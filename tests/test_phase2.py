@@ -76,7 +76,7 @@ class TestPhase2(unittest.TestCase):
         self.assertGreater(len(token_ids), 0)
         # The LLM now receives clean, semantic morpheme IDs instead of fuzzy BPE tokens.
         decoded_tags = self.tokenizer.decode(token_ids)
-        self.assertEqual(decoded_tags, "kitap PLURAL CASE_LOC gel TENSE_FUT PERSON_1SG")
+        self.assertEqual(decoded_tags, "<BOS> kitap PLURAL CASE_LOC gel TENSE_FUT PERSON_1SG <EOS>")
 
 if __name__ == '__main__':
     unittest.main()

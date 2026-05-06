@@ -31,10 +31,11 @@ class KristalTokenizer:
         and returning the integer IDs for the semantic token_vector.
         """
         words = text.split()
-        token_ids = []
+        token_ids = [self.vocab.encode('<BOS>')]
         for word in words:
-            # We strip basic punctuation for simplicity in this prototype
-            clean_word = word.strip(".,!?\"'")
+            # We strip basic punctuation and apostrophes for simplicity in this prototype
+            clean_word = word.replace("'", "").strip(".,!?\"'…—«»")
+            
             if not clean_word:
                 continue
                 
@@ -46,8 +47,10 @@ class KristalTokenizer:
                     self.vocab.add_token(morpheme_id)
                     token_ids.append(self.vocab.encode(morpheme_id))
             else:
-                # If analysis fails, we could map to a special token or just add the word as UNK
+                # If analysis fails, log and map to UNK
+                print(f"Warning OOV: {clean_word!r}")
                 token_ids.append(self.vocab.encode("<UNK>"))
+        token_ids.append(self.vocab.encode('<EOS>'))
         return token_ids
 
     def decode(self, token_ids: List[int]) -> str:

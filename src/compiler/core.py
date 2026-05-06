@@ -25,7 +25,16 @@ class CrystalCompiler:
             pos = stem_data['pos']
             
             # Determine start state based on POS
-            start_state = State.VERB_ROOT if pos == 'VERB' else State.NOUN_ROOT
+            pos_to_state = {
+                "VERB": State.VERB_ROOT,
+                "NOUN": State.NOUN_ROOT,
+                "ADJ":  State.NOUN_ROOT,
+                "NUM":  State.NOUN_ROOT,
+                "PRON": State.NOUN_ROOT,
+                "POSTP": State.NOUN_ROOT,
+                "ADV":  State.NOUN_ROOT,
+            }
+            start_state = pos_to_state.get(pos, State.NOUN_ROOT)
             
             # Initial path contains the root
             initial_path = [{

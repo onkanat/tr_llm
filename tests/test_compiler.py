@@ -15,6 +15,7 @@ class TestCrystalCompiler(unittest.TestCase):
             f.write("git\tVERB\tVOICING\n")
             f.write("kitap\tNOUN\tVOICING\n")
             f.write("göz\tNOUN\t-\n")
+            f.write("düş\tVERB\t-\n")
         self.lexicon.load_from_tsv(self.test_tsv)
 
         # 2. Setup Morphotactics
@@ -48,6 +49,58 @@ class TestCrystalCompiler(unittest.TestCase):
         # the 'k' in 'gelecek' does NOT mutate automatically unless the Phonology Engine handles 'k' -> 'ğ' mutation!
         # Wait, our PhonologyEngine handles 'D' and 'C', but does it handle standard noun/verb ending mutations?
         pass
+
+    def test_compile_past_verb(self):
+        # düş + tü -> düştü (Simple Past - Witnessed)
+        result = self.compiler.compile("düştü")
+        self.assertGreater(len(result["analyses"]), 0)
+        
+        morphemes = result["analyses"][0]["morphemes"]
+        self.assertEqual(morphemes[0]["id"], "düş")
+        self.assertEqual(morphemes[1]["id"], "TENSE_PAST")
+        self.assertEqual(morphemes[1]["surface"], "tü")
+
+    def test_compile_evidential_verb(self):
+        # düş + müş -> düşmüş (Evidential Past - Inferred/Heard)
+        result = self.compiler.compile("düşmüş")
+        self.assertGreater(len(result["analyses"]), 0)
+        
+        morphemes = result["analyses"][0]["morphemes"]
+        self.assertEqual(morphemes[0]["id"], "düş")
+        self.assertEqual(morphemes[1]["id"], "TENSE_EVIDENTIAL")
+        self.assertEqual(morphemes[1]["surface"], "müş")
+
+    def test_compile_compound_tense_past_prog(self):
+        # git + iyor + du + m -> gidiyordum
+        result = self.compiler.compile("gidiyordum")
+        self.assertGreater(len(result["analyses"]), 0)
+        
+        morphemes = result["analyses"][0]["morphemes"]
+        self.assertEqual(len(morphemes), 4)
+        self.assertEqual(morphemes[0]["id"], "git")
+        self.assertEqual(morphemes[0]["surface"], "gid")
+        self.assertEqual(morphemes[1]["id"], "TENSE_PROG")
+        self.assertEqual(morphemes[1]["surface"], "iyor")
+        self.assertEqual(morphemes[2]["id"], "COPULA_PAST")
+        self.assertEqual(morphemes[2]["surface"], "du")
+        self.assertEqual(morphemes[3]["id"], "PERSON_1SG")
+        self.assertEqual(morphemes[3]["surface"], "m")
+
+    def test_compile_compound_tense_evidential_fut(self):
+        # git + ecek + miş + im -> gidecekmişim
+        result = self.compiler.compile("gidecekmişim")
+        self.assertGreater(len(result["analyses"]), 0)
+        
+        morphemes = result["analyses"][0]["morphemes"]
+        self.assertEqual(len(morphemes), 4)
+        self.assertEqual(morphemes[0]["id"], "git")
+        self.assertEqual(morphemes[0]["surface"], "gid")
+        self.assertEqual(morphemes[1]["id"], "TENSE_FUT")
+        self.assertEqual(morphemes[1]["surface"], "ecek")
+        self.assertEqual(morphemes[2]["id"], "COPULA_EVIDENTIAL")
+        self.assertEqual(morphemes[2]["surface"], "miş")
+        self.assertEqual(morphemes[3]["id"], "PERSON_1SG")
+        self.assertEqual(morphemes[3]["surface"], "im")
 
     def test_compile_simple_noun(self):
         # kitap + lar + da -> kitaplarda

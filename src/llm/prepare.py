@@ -14,6 +14,10 @@ def prepare_dataset(input_filepath: str, output_filepath: str):
     # 1. Init Compiler
     lexicon = LexiconManager()
     # In production, load the full roots.tsv here.
+    lexicon_path = 'data/lexicon/roots.tsv'
+    if os.path.exists(lexicon_path):
+        lexicon.load_from_tsv(lexicon_path)
+        
     graph = build_default_graph()
     compiler = CrystalCompiler(lexicon, graph)
     vocab = Vocabulary()

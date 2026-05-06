@@ -1,5 +1,5 @@
 import json
-from typing import Dict, Any
+from typing import Dict, Any, Set
 
 class RLHFRewardModel:
     """
@@ -7,6 +7,9 @@ class RLHFRewardModel:
     Models that hallucinate unknown morphemes or break graph rules receive negative rewards.
     """
     
+    def __init__(self, valid_vocab: Set[str] = None):
+        self.valid_vocab = valid_vocab if valid_vocab is not None else set()
+        
     def calculate_reward(self, model_output_json_str: str) -> float:
         """
         Calculates a reward (-1.0 to 1.0) based on strict adherence to the 
@@ -32,9 +35,11 @@ class RLHFRewardModel:
         if not isinstance(token_vector, list):
             return -0.5
             
-        # In a real scenario, check if every item in token_vector exists in vocab (vocab_size=20500)
-        # If it invented a fake token ID, penalize heavily.
         if len(token_vector) > 0:
+            if self.valid_vocab:
+                fake_tokens = [t for t in token_vector if t not in self.valid_vocab]
+                if fake_tokens:
+                    return -0.9 # Heavy penalty for hallucination
             reward += 0.8
             
         return reward

@@ -28,3 +28,7 @@ When interacting within this workspace:
 2.  **Follow the Output Contract**: All linguistic analysis modules must output strictly formatted `CrystalPack` JSON.
 3.  **Implement as Pure Functions**: System modules should be written as pure functions without global mutable state.
 4.  **Reference Skills for Implementation Details**: Consult the specific `Skill_*.md` files when tasked with designing or implementing particular subsystems (e.g., phonology rules, the morphotactics state machine).
+
+## Architectural Rules & Conventions
+
+*   **Lexicon Philosophy (Zero-OOV):** The Kristal Compiler rejects the use of massive, noisy statistical corpus dumps (e.g., raw Wikipedia dumps or uncurated text scrapes). The mathematics of Turkish ( $C = \Sigma [f(M_k \Sigma M_e)]$ ) dictates that infinite surface forms are generated at runtime from a finite set of atomic roots. Therefore, the lexicon (`roots.tsv`) must remain a highly curated, mathematically pure list of approximately 20,500 base lemmas (`M_k`) with strict phonetic attributes (e.g., `VOICING`, `VOWEL_DROP`). Do not pollute the lexicon with derivational forms or statistical noise.

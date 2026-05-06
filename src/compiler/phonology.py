@@ -55,7 +55,6 @@ class PhonologyEngine:
             return stem_to_mutate
 
         i = 0
-        starts_with_vowel_sound = False
         
         while i < len(template):
             char = template[i]
@@ -69,7 +68,6 @@ class PhonologyEngine:
                     if ends_with_vowel:
                         resolved += buffer_char
                         ends_with_vowel = False
-                        if i == 3: starts_with_vowel_sound = False
                 elif buffer_char in "IA":
                     if not ends_with_vowel:
                         if buffer_char == 'I':
@@ -77,37 +75,31 @@ class PhonologyEngine:
                         elif buffer_char == 'A':
                             resolved += 'a' if is_back else 'e'
                         ends_with_vowel = True
-                        if i == 3: starts_with_vowel_sound = True
                 continue
 
             # Handle abstract placeholders
             if char == 'A':
                 resolved += 'a' if is_back else 'e'
                 ends_with_vowel = True
-                if i == 0: starts_with_vowel_sound = True
             elif char == 'I':
                 resolved += cls._resolve_I(is_back, is_rounded)
                 ends_with_vowel = True
-                if i == 0: starts_with_vowel_sound = True
             elif char == 'D':
                 resolved += 't' if ends_with_unvoiced else 'd'
                 ends_with_vowel = False
                 ends_with_unvoiced = False
-                if i == 0: starts_with_vowel_sound = False
             elif char == 'C':
                 resolved += 'ç' if ends_with_unvoiced else 'c'
                 ends_with_vowel = False
                 ends_with_unvoiced = False
-                if i == 0: starts_with_vowel_sound = False
             else:
                 # Normal character
                 resolved += char
                 ends_with_vowel = char in cls.VOWELS
                 ends_with_unvoiced = char in cls.UNVOICED_CONSONANTS
-                if i == 0: starts_with_vowel_sound = char in cls.VOWELS
             i += 1
 
-        if starts_with_vowel_sound:
+        if resolved and resolved[0] in cls.VOWELS:
             mutated_stem = apply_stem_mutation(mutated_stem)
 
         return mutated_stem, resolved
