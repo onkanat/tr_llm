@@ -1,3 +1,4 @@
+import json
 from typing import List, Dict, Optional
 from src.compiler.core import CrystalCompiler
 
@@ -20,6 +21,27 @@ class Vocabulary:
     def decode(self, token_id: int) -> str:
         return self.itos.get(token_id, "<UNK>")
 
+    def save(self, filepath: str):
+        """Saves the vocabulary state to a JSON file."""
+        data = {
+            "stoi": self.stoi,
+            "next_id": self._next_id
+        }
+        with open(filepath, "w", encoding="utf-8") as f:
+            json.dump(data, f, ensure_ascii=False, indent=2)
+
+    def load(self, filepath: str):
+        """Loads the vocabulary state from a JSON file."""
+        import os
+        if not os.path.exists(filepath):
+            return
+        with open(filepath, "r", encoding="utf-8") as f:
+            data = json.load(f)
+            self.stoi = data.get("stoi", self.stoi)
+            # Reconstruct itos with integer keys
+            self.itos = {int(v): k for k, v in self.stoi.items()}
+            self._next_id = data.get("next_id", self._next_id)
+
 class KristalTokenizer:
     def __init__(self, compiler: CrystalCompiler, vocab: Vocabulary):
         self.compiler = compiler
@@ -33,23 +55,38 @@ class KristalTokenizer:
         words = text.split()
         token_ids = [self.vocab.encode('<BOS>')]
         for word in words:
-            # We strip basic punctuation and apostrophes for simplicity in this prototype
-            clean_word = word.replace("'", "").strip(".,!?\"'…—«»")
+            # We strip basic punctuation, keeping apostrophes for potential future suffix parsing
+            clean_word = word.strip(".,!?\"…—«»/()-;:")
             
             if not clean_word:
                 continue
                 
-            result = self.compiler.compile(clean_word)
+            # 1. Number Bypass
+            if clean_word.replace(".", "").replace(",", "").isdigit() or clean_word.isnumeric():
+                self.vocab.add_token("<NUMBER>")
+                token_ids.append(self.vocab.encode("<NUMBER>"))
+                continue
+                
+            # 2. Normal Compilation
+            compile_word = clean_word.replace("'", "")
+            result = self.compiler.compile(compile_word)
+            
             # Use the token vector from the best analysis
             if result.get("token_vector"):
                 for morpheme_id in result["token_vector"]:
-                    # Dynamically add to vocab for prototype (in production this is fixed to 20500)
+                    # Dynamically add to vocab for prototype
                     self.vocab.add_token(morpheme_id)
                     token_ids.append(self.vocab.encode(morpheme_id))
             else:
-                # If analysis fails, log and map to UNK
-                print(f"Warning OOV: {clean_word!r}")
-                token_ids.append(self.vocab.encode("<UNK>"))
+                # 3. Proper Noun Bypass (If compilation fails but word is capitalized)
+                if clean_word[0].isupper():
+                    self.vocab.add_token("<PROPER_NOUN>")
+                    token_ids.append(self.vocab.encode("<PROPER_NOUN>"))
+                else:
+                    # True OOV
+                    print(f"Warning OOV: {clean_word!r}")
+                    token_ids.append(self.vocab.encode("<UNK>"))
+                    
         token_ids.append(self.vocab.encode('<EOS>'))
         return token_ids
 

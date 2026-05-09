@@ -1,0 +1,133 @@
+============================================================
+ KRİSTAL-VEKTÖREL MİMARİSİ: VEKTÖREL GEZGİN RAPORU
+============================================================
+
+Sorgu #1: 'Durgun su ölümü hatırlatır'
+------------------------------
+[1. Kristalizasyon]:
+  Morfem Etiketleri: <BOS> durgun su ölüm POSS_3SG hatırlat TENSE_AORIST <EOS>
+  Token IDs: [2, 263, 298, 223, 13, 385, 26, 3]
+[2. Vektörel Projeksiyon]:
+  Fingerprint (İlk 5): [0.022393175792554357, -0.010343711361858717, 0.009512593863572005, 0.026482450143198197, 0.041882190837324675]
+[3. Vektörel Geri Çağırma]:
+  Eşleşme #1 (Skor: 0.3825):
+    Metin: Dökme su.
+    Morfemler: <BOS> dökme su <EOS>
+    Yazar: Anonim/Halk
+  Eşleşme #2 (Skor: 0.2780):
+    Metin: Acı su sabunu köpürtmez.
+    Morfemler: <BOS> acı su sabun POSS_3SG köpürt NEG TENSE_AORIST_NEG <EOS>
+    Yazar: Anonim/Halk
+  Eşleşme #3 (Skor: 0.1400):
+    Metin: Bana göre ölümün en büyük vasfı durgunluk, hareketsizliktir.
+    Morfemler: <BOS> bana göre ölüm POSS_2SG en büyük <UNK> durgun DERIV_lIk hareket DERIV_sIz DERIV_lIk COPULA_AORIST <EOS>
+    Yazar: Nâzım Hikmet
+
+Sorgu #2: 'Akmayan su kımıldanmayan yer'
+------------------------------
+[1. Kristalizasyon]:
+  Morfem Etiketleri: <BOS> ak NEG PART_An su kımıldan NEG PART_An yer <EOS>
+  Token IDs: [2, 364, 87, 69, 298, 380, 87, 69, 330, 3]
+[2. Vektörel Projeksiyon]:
+  Fingerprint (İlk 5): [0.0467385188818005, 0.03493900096686493, 0.011959295772621613, 0.029586016815961243, -0.013364454936272353]
+[3. Vektörel Geri Çağırma]:
+  Eşleşme #1 (Skor: 0.3890):
+    Metin: Akmayan su, kımıldanmayan, olduğu yerde bir çukurun içinde pıhtılaşan, ağırlaşan durgun ve durulmuş su ölümü hatırlatır bana.
+    Morfemler: <BOS> ak NEG PART_An su kımıldan NEG PART_An ol PART_DIk POSS_3SG yer CASE_LOC bir çukur POSS_2SG içinde pıhtılaş PART_An ağırlaş PART_An durgun ve durul TENSE_EVIDENTIAL su ölüm POSS_3SG hatırlat TENSE_AORIST bana <EOS>
+    Yazar: Nâzım Hikmet
+  Eşleşme #2 (Skor: 0.3199):
+    Metin: Aklı hep evde, Gülsüm'deydi.
+    Morfemler: <BOS> ak DERIV_lI hep ev CASE_LOC <PROPER_NOUN> <EOS>
+    Yazar: Ömer Seyfettin
+  Eşleşme #3 (Skor: 0.2570):
+    Metin: Aklından geçirdiği gerçekmiş gibi telaşlanmıştı.
+    Morfemler: <BOS> ak DERIV_lI POSS_2SG CASE_ABL geçir PART_DIk POSS_3SG gerçek COPULA_EVIDENTIAL gibi telaşlan TENSE_EVIDENTIAL COPULA_PAST <EOS>
+    Yazar: Necati Cumalı
+
+Sorgu #3: 'Pıhtılaşan su ağırlaşan su'
+------------------------------
+[1. Kristalizasyon]:
+  Morfem Etiketleri: <BOS> pıhtılaş PART_An su ağırlaş PART_An su <EOS>
+  Token IDs: [2, 382, 69, 298, 383, 69, 298, 3]
+[2. Vektörel Projeksiyon]:
+  Fingerprint (İlk 5): [-0.04951310443826027, -0.01906910713865081, -0.04932665687401346, -0.017990366066926864, -0.04009497067622752]
+[3. Vektörel Geri Çağırma]:
+  Eşleşme #1 (Skor: 0.3087):
+    Metin: Alçılı sular.
+    Morfemler: <BOS> alçı DERIV_lI su PLURAL <EOS>
+    Yazar: Anonim/Halk
+  Eşleşme #2 (Skor: 0.2181):
+    Metin: Bir bardak suyu içince dirildi.
+    Morfemler: <BOS> bir bardak su CASE_ACC iç GERUND_IncA diril COPULA_PAST <EOS>
+    Yazar: Anonim/Halk
+  Eşleşme #3 (Skor: 0.2081):
+    Metin: O yıl su baskınları bir afet gibiydi.
+    Morfemler: <BOS> o yıl su baskın POSS_3PL bir afet gibi COPULA_PAST <EOS>
+    Yazar: Anonim/Halk
+
+Sorgu #4: 'Kitabı okudum ve temizledim'
+------------------------------
+[1. Kristalizasyon]:
+  Morfem Etiketleri: <BOS> kitap POSS_3SG oku TENSE_PAST PERSON_1SG ve temizle TENSE_PAST PERSON_1SG <EOS>
+  Token IDs: [2, 249, 13, 1670, 22, 32, 46, 4403, 22, 32, 3]
+[2. Vektörel Projeksiyon]:
+  Fingerprint (İlk 5): [-0.05532637168833442, 0.07519765825433956, -0.02472469964710026, -0.0026744346868225032, 0.018012807443736907]
+[3. Vektörel Geri Çağırma]:
+  Eşleşme #1 (Skor: 0.3641):
+    Metin: Kitap dostu.
+    Morfemler: <BOS> kitap dost POSS_3SG <EOS>
+    Yazar: Anonim/Halk
+  Eşleşme #2 (Skor: 0.3546):
+    Metin: Kitap cenneti.
+    Morfemler: <BOS> kitap cennet POSS_3SG <EOS>
+    Yazar: Anonim/Halk
+  Eşleşme #3 (Skor: 0.2904):
+    Metin: Kitap bastırmak.
+    Morfemler: <BOS> kitap bastır INF_mAk <EOS>
+    Yazar: Anonim/Halk
+
+Sorgu #5: 'Gidecekti ama gelmedi'
+------------------------------
+[1. Kristalizasyon]:
+  Morfem Etiketleri: <BOS> git TENSE_FUT COPULA_PAST ama gel NEG TENSE_PAST <EOS>
+  Token IDs: [2, 619, 43, 44, 64, 589, 87, 22, 3]
+[2. Vektörel Projeksiyon]:
+  Fingerprint (İlk 5): [0.005277097713712781, -0.020075823150153927, 0.042302328945561164, -0.02962441651722341, -0.04645851581033793]
+[3. Vektörel Geri Çağırma]:
+  Eşleşme #1 (Skor: 0.3400):
+    Metin: Çocuklar eve geldi.
+    Morfemler: <BOS> çocuk PLURAL ev CASE_DAT gel TENSE_PAST <EOS>
+    Yazar: Anonim/Halk
+  Eşleşme #2 (Skor: 0.2994):
+    Metin: Domuz gibi bilir ama söylemez!
+    Morfemler: <BOS> domuz gibi bilir ama söyle NEG TENSE_AORIST_NEG <EOS>
+    Yazar: Anonim/Halk
+  Eşleşme #3 (Skor: 0.2700):
+    Metin: Mustafa İnan biraz geç gelmişti, arkada kalmıştı.
+    Morfemler: <BOS> <PROPER_NOUN> inan biraz geç gel TENSE_EVIDENTIAL COPULA_PAST arka CASE_LOC kal TENSE_EVIDENTIAL COPULA_PAST <EOS>
+    Yazar: Oğuz Atay
+
+Sorgu #6: 'Demirkır, güney tepelerinin duldalarına çektiği atları gece yarısına doğru yeniden ovaya indirdi.'
+------------------------------
+[1. Kristalizasyon]:
+  Morfem Etiketleri: <BOS> <PROPER_NOUN> güney tepe POSS_3PL CASE_GEN_N dulda POSS_3PL CASE_DAT_N çek PART_DIk POSS_3SG at POSS_3PL gece yarı POSS_3SG CASE_DAT_N doğru yeniden ova CASE_DAT indir TENSE_PAST <EOS>
+  Token IDs: [2, 4, 5, 6, 7, 8, 9, 7, 10, 11, 12, 13, 14, 7, 15, 16, 13, 10, 17, 18, 19, 20, 21, 22, 3]
+[2. Vektörel Projeksiyon]:
+  Fingerprint (İlk 5): [0.059847010487473505, 0.019752060736611954, 0.002247648028335351, -0.051200044327923806, -0.05355617186840123]
+[3. Vektörel Geri Çağırma]:
+  Eşleşme #1 (Skor: 1.0000):
+    Metin: Demirkır, güney tepelerinin duldalarına çektiği atları gece yarısına doğru yeniden ovaya indirdi.
+    Morfemler: <BOS> <PROPER_NOUN> güney tepe POSS_3PL CASE_GEN_N dulda POSS_3PL CASE_DAT_N çek PART_DIk POSS_3SG at POSS_3PL gece yarı POSS_3SG CASE_DAT_N doğru yeniden ova CASE_DAT indir TENSE_PAST <EOS>
+    Yazar: Abbas Sayar
+  Eşleşme #2 (Skor: 0.1487):
+    Metin: Şu oğlumun canını bağışla bize.
+    Morfemler: <BOS> şu <UNK> can POSS_2SG CASE_ACC bağışla biz CASE_DAT <EOS>
+    Yazar: Kerim Korcan
+  Eşleşme #3 (Skor: 0.1484):
+    Metin: Doğduğuma pişman olacak kadar sıkıntı çektim.
+    Morfemler: <BOS> doğ PART_DIk POSS_1SG CASE_DAT pişman olacak kadar sıkıntı çek COPULA_PAST PERSON_1SG <EOS>
+    Yazar: Halide Edip Adıvar
+
+============================================================
+ RAPOR SONU
+============================================================

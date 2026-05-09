@@ -2,128 +2,237 @@ from typing import Dict, List, Set
 
 class State:
     START = "S_START"
+    
+    # Root States
     VERB_ROOT = "S_VERB_ROOT"
     NOUN_ROOT = "S_NOUN_ROOT"
+    ADJ_ROOT = "S_ADJ_ROOT"
+    ADV_ROOT = "S_ADV_ROOT"
+    
+    # Verb Voice States (Çatı)
+    VERB_VOICE_CAUSATIVE = "S_VERB_VOICE_CAUSATIVE"
+    VERB_VOICE_PASSIVE = "S_VERB_VOICE_PASSIVE"
+    
+    # Verb Modals
+    VERB_POTENTIAL = "S_VERB_POTENTIAL"
+    
+    # Verb Inflection States
+    VERB_NEGATION = "S_VERB_NEGATION"
     VERB_POST_TENSE = "S_VERB_POST_TENSE"
     VERB_POST_COPULA = "S_VERB_POST_COPULA"
     VERB_POST_PERSON = "S_VERB_POST_PERSON"
+    
+    # Noun Inflection States
     NOUN_POST_PLURAL = "S_NOUN_POST_PLURAL"
     NOUN_POST_POSSESSIVE = "S_NOUN_POST_POSSESSIVE"
     NOUN_POST_POSSESSIVE_3 = "S_NOUN_POST_POSSESSIVE_3"
     NOUN_POST_CASE = "S_NOUN_POST_CASE"
+    
     STOP = "S_STOP"
 
 class Transition:
-    def __init__(self, to_state: str, affix_id: str, affix_template: str):
+    def __init__(self, to_state: str, affix_id: str, affix_template: str, attributes: str = "-"):
         self.to_state = to_state
         self.affix_id = affix_id
         self.affix_template = affix_template
+        self.attributes = attributes
 
 class MorphotacticsGraph:
     def __init__(self):
-        # A dictionary mapping from state to a list of possible transitions
         self.transitions: Dict[str, List[Transition]] = {}
-        # A set of states that are considered valid ending points (terminal states)
         self.terminal_states: Set[str] = set()
 
-    def add_transition(self, from_state: str, to_state: str, affix_id: str, affix_template: str):
-        """Adds a valid transition between states with a specific affix."""
+    def add_transition(self, from_state: str, to_state: str, affix_id: str, affix_template: str, attributes: str = "-"):
         if from_state not in self.transitions:
             self.transitions[from_state] = []
-        self.transitions[from_state].append(Transition(to_state, affix_id, affix_template))
+        self.transitions[from_state].append(Transition(to_state, affix_id, affix_template, attributes))
 
     def mark_terminal(self, state: str):
-        """Marks a state as a valid end of a word."""
         self.terminal_states.add(state)
 
     def get_valid_transitions(self, current_state: str) -> List[Transition]:
-        """Returns all valid transitions from the current state."""
         return self.transitions.get(current_state, [])
 
     def is_terminal(self, state: str) -> bool:
-        """Checks if a state is a valid terminal state."""
         return state in self.terminal_states
 
 def build_default_graph() -> MorphotacticsGraph:
-    """Builds a basic morphotactics graph for testing and initial implementation."""
     graph = MorphotacticsGraph()
 
-    # From START to Roots (This transition is conceptual, usually roots are derived from lexicon first)
-    # We will assume Lexicon gives us the ROOT state.
+    # --- VERB PATH (FİİL YOLU) ---
     
-    # Verb Path: ROOT -> TENSE -> PERSON
-    # Example: gel (VERB_ROOT) -> -ecek (TENSE_FUT) -> -im (PERSON_1SG)
-    graph.add_transition(State.VERB_ROOT, State.VERB_POST_TENSE, "TENSE_FUT", "(y)AcAk")
-    graph.add_transition(State.VERB_ROOT, State.VERB_POST_TENSE, "TENSE_PROG", "(y)Iyor")
-    graph.add_transition(State.VERB_ROOT, State.VERB_POST_TENSE, "TENSE_PAST", "DI")
-    graph.add_transition(State.VERB_ROOT, State.VERB_POST_TENSE, "TENSE_EVIDENTIAL", "mIş")
+    # 1. Voice (Çatı)
+    graph.add_transition(State.VERB_ROOT, State.VERB_VOICE_CAUSATIVE, "VOICE_CAUS_t", "t", "-")
+    graph.add_transition(State.VERB_ROOT, State.VERB_VOICE_CAUSATIVE, "VOICE_CAUS_DIr", "DIr", "-")
+    graph.add_transition(State.VERB_VOICE_CAUSATIVE, State.VERB_VOICE_CAUSATIVE, "VOICE_CAUS_DIr", "DIr", "-")
     
-    graph.add_transition(State.VERB_POST_TENSE, State.VERB_POST_PERSON, "PERSON_1SG", "(I)m")
-    graph.add_transition(State.VERB_POST_TENSE, State.VERB_POST_PERSON, "PERSON_2SG", "sIn")
-    graph.add_transition(State.VERB_POST_TENSE, State.VERB_POST_PERSON, "PERSON_3SG", "")
-    graph.add_transition(State.VERB_POST_TENSE, State.VERB_POST_PERSON, "PERSON_1PL", "(I)z")
+    graph.add_transition(State.VERB_ROOT, State.VERB_VOICE_PASSIVE, "VOICE_PASS_Il", "Il", "-")
+    graph.add_transition(State.VERB_VOICE_CAUSATIVE, State.VERB_VOICE_PASSIVE, "VOICE_PASS_Il", "Il", "-")
     
-    # Copula Path (Ek-fiil): TENSE -> COPULA -> PERSON
-    graph.add_transition(State.VERB_POST_TENSE, State.VERB_POST_COPULA, "COPULA_PAST", "DI")
-    graph.add_transition(State.VERB_POST_TENSE, State.VERB_POST_COPULA, "COPULA_EVIDENTIAL", "mIş")
+    # 1.5 Potential / Impotential (Yeterlilik / Eksi-Yeterlilik)
+    verb_pre_pot_states = [State.VERB_ROOT, State.VERB_VOICE_CAUSATIVE, State.VERB_VOICE_PASSIVE]
+    for from_state in verb_pre_pot_states:
+        # Potential loops back to VERB_ROOT so it can take neg or tense normally
+        graph.add_transition(from_state, State.VERB_ROOT, "POTENTIAL", "(y)Abil", "-")
+        # Impotential goes straight to negation
+        graph.add_transition(from_state, State.VERB_NEGATION, "IMPOTENTIAL_NEG", "(y)AmA", "-")
     
-    graph.add_transition(State.VERB_POST_COPULA, State.VERB_POST_PERSON, "PERSON_1SG", "(I)m")
-    graph.add_transition(State.VERB_POST_COPULA, State.VERB_POST_PERSON, "PERSON_2SG", "sIn")
-    graph.add_transition(State.VERB_POST_COPULA, State.VERB_POST_PERSON, "PERSON_3SG", "")
-    graph.add_transition(State.VERB_POST_COPULA, State.VERB_POST_PERSON, "PERSON_1PL", "(I)z")
+    # 2. Negation (Olumsuzluk)
+    verb_pre_neg_states = [State.VERB_ROOT, State.VERB_VOICE_CAUSATIVE, State.VERB_VOICE_PASSIVE]
+    for from_state in verb_pre_neg_states:
+        graph.add_transition(from_state, State.VERB_NEGATION, "NEG", "mA", "-")
     
-    # Noun Path: ROOT -> PLURAL -> POSSESSIVE -> CASE
-    # Example: kitap (NOUN_ROOT) -> -lar (PLURAL) -> -ım (POSS_1SG) -> -da (CASE_LOC)
-    graph.add_transition(State.NOUN_ROOT, State.NOUN_POST_PLURAL, "PLURAL", "lAr")
+    # 3. Tense (Zaman/Kip)
+    verb_pre_tense_states = [State.VERB_ROOT, State.VERB_VOICE_CAUSATIVE, State.VERB_VOICE_PASSIVE, State.VERB_NEGATION]
     
-    # 1st and 2nd Person Possessives
-    graph.add_transition(State.NOUN_ROOT, State.NOUN_POST_POSSESSIVE, "POSS_1SG", "(I)m")
-    graph.add_transition(State.NOUN_POST_PLURAL, State.NOUN_POST_POSSESSIVE, "POSS_1SG", "(I)m")
+    tenses = [
+        ("TENSE_FUT", "(y)AcAk", "VOICING"),
+        ("TENSE_PROG", "(y)Iyor", "-"),
+        ("TENSE_PAST", "DI", "-"),
+        ("TENSE_EVIDENTIAL", "mIş", "-"),
+        ("TENSE_AORIST", "(I)r", "-"),
+        ("TENSE_AORIST_VOWEL", "Ar", "-"),
+        ("TENSE_COND", "sA", "-"),
+        ("TENSE_NECESS", "mAlI", "-"),
+        ("TENSE_OPTATIVE", "(y)A", "-"),
+    ]
     
-    # 3rd Person Possessive
-    graph.add_transition(State.NOUN_ROOT, State.NOUN_POST_POSSESSIVE_3, "POSS_3SG", "(s)I")
-    graph.add_transition(State.NOUN_POST_PLURAL, State.NOUN_POST_POSSESSIVE_3, "POSS_3SG", "I") # lAr + I
-    
-    # Normal Case Transitions
-    graph.add_transition(State.NOUN_ROOT, State.NOUN_POST_CASE, "CASE_LOC", "DA")
-    graph.add_transition(State.NOUN_POST_PLURAL, State.NOUN_POST_CASE, "CASE_LOC", "DA")
-    graph.add_transition(State.NOUN_POST_POSSESSIVE, State.NOUN_POST_CASE, "CASE_LOC", "DA")
+    for from_state in verb_pre_tense_states:
+        for tid, template, attr in tenses:
+            graph.add_transition(from_state, State.VERB_POST_TENSE, tid, template, attr)
 
-    graph.add_transition(State.NOUN_ROOT, State.NOUN_POST_CASE, "CASE_ABL", "DAn")
-    graph.add_transition(State.NOUN_POST_PLURAL, State.NOUN_POST_CASE, "CASE_ABL", "DAn")
-    graph.add_transition(State.NOUN_POST_POSSESSIVE, State.NOUN_POST_CASE, "CASE_ABL", "DAn")
+    # Special Aorist Negation (gel-mez)
+    graph.add_transition(State.VERB_NEGATION, State.VERB_POST_TENSE, "TENSE_AORIST_NEG", "z", "-")
 
-    graph.add_transition(State.NOUN_ROOT, State.NOUN_POST_CASE, "CASE_ACC", "(y)I")
-    graph.add_transition(State.NOUN_POST_PLURAL, State.NOUN_POST_CASE, "CASE_ACC", "(y)I")
-    graph.add_transition(State.NOUN_POST_POSSESSIVE, State.NOUN_POST_CASE, "CASE_ACC", "(y)I")
-
-    graph.add_transition(State.NOUN_ROOT, State.NOUN_POST_CASE, "CASE_DAT", "(y)A")
-    graph.add_transition(State.NOUN_POST_PLURAL, State.NOUN_POST_CASE, "CASE_DAT", "(y)A")
-    graph.add_transition(State.NOUN_POST_POSSESSIVE, State.NOUN_POST_CASE, "CASE_DAT", "(y)A")
-
-    # Genitive Case (Tamlayan): Always takes (n)
-    graph.add_transition(State.NOUN_ROOT, State.NOUN_POST_CASE, "CASE_GEN", "(n)In")
-    graph.add_transition(State.NOUN_POST_PLURAL, State.NOUN_POST_CASE, "CASE_GEN", "(n)In")
-    graph.add_transition(State.NOUN_POST_POSSESSIVE, State.NOUN_POST_CASE, "CASE_GEN", "(n)In")
-    graph.add_transition(State.NOUN_POST_POSSESSIVE_3, State.NOUN_POST_CASE, "CASE_GEN", "nIn")
-
-    # Special Case Transitions for 3rd Person Possessive (n buffer)
-    graph.add_transition(State.NOUN_POST_POSSESSIVE_3, State.NOUN_POST_CASE, "CASE_LOC", "nDA")
-    graph.add_transition(State.NOUN_POST_POSSESSIVE_3, State.NOUN_POST_CASE, "CASE_ABL", "nDAn")
-    graph.add_transition(State.NOUN_POST_POSSESSIVE_3, State.NOUN_POST_CASE, "CASE_ACC", "nI")
-    graph.add_transition(State.NOUN_POST_POSSESSIVE_3, State.NOUN_POST_CASE, "CASE_DAT", "nA")
+    # 4. Copula (Ek-fiil / Birleşik Zaman)
+    graph.add_transition(State.VERB_POST_TENSE, State.VERB_POST_COPULA, "COPULA_PAST", "DI", "-")
+    graph.add_transition(State.VERB_POST_TENSE, State.VERB_POST_COPULA, "COPULA_EVIDENTIAL", "mIş", "-")
+    graph.add_transition(State.VERB_POST_TENSE, State.VERB_POST_COPULA, "COPULA_COND", "sA", "-")
+    graph.add_transition(State.VERB_POST_TENSE, State.VERB_POST_COPULA, "COPULA_AORIST", "DIr", "-")
     
-    # Participles and Gerunds (Fiilimsiler): Verb -> Noun/Stop
-    graph.add_transition(State.VERB_ROOT, State.NOUN_ROOT, "PARTICIPLE_PAST", "DIk") # Sıfat-fiil: söylediği
-    graph.add_transition(State.VERB_ROOT, State.NOUN_ROOT, "INFINITIVE", "mA") # İsim-fiil: etmeye
-    graph.add_transition(State.VERB_ROOT, State.STOP, "GERUND_AFTER", "DIktAn") # Zarf-fiil: duyduktan
-    graph.add_transition(State.VERB_ROOT, State.STOP, "GERUND_REPEATED", "(y)A") # Zarf-fiil: koşa
+    # 5. Person (Şahıs)
+    person_suffixes = [
+        ("PERSON_1SG", "(I)m", "-"),
+        ("PERSON_2SG", "sIn", "-"),
+        ("PERSON_3SG", "", "-"),
+        ("PERSON_1PL", "(I)z", "-"),
+        ("PERSON_2PL", "sInIz", "-"),
+        ("PERSON_3PL", "lAr", "-"),
+    ]
+    
+    for from_state in [State.VERB_POST_TENSE, State.VERB_POST_COPULA]:
+        for tid, template, attr in person_suffixes:
+            graph.add_transition(from_state, State.VERB_POST_PERSON, tid, template, attr)
 
-    # Define Terminal States
-    # Roots can be terminal (e.g., "gel", "kitap")
+    # --- NOUN PATH (İSİM YOLU) ---
+    
+    graph.add_transition(State.NOUN_ROOT, State.NOUN_POST_PLURAL, "PLURAL", "lAr", "-")
+    
+    # Possessives
+    possessives = [
+        ("POSS_1SG", "(I)m", "-"),
+        ("POSS_2SG", "(I)n", "-"),
+        ("POSS_3SG", "(s)I", "-"),
+        ("POSS_1PL", "(I)mIz", "-"),
+        ("POSS_2PL", "(I)nIz", "-"),
+        ("POSS_3PL", "lArI", "-"),
+    ]
+    
+    for from_state in [State.NOUN_ROOT, State.NOUN_POST_PLURAL]:
+        for tid, template, attr in possessives:
+            target = State.NOUN_POST_POSSESSIVE if "3" not in tid else State.NOUN_POST_POSSESSIVE_3
+            graph.add_transition(from_state, target, tid, template, attr)
+
+    # Cases
+    cases = [
+        ("CASE_LOC", "DA", "-"),
+        ("CASE_ABL", "DAn", "-"),
+        ("CASE_ACC", "(y)I", "-"),
+        ("CASE_DAT", "(y)A", "-"),
+        ("CASE_GEN", "(n)In", "-"),
+        ("CASE_INS", "(y)lA", "-"),
+        ("CASE_EQU", "CA", "-"),
+    ]
+    
+    for from_state in [State.NOUN_ROOT, State.NOUN_POST_PLURAL, State.NOUN_POST_POSSESSIVE]:
+        for tid, template, attr in cases:
+            graph.add_transition(from_state, State.NOUN_POST_CASE, tid, template, attr)
+            
+    # Special buffer for 3rd person possessive + case (n buffer)
+    n_cases = [
+        ("CASE_LOC_N", "nDA", "-"),
+        ("CASE_ABL_N", "nDAn", "-"),
+        ("CASE_ACC_N", "nI", "-"),
+        ("CASE_DAT_N", "nA", "-"),
+        ("CASE_GEN_N", "nIn", "-"),
+        ("CASE_EQU_N", "nCA", "-"),
+    ]
+    for tid, template, attr in n_cases:
+        graph.add_transition(State.NOUN_POST_POSSESSIVE_3, State.NOUN_POST_CASE, tid, template, attr)
+
+    # Noun Copula (İsim soylu sözcüklerde ek-fiil bildirme eki)
+    noun_copula_states = [State.NOUN_ROOT, State.ADJ_ROOT, State.NOUN_POST_PLURAL, State.NOUN_POST_POSSESSIVE, State.NOUN_POST_POSSESSIVE_3, State.NOUN_POST_CASE]
+    for from_state in noun_copula_states:
+        graph.add_transition(from_state, State.STOP, "COPULA_AORIST", "DIr", "-")
+        # For past copula on nouns (e.g. güzeldi)
+        graph.add_transition(from_state, State.VERB_POST_COPULA, "COPULA_PAST", "(y)DI", "-")
+        graph.add_transition(from_state, State.VERB_POST_COPULA, "COPULA_EVIDENTIAL", "(y)mIş", "-")
+        graph.add_transition(from_state, State.VERB_POST_COPULA, "COPULA_COND", "(y)sA", "-")
+
+    # --- DERIVATION (TÜRETİM) ---
+    
+    # Verb to Noun/Stop (Fiilimsi ve İsim Yapım)
+    v2n = [
+        ("INF_mAk", "mAk", "-"),
+        ("INF_mA", "mA", "-"),
+        ("INF_Iş", "Iş", "-"),
+        ("PART_An", "(y)An", "-"),
+        ("PART_DIk", "DIk", "VOICING"),
+    ]
+    verb_pre_deriv_states = [State.VERB_ROOT, State.VERB_VOICE_CAUSATIVE, State.VERB_VOICE_PASSIVE, State.VERB_NEGATION]
+    for from_state in verb_pre_deriv_states:
+        for tid, template, attr in v2n:
+            graph.add_transition(from_state, State.NOUN_ROOT, tid, template, attr)
+
+    # Gerunds (Zarf-fiiller) -> They go to STOP
+    gerunds = [
+        ("GERUND_ArAk", "(y)ArAk", "-"),
+        ("GERUND_IncA", "(y)IncA", "-"),
+        ("GERUND_Ip", "(y)Ip", "-"),
+        ("GERUND_mAdAn", "mAdAn", "-"),
+        ("GERUND_AlI", "(y)AlI", "-"),
+    ]
+    for from_state in verb_pre_deriv_states:
+        for tid, template, attr in gerunds:
+            graph.add_transition(from_state, State.STOP, tid, template, attr)
+            
+    # -ken gerund (attaches to tense or noun states)
+    graph.add_transition(State.VERB_POST_TENSE, State.STOP, "GERUND_KEN", "ken", "-")
+    for from_state in noun_copula_states:
+        graph.add_transition(from_state, State.STOP, "GERUND_KEN", "(y)ken", "-")
+
+    # Noun to Noun / Adj
+    n2nx = [
+        ("DERIV_lIk", "lIk", "VOICING"),
+        ("DERIV_lI", "lI", "-"),
+        ("DERIV_sIz", "sIz", "-"),
+        ("DERIV_CI", "CI", "-"),
+    ]
+    for from_state in [State.NOUN_ROOT, State.NOUN_POST_PLURAL, State.NOUN_POST_POSSESSIVE]:
+        for tid, template, attr in n2nx:
+            graph.add_transition(from_state, State.NOUN_ROOT, tid, template, attr)
+            graph.add_transition(from_state, State.ADJ_ROOT, tid, template, attr)
+
+    # Noun/Adj to Verb
+    graph.add_transition(State.NOUN_ROOT, State.VERB_ROOT, "DERIV_lA", "lA", "-")
+    graph.add_transition(State.ADJ_ROOT, State.VERB_ROOT, "DERIV_lAş", "lAş", "-")
+    graph.add_transition(State.ADJ_ROOT, State.VERB_ROOT, "DERIV_lAn", "lAn", "-")
+
+    # --- TERMINAL STATES ---
     graph.mark_terminal(State.VERB_ROOT)
     graph.mark_terminal(State.NOUN_ROOT)
-    # Most post-suffix states are terminal
+    graph.mark_terminal(State.ADJ_ROOT)
+    graph.mark_terminal(State.ADV_ROOT)
     graph.mark_terminal(State.VERB_POST_TENSE)
     graph.mark_terminal(State.VERB_POST_COPULA)
     graph.mark_terminal(State.VERB_POST_PERSON)

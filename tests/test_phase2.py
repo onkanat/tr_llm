@@ -46,37 +46,52 @@ class TestPhase2(unittest.TestCase):
         self.assertIn("TENSE_FUT", decoded_tags)
 
     def test_vector_memory_recall(self):
-        # Add dummy context
-        self.memory.add_document("Ahşap işleme teknikleri", [0.9, 0.1, 0.1], {"domain": "marangoz"})
-        self.memory.add_document("Derin öğrenme modelleri", [0.1, 0.9, 0.1], {"domain": "ai"})
-        self.memory.add_document("Mobilya tasarımı tarihi", [0.8, 0.2, 0.1], {"domain": "marangoz"})
+        from qdrant_client.http import models
+        # Add dummy context using batch and sparse vectors
+        texts = ["Ahşap işleme teknikleri", "Derin öğrenme modelleri", "Mobilya tasarımı tarihi"]
+        dense_vectors = [[0.9, 0.1, 0.1], [0.1, 0.9, 0.1], [0.8, 0.2, 0.1]]
+        sparse_vectors = [
+            models.SparseVector(indices=[1], values=[1.0]),
+            models.SparseVector(indices=[2], values=[1.0]),
+            models.SparseVector(indices=[1], values=[1.0])
+        ]
+        metadatas = [{"domain": "marangoz"}, {"domain": "ai"}, {"domain": "marangoz"}]
+        self.memory.add_documents_batch(texts, dense_vectors, sparse_vectors, metadatas)
 
         # Query vector close to 'marangoz' documents
-        query_vec = [0.85, 0.15, 0.1]
-        results = self.memory.recall(query_vec, top_k=2)
-        
+        query_dense = [0.85, 0.15, 0.1]
+        query_sparse = models.SparseVector(indices=[1], values=[1.0])
+        results = self.memory.hybrid_recall(query_dense, query_sparse, top_k=2)
+
         self.assertEqual(len(results), 2)
         # Should rank "Ahşap işleme" or "Mobilya tasarımı" first
         self.assertEqual(results[0]["metadata"]["domain"], "marangoz")
         self.assertEqual(results[1]["metadata"]["domain"], "marangoz")
 
     def test_rag_pipeline_integration(self):
+        from qdrant_client.http import models
         # Simulate full pipeline: Query -> Context -> Tokenize context -> Feed to LLM
-        
+
         # 1. Store a document
-        self.memory.add_document("kitaplarda geleceğim", [1.0, 0.0, 0.0], {"doc_id": 1})
-        
+        self.memory.add_documents_batch(
+            ["kitaplarda geleceğim"], 
+            [[1.0, 0.0, 0.0]], 
+            [models.SparseVector(indices=[1], values=[1.0])], 
+            [{"doc_id": 1}]
+        )
+
         # 2. Recall context
-        retrieved = self.memory.recall([1.0, 0.0, 0.0], top_k=1)
+        retrieved = self.memory.hybrid_recall([1.0, 0.0, 0.0], models.SparseVector(indices=[1], values=[1.0]), top_k=1)
         context_text = retrieved[0]["text"]
-        
+
         # 3. CrystalCompile the context into token IDs for the LLM
         token_ids = self.tokenizer.encode(context_text)
-        
+
         self.assertGreater(len(token_ids), 0)
         # The LLM now receives clean, semantic morpheme IDs instead of fuzzy BPE tokens.
         decoded_tags = self.tokenizer.decode(token_ids)
         self.assertEqual(decoded_tags, "<BOS> kitap PLURAL CASE_LOC gel TENSE_FUT PERSON_1SG <EOS>")
+
 
 if __name__ == '__main__':
     unittest.main()

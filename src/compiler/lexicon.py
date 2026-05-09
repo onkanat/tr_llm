@@ -5,7 +5,7 @@ class TrieNode:
     def __init__(self):
         self.children = {}
         self.is_word = False
-        self.data = None
+        self.entries = [] # List of data Dicts to support homonyms
 
 class LexiconManager:
     def __init__(self):
@@ -17,25 +17,7 @@ class LexiconManager:
             reader = csv.DictReader(f, delimiter='\t')
             for row in reader:
                 lemma = row['lemma']
-                # Insert original lemma
                 self._insert(lemma, row)
-                
-                # Pre-calculate voicing if applicable for performance
-                # This ensures O(k) lookup without runtime phonology checks for stems
-                if row.get('attributes') == 'VOICING':
-                    voiced_lemma = self._apply_voicing(lemma)
-                    if voiced_lemma != lemma:
-                        self._insert(voiced_lemma, row)
-
-    def _apply_voicing(self, lemma: str) -> str:
-        """Applies consonant mutation (yumuşama) to the final character."""
-        if not lemma: return lemma
-        last_char = lemma[-1]
-        # Common Turkish voicing rules: p->b, ç->c, t->d, k->ğ (sometimes g)
-        voicing_map = {'p': 'b', 'ç': 'c', 't': 'd', 'k': 'ğ'} 
-        if last_char in voicing_map:
-            return lemma[:-1] + voicing_map[last_char]
-        return lemma
 
     def _insert(self, word: str, data: Dict[str, Any]):
         """Inserts a word and its metadata into the Trie."""
@@ -45,22 +27,49 @@ class LexiconManager:
                 node.children[char] = TrieNode()
             node = node.children[char]
         node.is_word = True
-        node.data = data
+        node.entries.append(data)
 
     def find_stems(self, word: str) -> List[tuple[str, Dict[str, Any]]]:
         """
-        Scans prefixes of the input word and returns all possible root candidates
-        along with the exact matched surface prefix.
-        Complexity: O(k) where k is the length of the word.
+        Mutation-aware stem finding.
         """
         stems = []
         node = self.root
         matched_prefix = ""
-        for char in word:
-            if char not in node.children:
+        # Mapping from surface character in word -> possible root character
+        # e.g. if we see 'd' in word, we might be looking for root ending in 't'
+        reverse_voicing_map = {'b': 'p', 'c': 'ç', 'd': 't', 'ğ': 'k', 'g': 'k'}
+        
+        for i, char in enumerate(word):
+            # Try normal match first
+            if char in node.children:
+                # We also need to check if there's an alternative unvoiced root path
+                # BUT, if we have a direct match (like 'git' for 'gidecek'),
+                # it might be the voiced root in the lexicon (if we kept them).
+                # Since we purified, we expect 'git' (unvoiced).
+                pass
+            
+            # Look ahead for potential roots ending in unvoiced consonants
+            unvoiced_char = reverse_voicing_map.get(char)
+            
+            # If we have an unvoiced candidate (like 't' for 'd'), check that path too
+            if unvoiced_char and unvoiced_char in node.children:
+                unvoiced_node = node.children[unvoiced_char]
+                if unvoiced_node.is_word:
+                    for entry in unvoiced_node.entries:
+                        # Only allow if the root has VOICING attribute
+                        if "VOICING" in entry.get('attributes', ''):
+                            stems.append((matched_prefix + char, entry))
+
+            # Advance node based on direct match
+            if char in node.children:
+                matched_prefix += char
+                node = node.children[char]
+                if node.is_word:
+                    for entry in node.entries:
+                        stems.append((matched_prefix, entry))
+            else:
+                # No more possible prefix matches in Trie
                 break
-            matched_prefix += char
-            node = node.children[char]
-            if node.is_word:
-                stems.append((matched_prefix, node.data))
+                    
         return stems

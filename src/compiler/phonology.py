@@ -26,92 +26,131 @@ class PhonologyEngine:
         return word[-1] in cls.UNVOICED_CONSONANTS
 
     @classmethod
-    def resolve_affix(cls, stem: str, template: str) -> tuple[str, str]:
+    def mutate_stem(cls, stem: str, attributes: str, next_is_vowel: bool) -> str:
+        """
+        Applies phonetic mutations to the stem based on its attributes and the next character.
+        """
+        if not stem or not next_is_vowel:
+            return stem
+
+        mutated = stem
+        
+        # 1. VOWEL_DROP (Hece Düşmesi) e.g., ağız -> ağz-ı
+        if "VOWEL_DROP" in attributes:
+            if len(stem) >= 3:
+                vowel_indices = [i for i, char in enumerate(stem) if char in cls.VOWELS]
+                if len(vowel_indices) >= 2:
+                    last_vowel_idx = vowel_indices[-1]
+                    if last_vowel_idx == len(stem) - 2:
+                        mutated = stem[:last_vowel_idx] + stem[last_vowel_idx+1:]
+        
+        # 2. VOICING (Ünsüz Yumuşaması) e.g., kitap -> kitab-ı
+        if "VOICING" in attributes:
+            last_char = mutated[-1]
+            voicing_map = {'p': 'b', 'ç': 'c', 't': 'd', 'k': 'ğ'}
+            if last_char in voicing_map:
+                new_char = voicing_map[last_char]
+                if last_char == 'k' and len(mutated) >= 2 and mutated[-2].lower() == 'n':
+                    new_char = 'g'
+                mutated = mutated[:-1] + new_char
+        
+        return mutated
+
+    @classmethod
+    def resolve_affix(cls, stem: str, template: str, attributes: str = "-") -> tuple[str, str]:
         """
         Resolves an abstract affix template into its surface form based on the stem.
         Returns a tuple: (mutated_stem, resolved_affix)
-        This handles cases where adding a vowel suffix mutates the stem (e.g. ecek + im -> eceğ + im)
         """
         if not template:
             return stem, ""
 
-        resolved = ""
-        mutated_stem = stem
         last_vowel = cls._get_last_vowel(stem)
-        ends_with_vowel = cls._ends_with_vowel(stem)
-        ends_with_unvoiced = cls._ends_with_unvoiced(stem)
-        
-        # Determine harmonies
         is_back = last_vowel in cls.BACK_VOWELS
         is_rounded = last_vowel in cls.ROUNDED_VOWELS
-
-        def apply_stem_mutation(stem_to_mutate):
-            """Applies consonant mutation to the end of the stem when followed by a vowel."""
-            if not stem_to_mutate: return stem_to_mutate
-            last_char = stem_to_mutate[-1]
-            voicing_map = {'p': 'b', 'ç': 'c', 't': 'd', 'k': 'ğ'}
-            if last_char in voicing_map:
-                return stem_to_mutate[:-1] + voicing_map[last_char]
-            return stem_to_mutate
-
-        i = 0
         
+        # Determine current state for hardening/buffer
+        current_ends_unvoiced = cls._ends_with_unvoiced(stem)
+        current_ends_vowel = cls._ends_with_vowel(stem)
+
+        resolved = ""
+        i = 0
+        starts_with_vowel = False
+        
+        # Peek to see if it starts with a vowel or a vowel-inducing buffer
+        if template.startswith('('):
+            if len(template) >= 3 and template[2] == ')':
+                buffer_char = template[1]
+                if buffer_char in "IA" and not current_ends_vowel:
+                    starts_with_vowel = True
+                elif buffer_char in "ysnş" and current_ends_vowel:
+                    starts_with_vowel = False
+        elif template[0] in "AI":
+            starts_with_vowel = True
+        elif template[0] in cls.VOWELS:
+            starts_with_vowel = True
+
         while i < len(template):
             char = template[i]
 
-            # Handle optional buffer characters e.g., (y), (I)
             if char == '(' and i + 2 < len(template) and template[i+2] == ')':
                 buffer_char = template[i+1]
                 i += 3
-                
                 if buffer_char in "ysnş":
-                    if ends_with_vowel:
+                    if current_ends_vowel:
                         resolved += buffer_char
-                        ends_with_vowel = False
+                        current_ends_vowel = False
+                        current_ends_unvoiced = False
                 elif buffer_char in "IA":
-                    if not ends_with_vowel:
-                        if buffer_char == 'I':
-                            resolved += cls._resolve_I(is_back, is_rounded)
-                        elif buffer_char == 'A':
-                            resolved += 'a' if is_back else 'e'
-                        ends_with_vowel = True
+                    if not current_ends_vowel:
+                        vowel_char = cls._resolve_I(is_back, is_rounded) if buffer_char == 'I' else ('a' if is_back else 'e')
+                        resolved += vowel_char
+                        current_ends_vowel = True
+                        current_ends_unvoiced = False
+                        is_back = vowel_char in cls.BACK_VOWELS
+                        is_rounded = vowel_char in cls.ROUNDED_VOWELS
                 continue
 
-            # Handle abstract placeholders
             if char == 'A':
-                resolved += 'a' if is_back else 'e'
-                ends_with_vowel = True
+                vowel_char = 'a' if is_back else 'e'
+                resolved += vowel_char
+                current_ends_vowel = True
+                current_ends_unvoiced = False
+                is_back = vowel_char in cls.BACK_VOWELS
+                is_rounded = vowel_char in cls.ROUNDED_VOWELS
             elif char == 'I':
-                resolved += cls._resolve_I(is_back, is_rounded)
-                ends_with_vowel = True
+                vowel_char = cls._resolve_I(is_back, is_rounded)
+                resolved += vowel_char
+                current_ends_vowel = True
+                current_ends_unvoiced = False
+                is_back = vowel_char in cls.BACK_VOWELS
+                is_rounded = vowel_char in cls.ROUNDED_VOWELS
             elif char == 'D':
-                resolved += 't' if ends_with_unvoiced else 'd'
-                ends_with_vowel = False
-                ends_with_unvoiced = False
+                resolved += 't' if current_ends_unvoiced else 'd'
+                current_ends_vowel = False
+                current_ends_unvoiced = resolved[-1] in cls.UNVOICED_CONSONANTS
             elif char == 'C':
-                resolved += 'ç' if ends_with_unvoiced else 'c'
-                ends_with_vowel = False
-                ends_with_unvoiced = False
+                resolved += 'ç' if current_ends_unvoiced else 'c'
+                current_ends_vowel = False
+                current_ends_unvoiced = resolved[-1] in cls.UNVOICED_CONSONANTS
             else:
-                # Normal character
                 resolved += char
-                ends_with_vowel = char in cls.VOWELS
-                ends_with_unvoiced = char in cls.UNVOICED_CONSONANTS
+                current_ends_vowel = char in cls.VOWELS
+                current_ends_unvoiced = char in cls.UNVOICED_CONSONANTS
+                if current_ends_vowel:
+                    is_back = char in cls.BACK_VOWELS
+                    is_rounded = char in cls.ROUNDED_VOWELS
             i += 1
 
-        if resolved and resolved[0] in cls.VOWELS:
-            mutated_stem = apply_stem_mutation(mutated_stem)
+        mutated_stem = stem
+        if starts_with_vowel or (resolved and resolved[0] in cls.VOWELS):
+             mutated_stem = cls.mutate_stem(stem, attributes, True)
 
         return mutated_stem, resolved
 
     @classmethod
     def _resolve_I(cls, is_back: bool, is_rounded: bool) -> str:
-        if is_back and not is_rounded:
-            return 'ı'
-        elif is_back and is_rounded:
-            return 'u'
-        elif not is_back and not is_rounded:
-            return 'i'
-        elif not is_back and is_rounded:
-            return 'ü'
-        return 'ı' # Fallback
+        if is_back and not is_rounded: return 'ı'
+        if is_back and is_rounded: return 'u'
+        if not is_back and not is_rounded: return 'i'
+        return 'ü'
