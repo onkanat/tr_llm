@@ -1,56 +1,11 @@
 import os
-import hashlib
-import random
+import sys
 from qdrant_client.http import models
 from src.compiler.lexicon import LexiconManager
 from src.compiler.morphotactics import build_default_graph
 from src.compiler.core import CrystalCompiler
 from src.llm.tokenizer import KristalTokenizer, Vocabulary
-from src.rag.vector_memory import VectorMemory
-
-def generate_kristal_vector(token_ids, crystal_tags_str, size=768):
-    """
-    Kristal-Vektörel Mimarisi için yoğun (dense), konumsal (positional) 
-    ve ağırlıklı (weighted) deterministik vektör üretimi.
-    """
-    if not token_ids:
-        return [0.0] * size
-        
-    final_vec = [0.0] * size
-    tags = crystal_tags_str.split() if crystal_tags_str else []
-    
-    for pos_idx, tid in enumerate(token_ids):
-        weight = 1.0
-        if pos_idx < len(tags):
-            tag = tags[pos_idx]
-            if tag in ["<BOS>", "<EOS>", "<PAD>", "<UNK>"]:
-                weight = 0.1
-            elif tag.isupper() or "_" in tag:
-                weight = 0.5
-            else:
-                weight = 2.0
-
-        hash_input = f"{tid}_pos{pos_idx}"
-        seed_val = int(hashlib.sha256(hash_input.encode()).hexdigest(), 16)
-        rng = random.Random(seed_val)
-        
-        for i in range(size):
-            val = (rng.random() * 2.0) - 1.0
-            final_vec[i] += val * weight
-            
-    norm = sum(v*v for v in final_vec) ** 0.5
-    if norm > 1e-9:
-        final_vec = [v/norm for v in final_vec]
-        
-    return final_vec
-
-def generate_sparse_vector(token_ids):
-    """
-    BM25 hibrit arama için morfem frekanslarından seyrek (sparse) vektör üretir.
-    """
-    from collections import Counter
-    counts = Counter(token_ids)
-    return models.SparseVector(indices=list(counts.keys()), values=[float(v) for v in counts.values()])
+from src.rag.vector_memory import VectorMemory, generate_kristal_vector, generate_sparse_vector
 
 def run_simulation():
     # 1. HAZIRLIK
@@ -65,6 +20,26 @@ def run_simulation():
     
     # Vektör Bellek (768d)
     memory = VectorMemory(collection_name="simulasyon_bellek", vector_size=768, host="localhost", port=6333)
+    if memory.is_in_memory or memory.client.count(memory.collection_name).count == 0:
+        seed_docs = [
+            "Bana göre ölümün en büyük vasfı durgunluk, hareketsizliktir.",
+            "Akmayan su kirlenir, yerinde sayan insan geriler.",
+            "Pıhtılaşan kan ve ağırlaşan hava nefes almayı güçleştirdi.",
+            "Kitap okumak zihni temizler ve yeni ufuklar açar.",
+            "O gün gelecekti fakat işleri uzadığı için gelemedi.",
+            "Demirkır atları ovaya indirdi ve rüzgar dindi."
+        ]
+        for s_doc in seed_docs:
+            d_ids = tokenizer.encode(s_doc)
+            d_tags = tokenizer.decode(d_ids)
+            d_dense = generate_kristal_vector(d_ids, d_tags)
+            d_sparse = generate_sparse_vector(d_ids, d_tags)
+            memory.add_document(
+                text=s_doc,
+                dense_vector=d_dense,
+                sparse_vector=d_sparse,
+                metadata={"crystal_tags": d_tags}
+            )
 
     # 2. SORGULAR
     queries = [
@@ -106,16 +81,27 @@ def run_simulation():
             f_rep.write(f"  Morfem Etiketleri: {crystal_tags}\n")
             f_rep.write(f"  Token IDs: {token_ids}\n")
 
-            # B. VEKTÖREL PROJEKSİYON (DENSE & SPARSE)
+            # B. YENİDEN YAPILANDIRMA (DECOMPILATION)
+            # Reconstruct the tokenized morphemes back to a surface string word-by-word
+            from tests.test_decompiler import MorphemeDecompiler
+            decompiler = MorphemeDecompiler(compiler, vocab)
+            
+            decompiled_sentence = decompiler.decompile_sentence(crystal_tags)
+            
+            f_rep.write(f"[1.5 Decompilation (Yeniden Yapılandırma)]:\n")
+            f_rep.write(f"  Yapılandırılan Cümle: {decompiled_sentence}\n")
+
+            # C. VEKTÖREL PROJEKSİYON (DENSE & SPARSE)
             query_dense_vector = generate_kristal_vector(token_ids, crystal_tags)
-            query_sparse_vector = generate_sparse_vector(token_ids)
+            query_sparse_vector = generate_sparse_vector(token_ids, crystal_tags)
             
             f_rep.write(f"[2. Vektörel Projeksiyon]:\n")
             f_rep.write(f"  Dense Fingerprint (İlk 5): {query_dense_vector[:5]}\n")
             f_rep.write(f"  Sparse Indices: {query_sparse_vector.indices}\n")
 
-            # C. HİBRİT GERİ ÇAĞIRMA (RRF)
-            results = memory.hybrid_recall(query_dense_vector, query_sparse_vector, top_k=3)
+            # D. HİBRİT GERİ ÇAĞIRMA (RRF)
+            results = memory.hybrid_recall(query_dense_vector, query_sparse_vector, top_k=3, query_tags=crystal_tags)
+
 
             f_rep.write(f"[3. Hibrit Geri Çağırma (Dense + BM25)]:\n")
             if not results:

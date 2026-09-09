@@ -1,3 +1,4 @@
+import json
 import unittest
 import os
 from src.compiler.lexicon import LexiconManager
@@ -5,6 +6,7 @@ from src.compiler.morphotactics import build_default_graph
 from src.compiler.core import CrystalCompiler
 from src.llm.tokenizer import Vocabulary, KristalTokenizer
 from src.rag.vector_memory import VectorMemory
+
 
 class TestPhase2(unittest.TestCase):
     def setUp(self):
@@ -44,6 +46,19 @@ class TestPhase2(unittest.TestCase):
         self.assertIn("CASE_LOC", decoded_tags)
         self.assertIn("gel", decoded_tags)
         self.assertIn("TENSE_FUT", decoded_tags)
+
+    def test_tokenizer_handles_structured_jsonl(self):
+        structured = json.dumps({
+            "instruction": "Kök morfem nedir?",
+            "input": "kitaplarda",
+            "output": "ROOT: kitap"
+        })
+        encoded = self.tokenizer.encode(structured)
+        decoded = self.tokenizer.decode(encoded)
+
+        self.assertIn("<INSTRUCTION>", decoded)
+        self.assertIn("<INPUT>", decoded)
+        self.assertIn("<OUTPUT>", decoded)
 
     def test_vector_memory_recall(self):
         from qdrant_client.http import models

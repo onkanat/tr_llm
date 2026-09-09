@@ -1,0 +1,151 @@
+============================================================
+ KRİSTAL-VEKTÖREL MİMARİSİ: VEKTÖREL GEZGİN RAPORU (HİBRİT ARAMA)
+============================================================
+
+Sorgu #1: 'Durgun su ölümü hatırlatır'
+------------------------------
+[1. Kristalizasyon]:
+  Morfem Etiketleri: <BOS> durgun su ölüm POSS_3SG hatırlat TENSE_AORIST <EOS>
+  Token IDs: [2, 263, 298, 223, 13, 385, 26, 3]
+[1.5 Decompilation (Yeniden Yapılandırma)]:
+  Yapılandırılan Cümle: durgun su ölümü hatırlatır
+[2. Vektörel Projeksiyon]:
+  Dense Fingerprint (İlk 5): [0.013123991648967362, 0.007514464454631211, -0.0038245641922280537, -0.008155570684311818, 0.003236833538039198]
+  Sparse Indices: [263, 298, 223, 13, 385, 26]
+[3. Hibrit Geri Çağırma (Dense + BM25)]:
+  Eşleşme #1 (Skor: 1.0000):
+    Metin: Bana göre ölümün en büyük vasfı durgunluk, hareketsizliktir.
+    Morfemler: <BOS> bana göre ölüm POSS_2SG en büyük vasıf POSS_3SG durgun DERIV_lIk hareket DERIV_sIz DERIV_lIk COPULA_AORIST <EOS>
+    Yazar: Anonim
+  Eşleşme #2 (Skor: 0.3333):
+    Metin: Akmayan su kirlenir, yerinde sayan insan geriler.
+    Morfemler: <BOS> ak NEG PART_An su kirlen TENSE_AORIST yerinde say PART_An insan geri PLURAL <EOS>
+    Yazar: Anonim
+  Eşleşme #3 (Skor: 0.1964):
+    Metin: O gün gelecekti fakat işleri uzadığı için gelemedi.
+    Morfemler: <BOS> o gün gelecek COPULA_PAST fakat iş POSS_3PL uza PART_DIk POSS_3SG için gel IMPOTENTIAL_NEG TENSE_PAST <EOS>
+    Yazar: Anonim
+
+Sorgu #2: 'Akmayan su kımıldanmayan yer'
+------------------------------
+[1. Kristalizasyon]:
+  Morfem Etiketleri: <BOS> ak NEG PART_An su kımıldan NEG PART_An yer <EOS>
+  Token IDs: [2, 364, 87, 69, 298, 380, 87, 69, 330, 3]
+[1.5 Decompilation (Yeniden Yapılandırma)]:
+  Yapılandırılan Cümle: akmayan su kımıldanmayan yer
+[2. Vektörel Projeksiyon]:
+  Dense Fingerprint (İlk 5): [-0.0628237410170756, 0.07225394056058479, 0.06418693761408957, -0.032261739978053386, 0.018309475067132146]
+  Sparse Indices: [364, 87, 69, 298, 380, 330]
+[3. Hibrit Geri Çağırma (Dense + BM25)]:
+  Eşleşme #1 (Skor: 0.5000):
+    Metin: Akmayan su kirlenir, yerinde sayan insan geriler.
+    Morfemler: <BOS> ak NEG PART_An su kirlen TENSE_AORIST yerinde say PART_An insan geri PLURAL <EOS>
+    Yazar: Anonim
+  Eşleşme #2 (Skor: 0.2381):
+    Metin: Pıhtılaşan kan ve ağırlaşan hava nefes almayı güçleştirdi.
+    Morfemler: <BOS> pıhtılaş PART_An kan ve ağırlaş PART_An hava nefes alma CASE_ACC güçleştir TENSE_PAST <EOS>
+    Yazar: Anonim
+  Eşleşme #3 (Skor: 0.1667):
+    Metin: Kitap okumak zihni temizler ve yeni ufuklar açar.
+    Morfemler: <BOS> kitap oku INF_mAk zihin POSS_3SG temiz PLURAL ve yeni ufuk PLURAL açar <EOS>
+    Yazar: Anonim
+
+Sorgu #3: 'Pıhtılaşan su ağırlaşan su'
+------------------------------
+[1. Kristalizasyon]:
+  Morfem Etiketleri: <BOS> pıhtılaş PART_An su ağırlaş PART_An su <EOS>
+  Token IDs: [2, 382, 69, 298, 383, 69, 298, 3]
+[1.5 Decompilation (Yeniden Yapılandırma)]:
+  Yapılandırılan Cümle: pıhtılaşan su ağırlaşan su
+[2. Vektörel Projeksiyon]:
+  Dense Fingerprint (İlk 5): [-0.029274626932387415, 0.03999866050823701, -0.005728144054859736, -0.02828793224174128, 0.015641331224672216]
+  Sparse Indices: [382, 69, 298, 383]
+[3. Hibrit Geri Çağırma (Dense + BM25)]:
+  Eşleşme #1 (Skor: 1.0000):
+    Metin: Pıhtılaşan kan ve ağırlaşan hava nefes almayı güçleştirdi.
+    Morfemler: <BOS> pıhtılaş PART_An kan ve ağırlaş PART_An hava nefes alma CASE_ACC güçleştir TENSE_PAST <EOS>
+    Yazar: Anonim
+  Eşleşme #2 (Skor: 0.3333):
+    Metin: Akmayan su kirlenir, yerinde sayan insan geriler.
+    Morfemler: <BOS> ak NEG PART_An su kirlen TENSE_AORIST yerinde say PART_An insan geri PLURAL <EOS>
+    Yazar: Anonim
+  Eşleşme #3 (Skor: 0.1250):
+    Metin: Kitap okumak zihni temizler ve yeni ufuklar açar.
+    Morfemler: <BOS> kitap oku INF_mAk zihin POSS_3SG temiz PLURAL ve yeni ufuk PLURAL açar <EOS>
+    Yazar: Anonim
+
+Sorgu #4: 'Kitabı okudum ve temizledim'
+------------------------------
+[1. Kristalizasyon]:
+  Morfem Etiketleri: <BOS> kitap POSS_3SG oku TENSE_PAST PERSON_1SG ve temizle TENSE_PAST PERSON_1SG <EOS>
+  Token IDs: [2, 249, 13, 1670, 22, 32, 46, 4451, 22, 32, 3]
+[1.5 Decompilation (Yeniden Yapılandırma)]:
+  Yapılandırılan Cümle: kitabı okudum ve temizledim
+[2. Vektörel Projeksiyon]:
+  Dense Fingerprint (İlk 5): [0.04722227036963427, -0.011267241502338073, 0.05420617452968993, -0.05555990446599073, 0.039357331266096626]
+  Sparse Indices: [249, 13, 1670, 22, 32, 46, 4451]
+[3. Hibrit Geri Çağırma (Dense + BM25)]:
+  Eşleşme #1 (Skor: 1.0000):
+    Metin: Kitap okumak zihni temizler ve yeni ufuklar açar.
+    Morfemler: <BOS> kitap oku INF_mAk zihin POSS_3SG temiz PLURAL ve yeni ufuk PLURAL açar <EOS>
+    Yazar: Anonim
+  Eşleşme #2 (Skor: 0.2917):
+    Metin: Pıhtılaşan kan ve ağırlaşan hava nefes almayı güçleştirdi.
+    Morfemler: <BOS> pıhtılaş PART_An kan ve ağırlaş PART_An hava nefes alma CASE_ACC güçleştir TENSE_PAST <EOS>
+    Yazar: Anonim
+  Eşleşme #3 (Skor: 0.2917):
+    Metin: Demirkır atları ovaya indirdi ve rüzgar dindi.
+    Morfemler: <BOS> <PROPER_NOUN> at POSS_3PL ova CASE_DAT indir TENSE_PAST ve <UNK> din COPULA_PAST <EOS>
+    Yazar: Anonim
+
+Sorgu #5: 'Gidecekti ama gelmedi'
+------------------------------
+[1. Kristalizasyon]:
+  Morfem Etiketleri: <BOS> git TENSE_FUT COPULA_PAST ama gel NEG TENSE_PAST <EOS>
+  Token IDs: [2, 619, 43, 44, 64, 589, 87, 22, 3]
+[1.5 Decompilation (Yeniden Yapılandırma)]:
+  Yapılandırılan Cümle: gidecekti ama gelmedi
+[2. Vektörel Projeksiyon]:
+  Dense Fingerprint (İlk 5): [0.008960698439209611, 0.0036481429825346566, 0.00871178775687587, -0.026028455778203764, -0.048149275890067185]
+  Sparse Indices: [619, 43, 44, 64, 589, 87, 22]
+[3. Hibrit Geri Çağırma (Dense + BM25)]:
+  Eşleşme #1 (Skor: 0.6667):
+    Metin: O gün gelecekti fakat işleri uzadığı için gelemedi.
+    Morfemler: <BOS> o gün gelecek COPULA_PAST fakat iş POSS_3PL uza PART_DIk POSS_3SG için gel IMPOTENTIAL_NEG TENSE_PAST <EOS>
+    Yazar: Anonim
+  Eşleşme #2 (Skor: 0.5000):
+    Metin: Akmayan su kirlenir, yerinde sayan insan geriler.
+    Morfemler: <BOS> ak NEG PART_An su kirlen TENSE_AORIST yerinde say PART_An insan geri PLURAL <EOS>
+    Yazar: Anonim
+  Eşleşme #3 (Skor: 0.2250):
+    Metin: Demirkır atları ovaya indirdi ve rüzgar dindi.
+    Morfemler: <BOS> <PROPER_NOUN> at POSS_3PL ova CASE_DAT indir TENSE_PAST ve <UNK> din COPULA_PAST <EOS>
+    Yazar: Anonim
+
+Sorgu #6: 'Demirkır, güney tepelerinin duldalarına çektiği atları gece yarısına doğru yeniden ovaya indirdi.'
+------------------------------
+[1. Kristalizasyon]:
+  Morfem Etiketleri: <BOS> <PROPER_NOUN> güney tepe POSS_3PL CASE_GEN_N dulda POSS_3PL CASE_DAT_N çek PART_DIk POSS_3SG at POSS_3PL gece yarı POSS_3SG CASE_DAT_N doğru yeniden ova CASE_DAT indir TENSE_PAST <EOS>
+  Token IDs: [2, 4, 5, 6, 7, 8, 9, 7, 10, 11, 12, 13, 14, 7, 15, 16, 13, 10, 17, 18, 19, 20, 21, 22, 3]
+[1.5 Decompilation (Yeniden Yapılandırma)]:
+  Yapılandırılan Cümle: güney tepelerinin duldalarına çektiği atları gece yarısına doğru yeniden ovaya indirdi
+[2. Vektörel Projeksiyon]:
+  Dense Fingerprint (İlk 5): [-0.023774124388860892, 0.04717729942147602, 0.0035000363150230833, 0.01640052426318867, -0.004434214966231249]
+  Sparse Indices: [4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22]
+[3. Hibrit Geri Çağırma (Dense + BM25)]:
+  Eşleşme #1 (Skor: 0.5000):
+    Metin: Demirkır atları ovaya indirdi ve rüzgar dindi.
+    Morfemler: <BOS> <PROPER_NOUN> at POSS_3PL ova CASE_DAT indir TENSE_PAST ve <UNK> din COPULA_PAST <EOS>
+    Yazar: Anonim
+  Eşleşme #2 (Skor: 0.2500):
+    Metin: Pıhtılaşan kan ve ağırlaşan hava nefes almayı güçleştirdi.
+    Morfemler: <BOS> pıhtılaş PART_An kan ve ağırlaş PART_An hava nefes alma CASE_ACC güçleştir TENSE_PAST <EOS>
+    Yazar: Anonim
+  Eşleşme #3 (Skor: 0.2381):
+    Metin: O gün gelecekti fakat işleri uzadığı için gelemedi.
+    Morfemler: <BOS> o gün gelecek COPULA_PAST fakat iş POSS_3PL uza PART_DIk POSS_3SG için gel IMPOTENTIAL_NEG TENSE_PAST <EOS>
+    Yazar: Anonim
+
+============================================================
+ RAPOR SONU
+============================================================

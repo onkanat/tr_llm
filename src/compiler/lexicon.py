@@ -41,14 +41,6 @@ class LexiconManager:
         reverse_voicing_map = {'b': 'p', 'c': 'ç', 'd': 't', 'ğ': 'k', 'g': 'k'}
         
         for i, char in enumerate(word):
-            # Try normal match first
-            if char in node.children:
-                # We also need to check if there's an alternative unvoiced root path
-                # BUT, if we have a direct match (like 'git' for 'gidecek'),
-                # it might be the voiced root in the lexicon (if we kept them).
-                # Since we purified, we expect 'git' (unvoiced).
-                pass
-            
             # Look ahead for potential roots ending in unvoiced consonants
             unvoiced_char = reverse_voicing_map.get(char)
             
@@ -60,6 +52,25 @@ class LexiconManager:
                         # Only allow if the root has VOICING attribute
                         if "VOICING" in entry.get('attributes', ''):
                             stems.append((matched_prefix + char, entry))
+
+            # Look ahead for vowel drop candidates (direct or voiced/unvoiced)
+            for v in ('ı', 'i', 'u', 'ü'):
+                if v in node.children:
+                    v_node = node.children[v]
+                    chars_to_check = [char]
+                    if unvoiced_char:
+                        chars_to_check.append(unvoiced_char)
+                    
+                    for c in chars_to_check:
+                        if c in v_node.children:
+                            target_node = v_node.children[c]
+                            if target_node.is_word:
+                                for entry in target_node.entries:
+                                    attrs = entry.get('attributes', '')
+                                    if "VOWEL_DROP" in attrs:
+                                        if c == unvoiced_char and "VOICING" not in attrs:
+                                            continue
+                                        stems.append((matched_prefix + char, entry))
 
             # Advance node based on direct match
             if char in node.children:

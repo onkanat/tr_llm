@@ -11,12 +11,17 @@ from src.rag.vector_memory import VectorMemory
 from src.compiler.lexicon import LexiconManager
 from src.compiler.morphotactics import build_default_graph
 from src.compiler.core import CrystalCompiler
-from src.llm.tokenizer import KristalTokenizer, Vocabulary
+from src.llm.tokenizer import KristalTokenizer, Vocabulary, get_morpheme_weight
+from qdrant_client.http import models
 
 def generate_kristal_vector(token_ids, crystal_tags_str, size=768):
     """
     Kristal-Vektörel Mimarisi için yoğun (dense), konumsal (positional) 
     ve ağırlıklı (weighted) deterministik vektör üretimi.
+    
+    Uygulanan Mantıksal Koruma Katmanı (Sprint 3):
+    Kelimeler bazında gruplama yapılarak, NEG veya IMPOTENTIAL_NEG barındıran 
+    kelimelerin vektörü Sign Inversion (Kutup Değişimi) ile -1.0 ile çarpılır.
     """
     if not token_ids:
         return [0.0] * size
@@ -24,46 +29,89 @@ def generate_kristal_vector(token_ids, crystal_tags_str, size=768):
     final_vec = [0.0] * size
     tags = crystal_tags_str.split() if crystal_tags_str else []
     
+    # 1. Kelime sınırlarını belirleyerek morfemleri kelime bazlı grupla
+    words = []
+    current_word = []
     for pos_idx, tid in enumerate(token_ids):
-        # --- 2. Morfem Ağırlıklandırma ---
-        weight = 1.0
-        if pos_idx < len(tags):
-            tag = tags[pos_idx]
-            if tag in ["<BOS>", "<EOS>", "<PAD>", "<UNK>"]:
-                weight = 0.1 # Düşük ağırlık (Sistem tokenları)
-            elif tag.isupper() or "_" in tag:
-                weight = 0.5 # Orta ağırlık (Gramer ekleri, örn: TENSE_PAST)
-            else:
-                weight = 2.0 # Yüksek ağırlık (Kökler, örn: durgun, su)
-
-        # --- 1. Konumsal Kodlama (Positional Encoding) ---
-        # Seed değerine pos_idx ekleyerek kelimenin sırasını vektöre kodluyoruz.
-        hash_input = f"{tid}_pos{pos_idx}"
-        seed_val = int(hashlib.sha256(hash_input.encode()).hexdigest(), 16)
-        rng = random.Random(seed_val)
+        tag = tags[pos_idx] if pos_idx < len(tags) else ""
         
-        # Bu morfem için 768 boyutlu yoğun bir vektör oluştur ve ağırlıkla çarp
-        for i in range(size):
-            # -1.0 ile 1.0 arası deterministik rastgele değer
-            val = (rng.random() * 2.0) - 1.0
-            final_vec[i] += val * weight
+        is_control = tag in [
+            "<BOS>", "<EOS>", "<PAD>", "<UNK>",
+            "<INSTRUCTION>", "</INSTRUCTION>",
+            "<INPUT>", "</INPUT>", "<OUTPUT>", "</OUTPUT>",
+            "<NUMBER>", "<SYMBOL>"
+        ]
+        is_root = not is_control and (
+            tag == "<PROPER_NOUN>" or (
+                not tag.startswith("DERIV_") and 
+                not tag.startswith(("TENSE_", "PERSON_", "POSS_", "CASE_", "COPULA_", "PART_", "INF_", "GERUND_")) and 
+                tag not in ("PLURAL", "NEG", "POTENTIAL", "IMPOTENTIAL_NEG")
+            )
+        )
+        
+        if is_control or is_root:
+            if current_word:
+                words.append(current_word)
+            current_word = [(pos_idx, tid, tag)]
+        else:
+            current_word.append((pos_idx, tid, tag))
+    if current_word:
+        words.append(current_word)
+        
+    # 2. Her kelime için vektör üret ve olumsuzluk durumunda kutup değişimi yap
+    for word_tokens in words:
+        word_vec = [0.0] * size
+        has_negation = False
+        
+        for pos_idx, tid, tag in word_tokens:
+            weight = get_morpheme_weight(tag)
+            if tag in ("NEG", "IMPOTENTIAL_NEG"):
+                has_negation = True
+                
+            hash_input = f"{tid}_pos{pos_idx}"
+            seed_val = int(hashlib.sha256(hash_input.encode()).hexdigest(), 16)
+            rng = random.Random(seed_val)
             
-    # Son cümleyi L2 ile normalize et
+            for i in range(size):
+                val = (rng.random() * 2.0) - 1.0
+                word_vec[i] += val * weight
+                
+        if has_negation:
+            word_vec = [-v for v in word_vec]
+            
+        for i in range(size):
+            final_vec[i] += word_vec[i]
+            
+    # Son L2 normalizasyonu
     norm = sum(v*v for v in final_vec) ** 0.5
     if norm > 1e-9:
         final_vec = [v/norm for v in final_vec]
         
     return final_vec
 
-from qdrant_client.http import models
 
-def generate_sparse_vector(token_ids):
+def generate_sparse_vector(token_ids, crystal_tags_str):
     """
     BM25 hibrit arama için morfem frekanslarından seyrek (sparse) vektör üretir.
+    Morfem tiplerine göre ağırlıklandırılmış frekans değerleri kullanır.
     """
     from collections import Counter
     counts = Counter(token_ids)
-    return models.SparseVector(indices=list(counts.keys()), values=[float(v) for v in counts.values()])
+    
+    tags = crystal_tags_str.split() if crystal_tags_str else []
+    id_to_weight = {}
+    for pos_idx, tid in enumerate(token_ids):
+        weight = 1.0
+        if pos_idx < len(tags):
+            tag = tags[pos_idx]
+            weight = get_morpheme_weight(tag)
+        id_to_weight[tid] = max(id_to_weight.get(tid, 0.0), weight)
+        
+    indices = list(counts.keys())
+    values = [float(counts[tid] * id_to_weight.get(tid, 1.0)) for tid in indices]
+    
+    return models.SparseVector(indices=indices, values=values)
+
 
 def import_gts_examples(max_examples=100, reset=True):
     jsonl_path = 'data/poems/gts.json'
@@ -84,6 +132,8 @@ def import_gts_examples(max_examples=100, reset=True):
     graph = build_default_graph()
     compiler = CrystalCompiler(lexicon, graph)
     vocab = Vocabulary()
+    if os.path.exists('data/vocab.json'):
+        vocab.load('data/vocab.json')
     tokenizer = KristalTokenizer(compiler, vocab)
 
     # 2. RAPOR HAZIRLIĞI
@@ -164,7 +214,8 @@ def import_gts_examples(max_examples=100, reset=True):
                     token_ids = tokenizer.encode(ornek_metin)
                     crystal_tags = tokenizer.decode(token_ids)
                     dense_vector = generate_kristal_vector(token_ids, crystal_tags)
-                    sparse_vector = generate_sparse_vector(token_ids)
+                    sparse_vector = generate_sparse_vector(token_ids, crystal_tags)
+
                     
                     # Batch listelerine ekle
                     batch_texts.append(ornek_metin)

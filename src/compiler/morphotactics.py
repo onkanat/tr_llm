@@ -170,6 +170,10 @@ def build_default_graph() -> MorphotacticsGraph:
     for tid, template, attr in n_cases:
         graph.add_transition(State.NOUN_POST_POSSESSIVE_3, State.NOUN_POST_CASE, tid, template, attr)
 
+    # Relative Suffix (Aitlik eki: evdeki, masadaki, edebiyattaki, akşamki)
+    graph.add_transition(State.NOUN_POST_CASE, State.ADJ_ROOT, "REL_ki", "ki", "-")
+    graph.add_transition(State.NOUN_ROOT, State.ADJ_ROOT, "REL_ki", "ki", "-")
+
     # Noun Copula (İsim soylu sözcüklerde ek-fiil bildirme eki)
     noun_copula_states = [State.NOUN_ROOT, State.ADJ_ROOT, State.NOUN_POST_PLURAL, State.NOUN_POST_POSSESSIVE, State.NOUN_POST_POSSESSIVE_3, State.NOUN_POST_CASE]
     for from_state in noun_copula_states:

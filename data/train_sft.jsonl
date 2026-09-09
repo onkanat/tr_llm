@@ -1,0 +1,2 @@
+{"instruction": "Cümledeki eylemin zamanını tespit et.", "input": "Yarın okula gideceğim.", "output": "TENSE_FUT"}
+{"instruction": "Kelimedeki kök morfemini bul.", "input": "kitaplarda", "output": "ROOT: kitap"}

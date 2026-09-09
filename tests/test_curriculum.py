@@ -47,8 +47,23 @@ class TestCurriculumGenerator(unittest.TestCase):
         with open(self.test_jsonl, 'r', encoding='utf-8') as f:
             lines = f.readlines()
             self.assertEqual(len(lines), len(data))
-            first_item = eval(lines[0]) # Using eval since it's trusted local test code, or json.loads
+            first_item = eval(lines[0])
             self.assertEqual(first_item["instruction"], data[0]["instruction"])
+
+    def test_export_to_prompt_file(self):
+        data = self.generator.generate_parenting_data()
+        prompt_path = "test_curriculum.prompts.txt"
+        try:
+            self.generator.export_to_prompt_file(data, prompt_path)
+            self.assertTrue(os.path.exists(prompt_path))
+            with open(prompt_path, 'r', encoding='utf-8') as f:
+                content = f.read()
+                self.assertIn("<INSTRUCTION>", content)
+                self.assertIn("<INPUT>", content)
+                self.assertIn("<OUTPUT>", content)
+        finally:
+            if os.path.exists(prompt_path):
+                os.remove(prompt_path)
 
 if __name__ == '__main__':
     unittest.main()

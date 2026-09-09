@@ -65,8 +65,33 @@ class CurriculumGenerator:
             ]
         return []
 
+    def render_prompt_template(self, item: Dict[str, str]) -> str:
+        """
+        Converts a structured curriculum item into a plain text prompt
+        template.
+        """
+        instruction = item.get("instruction", "").strip()
+        input_text = item.get("input", "").strip()
+        output_text = item.get("output", "").strip()
+
+        parts = []
+        if instruction:
+            parts.extend(["<INSTRUCTION>", instruction, "</INSTRUCTION>"])
+        parts.extend(["<INPUT>", input_text, "</INPUT>"])
+        parts.extend(["<OUTPUT>", output_text, "</OUTPUT>"])
+        return " ".join(parts).strip()
+
+    def export_to_prompt_file(self, data: List[Dict[str, str]], filepath: str):
+        """Exports the generated curriculum as plain text prompt templates."""
+        with open(filepath, 'w', encoding='utf-8') as f:
+            for item in data:
+                f.write(self.render_prompt_template(item) + '\n')
+
     def export_to_jsonl(self, data: List[Dict[str, str]], filepath: str):
-        """Exports the generated curriculum to JSONL format suitable for SFT/RLHF pipelines."""
+        """
+        Exports the generated curriculum to JSONL format suitable for SFT/RLHF
+        pipelines.
+        """
         with open(filepath, 'w', encoding='utf-8') as f:
             for item in data:
                 f.write(json.dumps(item, ensure_ascii=False) + '\n')

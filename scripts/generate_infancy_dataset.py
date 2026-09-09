@@ -11,6 +11,9 @@ from src.rag.vector_memory import VectorMemory
 from src.compiler.lexicon import LexiconManager
 from src.llm.tokenizer import Vocabulary
 from scripts.import_examples import generate_kristal_vector, generate_sparse_vector
+from src.compiler.core import CrystalCompiler
+from src.compiler.morphotactics import build_default_graph
+
 
 def run_infancy_crawler(num_pairs=5000):
     print("="*50)
@@ -20,6 +23,8 @@ def run_infancy_crawler(num_pairs=5000):
     # 1. Hazırlık
     lexicon = LexiconManager()
     lexicon.load_from_tsv('data/lexicon/roots.tsv')
+    graph = build_default_graph()
+    compiler = CrystalCompiler(lexicon, graph)
     
     vocab = Vocabulary()
     vocab.load('data/vocab.json')
@@ -56,11 +61,82 @@ def run_infancy_crawler(num_pairs=5000):
     dataset = []
     positive_count = 0
     negative_count = 0
+    seen_pos_pairs = set()
 
-    print(f"\nGezgin rastgele anlamsal ve sözdizimsel bağlar kuruyor ({num_pairs} deneme)...")
+    # --- POZİTİF BAĞLARIN ORGANİK ÇIKARILMASI (CRAWLER) ---
+    print("\n[1] Veritabanındaki dökümanlardan organik Pozitif bağlar çıkarılıyor...")
+    next_page = None
+    while True:
+        results, next_page = memory.client.scroll(
+            collection_name=memory.collection_name,
+            limit=100,
+            with_payload=True,
+            with_vectors=False,
+            offset=next_page
+        )
+        for r in results:
+            text = r.payload.get("text", "")
+            if not text:
+                continue
+                
+            words = text.split()
+            compiled_words = []
+            for w in words:
+                clean_w = w.strip(".,!?\"…—«»/()-;:")
+                if not clean_w:
+                    continue
+                if clean_w.replace(".", "").replace(",", "").isdigit() or clean_w.isnumeric():
+                    continue
+                compile_w = clean_w.replace("'", "")
+                res = compiler.compile(compile_w)
+                if res.get("analyses"):
+                    best = res["analyses"][0]
+                    root_morpheme = best["morphemes"][0]
+                    compiled_words.append((root_morpheme["id"], root_morpheme["pos"]))
+                else:
+                    if clean_w[0].isupper():
+                        compiled_words.append((clean_w, "PROPER_NOUN"))
+                    else:
+                        compiled_words.append((clean_w, "UNK"))
+                        
+            # Ardışık kelime örüntülerini kontrol et
+            for idx in range(len(compiled_words) - 1):
+                w1, pos1 = compiled_words[idx]
+                w2, pos2 = compiled_words[idx+1]
+                
+                pattern = None
+                if pos1 == "NOUN" and pos2 == "VERB":
+                    pattern = "Noun+Verb"
+                elif pos1 == "ADJ" and pos2 == "NOUN":
+                    pattern = "Adj+Noun"
+                elif pos1 == "ADV" and pos2 == "VERB":
+                    pattern = "Adv+Verb"
+                    
+                if pattern:
+                    pair_key = (w1, w2, pattern)
+                    if pair_key not in seen_pos_pairs:
+                        seen_pos_pairs.add(pair_key)
+                        output_text = f"Pozitif anlamsal bağ ({pattern}): '{w1}' ve '{w2}'. Örnek bağlam: '{text}'"
+                        positive_count += 1
+                        dataset.append({
+                            "instruction": f"Aşağıdaki {pattern} eşleşmesinin anlamsal sınırlarını belirle: {w1} + {w2}",
+                            "input": f"{w1} {w2}",
+                            "output": output_text
+                        })
+        if not next_page:
+            break
+
+    print(f"  -> {positive_count} adet organik Pozitif bağ çıkarıldı.")
+
+    # --- DENGELİ NEGATİF BAĞLARIN ÜRETİLMESİ (CO-OCCURRENCE / SEMANTIC PENALTY) ---
+    target_negatives = positive_count
+    print(f"\n[2] Dengeli Negatif bağlar üretiliyor (Hedef: {target_negatives} adet)...")
     
-    for i in range(num_pairs):
-        # Rastgele bir sentaktik kalıp seç
+    attempts = 0
+    max_attempts = target_negatives * 20
+    
+    while negative_count < target_negatives and attempts < max_attempts:
+        attempts += 1
         pattern = random.choice(["Noun+Verb", "Adj+Noun", "Adv+Verb"])
         
         if pattern == "Noun+Verb":
@@ -73,39 +149,24 @@ def run_infancy_crawler(num_pairs=5000):
             w1 = random.choice(advs)
             w2 = random.choice(verbs)
             
+        # Zaten pozitif listesinde varsa geç
+        if (w1, w2, pattern) in seen_pos_pairs:
+            continue
+            
         token_ids = [
             vocab.encode('<BOS>'), 
             vocab.encode(w1), 
             vocab.encode(w2), 
             vocab.encode('<EOS>')
         ]
-        
         tags_str = f"<BOS> {w1} {w2} <EOS>"
-        
-        # Vektörleri oluştur
         dense_vec = generate_kristal_vector(token_ids, tags_str)
         
-        # Hafızaya Sor (Pure Semantic Recall via Dense Vector)
         results = memory.dense_recall(dense_vec, top_k=1)
+        top_score = results[0]['score'] if results else 0.0
         
-        score = 0.0
-        match_text = "Yok"
-        if results:
-            score = results[0]['score']
-            match_text = results[0]['text']
-
-        # Anlam Sınırlarını (Semantic Boundaries) Belirle
-        if score > 0.18:
-            label = "GEÇERLİ (POZİTİF)"
-            output_text = f"Pozitif anlamsal bağ ({pattern}): '{w1}' ve '{w2}'. Örnek bağlam: '{match_text}'"
-            positive_count += 1
-            dataset.append({
-                "instruction": f"Aşağıdaki {pattern} eşleşmesinin anlamsal sınırlarını belirle: {w1} + {w2}",
-                "input": f"{w1} {w2}",
-                "output": output_text
-            })
-        elif score < 0.10:
-            label = "GEÇERSİZ (NEGATİF)"
+        # Eğer en benzer döküman skoru çok düşükse, negatif olarak doğrula
+        if top_score < 0.18:
             output_text = f"Negatif çelişik bağ ({pattern}): *'{w1}' ile '{w2}' bir araya gelmez. Uzayda yankı bulunamadı."
             negative_count += 1
             dataset.append({
@@ -113,11 +174,12 @@ def run_infancy_crawler(num_pairs=5000):
                 "input": f"{w1} {w2}",
                 "output": output_text
             })
-
-        if (i+1) % 500 == 0:
-            print(f"  Deneme {i+1}: {w1} + {w2} ({pattern}) -> Skor: {score:.4f} [{label}]")
+            
+            if negative_count % 200 == 0:
+                print(f"  -> {negative_count} adet Negatif bağ üretildi...")
 
     print("\n" + "="*50)
+
     print(f" BEBEKLİK FAZI KEŞİF TAMAMLANDI")
     print(f" Pozitif Bağ: {positive_count}")
     print(f" Negatif Bağ: {negative_count}")

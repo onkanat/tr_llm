@@ -3,6 +3,13 @@ __pycache__/
 *.pyc
 .pytest_cache/
 .coverage
+.DS_Store
+*/.DS_Store
 data/poems/gts.json
 data/poems/v12.gts.json.tar.gz
 
+# Model weights and large binaries (>100MB exceeds GitHub limit)
+*.pt
+*.bin
+*.bin.meta.json
+data/pedagogy/dpo_all_tokenized.jsonl
