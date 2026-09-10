@@ -12,9 +12,9 @@ META_TAGS = {
 }
 
 SUFFIX_PREFIXES = (
-    "TENSE_", "PERSON_", "POSS_", "CASE_", "COPULA_", "PART_", "INF_", "GERUND_", "DERIV_"
+    "TENSE_", "PERSON_", "POSS_", "CASE_", "COPULA_", "PART_", "INF_", "GERUND_", "DERIV_", "REL_", "VOICE_", "IMPOTENTIAL_"
 )
-SUFFIX_EXACTS = {"PLURAL", "POTENTIAL", "NEG", "IMPOTENTIAL_NEG"}
+SUFFIX_EXACTS = {"PLURAL", "POTENTIAL", "NEG", "IMPOTENTIAL_NEG", "REL_ki"}
 
 PAST_PERSON_TEMPLATES = {
     "PERSON_1SG": "m",
@@ -29,7 +29,8 @@ COMMON_FALLBACKS = {
     "PLURAL": {"template": "lAr", "attributes": "-"},
     "POTENTIAL": {"template": "(y)Abil", "attributes": "-"},
     "NEG": {"template": "mA", "attributes": "-"},
-    "IMPOTENTIAL_NEG": {"template": "(y)AmA", "attributes": "-"}
+    "IMPOTENTIAL_NEG": {"template": "(y)AmA", "attributes": "-"},
+    "REL_ki": {"template": "ki", "attributes": "-"}
 }
 
 class MorphemeDecompiler:
@@ -140,7 +141,7 @@ class MorphemeDecompiler:
                 continue
                 
             is_suf = self.is_suffix(tag)
-            is_meta = tag.lower() in META_TAGS
+            is_meta = (tag.lower() in META_TAGS) and not is_suf
             
             if is_meta:
                 if current_word_tags:

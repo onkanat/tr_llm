@@ -13,3 +13,8 @@ data/poems/v12.gts.json.tar.gz
 *.bin
 *.bin.meta.json
 data/pedagogy/dpo_all_tokenized.jsonl
+data/qdrant_db/
+data/simulasyon_bellek_export.jsonl
+scratch/
+
+

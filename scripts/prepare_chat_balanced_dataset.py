@@ -79,12 +79,15 @@ def main():
     # D. GTS Anlamsal Sözlük (1,500 kayıt)
     semantics_records = tokenize_jsonl('data/pedagogy/lexical_semantics_dataset.jsonl', tokenizer, max_samples=1500)
 
-    # E. Marangozluk Alan Uzmanlığı (500 kayıt)
+    # E. Marangozluk Alan Uzmanlığı (2,500 kayıt)
     carpenter_raw = tokenize_jsonl('data/pedagogy/carpenter_specialization_dataset.jsonl', tokenizer)
-    carpenter_records = (carpenter_raw * 2)[:500]
+    carpenter_records = carpenter_raw[:2500]
 
     # F. İnteraktif Self-RAG Kullanım Görevleri (2,500 kayıt)
     rag_records = tokenize_jsonl('data/pedagogy/rag_interactive_dataset.jsonl', tokenizer, max_samples=2500)
+
+    # G. Klasik Sadık Belge Alıntılama (RAG Grounding - 3,500 kayıt)
+    classic_rag_records = tokenize_jsonl('data/pedagogy/rag_dataset.jsonl', tokenizer, max_samples=3500)
 
     # 2. Save Vocabulary Update if any new token emerged
     vocab.save('data/vocab.json')
@@ -97,10 +100,11 @@ def main():
         parenting_records +
         semantics_records +
         carpenter_records +
-        rag_records
+        rag_records +
+        classic_rag_records
     )
 
-    print(f"\n[3] Toplam Dengeli Sohbet & Self-RAG SFT Kayıt Sayısı: {len(all_records):,}")
+    print(f"\n[3] Toplam Dengeli Sohbet & RAG SFT Kayıt Sayısı: {len(all_records):,}")
     print("Kayıtlar karıştırılıyor (shuffling)...")
     random.seed(42)
     random.shuffle(all_records)

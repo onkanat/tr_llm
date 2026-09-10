@@ -209,7 +209,7 @@ class KristalLM(nn.Module):
         self.ln_f = nn.LayerNorm(n_embd)
         self.lm_head = nn.Linear(n_embd, vocab_size)
 
-    def forward(self, x: torch.Tensor, targets: torch.Tensor = None, sign_mask: torch.Tensor = None):
+    def forward(self, x: torch.Tensor, targets: torch.Tensor = None, sign_mask: torch.Tensor = None, return_hidden_states: bool = False):
         batch_size, seq_len = x.shape
         
         # 1. Custom token embedding (with sign inversion for negated words)
@@ -230,6 +230,9 @@ class KristalLM(nn.Module):
                 logits.view(-1, logits.size(-1)), 
                 targets.view(-1)
             )
+            
+        if return_hidden_states:
+            return logits, loss, x_emb
             
         return logits, loss
 

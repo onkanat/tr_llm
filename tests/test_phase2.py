@@ -24,7 +24,7 @@ class TestPhase2(unittest.TestCase):
         # Setup Phase 2 components
         self.vocab = Vocabulary()
         self.tokenizer = KristalTokenizer(self.compiler, self.vocab)
-        self.memory = VectorMemory(vector_size=3) # Tiny dummy vector size
+        self.memory = VectorMemory(vector_size=3, storage_path=None) # Tiny dummy vector size in ephemeral memory
 
     def tearDown(self):
         if os.path.exists(self.test_tsv):

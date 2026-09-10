@@ -44,7 +44,9 @@ def main():
         print("CUDA GPU seçildi.", flush=True)
     else:
         device = torch.device("cpu")
-        print("CPU modu seçildi (macOS PyTorch MPS deadlock riskini önlemek için varsayılan).", flush=True)
+        num_cores = os.cpu_count() or 8
+        torch.set_num_threads(num_cores)
+        print(f"CPU modu seçildi ({num_cores} iş parçacığı aktif).", flush=True)
 
     # 2. Vocabulary & Data Loading
     vocab = Vocabulary()
@@ -84,12 +86,22 @@ def main():
     model = KristalLM(vocab_size=vocab_size, n_embd=n_embd, vocab=vocab)
     
     model_save_path = 'data/kristal_model.pt'
+    model_load_path = None
     from_scratch = "--from-scratch" in sys.argv
-    
+
+    for arg_idx, arg in enumerate(sys.argv):
+        if arg in ("--save-path", "--output-model") and arg_idx + 1 < len(sys.argv):
+            model_save_path = sys.argv[arg_idx + 1]
+        if arg in ("--load-path", "--base-model") and arg_idx + 1 < len(sys.argv):
+            model_load_path = sys.argv[arg_idx + 1]
+
+    if model_load_path is None:
+        model_load_path = model_save_path
+
     lr = 1e-3
-    if os.path.exists(model_save_path) and not from_scratch:
-        print(f"Mevcut model ağırlıkları '{model_save_path}' tespit edildi, eğitim devam ettiriliyor (Resume)...", flush=True)
-        state_dict = torch.load(model_save_path, map_location=device)
+    if os.path.exists(model_load_path) and not from_scratch:
+        print(f"Mevcut model ağırlıkları '{model_load_path}' tespit edildi, eğitim devam ettiriliyor (Resume)...", flush=True)
+        state_dict = torch.load(model_load_path, map_location=device)
         keys_to_skip = [k for k in state_dict.keys() if "cos_cached" in k or "sin_cached" in k or "mask" in k]
         for k in keys_to_skip:
             del state_dict[k]
@@ -114,7 +126,7 @@ def main():
         if arg == "--batch-size" and arg_idx + 1 < len(sys.argv):
             batch_size = int(sys.argv[arg_idx + 1])
             
-    eval_interval = max(10, max_steps // 10)
+    eval_interval = 10
     
     print(f"\nEğitim Başlatılıyor -> Adım Sayısı: {max_steps}, Batch Boyutu: {batch_size}, Block Boyutu: {block_size}", flush=True)
     

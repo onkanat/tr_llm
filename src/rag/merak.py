@@ -45,19 +45,37 @@ class CuriosityEngine(nn.Module):
     def forward(
         self,
         hidden_states: torch.Tensor,
-        logits: torch.Tensor
+        logits: torch.Tensor,
+        has_unk: bool = False,
+        unk_token_id: Optional[int] = 1
     ) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
         """
         Args:
             hidden_states: Last layer hidden states z (batch_size, hidden_dim)
             logits: Next token prediction logits (batch_size, vocab_size)
+            has_unk: Boolean flag indicating presence of <UNK> in input context
+            unk_token_id: Token ID for <UNK> to detect predictive epistemic gap
         Returns:
             entropy: Calculated Shannon entropy H(z)
-            needs_retrieval: Boolean tensor (H(z) > tau)
+            needs_retrieval: Boolean tensor (H(z) > tau or has_unk)
             q_merak: Synthesized curiosity vector (batch_size, curiosity_dim)
         """
         entropy = self.calculate_entropy(logits)
         needs_retrieval = self.detect_epistemic_gap(entropy)
         
+        # Epistemic trigger 1: Context contains <UNK> morpheme
+        if has_unk:
+            needs_retrieval = torch.ones_like(needs_retrieval, dtype=torch.bool)
+            entropy = entropy + self.tau + 1.0  # Epistemic curiosity boost strictly exceeding tau
+
+        # Epistemic trigger 2: Model prediction assigns non-trivial probability to <UNK>
+        if unk_token_id is not None and logits.shape[-1] > unk_token_id:
+            probs = torch.softmax(logits, dim=-1)
+            unk_p = probs[..., unk_token_id]
+            predicts_unk = unk_p > 0.05
+            if predicts_unk.any():
+                needs_retrieval = needs_retrieval | predicts_unk
+        
         q_merak = self.norm(self.q_proj(hidden_states))
         return entropy, needs_retrieval, q_merak
+

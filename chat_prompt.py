@@ -4,6 +4,7 @@
 import os
 import sys
 import json
+from datetime import datetime, timezone
 import torch
 
 # Ensure parent directory is in path
@@ -16,6 +17,11 @@ from src.llm.tokenizer import KristalTokenizer, Vocabulary
 from scripts.train_step_demo import KristalLM
 from src.compiler.decompiler import MorphemeDecompiler
 from src.rag.vector_memory import VectorMemory, generate_kristal_vector, generate_sparse_vector
+from src.rag.merak import CuriosityEngine
+from src.llm.router import TriModalRouter
+from src.rag.epistemic_agent import EpistemicCuriosityAgent
+from src.gateway.agent_gateway import AgentGateway
+from src.gateway.pedagogical_supervisor import PedagogicalSupervisor
 
 # ANSI Color Codes
 C_RESET = "\033[0m"
@@ -62,22 +68,26 @@ def resize_state_dict(model, old_state_dict):
     return new_state_dict
 
 def generate_tokens(model, tokenizer, vocab, prompt_tokens, max_new_tokens=60, device='cpu', temperature=0.0, top_k=5, repetition_penalty=1.5, repetition_window=12):
-
-    """Generates next tokens autoregressively from prompt_tokens."""
+    """Generates next tokens autoregressively from prompt_tokens and tracks entropy."""
     model.eval()
     generated = list(prompt_tokens)
     eos_id = vocab.stoi.get("<EOS>", -1)
     output_end_id = vocab.stoi.get("</OUTPUT>", -1)
+    last_entropy = 0.0
     
     # Stop if we already have EOS or </OUTPUT> at the end
     if generated and generated[-1] in (eos_id, output_end_id):
-        return generated
+        return generated, 0.0
         
     with torch.no_grad():
         for _ in range(max_new_tokens):
             x = torch.tensor([generated], dtype=torch.long, device=device)
             logits, _ = model(x)
             logits = logits[0, -1, :] # focus on the last position
+            
+            # Measure token entropy
+            probs_for_entropy = torch.softmax(logits, dim=-1)
+            last_entropy = -torch.sum(probs_for_entropy * torch.log(probs_for_entropy + 1e-9)).item()
             
             # Apply repetition penalty only to output tokens within the sliding window
             output_tokens = generated[len(prompt_tokens):]
@@ -108,7 +118,7 @@ def generate_tokens(model, tokenizer, vocab, prompt_tokens, max_new_tokens=60, d
             if pred_id == eos_id or pred_id == output_end_id:
                 break
     print() # New line after generation
-    return generated
+    return generated, last_entropy
 
 
 def print_help():
@@ -116,10 +126,15 @@ def print_help():
     print(f"  {C_YELLOW}help{C_RESET}       : Bu yardım menüsünü gösterir.")
     print(f"  {C_YELLOW}mode{C_RESET}       : Çıkarım modunu değiştirir (Normal / SFT / RAG).")
     print(f"  {C_YELLOW}params{C_RESET}     : Sıcaklık (temp) ve top_k parametrelerini ayarlar.")
-    print(f"  {C_YELLOW}clear{C_RESET}      : Ekranı temizler.")
+    print(f"  {C_YELLOW}arena{C_RESET}      : Büyük Ajan Arenasını ve otonom süpervizörü başlatır.")
     print(f"  {C_YELLOW}q / exit{C_RESET}   : Programdan çıkar.")
 
 def main():
+    if "--gateway" in sys.argv:
+        from scripts.run_agent_arena import main as run_arena_main
+        run_arena_main()
+        return
+
     # Setup Device
     device = torch.device("mps" if torch.backends.mps.is_available() else "cpu")
     
@@ -143,43 +158,41 @@ def main():
     tokenizer = KristalTokenizer(compiler, vocab)
     decompiler = MorphemeDecompiler(compiler, vocab)
     
-    # Connect to Qdrant/In-Memory VectorMemory
-    print(f"\n{C_MAGENTA}[RAG] Vektörel belleğe bağlanılıyor...{C_RESET}")
-    is_fallback = False
-    try:
-        memory = VectorMemory(collection_name="simulasyon_bellek", vector_size=768, host="localhost", port=6333)
-    except Exception as e:
-        print(f"  {C_YELLOW}Uyarı: Qdrant sunucusuna bağlanılamadı. Geçici bellek (In-Memory) kuruluyor. Hata: {e}{C_RESET}")
-        memory = VectorMemory(collection_name="simulasyon_bellek", vector_size=768)
-        is_fallback = True
-        
-    if is_fallback:
-        print(f"  {C_GRAY}-> Geçici belleğe örnek belgeler ve SFT verileri yükleniyor...{C_RESET}")
-        sample_texts = [
-            ("Okul müdürüyken okulun ek inşaatında hamallarla birlikte çalışmış.", "Okul müdürüyken okulun ek inşaatında hamallarla birlikte çalışmış.", "Belgeye göre cevapla."),
-            ("Su düzeyi.", "Su düzeyi.", "Belgeye göre cevapla."),
-            ("Kitap okumak insanı geliştirir.", "Kitap okumak insanı geliştirir.", "Belgeye göre cevapla.")
+    # Connect to VectorMemory (Persistent local data/qdrant_db or remote Qdrant)
+    print(f"\n{C_MAGENTA}[RAG] Vektörel belleklere bağlanılıyor...{C_RESET}")
+    memory = VectorMemory(collection_name="kristal_bellek", vector_size=768, host="localhost", port=6333, storage_path="data/qdrant_db")
+    general_memory = VectorMemory(collection_name="simulasyon_bellek", vector_size=768, host="localhost", port=6333, storage_path="data/qdrant_db")
+    print(f"  {C_BOLD}Bellek Depolama:{C_RESET} {C_GREEN}{memory.storage_type}{C_RESET}")
+    doc_count = memory.get_document_count()
+    gen_count = general_memory.get_document_count()
+    print(f"  {C_BOLD}Aktif Koleksiyonlar:{C_RESET} {C_YELLOW}{memory.collection_name}{C_RESET} ({doc_count} parça) + {C_CYAN}{general_memory.collection_name}{C_RESET} ({gen_count} parça)")
+    
+    # If collection is completely empty, load baseline samples
+    if doc_count == 0:
+        print(f"  {C_GRAY}-> Koleksiyon boş olduğundan temel bilgi belgeleri indeksleniyor...{C_RESET}")
+        knowledge_texts = [
+            ("Masif ahşap mobilya imalatında kereste nemi yüzde 8 ile 12 arasında olmalıdır.", "Masif ahşap mobilya imalatında kereste nemi yüzde 8 ile 12 arasında olmalıdır."),
+            ("Meşe ağacı sert dokulu, yoğun lifli, neme ve aşınmaya dayanıklı bir ağaç türüdür. Masif mobilya ve parke yapımında kullanılır.", "Meşe ağacı sert dokulu, yoğun lifli, neme ve aşınmaya dayanıklı bir ağaç türüdür. Masif mobilya ve parke yapımında kullanılır."),
+            ("Kırlangıç kuyruğu geçme, çekmece kasalarında ve sandık köşelerinde çekme kuvvetine karşı direnç sağlar.", "Kırlangıç kuyruğu geçme, çekmece kasalarında ve sandık köşelerinde çekme kuvvetine karşı direnç sağlar."),
+            ("Lamba zıvana geçme geniş ahşap yüzeylerde, klasik gömme zıvana ise masa ve sandalye ayaklarında tercih edilir.", "Lamba zıvana geçme geniş ahşap yüzeylerde, klasik gömme zıvana ise masa ve sandalye ayaklarında tercih edilir.")
         ]
-        chat_path = 'data/pedagogy/middle_school_chat.jsonl'
-        if os.path.exists(chat_path):
+        
+        guide_path = 'data/knowledge/ahsap_ve_marangozluk_rehberi.md'
+        if os.path.exists(guide_path):
             try:
-                with open(chat_path, 'r', encoding='utf-8') as f:
-                    for line in f:
-                        if not line.strip(): continue
-                        item = json.loads(line)
-                        inst = item["instruction"].strip()
-                        inp = item["input"].strip()
-                        out = item["output"].strip()
-                        query_text = inp if inp else inst
-                        sample_texts.append((query_text, out, inst))
+                with open(guide_path, 'r', encoding='utf-8') as f:
+                    content = f.read()
+                paragraphs = [p.strip() for p in content.split('\n\n') if p.strip() and not p.startswith('#')]
+                for p in paragraphs:
+                    knowledge_texts.append((p, p))
             except Exception as e:
-                print(f"  {C_RED}Uyarı: {chat_path} yüklenirken hata oluştu: {e}{C_RESET}")
+                print(f"  {C_RED}Uyarı: {guide_path} yüklenirken hata: {e}{C_RESET}")
                 
         batch_dense = []
         batch_sparse = []
         batch_meta = []
         loaded_texts = []
-        for query_text, doc_text, inst in sample_texts:
+        for query_text, doc_text in knowledge_texts:
             q_ids = tokenizer.encode(query_text)
             q_tags = tokenizer.decode(q_ids)
             dense_vec = generate_kristal_vector(q_ids, q_tags)
@@ -192,19 +205,24 @@ def main():
             batch_dense.append(dense_vec)
             batch_sparse.append(sparse_vec)
             batch_meta.append({
-                "domain": "fallback_data",
-                "system_message": inst,
+                "source": "knowledge_guide",
                 "crystal_tags": d_tags,
                 "token_ids": d_ids
             })
         memory.add_documents_batch(loaded_texts, batch_dense, batch_sparse, batch_meta)
-        print(f"  {C_GREEN}Geçici bellek kuruldu. Örnek {len(loaded_texts)} belge indekslendi.{C_RESET}")
+        print(f"  {C_GREEN}Temel bellek kuruldu. {len(loaded_texts)} bilgi parçası indekslendi.{C_RESET}")
     
     # Load Model Weights
     model_path = 'data/kristal_model.pt'
+    for arg_idx, arg in enumerate(sys.argv):
+        if arg in ("--model", "--model-path") and arg_idx + 1 < len(sys.argv):
+            model_path = sys.argv[arg_idx + 1]
+
     if not os.path.exists(model_path):
         print(f"{C_RED}Hata: Eğitilmiş model dosyası '{model_path}' bulunamadı!{C_RESET}")
         return
+        
+    print(f"  {C_CYAN}Model Ağırlıkları Yükleniyor: {model_path}{C_RESET}")
         
     model = KristalLM(vocab_size=vocab_size, n_embd=768, vocab=vocab, block_size=4096, n_layer=6, n_head=6)
     state_dict = torch.load(model_path, map_location=device)
@@ -216,6 +234,12 @@ def main():
     model.load_state_dict(state_dict, strict=False)
     model.to(device)
     model.eval()
+
+    # Initialize Merak Motoru & Tri-Modal Router
+    curiosity_engine = CuriosityEngine(hidden_dim=768, curiosity_dim=768, tau=2.5).to(device)
+    router = TriModalRouter(prompt_dim=768, merak_dim=768, rag_dim=768, router_dim=256, num_experts=4, top_k=2, expert_names=["grammar_core", "pedagogy", "carpenter", "legal"]).to(device)
+    curiosity_engine.eval()
+    router.eval()
 
 
     
@@ -243,11 +267,14 @@ def main():
         "Kelimede çoğul eki (PLURAL) olup olmadığını tespit et.",
         "Kelimenin aldığı durum eklerini (hâl eklerini) tespit et.",
         "Kelimedeki eylemin zamanını veya kipini tespit et.",
-        "Belgeye göre cevapla."
+        "Belgeye göre cevapla.",
+        "Ahşap uzmanı olarak cevapla."
     ]
     
     while True:
         try:
+            current_rag_doc = None
+            current_rag_score = 0.0
             print(f"\n{C_GRAY}[Mod: {mode} | Temp: {temp} | Top-K: {top_k}]{C_RESET}")
             if mode == "SFT":
                 print(f"{C_BOLD}Lütfen SFT Görevi Seçin veya Kendi Talimatınızı Girin:{C_RESET}")
@@ -270,6 +297,24 @@ def main():
                     mode = "NORMAL"
                     print(f"\n{C_YELLOW}Normal metin tamamlama moduna geçildi.{C_RESET}")
                     print(f"{C_GRAY}Not: Model SFT/DPO ile talimat izlemeye aşırı hizalandığı için, ham metin girdiğinizde tekrara düşebilir veya <PROPER_NOUN> üretebilir. En iyi sonuçlar için SFT modunu tercih edin veya istemi SFT formatında verin.{C_RESET}")
+                    continue
+                elif choice.lower() in ("arena", "gateway"):
+                    print(f"\n{C_MAGENTA}{C_BOLD}=== PEDAGOJİK AJAN ARENASI VE SÜPERVİZÖR MODU ==={C_RESET}")
+                    gateway = AgentGateway(
+                        model=model,
+                        tokenizer=tokenizer,
+                        decompiler=decompiler,
+                        memory=memory,
+                        general_memory=general_memory,
+                        future_train_path="data/future_train_vector.jsonl",
+                        device=str(device)
+                    )
+                    supervisor = PedagogicalSupervisor(gateway=gateway, retrain_threshold=5)
+                    domain_choice = input(f"{C_YELLOW}Alan Seçin (1: Ahşap/Carpenter, 2: Morfoloji/Pedagogy, 3: Edebi/Literary) [Varsayılan 1]: {C_RESET}").strip()
+                    dom_map = {"1": "carpenter", "2": "pedagogy", "3": "literary"}
+                    sel_dom = dom_map.get(domain_choice, "carpenter")
+                    print(f"\n{C_CYAN}Arena oturumu başlatılıyor ({sel_dom})...{C_RESET}")
+                    supervisor.run_arena_session(domain=sel_dom, rounds=2, auto_retrain=True)
                     continue
                 elif choice.lower() == "params":
                     try:
@@ -298,7 +343,11 @@ def main():
                     print(f"{C_RED}Geçersiz seçim.{C_RESET}")
                     continue
                     
-                word_input = input(f"{C_YELLOW}Analiz Edilecek Kelimeyi Girin: {C_RESET}").strip()
+                if selected_inst in ["Belgeye göre cevapla.", "Ahşap uzmanı olarak cevapla."]:
+                    word_input = input(f"{C_YELLOW}Sorunuzu veya Cümleyi Girin: {C_RESET}").strip()
+                else:
+                    word_input = input(f"{C_YELLOW}Analiz Edilecek Kelimeyi Girin: {C_RESET}").strip()
+                    
                 if not word_input:
                     continue
                 
@@ -314,24 +363,38 @@ def main():
                     print(f"\n{C_CYAN}[RAG] Bellekten döküman aranıyor...{C_RESET}")
                     results = memory.hybrid_recall(dense_vec, sparse_vec, top_k=1, query_tags=query_tags)
                     
-                    if results:
+                    MIN_RAG_SCORE = 0.40
+                    source_coll = memory.collection_name
+                    if not (results and results[0]["score"] >= MIN_RAG_SCORE and results[0].get("has_root_match", True)):
+                        gen_results = general_memory.hybrid_recall(dense_vec, sparse_vec, top_k=1, query_tags=query_tags)
+                        if gen_results and gen_results[0]["score"] >= MIN_RAG_SCORE and gen_results[0].get("has_root_match", True):
+                            results = gen_results
+                            source_coll = general_memory.collection_name
+                            
+                    if results and results[0]["score"] >= MIN_RAG_SCORE and results[0].get("has_root_match", True):
                         doc = results[0]
                         doc_text = doc["text"]
                         doc_tags = doc["metadata"].get("crystal_tags", "")
-                        sys_msg = doc["metadata"].get("system_message", selected_inst)
-                        print(f"  {C_BOLD}Bulunan Döküman:{C_RESET} {C_GREEN}{doc_text}{C_RESET}")
+                        print(f"  {C_BOLD}Bulunan Döküman ({C_YELLOW}{source_coll}{C_RESET}{C_BOLD}):{C_RESET} {C_GREEN}{doc_text}{C_RESET}")
                         print(f"  {C_BOLD}Döküman Morfemleri:{C_RESET} {doc_tags}")
-                        print(f"  {C_BOLD}Sistem Mesajı (Instruction):{C_RESET} {C_CYAN}{sys_msg}{C_RESET}")
-                        print(f"  {C_BOLD}Eşleşme Skoru (RRF + Ceza):{C_RESET} {C_YELLOW}{doc['score']:.4f}{C_RESET}")
+                        matching_roots = results[0].get("matching_roots", [])
+                        if matching_roots:
+                            print(f"  {C_BOLD}Eşleşen Kökler:{C_RESET} {C_GREEN}{matching_roots}{C_RESET}")
+                        print(f"  {C_BOLD}Eşleşme Skoru (RRF):{C_RESET} {C_YELLOW}{doc['score']:.4f}{C_RESET}")
                         clean_doc_tags = doc_tags.replace("<BOS>", "").replace("<EOS>", "").strip()
+                        input_str = f"belge: {clean_doc_tags} sorgu: {clean_query_tags}"
                     else:
-                        print(f"  {C_RED}Uyarı: Eşleşen döküman bulunamadı. Boş bağlam kullanılıyor.{C_RESET}")
-                        clean_doc_tags = ""
-                        sys_msg = selected_inst
+                        if results:
+                            print(f"  {C_YELLOW}[RAG] Yetersiz Eşleşme: En yakın belgenin skoru ({results[0]['score']:.4f}) güven eşiğinin ({MIN_RAG_SCORE}) altında kaldı veya konu kökleri uyuşmadı.{C_RESET}")
+                            print(f"  {C_YELLOW}-> Alakasız belge bağlama eklenmedi.{C_RESET}")
+                        else:
+                            print(f"  {C_RED}Uyarı: Eşleşen döküman bulunamadı.{C_RESET}")
+                        print(f"  {C_GRAY}[Bilgi] Veritabanında bu soruya referans olacak yeterli belge bulunamadı.{C_RESET}")
+                        print(f"  {C_GRAY}-> 'rag_tool.py' ile ilgili belgeyi ekleyebilir veya Seçim 6 (Ahşap Uzmanı) ile genel model bilgisini sorgulayabilirsiniz.{C_RESET}")
+                        continue
                         
-                    input_str = f"belge: {clean_doc_tags} sorgu: {clean_query_tags}"
                     prompt_dict = {
-                        "instruction": sys_msg,
+                        "instruction": selected_inst,
                         "input": input_str,
                         "output": ""
                     }
@@ -345,7 +408,7 @@ def main():
                 raw_prompt = json.dumps(prompt_dict)
                 
             elif mode == "RAG":
-                user_prompt = input(f"{C_YELLOW}RAG Sorgusu Girin (örn. okul): {C_RESET}").strip()
+                user_prompt = input(f"{C_YELLOW}RAG Sorgusu Girin (örn. meşe ağacı): {C_RESET}").strip()
                 if not user_prompt:
                     continue
                 if user_prompt.lower() in ("q", "exit"):
@@ -374,30 +437,76 @@ def main():
                 query_tags = tokenizer.decode(query_token_ids)
                 clean_query_tags = query_tags.replace("<BOS>", "").replace("<EOS>", "").strip()
                 
+                # 1. Merak Motoru & Shannon Entropisi
+                q_tensor = torch.tensor([query_token_ids], dtype=torch.long, device=device)
+                with torch.no_grad():
+                    q_res = model(q_tensor, return_hidden_states=True)
+                    if len(q_res) == 3:
+                        q_logits, _, q_emb = q_res
+                        last_h = q_emb[:, -1, :]
+                    else:
+                        q_logits, _ = q_res
+                        last_h = torch.zeros(q_logits.shape[0], 768, device=device)
+                        q_emb = torch.zeros(1, len(query_token_ids), 768, device=device)
+                    h_val, needs_ret, q_merak = curiosity_engine(last_h, q_logits[:, -1, :])
+                    
+                if needs_ret.item():
+                    print(f"  {C_MAGENTA}[Merak Motoru]{C_RESET} {C_YELLOW}Shannon Entropisi H(z)={h_val.item():.2f} > 2.50 — Epistemik açık tespit edildi! (Otonom bellek çağrısı tetiklendi){C_RESET}")
+                else:
+                    print(f"  {C_GRAY}[Merak Motoru] Model belirsizlik düzeyi H(z)={h_val.item():.2f} <= 2.50 (Düşük merak){C_RESET}")
+                
                 dense_vec = generate_kristal_vector(query_token_ids, query_tags)
                 sparse_vec = generate_sparse_vector(query_token_ids, query_tags)
                 
                 print(f"\n{C_CYAN}[RAG] Bellekten döküman aranıyor...{C_RESET}")
                 results = memory.hybrid_recall(dense_vec, sparse_vec, top_k=1, query_tags=query_tags)
                 
-                if results:
+                MIN_RAG_SCORE = 0.40
+                source_coll = memory.collection_name
+                if not (results and results[0]["score"] >= MIN_RAG_SCORE and results[0].get("has_root_match", True)):
+                    gen_results = general_memory.hybrid_recall(dense_vec, sparse_vec, top_k=1, query_tags=query_tags)
+                    if gen_results and gen_results[0]["score"] >= MIN_RAG_SCORE and gen_results[0].get("has_root_match", True):
+                        results = gen_results
+                        source_coll = general_memory.collection_name
+                        
+                if results and results[0]["score"] >= MIN_RAG_SCORE and results[0].get("has_root_match", True):
                     doc = results[0]
+                    current_rag_doc = doc
+                    current_rag_score = float(doc["score"])
                     doc_text = doc["text"]
                     doc_tags = doc["metadata"].get("crystal_tags", "")
-                    sys_msg = doc["metadata"].get("system_message", "Belgeye göre cevapla.")
-                    print(f"  {C_BOLD}Bulunan Döküman:{C_RESET} {C_GREEN}{doc_text}{C_RESET}")
+                    print(f"  {C_BOLD}Bulunan Döküman ({C_YELLOW}{source_coll}{C_RESET}{C_BOLD}):{C_RESET} {C_GREEN}{doc_text}{C_RESET}")
                     print(f"  {C_BOLD}Döküman Morfemleri:{C_RESET} {doc_tags}")
-                    print(f"  {C_BOLD}Sistem Mesajı (Instruction):{C_RESET} {C_CYAN}{sys_msg}{C_RESET}")
-                    print(f"  {C_BOLD}Eşleşme Skoru (RRF + Ceza):{C_RESET} {C_YELLOW}{doc['score']:.4f}{C_RESET}")
-                    clean_doc_tags = doc_tags.replace("<BOS>", "").replace("<EOS>", "").strip()
-                else:
-                    print(f"  {C_RED}Uyarı: Eşleşen döküman bulunamadı. Boş bağlam kullanılıyor.{C_RESET}")
-                    clean_doc_tags = ""
-                    sys_msg = "Belgeye göre cevapla."
+                    matching_roots = results[0].get("matching_roots", [])
+                    if matching_roots:
+                        print(f"  {C_BOLD}Eşleşen Kökler:{C_RESET} {C_GREEN}{matching_roots}{C_RESET}")
+                    print(f"  {C_BOLD}Eşleşme Skoru (RRF):{C_RESET} {C_YELLOW}{doc['score']:.4f}{C_RESET}")
                     
-                input_str = f"belge: {clean_doc_tags} sorgu: {clean_query_tags}"
+                    # 2. Tri-Modal Router Uzman Seçimi
+                    prompt_vec = q_emb.mean(dim=1)
+                    rag_vec = None
+                    if doc.get("metadata", {}).get("token_ids"):
+                        d_ids = doc["metadata"]["token_ids"]
+                        with torch.no_grad():
+                            rag_vec = model.embedding(torch.tensor([d_ids], dtype=torch.long, device=device)).mean(dim=1)
+                    _, router_indices, _ = router(prompt_vec, q_merak, rag_vec)
+                    experts = router.get_selected_expert_names(router_indices)[0]
+                    print(f"  {C_BOLD}Tri-Modal Router Uzmanları:{C_RESET} {C_CYAN}{', '.join(experts)}{C_RESET}")
+                    
+                    clean_doc_tags = doc_tags.replace("<BOS>", "").replace("<EOS>", "").strip()
+                    input_str = f"belge: {clean_doc_tags} sorgu: {clean_query_tags}"
+                else:
+                    if results:
+                        print(f"  {C_YELLOW}[RAG] Yetersiz Eşleşme: En yakın belgenin skoru ({results[0]['score']:.4f}) güven eşiğinin ({MIN_RAG_SCORE}) altında kaldı veya konu kökleri uyuşmadı.{C_RESET}")
+                        print(f"  {C_YELLOW}-> Alakasız belge bağlama eklenmedi.{C_RESET}")
+                    else:
+                        print(f"  {C_RED}Uyarı: Eşleşen döküman bulunamadı.{C_RESET}")
+                    print(f"  {C_GRAY}[Bilgi] Veritabanında bu soruya referans olacak yeterli belge bulunamadı.{C_RESET}")
+                    print(f"  {C_GRAY}-> 'rag_tool.py' ile ilgili belgeyi ekleyebilir veya 'mode' yazıp SFT moduna geçebilirsiniz.{C_RESET}")
+                    continue
+                    
                 prompt_dict = {
-                    "instruction": sys_msg,
+                    "instruction": "Belgeye göre cevapla.",
                     "input": input_str,
                     "output": ""
                 }
@@ -457,15 +566,16 @@ def main():
             # Generate
             print(f"\n{C_BOLD}Model Çıktısı:{C_RESET}")
             # Stream/print generated tokens
-            generated_ids = generate_tokens(model, tokenizer, vocab, prompt_tokens, 
-                                            max_new_tokens=max_tokens, device=device, 
-                                            temperature=temp, top_k=top_k)
+            generated_ids, post_entropy = generate_tokens(model, tokenizer, vocab, prompt_tokens, 
+                                                         max_new_tokens=max_tokens, device=device, 
+                                                         temperature=temp, top_k=top_k)
             
             # Extract newly generated tokens
             new_tokens = generated_ids[len(prompt_tokens):]
             new_morphemes = [vocab.decode(tid) for tid in new_tokens]
             clean_morphemes = [t for t in new_morphemes if t not in ("<EOS>", "</OUTPUT>", "<PAD>", "<UNK>")]
             
+            decompiled_text = ""
             if clean_morphemes:
                 morphemes_str = " ".join(clean_morphemes)
                 decompiled_text = decompiler.decompile_sentence(morphemes_str)
@@ -473,6 +583,31 @@ def main():
                     print(f"\n{C_GREEN}{C_BOLD}Decompile Edilmiş Çıktı:{C_RESET} {C_BOLD}{decompiled_text}{C_RESET}")
                 else:
                     print(f"\n{C_GREEN}{C_BOLD}Yazılı Çıktı:{C_RESET} {' '.join(clean_morphemes)}")
+                    
+            # Epistemik Değerlendirme & future_train_vector.jsonl Kaydı:
+            # Model merak edip >= 0.85 uyumlu belge getirdiğinde, ancak anlayamadığında kaydeder.
+            if mode == "RAG" and current_rag_doc and current_rag_score >= 0.85:
+                decomp_lower = decompiled_text.lower()
+                is_uncertain = (post_entropy > 2.5) or any(p in decomp_lower for p in ["bilgi yok", "bulunamaz", "bilinmiyor"]) or (new_morphemes.count("<UNK>") >= 2)
+                if is_uncertain:
+                    print(f"\n  {C_MAGENTA}{C_BOLD}[Epistemik Kayıt]{C_RESET} {C_YELLOW}Model belgeyi getirdi (Uyum: {current_rag_score:.4f} >= 0.85) fakat tam anlayamadı (H(z)={post_entropy:.2f}).{C_RESET}")
+                    print(f"  {C_CYAN}-> Bu örnek gelecekteki model eğitimi için 'data/future_train_vector.jsonl' kütüğüne eklendi.{C_RESET}")
+                    os.makedirs("data", exist_ok=True)
+                    record = {
+                        "instruction": "Belgeye göre cevapla.",
+                        "input": raw_prompt,
+                        "output": " ".join(clean_morphemes),
+                        "decompiled_output": decompiled_text,
+                        "rag_document": current_rag_doc["text"],
+                        "similarity_score": round(current_rag_score, 4),
+                        "entropy_post": round(post_entropy, 4),
+                        "reason": "epistemic_gap_unresolved_high_similarity",
+                        "timestamp": datetime.now(timezone.utc).isoformat()
+                    }
+                    with open("data/future_train_vector.jsonl", "a", encoding="utf-8") as f:
+                        f.write(json.dumps(record, ensure_ascii=False) + "\n")
+                else:
+                    print(f"\n  {C_GREEN}[Epistemik Onay] Model yüksek uyumlu belgeyi başarıyla çözümledi (H(z)={post_entropy:.2f} <= 2.50).{C_RESET}")
                             
         except KeyboardInterrupt:
             print(f"\n{C_GREEN}Çıkış yapılıyor...{C_RESET}")

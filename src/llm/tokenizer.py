@@ -24,12 +24,47 @@ class Vocabulary:
         }
         self.itos = {v: k for k, v in self.stoi.items()}
         self._next_id = 12
+        self.frozen = False
+
+    def freeze(self):
+        """Freezes vocabulary so no new tokens can be dynamically added."""
+        self.frozen = True
+
+    def unfreeze(self):
+        """Unfreezes vocabulary allowing new tokens to be added."""
+        self.frozen = False
 
     def add_token(self, token: str):
+        if self.frozen:
+            return
         if token not in self.stoi:
             self.stoi[token] = self._next_id
             self.itos[self._next_id] = token
             self._next_id += 1
+
+    def register_new_tokens(self, new_tokens: List[str]) -> List[int]:
+        """
+        Safely registers new tokens into vocabulary even if frozen,
+        assigns unique IDs, and returns the assigned token IDs.
+        """
+        was_frozen = self.frozen
+        self.unfreeze()
+        added_ids = []
+        for tok in new_tokens:
+            tok = tok.strip()
+            if not tok:
+                continue
+            if tok not in self.stoi:
+                new_id = self._next_id
+                self.stoi[tok] = new_id
+                self.itos[new_id] = tok
+                self._next_id += 1
+                added_ids.append(new_id)
+            else:
+                added_ids.append(self.stoi[tok])
+        if was_frozen:
+            self.freeze()
+        return added_ids
 
     def encode(self, token: str) -> int:
         return self.stoi.get(token, self.stoi["<UNK>"])
@@ -46,8 +81,8 @@ class Vocabulary:
         with open(filepath, "w", encoding="utf-8") as f:
             json.dump(data, f, ensure_ascii=False, indent=2)
 
-    def load(self, filepath: str):
-        """Loads the vocabulary state from a JSON file."""
+    def load(self, filepath: str, freeze: bool = True):
+        """Loads the vocabulary state from a JSON file and freezes it by default."""
         import os
         if not os.path.exists(filepath):
             return
@@ -56,6 +91,8 @@ class Vocabulary:
             self.stoi = data.get("stoi", self.stoi)
             self.itos = {int(v): k for k, v in self.stoi.items()}
             self._next_id = data.get("next_id", self._next_id)
+        if freeze:
+            self.freeze()
 
 class KristalTokenizer:
     CONTROL_TOKENS = {
@@ -165,11 +202,15 @@ class KristalTokenizer:
 
             if result.get("token_vector"):
                 for morpheme_id in result["token_vector"]:
-                    self.vocab.add_token(morpheme_id)
-                    token_ids.append(self.vocab.encode(morpheme_id))
+                    if morpheme_id in self.vocab.stoi:
+                        token_ids.append(self.vocab.encode(morpheme_id))
+                    elif not self.vocab.frozen:
+                        self.vocab.add_token(morpheme_id)
+                        token_ids.append(self.vocab.encode(morpheme_id))
+                    else:
+                        token_ids.append(self.vocab.encode("<UNK>"))
             else:
                 if clean_word[0].isupper():
-                    self.vocab.add_token("<PROPER_NOUN>")
                     token_ids.append(self.vocab.encode("<PROPER_NOUN>"))
                 else:
                     if self.verbose:

@@ -33,7 +33,7 @@ def resize_state_dict(model, old_state_dict):
                 new_state_dict[k] = v
     return new_state_dict
 
-def generate_response(model, vocab, prompt_tokens, max_new_tokens=15, device='cpu'):
+def generate_response(model, vocab, prompt_tokens, max_new_tokens=15, device='cpu', repetition_penalty=1.5):
     model.eval()
     generated = list(prompt_tokens)
     eos_id = vocab.stoi.get("<EOS>", -1)
@@ -44,6 +44,16 @@ def generate_response(model, vocab, prompt_tokens, max_new_tokens=15, device='cp
             x = torch.tensor([generated], dtype=torch.long, device=device)
             logits, _ = model(x)
             logits = logits[0, -1, :]
+            
+            output_tokens = generated[len(prompt_tokens):]
+            if repetition_penalty > 1.0 and output_tokens:
+                window_tokens = output_tokens[-12:]
+                for token_id in set(window_tokens):
+                    if logits[token_id] > 0:
+                        logits[token_id] /= repetition_penalty
+                    else:
+                        logits[token_id] *= repetition_penalty
+                        
             pred_id = torch.argmax(logits).item()
             generated.append(pred_id)
             if pred_id == eos_id or pred_id == output_end_id:
@@ -53,6 +63,7 @@ def generate_response(model, vocab, prompt_tokens, max_new_tokens=15, device='cp
     # Filter out stop tokens from output
     clean_tokens = [tid for tid in response_tokens if tid not in (eos_id, output_end_id)]
     return clean_tokens
+
 
 def evaluate_perplexity_on_binary(model, dataset, device, num_batches=30, batch_size=32):
     model.eval()
@@ -162,7 +173,9 @@ def main():
             expected_output = record.get("output", "")
             
             # Identify task type
-            if any(w in instruction.lower() for w in ["marangoz", "ahşap", "ağaç", "mobilya"]):
+            if "carpenter" in jsonl_path:
+                task_type = "MARANGOZLUK"
+            elif any(w in instruction.lower() for w in ["marangoz", "ahşap", "ağaç", "mobilya"]):
                 task_type = "MARANGOZLUK"
             elif "kök" in instruction:
                 task_type = "KÖK_BULMA"
@@ -207,7 +220,7 @@ def main():
             else:
                 eval_prompt_ids = prompt_ids
                 
-            max_tokens = 20 if task_type == "MARANGOZLUK" else 10
+            max_tokens = 35 if task_type == "MARANGOZLUK" else 10
             pred_token_ids = generate_response(model, vocab, eval_prompt_ids, max_new_tokens=max_tokens, device=device)
             pred_tags = [vocab.decode(tid) for tid in pred_token_ids]
             pred_str = " ".join(pred_tags)
@@ -258,8 +271,14 @@ def main():
 
             if task_type == "MARANGOZLUK":
                 decomp_lower = decomp_output.lower()
-                if "kullanılmalıdır" in decomp_lower or "uygundur" in decomp_lower or any(w in decomp_lower for w in ["ahşap", "ağaç", "rende", "kumpas", "tutkal", "gürgen", "meşe", "yağ"]):
+                exp_lower = expected_output.lower()
+                carpentry_terms = ["kullanılmalıdır", "uygundur", "ahşap", "ağaç", "rende", "kumpas", "tutkal", "gürgen", "meşe", "yağ", "zıvana", "kırlangıç", "cila", "kereste", "nem", "lif", "kurutma", "kaplama", "fırın", "çatlak", "tabak", "parça", "halka", "teknik", "çözüm", "rapor", "usta", "eğe", "iskarpela", "gönye", "planya", "işkence", "freze"]
+                has_domain_term = any(w in decomp_lower for w in carpentry_terms)
+                exp_words = [w.strip(".,;:\"'!?") for w in exp_lower.split() if len(w) >= 4]
+                shared_words = [w for w in exp_words if w in decomp_lower]
+                if (has_domain_term and len(shared_words) >= 1) or len(shared_words) >= 2 or ("kullanılmalıdır" in decomp_lower and any(w in decomp_lower for w in exp_words)):
                     is_match = True
+
 
             if is_match:
                 exact_matches += 1

@@ -9,9 +9,11 @@ Bu kılavuz, **Kristal–Vektörel Mimarisi** tabanlı Türkçe dil modelini kur
 2. [Etkileşimli CLI ile Sohbet ve Analiz (`chat_prompt.py`)](#2-etkileşimli-cli-ile-sohbet-ve-analiz)
 3. [Model Eğitimi ve İnce Ayar (`train.py`)](#3-model-eğitimi-ve-i̇nce-ayar)
 4. [Veri Seti Oluşturma ve Derleme](#4-veri-seti-oluşturma-ve-derleme)
-5. [Otonom Self-RAG ve Vektörel Bellek Navigasyonu](#5-otonom-self-rag-ve-vektörel-bellek-navigasyonu)
-6. [Python API ile Programatik Kullanım](#6-python-api-ile-programatik-kullanım)
-7. [Sorun Giderme ve Sık Karşılaşılan Sorunlar](#7-sorun-giderme)
+5. [RAG Belge Yükleme ve Yönetim Aracı (`rag_tool.py`)](#5-rag-belge-yükleme-ve-yönetim-aracı-rag_toolpy)
+6. [Otonom Self-RAG ve Vektörel Bellek Navigasyonu](#6-otonom-self-rag-ve-vektörel-bellek-navigasyonu)
+7. [Agent Gateway ve Pedagojik Arena (`run_agent_arena.py`)](#7-agent-gateway-ve-pedagojik-arena)
+8. [Python API ile Programatik Kullanım](#8-python-api-ile-programatik-kullanım)
+9. [Sorun Giderme ve Sık Karşılaşılan Sorunlar](#9-sorun-giderme)
 
 ---
 
@@ -41,7 +43,7 @@ Kurulumun eksiksiz olduğunu doğrulamak için birim testlerini çalıştırın:
 ```bash
 ./venv/bin/pytest
 ```
-*Tüm 67 testin (kök sözlüğü, durum makinesi, ses olayları, decompiler, merak motoru, tri-modal router) eksiksiz geçtiğinden emin olun.*
+*Tüm 87 testin (kök sözlüğü, durum makinesi, ses olayları, decompiler, merak motoru, tri-modal router, agent gateway, pedagojik supervisor, UNK merakı ve sözlük cerrahisi) eksiksiz geçtiğinden emin olun.*
 
 ---
 
@@ -50,7 +52,11 @@ Kurulumun eksiksiz olduğunu doğrulamak için birim testlerini çalıştırın:
 Modeli terminalden gerçek zamanlı olarak test etmek için `chat_prompt.py` betiği kullanılır. Betik renkli morfem görselleştirmesi, anlık akıtma (streaming) ve `MorphemeDecompiler` desteği sunar.
 
 ```bash
+# Temel Lise Modeli ile başlatma:
 ./venv/bin/python chat_prompt.py
+
+# Dikey Ahşap Uzmanlık Modülü ile başlatma:
+./venv/bin/python chat_prompt.py --model data/kristal_carpenter_model.pt
 ```
 
 ### Modlar ve Kullanım
@@ -89,6 +95,8 @@ Modelin ana eğitim döngüsü `train.py` betiği üzerinden yönetilir. Causal 
 | Parametre | Varsayılan | Açıklama |
 |---|---|---|
 | `--data <yol>` | `data/train.bin` | Eğitilecek ikili veri dosyasının yolu (`.meta.json` ile blok boyutu otomatik algılanır). |
+| `--load-path <yol>` | `--save-path` | Eğitime devam edilecek temel model ağırlık dosyası (örn: `data/kristal_model.pt`). |
+| `--save-path <yol>` | `data/kristal_model.pt` | Eğitilen yeni ağırlıkların kaydedileceği dosya yolu. |
 | `--steps <sayı>` | `100` | Çalıştırılacak optimizasyon adım sayısı. |
 | `--batch-size <sayı>` | `32` | Her adımdaki mini-batch boyutu. |
 | `--device <cihaz>` | `cpu` | Çalıştırılacak cihaz (`cpu`, `mps`, `cuda`). macOS'ta büyük sözlüklerde deadlock'u önlemek için varsayılan CPU'dur. |
@@ -96,49 +104,96 @@ Modelin ana eğitim döngüsü `train.py` betiği üzerinden yönetilir. Causal 
 
 ### Örnek Çalıştırma Senaryoları
 
-#### A. Dengeli Sohbet ve Self-RAG İnce Ayarı (Hızlı - ~10 dk)
+#### A. Evre 1-3: Pedagoji ve Temel Lise Eğitimi (46.412 kayıt, 1.84M token)
 ```bash
-./venv/bin/python -u train.py --data data/train_chat_balanced.bin --steps 150 --batch-size 32
+./venv/bin/python -u train.py --data data/train_pedagogy_highschool.bin --steps 300 --batch-size 16 --device cpu
 ```
 
-#### B. Tam Temel Külliyat Eğitimi (87.629 kayıt, 11.2M token)
+#### B. Evre 4: Dikey Ahşap Uzmanlık Modülü (12.775 kayıt, 793K token)
 ```bash
-./venv/bin/python -u train.py --data data/train_deep_sft.bin --steps 300 --batch-size 32
+./venv/bin/python -u train.py --data data/train_carpenter_specialization.bin --load-path data/kristal_model.pt --save-path data/kristal_carpenter_model.pt --steps 150 --batch-size 16 --device cpu
+```
+
+#### C. Dengeli Sohbet ve Self-RAG İnce Ayarı
+```bash
+./venv/bin/python -u train.py --data data/train_chat_balanced.bin --steps 150 --batch-size 32
 ```
 
 ---
 
 ## 4. Veri Seti Oluşturma ve Derleme
 
-Projedeki veri setleri sentetik, deterministik ve pedagojik olarak yapılandırılmıştır.
+Projedeki veri setleri sentetik, deterministik ve pedagojik hiyerarşiye (Evre 1-4) göre yapılandırılmıştır:
 
-### 1. Zenginleştirilmiş Sohbet Verisi Üretme
+### 1. Temel Lise ve Pedagoji Verisi Derleme (Evre 1-3)
+```bash
+./venv/bin/python scripts/prepare_pedagogy_high_school_dataset.py
+```
+*Çıktı: `data/train_pedagogy_highschool.bin` (3.51 MB, 46.412 örnek, 1.84M token). Bebeklik ontolojisi, ebeveynlik morfolojisi, lise müfredatı, edebiyat & şiir ve TDK GTS sözlüğünü birleştirir.*
+
+### 2. Dikey Ahşap Uzmanlık Verisi Derleme (Evre 4)
+```bash
+./venv/bin/python scripts/prepare_carpenter_specialization_dataset.py
+```
+*Çıktı: `data/train_carpenter_specialization.bin` (1.51 MB, 12.775 örnek, 793K token). Ahşap ve marangozluk teknolojisi ile unutmayı önleyici morfolojik çıpaları harmanlar.*
+
+### 3. Zenginleştirilmiş Sohbet ve Self-RAG Verisi Üretme
 ```bash
 ./venv/bin/python scripts/generate_deep_chat_dataset.py
-```
-*Çıktı: `data/pedagogy/chat_conversations.jsonl` (6.000 diyalog).*
-
-### 2. Otonom Self-RAG Verisi Üretme
-```bash
 ./venv/bin/python scripts/generate_interactive_rag_dataset.py
+./venv/bin/python scripts/prepare_chat_balanced_dataset.py
 ```
-*Çıktı: `data/pedagogy/rag_interactive_dataset.jsonl` (6.599 Self-RAG görevi).*
-
-### 3. İkili (Binary) Paketleme Adımları
-- **Dengeli İnce Ayar Verisi Derleme:**
-  ```bash
-  ./venv/bin/python scripts/prepare_chat_balanced_dataset.py
-  # Çıktı: data/train_chat_balanced.bin (3.25 MB)
-  ```
-- **Tüm Külliyatı (Ana Temel Veri) Derleme:**
-  ```bash
-  ./venv/bin/python scripts/prepare_deep_dataset.py
-  # Çıktı: data/train_deep_sft.bin (21.39 MB)
-  ```
+*Çıktı: `data/train_chat_balanced.bin` (3.25 MB).*
 
 ---
 
-## 5. Otonom Self-RAG ve Vektörel Bellek Navigasyonu
+## 5. RAG Belge Yükleme ve Yönetim Aracı (`rag_tool.py`)
+
+Test grubunun (pilot kullanıcıların) kendi dökümanlarını (TXT, MD, JSON, CSV, PDF) sisteme kolayca yükleyebilmesi ve arama testi yapabilmesi için `rag_tool.py` aracı geliştirilmiştir. Yüklenen belgeler yerel kalıcı veritabanında (`data/qdrant_db`) saklanır ve `chat_prompt.py` üzerinden hemen kullanılabilir.
+
+### 🌟 1. Etkileşimli Menü Modu (Tavsiye Edilen)
+Argümansız çalıştırıldığında test kullanıcılarına rehberlik eden renkli terminal sihirbazı açılır:
+```bash
+./venv/bin/python rag_tool.py
+```
+*Açılan menüden tek tuşla dosya/klasör yükleme, arama testi ve bellek durumu görüntülenebilir.*
+
+### ⚡ 2. Komut Satırı (CLI) Kullanımı
+
+#### A. Tek Bir Dosya Yükleme (.txt, .md, .json, .csv, .pdf)
+```bash
+./venv/bin/python rag_tool.py add --file docs/ahsap_rehberi.md --title "Ahşap Rehberi"
+```
+
+#### B. Bir Klasördeki Tüm Belgeleri Toplu Yükleme
+```bash
+./venv/bin/python rag_tool.py add --dir docs/
+```
+
+#### C. Doğrudan Metin / Not Ekleme
+```bash
+./venv/bin/python rag_tool.py add --text "Zıvana geçme mukavemeti en yüksek birleştirmedir." --title "Zıvana Kuralı"
+```
+
+#### D. Yüklenen Belgeleri Arama ve RRF Skorlama Testi
+```bash
+./venv/bin/python rag_tool.py search "ahşap nem oranı kaç olmalı"
+```
+
+#### E. Bellek Durumu ve Kayıtlı Belgeleri Listeleme
+```bash
+./venv/bin/python rag_tool.py status
+./venv/bin/python rag_tool.py list
+```
+
+#### F. Belleği Sıfırlama / Temizleme
+```bash
+./venv/bin/python rag_tool.py reset
+```
+
+---
+
+## 6. Otonom Self-RAG ve Vektörel Bellek Navigasyonu
 
 Kristal–Vektörel mimarisinde model, parametrik ezber yerine aktif bir gezgin (Vector Rover) gibi davranır:
 
@@ -167,7 +222,75 @@ Bellekten getirilen metin verildiğinde model halüsinasyon görmeden belgeden �
 
 ---
 
-## 6. Python API ile Programatik Kullanım
+## 7. Agent Gateway ve Pedagojik Arena (`run_agent_arena.py`)
+
+Büyük dil modellerinin (Antigravity Agent'ları, Google Gemini API, Ollama vb.) küçük KristalLM modelini otonom pedagojik denetimden geçirmesi, eksik/hatalı bilgileri RAG belleğine (`kristal_bellek`, `simulasyon_bellek`) otomatik enjekte etmesi ve modeli sürekli öğrenme döngüsüne (Karpathy Continuous Learning Loop) sokması için **Agent Gateway** ve **Pedagogical Supervisor** mimarisi geliştirilmiştir.
+
+### 🌟 1. Etkileşimli Arena Testi (`run_agent_arena.py`)
+Küçük modeli çoklu branşta (Lise Edebiyat, Fizik, Kimya, Biyoloji, Tarih, Coğrafya, Mantık, Marangozluk, Morfoloji) doğrudan sınava tabi tutmak ve anlık epistemik durumunu görmek için:
+```bash
+./venv/bin/python scripts/run_agent_arena.py
+```
+Önemli seçenekler:
+- `--subject edebiyat` veya `--subject fizik` (Belirli branşa odaklanma)
+- `--threshold 0.85` (Bulunabilirlik denetimi için asgari alaka eşiği)
+- `--auto-retrain` (future_train_vector.jsonl biriktiğinde otomatik eğitimi tetikler)
+
+### 🚪 2. HTTP REST Gateway Sunucusu
+Dış ajanların HTTP üzerinden modeli sorgulaması ve belleğe bilgi beslemesi için bağımsız REST API sunucusu çalıştırılabilir:
+```bash
+./venv/bin/python -m src.gateway.agent_gateway --host 127.0.0.1 --port 8080
+```
+veya CLI sohbeti içerisinden ağ geçidini ayağa kaldırmak için:
+```bash
+./venv/bin/python chat_prompt.py --gateway --port 8080
+```
+
+#### REST API Uç Noktaları:
+| Uç Nokta | Metod | Açıklama |
+|---|---|---|
+| `/api/query` | POST | Modele soru sorar, epistemik merak ($H(z)$) ve RAG yanıtını döndürür. |
+| `/api/inject` | POST | `kristal_bellek` veya `simulasyon_bellek` koleksiyonuna doğrudan bilgi dokümanı ekler. |
+| `/api/check` | POST | Modelin verilen sorgu ile enjekte edilen bilgiyi $\ge 0.85$ alaka skoruyla bulup bulamadığını denetler. |
+| `/api/backlog` | GET | `future_train_vector.jsonl` içindeki kuyrukta bekleyen yeniden eğitim örneklerini listeler. |
+| `/api/status` | GET | Kapının ve vektör belleklerinin genel sağlık durumunu döner. |
+
+#### Örnek REST İstekleri (cURL):
+```bash
+# Model Sorgulama
+curl -X POST http://localhost:8080/api/query \
+  -H "Content-Type: application/json" \
+  -d '{"prompt": "Ahşapta zıvana birleştirme nedir?"}'
+
+# Belleğe Bilgi Enjeksiyonu
+curl -X POST http://localhost:8080/api/inject \
+  -H "Content-Type: application/json" \
+  -d '{"collection": "simulasyon_bellek", "text": "Zıvana geçme yüksek mukavemetli ahşap birleştirmedir.", "metadata": {"source": "pedagoji"}}'
+
+# Bulunabilirlik Denetimi (Threshold: 0.85)
+curl -X POST http://localhost:8080/api/check \
+  -H "Content-Type: application/json" \
+  -d '{"query": "ahşap zıvana birleştirme mukavemet", "expected_concept": "Zıvana geçme", "threshold": 0.85}'
+```
+
+### 🧠 3. CLI İçinden Arena Komutu
+Etkileşimli `chat_prompt.py` oturumu açıkken `arena` yazarak doğrudan pedagojik denetim çalıştırılabilir:
+```text
+Girdiniz: arena
+>>> [ARENA] Pedagojik denetim döngüsü başlatılıyor...
+>>> Soru: Fotosentez nerede gerçekleşir?
+...
+```
+
+### 🔄 4. Sürekli Yeniden Eğitim Hattı (Retrain Pipeline)
+`future_train_vector.jsonl` dosyasında biriken (modelin merak ettiği ve RAG'ın $\ge 0.85$ alaka ile getirdiği) veriler şu komutla yeni eğitim ağırlıklarına dönüştürülür:
+```bash
+./venv/bin/python src/gateway/retrain_pipeline.py --steps 50 --batch-size 16
+```
+
+---
+
+## 8. Python API ile Programatik Kullanım
 
 Kristal derleyici ve dil modelini kendi Python kodunuzda doğrudan kullanabilirsiniz:
 
@@ -203,7 +326,7 @@ print("Türkçe Karşılık:", turkce_metin)
 
 ---
 
-## 7. Sorun Giderme ve Sık Karşılaşılan Sorunlar
+## 9. Sorun Giderme ve Sık Karşılaşılan Sorunlar
 
 ### 1. macOS Metal (MPS) Üzerinde Eğitim Kilitlenmesi (Deadlock)
 - **Belirti:** `train.py` veya `chat_prompt.py` çalışırken MPS üzerinde `AdamW` adımında işlemin askıda kalması.
