@@ -8,7 +8,7 @@ from src.compiler.phonology import PhonologyEngine
 META_TAGS = {
     "root", "case", "ten", "plural", "evet", "hayır", "var", "yok",
     "belge:", "sorgu:", "tanım:", "cevap:",
-    "<ARA>", "</ARA>", "<BELGE>", "</BELGE>", "ara", "belge"
+    "<ARA>", "</ARA>", "<BELGE>", "</BELGE>", "<DUSUNCE>", "</DUSUNCE>", "ara", "belge", "düşünce"
 }
 
 SUFFIX_PREFIXES = (

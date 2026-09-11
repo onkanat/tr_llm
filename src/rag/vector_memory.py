@@ -190,7 +190,11 @@ class VectorMemory:
         # 1. Extract distinctive query roots if query_tags is provided
         distinctive_query_roots = set()
         if query_tags:
-            common_roots = {"su", "bir", "ve", "de", "da", "ki", "o", "bu", "şu", "ama", "ile", "en", "daha", "her", "şey", "için", "ol", "et", "yap"}
+            common_roots = {
+                "su", "bir", "ve", "de", "da", "ki", "o", "bu", "şu", "ama", "ile", 
+                "en", "daha", "her", "şey", "için", "ol", "et", "yap",
+                "ne", "kim", "nasıl", "neden", "niçin", "hangi", "nere", "kaç", "mı", "mi", "mu", "mü"
+            }
             inflection_prefixes = ("TENSE_", "PERSON_", "POSS_", "CASE_", "COPULA_", "PART_", "INF_", "GERUND_")
             special_tokens = ["<BOS>", "<EOS>", "<PAD>", "<UNK>", "<INSTRUCTION>", "</INSTRUCTION>", "<INPUT>", "</INPUT>", "<OUTPUT>", "</OUTPUT>", "<NUMBER>", "<SYMBOL>"]
             

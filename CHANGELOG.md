@@ -4,6 +4,33 @@ Bu projedeki tüm önemli değişiklikler bu dosyada belgelenmektedir.
 
 Format [Keep a Changelog](https://keepachangelog.com/tr/1.0.0/) standardına dayanır ve bu proje [Semantic Versioning (SemVer)](https://semver.org/spec/v2.0.0.html) ilkelerini benimser.
 
+## [1.5.0] - 2026-09-11
+
+### Eklendi (Added)
+- **Çift Çıktılı CoT & Bilgi Kartı Ayrıştırıcısı (`src/gateway/pedagogical_supervisor.py`):**
+  - `extract_cot_and_card`: Öğretmen modellerin (Gemini, Ollama) ürettiği ham yanıtlardan iç düşünce adımlarını (`<DUSUNCE>`) ve temiz Türkçe deklaratif bilgi kartlarını (`<BILGI_KARTI>`) deterministik olarak ayırır.
+  - `record_to_cot_vault`: Düşünce zincirlerini çöpe atmak yerine `data/pedagogy/cot_vault.jsonl` arşivine yazar.
+- **İzole Akıl Yürütme Belleği (`muhakeme_bellek` & `src/gateway/agent_gateway.py`):**
+  - `AgentGateway.inject_reasoning_trace`: CoT kayıtlarını deklaratif `kristal_bellek`'ten tamamen izole edilmiş özel Qdrant `muhakeme_bellek` koleksiyonuna endeksler.
+- **Morfemik Akıl Yürütme Tokenları & Sözlük Cerrahisi:**
+  - `<DUSUNCE>` ve `</DUSUNCE>` kontrol belirteçleri `data/vocab.json` (31.340 token), `KristalTokenizer.CONTROL_TOKENS` ve `MorphemeDecompiler.META_TAGS` içine entegre edildi.
+  - Model kontrol noktalarına (`kristal_model.pt` ve `kristal_carpenter_model.pt`) ağırlık cerrahisi uygulanarak [31340, 768] matris boyutlarına sıfır-unutma garantisiyle yükseltildi.
+- **Evre 5 Akıl Yürütme Veri Derleme Betiği (`scripts/prepare_reasoning_dataset.py`):**
+  - CoT kasasından Quiet-STaR / Morphemic Reasoning formatında `data/train_reasoning_cot.bin` ikili eğitim seti üretici eklendi.
+- **Kapsamlı Birim Testleri:**
+  - `tests/test_cot_sanitization_and_rag_precision.py` (3 test) ve `tests/test_cot_vault_and_dual_parser.py` (6 test) eklendi; toplam test sayısı 96/96 (%100) oldu.
+
+### Değiştirildi (Changed)
+- **RAG Stopword ve Soru Zamiri Hassasiyeti (`src/rag/vector_memory.py`):**
+  - `"ne"`, `"kim"`, `"nasıl"`, `"neden"`, `"niçin"`, `"hangi"`, `"nere"`, `"kaç"`, `"mı"`, `"mi"`, `"mu"`, `"mü"` soru sözcükleri `common_roots` kümesine dahil edilerek seyrek BM25 puanlamasında sahte eşleşmeler engellendi. Gürgen sorusundaki alakasız zıvana kartının RRF skoru 0.75'ten 0.019'a düşürülerek tam hedef kartın (1.00) seçilmesi sağlandı.
+- **Pedagojik Süpervizör İstemi:**
+  - Öğretmen modellere düşüncelerini `<DUSUNCE>`, öğrenciye sunulacak pedagojik özeti `<BILGI_KARTI>` etiketleri arasına yazma talimatı verildi.
+
+### Düzeltildi (Fixed)
+- **Vektör Belleği & Eğitim Kütüğü Sanitizasyonu (`scripts/sanitize_vector_memory.py`):**
+  - Qdrant'taki İngilizce CoT sızıntıları [nokta 4249, 4250] bellekten temizlendi.
+  - `high_school_foundation_dataset.jsonl` ve `future_train_archive.jsonl` içindeki 40 adet kirli CoT satırı ayıklandı ve `train_pedagogy_highschool.bin` yeniden derlendi.
+
 ---
 
 ## [1.4.0] - 2026-09-10

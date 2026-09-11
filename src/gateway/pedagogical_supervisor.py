@@ -19,6 +19,7 @@ Döngü Adımları:
 
 import os
 import json
+import re
 import time
 import urllib.request
 import urllib.error
@@ -266,6 +267,174 @@ def get_curriculum_probes(domain: str = "arena_mix", count: int = 10) -> List[Di
     return probes[:count]
 
 
+def sanitize_teacher_card(raw_text: Optional[str]) -> Optional[str]:
+    """
+    Cleans and extracts pure Turkish pedagogical knowledge from raw LLM teacher output,
+    stripping internal Chain-of-Thought (CoT), English reasoning tokens, and meta-instructions.
+    """
+    if not raw_text or not isinstance(raw_text, str):
+        return None
+        
+    text = raw_text.strip()
+    
+    # 1. Remove XML/HTML style thought blocks (<think>...</think>, <thought>...</thought>, etc.)
+    import re
+    text = re.sub(r'<think>.*?</think>', '', text, flags=re.DOTALL | re.IGNORECASE)
+    text = re.sub(r'<thought>.*?</thought>', '', text, flags=re.DOTALL | re.IGNORECASE)
+    text = re.sub(r'<reasoning>.*?</reasoning>', '', text, flags=re.DOTALL | re.IGNORECASE)
+    
+    # 2. Filter out English meta-reasoning and CoT preambles line by line
+    cot_patterns = [
+        r'^\s*we need to\b',
+        r'^\s*the user says\b',
+        r'^\s*the user:\b',
+        r'^\s*they want\b',
+        r'^\s*let\'s produce\b',
+        r'^\s*here is\b',
+        r'^\s*so that should\b',
+        r'^\s*then the question\b',
+        r'^\s*and they give\b',
+        r'^\s*make it\b',
+        r'^\s*something like\b',
+        r'^\s*but better to be clear\b',
+        r'^\s*but the question says\b',
+        r'^\s*in this case\b',
+        r'^\s*first, let\'s\b',
+        r'^\s*to answer this\b',
+        r'^\s*concise, pedagogically\b'
+    ]
+    cot_regex = re.compile('|'.join(cot_patterns), re.IGNORECASE)
+    
+    cleaned_lines = []
+    for line in text.split('\n'):
+        line_s = line.strip()
+        if not line_s:
+            continue
+        if cot_regex.search(line_s):
+            continue
+        cleaned_lines.append(line_s)
+        
+    candidate = '\n'.join(cleaned_lines).strip()
+    if not candidate:
+        return None
+        
+    # 3. Check for English dominance: if candidate is mostly English, reject it
+    tr_chars = set('çğıöşüÇĞİÖŞÜ')
+    words = re.findall(r'\b[a-zA-ZçğıöşüÇĞİÖŞÜ]+\b', candidate.lower())
+    if not words:
+        return None
+        
+    english_stopwords = {
+        'the', 'to', 'and', 'is', 'we', 'user', 'says', 'it', 'that', 'can', 'of',
+        'in', 'for', 'on', 'with', 'as', 'at', 'this', 'be', 'are', 'should', 'produced',
+        'let', 'create', 'info', 'card', 'sentences', 'solution', 'write', 'they', 'want'
+    }
+    eng_word_count = sum(1 for w in words if w in english_stopwords)
+    tr_char_count = sum(1 for c in candidate if c in tr_chars)
+    
+    if len(words) > 6 and (eng_word_count / len(words) > 0.20) and tr_char_count < 2:
+        return None
+        
+    # 4. Clean leading label tags
+    candidate = re.sub(r'^(Bilgi Kartı|Öğretmen Açıklaması|Özet|Cevap|Teknik Çözüm)\s*:\s*', '', candidate, flags=re.IGNORECASE)
+    candidate = candidate.strip(' "\'“’')
+    
+    if len(candidate) < 15:
+        return None
+        
+    return candidate
+
+
+def extract_cot_and_card(raw_text: Optional[str]) -> Tuple[Optional[str], Optional[str]]:
+    """
+    Separates internal Chain-of-Thought (thought_trace) from clean Turkish declarative knowledge (clean_card).
+    Handles structured tags (<DUSUNCE>...</DUSUNCE>, <BILGI_KARTI>...</BILGI_KARTI>),
+    standard model reasoning tags (<think>, <thought>, <reasoning>),
+    and falls back to sanitize_teacher_card for declarative extraction.
+    
+    Returns:
+        (thought_trace, clean_card)
+    """
+    if not raw_text or not isinstance(raw_text, str):
+        return None, None
+        
+    text = raw_text.strip()
+    thought_trace = None
+    clean_card = None
+    
+    # 1. Look for explicit <DUSUNCE>...</DUSUNCE> tag
+    dusunce_match = re.search(r'<DUSUNCE>(.*?)</DUSUNCE>', text, flags=re.DOTALL | re.IGNORECASE)
+    if dusunce_match:
+        thought_trace = dusunce_match.group(1).strip()
+    else:
+        # Check standard reasoning tags
+        think_match = re.search(r'<(think|thought|reasoning)>(.*?)</\1>', text, flags=re.DOTALL | re.IGNORECASE)
+        if think_match:
+            thought_trace = think_match.group(2).strip()
+
+    # 2. Look for explicit <BILGI_KARTI>...</BILGI_KARTI> tag
+    card_match = re.search(r'<BILGI_KARTI>(.*?)</BILGI_KARTI>', text, flags=re.DOTALL | re.IGNORECASE)
+    if card_match:
+        cand = card_match.group(1).strip()
+        cand = re.sub(r'^(Bilgi Kartı|Öğretmen Açıklaması|Özet|Cevap|Teknik Çözüm)\s*:\s*', '', cand, flags=re.IGNORECASE)
+        cand = cand.strip(' "\'“’')
+        if len(cand) >= 15:
+            clean_card = cand
+
+    # 3. If explicit <BILGI_KARTI> not found, sanitize remaining text
+    if not clean_card:
+        rem = text
+        rem = re.sub(r'<DUSUNCE>.*?</DUSUNCE>', '', rem, flags=re.DOTALL | re.IGNORECASE)
+        rem = re.sub(r'<(think|thought|reasoning)>.*?</\1>', '', rem, flags=re.DOTALL | re.IGNORECASE)
+        clean_card = sanitize_teacher_card(rem)
+
+    # 4. If thought_trace not found yet via tags, check for preambles in raw text
+    if not thought_trace:
+        lines = text.split('\n')
+        cot_lines = []
+        for line in lines:
+            line_s = line.strip()
+            if not line_s:
+                continue
+            if re.search(r'^\s*(we need to|the user says|the user:|they want|let\'s produce|here is|first, let\'s|to answer this)\b', line_s, re.IGNORECASE):
+                cot_lines.append(line_s)
+        if cot_lines:
+            thought_trace = '\n'.join(cot_lines).strip()
+
+    return thought_trace, clean_card
+
+
+def record_to_cot_vault(
+    query: str,
+    instruction: str,
+    thought_trace: str,
+    final_answer: str,
+    source: str = "teacher_pedagogy",
+    vault_path: str = "data/pedagogy/cot_vault.jsonl"
+) -> bool:
+    """
+    Appends an isolated reasoning record to cot_vault.jsonl.
+    """
+    if not thought_trace or not final_answer:
+        return False
+    try:
+        os.makedirs(os.path.dirname(vault_path), exist_ok=True)
+        record = {
+            "timestamp": datetime.now(timezone.utc).isoformat(),
+            "query": query,
+            "instruction": instruction,
+            "thought_trace": thought_trace.strip(),
+            "final_answer": final_answer.strip(),
+            "source": source
+        }
+        with open(vault_path, "a", encoding="utf-8") as f:
+            f.write(json.dumps(record, ensure_ascii=False) + "\n")
+        return True
+    except Exception as e:
+        print(f"[CoT Vault] Kayıt hatası: {e}")
+        return False
+
+
 class PedagogicalSupervisor:
     def __init__(
         self,
@@ -288,8 +457,8 @@ class PedagogicalSupervisor:
         self.enrich_rag = enrich_rag
         self.history: List[Dict[str, Any]] = []
 
-    def call_ollama(self, prompt: str) -> Optional[str]:
-        """Calls external Ollama API (supports both /v1/chat/completions and /api/generate)."""
+    def call_ollama(self, prompt: str, return_raw: bool = False) -> Optional[str]:
+        """Calls external Ollama API (supports both /v1/chat/completions and /api/generate) with sanitization."""
         if not self.ollama_url:
             return None
             
@@ -298,12 +467,13 @@ class PedagogicalSupervisor:
             headers["Authorization"] = f"Bearer {self.ollama_api_key}"
 
         try:
+            raw_text = None
             if "/v1" in self.ollama_url:
                 api_url = f"{self.ollama_url.rstrip('/')}/chat/completions"
                 payload = {
                     "model": self.ollama_model,
                     "messages": [{"role": "user", "content": prompt}],
-                    "max_tokens": 500
+                    "max_tokens": 800
                 }
                 req = urllib.request.Request(
                     api_url,
@@ -313,8 +483,8 @@ class PedagogicalSupervisor:
                 with urllib.request.urlopen(req, timeout=25) as resp:
                     data = json.loads(resp.read().decode("utf-8"))
                     msg = data["choices"][0]["message"]
-                    content = msg.get("content") or msg.get("reasoning", "")
-                    return content.strip() if content else None
+                    # Do not fall back to reasoning if content is empty
+                    raw_text = msg.get("content") or ""
             else:
                 api_url = f"{self.ollama_url.rstrip('/')}/api/generate"
                 payload = {
@@ -329,12 +499,15 @@ class PedagogicalSupervisor:
                 )
                 with urllib.request.urlopen(req, timeout=25) as resp:
                     data = json.loads(resp.read().decode("utf-8"))
-                    return data.get("response", "").strip()
+                    raw_text = data.get("response", "")
+            if return_raw:
+                return raw_text
+            return sanitize_teacher_card(raw_text)
         except Exception:
             return None
 
-    def call_gemini(self, prompt: str) -> Optional[str]:
-        """Calls Google Gemini API (gemini-2.5-flash) for expert pedagogical knowledge synthesis."""
+    def call_gemini(self, prompt: str, return_raw: bool = False) -> Optional[str]:
+        """Calls Google Gemini API (gemini-2.5-flash) for expert pedagogical knowledge synthesis with sanitization."""
         if not self.gemini_api_key:
             return None
         url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={self.gemini_api_key}"
@@ -344,8 +517,7 @@ class PedagogicalSupervisor:
                 "parts": [{"text": prompt}]
             }],
             "generationConfig": {
-                "thinkingConfig": {"thinkingBudget": 0},
-                "maxOutputTokens": 500,
+                "maxOutputTokens": 800,
                 "temperature": 0.2
             }
         }
@@ -357,7 +529,10 @@ class PedagogicalSupervisor:
                 if candidates:
                     parts = candidates[0].get("content", {}).get("parts", [])
                     if parts:
-                        return parts[0].get("text", "").strip()
+                        raw_text = parts[0].get("text", "")
+                        if return_raw:
+                            return raw_text
+                        return sanitize_teacher_card(raw_text)
         except Exception:
             return None
 
@@ -426,28 +601,56 @@ class PedagogicalSupervisor:
         if (not is_satisfactory or first_attempt["epistemic_failure"] or first_attempt["rag_score"] < 0.85) and auto_inject and knowledge_text:
             text_to_inject = knowledge_text
             teacher_card = None
+            thought_trace = None
             teacher_provider = None
 
             if self.enrich_rag:
                 enrich_prompt = (
-                    f"Sen Türk dili, edebiyatı ve bilimi uzmanı bir öğretmensin. Öğrencinin şu sorusuna en fazla 2-3 cümlelik net, "
-                    f"öz ve pedagojik olarak kusursuz bir bilgi kartı hazırla:\n"
+                    f"Sen Türk dili, edebiyatı ve bilimi uzmanı bir öğretmensin.\n"
+                    f"Şu soru için önce derinlemesine düşünce adımlarını <DUSUNCE> ... </DUSUNCE> etiketleri arasına,\n"
+                    f"ardından öğrenci için en fazla 2-3 cümlelik net, öz ve pedagojik olarak kusursuz bilgi kartını <BILGI_KARTI> ... </BILGI_KARTI> etiketleri arasına yaz.\n\n"
                     f"Soru: {query}\n"
                     f"Temel Kavram: {knowledge_text}"
                 )
+                raw_teacher_text = None
+
                 # Prioritize Gemini API if available (superior for Turkish literature/poetry)
                 if self.gemini_api_key:
-                    teacher_card = self.call_gemini(enrich_prompt)
-                    if teacher_card and len(teacher_card.strip()) >= 20:
+                    raw_teacher_text = self.call_gemini(enrich_prompt, return_raw=True)
+                    if raw_teacher_text and len(raw_teacher_text.strip()) >= 20:
                         teacher_provider = "Gemini (gemini-2.5-flash)"
                         step_log["gemini_enriched"] = True
 
                 # Fallback to Ollama if Gemini not available
-                if not teacher_card and self.ollama_url:
-                    teacher_card = self.call_ollama(enrich_prompt)
-                    if teacher_card and len(teacher_card.strip()) >= 20:
+                if not raw_teacher_text and self.ollama_url:
+                    raw_teacher_text = self.call_ollama(enrich_prompt, return_raw=True)
+                    if raw_teacher_text and len(raw_teacher_text.strip()) >= 20:
                         teacher_provider = f"Ollama ({self.ollama_model})"
                         step_log["ollama_enriched"] = True
+
+                if raw_teacher_text:
+                    thought_trace, clean_card = extract_cot_and_card(raw_teacher_text)
+                    teacher_card = clean_card
+
+                    # Record reasoning trace to CoT Vault and muhakeme_bellek
+                    if thought_trace and len(thought_trace.strip()) >= 15:
+                        step_log["thought_trace"] = thought_trace
+                        record_to_cot_vault(
+                            query=query,
+                            instruction=instruction,
+                            thought_trace=thought_trace,
+                            final_answer=clean_card or knowledge_text,
+                            source=teacher_provider or "pedagogical_supervisor"
+                        )
+                        if hasattr(self.gateway, "inject_reasoning_trace"):
+                            self.gateway.inject_reasoning_trace(
+                                query=query,
+                                thought_text=thought_trace,
+                                final_card=clean_card or knowledge_text,
+                                domain=target_coll,
+                                metadata={"source": teacher_provider or "pedagogical_supervisor", "topic": query}
+                            )
+                            step_log["reasoning_injected"] = True
 
             # Always combine base textbook knowledge with teacher explanation
             if teacher_card:

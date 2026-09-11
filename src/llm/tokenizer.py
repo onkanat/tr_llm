@@ -101,6 +101,7 @@ class KristalTokenizer:
         "<OUTPUT>", "</OUTPUT>",
         "<ARA>", "</ARA>",
         "<BELGE>", "</BELGE>",
+        "<DUSUNCE>", "</DUSUNCE>",
     }
 
     def __init__(self, compiler: CrystalCompiler, vocab: Vocabulary, verbose: bool = False):

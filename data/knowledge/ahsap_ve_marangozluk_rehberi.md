@@ -14,3 +14,10 @@ Meşe ağacı, sert dokulu, yoğun lifli ve mekanik mukavemeti çok yüksek bir 
 
 ## 5. Çam ve Yumuşak Ağaçlar
 Çam ve ladin gibi yumuşak dokulu ağaçlar kolay işlenir ancak darbeye karşı meşeye kıyasla daha az dirençlidir. Genellikle iç mekan doğramalarında, çatı iskeletlerinde ve kaba inşaat kalıplarında kullanılır.
+
+## 6. Gürgen Ağacı ve Kullanım Alanları
+Gürgen ağacı aşırı sert, tok, sıkı lifli ve beyazımsı yapılı çok mukavim bir sert ağaç türüdür. Darbelere, sürtünmeye ve mekanik aşınmaya karşı olağanüstü direnç gösterir. Bu özellikleri nedeniyle gürgen ağacından marangoz tezgahları, mengene çeneleri, planya gövdeleri, el aleti sapları, sandalye ve koltuk iskeletleri, buharla bükme tonet mobilyalar ve ağır yüke maruz kalan ahşap mekanik parçalar yapılır. Dış hava şartlarına karşı meşe kadar dayanıklı olmadığından kuru iç mekan mobilyalarında tercih edilir.
+
+## 7. Ceviz Ağacı ve Kullanım Alanları
+Ceviz ağacı, orta sertlikte, dayanıklı, boyutsal kararlılığı yüksek ve zengin damar desenlerine sahip asil bir mobilya ağacıdır. Lüks masif mobilyalar, vitrin ve konsollar, yemek masaları, tüfek dipçikleri, müzik aletleri ve sanatsal ahşap oyma işlerinde yaygın şekilde kullanılır. Cila ve verniği mükemmel kabul eder.
+

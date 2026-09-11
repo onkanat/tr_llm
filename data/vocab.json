@@ -31337,7 +31337,9 @@
     "talil": 31334,
     "tevriye": 31335,
     "tuyuğ": 31336,
-    "şahlandır": 31337
+    "şahlandır": 31337,
+    "<DUSUNCE>": 31338,
+    "</DUSUNCE>": 31339
   },
-  "next_id": 31338
+  "next_id": 31340
 }

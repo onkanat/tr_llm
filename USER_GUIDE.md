@@ -290,6 +290,38 @@ Girdiniz: arena
 
 ---
 
+## 7.1 CoT Kasası ve Morfemik Akıl Yürütme (CoT Vault & Reasoning Isolation)
+
+Büyük öğretmen modeller (Google Gemini 2.5 Flash, Ollama gpt-oss:20b) tarafından üretilen iç düşünce adımları (Chain-of-Thought), modelin felsefi ve pedagojik kalitesi açısından son derece değerlidir; ancak bu adımlar deklaratif arama belleğine (`kristal_bellek`) sızdığında sahte eşleşmelere yol açar.
+
+Bu sorunu çözmek için **Çift Çıktılı Ayrıştırma ve İzolasyon Mimarisi** uygulanmıştır:
+
+```text
+Öğretmen Yanıtı (Gemini / Ollama)
+           │
+           ▼
+extract_cot_and_card()
+     ├──> <DUSUNCE>      ──> data/pedagogy/cot_vault.jsonl & Qdrant: muhakeme_bellek
+     └──> <BILGI_KARTI>  ──> Qdrant: kristal_bellek (Tamamen saf deklaratif Türkçe)
+```
+
+### 1. Akıl Yürütme Verisini İkili Eğitime Derleme (Evre 5 Hazırlığı)
+Kasada biriken düşünce adımlarını modelin içsel akıl yürütmesini (`<DUSUNCE> ... </DUSUNCE>`) öğrenmesi için `train_reasoning_cot.bin` ikili formatına derleyebilirsiniz:
+```bash
+./venv/bin/python scripts/prepare_reasoning_dataset.py \
+  --vault data/pedagogy/cot_vault.jsonl \
+  --output data/train_reasoning_cot.bin \
+  --min-len 15
+```
+
+### 2. Vektörel Bellek Arındırma ve Denetim (Sanitization)
+Bellekteki CoT sızıntılarını temizlemek ve saf bilgi kartlarını yeniden indekslemek için:
+```bash
+./venv/bin/python scripts/sanitize_vector_memory.py
+```
+
+---
+
 ## 8. Python API ile Programatik Kullanım
 
 Kristal derleyici ve dil modelini kendi Python kodunuzda doğrudan kullanabilirsiniz:

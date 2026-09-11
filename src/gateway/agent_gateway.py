@@ -57,6 +57,7 @@ class AgentGateway:
         self.decompiler = decompiler
         self.memory = memory
         self.general_memory = general_memory
+        self.reasoning_memory = None
         self.epistemic_agent = epistemic_agent
         
         # If epistemic_agent not provided, build from components if available
@@ -178,6 +179,15 @@ class AgentGateway:
         """
         target_mem = self.memory if target_collection == "kristal_bellek" else (self.general_memory or self.memory)
         
+        # Sanitize against thoughts/reasoning blocks
+        import re
+        clean_text = re.sub(r'<think>.*?</think>', '', text, flags=re.DOTALL | re.IGNORECASE)
+        clean_text = re.sub(r'<thought>.*?</thought>', '', clean_text, flags=re.DOTALL | re.IGNORECASE)
+        clean_text = re.sub(r'<reasoning>.*?</reasoning>', '', clean_text, flags=re.DOTALL | re.IGNORECASE)
+        clean_text = clean_text.strip()
+        if clean_text:
+            text = clean_text
+
         token_ids = self.tokenizer.encode(text)
         tags = self.tokenizer.decode(token_ids)
         
@@ -203,6 +213,59 @@ class AgentGateway:
             "document_text": text,
             "crystal_tags": tags,
             "total_documents": target_mem.get_document_count()
+        }
+
+    def inject_reasoning_trace(
+        self,
+        query: str,
+        thought_text: str,
+        final_card: str = "",
+        domain: str = "general",
+        metadata: Optional[Dict[str, Any]] = None
+    ) -> Dict[str, Any]:
+        """
+        Ingests a reasoning trace (CoT) into the dedicated 'muhakeme_bellek' collection,
+        completely isolating thought steps from the declarative 'kristal_bellek' space.
+        """
+        if self.reasoning_memory is None:
+            client = self.memory.client if self.memory else None
+            self.reasoning_memory = VectorMemory(
+                collection_name="muhakeme_bellek",
+                vector_size=768,
+                client=client,
+                storage_path="data/qdrant_db" if not client else None
+            )
+
+        doc_text = f"Soru: {query}\n\n[Akıl Yürütme]:\n{thought_text.strip()}\n\n[Çözüm]: {final_card.strip()}"
+        token_ids = self.tokenizer.encode(doc_text)
+        tags = self.tokenizer.decode(token_ids)
+
+        dense_vec = generate_kristal_vector(token_ids, tags)
+        sparse_vec = generate_sparse_vector(token_ids, tags)
+
+        meta = metadata.copy() if metadata else {}
+        meta["query"] = query
+        meta["domain"] = domain
+        meta["thought_text"] = thought_text
+        meta["final_card"] = final_card
+        meta["crystal_tags"] = tags
+        meta["token_ids"] = token_ids
+        meta["injected_by"] = "agent_gateway_cot_vault"
+        meta["timestamp"] = datetime.now(timezone.utc).isoformat()
+
+        self.reasoning_memory.add_documents_batch(
+            texts=[doc_text],
+            dense_vectors=[dense_vec],
+            sparse_vectors=[sparse_vec],
+            metadatas=[meta]
+        )
+
+        return {
+            "status": "success",
+            "collection": "muhakeme_bellek",
+            "query": query,
+            "domain": domain,
+            "total_documents": self.reasoning_memory.get_document_count()
         }
 
     def check_memory(

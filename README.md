@@ -1,13 +1,14 @@
-# Kristal–Vektörel Mimarisi (Crystal-Vector Engine v1.2)
+# Kristal–Vektörel Mimarisi (Crystal-Vector Engine v1.5)
 
 [![Python 3.14](https://img.shields.io/badge/Python-3.14-blue.svg)](https://python.org)
 [![PyTorch](https://img.shields.io/badge/PyTorch-2.11-ee4c2c.svg)](https://pytorch.org)
-[![Tests Passing](https://img.shields.io/badge/Tests-83%2F83%20Passed%20(100%25)-brightgreen.svg)]()
+[![Tests Passing](https://img.shields.io/badge/Tests-96%2F96%20Passed%20(100%25)-brightgreen.svg)]()
 [![Zero-OOV](https://img.shields.io/badge/Zero--OOV-Deterministic%20Ontology-blueviolet.svg)]()
 [![Self-RAG](https://img.shields.io/badge/RAG-Autonomous%20Vector%20Rover-orange.svg)]()
+[![CoT Vault](https://img.shields.io/badge/Reasoning-Isolated%20CoT%20Vault-gold.svg)]()
 [![Agent Gateway](https://img.shields.io/badge/Agent-Gateway%20%26%20Arena-purple.svg)]()
 
-> **Türkçe ve sondan eklemeli (agglutinative) diller için geliştirilmiş, istatistiksel alt-kelime (BPE) tokenizasyonunu deterministik morfolojik ontolojiyle değiştiren, parametrik ezber yerine otonom vektörel hafıza navigasyonunu (Self-RAG) merkeze alan ve büyük agent modelleriyle otonom pedagojik öğrenme döngüsüne (Karpathy Continuous Loop) sahip nöro-sembolik dil modeli.**
+> **Türkçe ve sondan eklemeli (agglutinative) diller için geliştirilmiş, istatistiksel alt-kelime (BPE) tokenizasyonunu deterministik morfolojik ontolojiyle değiştiren, parametrik ezber yerine otonom vektörel hafıza navigasyonunu (Self-RAG) merkeze alan, öğretmen modellerin akıl yürütme (CoT) adımlarını izole bir kasada saklayıp deklaratif belleği arındıran ve büyük agent modelleriyle otonom pedagojik öğrenme döngüsüne (Karpathy Continuous Loop) sahip nöro-sembolik dil modeli.**
 
 ---
 
@@ -15,13 +16,15 @@
 
 Geleneksel Büyük Dil Modelleri (LLM), devasa veri setleriyle bir kez eğitilip o andan itibaren yeni hiçbir şey öğrenemeyen ve dünyadaki tüm olguları ağırlık matrislerinde ezberlemeye çalışan **"Hafızasız Devler" (Memoryless Giants)** olarak işlev görür. 
 
-**Kristal–Vektörel Mimarisi**, bu paradigmayı iki temel ayaktan dönüştürür:
+**Kristal–Vektörel Mimarisi**, bu paradigmayı üç temel ayaktan dönüştürür:
 
 1. **Kristal Derleyici (Lego İlkesi - Sıfır OOV):**
    Türkçe gibi sondan eklemeli dillerde kelimeler rastgele BPE parçalarına bölünmez. Sonlu ve saf bir atomik kök sözlüğü ($M_k \approx 20.500$) ile yönlü çizge (durum makinesi) tabanlı morfotaktik kurallar birleştirilerek sonsuz yüzey formu deterministik olarak analiz edilir ve sentezlenir:
    $$C = \Sigma [f(M_k \Sigma M_e)]$$
 2. **Vektörel Gezgin (Vector Rover, Self-RAG & Epistemik Döngü):**
    Model, tüm olgusal bilgileri statik ağırlıklarında ezberlemek zorunda değildir. Merak motoru ($\mathcal{H}(z) > \tau$) ve otonom `<ARA> ... </ARA>` sorgulama refleksi ile evrensel vektör veritabanında (Qdrant) gezinir; $\ge 0.85$ uyumlu kanıt metni ile yanıt üretir. Eğer model yüksek uyumlu belgeyi almasına rağmen anlayamazsa, bu örnek `future_train_vector.jsonl` kütüğüne kaydedilerek otonom yeniden eğitim döngüsünü besler.
+3. **İzole Akıl Yürütme Kasası (CoT Vault & Morphemic Reasoning):**
+   Öğretmen modellerin (Gemini, Ollama) ürettiği derin düşünce adımları çöpe atılmaz veya deklaratif belleğe bulaştırılmaz; çift çıktılı ayrıştırıcı (`extract_cot_and_card`) ile ayrıştırılır. Temiz bilgi kartları (`<BILGI_KARTI>`) doğrudan `kristal_bellek`'e aktarılırken, düşünce zincirleri (`<DUSUNCE>`) `data/pedagogy/cot_vault.jsonl` kasasında ve `muhakeme_bellek` koleksiyonunda arşivlenerek Evre 5 morfemik akıl yürütme eğitimine zemin hazırlar.
 
 ---
 
@@ -34,19 +37,19 @@ flowchart TD
         Lexicon[("Kök Sözlüğü - roots.tsv\n~20.500 Kök")] --> Comp
         Graph["Morfotaktik Çizge (State Machine)"] --> Comp
         Phonology["Fonoloji Motoru (Ses Olayları)"] --> Comp
-        Comp --> Tokenizer["KristalTokenizer\n(Semantik Morfem Vektörü)"]
+        Comp --> Tokenizer["KristalTokenizer\n(Semantik Morfem Vektörü\n31.340 Token + DUSUNCE)"]
     end
 
     subgraph REASONING ["2. Nöral Akıl Yürütme & Yönlendirme (KristalLM)"]
         Tokenizer --> Embed["KristalEmbedding\n(İşaret Tabanlı Ağırlıklandırma)"]
         Embed --> Transformer["6-Katmanlı KristalLM\n(RoPE + Causal Masking)"]
-        Transformer --> Curiosity["Merak Motoru (Shannon Entropisi)\nH(z) > tau"]
+        Transformer --> Curiosity["Merak Motoru (Shannon Entropisi)\nH(z) > tau veya UNK"]
         Curiosity --> Router["Tri-Modal Dinamik Router\ne_route = Wp*P + Wm*qm + Wr*ctx"]
     end
 
     subgraph MEMORY ["3. Vektörel Bellek & Epistemik Döngü"]
         Router -->|"Otonom Bellek Çağrısı"| VecMem[("Vektörel Bellek (VectorMemory)\nQdrant Hibrit Arama")]
-        VecMem --> Filter{{"Uyum Skoru >= 0.85"}}
+        VecMem --> Filter{{"Uyum Skoru >= 0.85\n(Stopword / Zamir Korumalı)"}}
         Filter -->|"Evet (Kanıt Metni)"| DocInject["<CONTEXT> Kanıt Metni </CONTEXT>"]
         DocInject --> Transformer
         Filter -->|"Model Anlamazsa"| FutureTrain[("future_train_vector.jsonl\nSürekli Eğitim Kütüğü")]
@@ -54,10 +57,14 @@ flowchart TD
         Retrain --> Transformer
     end
 
-    subgraph GATEWAY ["4. Ajan Kapısı & Pedagojik Süpervizör"]
-        ExtAgent["Büyük Agent Modelleri\n(Antigravity / Gemini / Ollama)"] <--> Gateway["AgentGateway\n(Python API & REST Server)"]
+    subgraph GATEWAY ["4. Ajan Kapısı, CoT Kasası & Pedagojik Süpervizör"]
+        ExtAgent["Büyük Öğretmen Modelleri\n(Gemini 2.5 Flash / Ollama)"] <--> Gateway["AgentGateway\n(Python API & REST Server)"]
         Gateway <--> Supervisor["Pedagojik Süpervizör\n(Öğretmen-Çırak Arenası)"]
-        Supervisor -->|"Bilgi Enjeksiyonu"| VecMem
+        Supervisor --> DualParse{"Çift Çıktılı Ayrıştırıcı\nextract_cot_and_card()"}
+        DualParse -->|"<BILGI_KARTI> (Saf Bilgi)"| VecMem
+        DualParse -->|"<DUSUNCE> (Akıl Yürütme)"| CoTVault[("cot_vault.jsonl &\nmuhakeme_bellek (Qdrant)")]
+        CoTVault --> PrepReasoning["prepare_reasoning_dataset.py\n(train_reasoning_cot.bin)"]
+        PrepReasoning -->|"Evre 5 Eğitimi"| Transformer
         Supervisor -->|"Sınav Soruları"| RawText
     end
 
@@ -84,10 +91,11 @@ flowchart TD
 - **`VectorMemory` (`src/rag/vector_memory.py`):** Qdrant tabanlı yoğun (KristalEmbedding) ve seyrek (BM25) hibrit arama sunan, çift koleksiyonlu (`kristal_bellek` & `simulasyon_bellek`), sunucu bağlantısı olmadığında otomatik `:memory:` moduna geçen dayanıklı bellek.
 - **`EpistemicCuriosityAgent` (`src/rag/epistemic_agent.py`):** Merak, router ve hibrit arama döngüsünü işleten; $\ge 0.85$ uyumlu kanıt metinlerine rağmen modelin anlayamadığı durumları tespit edip `data/future_train_vector.jsonl` kütüğüne kaydeden otonom ajan.
 
-### 3. Ajan Kapısı & Pedagojik Süpervizör (`src/gateway/`)
-- **`AgentGateway` (`src/gateway/agent_gateway.py`):** Büyük agent modellerinin (Antigravity Agent, Gemini API, Ollama) küçük modelle çift yönlü iletişim kurmasını sağlayan Python arayüzü ve yerleşik HTTP REST API sunucusu (`/api/query`, `/api/inject`, `/api/status`, `/api/backlog`).
-- **`PedagogicalSupervisor` (`src/gateway/pedagogical_supervisor.py`):** Modeli sınavdan geçiren, yanıtları değerlendiren, eksik bilgiler için RAG'a dinamik enjeksiyon yapan ve $\ge 0.85$ bulunabilirlik denetimi gerçekleştiren usta-çırak süpervizörü.
-- **`RetrainPipeline` (`src/gateway/retrain_pipeline.py`):** `future_train_vector.jsonl` dosyasında biriken çözülememiş epistemik açıkları derleyip modeli otonom yeniden eğiten Karpathy Continuous Learning Loop motoru.
+### 3. Ajan Kapısı, CoT Kasası & Pedagojik Süpervizör (`src/gateway/`)
+- **`AgentGateway` (`src/gateway/agent_gateway.py`):** Büyük agent modellerinin (Antigravity Agent, Gemini API, Ollama) küçük modelle çift yönlü iletişim kurmasını sağlayan Python arayüzü, `muhakeme_bellek` akıl yürütme enjeksiyonu (`inject_reasoning_trace`) ve yerleşik HTTP REST API sunucusu (`/api/query`, `/api/inject`, `/api/status`, `/api/backlog`).
+- **`PedagogicalSupervisor` (`src/gateway/pedagogical_supervisor.py`):** Modeli sınavdan geçiren, yanıtları değerlendiren, çift çıktılı ayrıştırıcı (`extract_cot_and_card`) ile düşünce zincirlerini (`<DUSUNCE>`) `data/pedagogy/cot_vault.jsonl` kasasına ve `muhakeme_bellek`'e izole eden, saf deklaratif bilgi kartlarını (`<BILGI_KARTI>`) ise `kristal_bellek`'e enjekte eden usta-çırak denetçisi.
+- **`RetrainPipeline` (`src/gateway/retrain_pipeline.py`):** `future_train_vector.jsonl` dosyasında biriken çözülememiş epistemik açıkları derleyip modeli otonom yeniden eğiten Karpathy Continuous Learning Loop motoru ve sıfır-unutmalı sözlük cerrahisi (`expand_model_vocabulary`).
+- **`scripts/prepare_reasoning_dataset.py`:** CoT kasasını Evre 5 Morfemik Akıl Yürütme (Morphemic Reasoning) ikili veri setine (`data/train_reasoning_cot.bin`) dönüştüren derleyici.
 
 ---
 
@@ -126,9 +134,9 @@ Model, bir çocuğun gelişim aşamalarını taklit eden çok aşamalı bir peda
 | **Marangozluk Alan Uzmanlığı** | **%100.00 (10/10)** | *"bu işlem için kalınlık makinesi kullanılmalıdır"*, *"kereste fırınında..."* |
 | **Doğal Türkçe Sohbet (Chat)** | **Yüksek Akıcılık** | *"selam harika bir gün geçiriyorum size nasıl yardımcı olabilirim"* |
 | **Otonom RAG Sorgu Üretimi** | **Doğrulandı** | *"Gürgen ahşapta nerede kullanılır?"* $\rightarrow$ `<ARA> gürgen marangozluk kullanım </ARA>` |
-| **Epistemik Uyum Eşiği (RAG >= 0.85)** | **Doğrulandı** | Uyumsuz/alakasız veri elenir; yüksek uyumlu anlaşılamayanlar `future_train`'e kaydedilir. |
-| **Ajan Kapısı & Pedagojik Süpervizör** | **Doğrulandı** | Antigravity / Gemini / Ollama usta-çırak diyalogu, RAG enjeksiyonu ve Karpathy döngüsü. |
-| **Birim ve Entegrasyon Testleri** | **%100 (87/87)** | Kök sözlüğü, durum makinesi, fonoloji, decompiler, RAG, merak motoru, router, gateway, retrain, UNK merakı, sözlük cerrahisi |
+| **Epistemik Uyum Eşiği (RAG >= 0.85)** | **Doğrulandı** | Soru zamirleri arındırıldı (RRF 0.75 $\rightarrow$ 0.019 ceza); yüksek uyumlu anlaşılamayanlar `future_train`'e kaydedilir. |
+| **Ajan Kapısı, CoT Kasası & Süpervizör** | **Doğrulandı** | Düşünce zincirleri (`<DUSUNCE>`) `cot_vault.jsonl` ve `muhakeme_bellek`'e izole edildi; saf kartlar (`<BILGI_KARTI>`) `kristal_bellek`'e aktarıldı. |
+| **Birim ve Entegrasyon Testleri** | **%100 (96/96)** | Kök sözlüğü, durum makinesi, fonoloji, decompiler, RAG, merak motoru, router, gateway, retrain, UNK merakı, sözlük cerrahisi, CoT izolasyonu ve çift ayrıştırıcı |
 
 ---
 
@@ -173,6 +181,10 @@ pip install -r requirements.txt
 # 2. Evre 4: Temel Model Üzerine Ahşap Alan Uzmanlığı (Carpenter Specialization) Eğitme:
 ./venv/bin/python train.py --data data/train_carpenter_specialization.bin --load-path data/kristal_model.pt --save-path data/kristal_carpenter_model.pt --steps 150 --batch-size 16 --device cpu
 
+# 3. Evre 5: İzole CoT Kasasından Morfemik Akıl Yürütme (Reasoning) Eğitimi:
+./venv/bin/python scripts/prepare_reasoning_dataset.py --vault data/pedagogy/cot_vault.jsonl --output data/train_reasoning_cot.bin
+./venv/bin/python train.py --data data/train_reasoning_cot.bin --load-path data/kristal_model.pt --save-path data/kristal_reasoning_model.pt --steps 100 --batch-size 16 --device cpu
+
 # Dengeli Sohbet ve Self-RAG verisiyle eğitme:
 ./venv/bin/python train.py --data data/train_chat_balanced.bin --steps 150 --batch-size 16 --device cpu
 ```
@@ -187,6 +199,8 @@ pip install -r requirements.txt
 | `chat_prompt.py` | `--model <model.pt>`, `mode` (SFT/Normal/RAG), `arena`, `--gateway` | Terminal üzerinden çekirdek veya uzmanlaşmış modelle gerçek zamanlı interaktif diyalog sağlar. |
 | `scripts/run_agent_arena.py` | `--domain <carpenter\|pedagogy\|literary>`, `--rounds <sayı>`, `--ollama-model <model>`, `--auto-retrain`, `--server` | Usta-çırak pedagojik döngüsünü (Gemini/Ollama) veya HTTP REST API Gateway sunucusunu başlatır. |
 | `rag_tool.py` | `add`, `search`, `list`, `status`, `reset` | Vektörel belleğe (kristal_bellek) harici TXT, MD, PDF veya JSON belge ekler ve yönetir. |
+| `scripts/prepare_reasoning_dataset.py` | `--vault <yol>`, `--output <yol>`, `--min-len <sayı>` | CoT kasasındaki düşünce zincirlerini Evre 5 için `train_reasoning_cot.bin` olarak derler. |
+| `scripts/sanitize_vector_memory.py` | `--db-path <yol>`, `--clean-points`, `--seed-woods` | Qdrant vektörel belleğini CoT sızıntılarından arındırır ve saf ağaç/marangozluk kartlarını indeksler. |
 | `scripts/prepare_pedagogy_high_school_dataset.py` | Yok | Bebeklik, morfoloji ve temel lise eğitim verisini `train_pedagogy_highschool.bin` olarak derler. |
 | `scripts/prepare_carpenter_specialization_dataset.py` | Yok | Evre 4 Ahşap & Marangozluk dikey uzmanlık kümesini `train_carpenter_specialization.bin` olarak derler. |
 | `scripts/generate_high_school_dataset.py` | Yok | Lise fen, edebiyat, tarih, coğrafya ve mantık SFT soru-cevap veri setini oluşturur. |
