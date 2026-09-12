@@ -93,6 +93,13 @@ def main():
         lit_records = lit_raw * 10
         print(f"  * [Oversampled] Türkçe Edebiyat & Şiir: {len(lit_records):,} kayıt.")
 
+    # G. 1931 Türk Tarihi Ders Kitapları Sentetik SFT Külliyatı
+    history_path = "data/pedagogy/turk_tarihi_sft.jsonl"
+    history_records = []
+    if os.path.exists(history_path):
+        history_records = tokenize_jsonl(history_path, tokenizer, max_samples=6500)
+        print(f"  * 1931 Türk Tarihi SFT Külliyatı: {len(history_records):,} kayıt.")
+
     # 2. Bütünleştirme ve Karıştırma
     # DİKKAT: Ahşap/Marangozluk uzmanlığı (Evre 4), Lise Temel Eğitimi (Evre 3) bittikten
     # sonra dikey bir modül olarak ayrı derlenir ve eğitilir (scripts/prepare_carpenter_specialization_dataset.py).
@@ -102,7 +109,8 @@ def main():
         infancy_records + 
         semantics_records + 
         rag_records + 
-        lit_records
+        lit_records +
+        history_records
     )
     random.seed(42)
     random.shuffle(all_records)
@@ -127,7 +135,7 @@ def main():
     block_size = 64
     meta = {
         "dataset_name": "train_pedagogy_highschool",
-        "created_at": "2026-09-10",
+        "created_at": "2026-09-12",
         "total_tokens": total_tokens,
         "total_samples": len(all_records),
         "block_size": block_size,
@@ -137,7 +145,9 @@ def main():
             "high_school_foundation": len(high_school_records),
             "infancy_ontology": len(infancy_records),
             "lexical_semantics": len(semantics_records),
-            "rag_communication": len(rag_records)
+            "rag_communication": len(rag_records),
+            "literature_poetry": len(lit_records),
+            "turk_tarihi_1931": len(history_records)
         }
     }
     meta_path = output_bin + ".meta.json"

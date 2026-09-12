@@ -43,7 +43,7 @@ C_GRAY = "\033[90m"
 
 def main():
     parser = argparse.ArgumentParser(description="Kristal-Vektörel Agent Arena CLI")
-    parser.add_argument("--domain", type=str, default="arena_mix", choices=["carpenter", "pedagogy", "literary", "highschool", "arena_mix", "poetry", "edebiyat"], help="Eğitim/Soru alanı")
+    parser.add_argument("--domain", type=str, default="arena_mix", choices=["carpenter", "pedagogy", "literary", "highschool", "arena_mix", "poetry", "edebiyat", "history_1931", "turk_tarihi"], help="Eğitim/Soru alanı")
     parser.add_argument("--rounds", type=int, default=10, help="Diyalog tur sayısı")
     parser.add_argument("--auto-retrain", action="store_true", help="future_train eşiği aşıldığında modeli otomatik yeniden eğit")
     parser.add_argument("--retrain-threshold", type=int, default=5, help="Otomatik eğitim için biriken kayıt eşiği")

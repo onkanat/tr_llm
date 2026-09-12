@@ -1,14 +1,15 @@
-# Kristal–Vektörel Mimarisi (Crystal-Vector Engine v1.5)
+# Kristal–Vektörel Mimarisi (Crystal-Vector Engine v1.6)
 
 [![Python 3.14](https://img.shields.io/badge/Python-3.14-blue.svg)](https://python.org)
 [![PyTorch](https://img.shields.io/badge/PyTorch-2.11-ee4c2c.svg)](https://pytorch.org)
 [![Tests Passing](https://img.shields.io/badge/Tests-96%2F96%20Passed%20(100%25)-brightgreen.svg)]()
-[![Zero-OOV](https://img.shields.io/badge/Zero--OOV-Deterministic%20Ontology-blueviolet.svg)]()
+[![Zero-OOV](https://img.shields.io/badge/Zero--OOV-Deterministic%20Ontology%20(31.357%20Tokens)-blueviolet.svg)]()
 [![Self-RAG](https://img.shields.io/badge/RAG-Autonomous%20Vector%20Rover-orange.svg)]()
 [![CoT Vault](https://img.shields.io/badge/Reasoning-Isolated%20CoT%20Vault-gold.svg)]()
+[![1931 History SFT-DPO](https://img.shields.io/badge/Dataset-1931%20Türk%20Tarihi%20(SFT%2FChat%2FDPO)-red.svg)](https://huggingface.co/datasets/onkanat/turk-tarihi-1931-sft-dpo)
 [![Agent Gateway](https://img.shields.io/badge/Agent-Gateway%20%26%20Arena-purple.svg)]()
 
-> **Türkçe ve sondan eklemeli (agglutinative) diller için geliştirilmiş, istatistiksel alt-kelime (BPE) tokenizasyonunu deterministik morfolojik ontolojiyle değiştiren, parametrik ezber yerine otonom vektörel hafıza navigasyonunu (Self-RAG) merkeze alan, öğretmen modellerin akıl yürütme (CoT) adımlarını izole bir kasada saklayıp deklaratif belleği arındıran ve büyük agent modelleriyle otonom pedagojik öğrenme döngüsüne (Karpathy Continuous Loop) sahip nöro-sembolik dil modeli.**
+> **Türkçe ve sondan eklemeli (agglutinative) diller için geliştirilmiş, istatistiksel alt-kelime (BPE) tokenizasyonunu deterministik morfolojik ontolojiyle değiştiren, parametrik ezber yerine otonom vektörel hafıza navigasyonunu (Self-RAG) merkeze alan, 1931 Maarif Vekaleti Türk Tarihi müfredatıyla zenginleştirilmiş (SFT ➔ Chat ➔ DPO), öğretmen modellerin akıl yürütme (CoT) adımlarını izole bir kasada saklayıp deklaratif belleği arındıran ve büyük agent modelleriyle otonom pedagojik öğrenme döngüsüne (Karpathy Continuous Loop) sahip nöro-sembolik dil modeli.**
 
 ---
 
@@ -166,6 +167,9 @@ pip install -r requirements.txt
 
 ### 4. Otonom Ajan Arenasını veya REST API Sunucusunu Çalıştırma
 ```bash
+# 1931 Türk Tarihi müfredatında 3 turluk otonom pedagojik sınav ve RAG doğrulama:
+./venv/bin/python scripts/run_agent_arena.py --domain history_1931 --rounds 3 --device cpu
+
 # Ahşap alanında 2 turluk otonom pedagojik sınav ve RAG enjeksiyonu:
 ./venv/bin/python scripts/run_agent_arena.py --domain carpenter --rounds 2
 
@@ -173,20 +177,20 @@ pip install -r requirements.txt
 ./venv/bin/python scripts/run_agent_arena.py --server --port 8080
 ```
 
-### 5. Modeli Eğitme (Fine-Tuning / Eğitim Döngüsü)
+### 5. 3 Aşamalı Sıralı Model Eğitimi (SFT ➔ Chat ➔ DPO)
 ```bash
-# 1. Evre 1-3: Pedagoji ve Temel Lise Eğitimiyle Çekirdek Modeli Eğitme:
-./venv/bin/python train.py --data data/train_pedagogy_highschool.bin --steps 300 --batch-size 16 --device cpu
+# 0. Veri Hazırlık ve Entegrasyon Boru Hattını Çalıştırma:
+./venv/bin/python scripts/prepare_turk_tarihi_pipeline.py
 
-# 2. Evre 4: Temel Model Üzerine Ahşap Alan Uzmanlığı (Carpenter Specialization) Eğitme:
-./venv/bin/python train.py --data data/train_carpenter_specialization.bin --load-path data/kristal_model.pt --save-path data/kristal_carpenter_model.pt --steps 150 --batch-size 16 --device cpu
+# 1. Aşama (SFT): Temel Lise ve 1931 Tarih Külliyatı Eğitimi (Metal GPU / MPS):
+./venv/bin/python train.py --data data/train_pedagogy_highschool.bin --steps 200 --batch-size 16 --device mps
+cp data/kristal_model.pt data/kristal_model_sft.pt
 
-# 3. Evre 5: İzole CoT Kasasından Morfemik Akıl Yürütme (Reasoning) Eğitimi:
-./venv/bin/python scripts/prepare_reasoning_dataset.py --vault data/pedagogy/cot_vault.jsonl --output data/train_reasoning_cot.bin
-./venv/bin/python train.py --data data/train_reasoning_cot.bin --load-path data/kristal_model.pt --save-path data/kristal_reasoning_model.pt --steps 100 --batch-size 16 --device cpu
+# 2. Aşama (Chat): Çok Turlu Tarih ve Dengeli Sohbet İnce Ayarı:
+./venv/bin/python scripts/train_chat_sft.py --data data/train_chat_balanced.bin --steps 200 --batch-size 16 --device mps
 
-# Dengeli Sohbet ve Self-RAG verisiyle eğitme:
-./venv/bin/python train.py --data data/train_chat_balanced.bin --steps 150 --batch-size 16 --device cpu
+# 3. Aşama (DPO): Direct Preference Optimization (Bradley-Terry Sigmoid Kaybı):
+./venv/bin/python train_dpo.py --data data/pedagogy/turk_tarihi_dpo_tokenized.jsonl --steps 100 --batch-size 4 --beta 0.1
 ```
 
 ---
@@ -196,20 +200,19 @@ pip install -r requirements.txt
 | Betik / Komut | Önemli Parametreler | Açıklama |
 |---|---|---|
 | `train.py` | `--data <dosya.bin>`, `--load-path <model.pt>`, `--save-path <model.pt>`, `--steps <sayı>`, `--batch-size <sayı>`, `--device <cpu\|mps\|cuda>` | Modeli SFT, causal masking ve modüler uzmanlık ağırlıklarıyla eğitir. |
+| `scripts/train_chat_sft.py` | `--data <dosya.bin>`, `--steps <sayı>`, `--batch-size <sayı>`, `--device <cpu\|mps>`, `--base-model <model.pt>` | Causal prompt masking ile sohbet ve diyalog yeteneklerini dengeli biçimde ince ayarlar. |
+| `train_dpo.py` | `--data <dosya.jsonl>`, `--steps <sayı>`, `--batch-size <sayı>`, `--beta <sayı>`, `--active-model <pt>`, `--ref-model <pt>` | Dondurulmuş referans model ile aktif model arasında Bradley-Terry DPO optimizasyonu yürütür. |
+| `scripts/prepare_turk_tarihi_pipeline.py` | Yok | HF 1931 Türk Tarihi veri setini indirip derler, sözlüğü genişletir ve Qdrant'a indeksler. |
+| `scripts/run_agent_arena.py` | `--domain <history_1931\|carpenter\|pedagogy\|literary>`, `--rounds <sayı>`, `--auto-retrain`, `--server` | Usta-çırak pedagojik döngüsünü (Gemini/Ollama) veya HTTP REST API Gateway sunucusunu başlatır. |
 | `chat_prompt.py` | `--model <model.pt>`, `mode` (SFT/Normal/RAG), `arena`, `--gateway` | Terminal üzerinden çekirdek veya uzmanlaşmış modelle gerçek zamanlı interaktif diyalog sağlar. |
-| `scripts/run_agent_arena.py` | `--domain <carpenter\|pedagogy\|literary>`, `--rounds <sayı>`, `--ollama-model <model>`, `--auto-retrain`, `--server` | Usta-çırak pedagojik döngüsünü (Gemini/Ollama) veya HTTP REST API Gateway sunucusunu başlatır. |
 | `rag_tool.py` | `add`, `search`, `list`, `status`, `reset` | Vektörel belleğe (kristal_bellek) harici TXT, MD, PDF veya JSON belge ekler ve yönetir. |
 | `scripts/prepare_reasoning_dataset.py` | `--vault <yol>`, `--output <yol>`, `--min-len <sayı>` | CoT kasasındaki düşünce zincirlerini Evre 5 için `train_reasoning_cot.bin` olarak derler. |
 | `scripts/sanitize_vector_memory.py` | `--db-path <yol>`, `--clean-points`, `--seed-woods` | Qdrant vektörel belleğini CoT sızıntılarından arındırır ve saf ağaç/marangozluk kartlarını indeksler. |
-| `scripts/prepare_pedagogy_high_school_dataset.py` | Yok | Bebeklik, morfoloji ve temel lise eğitim verisini `train_pedagogy_highschool.bin` olarak derler. |
+| `scripts/prepare_pedagogy_high_school_dataset.py` | Yok | Bebeklik, morfoloji, edebiyat ve 1931 Tarih SFT verisini `train_pedagogy_highschool.bin` olarak derler. |
+| `scripts/prepare_chat_balanced_dataset.py` | Yok | Chat + Self-RAG + 1931 Tarih diyalogları odaklı `train_chat_balanced.bin` dosyasını derler. |
 | `scripts/prepare_carpenter_specialization_dataset.py` | Yok | Evre 4 Ahşap & Marangozluk dikey uzmanlık kümesini `train_carpenter_specialization.bin` olarak derler. |
-| `scripts/generate_high_school_dataset.py` | Yok | Lise fen, edebiyat, tarih, coğrafya ve mantık SFT soru-cevap veri setini oluşturur. |
-| `scripts/generate_literature_poetry_dataset.py` | Yok | Halk, Divan, Tanzimat, Servet-i Fünun, Milli Edebiyat ve modern şiir SFT kümesini derler. |
 | `scripts/evaluate_chat.py` | Yok | 12 farklı senaryoda diyalog çıkarımlarını test eder ve decompile eder. |
 | `scripts/test_rag_interactive.py` | Yok | `<ARA>` sorgusu üretimi, belgeden çıkarım ve bilgi yok itirafını test eder. |
-| `scripts/evaluate_on_train_data.py` | Yok | Perplexity, 10 morfolojik görev ve alan uzmanlığı regresyon testlerini yürütür. |
-| `scripts/prepare_deep_dataset.py` | Yok | Tüm alt kümeleri birleştirerek 11.2M tokenlık `train_deep_sft.bin` dosyasını derler. |
-| `scripts/prepare_chat_balanced_dataset.py` | Yok | Chat + Self-RAG odaklı dengeli `train_chat_balanced.bin` dosyasını derler. |
 
 ---
 

@@ -45,12 +45,16 @@ def main():
     print(f"Sözlük Yüklendi. Kelime dağarcığı boyutu: {vocab_size}")
 
     dpo_jsonl_path = 'data/pedagogy/dpo_all_tokenized.jsonl'
+    for arg_idx, arg in enumerate(sys.argv):
+        if arg in ("--data", "--dataset") and arg_idx + 1 < len(sys.argv):
+            dpo_jsonl_path = sys.argv[arg_idx + 1]
+
     if not os.path.exists(dpo_jsonl_path):
         print(f"Hata: DPO derlenmiş veri seti '{dpo_jsonl_path}' bulunamadı! Lütfen derleme adımını çalıştırın.")
         return
 
     # Load all tokenized records
-    print("DPO veri seti yükleniyor...")
+    print(f"DPO veri seti yükleniyor: {dpo_jsonl_path}...")
     records = []
     skipped_count = 0
     with open(dpo_jsonl_path, 'r', encoding='utf-8') as f:
@@ -73,18 +77,34 @@ def main():
     ref_model = KristalLM(vocab_size=vocab_size, n_embd=n_embd, vocab=vocab, block_size=4096, n_layer=6, n_head=6)
     
     sft_model_path = 'data/kristal_model_sft.pt'
+    active_model_path = 'data/kristal_model.pt'
+    for arg_idx, arg in enumerate(sys.argv):
+        if arg in ("--ref-model", "--sft-model") and arg_idx + 1 < len(sys.argv):
+            sft_model_path = sys.argv[arg_idx + 1]
+        if arg in ("--active-model", "--base-model") and arg_idx + 1 < len(sys.argv):
+            active_model_path = sys.argv[arg_idx + 1]
+
     if not os.path.exists(sft_model_path):
-        print(f"Hata: SFT model dosyası '{sft_model_path}' bulunamadı! Lütfen önce SFT eğitimini çalıştırın.")
+        print(f"Hata: SFT referans model dosyası '{sft_model_path}' bulunamadı!")
         return
 
-    # Load weights into both models (filter out deterministic RoPE/Causal buffers to avoid size mismatch)
+    # Load weights into ref_model (filter out deterministic RoPE/Causal buffers)
     sft_state_dict = torch.load(sft_model_path, map_location=device)
     keys_to_skip = [k for k in sft_state_dict.keys() if "cos_cached" in k or "sin_cached" in k or "mask" in k]
     for k in keys_to_skip:
         del sft_state_dict[k]
-        
-    model.load_state_dict(sft_state_dict, strict=False)
     ref_model.load_state_dict(sft_state_dict, strict=False)
+
+    # Load weights into active model (from active_model_path if exists, else sft_model_path)
+    if os.path.exists(active_model_path):
+        print(f"  * Aktif model ağırlıkları: {active_model_path}")
+        active_state_dict = torch.load(active_model_path, map_location=device)
+        for k in [k for k in active_state_dict.keys() if "cos_cached" in k or "sin_cached" in k or "mask" in k]:
+            del active_state_dict[k]
+        model.load_state_dict(active_state_dict, strict=False)
+    else:
+        print(f"  * Aktif model referans modelden başlatılıyor: {sft_model_path}")
+        model.load_state_dict(sft_state_dict, strict=False)
     
     model.to(device)
     ref_model.to(device)
@@ -97,17 +117,24 @@ def main():
     print("Modeller hazırlandı. Referans model donduruldu.")
 
     # 4. Optimizer setup
-    # DPO training typically uses a low learning rate (e.g. 5e-6 to 5e-5)
-    optimizer = optim.AdamW(model.parameters(), lr=1e-5, weight_decay=0.01)
+    lr = 1e-5
+    optimizer = optim.AdamW(model.parameters(), lr=lr, weight_decay=0.01)
 
     # 5. DPO Training Loop
-    # We define steps, batch size, and beta parameter
-    max_steps = 1000
+    max_steps = 150
     batch_size = 4  # Gradient accumulation batch size
     beta = 0.1      # DPO temperature parameter
     eval_interval = 10
 
-    print(f"\nDPO Hizalama Başlatılıyor -> Adım: {max_steps}, Beta: {beta}, LR: 1e-5, Batch: {batch_size}")
+    for arg_idx, arg in enumerate(sys.argv):
+        if arg == "--steps" and arg_idx + 1 < len(sys.argv):
+            max_steps = int(sys.argv[arg_idx + 1])
+        if arg == "--batch-size" and arg_idx + 1 < len(sys.argv):
+            batch_size = int(sys.argv[arg_idx + 1])
+        if arg == "--beta" and arg_idx + 1 < len(sys.argv):
+            beta = float(sys.argv[arg_idx + 1])
+
+    print(f"\nDPO Hizalama Başlatılıyor -> Adım: {max_steps}, Beta: {beta}, LR: {lr}, Batch: {batch_size}")
     
     model.train()
     start_time = time.time()

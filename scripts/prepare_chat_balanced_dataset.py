@@ -89,6 +89,9 @@ def main():
     # G. Klasik Sadık Belge Alıntılama (RAG Grounding - 3,500 kayıt)
     classic_rag_records = tokenize_jsonl('data/pedagogy/rag_dataset.jsonl', tokenizer, max_samples=3500)
 
+    # H. 1931 Türk Tarihi Çok Turlu Sohbet Külliyatı (3,000 kayıt)
+    history_chat_records = tokenize_jsonl('data/pedagogy/turk_tarihi_chat.jsonl', tokenizer, max_samples=3000)
+
     # 2. Save Vocabulary Update if any new token emerged
     vocab.save('data/vocab.json')
     print(f"\n[2] Sözlük Kontrolü: {initial_vocab_size} -> {len(vocab.stoi)} token.")
@@ -101,7 +104,8 @@ def main():
         semantics_records +
         carpenter_records +
         rag_records +
-        classic_rag_records
+        classic_rag_records +
+        history_chat_records
     )
 
     print(f"\n[3] Toplam Dengeli Sohbet & RAG SFT Kayıt Sayısı: {len(all_records):,}")
@@ -137,7 +141,9 @@ def main():
             "parenting_deep": len(parenting_records),
             "lexical_semantics": len(semantics_records),
             "carpenter_specialization": len(carpenter_records),
-            "rag_interactive": len(rag_records)
+            "rag_interactive": len(rag_records),
+            "classic_rag": len(classic_rag_records),
+            "turk_tarihi_1931_chat": len(history_chat_records)
         }
     }
 

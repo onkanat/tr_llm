@@ -119,31 +119,48 @@ Modelin ana eğitim döngüsü `train.py` betiği üzerinden yönetilir. Causal 
 ./venv/bin/python -u train.py --data data/train_chat_balanced.bin --steps 150 --batch-size 32
 ```
 
+#### D. 1931 Türk Tarihi Müfredatı Sıralı Eğitimi (SFT ➔ Chat ➔ DPO)
+```bash
+# 1. Aşama: SFT (Supervised Fine-Tuning) - Lise Temeli & Tarih Külliyatı (MPS Hızlandırmalı)
+./venv/bin/python train.py --data data/train_pedagogy_highschool.bin --steps 200 --batch-size 16 --device mps
+cp data/kristal_model.pt data/kristal_model_sft.pt
+
+# 2. Aşama: Chat (Causal Maskeli Çok Turlu Tarih & Sohbet İnce Ayarı)
+./venv/bin/python scripts/train_chat_sft.py --data data/train_chat_balanced.bin --steps 200 --batch-size 16 --device mps
+
+# 3. Aşama: DPO (Direct Preference Optimization - Bradley-Terry Sigmoid Kaybı)
+./venv/bin/python train_dpo.py --data data/pedagogy/turk_tarihi_dpo_tokenized.jsonl --steps 100 --batch-size 4 --beta 0.1
+```
+
 ---
 
 ## 4. Veri Seti Oluşturma ve Derleme
 
-Projedeki veri setleri sentetik, deterministik ve pedagojik hiyerarşiye (Evre 1-4) göre yapılandırılmıştır:
+Projedeki veri setleri sentetik, deterministik ve pedagojik hiyerarşiye göre yapılandırılmıştır:
 
-### 1. Temel Lise ve Pedagoji Verisi Derleme (Evre 1-3)
+### 1. 1931 Türk Tarihi Külliyatı Hazırlığı ve Entegrasyonu
+Hugging Face üzerindeki [`onkanat/turk-tarihi-1931-sft-dpo`](https://huggingface.co/datasets/onkanat/turk-tarihi-1931-sft-dpo) veri setini (6.477 SFT, 6.071 Chat, 406 DPO) işleyip Qdrant belleğe indekslemek için:
+```bash
+./venv/bin/python scripts/prepare_turk_tarihi_pipeline.py
+```
+
+### 2. Temel Lise ve Pedagoji Verisi Derleme (Evre 1-3)
 ```bash
 ./venv/bin/python scripts/prepare_pedagogy_high_school_dataset.py
 ```
-*Çıktı: `data/train_pedagogy_highschool.bin` (3.51 MB, 46.412 örnek, 1.84M token). Bebeklik ontolojisi, ebeveynlik morfolojisi, lise müfredatı, edebiyat & şiir ve TDK GTS sözlüğünü birleştirir.*
+*Çıktı: `data/train_pedagogy_highschool.bin` (4.47 MB, 52.739 örnek, 2.34M token). Bebeklik ontolojisi, ebeveynlik morfolojisi, lise müfredatı, edebiyat & şiir, TDK GTS sözlüğü ve 1931 Tarih SFT verilerini birleştirir.*
 
-### 2. Dikey Ahşap Uzmanlık Verisi Derleme (Evre 4)
+### 3. Dikey Ahşap Uzmanlık Verisi Derleme (Evre 4)
 ```bash
 ./venv/bin/python scripts/prepare_carpenter_specialization_dataset.py
 ```
 *Çıktı: `data/train_carpenter_specialization.bin` (1.51 MB, 12.775 örnek, 793K token). Ahşap ve marangozluk teknolojisi ile unutmayı önleyici morfolojik çıpaları harmanlar.*
 
-### 3. Zenginleştirilmiş Sohbet ve Self-RAG Verisi Üretme
+### 4. Zenginleştirilmiş Sohbet ve Self-RAG Verisi Derleme
 ```bash
-./venv/bin/python scripts/generate_deep_chat_dataset.py
-./venv/bin/python scripts/generate_interactive_rag_dataset.py
 ./venv/bin/python scripts/prepare_chat_balanced_dataset.py
 ```
-*Çıktı: `data/train_chat_balanced.bin` (3.25 MB).*
+*Çıktı: `data/train_chat_balanced.bin` (5.34 MB, 21.875 örnek, 2.80M token).*
 
 ---
 
@@ -227,14 +244,20 @@ Bellekten getirilen metin verildiğinde model halüsinasyon görmeden belgeden �
 Büyük dil modellerinin (Antigravity Agent'ları, Google Gemini API, Ollama vb.) küçük KristalLM modelini otonom pedagojik denetimden geçirmesi, eksik/hatalı bilgileri RAG belleğine (`kristal_bellek`, `simulasyon_bellek`) otomatik enjekte etmesi ve modeli sürekli öğrenme döngüsüne (Karpathy Continuous Learning Loop) sokması için **Agent Gateway** ve **Pedagogical Supervisor** mimarisi geliştirilmiştir.
 
 ### 🌟 1. Etkileşimli Arena Testi (`run_agent_arena.py`)
-Küçük modeli çoklu branşta (Lise Edebiyat, Fizik, Kimya, Biyoloji, Tarih, Coğrafya, Mantık, Marangozluk, Morfoloji) doğrudan sınava tabi tutmak ve anlık epistemik durumunu görmek için:
+Küçük modeli çoklu branşta (1931 Türk Tarihi, Edebiyat & Şiir, Lise Fen/Sosyal, Marangozluk, Morfoloji) doğrudan sınava tabi tutmak ve anlık epistemik durumunu görmek için:
 ```bash
-./venv/bin/python scripts/run_agent_arena.py
+# 1931 Türk Tarihi sınavı:
+./venv/bin/python scripts/run_agent_arena.py --domain history_1931 --rounds 3 --device cpu
+
+# Ahşap ve marangozluk sınavı:
+./venv/bin/python scripts/run_agent_arena.py --domain carpenter --rounds 3 --device cpu
 ```
 Önemli seçenekler:
-- `--subject edebiyat` veya `--subject fizik` (Belirli branşa odaklanma)
-- `--threshold 0.85` (Bulunabilirlik denetimi için asgari alaka eşiği)
-- `--auto-retrain` (future_train_vector.jsonl biriktiğinde otomatik eğitimi tetikler)
+- `--domain <history_1931|carpenter|pedagogy|literary|highschool|arena_mix>` (Sınav alanı)
+- `--rounds <sayı>` (Diyalog tur sayısı)
+- `--retrain-threshold 5` (future_train kütüğü için otomatik eğitim tetik eşiği)
+- `--auto-retrain` (future_train_vector.jsonl eşiği aşıldığında otomatik eğitimi tetikler)
+- `--device <cpu|mps>` (Hesaplama donanımı)
 
 ### 🚪 2. HTTP REST Gateway Sunucusu
 Dış ajanların HTTP üzerinden modeli sorgulaması ve belleğe bilgi beslemesi için bağımsız REST API sunucusu çalıştırılabilir:

@@ -4,6 +4,33 @@ Bu projedeki tüm önemli değişiklikler bu dosyada belgelenmektedir.
 
 Format [Keep a Changelog](https://keepachangelog.com/tr/1.0.0/) standardına dayanır ve bu proje [Semantic Versioning (SemVer)](https://semver.org/spec/v2.0.0.html) ilkelerini benimser.
 
+## [1.6.0] - 2026-09-12
+
+### Eklendi (Added)
+- **1931 Türk Tarihi Ders Kitapları Sentetik Veri Seti Entegrasyonu (`onkanat/turk-tarihi-1931-sft-dpo`):**
+  - Maarif Vekaleti 1931 liseler için 4 ciltlik Türk Tarihi kaynaklı 6.477 SFT (`data/pedagogy/turk_tarihi_sft.jsonl`), 6.071 Chat diyalogu (`data/pedagogy/turk_tarihi_chat.jsonl`) ve 406 DPO tercih çifti (`data/pedagogy/turk_tarihi_dpo_tokenized.jsonl`) projeye dahil edildi.
+- **Tarih Veri Hazırlık ve Entegrasyon Boru Hattı (`scripts/prepare_turk_tarihi_pipeline.py`):**
+  - HF veri setini otomatik formatlayan, DPO çiftlerini tokenize eden, sözlük taraması yapan ve Qdrant `simulasyon_bellek` koleksiyonuna tarihsel bilgi kartlarını indeksleyen uçtan uca betik eklendi.
+- **Pedagojik Süpervizör & Ajan Arenası Tarih Müfredatı (`history_1931` & `turk_tarihi`):**
+  - `src/gateway/pedagogical_supervisor.py` içine 1931 Türk Tarih Tezi, Orta Asya göçleri ve Sümer-Hitit medeniyet bağıntılarını sınayan yerleşik pedagojik problar eklendi.
+  - `scripts/run_agent_arena.py` CLI seçeneğine `--domain history_1931` ve `turk_tarihi` parametreleri entegre edildi.
+- **3 Aşamalı Sıralı Model Eğitimi (SFT ➔ Chat ➔ DPO):**
+  - **Aşama 1 (SFT):** `data/train_pedagogy_highschool.bin` (52.739 örnek, 2.34M token) üzerine 200 adım MPS eğitimi (Kayıp: 2.59 ➔ 3.11).
+  - **Aşama 2 (Chat):** `data/train_chat_balanced.bin` (21.875 örnek, 2.80M token) üzerinde causal prompt masking ile 200 adım MPS eğitimi (Kayıp: 3.96 ➔ 1.73, sohbet yapılarında 0.43 seviyesi).
+  - **Aşama 3 (DPO):** `train_dpo.py` üzerinden dondurulmuş referans SFT modeli ile aktif Chat modeli arasında Bradley-Terry sigmoid kaybı optimizasyonu ile 100 adım CPU eğitimi (Kayıp: 0.64 ➔ 0.38, %39.8 düşüş).
+- **Morfemik Sözlük Genişletmesi & Ağırlık Cerrahisi:**
+  - Tarih metinlerindeki 17 yeni morfem (`aligned`, `muvasala`, `inkıraz`, `ihtilat`, `nehiy`, `kopça`, vb.) `data/vocab.json`'a işlendi (31.340 ➔ 31.357), `kristal_model.pt` ağırlık matrisleri sıfır-unutma garantisiyle genişletildi.
+- **Qdrant RAG Bellek Genişletmesi:**
+  - `simulasyon_bellek` koleksiyonuna 300'den fazla tarihsel bilgi kartı işlenerek toplam belge sayısı 4.618'e yükseltildi.
+
+### Değiştirildi (Changed)
+- **`scripts/prepare_pedagogy_high_school_dataset.py`:** Türk Tarihi SFT verisi temel lise müfredatına dahil edildi.
+- **`scripts/prepare_chat_balanced_dataset.py`:** Çok turlu tarih diyalogları dengeli sohbet havuzuna entegre edildi.
+- **`scripts/train_chat_sft.py`:** CLI argüman desteği eklendi (`--data`, `--steps`, `--batch-size`, `--device`, `--base-model`).
+- **`train_dpo.py`:** Ayrı aktif model (`--active-model`) ve referans model (`--ref-model`) desteği ile dinamik CLI parametreleri (`--steps`, `--batch-size`, `--beta`, `--data`) eklendi.
+
+---
+
 ## [1.5.0] - 2026-09-11
 
 ### Eklendi (Added)

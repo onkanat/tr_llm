@@ -181,6 +181,29 @@ CURRICULUM_PROBES = {
             "knowledge_to_inject": "Lozan Barış Antlaşması, Türkiye Cumhuriyeti'nin bağımsızlığını ve sınırlarını uluslararası alanda tescilleyen, kapitülasyonları kaldıran kurucu antlaşmadır.",
             "expected_keywords": ["bağımsızlık", "sınır", "kapitülasyon", "cumhuriyet"]
         }
+    ],
+    "history_1931": [
+        {
+            "query": "1931 Türk Tarih Tezi'nin temel amacı nedir?",
+            "instruction": "Tarih araştırmaları ve lise tarih müfredatı kapsamında açıkla.",
+            "target_collection": "simulasyon_bellek",
+            "knowledge_to_inject": "1931 Türk Tarih Tezi; Türk milletinin dünya medeniyetinin gelişimindeki öncü rolünü, Orta Asya kökenli kadim uygarlıkların göçlerle Mezopotamya, Anadolu ve Akdeniz havzasına yaydığı medeni birikimi ve ulusal tarih bilincini ortaya koymayı amaçlar.",
+            "expected_keywords": ["medeniyet", "orta asya", "uygarlık", "tarih tezi", "cumhuriyet"]
+        },
+        {
+            "query": "Orta Asya'dan kuraklık sebebiyle yapılan Türk göçleri dünya tarihini nasıl etkilemiştir?",
+            "instruction": "1931 Tarih I ders kitabı kapsamında açıkla.",
+            "target_collection": "simulasyon_bellek",
+            "knowledge_to_inject": "Orta Asya iç denizlerinin kuruması ve iklim değişiklikleri sonucu gerçekleşen göçler; tekerlek, atın ehlileştirilmesi, maden işleme ve tarım gibi uygarlık unsurlarını Çin, Hindistan, Ön Asya ve Avrupa'ya taşımıştır.",
+            "expected_keywords": ["göç", "iklim", "kuraklık", "maden", "uygarlık"]
+        },
+        {
+            "query": "Sümer ve Hitit uygarlıklarının Türk tarihi ile ilişkisi 1931 ders kitaplarında nasıl ele alınmıştır?",
+            "instruction": "1931 Tarih I liseler ders kitabı perspektifinden açıkla.",
+            "target_collection": "simulasyon_bellek",
+            "knowledge_to_inject": "1931 ders kitaplarında Sümer ve Hititlerin Orta Asya kökenli Brakisefal Turani kavimler olduğu, Mezopotamya ve Anadolu'ya gelişmiş madencilik, yazı ve şehir kültürünü kazandırdıkları tezi savunulmuştur.",
+            "expected_keywords": ["sümer", "hitit", "turani", "brakisefal", "anadolu", "mezopotamya"]
+        }
     ]
 }
 

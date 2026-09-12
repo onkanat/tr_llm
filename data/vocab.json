@@ -31339,7 +31339,24 @@
     "tuyuğ": 31336,
     "şahlandır": 31337,
     "<DUSUNCE>": 31338,
-    "</DUSUNCE>": 31339
+    "</DUSUNCE>": 31339,
+    "aligned": 31340,
+    "basılabilme": 31341,
+    "ihtilat": 31342,
+    "implies": 31343,
+    "inkıraz": 31344,
+    "kopça": 31345,
+    "muvasala": 31346,
+    "nehiy": 31347,
+    "nodes": 31348,
+    "osteolojik": 31349,
+    "shared": 31350,
+    "sphinx": 31351,
+    "stretching": 31352,
+    "sürünme": 31353,
+    "tefevvuk": 31354,
+    "tesalüp": 31355,
+    "yönetilebilme": 31356
   },
-  "next_id": 31340
+  "next_id": 31357
 }

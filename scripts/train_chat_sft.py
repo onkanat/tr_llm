@@ -39,10 +39,15 @@ def main():
     print(" KRİSTAL-VEKTÖREL MİMARİSİ: ORTAOKUL SOHBET SFT EĞİTİMİ")
     print("=" * 60)
 
-    # 1. Device Setup (Using MPS for fast GPU-accelerated training)
-    if torch.backends.mps.is_available():
+    # 1. Device Setup
+    device_arg = "mps" if torch.backends.mps.is_available() else "cpu"
+    for arg_idx, arg in enumerate(sys.argv):
+        if arg == "--device" and arg_idx + 1 < len(sys.argv):
+            device_arg = sys.argv[arg_idx + 1]
+
+    if device_arg == "mps" and torch.backends.mps.is_available():
         device = torch.device("mps")
-    elif torch.cuda.is_available():
+    elif device_arg == "cuda" and torch.cuda.is_available():
         device = torch.device("cuda")
     else:
         device = torch.device("cpu")
@@ -55,22 +60,33 @@ def main():
     vocab_size = len(vocab.stoi)
     print(f"Sözlük Yüklendi. Kelime dağarcığı boyutu: {vocab_size}")
 
-    train_bin_path = 'data/train_chat_sft.bin'
+    train_bin_path = 'data/train_chat_balanced.bin'
     if not os.path.exists(train_bin_path):
-        print(f"Hata: {train_bin_path} bulunamadı! Lütfen önce prepare_chat_fine_tune_dataset.py betiğini çalıştırın.")
+        train_bin_path = 'data/train_chat_sft.bin'
+
+    for arg_idx, arg in enumerate(sys.argv):
+        if arg in ("--data", "--dataset") and arg_idx + 1 < len(sys.argv):
+            train_bin_path = sys.argv[arg_idx + 1]
+
+    if not os.path.exists(train_bin_path):
+        print(f"Hata: {train_bin_path} bulunamadı! Lütfen önce prepare_chat_balanced_dataset.py betiğini çalıştırın.")
         return
 
     # Use block_size = 128 to cover prompt + output sequences in a single window while keeping training fast
     block_size = 128
     dataset = AlignedKristalDataset(train_bin_path, block_size=block_size)
-    print(f"Sohbet SFT veri kümesi yüklendi. Toplam morfem sayısı: {len(dataset.data)}")
+    print(f"Sohbet SFT veri kümesi yüklendi: {train_bin_path}. Toplam morfem sayısı: {len(dataset.data):,}")
 
     # 3. Model Setup & Load Base Weights
     print("\n[1] Temel model ağırlıkları yükleniyor...")
     model = KristalLM(vocab_size=vocab_size, n_embd=768, vocab=vocab, block_size=1024, n_layer=6, n_head=6)
     
-    # Load from the best DPO model weights
+    # Load from the best SFT/DPO model weights
     base_model_path = 'data/kristal_model.pt'
+    for arg_idx, arg in enumerate(sys.argv):
+        if arg in ("--base-model", "--load-path") and arg_idx + 1 < len(sys.argv):
+            base_model_path = sys.argv[arg_idx + 1]
+
     if not os.path.exists(base_model_path):
         print(f"Hata: Temel model dosyası '{base_model_path}' bulunamadı!")
         return
@@ -84,18 +100,23 @@ def main():
     model.load_state_dict(resized_state_dict, strict=False)
     model.to(device)
 
-
     print(f"  -> Ağırlıklar '{base_model_path}' adresinden başarıyla yüklendi.")
 
     # Using low learning rate to prevent forgetting prior scientific knowledge
-    optimizer = optim.AdamW(model.parameters(), lr=1.5e-4, weight_decay=0.01)
+    lr = 1.5e-4
+    optimizer = optim.AdamW(model.parameters(), lr=lr, weight_decay=0.01)
     
     # 4. SFT Training Loop with Causal Masking
     batch_size = 16
-    max_steps = 1200  # Extended alignment steps for copy task
-    eval_interval = 25
+    max_steps = 200
+    for arg_idx, arg in enumerate(sys.argv):
+        if arg == "--steps" and arg_idx + 1 < len(sys.argv):
+            max_steps = int(sys.argv[arg_idx + 1])
+        if arg == "--batch-size" and arg_idx + 1 < len(sys.argv):
+            batch_size = int(sys.argv[arg_idx + 1])
 
-    print(f"\n[2] Sohbet Fine-tuning Başlatılıyor -> Adım Sayısı: {max_steps}, LR: 1.5e-4, Batch: {batch_size}")
+    eval_interval = 10
+    print(f"\n[2] Sohbet Fine-tuning Başlatılıyor -> Adım Sayısı: {max_steps}, LR: {lr}, Batch: {batch_size}")
 
 
 
