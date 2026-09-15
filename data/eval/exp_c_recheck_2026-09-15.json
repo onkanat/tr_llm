@@ -1,0 +1,317 @@
+{
+  "task_id": "T-0016",
+  "ran_at": "2026-09-15T04:21:17.671980+00:00",
+  "git_head": "65fddc2",
+  "device": "mps",
+  "mps_available": true,
+  "torch_version": "2.11.0",
+  "checkpoint": {
+    "path": "data/kristal_carpenter_model.pt",
+    "sha256": "5f0b8c71727d15e338e4301634b0d05652c3230cebc532b1124aff3761e93b4d",
+    "sha256_after_run": "5f0b8c71727d15e338e4301634b0d05652c3230cebc532b1124aff3761e93b4d",
+    "bytes": 374026701
+  },
+  "determinism": {
+    "runs": 2,
+    "identical": true,
+    "diff": null
+  },
+  "prior_artifacts_search": {
+    "found": false,
+    "command": "find data/eval scratch -maxdepth 2 -type f \\( -iname \"*c_*\" -o -iname \"*exp_c*\" -o -iname \"*experiment_c*\" \\)",
+    "detail": "Diskte daha once kaydedilmis Exp C cikti dosyasi bulunamadi. Exp C ciktilari T-0015 oncesinde diske kalici olarak yazilmamisti; ilk kalici temel cizgi bu gorevle olusturulmaktadir."
+  },
+  "envelope": {
+    "new": "render_prompt(inst_text, '')",
+    "old": "f\"<BOS> {render_prompt(inst_text, '')}\""
+  },
+  "training_common_prefix": {
+    "method": "common_prefix_len(tokenizer.encode(json.dumps(rec0)), tokenizer.encode(render_prompt(rec0['instruction'], '')))",
+    "value": 32
+  },
+  "cases": [
+    {
+      "id": "C1_1_Dolgu_Vernigi",
+      "split": "C1",
+      "instruction": "Ahşap atölyesi güvenlik ve imalat rehberi: Ahşabın son kat yüzeyinde dolgu verniği nasıl tatbik edilmelidir?",
+      "expected": "Dolgu verniği uygulamasında ahşabın açık gözeneklerini doldurarak son kat cila için cam gibi pürüzsüz ve homojen bir alt zemin hazırlayan astar verniktir.",
+      "new_envelope": {
+        "prompt": "<INSTRUCTION> Ahşap atölyesi güvenlik ve imalat rehberi: Ahşabın son kat yüzeyinde dolgu verniği nasıl tatbik edilmelidir? </INSTRUCTION> <INPUT>  </INPUT> <OUTPUT>",
+        "tokens_head": [
+          2,
+          1707,
+          2014,
+          4508,
+          13,
+          2669
+        ],
+        "double_bos": false,
+        "raw_output": "teknik çözüm teknik rapor teknik açıklama kereste CASE_GEN sıcak DERIV_lIk nem ve hava sirkülasyon POSS_3SG kontrollü fırın PLURAL CASE_LOC kademe DERIV_lI ol GERUND_ArAk kurutul GERUND_ArAk hücre iç POSS_3SG gerilim POSS_3PL CASE_GEN_N yukarı kıvrıl GERUND_ArAk oluk şekil POSS_2SG CASE_ACC alma POSS_3SG deformasyon POSS_3SG COPULA_AORIST </OUTPUT>",
+        "decompiled_output": "Teknik çözüm teknik rapor teknik açıklama kerestenin sıcaklık nem ve hava sirkülasyonu kontrollü fırınlarda kademeli olarak kurutularak hücre içi gerilimlerinin yukarı kıvrılarak oluk şeklini alması deformasyonudur"
+      },
+      "old_envelope": {
+        "prompt": "<BOS> <INSTRUCTION> Ahşap atölyesi güvenlik ve imalat rehberi: Ahşabın son kat yüzeyinde dolgu verniği nasıl tatbik edilmelidir? </INSTRUCTION> <INPUT>  </INPUT> <OUTPUT>",
+        "tokens_head": [
+          2,
+          2,
+          1707,
+          2014,
+          4508,
+          13
+        ],
+        "double_bos": true,
+        "raw_output": "teknik çözüm teknik rapor teknik açıklama kereste CASE_GEN sıcak DERIV_lIk nem ve hava sirkülasyon POSS_3SG kontrollü fırın PLURAL CASE_LOC kademe DERIV_lI ol GERUND_ArAk kurutul GERUND_ArAk hücre iç POSS_3SG gerilim POSS_3PL CASE_GEN_N birbiri POSS_2SG CASE_DAT boş DERIV_lIk DERIV_sIz ve kas GERUND_mAdAn oturma POSS_3SG mukavemet için şart COPULA_AORIST </OUTPUT>",
+        "decompiled_output": "Teknik çözüm teknik rapor teknik açıklama kerestenin sıcaklık nem ve hava sirkülasyonu kontrollü fırınlarda kademeli olarak kurutularak hücre içi gerilimlerinin birbirine boşluksuz ve kasmadan oturması mukavemet için şarttır"
+      },
+      "changed_by_envelope_fix": true,
+      "judgment": "Ezber sapması: Model dolgu verniği tanımını tam ezberden getirmek yerine, eğitim külliyatındaki kereste kurutma/fırınlama teknik raporuyla birleştirmiştir. Zarf etkisi: Zarf değişikliği çıktıyı değiştirdi (DEĞİŞTİ)."
+    },
+    {
+      "id": "C1_2_Kurt_Disi",
+      "split": "C1",
+      "instruction": "Geleneksel ahşap zanaatı sorusu: Usta marangoz olarak kurt dişi birleştirme geçme tekniğinin püf noktalarını açıkla.",
+      "expected": "Kurt dişi birleştirme uygulamasında açılı zikzak dişlerle ahşap parçaların boylamasına eklenerek sonsuz kereste elde edilmesini sağlayan endüstriyel eklemedir.",
+      "new_envelope": {
+        "prompt": "<INSTRUCTION> Geleneksel ahşap zanaatı sorusu: Usta marangoz olarak kurt dişi birleştirme geçme tekniğinin püf noktalarını açıkla. </INSTRUCTION> <INPUT>  </INPUT> <OUTPUT>",
+        "tokens_head": [
+          2,
+          1707,
+          6790,
+          2014,
+          7741,
+          13
+        ],
+        "double_bos": false,
+        "raw_output": "teknik çözüm teknik rapor usta tavsiye POSS_3SG ahşap POSS_2SG son kat yüzey POSS_2SG CASE_LOC sıkış GERUND_Ip hava kilit POSS_3SG yap GERUND_ArAk kuru PART_DIk POSS_2SG CASE_ABL su CASE_DAT ve uç POSS_2SG CASE_DAT takoz kama çakıl GERUND_ArAk mekanik ol GERUND_ArAk kilitlen PART_DIk POSS_3SG geleneksel sökül POTENTIAL TENSE_AORIST masa birleşim POSS_3SG COPULA_AORIST </OUTPUT>",
+        "decompiled_output": "Teknik çözüm teknik rapor usta tavsiyesi ahşabın son kat yüzeyinde sıkışıp hava kilidi yaparak kuruduğundan suya ve ucuna takoz kama çakılarak mekanik olarak kilitlendiği geleneksel sökülebilir masa birleşimidir"
+      },
+      "old_envelope": {
+        "prompt": "<BOS> <INSTRUCTION> Geleneksel ahşap zanaatı sorusu: Usta marangoz olarak kurt dişi birleştirme geçme tekniğinin püf noktalarını açıkla. </INSTRUCTION> <INPUT>  </INPUT> <OUTPUT>",
+        "tokens_head": [
+          2,
+          2,
+          1707,
+          6790,
+          2014,
+          7741
+        ],
+        "double_bos": true,
+        "raw_output": "teknik çözüm teknik rapor usta tavsiye POSS_3SG ahşap POSS_2SG son kat yüzey POSS_2SG CASE_LOC sıkış GERUND_Ip hava kilit POSS_3SG yap GERUND_ArAk kuru PART_DIk POSS_2SG CASE_ABL su CASE_DAT ve uç POSS_2SG CASE_DAT göre enin CASE_DAT geniş PLURAL ve daral TENSE_AORIST tabla POSS_3PL CASE_ACC_N önle INF_mAk için çatlak PLURAL POSS_2SG üzerine kilit şekil POSS_2SG CASE_LOC kakıl PART_An ahşap parça COPULA_AORIST </OUTPUT>",
+        "decompiled_output": "Teknik çözüm teknik rapor usta tavsiyesi ahşabın son kat yüzeyinde sıkışıp hava kilidi yaparak kuruduğundan suya ve ucuna göre enine genişler ve daralır tablalarını önlemek için çatlakların üzerine kilit şeklinde kakılan ahşap parçadır"
+      },
+      "changed_by_envelope_fix": true,
+      "judgment": "Ezber sapması: Kurt dişi tekniğinin boylamasına ekleme tanımı yerine, usta tavsiyesi şablonuyla mekanik kilitlenme ve takoz kama birleşimine kaymıştır. Zarf etkisi: Zarf değişikliği çıktıyı değiştirdi (DEĞİŞTİ)."
+    },
+    {
+      "id": "C1_3_Kayin_Agaci",
+      "split": "C1",
+      "instruction": "Marangozluk alan uzmanlığı: Marangozlukta kayın ağacının özellikleri ve kullanım alanları nelerdir?",
+      "expected": "Kayın ağacı: Oldukça sert ve sıkı liflidir; buharlama yöntemiyle kolayca bükülerek Thonet tarzı sandalye ve bükme mobilyalarda idealdir.",
+      "new_envelope": {
+        "prompt": "<INSTRUCTION> Marangozluk alan uzmanlığı: Marangozlukta kayın ağacının özellikleri ve kullanım alanları nelerdir? </INSTRUCTION> <INPUT>  </INPUT> <OUTPUT>",
+        "tokens_head": [
+          2,
+          1707,
+          11341,
+          39,
+          1936,
+          6754
+        ],
+        "double_bos": false,
+        "raw_output": "teknik rapor tanımlan PART_An özel DERIV_lIk PLURAL doğrudan maun ağaç POSS_2SG CASE_DAT ait COPULA_AORIST </OUTPUT>",
+        "decompiled_output": "Teknik rapor tanımlanan özellikler doğrudan maun ağacına aittir"
+      },
+      "old_envelope": {
+        "prompt": "<BOS> <INSTRUCTION> Marangozluk alan uzmanlığı: Marangozlukta kayın ağacının özellikleri ve kullanım alanları nelerdir? </INSTRUCTION> <INPUT>  </INPUT> <OUTPUT>",
+        "tokens_head": [
+          2,
+          2,
+          1707,
+          11341,
+          39,
+          1936
+        ],
+        "double_bos": true,
+        "raw_output": "teknik rapor tanımlan PART_An özel DERIV_lIk PLURAL doğrudan maun ağaç POSS_2SG CASE_DAT ait COPULA_AORIST </OUTPUT>",
+        "decompiled_output": "Teknik rapor tanımlanan özellikler doğrudan maun ağacına aittir"
+      },
+      "changed_by_envelope_fix": false,
+      "judgment": "Ezber sapması: Model kayın ağacı özellikleri sorusuna maun ağacı atfıyla cevap vermiştir (alan karışması). Zarf etkisi: Zarf değişikliği çıktıyı değiştirdi (AYNI)."
+    },
+    {
+      "id": "C2_1_Dolgu_Vernigi_Parafraz",
+      "split": "C2",
+      "instruction": "Ahşap atölyesi güvenlik ve imalat rehberi: Masif ahşapta dolgu verniği uygulaması nasıl yapılır?",
+      "expected": "Dolgu verniği uygulamasında ahşabın açık gözeneklerini doldurarak son kat cila için...",
+      "new_envelope": {
+        "prompt": "<INSTRUCTION> Ahşap atölyesi güvenlik ve imalat rehberi: Masif ahşapta dolgu verniği uygulaması nasıl yapılır? </INSTRUCTION> <INPUT>  </INPUT> <OUTPUT>",
+        "tokens_head": [
+          2,
+          1707,
+          2014,
+          4508,
+          13,
+          2669
+        ],
+        "double_bos": false,
+        "raw_output": "teknik rapor usta tavsiye POSS_3SG ahşap POSS_2SG bulun PART_DIk POSS_3SG ortam POSS_2SG bağıl nem POSS_3SG ve CASE_DAT karşı mekanik ol GERUND_ArAk kilitlen PART_An özellikle çekmece kasa POSS_3PL CASE_LOC_N ve sandık köşe POSS_3PL CASE_LOC_N ayrıl TENSE_AORIST </OUTPUT>",
+        "decompiled_output": "Teknik rapor usta tavsiyesi ahşabın bulunduğu ortamın bağıl nemi veye karşı mekanik olarak kilitlenen özellikle çekmece kasalarında ve sandık köşelerinde ayrılır"
+      },
+      "old_envelope": {
+        "prompt": "<BOS> <INSTRUCTION> Ahşap atölyesi güvenlik ve imalat rehberi: Masif ahşapta dolgu verniği uygulaması nasıl yapılır? </INSTRUCTION> <INPUT>  </INPUT> <OUTPUT>",
+        "tokens_head": [
+          2,
+          2,
+          1707,
+          2014,
+          4508,
+          13
+        ],
+        "double_bos": true,
+        "raw_output": "teknik rapor usta tavsiye POSS_3SG ahşap POSS_2SG bulun PART_DIk POSS_3SG ortam POSS_2SG bağıl nem POSS_3SG ve CASE_DAT karşı mekanik ol GERUND_ArAk kilitlen PART_An özellikle çekmece kasa POSS_3PL CASE_LOC_N ve sandık köşe POSS_3PL CASE_LOC_N ayrıl TENSE_AORIST </OUTPUT>",
+        "decompiled_output": "Teknik rapor usta tavsiyesi ahşabın bulunduğu ortamın bağıl nemi veye karşı mekanik olarak kilitlenen özellikle çekmece kasalarında ve sandık köşelerinde ayrılır"
+      },
+      "changed_by_envelope_fix": false,
+      "judgment": "Nitel Genelleme Değerlendirmesi (NOT: C2 beklenen cevap alanı '...' ile kırpılmış bir yer tutucudur; sayısal doğruluk oranı hesaplanamaz ve uydurulmamalıdır). Model parafraz isteme marangozluk alan terimleriyle (Teknik rapor usta tavsiyesi ahşabın bulunduğu ortamın bağıl ...) tutarlı teknik üslup ile yanıt üretmiştir. Zarf etkisi: Zarf değişikliği çıktıyı değiştirdi (AYNI)."
+    },
+    {
+      "id": "C2_2_Kurt_Disi_Parafraz",
+      "split": "C2",
+      "instruction": "Geleneksel ahşap zanaatı sorusu: Ahşapta kurt dişi geçme nasıl yapılır ve nelere dikkat edilmelidir?",
+      "expected": "Kurt dişi birleştirme uygulamasında açılı zikzak dişlerle ahşap parçaların boylamasına...",
+      "new_envelope": {
+        "prompt": "<INSTRUCTION> Geleneksel ahşap zanaatı sorusu: Ahşapta kurt dişi geçme nasıl yapılır ve nelere dikkat edilmelidir? </INSTRUCTION> <INPUT>  </INPUT> <OUTPUT>",
+        "tokens_head": [
+          2,
+          1707,
+          6790,
+          2014,
+          7741,
+          13
+        ],
+        "double_bos": false,
+        "raw_output": "teknik rapor teknik çözüm zeytin ağa DERIV_CI doğal hoş koku DERIV_lI ve güve PART_An çok daha fazla çeker bu neden CASE_INS tabla yapım POSS_2SG CASE_LOC halka POSS_3PL zıt yerleştiril GERUND_ArAk eğrilme nötr DERIV_lAn TENSE_AORIST </OUTPUT>",
+        "decompiled_output": "Teknik rapor teknik çözüm zeytin ağacı doğal hoş kokulu ve güveyen çok daha fazla çeker bu nedenle tabla yapımında halkaları zıt yerleştirilerek eğrilme nötrlenir"
+      },
+      "old_envelope": {
+        "prompt": "<BOS> <INSTRUCTION> Geleneksel ahşap zanaatı sorusu: Ahşapta kurt dişi geçme nasıl yapılır ve nelere dikkat edilmelidir? </INSTRUCTION> <INPUT>  </INPUT> <OUTPUT>",
+        "tokens_head": [
+          2,
+          2,
+          1707,
+          6790,
+          2014,
+          7741
+        ],
+        "double_bos": true,
+        "raw_output": "teknik çözüm tik ağa DERIV_CI doğal hoş koku DERIV_lI ve güve PART_An çok daha sert COPULA_AORIST dış cephe ve havuz kenar POSS_3PL CASE_LOC_N kullanıl TENSE_AORIST </OUTPUT>",
+        "decompiled_output": "Teknik çözüm tik ağacı doğal hoş kokulu ve güveyen çok daha serttir dış cephe ve havuz kenarlarında kullanılır"
+      },
+      "changed_by_envelope_fix": true,
+      "judgment": "Nitel Genelleme Değerlendirmesi (NOT: C2 beklenen cevap alanı '...' ile kırpılmış bir yer tutucudur; sayısal doğruluk oranı hesaplanamaz ve uydurulmamalıdır). Model parafraz isteme marangozluk alan terimleriyle (Teknik rapor teknik çözüm zeytin ağacı doğal hoş kokulu ve g...) tutarlı teknik üslup ile yanıt üretmiştir. Zarf etkisi: Zarf değişikliği çıktıyı değiştirdi (DEĞİŞTİ)."
+    },
+    {
+      "id": "C2_3_Kayin_Agaci_Parafraz",
+      "split": "C2",
+      "instruction": "Marangozluk alan uzmanlığı: Mobilyada kayın ağacının genel özellikleri ve kullanım yerleri nelerdir?",
+      "expected": "Kayın ağacı: Oldukça sert ve sıkı liflidir...",
+      "new_envelope": {
+        "prompt": "<INSTRUCTION> Marangozluk alan uzmanlığı: Mobilyada kayın ağacının genel özellikleri ve kullanım yerleri nelerdir? </INSTRUCTION> <INPUT>  </INPUT> <OUTPUT>",
+        "tokens_head": [
+          2,
+          1707,
+          11341,
+          39,
+          1936,
+          6754
+        ],
+        "double_bos": false,
+        "raw_output": "teknik rapor tanımlan PART_An özel DERIV_lIk PLURAL doğrudan maun ağaç POSS_2SG CASE_DAT ait COPULA_AORIST </OUTPUT>",
+        "decompiled_output": "Teknik rapor tanımlanan özellikler doğrudan maun ağacına aittir"
+      },
+      "old_envelope": {
+        "prompt": "<BOS> <INSTRUCTION> Marangozluk alan uzmanlığı: Mobilyada kayın ağacının genel özellikleri ve kullanım yerleri nelerdir? </INSTRUCTION> <INPUT>  </INPUT> <OUTPUT>",
+        "tokens_head": [
+          2,
+          2,
+          1707,
+          11341,
+          39,
+          1936
+        ],
+        "double_bos": true,
+        "raw_output": "teknik rapor tanımlan PART_An özel DERIV_lIk PLURAL doğrudan maun ağaç POSS_2SG CASE_DAT ait COPULA_AORIST </OUTPUT>",
+        "decompiled_output": "Teknik rapor tanımlanan özellikler doğrudan maun ağacına aittir"
+      },
+      "changed_by_envelope_fix": false,
+      "judgment": "Nitel Genelleme Değerlendirmesi (NOT: C2 beklenen cevap alanı '...' ile kırpılmış bir yer tutucudur; sayısal doğruluk oranı hesaplanamaz ve uydurulmamalıdır). Model parafraz isteme marangozluk alan terimleriyle (Teknik rapor tanımlanan özellikler doğrudan maun ağacına ait...) tutarlı teknik üslup ile yanıt üretmiştir. Zarf etkisi: Zarf değişikliği çıktıyı değiştirdi (AYNI)."
+    }
+  ],
+  "summary": {
+    "c1_memorization": "C1 istemleri eğitim instruction dizgeleriyle birebir aynı olmasına rağmen model eğitim cevaplarını ÜRETMEMİŞTİR; beklenen-vs-gerçek kelime örtüşmesi C1_1 1/22 (yalnızca \"ve\"), C1_2 1/18 (yalnızca \"ahşap\"), C1_3 0/17. C1_1 ham çıktısı dolgu verniği yerine kereste kurutma/fırınlama deformasyonunu, C1_2 kurt dişi boylamasına ekleme yerine mekanik kilitlenme ve takoz-kama masa birleşimini anlatmakta, C1_3 ise kayın ağacı yerine doğrudan maun ağacına ait özellikler üretmektedir (alan karışması). Sonuç: C1 ezber testi BAŞARISIZDIR; model eğitimde gördüğü cevap metinlerini kelimesi kelimesine ezberden getirememiştir.",
+    "c2_generalization": "C2 istemleri eğitimde geçmeyen parafraz sorulardır. Beklenen cevap alanları \"...\" içeren kırpılmış yer tutucular olduğundan sayısal doğruluk oranı hesaplanamaz ve uydurulmamalıdır. Model parafraz istemlerde marangozluk zanaatı terminolojisini (\"bağıl nem\" [C2_1], \"zeytin ağaç/tabla\" [C2_2]) koruyarak alana özgü teknik üslup ile yanıt üretmiştir. (NOT: Önceki raporda hatalı olarak model çıktısı sanılan \"masif ahşap\" ifadesi F1 bulgusu uyarınca kaldırılmıştır; terim yalnızca prompt instruction alanında mevcuttur).",
+    "envelope_effect": "Zarf düzeltmesi (çift <BOS> kusurunun kaldırılması ve kanonik render_prompt standardına geçilmesi) 6 vakanın 3\"ünde (C1_1, C1_2, C2_2) ham model çıktısını doğrudan değiştirmiştir. Bu durum, çift <BOS> kusurunun modelin üretim dağılımı üzerinde etkisiz olmadığını ve gerçek bir çıkarım kayması (confound) yarattığını kanıtlamaktadır."
+  },
+  "c1_expected_vs_actual": [
+    {
+      "id": "C1_1_Dolgu_Vernigi",
+      "expected_word_count": 22,
+      "raw_word_count": 37,
+      "common_word_count": 1,
+      "common_words": [
+        "ve"
+      ],
+      "ratio": "1/22",
+      "matches_advisor_measurement": true,
+      "method": "set(re.findall(r\"\\w+\", expected.lower())) & set(re.findall(r\"\\w+\", raw_output.lower()))"
+    },
+    {
+      "id": "C1_2_Kurt_Disi",
+      "expected_word_count": 18,
+      "raw_word_count": 39,
+      "common_word_count": 1,
+      "common_words": [
+        "ahşap"
+      ],
+      "ratio": "1/18",
+      "matches_advisor_measurement": true,
+      "method": "set(re.findall(r\"\\w+\", expected.lower())) & set(re.findall(r\"\\w+\", raw_output.lower()))"
+    },
+    {
+      "id": "C1_3_Kayin_Agaci",
+      "expected_word_count": 17,
+      "raw_word_count": 15,
+      "common_word_count": 0,
+      "common_words": [],
+      "ratio": "0/17",
+      "matches_advisor_measurement": true,
+      "method": "set(re.findall(r\"\\w+\", expected.lower())) & set(re.findall(r\"\\w+\", raw_output.lower()))"
+    }
+  ],
+  "corrections": [
+    {
+      "finding": "F1",
+      "severity": "ORTA",
+      "field": "summary.c2_generalization",
+      "what_changed": "Model çıktılarında hiç geçmeyen \"masif ahşap\" terimi kaldırıldı; yerine ham çıktıda gerçekten geçen \"bağıl nem\" (C2_1) ve \"zeytin ağaç/tabla\" (C2_2) terimleri yazıldı.",
+      "found_by": "T-0016 bagimsiz dogrulamasi (danisman, claude)",
+      "verified_at": "2026-09-15T04:45:00Z"
+    },
+    {
+      "finding": "F2",
+      "severity": "ORTA",
+      "field": "summary.c1_memorization",
+      "what_changed": "\"sentezleyerek yanıtlamıştır\" iyimser çerçevelemesi kaldırıldı; C1 ezber testinin fiilen BAŞARISIZ olduğu açıkça belirtildi. Beklenen-vs-gerçek kelime kümesi örtüşmesi sayıları (C1_1 1/22, C1_2 1/18, C1_3 0/17) ve c1_expected_vs_actual tablosu eklendi. C1_1 kereste kurutma, C1_2 mekanik kilitlenme, C1_3 maun ağacı sapmaları belgelendi.",
+      "found_by": "T-0016 bagimsiz dogrulamasi (danisman, claude)",
+      "verified_at": "2026-09-15T04:45:00Z"
+    },
+    {
+      "finding": "F3",
+      "severity": "DUSUK",
+      "field": "summary.envelope_effect",
+      "what_changed": "A/B deneyinin izole etmediği mekanistik nedensellik iddiası (\"dikkat mekanizmasının eğitimde öğrendiği mutlak pozisyonlama ile tam uyumlu çalışması\") kaldırıldı. Yalnızca ölçülen kanıt bırakıldı: zarf düzeltmesi 6 vakanın 3\"ünde (C1_1, C1_2, C2_2) ham çıktıyı değiştirdi; çift <BOS> kusuru çıktı üzerinde etkisiz değildi.",
+      "found_by": "T-0016 bagimsiz dogrulamasi (danisman, claude)",
+      "verified_at": "2026-09-15T04:45:00Z"
+    }
+  ]
+}

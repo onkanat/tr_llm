@@ -1,0 +1,100 @@
+{
+  "task_id": "T-0017",
+  "verified_by": "claude",
+  "role": "danisman (bagimsiz dogrulama)",
+  "verified_at": "2026-09-15T05:10:00Z",
+  "verdict": "PASS",
+  "verdict_note": "T-0016'da bildirilen uc bulgunun (F1, F2, F3) UCU de kapatildi ve — en onemlisi — T-0016'da BYTE DUZEYINDE dogrulanan alanlara DOKUNULMAMIS. Bunu iddiaya guvenerek degil, kendi bagimsiz probe'umu YENI dosyaya karsi yeniden kosturarak kanitladim: 12/12 raw_output + 24/24 diger alan kontrolu gecti, ham ciktilarda 0 HATA. Ayrica yurutucunun ekledigi c1_expected_vs_actual tablosunu KENDIM yeniden saydim: uc vakanin ucu de birebir. Yeni metinler olculen sonucu dogru yansitiyor; hicbir iyimser cerceveleme kalmadi.",
+  "claims_verified": [
+    {
+      "claim": "F2: summary.c1_memorization duzeltildi — C1 ezber testinin BASARISIZ oldugu acikca yazildi, 'sentezleyerek yanitlamistir' cercevelemesi kaldirildi.",
+      "method": "Metin okundu + ifade taramasi",
+      "result": "Metin 'model egitim cevaplarini URETMEMISTIR ... Sonuc: C1 ezber testi BASARISIZDIR; model egitimde gordugu cevap metinlerini kelimesi kelimesine ezberden getirememistir' diyor. 'sentezleyerek' ifadesi metinde YOK. Ortusme sayilari (1/22, 1/18, 0/17) ve sapma aciklamalari (kereste kurutma / mekanik kilitlenme / maun) eklenmis ve ham ciktilarla uyumlu.",
+      "status": "DOGRULANDI"
+    },
+    {
+      "claim": "F1: summary.c2_generalization'dan 'masif ahşap' cikarildi; yerine ham ciktida gecen terimler yazildi.",
+      "method": "12 ham cikti uzerinde terim taramasi",
+      "result": "'masif' ham ciktilarin hicbirinde YOK (0/12). Yerine konan 'bağıl nem' (C2_1), 'zeytin' ve 'tabla' (C2_2) terimlerinin UCU de ham ciktida GECTI. C2 icin sayisal oran yine verilmemis — dogru korunmus.",
+      "status": "DOGRULANDI"
+    },
+    {
+      "claim": "F3: mekanistik nedensellik iddiasi (mutlak pozisyonlama / dikkat mekanizmasi) kaldirildi.",
+      "method": "Metin taramasi",
+      "result": "'pozisyonlama' kelimesi summary.envelope_effect icinde YOK. Kalan ifade yalnizca olculen gercegi aktariyor: zarf duzeltmesi 6 vakanin 3'unde (C1_1, C1_2, C2_2) ham ciktiyi degistirdi.",
+      "status": "DOGRULANDI"
+    },
+    {
+      "claim": "Yeni alan c1_expected_vs_actual eklendi; oranlar danisman olcumuyle birebir.",
+      "method": "DANISMAN KENDI YENIDEN SAYIMI: her C1 vakasi icin set(re.findall(r'\\w+', s.lower())) kesisimi hesapland ve tabloyla karsilastirildi",
+      "result": "C1_1 1/22 ortak ['ve'] | C1_2 1/18 ortak ['ahşap'] | C1_3 0/17 ortak [] — UCU DE birebir. expected_word_count (22/18/17), raw_word_count (37/39/15), common_words listeleri ve ratio alanlari dogru. method alani yontemi acikca yaziyor.",
+      "status": "DOGRULANDI"
+    },
+    {
+      "claim": "Yeni alan corrections eklendi (F1/F2/F3, alan, degisiklik, bulan, tarih).",
+      "method": "Alan okundu",
+      "result": "Uc kayit var; her biri finding/severity/field/what_changed/found_by/verified_at iceriyor. found_by = 'T-0016 bagimsiz dogrulamasi (danisman, claude)' — dogru atif.",
+      "status": "DOGRULANDI"
+    },
+    {
+      "claim": "Byte duzeyinde dogrulanmis alanlara HIC DOKUNULMADI (cases, checkpoint, determinism, prompt, token, raw_output).",
+      "method": "EN GUCLU KANIT: danismanin bagimsiz probe'u (modeli MPS'te yeniden kurup 6 vakayi iki zarfla yeniden kosan ve raporla string karsilastiran betik) YENI dosyaya karsi tekrar kosturuldu",
+      "result": "12/12 raw_output kontrolu (6 yeni + 6 eski zarf) GECTI ve ham ciktilar alaninda 0 HATA. 24/24 prompt kimligi + tokens_head + double_bos + changed bayragi kontrolu GECTI. Yani dosya degistirilmis olsaydi probe bunu yakalardi; yakalamadi.",
+      "status": "DOGRULANDI"
+    },
+    {
+      "claim": "Ust anahtar listesi korunmus, iki yeni alan eklenmis.",
+      "method": "list(d.keys()) karsilastirmasi",
+      "result": "T-0016'daki 13 anahtar aynen duruyor (task_id, ran_at, git_head, device, mps_available, torch_version, checkpoint, determinism, prior_artifacts_search, envelope, training_common_prefix, cases, summary) + c1_expected_vs_actual + corrections. Sira ve isimler korunmus.",
+      "status": "DOGRULANDI"
+    },
+    {
+      "claim": "Degisiklik yalnizca data/eval/exp_c_recheck_2026-09-15.json icinde.",
+      "method": "git status --short + dosya sistemi",
+      "result": "data/ disinda degisiklik yalnizca yeni untracked .agent-bus/tasks/T-0016.json ve T-0017.json. Donmus yollarda degisiklik yok. Rapor mtime 07:59 (yalnizca bu dosya yazilmis).",
+      "status": "DOGRULANDI"
+    },
+    {
+      "claim": "pytest tam takimi 123 test yesil.",
+      "method": "venv/bin/pytest -q --no-header (sandbox disi)",
+      "result": "123 passed in 10.24s. Dogrulandi.",
+      "status": "DOGRULANDI"
+    },
+    {
+      "claim": "Egitim kosusu yapilmadi, checkpoint'e dokunulmadi.",
+      "method": "checkpoint sha256 + .pt/.bin mtime taramasi",
+      "result": "sha256 hala 5f0b8c71727d15e338e4301634b0d05652c3230cebc532b1124aff3761e93b4d (T-0016 ile ayni). Degisen .pt/.bin: 0.",
+      "status": "DOGRULANDI"
+    }
+  ],
+  "findings": [],
+  "non_findings": [
+    {
+      "id": "N1",
+      "title": "'masif' kelimesinin raporda HALA gecmesi F1'in duzeltilmedigi anlamina GELMEZ",
+      "detail": "F1 duzeltmesinden sonra 'masif ahşap' ifadesi summary.c2_generalization icinde BIR KEZ daha geciyor — ama bu kez bir IDDIA olarak degil, DUZELTME KAYDI olarak: '(NOT: Önceki raporda hatalı olarak model çıktısı sanılan \"masif ahşap\" ifadesi F1 bulgusu uyarınca kaldırılmıştır; terim yalnızca prompt instruction alanında mevcuttur)'. Bu DOGRU ve DURUST bir beyandir; ham ciktida terim hala 0 kez geciyor. Ileride biri raporu 'masif' ile grep'lerse ayni satira duser ve F1'i yeniden acmamalidir. (Ayni sinif: bir terimin CANLI iddia mi yoksa tarihsel kayit mi oldugunu baglamdan oku.)"
+    },
+    {
+      "id": "N2",
+      "title": "F3 metnindeki 'kanıtlamaktadır' ifadesi sinirli bulgu uzerinde duruyor ama asiri degil",
+      "detail": "Yeni metin 'cift <BOS> kusurunun ... etkisiz olmadigini ve gercek bir cikarim kaymasi (confound) yarattigini kanitlamaktadir' diyor. Dayanak 6 vaka / 3 degisim — kucuk orneklem, ama 'etkisiz degildi' hukmu tam da bu olcumun kapsaminda. Mekanizma iddiasi (pozisyonlama/dikkat) kaldirildigi icin F3 kapandi; bu ifade bulgu seviyesinde degil."
+    },
+    {
+      "id": "N3",
+      "title": "F3 metnindeki 3\"ünde yazim hatasi KOZMETIK",
+      "detail": "summary.envelope_effect'te '6 vakanın 3\"ünde' yazilmis (kesme yerine duz cift tirnak). Anlam ve olcum dogru; gorev acmayi gerektirmeyecek bir tipografi kusuru, kayda geciyor."
+    },
+    {
+      "id": "N4",
+      "title": "Danismanin probe'undaki tek [HATA] yine kendi hatasiydi",
+      "detail": "Probe ozet metnini 'vakanin' ile ariyor; metin 'vakanın' (ı) ve simdi '3\"ünde' yaziyor. Ayristirma basarisiz olup '?' donuyor, karsilastirma da HATA veriyor. Yurutucu hatasi DEGIL; T-0016 dogrulamasinda N4 olarak zaten kayitliydi. Sayinin dogrulugu ayrica elle teyit edildi: 3/6."
+    }
+  ],
+  "downstream": {
+    "T_0017_status": "done (SPEC: done tekrar acilmaz)",
+    "chain": "T-0015 (cift BOS duzeltmesi) -> T-0016 (yeni zarfla yeniden kosu) -> T-0017 (rapor ozet duzeltmesi). Uc halka da bagimsiz dogrulamadan gecti.",
+    "scientific_baseline_now_recorded": "Exp C artik diske kayitli, dogrulanmis bir temel cizgiye sahip. Ham bulgu: C1 ezber testi BASARISIZ (beklenen-vs-gercek kelime ortusmesi 1/22, 1/18, 0/17); C2 nitel olarak alan uslubunu koruyor; zarf duzeltmesi 6 vakanin 3'unde ciktiyi degistirdi.",
+    "next_action": "Kullanici onayiyla COMMIT + PUSH. Onerilen kapsam: data/eval/exp_c_recheck_2026-09-15.json, data/eval/t0016_verification.json, data/eval/t0017_verification.json, .agent-bus/tasks/T-0016.json, .agent-bus/tasks/T-0017.json. data/**'nin geri kalani ve .pt/.bin HARIC; git add -A KULLANMA.",
+    "open_question_for_user": "C1 ezber testinin basarisiz cikmasi projenin ana bulgusudur; ayri bir gorev (or. egitim verisinin ezberlenebilirliginin olculmesi) acilmasi kullanici karari."
+  }
+}

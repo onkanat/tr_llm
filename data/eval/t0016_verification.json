@@ -1,0 +1,136 @@
+{
+  "task_id": "T-0016",
+  "verified_by": "claude",
+  "role": "danisman (bagimsiz dogrulama)",
+  "verified_at": "2026-09-15T04:45:00Z",
+  "verdict": "PASS",
+  "verdict_note": "10 kabul kriterinin 10'u karsilandi ve TUM SAYISAL olcumler bagimsiz olarak BIREBIR yeniden uretildi: 6 vakanin yeni ve eski zarf ham ciktilarinin tamami byte duzeyinde eslesti (36/36 kontrol), checkpoint sha256 ayni, determinizm iki kosuda birebir. Yurutucu HICBIR olcumu carpitmamis. Ancak raporun NITEL ozet metinleri, olculen sonucu oldugundan IYI gosteriyor: C1 ezber testi fiilen BASARISIZ oldugu halde ozet bunu bir uslup tercihi gibi sunuyor (F2), ve ozette modelin kullandigi soylenen 'masif ahşap' terimi ham ciktilarin hicbirinde GECMIYOR (F1). Ikisi de rapor metni duzeltmesiyle kapatilabilir; veri dogru.",
+  "claims_verified": [
+    {
+      "claim": "Kosu sandbox disinda MPS uzerinde yapildi; device='mps', mps_available=True, torch 2.11.0.",
+      "method": "Rapor okundu + danisman kendi ortaminda sandbox disinda torch.backends.mps.is_available() olctu ve scripts/run_experiment_c.py'yi bizzat kosturdu",
+      "result": "mps.is_available() == True (sandbox disi). Raporun device alani 'mps'. Ucuncu kez dogrulandi.",
+      "status": "DOGRULANDI"
+    },
+    {
+      "claim": "Determinizm: run_experiment_c.py ard arda 2 kez kosuldu, iki stdout bit duzeyinde ozdes.",
+      "method": "DANISMAN KENDI KOSUSU: venv/bin/python scripts/run_experiment_c.py iki kez, stdout'lar diff -q ile karsilastirildi",
+      "result": "Iki stdout BIREBIR AYNI (56 satir, diff bos). Iddia bagimsiz olarak dogrulandi.",
+      "status": "DOGRULANDI"
+    },
+    {
+      "claim": "6 vakanin YENI zarf ham ciktisi raporda kayitli (kirpilmadan).",
+      "method": "DANISMANIN BAGIMSIZ PROBE'U: model MPS'te kuruldu, ayni 6 vaka generate(model, tok, render_prompt(inst,''), max_tokens=128, temp=0.0) ile yeniden kosuldu ve raporla string karsilastirildi",
+      "result": "6/6 vaka BIREBIR eslesti (raw_output byte duzeyinde ayni). Ornek C1_3: 'teknik rapor tanımlan PART_An özel DERIV_lIk PLURAL doğrudan maun ağaç POSS_2SG CASE_DAT ait COPULA_AORIST </OUTPUT>' — raporla ayni.",
+      "status": "DOGRULANDI"
+    },
+    {
+      "claim": "6 vakanin ESKI (kusurlu) zarf ham ciktisi raporda kayitli.",
+      "method": "Ayni probe, p_old = f\"<BOS> {render_prompt(inst, '')}\" ile",
+      "result": "6/6 vaka BIREBIR eslesti.",
+      "status": "DOGRULANDI"
+    },
+    {
+      "claim": "double_bos: yeni=False ([2,1707]), eski=True ([2,2]).",
+      "method": "Her vaka icin tokenizer.encode(prompt)[:6] olculdu",
+      "result": "6/6 vakada yeni tokens[:2] != [2,2] ve ilk alti token [2,1707,...]; eski tokens[:2] == [2,2] ve [2,2,1707,...]. Bayraklar dogru.",
+      "status": "DOGRULANDI"
+    },
+    {
+      "claim": "6 vakanin 3'unde (C1_1, C1_2, C2_2) zarf duzeltmesi ham ciktiyi degistirdi.",
+      "method": "Her vaka icin raw_new != raw_old olculdu ve degisen ID listesi cikarildi",
+      "result": "Olculen degisenler: ['C1_1_Dolgu_Vernigi', 'C1_2_Kurt_Disi', 'C2_2_Kurt_Disi_Parafraz'] = 3/6. Hem sayi hem ID listesi iddiayla birebir ayni.",
+      "status": "DOGRULANDI"
+    },
+    {
+      "claim": "Egitim akisi ile ortak onek = 32.",
+      "method": "common_prefix_len(tokenizer.encode(json.dumps(rec0)), tokenizer.encode(render_prompt(rec0['instruction'], '')))",
+      "result": "Olculen = 32. Rapordaki deger ile ayni.",
+      "status": "DOGRULANDI"
+    },
+    {
+      "claim": "Checkpoint sha256 kosu oncesi ve sonrasi ayni: 5f0b8c71...93b4d.",
+      "method": "shasum -a 256 data/kristal_carpenter_model.pt (bagimsiz) + find ile .pt/.bin degisim taramasi",
+      "result": "Bagimsiz sha256 = 5f0b8c71727d15e338e4301634b0d05652c3230cebc532b1124aff3761e93b4d — iddia ile birebir. 07:00 sonrasi degisen .pt/.bin sayisi: 0.",
+      "status": "DOGRULANDI"
+    },
+    {
+      "claim": "scripts/run_experiment_c.py, tests/test_prompt_contract.py ve data/** degismedi; HEAD 65fddc2.",
+      "method": "git status --short + git rev-parse --short HEAD",
+      "result": "HEAD = 65fddc2. data/ disi degisiklik yalnizca yeni untracked .agent-bus/tasks/T-0016.json. Donmus yollarda degisiklik yok.",
+      "status": "DOGRULANDI"
+    },
+    {
+      "claim": "Yardimci betik vakalari asil betikle ayni sekilde tanimliyor (sessiz sapma yok).",
+      "method": "scratch/run_t0016_benchmark.py'deki c1_cases/c2_cases listeleri ast.literal_eval ile scripts/run_experiment_c.py'den cikarilan listelerle karsilastirildi",
+      "result": "6 vakanin (id, instruction, expected) ucluleri BIREBIR ayni. Vakalar kopyalanmis ama sapmamis.",
+      "status": "DOGRULANDI"
+    },
+    {
+      "claim": "Diskte T-0015 oncesi Exp C cikti dosyasi bulunamadi (found=false).",
+      "method": "data/eval ve scratch taramasi (danisman, onceki turda)",
+      "result": "Dogru: data/eval'de yalnizca T-0012..T-0015 dogrulama + envanter + leakage raporu vardi; Exp C ciktisi yoktu. Bu rapor ilk kalici temel cizgidir.",
+      "status": "DOGRULANDI"
+    },
+    {
+      "claim": "C2 icin sayisal dogruluk orani uydurulmadi.",
+      "method": "Rapor metinleri okundu",
+      "result": "Rapor, C2 expected alanlarinin '...' ile kirpilmis yer tutucu oldugunu ACIKCA yaziyor ve sayisal oran vermiyor. Kabul kriteri 7 karsilandi.",
+      "status": "DOGRULANDI"
+    }
+  ],
+  "findings": [
+    {
+      "id": "F1",
+      "severity": "ORTA",
+      "kind": "rapor_uyusmazligi",
+      "title": "Ozette modelin kullandigi soylenen 'masif ahşap' terimi ham ciktilarin HICBIRINDE gecmiyor",
+      "detail": "summary.c2_generalization, modelin 'marangozluk zanaatı terminolojisi (nem oranı, zeytin ağacı tablası, masif ahşap)' kullandigini soyluyor. Olcum: 'masif' kelimesi 6 vakanin 12 ham ciktisinin (yeni+eski) TAMAMINDA 0 kez geciyor. Kelime yalnizca C2_1'in INSTRUCTION alaninda var ('Masif ahşapta dolgu verniği uygulaması nasıl yapılır?'). Yani prompt'un sozcugu modelin ciktisi sanilmis — farkli populasyonlarin karistirilmasi. 'zeytin' (1 kez, C2_2) ve 'bağıl nem' (C2_1) iddialari DOGRU.",
+      "impact": "Rapor, modelin uretmedigi bir terimi uretmis gibi gosteriyor. Sonucu sayisal olarak etkilemiyor ama kanitin guvenilirligini zayiflatir; duzeltilmeli."
+    },
+    {
+      "id": "F2",
+      "severity": "ORTA",
+      "kind": "yorum_iyimserligi",
+      "title": "C1 EZBER testi fiilen BASARISIZ oldugu halde ozet bunu bir uslup tercihi gibi sunuyor",
+      "detail": "summary.c1_memorization: 'Model dogrudan kelimesi kelimesine ezber yerine ... sentezleyerek yanitlamistir' diyor; hicbir beklenen-vs-gercek karsilastirmasi vermiyor. Danismanin olcumu (beklenen cevapla ham ciktinin ortak kelime kumesi): C1_1 -> 1/22 (yalniz 've'), C1_2 -> 1/18 (yalniz 'ahşap'), C1_3 -> 0/17. C1_1 ham ciktisi dolgu vernigi degil KERESTE KURUTMA (firin, hucre gerilimi, deformasyon) anlatiyor; C1_2 mekanik kilitlenme/takoz-kama anlatiyor; C1_3 ise kayin yerine 'maun' diyor. Yani C1 ezber testi BASARISIZDIR: model egitim cevaplarini uretmiyor. 'Sentezleyerek yanitlamistir' ifadesi bu olumsuz sonucu ortuyor.",
+      "impact": "Exp C'nin butun amaci ezber/genelleme ayrimini olcmek. C1 sonucunun olumlu cercevelenmesi, projenin ana bulgusunu ters yone cevirir. Kabul kriterlerinde 'C1 icin sayisal oran' istenmemisti; danisman bunu bulgu olarak kayda geciyor ve duzeltici gorev aciyor."
+    },
+    {
+      "id": "F3",
+      "severity": "DUSUK",
+      "kind": "kanit_asimi",
+      "title": "envelope_effect, olcumun desteklemedigi bir mekanistik nedensellik iddia ediyor",
+      "detail": "'...modelin dikkat mekanizmasinin egitimde ogrendigi mutlak pozisyonlama ile tam uyumlu calismasini saglamistir' deniyor. A/B yalnizca 'ham cikti 3/6 vakada degisti' gosterir; pozisyonlama/dikkat mekanizmasini izole ETMEZ. Daha basit ve dogru ifade: zarf duzeltmesi ciktiyi 3/6 vakada degistirdi, yani kusur etkisiz degildi.",
+      "impact": "Sonucu etkilemiyor; rapor metninde nedensel asiri yorum. Duzeltilmeli."
+    }
+  ],
+  "non_findings": [
+    {
+      "id": "N1",
+      "title": "C1_3 ve C2_3 ham ciktilarinin birebir ayni olmasi KUSUR DEGIL",
+      "detail": "Ikisi de kayin agaci vakasidir ve instruction onekleri ayni zarfi uretir; greedy (temp=0.0) decode ayni ciktiyi verir. Beklenen davranis, determinizmin kanitidir."
+    },
+    {
+      "id": "N2",
+      "title": "Yardimci betigin vakalari kopyalamasi KUSUR DEGIL",
+      "detail": "scratch/run_t0016_benchmark.py 6 vakayi kendi icinde yeniden tanimliyor; bu sessiz sapma riski tasir ama olculdu: (id, instruction, expected) ucluleri asil betikle BIREBIR ayni."
+    },
+    {
+      "id": "N3",
+      "title": "'masif ahşap' disinda kalan nitel iddialar DOGRU",
+      "detail": "C1_1 icin 'kereste/nem/hava sirkülasyon/sıcak' (kurutma), C1_2 icin 'usta tavsiye/sıkış/kama/takoz/kilit', C1_3 icin 'maun' (alan karismasi) — hepsi ham ciktida birebir gecti. Yurutucu nitel okumada genel olarak isabetli."
+    },
+    {
+      "id": "N4",
+      "title": "Danismanin probe'undaki tek [HATA] kendi hatasiydi",
+      "detail": "Ozet metnini 'vakanin' ile aradim, rapor 'vakanın' (ı) yaziyor; ayristirma basarisiz oldu ve '?' dondu. Yeniden olculdu: metin '6 vakanın 3'sinde' diyor ve degisen ID listesi birebir tutuyor. Yurutucu hatasi DEGIL."
+    }
+  ],
+  "downstream": {
+    "T_0016_status": "done (SPEC: done tekrar acilmaz)",
+    "corrective_task": "T-0017 acildi — yalnizca data/eval/exp_c_recheck_2026-09-15.json icindeki ozet metinlerinin duzeltilmesi (F1, F2, F3) + C1 beklenen-vs-gercek ortusme sayilarinin rapora eklenmesi. Olcumler ve ham ciktilar DOGRU, onlara DOKUNULMAYACAK.",
+    "scientific_result_first_time_recorded": "Exp C artik diske kayitli bir temel cizgiye sahip. Ham bulgu: C1 ezber testi BASARISIZ (cevapla ortusme 1/22, 1/18, 0/17); C2 genelleme nitel olarak alan uslubunu koruyor. Zarf duzeltmesi 3/6 vakada ciktiyi degistirdi.",
+    "next_action": "T-0017 kapandiktan sonra kullanici onayiyla COMMIT + PUSH (data/eval/*.json + .agent-bus/tasks/T-0016.json, T-0017.json). Egitim/checkpoint islemi YOK."
+  }
+}
