@@ -55,3 +55,22 @@ Bu dosya, modelin güncel eğitim verilerinden kaynaklanan yanlılıklarını (b
   * **RAG Hizalama Eğitimi:** Qdrant veritabanındaki 4.000 GTS dökümanı kullanılarak 7.982 adet sentetik RAG SFT kopyalama örneği üretildi ve model Metal GPU (MPS) üzerinde 1.200 adım fine-tune edildi (Loss **9.05**'ten **0.65**'e düştü).
   * **Kopyalama Başarısı:** Model, temiz veri kümesinde (Clean Case) dökümanın morfem akışını **%100 doğrulukla kopyalamayı** başarmıştır. OOV içeren durumlarda ise jargona sapmaksızın dökümanın dilbilgisel ve morfolojik yapısını korumuştur.
 
+---
+
+## 🟢 6. Eylül 2026 Kapatılan Sözleşme ve Altyapı Borçları
+
+* **Çift `<BOS>` Değerlendirme Çelişkisi (T-0013 & T-0015):** Değerlendirme betiklerinin istem başına fazladan `<BOS>` ekleyerek eğitimi 1. token'da bozması sorunu [[canonical_prompt_contract]] ve `render_prompt` fonksiyonu ile tamamen çözüldü; kanarya testleri eklendi.
+* **Sessiz Ağırlık Kırpma / Slicing (T-0025 & T-0026):** Model tensörlerinin boyut uyuşmazlığında sessizce kırpılarak eğitilmiş parametrelerin çöpe atılması engellendi. [[state_dict_resizing]] fonksiyonu tek kanonik kapı yapılarak küçültme girişimlerinde açık `ValueError` fırlatması sağlandı.
+* **Üretim Kasası Test Kirliliği (T-0023):** Birim testlerin doğrudan `data/pedagogy/cot_vault.jsonl` dosyasına yazması engellendi; geçici kasa mimarisi ve SHA-256 bütünlük çıpası kuruldu ([[cot_vault]]).
+* **B1.5 Veri Sızıntısı (T-0012):** Eğitim ve değerlendirme arasındaki cevap düzeyinde örtüşmeler [[b1_5_split_contract]] ile ayrık kök sözleşmesine bağlandı.
+* **Talimat Yüzeyi Hizalaması (T-0028 & T-0029):** Talimat ve kural dosyalarındaki bayat iddialar (20.500 kök hedefi, 5.792 DPO sayısı vb.) KOD KAZANIR ilkesiyle ampirik verilere (48.200 tekil lemma / 52.373 giriş) eşitlendi; `/docs_update` yeteneği genişletildi.
+
+---
+
+## 🟡 7. Aktif ve Devam Eden Mimari Borçlar
+
+* **4096² Dikkat Maskesi Tamponları (T-0027):** 23 model checkpoint'inin tensör baytlarının %21'ini oluşturan sabit bool maske tamponları (`blocks.*.attn.mask`) diskte gereksiz yer kaplamaktadır. Yeniden üretim aşamasında maskelerin `register_buffer(persistent=False)` yapılması önerilmektedir ([[model_checkpoints]]).
+* **`test_model.py` Boyut Uyumsuzluğu (T-0027 & T-0028):** Betik modeli sabit `data/vocab.json` (31.357) ile başlattığı için güncel 32.816 satırlı `kristal_model.pt` yüklendiğinde `RuntimeError` vermektedir. Kanonik `resize_state_dict` entegrasyonu planlanmaktadır.
+* **Tabanın Noktalama/Rakam Eksikliği (D-A..D-E Kararları):** Mevcut taban model noktalama işaretlerini ve rakamları öğrenmemiştir. Kullanıcı onaylı D-A..D-E kararları doğrultusunda noktalama ve rakamların taban modele taşındığı iki parçalı minimum taban yeniden üretimi (`data/eval/regeneration_plan_2026-09-15.json`) sıradaki ana geliştirme borcudur ([[base_and_jacket_architecture]]).
+
+

@@ -1,0 +1,82 @@
+{
+  "metadata": {
+    "task_id": "T-0031",
+    "title": "Asimetrik gorunurlugu kapatma: .agent-bus/notes/ yuzeyi, results semasina narrative_log, bus_send atif kurali",
+    "generated_at": "2026-09-15T13:46:49.454496+00:00",
+    "operator": "antigravity",
+    "status": "done"
+  },
+  "structural_problems_diagnosed": {
+    "1_kiralanamaz": {
+      "problem": "agent-bus kiralamasi repo-goreli calisir (scripts/agent_bus_mcp.py sanitize_rel_path). Repo disi walkthrough.md kiralanamaz, yazimlar SPEC kural 1 kapsami disinda kalir.",
+      "resolution": "Yurutucunun karar gerekcelerini tasiyan .agent-bus/notes/ yuzeyi repo icine kuruldu; gorev basina tek dosya kurali getirildi."
+    },
+    "2_kesfedilemez": {
+      "problem": "Repo disi yollar bus_send ve protokolde yer almadigi icin danisman tarafindan kesfedilemiyordu; gorev numarasi atiflari bolum kaymasinda kirilmaya acikti.",
+      "resolution": "results/T-XXXX.json semasina opsiyonel narrative_log alani (path, sha256, ozet) eklendi; bus_send icin YOL + SHA256 atif kurali zorunlu kilindi."
+    },
+    "3_buyuyor": {
+      "problem": "walkthrough.md 23 gorevi tek monolitik dosyada tasimakta, okuma ve eszamanli yazim riskleri buyumekteydi.",
+      "resolution": "Gorev basina tekil dosya (.agent-bus/notes/T-XXXX.md) standartlastirildi; elle tutulan dizin dosyasi yasaklandi (dizin listesi dogal indekstir)."
+    }
+  },
+  "implementations": {
+    "spec_md": {
+      "path": ".agent-bus/SPEC.md",
+      "sha256": "d397877d40accf7365979a013783d9ad638f9ce92920913bd3fa524804cddae4",
+      "changes": [
+        "Kok dizin semasina notes/T-XXXX.md eklendi (surumlenen sinif).",
+        "results/T-XXXX.json semasina opsiyonel narrative_log {path, sha256, ozet} eklendi.",
+        "Eszamanli yazim ilkesi (is surerken yazim) protokole eklendi.",
+        "bus_send Atif Kurali (YOL + SHA-256 zorunlulugu, bolum/satir atfi ve uzun alinti yasagi) eklendi.",
+        "MCP araclari tablosunda bus_report_result girdisi narrative_log? ile guncellendi."
+      ],
+      "invariable_rules_preserved": true
+    },
+    "agent_bus_mcp": {
+      "path": "scripts/agent_bus_mcp.py",
+      "sha256": "7339e0ae30d91038c38a2635270cb3119e450cda3859f654bdf10d9535840737",
+      "changes": [
+        "report_result metoduna opsiyonel narrative_log parametresi eklendi.",
+        "narrative_log.path uzerinde sanitize_rel_path ile yol guvenligi denetimi eklendi.",
+        "TOOLS semasina ve handle_call_tool cagiricisina narrative_log eklendi."
+      ]
+    },
+    "note_file": {
+      "path": ".agent-bus/notes/T-0031.md",
+      "sha256": "0a79be7279628d5eccfa118680287979621dd39a451ab08e1c80772411671fab",
+      "line_count": 50,
+      "citations_included": [
+        "data/pedagogy/cot_vault.jsonl (sha256: 97b06fe5befd6613b520d28dc20a74deaeb30e4e8f7e6675a23720a019ff5619)",
+        "data/eval/t0030_wiki_revival_2026-09-15.json"
+      ]
+    },
+    "unit_tests": {
+      "path": "tests/test_agent_bus_narrative.py",
+      "sha256": "9b94fee7e51c1ead7fa810a0787d1a6f87ddb12b2d4c5ad06d9a2d592a6eeca4",
+      "cases": [
+        "test_report_result_without_narrative_log_backward_compatible (PASSED)",
+        "test_report_result_with_valid_narrative_log (PASSED)",
+        "test_report_result_negative_rejects_escaping_paths (PASSED)"
+      ]
+    }
+  },
+  "out_of_scope_evaluations": {
+    "walkthrough_migration": {
+      "recommendation": "Geriye donuk 8.x bolumlerinin tasinmasi rekonstruksiyon riski tasidigindan yapilmamalidir. Gelecekte tasinacaksa yalnizca kullanici onayi ve (kaynak yol + sha256) beyani ile yapilmalidir."
+    },
+    "external_writes_field_in_spec": {
+      "recommendation": "T-0028 ve T-0029 tecrubesi gostermistir ki, repo-disi konfigürasyon dosyalarina (~/.gemini/config/skills/docs_update/SKILL.md) mudahale eden gorevler icin SPEC'te 'external_writes' alani (yol + sha256 + yedek yolu) resmi bir standart olarak eklenmelidir."
+    }
+  },
+  "acceptance_criteria_verification": {
+    "1_results_has_matching_narrative_log": true,
+    "2_backward_compatibility_verified": true,
+    "3_negative_test_escaping_paths_rejected": true,
+    "4_pytest_full_suite_passed": 135,
+    "5_cot_vault_invariant_verified": true,
+    "6_spec_three_inviolable_rules_preserved": true,
+    "7_note_exists_with_path_sha256_citations": true,
+    "8_writes_boundaries_strictly_respected": true
+  }
+}

@@ -77,15 +77,9 @@ def main():
     for k in keys_to_skip:
         del state_dict[k]
         
-    # Resize state dict if vocab changed
-    new_state_dict = model.state_dict()
-    for k, v in old_v_items := list(state_dict.items()):
-        if k in new_state_dict and v.shape != new_state_dict[k].shape:
-            if len(v.shape) == 2:
-                new_state_dict[k][:min(v.shape[0], new_state_dict[k].shape[0]), :min(v.shape[1], new_state_dict[k].shape[1])] = v[:min(v.shape[0], new_state_dict[k].shape[0]), :min(v.shape[1], new_state_dict[k].shape[1])]
-            elif len(v.shape) == 1:
-                new_state_dict[k][:min(v.shape[0], new_state_dict[k].shape[0])] = v[:min(v.shape[0], new_state_dict[k].shape[0])]
-            state_dict[k] = new_state_dict[k]
+    # Resize state dict if vocab changed (kanonik ve gürültülü sözleşmeye yönlendirildi)
+    from src.llm.prompt_contract import resize_state_dict
+    state_dict = resize_state_dict(model, state_dict)
 
     model.load_state_dict(state_dict, strict=False)
     model.to(device)

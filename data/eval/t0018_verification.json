@@ -1,0 +1,186 @@
+{
+  "task_id": "T-0018",
+  "verified_by": "claude",
+  "role": "danisman (bagimsiz dogrulama)",
+  "verified_at": "2026-09-15T09:40:00Z",
+  "verdict": "KOSULLU_PASS",
+  "verdict_note": "OLCUM KATMANI KUSURSUZ: A1-A5, B1-B5, C1-C3 ve pozitif kontrolun HER sayisini bagimsiz olarak yeniden urettim — B2 (1.3945/0.3966/0.8227), B3 (0.0331; ata 7.1064/1.3011; kazanc %69.52), B4 (0.4408/0.1512/0.3697), C2 (Frobenius 357.737284 ve 281.362151; 101/107; max_abs_diff 0.377307/0.270966), C3 (0.3966 vs beyan 0.3778), A2 (ilk sapma indeks 11; bin 2014 'ahsap' vs guncel 0 '<UNK>'), A4 (0.4209 epoch, 0.3927, 0.3248), A5 (220/1799/3683) — hepsi BIREBIR. Checkpoint sha256 sabit, determinizm iki bagimsiz kosumda ayni, pytest 123/123 (sandbox disi). ANCAK gorev sartnamesinin 13. kabul kriteri ('summary'deki HER cumle sayisal alana atif veriyor; OLCULMEMIS cerceveleme YOK') KARSILANMADI: ozet, raporun KENDI B4 alanindaki rank-32 tokeninin percentil degerini 'rank 1-2 araliginda %99.90+' diye okuyor ve raporun kendi A2/H1 bulgusunu (tokenizasyon kaymasi) neden listesinden cikariyor. Bu yuzden T-0016/T-0017'deki duz 'PASS' sozlugu yerine KOSULLU_PASS: sayilar kabul, metin katmani duzeltme turu istiyor.",
+  "claims_verified": [
+    {
+      "claim": "B1: kosu MPS'te yapildi (device=mps, mps_available=true).",
+      "method": "sandbox DISINDA torch.backends.mps.is_available() olcumu + rapor alani karsilastirmasi",
+      "result": "device='mps', mps_available=true, torch 2.11.0 — dogrulandi. (Sandbox icinde MPS yine gorunmuyor; bu bir yurutucu hatasi degil, bilinen sinir.)",
+      "status": "DOGRULANDI"
+    },
+    {
+      "claim": "B2: ilk 100 kayit uzerinde instruction span kaybi 1.3945, output span 0.3966, toplam kayit 0.8227.",
+      "method": "Bagimsiz probe: KristalLM yeniden kuruldu, .bin'den ilk 100 kayit, etiket pozisyonlari np.where ile bulundu, cross_entropy reduction='none' ile span ortalamalari",
+      "result": "1.3945 / 0.3966 / 0.8227 — UCU DE birebir. Span tanimi (inst 1707->1708, out 1706->1705) yurutucunun betigiyle ayni.",
+      "status": "DOGRULANDI"
+    },
+    {
+      "claim": "B3 pozitif kontrol: </OUTPUT> (1705) ortalama kaybi 0.0331 (< 0.10 esigi) ve ata checkpoint kristal_model.pt kaybi 1.3011 -> 0.3966 (%69.52 kazanc).",
+      "method": "Ayni probe'da iki model icin ayri ayri olcum; ata icin output VE instruction span",
+      "result": "</OUTPUT> kaybi 0.0331 (birebir, 100 kayit). Ata: output span 1.3011, instruction span 7.1064, kazanc %69.52 — UCU DE birebir. Pozitif kontrol GECERLI: olcum, aradigi sinyali yoklugunda gosterebilecek gucu kanitliyor.",
+      "status": "DOGRULANDI"
+    },
+    {
+      "claim": "B4: C1 vakalarinin ortalama NLL'i 0.4408 / 0.1512 / 0.3697; ilk 20 tokenin erisilebilirligi yuksek.",
+      "method": "render_prompt(inst,'') + gercek cevap ile full_seq kuruldu, logit siralari (out_logits > out_logits[true]).sum()+1 ile hesaplandi",
+      "result": "0.4408 / 0.1512 / 0.3697 — UCU DE birebir. Ancak ilk 20 token dagilimi: C1_1 rank1=17/20, rank<=2=19/20, EN KOTU RANK=32 (pozisyon 4, 'dolgu', nll=6.2793); C1_2 en kotu rank=3; C1_3 en kotu rank=23. Yani 'ilk 20 token' iddiasi rank 1-2 bandinda DEGIL.",
+      "status": "DOGRULANDI (sayilar) / BULGU F1 (cerceveleme)"
+    },
+    {
+      "claim": "B5: determinizm — iki kosum birebir (runs=2, identical=true).",
+      "method": "Danismanin kendi iki bagimsiz kosumu (ayri probe dosyalari) + checkpoint sha256 kosum oncesi/sonrasi",
+      "result": "Iki bagimsiz kosumum B2/B4'te birebir ayni degerleri verdi; checkpoint sha256 kosum oncesi ve sonrasi ayni. Determinizm dogrulandi.",
+      "status": "DOGRULANDI"
+    },
+    {
+      "claim": "A1/A2: .bin 391.103 uint16 token, 5.702 <BOS> kaydi; corpus 5400 + arena 302 = 5702, eksik 0; ilk sapma indeks 11, bin'de 2014 'ahsap', guncel tokenizer'da 0 '<UNK>'.",
+      "method": "np.fromfile ile .bin okundu, <BOS> sinirlari ile kayit sayimi, json.dumps(record) iki tokenizer'la kodlanip ilk fark indeksi bulundu",
+      "result": "391.103 token, 5.702 kayit, ilk_32 token id dizisi birebir; eksik 0; ilk sapma indeks 11; bin 2014 vs guncel 0. Hepsi dogrulandi. Iki nokta (':') guncel tokenizer'da <UNK>'a (0) dusuyor cunku vocab.stoi'de yok.",
+      "status": "DOGRULANDI"
+    },
+    {
+      "claim": "A3: C1_1 kayit 0'da, C1_2 kayit 1'de, C1_3 kayit 10'da tam 1 kez; tam kayit eslesmesi 1 fakat guncel tokenizer'la prompt eslesmesi 0.",
+      "method": "Her vaka KENDI kaydiyla hizalandi (kayit 0/1/10), hem kayit duzeyinde hem prompt duzeyinde eslesme sayildi",
+      "result": "record_index 0/1/10 ve full_record_matches=1 dogrulandi; prompt_matches=0 dogrulandi. (Bu benim ILK probe'umda kayit 0'a karsi yaptigim yanlis hizalamanin duzeltilmis hali — popülasyon hatasi bendeydi.)",
+      "status": "DOGRULANDI"
+    },
+    {
+      "claim": "A4: 150 adim x 16 batch = 2.400 ornek, 0.4209 epoch; block_size 64; token maruziyeti %39.27; bir tokenin en az bir kez gorulme olasiligi %32.48.",
+      "method": "USER_GUIDE.md:118 komutu okundu; .bin.meta.json block_size dogrulandi; 2400/5702, 153600/391103 ve 1-(1-64/391103)^2400 aritmetigi yeniden hesaplandi",
+      "result": "block_size=64 (meta.json: 2026-09-13T07:12:46Z), 0.4209, 0.3927, 0.3248 — hepsi birebir. (Not: 'Kayitlarin %67.5'i' cumlesi ayri bulgu F5.)",
+      "status": "DOGRULANDI"
+    },
+    {
+      "claim": "A5: corpus'ta 220 ciftli onek / 1780 tek / 3400 yok; arena 0/19/283; birlesik 220/1799/3683.",
+      "method": "'Teknik Cozum:' dizgesi icin 'baslangicta mi' ve 'herhangi bir yerde mi' iki tanimi ayri ayri sayildi, 5400+302 ayristirildi",
+      "result": "Herhangi-bir-yerde tanimiyla 2000 - 220 = 1780 ve 3400 dogrulandi; arena 0/19/283 ve birlesik 220/1799/3683 birebir. (Benim 'baslangicta' tanimimla buldugum 1450/3730 FARKI benim tanim hatamdi.)",
+      "status": "DOGRULANDI"
+    },
+    {
+      "claim": "C1: egitim betigi scripts/retrain_clean_models.py (Stage 5) & scripts/run_goal_pipeline.py; derleme scripts/run_goal_pipeline.py:compile_jsonl_to_bin; .bin sha256 6d5a1d2c...; kayit yolu data/kristal_model.pt (02e15b81...); cikti 5f0b8c71....",
+      "method": "Dosya sistemi + sha256 + betik kaynagi okundu",
+      "result": "Tum hash'ler ve yollar dogrulandi; cikti checkpoint'i kosum boyunca degismedi (oncesi/sonrasi ayni sha256).",
+      "status": "DOGRULANDI"
+    },
+    {
+      "claim": "C2: kristal_carpenter_model.pt vs kristal_model.pt Frobenius 357.737284, 101/107 tensor degismis (%94.39), 91.923.721 ortak parametre, max_abs_diff 0.377307; vs step_b1_final 281.362151 / 0.270966.",
+      "method": "Rapordan bagimsiz olarak once model-sablonu yontemiyle, sonra raporun yontemi tahmin edilerek (107 float tensor, sekli farkli olanlar min-sekle kirpilarak) olculdu",
+      "result": "Raporun yontemi BIREBIR uretildi: 357.737284 / 281.362151 / 91.923.721 / 101/107 / 0.377307 / 0.270966 — hepsi tam. Raporun yontemi benim ilk yontemimden DAHA EKSIKSIZ (ben model sablonunda olmayan 6 float tensoru ve sozluk tensorlerini disarida birakmistim: 354.215409/66.161245). Benim 'sapma' sandigim sey popülasyon farkiydi.",
+      "status": "DOGRULANDI"
+    },
+    {
+      "claim": "C3: CHANGELOG.md:177 beyani 0.3778, olculen 0.3966, fark 0.0188.",
+      "method": "CHANGELOG.md:177 okundu (dosyada 'Bitis Kaybi: 0.3778' satiri VAR) + olculen deger bagimsiz uretildi",
+      "result": "'Bitis Kaybi: 0.3778' satiri CHANGELOG.md:177'de mevcut; olculen output span kaybi 0.3966; fark 0.0188 — dogrulandi. (Beyan 'bitis kaybi', olcum 'cevap span kaybi' — ayni sey olmadigi icin 0.0188 farki beklenir, celiski degil.)",
+      "status": "DOGRULANDI"
+    },
+    {
+      "claim": "Egitim kosusu yapilmadi, checkpoint'lere dokunulmadi.",
+      "method": "checkpoint sha256 + .pt/.bin mtime taramasi",
+      "result": "kristal_carpenter_model.pt sha256 5f0b8c71727d15e338e4301634b0d05652c3230cebc532b1124aff3761e93b4d sabit; degisen .pt/.bin: 0. Donmus yollara yazim yok.",
+      "status": "DOGRULANDI"
+    }
+  ],
+  "findings": [
+    {
+      "id": "F1",
+      "severity": "YUKSEK",
+      "field": "summary (B4 cumlesi)",
+      "what": "Ozet, 'modelin gercek egitim cevaplarina ait ilk 20 token icin rank 1-2 araliginda %99.90+ persentilde oldugu ... kanitlanmistir' diyor. Raporun KENDI B4 alani bunu curutuyor.",
+      "evidence": "B4 first_20_tokens[4]: morpheme_tag='dolgu', rank=32, percentile=99.9, nll=6.2793. Yani %99.9 percentili 'rank 1-2 araligina' degil, TAM DA serbest uretimde sapmaya sebep olan rank-32 tokenine ait. Bagimsiz olcumum: C1_1 rank1=17/20, rank<=2=19/20 (yani %95), EN KOTU RANK=32; C1_2 en kotu rank=3; C1_3 en kotu rank=23. Hiçbir vakada ilk 20 tokenin tamami rank 1-2 bandinda degil.",
+      "why_it_matters": "Percentile alani (1 - rank/vocab) '99.9' gostererek mukemmel gorunuyor; rank 32/31357 ise fiilen 32. sirada demek. Ozet bu iki dili karistirip olumsuz bir sonucu (model 4. adimda rayindan cikiyor) olumlu cerceveliyor. T-0016'daki ayni sinif bulgunun ([[yurutucu-raporlari-bagimsiz-dogrulanmali]]) tekrari.",
+      "action": "Ozet cumlesi B4'un gercek dagilimini yazmali: 'C1_1 ilk 20 tokenin 19'u rank<=2, en kotu rank 32 (pozisyon 4, nll 6.2793)'."
+    },
+    {
+      "id": "F2",
+      "severity": "YUKSEK",
+      "field": "summary (neden listesi)",
+      "what": "Ozet, C1 ortusmesinin (1/22) nedenlerini 'yetersiz maruz kalma (H2), decode sapmasi (H4), <PROPER_NOUN> yasagi ve ciftli onek (H5)' diye sayiyor. Raporun KENDI A2/H1 bulgusu — ki en belirleyicisi bu — listede YOK.",
+      "evidence": "A2: common_prefix_length=11, mismatch_index=11, current_tokenizer_first_100_tokens=7930 vs bin_first_100_tokens=7224 (oran 1.09773). A3: C1_1 icin cases_current_tokenizer.C1_1.prompt_matches = 0. Yani canonical degerlendirme istemi, modelin GERCEK egitim tensoruyle token duzeyinde hic eslesmiyor. Rapor bunu H1.detail'inde yaziyor ama ozete tasimiyor.",
+      "why_it_matters": "Exp C'nin C1 kolu 'ezber testi' olarak tasarlandi cunku istemler egitim istemleriyle AYNI. A2/A3 bu onkabulun token duzeyinde YANLIS oldugunu gosteriyor: istemler ancak GUNCEL tokenizer'la yeniden kodlandiginda ayni. Ozet, temel onkabulu curuten bulguyu gizleyip ikincil nedenleri one cikariyor.",
+      "action": "Ozet, H1/A2 bulgusunu birinci neden olarak icermeli ve C1'in 'ezber testi' onkabulunun token duzeyinde gecersiz oldugunu acikca yazmali."
+    },
+    {
+      "id": "F3",
+      "severity": "ORTA",
+      "field": "data_identity.A2.divergence_explanation",
+      "what": "Metin, ':' davranisini 'Current tokenizer (commit ccd552c+)' ifadesiyle ccd552c'ye bagliyor. ccd552c, .bin'in derlenme anindan ONCEdir; bu atif raporun kendi mismatch_detail'i ile celisir.",
+      "evidence": "git log -S 'PUNCT_SET' -- src/llm/tokenizer.py -> TEK commit: 9e59830 (2026-09-15, commit tarihi 06:08:56 +0300). git show ccd552c:src/llm/tokenizer.py | grep -c PUNCT_SET -> 0. git show 9e59830^:src/llm/tokenizer.py | grep -c PUNCT_SET -> 0. .bin.meta.json created_at = 2026-09-13T07:12:46Z (= 2026-09-13 10:12 +0300). Yani PUNCT_SET, .bin derlendikten ~1.8 gun SONRA girmis. Eger davranis ccd552c'den gelseydi .bin derlendiginde de gecerli olurdu ve bin'de indeks 11'de 2014 degil 0 (<UNK>) bulunurdu — A2'nin kendi mismatch_detail'i bunun tersini gosteriyor.",
+      "mechanism_verdict": "Metnin MEKANIZMA kismi dogru: 9e59830 oncesi kod noktalama isaretini token.strip(...) sonrasi 'if not clean_word: continue' ile DUSURUYORDU, yani derleme aninda ':' hic token uretmemis. Yanlis olan yalnizca commit atfi ve onun ima ettigi zaman cizelgesi.",
+      "why_it_matters": "Rapor, 'ayni encode yolu' gercegini (compile_jsonl_to_bin de tokenizer.encode kullanir) atlayarak farki 'derleme aninda farkli bir tokenizer' gibi degil, 'o zamanki kod zaten boyleydi' gibi okuyor. Dogru hukum bunun tersi: .bin GUNCEL tokenizer'a gore BAYAT (stale). Bu huküm butun projeye yayilir: 9e59830'dan once derlenen HER .bin bayattir ve onunla egitilmis her checkpoint, guncel tokenizer'la kodlanan istemlerle token-ozdes DEGIL.",
+      "downstream": "T-0015/T-0016/T-0017'de 'kanonik zarf egitimle birebir' hukmu, kaydi GUNCEL tokenizer'la yeniden kodlayarak kurulmustu; bu yontem yapisal olarak bayat-.bin kaymasini GOREMEZ. Yani zincirin temel onkabulu bu bulguyla sinirlanmistir.",
+      "action": "Atfi 9e59830'a duzelt; zaman cizelgesini (.bin 2026-09-13T07:12:46Z, PUNCT_SET 2026-09-15) yaz; ve .bin'in bayat oldugu sonucunu + proje capinda kapsamini makine-okunur bir alanda bildir."
+    },
+    {
+      "id": "F4",
+      "severity": "ORTA",
+      "field": "hypotheses[0].status / hypotheses[2].status",
+      "what": "H1 ve H3 ayni nesne icinde BIRBIRIYLE CELISEN iki etiket tasiyor: status='ELENMEDI' (elenmedi) ama verdict='ELENDI_VE_DETAYLANDIRILDI' (H1) / 'ELENDI' (H3).",
+      "evidence": "H1: status=ELENMEDI, verdict=ELENDI_VE_DETAYLANDIRILDI. H3: status=ELENMEDI, verdict=ELENDI; H3.detail zaten 'Olcumle ELENDI' diyor. H2/H4/H5'te iki alan tutarli (DESTEKLENDI/DESTEKLENDI).",
+      "why_it_matters": "Sartname her hipotezin DESTEKLENDI/ELENMEDI/OLCULEMEDI etiketlerinden BIRINI tasimasini istiyordu. Makine-okunur iki alanin ters anlam tasimasi, indirgeme yapan bir okuyucunun (veya otomatik denetimin) H1 ve H3'u 'hala ayakta' saymasina yol acar. H3 icin dogru olan verdict; H1 icin dogru olan status (kayit duzeyinde elendi, token duzeyinde ayakta) — ama ikisi tek alanda ifade edilmeli.",
+      "action": "Tek etiket alani birak; H1 icin nüansi ('kayit duzeyinde ELENDI, tokenizasyon duzeyinde DESTEKLENDI') tek alanda ifade et."
+    },
+    {
+      "id": "F5",
+      "severity": "ORTA",
+      "field": "hypotheses[1].detail (H2)",
+      "what": "'Kayitlarin %67.5'i egitim boyunca bir kez dahi pencereye girmemistir' cumlesi, TOKEN duzeyinde bir buyuklugu KAYIT duzeyinde gibi sunuyor.",
+      "evidence": "A4 alanlari: token_exposure_ratio=0.3927, prob_sampled_at_least_once=0.3248. 100-32.48=67.52 -> cumledeki %67.5 buradan geliyor, yani TOKEN olasiliginin tumleyeni; alan adi da 'prob_sampled_at_least_once' ve tanimi 'bir tokenin en az bir kez gorulme olasiligi'. Ayrica hemen onceki cumleyle de tutarsiz: %39.27 temas edilen token orani ise tumleyeni %60.73'tur, %67.5 degil. Raporda kayit duzeyinde 'en az bir kez gorulme' olcumu HİÇ yok.",
+      "why_it_matters": "Iki farkli popülasyon (token / kayit) tek cumlede birlesiyor ve okuyucu 'kayitlarin ucte ikisi hic gorulmedi' diye kayit duzeyinde bir olgu ogreniyor. Sonuc (maruz kalma dusuk) degismiyor ama buyukluk yanlis etiketleniyor — [[iki-sayi-celisiyor-sanma-once-kume]] dersinin tam tersi yonde bir kusur.",
+      "action": "Cumleyi token duzeyinde yaz ('tokenlerin %67.52'si hic pencereye girmedi') ya da kayit duzeyi sayiyi AYRI olcup ekle."
+    },
+    {
+      "id": "F6",
+      "severity": "DUSUK",
+      "field": "positive_control.B3.denek_2_ancestor_checkpoint_gain.gain_output_loss_pct / hypotheses[2].detail",
+      "what": "Ayni buyukluk iki alanda farkli: B3 'gain_output_loss_pct': 69.51, H3.detail ve summary ise %69.52.",
+      "evidence": "Bagimsiz olcumum: 0.9044/1.3011 = %69.51; (1.3011-0.3966)/1.3011 = %69.52. Fark, kazancin 0.9044 yerine 0.9045 yuvarlanmasindan geliyor. Kozmetik yuvarlama tutarsizligi.",
+      "why_it_matters": "Olcumu etkilemez; kayda geciyor cunku 'ayni sayi iki yerde farkli' bir raporu denetlerken gereksiz suphe uretir.",
+      "action": "Tek yuvarlama kurali sec."
+    }
+  ],
+  "non_findings": [
+    {
+      "id": "N1",
+      "title": "Benim A2 'FARK'im popülasyon hatamdi — raporun 7930 sayisi DOGRU",
+      "detail": "Ilk probe'umda 'guncel tokenizer 3972 token uretiyor, rapor 7930 diyor' diye sapma sandim; mesru olarak YALNIZ istem kismini kodlamisim. json.dumps(kaydin tamami) ile yeniden kodlayinca 7930 BIREBIR cikti. Rapor haklıydi."
+    },
+    {
+      "id": "N2",
+      "title": "Benim A5 'FARK'im tanim hatamdi — raporun 1780/3400 sayilari DOGRU",
+      "detail": "Ben 'Teknik Cozum:' onekini startswith ile saydim (1450/3730); rapor 'herhangi bir yerde' tanimini kullaniyor. Herhangi-bir-yerde sayimi 2000 verir, ciftli 220 dusulunce 1780 ve 3400 tam olarak cikar. Rapor haklıydi."
+    },
+    {
+      "id": "N3",
+      "title": "Benim C2 'FARK'im yontem farkiydi — raporun Frobenius sayilari DOGRU ve benimkinden daha eksiksiz",
+      "detail": "Model-sablonu yontemiyle 354.215409 (101 tensor) bulup raporun 357.737284'unden (107 tensor) suphelendim. Raporun yontemini (107 float tensor, sekli farkli 3 tensor min-sekle kirpilarak) uygulayinca 357.737284 / 281.362151 / 91.923.721 / 101 / max_abs 0.377307 / 0.270966 hepsi TAM cikti. Ustelik raporun yontemi daha eksiksiz: benim yontemim sozluk tensorlerini (32137 vs 32816/32156) tamamen disarida birakiyordu, yani 357.7'lik mesafenin buyuk kismini olcmemisim. Rapor haklıydi. (Bu oturumda ayni sinifta UCUNCU kez yanildim.)"
+    },
+    {
+      "id": "N4",
+      "title": "Kendi decode hipotezim KENDI A/B olcumumle CURUTULDU",
+      "detail": "'C1 sapmasinin sebebi generate() icindeki forbidden_ids maskesi + isaret-duyarli tekrar cezasidir' diye kurdum ve 4 decoder varyantini 3 vakada kosturdum (duz argmax / yalniz forbidden / yalniz ceza / ikisi birden). HICBIR varyant egitim cevabini uretmedi: C1_1 duz argmax ortak_onek 4/37, yalniz-forbidden 4/37, ceza 2/37, mevcut generate 3/37; C1_2 duz 3/55; C1_3 hepsinde 1/30. Duz argmax bile 'teknik cozum teknik cozum ...' dongusune giriyor. Yani maskeler sapmanin BICIMINI degistiriyor, VARLIGINI degil. Bu sonuc F1'i destekliyor ama F3/H4'un mekanizma iddiasini sinirliyor; kendi hipotezim olarak kayda geciyor. (Bu deney yurutucunun kapsaminda yoktu; ben ekledim.)"
+    },
+    {
+      "id": "N5",
+      "title": "C3'teki 'beyan vs olcum' farki celiski DEGIL",
+      "detail": "CHANGELOG 0.3778 'bitis kaybi' beyan ediyor, rapor 0.3966 'cevap span kaybi' olcuyor. Iki farkli buyukluk; 0.0188 farki beklenir ve rapor bunu celiski gibi sunmuyor."
+    },
+    {
+      "id": "N6",
+      "title": "Sandbox icindeki pytest hatasi sandbox kaynakli, yurutucu kusuru degil",
+      "detail": "Sandbox icinde 122 gecti + 1 dustu (tests/test_agent_gateway.py::test_gateway_http_server_endpoints -> PermissionError [Errno 1] Operation not permitted, socketserver.bind). Sandbox DISINDA 123/123 gecti. Bilinen sinir ([[sandbox-hides-mps-device]] ile ayni aile)."
+    }
+  ],
+  "downstream": {
+    "T_0018_status": "done (SPEC: done tekrar acilmaz) — duzeltme AYRI gorevle yapilir",
+    "corrective_task": "T-0019 (danisman tarafindan acildi, state/tasks/ VE tasks/ ikisine birden yazildi)",
+    "scientific_baseline": "C1 ezber testi BASARISIZ hukmu DEGISMEDI; ancak gerekcesi netlesti. Model egitim cevaplarini fit ETMIS (output span kaybi 0.3966, ataya gore %69.52 kazanc, ata instruction span 7.1064 -> 1.3945) ve cevaplar erisilebilir (C1_1 ilk 20 tokenin 19'u rank<=2), fakat serbest uretimde 4. pozisyonda rank-32 bir token (nll 6.2793) dala ayriliyor ve donguye giriyor. Bunu NE decoder maskeleri (duz argmax de basarisiz) NE de basit underfitting acikliyor.",
+    "new_project_level_finding": "data/train_carpenter_specialization.bin, guncel tokenizer'a gore BAYAT: 2026-09-13T07:12:46Z'de derlendi, PUNCT_SET 9e59830 ile 2026-09-15'te girdi. Ayni encode yolu kullanildigi icin (compile_jsonl_to_bin -> tokenizer.encode) bayatlik, 9e59830 oncesi derlenen TUM .bin'ler icin gecerlidir ve o .bin'lerle egitilmis checkpoint'ler guncel tokenizer'in istemleriyle token-ozdes degildir. Ilk 100 kayitta istem +%9.77 sisiyor (7930 vs 7224); C1_1 icin prompt_matches=0.",
+    "premise_affected": "T-0015/T-0016/T-0017 zincirinin 'kanonik zarf egitim kaydiyla birebir' hukmu, kaydi GUNCEL tokenizer'la yeniden kodlayarak kurulmustu — bu yontem bayat-.bin kaymasini yapisal olarak gorunmez kilar. Ham cikti olcumleri (raw_output) hala gecerli; sinirlanan sey 'istem egitimdekiyle ayni' onkabuludur.",
+    "open_question_for_user": "Bayat .bin'lerin yeniden derlenmesi (ve dolayisiyla ilgili checkpoint'lerin yeniden egitimi) DONMUS VERI ve EGITIM KOSUSU sinirlarina girdigi icin danisman tarafindan YAPILAMAZ. Karar kullanicinin: (a) yalniz kayda gecir ve Exp C'yi mevcut durumla yorumla, (b) yeniden derleme + yeniden egitim icin ayri bir plan ac."
+  }
+}

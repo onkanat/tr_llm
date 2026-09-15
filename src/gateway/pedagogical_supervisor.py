@@ -18,6 +18,7 @@ Döngü Adımları:
 """
 
 import os
+import sys
 import json
 import re
 import time
@@ -537,21 +538,66 @@ def extract_cot_and_card(raw_text: Optional[str]) -> Tuple[Optional[str], Option
     return thought_trace, clean_card
 
 
+_REPO_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+_CANONICAL_PROD_VAULT = os.path.realpath(os.path.join(_REPO_ROOT, "data", "pedagogy", "cot_vault.jsonl"))
+
+
 def record_to_cot_vault(
     query: str,
     instruction: str,
     thought_trace: str,
     final_answer: str,
     source: str = "teacher_pedagogy",
-    vault_path: str = "data/pedagogy/cot_vault.jsonl"
+    vault_path: Optional[str] = None
 ) -> bool:
     """
     Appends an isolated reasoning record to cot_vault.jsonl.
+
+    Güvenlik Sözleşmesi (Test İzolasyonu & Çevre Değişkeni):
+    - Test ortamlarında ('PYTEST_CURRENT_TEST' in os.environ veya unittest çalışması)
+      varsayılan üretim kasası olan 'data/pedagogy/cot_vault.jsonl' dosyasına doğrudan
+      yazım yapılması kesin olarak engellenir ve anında RuntimeError fırlatılır.
+    - Korumalı yol denetimi CWD'den bağımsız olarak __file__ ve realpath üzerinden
+      yapılır (G1 fail-open koruması).
+    - Kaçış Kapısı (Escape Hatch): Eğer bir entegrasyon testi veya alt süreç bilerek ve
+      isteyerek gerçek üretim kasasına yazım gerçekleştirmek durumundaysa, ortamda
+      ALLOW_PROD_VAULT_WRITE=1 tanımlanmalıdır. Standart birim testlerinde ise
+      mutlaka geçici bir vault_path (tmpdir) sağlanmalıdır.
+    - Düz dosya adı davranışı: vault_path dizin bileşeni içermiyorsa os.makedirs çağrılmaz; dosya geçerli CWD'ye (göreli yolda) yazılır.
     """
     if not thought_trace or not final_answer:
         return False
+
+    # F4: Varsayılan kasa yolu CWD'den bağımsız mutlak kanonik yoldur; COT_VAULT_PATH ortam değişkenine dokunulmaz.
+    if vault_path is not None:
+        target_vault = vault_path
+    elif "COT_VAULT_PATH" in os.environ:
+        target_vault = os.environ["COT_VAULT_PATH"]
+    else:
+        target_vault = _CANONICAL_PROD_VAULT
+
+    # G1 Çözümü: CWD'den bağımsız mutlak realpath karşılaştırması
+    target_vault_real = os.path.realpath(
+        target_vault if os.path.isabs(target_vault) else os.path.join(os.getcwd(), target_vault)
+    )
+
+    # Güvenlik Kapısı: Test ortamında varsayılan üretim kasasına sessizce yazmayı engelle.
+    is_test_env = "PYTEST_CURRENT_TEST" in os.environ or ("unittest" in sys.modules and any("test" in arg.lower() for arg in sys.argv))
+    if is_test_env and target_vault_real == _CANONICAL_PROD_VAULT and not os.environ.get("ALLOW_PROD_VAULT_WRITE"):
+        raise RuntimeError(
+            f"Güvenlik İhlali: Test ortamında varsayılan üretim kasası '{_CANONICAL_PROD_VAULT}' dosyasına "
+            "doğrudan yazma engellendi. Test izolasyonu için PedagogicalSupervisor(vault_path=...) "
+            "veya record_to_cot_vault(vault_path=...) ile izole bir geçici dosya yolu (tmpdir) belirtilmelidir. "
+            "(İstisnai entegrasyon testleri için ALLOW_PROD_VAULT_WRITE=1 tanımlanabilir)."
+        )
+
+    # F5: Guard yukarıda, koruma aşağıda. Dosya yazım hataları loglanıp False döner; öğretmen döngüsünü düşürmez.
+    # G2: Dizin bileşeni boş ise os.makedirs çağrılmaz, dosya geçerli CWD'ye yazılır.
     try:
-        os.makedirs(os.path.dirname(vault_path), exist_ok=True)
+        dir_name = os.path.dirname(target_vault)
+        if dir_name:
+            os.makedirs(dir_name, exist_ok=True)
+
         record = {
             "timestamp": datetime.now(timezone.utc).isoformat(),
             "query": query,
@@ -560,11 +606,11 @@ def record_to_cot_vault(
             "final_answer": final_answer.strip(),
             "source": source
         }
-        with open(vault_path, "a", encoding="utf-8") as f:
+        with open(target_vault, "a", encoding="utf-8") as f:
             f.write(json.dumps(record, ensure_ascii=False) + "\n")
         return True
     except Exception as e:
-        print(f"[CoT Vault] Kayıt hatası: {e}")
+        print(f"[COT_VAULT_HATA] Hedef kasaya yazılamadı ({target_vault}): {e}", file=sys.stderr)
         return False
 
 
@@ -578,7 +624,8 @@ class PedagogicalSupervisor:
         ollama_url: Optional[str] = None,
         ollama_model: str = "gpt-oss:20b",
         ollama_api_key: Optional[str] = None,
-        enrich_rag: bool = True
+        enrich_rag: bool = True,
+        vault_path: Optional[str] = None
     ):
         self.gateway = gateway
         self.retrain_pipeline = retrain_pipeline or RetrainPipeline()
@@ -588,6 +635,12 @@ class PedagogicalSupervisor:
         self.ollama_model = ollama_model
         self.ollama_api_key = ollama_api_key or os.environ.get("OLLAMA_API_KEY")
         self.enrich_rag = enrich_rag
+        if vault_path is not None:
+            self.vault_path = vault_path
+        elif "COT_VAULT_PATH" in os.environ:
+            self.vault_path = os.environ["COT_VAULT_PATH"]
+        else:
+            self.vault_path = _CANONICAL_PROD_VAULT
         self.history: List[Dict[str, Any]] = []
 
     def call_ollama(self, prompt: str, return_raw: bool = False) -> Optional[str]:
@@ -773,7 +826,8 @@ class PedagogicalSupervisor:
                             instruction=instruction,
                             thought_trace=thought_trace,
                             final_answer=clean_card or knowledge_text,
-                            source=teacher_provider or "pedagogical_supervisor"
+                            source=teacher_provider or "pedagogical_supervisor",
+                            vault_path=self.vault_path
                         )
                         if hasattr(self.gateway, "inject_reasoning_trace"):
                             self.gateway.inject_reasoning_trace(

@@ -270,3 +270,233 @@ def test_positive_control_detector_finds_unmigrated():
     # Verify that scratch/measure_forward_pass.py indeed has silent model loading
     has_silent_load = "if os.path.exists(sft_model_path):" in content
     assert has_silent_load, "Positive control failed: scratch file pattern changed unexpectedly."
+
+
+def is_resize_state_dict_silent(fn_ast: ast.FunctionDef, source_code: str) -> bool:
+    """
+    Analyzes an AST FunctionDef of resize_state_dict.
+    Uses structural analysis (F3):
+    Returns True if the function modifies/writes weights (assignments, pad, copy_, slice, etc.)
+    WITHOUT emitting any print, warning, logger alert, or raise.
+    """
+    has_warning_or_error = False
+    writes_weights = False
+
+    for node in ast.walk(fn_ast):
+        if isinstance(node, ast.Call):
+            func = node.func
+            # Check for print(...)
+            if isinstance(func, ast.Name) and func.id == "print":
+                has_warning_or_error = True
+            # Check for warnings.warn(...) or logger calls
+            elif isinstance(func, ast.Attribute) and func.attr in ("warn", "warning", "error", "critical"):
+                has_warning_or_error = True
+            # Check for mutating tensor calls or pad
+            elif isinstance(func, ast.Attribute) and func.attr in ("copy_", "pad", "resize_", "narrow", "slice"):
+                writes_weights = True
+            elif isinstance(func, ast.Name) and func.id in ("pad",):
+                writes_weights = True
+        elif isinstance(node, ast.Raise):
+            has_warning_or_error = True
+        elif isinstance(node, (ast.Assign, ast.AugAssign)):
+            # Assignments such as state_dict[k] = ..., d[k][:min(...)] = ...
+            writes_weights = True
+
+    # If it writes weights but has no warning, print, or raise -> SILENT
+    return writes_weights and not has_warning_or_error
+
+
+_REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+
+def audit_repo_resize_state_dict_definitions(repo_root=None, return_unparseable=False):
+    """Scans all python files in repo for resize_state_dict definitions."""
+    if repo_root is None:
+        repo_root = _REPO_ROOT
+    definitions = []
+    unparseable = []
+    for root, dirs, files in os.walk(repo_root):
+        dirs[:] = [d for d in dirs if not d.startswith(".") and d not in ("venv", "__pycache__", "build", "dist")]
+        for file in files:
+            if not file.endswith(".py"):
+                continue
+            path = os.path.normpath(os.path.join(root, file))
+            try:
+                with open(path, "r", encoding="utf-8") as f:
+                    content = f.read()
+                tree = ast.parse(content, filename=path)
+                for node in ast.walk(tree):
+                    if isinstance(node, ast.FunctionDef) and node.name == "resize_state_dict":
+                        silent = is_resize_state_dict_silent(node, content)
+                        definitions.append({
+                            "path": path,
+                            "line": node.lineno,
+                            "is_silent": silent
+                        })
+            except Exception as e:
+                # F7: DO NOT silently pass! Record unparseable file explicitly.
+                unparseable.append({
+                    "path": path,
+                    "error": str(e)
+                })
+
+    if return_unparseable:
+        return definitions, unparseable
+    if unparseable:
+        # F7: Unparseable files cause canary failure (RED) so broken files cannot hide silent definitions
+        raise SyntaxError(f"audit_repo_resize_state_dict_definitions failed to parse {len(unparseable)} files: {unparseable}")
+    return definitions
+
+
+def test_canary_e_no_silent_resize_state_dict_in_repo():
+    """Canary (e): Repo contains ZERO silent resize_state_dict definitions."""
+    defs = audit_repo_resize_state_dict_definitions()
+    silent_defs = [d for d in defs if d["is_silent"]]
+    assert len(silent_defs) == 0, f"Found {len(silent_defs)} silent resize_state_dict definitions in repo: {silent_defs}"
+
+    # Also verify that the 3 target files now import canonical resize_state_dict
+    target_files = [
+        "scripts/test_rag_interactive.py",
+        "scripts/evaluate_chat.py",
+        "scripts/evaluate_on_train_data.py"
+    ]
+    for tf in target_files:
+        assert os.path.exists(tf)
+        with open(tf, "r", encoding="utf-8") as f:
+            content = f.read()
+        assert "from src.llm.prompt_contract import resize_state_dict" in content, f"{tf} must import canonical resize_state_dict"
+        assert not re.search(r"^\s*def resize_state_dict", content, re.MULTILINE), f"{tf} must not define local resize_state_dict"
+
+
+def test_canary_e_silent_resize_mutant_detector():
+    """
+    Mutant Test for Canary (e) - F2:
+    Proves that if an old silent resize_state_dict implementation is reintroduced
+    into the repo filesystem (under scratch/), audit_repo_resize_state_dict_definitions()
+    discovers the physical file, flags it as silent, and causes the canary assertion to fail (RED).
+    Cleans up the mutant file in a finally block.
+    """
+    import time
+    scratch_dir = os.path.join(_REPO_ROOT, "scratch")
+    os.makedirs(scratch_dir, exist_ok=True)
+    mutant_path = os.path.join(scratch_dir, f"_mutant_silent_resize_{os.getpid()}_{time.time_ns()}.py")
+
+    mutant_code = (
+        "def resize_state_dict(model, old_state_dict):\n"
+        "    new_state_dict = model.state_dict()\n"
+        "    for k, v in old_state_dict.items():\n"
+        "        if k in new_state_dict:\n"
+        "            if v.shape != new_state_dict[k].shape:\n"
+        "                if len(v.shape) == 2:\n"
+        "                    new_state_dict[k][:min(v.shape[0], new_state_dict[k].shape[0]), :min(v.shape[1], new_state_dict[k].shape[1])] = v[:min(v.shape[0], new_state_dict[k].shape[0]), :min(v.shape[1], new_state_dict[k].shape[1])]\n"
+        "            else:\n"
+        "                new_state_dict[k] = v\n"
+        "    return new_state_dict\n"
+    )
+
+    try:
+        with open(mutant_path, "w", encoding="utf-8") as f:
+            f.write(mutant_code)
+
+        # Actively run audit on repo containing the mutant file
+        defs = audit_repo_resize_state_dict_definitions()
+        mutant_defs = [d for d in defs if os.path.realpath(d["path"]) == os.path.realpath(mutant_path)]
+        assert len(mutant_defs) == 1, f"Expected mutant file {mutant_path} to be discovered by audit, found: {mutant_defs}"
+        assert mutant_defs[0]["is_silent"] is True, f"Expected mutant to be classified as silent, got {mutant_defs}"
+
+        # Verify canary failure condition (must be RED when mutant is present)
+        silent_in_repo = [d for d in defs if d["is_silent"]]
+        assert len(silent_in_repo) > 0, "Canary should turn RED when silent mutant exists in repo!"
+    finally:
+        if os.path.exists(mutant_path):
+            os.remove(mutant_path)
+
+    # Post-cleanup: verify zero silent definitions remain
+    defs_after = audit_repo_resize_state_dict_definitions()
+    silent_after = [d for d in defs_after if d["is_silent"]]
+    assert len(silent_after) == 0, f"Expected 0 silent definitions after cleanup, found {silent_after}"
+
+
+def test_canary_e_structural_silent_detector_probes():
+    """
+    F3 Validation:
+    Proves that is_resize_state_dict_silent classifies BOTH:
+      (i) historical min() pattern
+      (ii) .size() + pad pattern
+    as silent (RED).
+    """
+    # Probe (i): historical min() pattern
+    probe1_code = (
+        "def resize_state_dict(model, old_state_dict):\n"
+        "    new_state_dict = model.state_dict()\n"
+        "    for k, v in old_state_dict.items():\n"
+        "        if k in new_state_dict:\n"
+        "            if v.shape != new_state_dict[k].shape:\n"
+        "                if len(v.shape) == 2:\n"
+        "                    new_state_dict[k][:min(v.shape[0], new_state_dict[k].shape[0]), :min(v.shape[1], new_state_dict[k].shape[1])] = v[:min(v.shape[0], new_state_dict[k].shape[0]), :min(v.shape[1], new_state_dict[k].shape[1])]\n"
+        "            else:\n"
+        "                new_state_dict[k] = v\n"
+        "    return new_state_dict\n"
+    )
+    tree1 = ast.parse(probe1_code)
+    fn1 = next(n for n in ast.walk(tree1) if isinstance(n, ast.FunctionDef))
+    assert is_resize_state_dict_silent(fn1, probe1_code) is True, "Probe 1 (min() pattern) must be classified as silent"
+
+    # Probe (ii): .size() + pad pattern (lacks min( or shape tokens)
+    probe2_code = (
+        "def resize_state_dict(model, old_state_dict):\n"
+        "    import torch.nn.functional as F\n"
+        "    new_state_dict = model.state_dict()\n"
+        "    for k, v in old_state_dict.items():\n"
+        "        if k in new_state_dict:\n"
+        "            diff = new_state_dict[k].size(0) - v.size(0)\n"
+        "            new_state_dict[k] = F.pad(v, (0, 0, 0, diff))\n"
+        "    return new_state_dict\n"
+    )
+    tree2 = ast.parse(probe2_code)
+    fn2 = next(n for n in ast.walk(tree2) if isinstance(n, ast.FunctionDef))
+    assert is_resize_state_dict_silent(fn2, probe2_code) is True, "Probe 2 (.size() + pad pattern) must be classified as silent"
+
+
+def test_canary_e_unparseable_probe_fails_canary():
+    """
+    F7 Validation:
+    Proves that a probe file containing a syntax error and a silent resize_state_dict
+    is NOT silently passed; it causes audit_repo_resize_state_dict_definitions to flag it
+    as unparseable and raise SyntaxError (RED).
+    """
+    import time
+    scratch_dir = os.path.join(_REPO_ROOT, "scratch")
+    os.makedirs(scratch_dir, exist_ok=True)
+    probe_path = os.path.join(scratch_dir, f"_unparseable_probe_{os.getpid()}_{time.time_ns()}.py")
+
+    broken_code = (
+        "def resize_state_dict(model, old_state_dict):\n"
+        "    new = model.state_dict()\n"
+        "    new['w'] = old_state_dict['w'][:min(10, 20)]\n"
+        "    return new\n"
+        "def intentional_syntax_error(:\n"
+    )
+
+    try:
+        with open(probe_path, "w", encoding="utf-8") as f:
+            f.write(broken_code)
+
+        # Calling audit without return_unparseable must raise SyntaxError (RED)
+        with pytest.raises(SyntaxError, match="failed to parse"):
+            audit_repo_resize_state_dict_definitions()
+
+        # Calling audit with return_unparseable returns the unparseable file in the report
+        defs, unparseable = audit_repo_resize_state_dict_definitions(return_unparseable=True)
+        unparseable_paths = [os.path.realpath(u["path"]) for u in unparseable]
+        assert os.path.realpath(probe_path) in unparseable_paths, f"Expected {probe_path} to be in unparseable list, got: {unparseable}"
+    finally:
+        if os.path.exists(probe_path):
+            os.remove(probe_path)
+
+    # After cleanup, no unparseable files remain
+    defs_clean, unparseable_clean = audit_repo_resize_state_dict_definitions(return_unparseable=True)
+    assert len(unparseable_clean) == 0, f"Expected 0 unparseable files after cleanup, got: {unparseable_clean}"
+
+
+

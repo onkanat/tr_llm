@@ -1,0 +1,195 @@
+{
+  "task_id": "T-0020",
+  "verification_of": ".agent-bus/state/results/T-0020.json",
+  "artifact_under_review": "data/eval/vocab_restore_recheck_2026-09-15.json",
+  "verifier": "claude (danisman)",
+  "verified_at": "2026-09-15T07:05:00Z",
+  "verdict": "PASS",
+  "verdict_note": "12 kabul kriterinin 11'i DOGRULANDI. Kriter E, spec'in KENDI dosya secimiyle UYGULANAMAZDI (danismanin hatasi, yurutucunun degil); yurutucu bunu sessizce ucuncu bir kol ekleyerek cozdu. Bu cozum teknik olarak DOGRU ve degerli, ama bildirilmedi -> 1 DUSUK bulgu.",
+  "own_measurements": {
+    "note": "Yurutucu raporu hipotez sayildi; asagidaki her sayi bagimsiz olarak yeniden olculdu.",
+    "vocab_carpenter_32137": {
+      "len_stoi": 32137,
+      "next_id": 32137,
+      "max_id": 32136,
+      "kesintisiz_0..32136": true,
+      "ilk_31357_vocab_json_ile_birebir": true,
+      "noktalama_icermiyor": true
+    },
+    "vocab_b1_5_32816": {
+      "len_stoi": 32816,
+      "next_id": 32816,
+      "max_id": 32815,
+      "kesintisiz_0..32815": true,
+      "noktalama_ve_rakam_iceriyor": true
+    },
+    "noktalama_konumu_bagimsiz_olcum": {
+      "'.'": 32137,
+      "','": 32138,
+      "':'": 32142,
+      "kaynak": "data/vocab_entity.json stoi uzerinden dogrudan okundu",
+      "kritik": "Noktalama blogu 32137'de BASLIYOR; carpenter sozlugu tam olarak 32137 satir = id 0..32136. Yani noktalama carpenter sozlugunun BIR SATIR OTESINDE basliyor."
+    },
+    "sha256_degismedi": {
+      "data/vocab.json": "4b40eebee9c996c8dd3150f6b3c8896de85764ee1cf0b08e6c636e5c002a0e69",
+      "data/vocab_entity.json": "7611b6a523a2bb524cc21aa9cc64235aa6a2ae99f87f46ac51cb2915e61164ad",
+      "kaynak": "bagimsiz shasum -a 256; yurutucunun bildirdigi degerlerle birebir ayni"
+    },
+    "checkpoint_sha256": {
+      "data/kristal_carpenter_model.pt": "5f0b8c71727d15e338e4301634b0d05652c3230cebc532b1124aff3761e93b4d",
+      "degisti_mi": false
+    },
+    "pt_bin_uretilen_veya_degisen": {
+      "komut": "find data -maxdepth 2 \\( -name '*.pt' -o -name '*.bin' \\) -newermt '2026-09-15 00:00' | wc -l",
+      "sonuc": 0
+    },
+    "pytest": {
+      "sandbox_ici": "1 failed (tests/test_agent_gateway.py::test_gateway_http_server_endpoints - PermissionError: [Errno 1] socket.bind), 122 passed",
+      "sandbox_disi": "123 passed in 10.14s",
+      "hukum": "Yurutucunun 123/123 iddiasi DOGRULANDI; sandbox ici tek hata bilinen socket.bind kisitlamasidir, kod kusuru degil."
+    },
+    "mps": {
+      "kayit_icindeki_deger": "device='mps', mps_available=True",
+      "sandbox_ici_olcum": "torch.backends.mps.is_available() = False",
+      "hukum": "Kayit mps_available=True diyorsa kosu sandbox DISINDA yapilmistir; sandbox ici bu deger False cikar. Dolayli ama tutarli kanit."
+    },
+    "kod_degisikligi": {
+      "git_diff_scripts/run_experiment_c.py": "+28 / -5",
+      "satir_108_118": "model_rows ve ckpt_rows hesaplaniyor; esitsizlikte [UYARI] basiliyor, esitlikte [BILGI] ile 'kirpma yok' deniyor",
+      "satir_225_226": "--vocab (varsayilan data/vocab.json), --ckpt (varsayilan data/kristal_carpenter_model.pt)",
+      "hukum": "Sessiz kirpma artik GORUNUR. T-0019'da tespit edilen kusur kapatildi."
+    }
+  },
+  "claims_verified": [
+    {
+      "criterion": "A",
+      "claim": "vocab_carpenter_32137.json: len(stoi)==32137, next_id==32137; ilk 31357 girdi vocab.json ile birebir ayni",
+      "verdict": "DOGRULANDI",
+      "evidence": "len(stoi)=32137, next_id=32137, id'ler 0..32136 kesintisiz, ilk 31357 girdi vocab.json ile birebir True"
+    },
+    {
+      "criterion": "B",
+      "claim": "vocab_b1_5_32816.json: len(stoi)==32816, next_id==32816; ayni onek ozelligi",
+      "verdict": "DOGRULANDI",
+      "evidence": "len(stoi)=32816, next_id=32816, id'ler 0..32815 kesintisiz, carpenter_32137'nin tam oneki"
+    },
+    {
+      "criterion": "C",
+      "claim": "--vocab/--ckpt argumanlari; model_rows ve ckpt_rows raporlaniyor, fark varsa acik uyari",
+      "verdict": "DOGRULANDI",
+      "evidence": "run_experiment_c.py:108-118 ve :225-226; sonuc json'unda arms[*].model_rows ve .ckpt_rows dolu"
+    },
+    {
+      "criterion": "D",
+      "claim": "REGRESYON: argumansiz/baseline kosu exp_c_recheck sayilarini birebir uretiyor",
+      "verdict": "DOGRULANDI",
+      "evidence": "KOL-A'nin 6 vakasinin ham ciktisi, exp_c_recheck_2026-09-15.json cases[i].new_envelope.raw_output ile 6/6 OZDES. exp_c_recheck mtime 09:33, T-0020 kosusu 09:51 -> dosya T-0020 tarafindan DEGISTIRILMEMIS.",
+      "verifier_self_correction": "Bu kriteri ilk denemede '6/6 FARKLI' diye olctum ve 'regresyon tutmadi' bulgusu yazmak uzereydim. Sebep BENIM alan adi hatamdi: exp_c_recheck'te raw_output ust duzeyde YOK, cases[i].new_envelope.raw_output icinde. Dogru yolu kullaninca 6/6 ozdes."
+    },
+    {
+      "criterion": "E",
+      "claim": "KOL-B'de ':' artik 32142 (gercek id) olarak kodlaniyor",
+      "verdict": "UYGULANAMAZDI — DANISMANIN SPEC HATASI",
+      "evidence": "KOL-B'nin sozlugu 32137 satir = id 0..32136. ':' id'si 32142 >= 32137. Yani spec'in istedigi dosya, spec'in istedigi ozelligi TANIM GEREGI tasiyamaz. Olculdu: KOL-B'de colon_encoded_id = 0, colon_token_name = '<UNK>'.",
+      "resolution_by_executor": "Yurutucu celiskiyi sessizce cozdu: spec'te istenmeyen UCUNCU bir kol (KOL-C_reference_32816, vocab=data/rebuild/vocab_b1_5_32816.json) ekledi. KOL-C'de colon_encoded_id = 32142, prompt_unk_count = 0. Cozum DOGRU ve olcumsel olarak degerli."
+    },
+    {
+      "criterion": "F",
+      "claim": "Iki kolun 6 vaka ham ciktisi yan yana kayitli; kelime ortusmesi sayisal",
+      "verdict": "DOGRULANDI",
+      "evidence": "comparison_table 6 satir x 16 sutun; byte_identical_a_vs_b = [True x6]; ortusmeler A ve B'de birebir ayni: 1/22, 1/18, 0/17, 0/11, 0/10, 0/7",
+      "ek": "Yurutucu 3 kol teslim etti (A, B, C) — spec 2 istiyordu."
+    },
+    {
+      "criterion": "G",
+      "claim": "device == 'mps' (sandbox disi kosu)",
+      "verdict": "DOGRULANDI",
+      "evidence": "kayitta device='mps', mps_available=True; sandbox icinde ayni olcum False veriyor -> kosu sandbox disinda"
+    },
+    {
+      "criterion": "H",
+      "claim": "EGITIM YOK; degisen/uretilen .pt sayisi = 0, .bin sayisi = 0",
+      "verdict": "DOGRULANDI",
+      "evidence": "find -newermt '2026-09-15 00:00' -> 0 dosya; checkpoint sha256 degismedi"
+    },
+    {
+      "criterion": "I",
+      "claim": "data/vocab.json ve data/vocab_entity.json sha256 DEGISMEDI",
+      "verdict": "DOGRULANDI",
+      "evidence": "bagimsiz shasum her ikisinde de yurutucunun bildirdigi degerle birebir ayni"
+    },
+    {
+      "criterion": "J",
+      "claim": "pytest 123/123 (sandbox disi)",
+      "verdict": "DOGRULANDI",
+      "evidence": "bagimsiz kosu: 123 passed in 10.14s"
+    },
+    {
+      "criterion": "K",
+      "claim": "writes listesi disinda dosya degismedi",
+      "verdict": "DOGRULANDI",
+      "evidence": "git status'ta T-0020 penceresinde (09:46-09:51) degisen tek dosya scripts/run_experiment_c.py (writes'ta) + 3 yeni cikti. exp_c_recheck mtime 09:33 (T-0019'dan), diger M dosyalar 09-13 tarihli. data/pedagogy/cot_vault.jsonl mtime 09:57 -> T-0021'in halen suren isi (T-0021 claim 06:53:20Z = 09:53), T-0020'e atfedilemez."
+    },
+    {
+      "criterion": "L",
+      "claim": "Kapanis hukumu sayiyla: sozluk restorasyonu C1 sonucunu degistirdi mi?",
+      "verdict": "DOGRULANDI",
+      "evidence": "closing_verdict.did_vocab_restoration_change_c1 = 'HAYIR', 0/3 C1, 0/6 toplam; verdict_statement ve empirical_explanation sayilarla tutarli"
+    }
+  ],
+  "findings": [
+    {
+      "id": "G1",
+      "severity": "DUSUK",
+      "title": "Spec icindeki oz-celiskinin sessizce cozulmesi (bildirilmedi)",
+      "detail": "Kabul kriteri E ('KOL-B'de : 32142 olarak kodlaniyor'), spec'in sectigi dosyayla (32137 satirlik onek) matematiksel olarak BAGDASAMAZ. Yurutucu bunu fark edip ucuncu bir kol ekleyerek cozdu ve dogru olcumu uretti — ama ne sonuc raporunda ne walkthrough'da 'kriter E spec geregi uygulanamaz' diye BILDIRMEDI. Cozumun kendisi dogru; eksik olan bildirim.",
+      "why_it_matters": "Ayni desen T-0010'da da cikti: ozel neden danismanin sartnamesiydi, yurutucu celiskiyi sessizce cozdu. Cozum islevsel oldugu icin gozden kaciyor; ama spec yazari kendi hatasini ogrenemiyor ve bir sonraki spec'te ayni celiskiyi tekrar uretiyor.",
+      "action": "Davranis degisikligi gerekmez (cikti dogru). Yalnizca: spec ile olculebilir gercek celistiginde, cozse bile bunu raporda tek cumleyle bildir."
+    },
+    {
+      "id": "G2",
+      "severity": "DUSUK",
+      "title": "clipping_occurred alani KOL-C'de yaniltici etiket",
+      "detail": "KOL-C'de ckpt_rows=32137 < model_rows=32816, yani checkpoint KIRPILMAMIS, DOLDURULMUS (pad) — 780+ satir hic egitilmemis satir olarak eklenmis. Alan adi 'clipping_occurred' ve degeri true. Makine-okunur etiket, olguyu ters adlandiriyor.",
+      "evidence": "comparison: KOL-C model_rows=32816, ckpt_rows=32137. Kirpma yonu ckpt>model iken asagi, model>ckpt iken YUKARI (pad).",
+      "action": "Alan adini 'row_mismatch' yap ya da yonu ayirt eden ikinci bir alan ekle (clipped / padded). Ayrica KOL-C'de noktalama satirlari (': ' = 32142 dahil) EGITILMEMIS satirlardir; bu, KOL-C'nin ':' id'sini bulmasinin neden hala anlamli bir basari olmadigini aciklar ve raporda belirtilmelidir."
+    }
+  ],
+  "non_findings": [
+    {
+      "id": "N1",
+      "title": "Dogrulayicinin kendi alan-yolu hatasi (SEKIZINCI vaka)",
+      "detail": "Kriter D'yi olcerken KOL-A'nin raw_output'unu exp_c_recheck'in UST DUZEY raw_output'u ile karsilastirdim -> 6/6 'farkli' cikti; 'regresyon tutmadi' bulgusu yazmak uzereydim. Gercek yol cases[i].new_envelope.raw_output. Dogru yolla 6/6 ozdes.",
+      "pattern": "Bu, 'iki sayi celisiyor sanma' refleksinin sekizinci vakasi ve YENI bir alt-bicimi: alan adi yanlis degil, alan DERINLIGI/yolu yanlis. Ust duzeyde aranan anahtar sessizce None donuyor ve iki taraf da 'yok' oldugu icin karsilastirma anlamsiz ama 'farkli' gorunuyor."
+    },
+    {
+      "id": "N2",
+      "title": "Kriter E'nin uygulanamazligi yurutucu kusuru DEGIL",
+      "detail": "Spec'i ben yazdim ve iki maddesi birbiriyle celisiyordu. Yurutucuye atfedilecek bir hata yok; aksine spec'in otesine gecip eksik olcumu tamamlayan kolu ekledi."
+    },
+    {
+      "id": "N3",
+      "title": "Yurutucunun kapanis aciklamasi DOGRU",
+      "detail": "'Noktalama tokenleri 32.137'den sonra yer aldigindan bu modelin ozgun egitiminde noktalama bulunmamaktadir' cumlesini bagimsiz dogruladim: noktalama blogu 32137'de basliyor, carpenter tam 32137 satir. Cumle olcumle tutarli — sayi degil, cumle denetimi."
+    },
+    {
+      "id": "N4",
+      "title": "KOL-A != KOL-B sonucunun DEGISMEMESI beklentiyle uyumlu, supheli degil",
+      "detail": "6/6 bit-ozdeslik ilk bakista 'restorasyon hicbir sey yapmadi, o zaman kayip sozluk onemsiz' gibi okunabilir. Oyle degil: iki sozluk de noktalama ICERMIYOR (biri 31357, digeri 32137 satir; noktalama 32137'de basliyor). Fark yalnizca 780 ozel isim satiriydi ve bu istemlerde ozel isim yok. Yani test, noktalama sorusunu OLCMEDI."
+    }
+  ],
+  "downstream": [
+    "T-0020 kapandi: run_experiment_c.py artik sessiz kirpmayi raporluyor (asil kazanc bu). Exp C temel cizgisi gecerliligini koruyor: 6/6 ham cikti byte-ozdes.",
+    "T-0021 (acik, antigravity claim etti 06:53:20Z) halen isleniyor; kapandiginda bagimsiz dogrulama sirasini alir.",
+    "YENI MIMARI BULGU (plan girdisi): carpenter modelinin sozluk siniri TAM OLARAK noktalama blogunun baslangicina denk geliyor (32137). Model noktalamayi 'ogrenmemis' degil — o id'ler icin HICBIR embedding satiri YOK. Dolayisiyla noktalama uretebilen bir ceket (jacket), mevcut 32137 satirli taban uzerine egitilemez; once taban sozlugu buyumelidir. Bu, T-0020'nin yan urunu olarak olculmus ve plana girmesi gereken bir kisittir.",
+    "ACIK SORU (olculmedi, plana kapi olarak girmeli): 32816 satirli modelin noktalama satirlari (32137-32145) ve rakam satirlari (32146-32155) EGITILMIS mi, yoksa rezerve/rastgele mi? PUNCT_SET tokenizer'a 9e59830 (2026-09-15) ile girdigine gore, bu satirlar tokenizer onlari uretmeden once olusturulmus olabilir. Eğer egitilmemisse, noktalama hicbir modelde temsil edilemiyor demektir."
+  ],
+  "boundaries_respected": {
+    "training_runs_started": 0,
+    "pt_or_bin_produced": 0,
+    "checkpoints_touched": 0,
+    "frozen_paths_written": 0,
+    "commit_or_push": false,
+    "my_writes": ["data/eval/t0020_verification.json"]
+  }
+}

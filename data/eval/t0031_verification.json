@@ -1,0 +1,77 @@
+{
+  "task_id": "T-0031",
+  "verdict": "PASS_WITH_FINDINGS",
+  "verified_by": "claude (danisman)",
+  "verified_at": "2026-09-15T14:18:28Z",
+  "method": "Bagimsiz dogrulama turu: spec + sonuc raporu + 5 degisen dosya okundu; yurutucunun kanit metnine guvenilmedi. narrative_log yol guvenligi icin MUTANT DENEYI kuruldu; geriye uyumluluk ANAHTAR SIRASI karsilastirmasiyla olculdu; pytest sandbox DISINDA kosuldu.",
+  "closure_signals": {
+    "1_executor_message": "2026-09-15T14-09-38Z-antigravity.json ('T-0031 Tamamlandi: Asimetrik Gorunurluk Kapatildi') — 14:09:38Z'de geldi; olcumun ilk aninda (14:08:29Z) YOKTU, kapi o an dogru sekilde 'tutmuyor' verdi.",
+    "2_leases_released": "T-0031 kiralamalari 14:10:23Z'de serbest birakildi; olcum aninda .agent-bus/state/leases/ = 0 dosya.",
+    "3_changed_files_full_scope": "5 yol = beyan edilen writes[] bes kaleminin tamami (SPEC.md, notes/T-0031.md, agent_bus_mcp.py, tests/test_agent_bus_narrative.py, data/eval/t0031_notes_surface_2026-09-15.json)."
+  },
+  "claimed_hashes_independently_verified": {
+    "not": "Yurutucunun mesajinda beyan ettigi 6 sha256'nin altisi da birebir DOGRU.",
+    ".agent-bus/notes/T-0031.md": "0a79be72... OK",
+    "data/eval/t0031_notes_surface_2026-09-15.json": "8cc04f8d... OK",
+    ".agent-bus/SPEC.md": "d397877d... OK",
+    "scripts/agent_bus_mcp.py": "7339e0ae... OK",
+    "tests/test_agent_bus_narrative.py": "9b94fee7... OK",
+    "data/pedagogy/cot_vault.jsonl": "97b06fe5... OK",
+    "ek": "notes/T-0031.md icindeki T-0030 raporu atfi (128f266c...) da gercek dosyayla birebir — icerikte uydurma hash YOK."
+  },
+  "acceptance_criteria_measured": {
+    "1_narrative_log_matches_note_sha256": "GECTI — results/T-0031.json narrative_log = {path: .agent-bus/notes/T-0031.md, sha256 0a79be72..., ozet}. Not dosyasinin GERCEK sha256'si 0a79be72... ile birebir; not 50 satir (raporun line_count beyani dogru).",
+    "2_backward_compatibility": "GECTI — KENDIM OLCUM: degisiklik ONCESI uretilmis state/results/T-0030.json anahtar sirasi ['task_id','status','finished','summary','evidence','changed_files']; narrative_log VERILMEDEN uretilen yeni sonuc dosyasi AYNI sirayi veriyor ve icinde narrative_log YOK. Kod okumasi da bunu destekliyor: alan yalnizca kosullu ekleniyor, mevcut anahtarlarin hicbiri degismedi.",
+    "3_negative_escaping_paths_rejected": "GECTI — MUTANT DENEYI ile kanitlandi (vakum DEGIL): sanitize_rel_path acikken '../escaping.md' ve '/tmp/escaping.md' -> ValueError 'Yol güvenlik ihlali'; sonuc dosyasi YAZILMADI, gorev dosyasi da DEGISMEDI (dogrulama her iki yazimdan da ONCE). sanitize_rel_path etkisizlestirildiginde (mutant) istisna kayboldu ve sonuc dosyasi YAZILDI; guard geri yuklenince davranis geri dondu. Guard ayrica ozgul: '.agent-bus/notes/T-9902.md' KABUL, '.agent-bus/notes/../../etc/passwd' RED.",
+    "4_pytest_full_suite": "GECTI — sandbox DISINDA './venv/bin/pytest -q' -> 135 passed in 7.41s (yurutucu 7.70s bildirmis; ayni sayi).",
+    "5_cot_vault_invariant": "GECTI — BENIM kosumum ONCESI ve SONRASI sha256 97b06fe5...5619 / 91 satir, birebir ayni.",
+    "6_spec_three_inviolable_rules": "GECTI — grep -n 'Kiralama olmadan yazma yok' .agent-bus/SPEC.md = 1 eslesme (satir 59), metin korunmus.",
+    "7_note_exists_with_citations": "GECTI — .agent-bus/notes/T-0031.md mevcut (50 satir); 'yol + sha256' bicimli 2 atif var, IKISININ hash'i de dogru cikti.",
+    "8_writes_boundary": "GECTI (zaman penceresiyle olculdu, bkz V3) — T-0031 penceresinde (13:33:47Z..14:08:26Z) degisen 6 dosyanin 5'i beyan edilen kume; 6.'si BENIM kendi mesajim (.agent-bus/state/inbox/antigravity/2026-09-15T13-57-27Z-claude.json), yurutucunun yazimi degil."
+  },
+  "findings": [
+    {
+      "id": "V1",
+      "severity": "DUSUK",
+      "file": ".agent-bus/notes/T-0031.md",
+      "line": "ust bilgi blogu (Durum satiri)",
+      "claim": "Not 'Durum: Devam ediyor / Tamamlanma aşamasında' diyor; sonuc dosyasi 'status: done' (14:08:26Z).",
+      "measurement": "Not mtime 13:45:21Z, sonuc 14:08:26Z — not 23 dk once, is SURERKEN yazilmis. Yani celiski bir hata degil, SPEC'e bu gorevde EKLENEN 'Eszamanli Yazim Ilkesi'nin ZORUNLU SONUCU: note rapordan sonra guncellenmez, dolayisiyla icindeki CANLI DURUM alani kalici olarak bayat kalir.",
+      "why_it_matters": "notes/ artik SURUMLENEN ve KALICI bir yuzey; orada duran 'devam ediyor' cumlesi, ayni gorevin sonuc dosyasiyla kalici olarak celisir. Bu, [[talimat-yuzeyi-dort-dosyaya-dagilmis]] V1 ailesinin (dosya kendisiyle celisir) yeni bir ornegi.",
+      "recommendation": "Konvansiyon, notu 'o ANIN fotografidir' diye tanimlasin ve canli durum alani yerine 'as-of' damgasi istesin: or. 'Durum (13:45:21Z itibariyle): ...'. Boylece not kalici yuzeyde kendini curutmez."
+    },
+    {
+      "id": "V2",
+      "severity": "DUSUK",
+      "file": ".agent-bus/SPEC.md",
+      "claim": "Kok dizin semasina eklenen satir: 'tasks/T-XXXX.json  # kalici gorev sartnameleri (surumlenir)'.",
+      "measurement": "OLCUM: .agent-bus/tasks/ icinde en yuksek dosya T-0025.json; T-0026..T-0031 icin kok kopya YOK (ls .agent-bus/tasks/ ile dogrulandi). Bu gorevlerin TEK sartname kopyasi .agent-bus/state/tasks/ altinda ve .agent-bus/.gitignore satir 2 'state/' -> surumlenmiyor. Yani T-0031'in kendi sartnamesi SURUMLENMIYOR. (Semaya eklenen cumle ignore kurallari acisindan DOGRU: .gitignore yalniz state/, log/, *.tmp disliyor; tasks/ ve notes/ dislanmiyor.)",
+      "root_cause": "T-0026'dan beri gorevler bilincli olarak state-only aciliyor (acik kusur #3'un guvenli modu, ayna asimetrisini cogaltmamak icin) — yani bu benim posting prosedurumun sonucu, yurutucunun kusuru degil.",
+      "why_it_matters": "Semayi okuyan bir danisman 'T-0031 sartnamesi surumlenir' diye okur; surumlenmiyor. Beyan ile artefakt kumesi ayrisiyor."
+    },
+    {
+      "id": "V3",
+      "severity": "DUSUK",
+      "file": ".agent-bus/state/tasks/T-0031.json",
+      "line": "kabul kriteri 8",
+      "claim": "'git status --porcelain ciktisindaki degisen yollar beyan edilen writes[] kumesinin DISINDA olmamali'.",
+      "measurement": "Kriter bu haliyle OLCULEMEZ: repo T-0031 oncesinden ~30 degisik/untracked dosya tasiyor (T-0014, T-0025, T-0028, T-0029 kalintilari), dolayisiyla 'git status ciktisi' kume olarak her zaman writes[] disina tasar. Gercek soru 'bu gorev hangi yollara yazdi'dir ve ancak ZAMAN PENCERESIYLE olculur: 13:33:47Z..14:08:26Z araliginda degisen dosya sayisi 6, beyan disi 0 (6.'si benim mesajim).",
+      "verdict": "Yurutucu sonucu DOGRU; kusur KABUL KRITERININ ifadesinde. Bir sonraki spec'te 'bu gorevin penceresinde degisen yollar' diye yazilmali."
+    },
+    {
+      "id": "V4",
+      "severity": "COK DUSUK",
+      "file": "data/eval/t0031_notes_surface_2026-09-15.json",
+      "line": "implementations.note_file.citations_included[1]",
+      "claim": "Ikinci atif hash'siz listelenmis: 'data/eval/t0030_wiki_revival_2026-09-15.json'.",
+      "measurement": "Notun KENDISI ayni atfi sha256 ile tasiyor (128f266c...) ve hash gercek dosyayla birebir. Yani kusur notta degil, RAPORUN ozetinde: notta olan bilgiyi eksik aktariyor (T-0028 V1 / 'tanimin ADI' ailesinin hafif bicimi).",
+      "verdict": "Sayi/hash curumedi; yalniz rapor ozeti notu eksik yansitiyor."
+    }
+  ],
+  "notes": [
+    "SPEC.md diffi harfiyen 'YALNIZ EKLEME' DEGIL: 17 satir eklendi, 3 satir degistirildi (surumleme cumlesi genisletildi, JSON ornegine virgul, MCP araclari tablosunda bus_report_result satiri opsiyonel isaretlendi). UCUNUN DE hicbiri bir KURAL KALDIRMIYOR; kriter 6'nin hedefledigi degismez kural (satir 59) metin olarak aynen duruyor. Bulgu degil, kayit.",
+    "KENDI OLCUM IZLERIM (bulgu degil): (1) pytest kosumum .pytest_cache/ ve __pycache__ yazdi — sayi olcen bir karsilastirmada kendi adimimin izi; (2) kriter 8 pencere taramasinda cikan tek 'beyan disi' dosya benim 13:57:27Z'de gonderdigim mesajdi.",
+    "T-0031'in getirdigi kural CANLI ORNEKLE dogrulandi: yurutucunun T-0031 tamamlanma mesaji 6 artefaktin TAMAMI icin yol+sha256 veriyor — SPEC'e yeni giren bus_send atif kuralina uyuyor. Kural onceki mesajlarda (T-0030) yoktu, cunku kural o tarihte henuz yazilmamisti.",
+    "Kapsam disi birakilan (spec'te acikca 'kapsam disi — kullanici karari'): walkthrough 8.x geriye donuk tasima. Rapor gerekceyiyle 'yapilmamali' onermis; T-0030'un ayni yondeki onerisiyle tutarli."
+  ]
+}

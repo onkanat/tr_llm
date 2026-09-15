@@ -23,18 +23,7 @@ from src.compiler.decompiler import MorphemeDecompiler
 from src.llm.tokenizer import KristalTokenizer, Vocabulary
 from scripts.train_step_demo import KristalLM
 
-def resize_state_dict(model, old_state_dict):
-    new_state_dict = model.state_dict()
-    for k, v in old_state_dict.items():
-        if k in new_state_dict:
-            if v.shape != new_state_dict[k].shape:
-                if len(v.shape) == 2:
-                    new_state_dict[k][:min(v.shape[0], new_state_dict[k].shape[0]), :min(v.shape[1], new_state_dict[k].shape[1])] = v[:min(v.shape[0], new_state_dict[k].shape[0]), :min(v.shape[1], new_state_dict[k].shape[1])]
-                elif len(v.shape) == 1:
-                    new_state_dict[k][:min(v.shape[0], new_state_dict[k].shape[0])] = v[:min(v.shape[0], new_state_dict[k].shape[0])]
-            else:
-                new_state_dict[k] = v
-    return new_state_dict
+from src.llm.prompt_contract import resize_state_dict
 
 def generate_prediction(model, tokenizer, decompiler, prompt_text: str, instruction: str = "", max_tokens: int = 30, device: str = 'cpu') -> dict:
     vocab = tokenizer.vocab

@@ -35,6 +35,8 @@ eksikliğinden** geldi. Bu protokol o sınıfı kapatır.
 .agent-bus/
   SPEC.md                    # bu dosya (sürümlenir)
   frozen.json                # değiştirilemez yol desenleri
+  tasks/T-XXXX.json          # kalıcı görev şartnameleri (sürümlenir)
+  notes/T-XXXX.md            # görev yürütüm anlatı günlükleri (sürümlenir)
   state/
     tasks/T-0001.json
     leases/<slug>.json
@@ -43,7 +45,8 @@ eksikliğinden** geldi. Bu protokol o sınıfı kapatır.
   log/events.jsonl           # append-only denetim kaydı
 ```
 
-`state/` ve `log/` **sürümlenmez** (`.gitignore`); `SPEC.md` ve `frozen.json` sürümlenir.
+`state/` ve `log/` **sürümlenmez** (`.gitignore`); `SPEC.md`, `frozen.json`, `tasks/` ve `notes/` **sürümlenir**. `notes/` yüzeyi `state/` ve `log/`'dan farklıdır; yürütücünün gerekçe zincirini repo içinde kalıcı ve keşfedilebilir kılar. Elle tutulan bir indeks dosyası yoktur; dizin listesi (`ls .agent-bus/notes/`) zaten indekstir.
+
 
 `tasks/` (kök altı, sürümlenir) ile `state/tasks/` (çalışma zamanı, sürümlenmez) kasıtlı
 olarak ayrıdır ve **ikisi de okunur**: kökteki dosyalar elle yazılmış talimatlardır
@@ -113,9 +116,17 @@ Aynı yola iki farklı `owner` kiralaması **asla** birlikte var olamaz.
   "finished": "2026-09-14T12:10:00Z",
   "summary": "ne yapıldı",
   "evidence": ["komut", "çıktı özeti", "ölçülen sayılar"],
-  "changed_files": ["scripts/agent_bus_mcp.py"]
+  "changed_files": ["scripts/agent_bus_mcp.py"],
+  "narrative_log": {
+    "path": ".agent-bus/notes/T-0001.md",
+    "sha256": "3a7b...",
+    "ozet": "yürütüm gerekçe ve karar özeti"
+  }
 }
 ```
+`narrative_log` alanı opsiyoneldir: `{"path": ".agent-bus/notes/T-XXXX.md", "sha256": "<64 hex>", "ozet": "<kisa>"}`. Alan uzun metni taşımaz; yalnız işaretçi + özet taşır. Böylece sonuç dosyasını okuyan danışman anlatı günlüğünü sıfır keşif maliyetiyle bulabilir.
+
+**Eşzamanlı Yazım İlkesi:** Note yazımı RAPOR ANINDA DEĞİL, iş SÜRERKEN eşzamanlı olarak yapılır. Rapordan sonra yazılan anlatı bir rekonstrüksiyondur ve çerçeveleme iyimserliği tam oraya sızar (T-0016/T-0018'de dört kez ölçüldü: sayılar kusursuz, çerçeve iyimser). Ara düzeltmenin izi yalnız eşzamanlı yazımda yaşar.
 
 ### Mesaj — `state/inbox/<recipient>/<ISO8601>-<sender>.json`
 ```json
@@ -124,6 +135,13 @@ Aynı yola iki farklı `owner` kiralaması **asla** birlikte var olamaz.
 Dosya adı saniye çözünürlüğündedir: aynı gönderen aynı saniyede iki mesaj gönderirse
 ad çakışır ve **ilki sessizce kaybolur**. Uygulama çakışmayı algılamak ve adı
 `<ISO8601>-<sender>-<n>.json` olarak ayırmak zorundadır.
+
+### `bus_send` Atıf Kuralı
+
+Mesajlarda bir artefakta atıf yapılırken:
+1. **Yol + SHA-256 Kuralı:** Bir artefakta atıf her zaman `YOL + sha256` biçiminde yapılmalıdır (örneğin: `data/eval/t0030_wiki_revival_2026-09-15.json` `sha256: 8a9f...`).
+2. **Bölüm/Satır Numarasına Atıf YASAKTIR:** Bölüm numaraları (`Section 8.13`) veya satır numaraları dosya içeriği kaydığında yeşil kalır ve sahte doğrulama yanılsaması üretir.
+3. **Uzun Alıntı YASAKTIR:** Rapor veya not içeriğinin uzun parçaları mesaja kopyalanmaz (ikinci bir kayma yüzeyi oluşturur; ayrıca `state/inbox/` sürümlenmez). Kritik kararlar ve olgular mesaja değil, kiralanmış sahipli yüzeylere (`SPEC.md`, `results/`, `notes/` veya `data/eval/`) yazılır.
 
 ## MCP araçları
 
@@ -135,7 +153,7 @@ ad çakışır ve **ilki sessizce kaybolur**. Uygulama çakışmayı algılamak 
 | `bus_acquire_lease` | paths[], task_id, owner, ttl_minutes? | `{ok, conflicts[]}` |
 | `bus_release_lease` | paths[], task_id | `{ok}` |
 | `bus_lease_status` | paths? | `[lease]` |
-| `bus_report_result` | task_id, status, summary, evidence[], changed_files[] | `{ok}` |
+| `bus_report_result` | task_id, status, summary, evidence[]?, changed_files[]?, narrative_log? | `{ok}` |
 | `bus_send` | to, subject, content | `{ok}` |
 | `bus_inbox` | who, unread_only? | `[message]` |
 | `bus_frozen_list` | — | `[glob]` |

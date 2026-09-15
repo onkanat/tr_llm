@@ -14,7 +14,8 @@ from unittest.mock import MagicMock
 from src.gateway.pedagogical_supervisor import (
     extract_cot_and_card,
     record_to_cot_vault,
-    PedagogicalSupervisor
+    PedagogicalSupervisor,
+    _CANONICAL_PROD_VAULT
 )
 from scripts.prepare_reasoning_dataset import format_reasoning_sample
 
@@ -130,24 +131,26 @@ class TestCoTVaultAndDualParser(unittest.TestCase):
         mock_gateway.inject_knowledge.return_value = {"status": "success"}
         mock_gateway.inject_reasoning_trace.return_value = {"status": "success"}
 
-        supervisor = PedagogicalSupervisor(
-            gateway=mock_gateway,
-            enrich_rag=True
-        )
-
-        # Mock teacher call returning dual CoT and Card
-        teacher_output = (
-            "<DUSUNCE>\n"
-            "Açık istiare teşbih sanatının bir türüdür. Sadece benzeyen değil kendisine benzetilen söylenir.\n"
-            "</DUSUNCE>\n"
-            "<BILGI_KARTI>\n"
-            "Açık istiare, teşbihte temel ögelerden yalnızca kendisine benzetilenin anıldığı istiare türüdür.\n"
-            "</BILGI_KARTI>"
-        )
-        supervisor.call_gemini = MagicMock(return_value=teacher_output)
-        supervisor.gemini_api_key = "dummy_key"
-
         with tempfile.TemporaryDirectory() as tmpdir:
+            isolated_vault = os.path.join(tmpdir, "isolated_cot_vault.jsonl")
+            supervisor = PedagogicalSupervisor(
+                gateway=mock_gateway,
+                enrich_rag=True,
+                vault_path=isolated_vault
+            )
+
+            # Mock teacher call returning dual CoT and Card
+            teacher_output = (
+                "<DUSUNCE>\n"
+                "Açık istiare teşbih sanatının bir türüdür. Sadece benzeyen değil kendisine benzetilen söylenir.\n"
+                "</DUSUNCE>\n"
+                "<BILGI_KARTI>\n"
+                "Açık istiare, teşbihte temel ögelerden yalnızca kendisine benzetilenin anıldığı istiare türüdür.\n"
+                "</BILGI_KARTI>"
+            )
+            supervisor.call_gemini = MagicMock(return_value=teacher_output)
+            supervisor.gemini_api_key = "dummy_key"
+
             probe = {
                 "query": "Açık istiare nedir?",
                 "instruction": "Lise edebiyat dersi kapsamında açıkla.",
@@ -171,6 +174,110 @@ class TestCoTVaultAndDualParser(unittest.TestCase):
             r_args, r_kwargs = mock_gateway.inject_reasoning_trace.call_args
             self.assertEqual(r_kwargs["query"], "Açık istiare nedir?")
             self.assertIn("kendisine benzetilen söylenir", r_kwargs["thought_text"])
+
+            # Assert isolated vault was written and contains the CoT trace (isolation confirmed)
+            self.assertTrue(os.path.exists(isolated_vault))
+            with open(isolated_vault, "r", encoding="utf-8") as f:
+                lines = f.readlines()
+            self.assertEqual(len(lines), 1)
+            vault_data = json.loads(lines[0])
+            self.assertEqual(vault_data["query"], "Açık istiare nedir?")
+            self.assertIn("Açık istiare teşbih sanatının bir türüdür.", vault_data["thought_trace"])
+
+    def test_record_to_cot_vault_blocks_prod_write_in_tests_cwd_repo_root(self):
+        # (G1-i) CWD=repo koku + varsayılan/göreli yol -> RuntimeError
+        with self.assertRaises(RuntimeError) as ctx:
+            record_to_cot_vault(
+                query="Tehlikeli sorgu",
+                instruction="Yönerge",
+                thought_trace="Düşünce adımı",
+                final_answer="Nihai yanıt",
+                vault_path="data/pedagogy/cot_vault.jsonl"
+            )
+        self.assertIn("Güvenlik İhlali", str(ctx.exception))
+
+    def test_record_to_cot_vault_blocks_prod_write_in_tests_cwd_other(self):
+        # (G1-ii) CWD=başka bir dizin + mutlak kanonik üretim yolu -> YİNE RuntimeError (fail-open koruması)
+        old_cwd = os.getcwd()
+        try:
+            os.chdir("/tmp")
+            with self.assertRaises(RuntimeError) as ctx:
+                record_to_cot_vault(
+                    query="Tehlikeli sorgu CWD disi",
+                    instruction="Yönerge",
+                    thought_trace="Düşünce adımı",
+                    final_answer="Nihai yanıt",
+                    vault_path=_CANONICAL_PROD_VAULT
+                )
+            self.assertIn("Güvenlik İhlali", str(ctx.exception))
+        finally:
+            os.chdir(old_cwd)
+
+    def test_record_to_cot_vault_flat_filename_in_tmpdir(self):
+        # (G2) vault_path dizin bileşeni içermiyorsa (düz dosya adı) sessizce False dönmez, başarıyla yazar
+        with tempfile.TemporaryDirectory() as tmpdir:
+            old_cwd = os.getcwd()
+            try:
+                os.chdir(tmpdir)
+                res = record_to_cot_vault(
+                    query="Düz dosya sorgusu",
+                    instruction="Yönerge",
+                    thought_trace="Düşünce adımı",
+                    final_answer="Nihai yanıt",
+                    vault_path="flat_vault.jsonl"
+                )
+                self.assertTrue(res)
+                self.assertTrue(os.path.exists("flat_vault.jsonl"))
+            finally:
+                os.chdir(old_cwd)
+
+    def test_record_to_cot_vault_f4_default_vault_path_none_cwd_tmp(self):
+        # (F4) CWD=/tmp + vault_path=None -> hedef kanonik MUTLAK yol olur ve test ortamında RuntimeError fırlatır
+        old_cwd = os.getcwd()
+        old_env_cot = os.environ.pop("COT_VAULT_PATH", None)
+        try:
+            os.chdir("/tmp")
+            with self.assertRaises(RuntimeError) as ctx:
+                record_to_cot_vault(
+                    query="Tehlikeli sorgu CWD tmp vault None",
+                    instruction="Yönerge",
+                    thought_trace="Düşünce adımı",
+                    final_answer="Nihai yanıt",
+                    vault_path=None
+                )
+            self.assertIn("Güvenlik İhlali", str(ctx.exception))
+            self.assertIn(_CANONICAL_PROD_VAULT, str(ctx.exception))
+
+            # COT_VAULT_PATH verilmişse ona dokunulmadığı da gösterilir
+            with tempfile.NamedTemporaryFile(suffix=".jsonl") as tf:
+                os.environ["COT_VAULT_PATH"] = tf.name
+                res = record_to_cot_vault(
+                    query="Güvenli özel env sorgusu",
+                    instruction="Yönerge",
+                    thought_trace="Düşünce adımı",
+                    final_answer="Nihai yanıt",
+                    vault_path=None
+                )
+                self.assertTrue(res)
+                self.assertTrue(os.path.exists(tf.name))
+        finally:
+            if old_env_cot is not None:
+                os.environ["COT_VAULT_PATH"] = old_env_cot
+            else:
+                os.environ.pop("COT_VAULT_PATH", None)
+            os.chdir(old_cwd)
+
+    def test_record_to_cot_vault_f5_unwritable_path_does_not_raise(self):
+        # (F5) Yazılamayan bir vault_path çağrıyı DÜŞÜRMEZ, loglanır ve False döner
+        unwritable_path = "/nonexistent_protected_root_dir_12345/vault.jsonl"
+        res = record_to_cot_vault(
+            query="Yazılamayan yol sorgusu",
+            instruction="Yönerge",
+            thought_trace="Düşünce adımı",
+            final_answer="Nihai yanıt",
+            vault_path=unwritable_path
+        )
+        self.assertFalse(res)
 
 
 if __name__ == "__main__":

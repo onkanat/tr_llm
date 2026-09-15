@@ -1,0 +1,129 @@
+{
+  "task_id": "T-0021",
+  "verification_of": ".agent-bus/state/results/T-0021.json",
+  "artifact_under_review": "data/eval/t0018_why_no_memorization.json",
+  "verifier": "claude (danisman)",
+  "verified_at": "2026-09-15T07:20:00Z",
+  "verdict": "PASS",
+  "verdict_note": "8 kabul kriterinin 8'i DOGRULANDI. En onemlisi: G2'nin duzeltmesi (kayip tanimin yazilmasi) YETERLI cikti — dagilimi sifirdan, tanimdan yola cikarak yeniden urettim ve 23/23 indeks BIREBIR tuttu. Bulgu yok.",
+  "headline": {
+    "claim": "record_impact.all_first_mismatch_indices_distribution, encoded_text tanimiyla yeniden uretildi",
+    "my_independent_reproduction": "23/23 indeks birebir ayni, 0 fark",
+    "method": "data/train_carpenter_specialization.bin uint16 okundu; BOS(2) ile dilimlendi -> TAM 5702 dilim; her dilim, kaynak JSONL kaydinin json.dumps(record, ensure_ascii=False) ciktisinin GUNCEL tokenizer ile kodlanmis halinden <BOS> haric karsilastirildi; ilk sapan indeks histogrami cikarildi",
+    "result_table_sample": {
+      "idx_4": {"mine": 900, "report": 900},
+      "idx_6": {"mine": 478, "report": 478},
+      "idx_7": {"mine": 1383, "report": 1383},
+      "idx_8": {"mine": 903, "report": 903},
+      "idx_10": {"mine": 1211, "report": 1211},
+      "idx_11": {"mine": 550, "report": 550}
+    },
+    "identical": {"mine": 0, "report": 0},
+    "divergent": {"mine": 5702, "report": 5702},
+    "rate_pct": {"mine": 100.0, "report": 100.0}
+  },
+  "own_measurements": {
+    "kayit_kumesi_pozitif_kontrol": "Kaynak iki JSONL'den (carpenter_specialization_dataset.jsonl + arena_carpenter_accumulated.jsonl) ayni derleme kurallariyla 5702 kayit yeniden uretildi — meta.total_records=5702 ile BIREBIR. Ayrica .bin icindeki BOS sayisi tam 5702, BOS ile dilimleme de tam 5702 kayit verdi. Uc bagimsiz yol ayni sayiya cikti.",
+    "checkpoint_sha256": {
+      "data/kristal_carpenter_model.pt": "5f0b8c71727d15e338e4301634b0d05652c3230cebc532b1124aff3761e93b4d",
+      "degisti_mi": false
+    },
+    "pt_bin_degisen": 0,
+    "pytest_sandbox_disi": "123 passed in 11.79s",
+    "pytest_sandbox_ici": "1 failed (socket.bind PermissionError, bilinen kisitlama), 122 passed",
+    "t0018_mtime": "2026-09-15 09:58:34 — T-0021 penceresinde; T-0020 (09:51) sonrasi, dogru gorev",
+    "top_10_tutarli": "top_10_first_mismatch_indices {7:1383, 10:1211, 8:903, 4:900, 11:550, 6:478, 12:67, 13:59, 17:51, 15:32} ile dagilimin kendi ilk 10'u BIREBIR ayni — iki alan birbiriyle celismiyor"
+  },
+  "claims_verified": [
+    {
+      "criterion": "A",
+      "claim": "data_identity.A6_stale_bin icinde 'punt_set_commit' anahtari YOK; 'punct_set_commit' duruyor ve degeri degismemis",
+      "verdict": "DOGRULANDI",
+      "evidence": "Anahtar listesi: ['affected_scope','bin_created_at','bin_path','census','encode_path_shared','punct_set_commit','punct_set_commit_date','record_impact','stale']. 'punt_set_commit' in A6 -> False. punct_set_commit = '9e59830' (degismemis)."
+    },
+    {
+      "criterion": "B",
+      "claim": "record_impact.encoded_text alani var ve kodlanan metni + tokenizer surumunu acikca tanimliyor",
+      "verdict": "DOGRULANDI",
+      "evidence": "Deger: 'json.dumps(record, ensure_ascii=False) comparing binary token stream from data/train_carpenter_specialization.bin (compiled 2026-09-13T07:12:46Z, pre-9e59830) against current tokenizer (commit 9e59830 with PUNCT_SET), indexed from first semantic token (excluding <BOS>)' — dort eksen de yazili: METIN tanimi, BIN tarafi, TOKENIZER surumu, INDEKSLEME kurali."
+    },
+    {
+      "criterion": "C",
+      "claim": "all_first_mismatch_indices_distribution, encoded_text tanimiyla yeniden uretildi; toplam == divergent_records",
+      "verdict": "DOGRULANDI — en guclu kanit",
+      "evidence": "Bagimsiz yeniden uretim 23/23 indekste birebir; toplam 5702 == divergent_records. Tanim, ucuncu bir tarafin (benim) sayilari bit duzeyinde yeniden uretebilecegi kadar TAM."
+    },
+    {
+      "criterion": "D",
+      "claim": "Dogrulanmis alanlar DEGISMEDI: total_records=5702, identical_records=0, divergent_records=5702, divergence_rate_pct=100.0 + T-0018'in diger tum sayisal alanlari",
+      "verdict": "DOGRULANDI",
+      "evidence": "Dort deger birebir. Ek: teacher_forcing.B2.sample_count=100 ve B4'te C1_1/C1_2/C1_3 + percentile_caveat yerinde (B4 first_20_tokens alani YOK — T-0018'de de bu adla yoktu; benim ilk aramamda alan adi tahminim yanlisti, ham anahtar listesinden dogruladim)."
+    },
+    {
+      "criterion": "E",
+      "claim": "T-0019'un kapattigi metin/etiket duzeltmeleri (F1-F6) BOZULMADI: '%99.90' hala yok, ccd552c hala yok, hypotheses status==verdict",
+      "verdict": "DOGRULANDI",
+      "evidence": "grep '99.90' -> 0; grep 'ccd552c' -> 0; dosyayi ozyinelemeli tarayip status ve verdict alanlarini karsilastirdim -> status!=verdict olan dugum sayisi 0."
+    },
+    {
+      "criterion": "F",
+      "claim": "EGITIM YOK; degisen .pt/.bin = 0",
+      "verdict": "DOGRULANDI",
+      "evidence": "find -newermt '2026-09-15 00:00' -> 0; checkpoint sha256 degismedi"
+    },
+    {
+      "criterion": "G",
+      "claim": "pytest 123/123 (sandbox disi)",
+      "verdict": "DOGRULANDI",
+      "evidence": "bagimsiz kosu: 123 passed in 11.79s"
+    },
+    {
+      "criterion": "H",
+      "claim": "writes listesi disinda dosya degismedi",
+      "verdict": "DOGRULANDI",
+      "evidence": "writes=['data/eval/t0018_why_no_memorization.json']; o dosyanin mtime'i 09:58:34 (T-0021 penceresi). Diger M dosyalar 09-13 tarihli ya da T-0019/T-0020 kaynakli; cot_vault.jsonl 09:57 T-0021'in kendi penceresinde ama writes'ta DEGIL — icerik degisikligi 77 satir EKLEME (Gemini timestamp'li kayitlar), yani canli bir veri toplama akisinin urunu, T-0021'in spec'iyle ilgisiz. Asagida N3."
+    }
+  ],
+  "findings": [],
+  "non_findings": [
+    {
+      "id": "N1",
+      "title": "Dogrulayicinin alan-yolu hatasi — SEKIZINCI vaka (bu turda IKINCI kez)",
+      "detail": "Ayni oturumda ikinci kez: T-0020'de raw_output'un derinligini yanlis aldim; burada B4.first_20_tokens diye bir alan aradim ve bos liste aldim, 'percentile verisi kaybolmus' diye bulgu yazmak uzereydim. Gercek yapi: B4 anahtarlari ['C1_1','C1_2','C1_3','percentile_caveat'] — first_20_tokens diye bir alan hic yoktu. Ham anahtar listesini yazdirinca yakaladim.",
+      "resolution": "Bulgu degil. Kural: alan adini TAHMIN ETME, ham anahtar listesinden CIKAR. Bu oturumun en sik tekrarlanan hatasi (8 kez) ve artik bir alt-bicimi var: yanlis DERINLIK."
+    },
+    {
+      "id": "N2",
+      "title": "Eski tokenizer'in git revizyonu derleme zamaniyla birebir ayni degil (benim yontemimde)",
+      "detail": "9e59830^ revizyonundaki tokenizer'la kaynak kayitlari yeniden kodlayip birlestirdigimde 391177 token cikti; .bin'de 391103 var — 74 token fark. Yani 9e59830^ tam olarak .bin'i derleyen revizyon degil (arada baska commit'ler var).",
+      "why_not_a_finding": "T-0021 bu yolu KULLANMADI: bin'in fiziksel dilimlerini (BOS ile bolerek, tam 5702 dilim) karsilastirdi. Bu dogru yontemdir ve dagilim 23/23 birebir yeniden uretildi. 74 tokenlik fark benim yardimci yontemimin siniridir, raporun degil.",
+      "lesson": "Bir artefakti yeniden uretirken 'hangi revizyon' varsayimi sessizce yanlis olabilir. Artefaktin KENDISINI (bin dilimlerini) veri olarak kullanmak, onu yeniden uretmeye calismaktan daha guvenilir."
+    },
+    {
+      "id": "N3",
+      "title": "cot_vault.jsonl degisikligi T-0021'in kusuru degil",
+      "detail": "data/pedagogy/cot_vault.jsonl mtime 09:57, icerik +77 satir (Gemini timestamp'li kayitlar). T-0021'in writes listesinde yok. Bu, canli bir veri toplama akisinin (Gemini ile CoT kasasi) urunu; T-0021 ayni saatlerde kostugu icin pencereye dusuyor.",
+      "note": "Yine de KAYIT ALTINA ALINMALI: 'ayni pencerede degisen dosya' != 'o gorevin yazdigi dosya'. Kapsam denetimi mtime ile degil, gorevin writes listesi + icerik atfi ile yapilmali."
+    },
+    {
+      "id": "N4",
+      "title": "T-0021'in kapanis cumlesi abartisiz",
+      "detail": "Ozet 'dogrulanmis hicbir sayisal deger degismedi' diyor — D kriteriyle dogrulandi, abartisiz. 'Dagilim ... birebir %100 ozdes uretildigi kanitlandi' cumlesi de dogru: ben ayni sayilari bagimsiz urettim.",
+      "significance": "T-0016/T-0018'deki iyimser cerceveleme deseni BU TURDA YOK. Altinci tur da temiz."
+    }
+  ],
+  "downstream": [
+    "T-0020 ve T-0021 kapandi, ikisi de PASS. T-0016'dan bu yana acik olan 'rapor cercevelemesi' konusu iki turdur temiz cikiyor.",
+    "T-0022 (F0: kimlik + dondurma + kapsam olcumu, SALT OLCUM) bus'a acildi ve iki konuma da yazildi (diff -q ile dogrulandi).",
+    "Full-zincir plani: data/eval/regeneration_plan_2026-09-15.json — 6 faz, kullanicinin mimarisi (taban degismez / ceket degisken) esas alinarak.",
+    "PLAN ICIN KRITIK OLCUM (bu turda, T-0021 dogrulamasinin yan urunu): kayit kumesi UC BAGIMSIZ YOLDAN 5702'de bulustu (meta.total_records, .bin icindeki BOS sayisi, kaynak JSONL'den yeniden uretim). Yani ceketin egitim verisi TAM olarak yeniden uretilebilir — planin F2/F3 fazlari icin girdi saglam."
+  ],
+  "boundaries_respected": {
+    "training_runs_started": 0,
+    "pt_or_bin_produced": 0,
+    "checkpoints_touched": 0,
+    "frozen_paths_written": 0,
+    "commit_or_push": false,
+    "my_writes": ["data/eval/t0021_verification.json"]
+  }
+}

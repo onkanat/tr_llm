@@ -42,7 +42,7 @@ Türkçe'deki ünsüz yumuşaması ses olayı nedeniyle (`p, ç, t, k` $\rightar
 ## 📖 TDK GTS Anlamsal Ontoloji Entegrasyonu
 
 Kristal-Vektörel mimarisi, istatistiksel devasa metin yığınları (raw web scrape) yerine doğrulanmış semantik kök ontolojisi kullanır:
-*   **Kök Havuzu:** Yaklaşık 20.500 doğrulanmış temel kök (`roots.tsv`).
+*   **Kök Havuzu:** 48.200 doğrulanmış tekil temel kök (52.373 leksikon kaydı, `roots.tsv`).
 *   **TDK Güncel Türkçe Sözlük (GTS):** `scripts/generate_lexical_semantics_dataset.py` aracılığıyla her bir leksikal kökün anlam tanımları, eşanlamlıları ve anlamsal sınırları üretilip `data/pedagogy/lexical_semantics_dataset.jsonl` halinde pedagojik eğitime enjekte edilir.
 *   **Zero-OOV İlkesi:** Dildeki tüm yüzey formlar sonlu atomik kök kümesi ($M_k$) ve kurallı ek morfotaktiği ($M_e$) üzerinden türetildiğinden, leksikona türemiş kelimeler (derivational noise) eklenmez.
 

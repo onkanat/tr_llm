@@ -24,6 +24,6 @@ Etmenler projenin kod tabanını (`src/`, `tests/`, `scripts/`) değiştirirken,
 ## 🛠️ Temel Kurallar
 
 1. **Önce Plan, Sonra Kod:** Değişiklikler yapılmadan önce mutlaka plan hazırlanmalı ve kullanıcı onayı alınmalıdır.
-2. **Wiki Senkronizasyonu:** Kodda yapılan her yapısal değişiklikten sonra `wiki/` altındaki ilgili dokümanlar güncellenmelidir.
+2. **Wiki Senkronizasyonu:** Kodda yapılan her yapısal değişiklikten sonra `wiki/` altındaki ilgili dokümanlar güncellenmelidir (T-0030 ile canlandırılmıştır; uçucu ampirik sayılar doğrudan kavram/varlık sayfalarına kopyalanmaz, `wiki/log.md` kronolojisine veya `data/eval/*.json` raporlarına atıfla verilir).
 3. **YAML Frontmatter:** Tüm `wiki/` markdown dosyaları standart frontmatter ile başlamalıdır.
 4. **Sayfa Bağlantıları:** Dokümanlar arası geçişler `[[sayfa-adi]]` biçiminde olmalıdır.

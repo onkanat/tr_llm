@@ -1,0 +1,2788 @@
+{
+  "metadata": {
+    "task_id": "T-0027",
+    "title": "Model durumu envanteri, sözlük uyumsuzluğu, kanonik yüklenebilirlik ve canlı çıkarım",
+    "generated_at": "2026-09-15T10:43:24.617366+00:00",
+    "operator": "antigravity",
+    "device": "mps",
+    "execution_environment": "macOS / MPS / Outside Sandbox"
+  },
+  "A_inventory": {
+    "scope_census": {
+      "top_level_count": 23,
+      "recursive_count": 38,
+      "archive_pilot_count": 11,
+      "b1_5_splits_count": 4,
+      "difference": 15,
+      "explanation": "data/*.pt (üst düzey) tam 23 checkpoint dosyası içerir. data/**/*.pt (özyinelemeli) ise 38 dosya verir. Aradaki 15 dosya; data/_archive/rag_pilot_invalidated/ altındaki 11 geçersiz kılınmış pilot checkpoint'i ve data/b1_5_splits/ altındaki 4 eğitim bölmesi tensörüdür (veri kümesi). 38 vs 23 bir çelişki değil, kapsam farkıdır.",
+      "claim_status": "DOGRULANDI"
+    },
+    "checkpoints": [
+      {
+        "name": "kristal_b1_5_best.pt",
+        "path": "data/kristal_b1_5_best.pt",
+        "sha256": "02e15b8198f8f3334609eb52691d699e80f88972245377c1a79772cb42ae1679",
+        "size_bytes": 472572529,
+        "lm_head_rows": 32816,
+        "n_embd": 768,
+        "n_layer": 6,
+        "block_size": 4096,
+        "key_count": 113,
+        "total_numel": 193630640,
+        "numel_excluding_masks": 92967344,
+        "mask_keys": [
+          "blocks.0.attn.mask",
+          "blocks.1.attn.mask",
+          "blocks.2.attn.mask",
+          "blocks.3.attn.mask",
+          "blocks.4.attn.mask",
+          "blocks.5.attn.mask"
+        ],
+        "mask_shapes": [
+          [
+            4096,
+            4096
+          ],
+          [
+            4096,
+            4096
+          ],
+          [
+            4096,
+            4096
+          ],
+          [
+            4096,
+            4096
+          ],
+          [
+            4096,
+            4096
+          ],
+          [
+            4096,
+            4096
+          ]
+        ],
+        "mask_numel": 100663296,
+        "dtype_histogram": {
+          "torch.float32": 92967344,
+          "torch.bool": 100663296
+        }
+      },
+      {
+        "name": "kristal_b1_5_entity_ready.pt",
+        "path": "data/kristal_b1_5_entity_ready.pt",
+        "sha256": "b684dd4899ac0be5035635db6a9477c1ae7ea3aced50b6097b2229d63d1d4330",
+        "size_bytes": 472794619,
+        "lm_head_rows": 32852,
+        "n_embd": 768,
+        "n_layer": 6,
+        "block_size": 4096,
+        "key_count": 113,
+        "total_numel": 193685972,
+        "numel_excluding_masks": 93022676,
+        "mask_keys": [
+          "blocks.0.attn.mask",
+          "blocks.1.attn.mask",
+          "blocks.2.attn.mask",
+          "blocks.3.attn.mask",
+          "blocks.4.attn.mask",
+          "blocks.5.attn.mask"
+        ],
+        "mask_shapes": [
+          [
+            4096,
+            4096
+          ],
+          [
+            4096,
+            4096
+          ],
+          [
+            4096,
+            4096
+          ],
+          [
+            4096,
+            4096
+          ],
+          [
+            4096,
+            4096
+          ],
+          [
+            4096,
+            4096
+          ]
+        ],
+        "mask_numel": 100663296,
+        "dtype_histogram": {
+          "torch.float32": 93022676,
+          "torch.bool": 100663296
+        }
+      },
+      {
+        "name": "kristal_b1_5_epoch1.pt",
+        "path": "data/kristal_b1_5_epoch1.pt",
+        "sha256": "7e5f07fe08c0ac076addab8d7b5eb0dd4e4fe03ddc8d0263e2f653f822d92e85",
+        "size_bytes": 472572529,
+        "lm_head_rows": 32816,
+        "n_embd": 768,
+        "n_layer": 6,
+        "block_size": 4096,
+        "key_count": 113,
+        "total_numel": 193630640,
+        "numel_excluding_masks": 92967344,
+        "mask_keys": [
+          "blocks.0.attn.mask",
+          "blocks.1.attn.mask",
+          "blocks.2.attn.mask",
+          "blocks.3.attn.mask",
+          "blocks.4.attn.mask",
+          "blocks.5.attn.mask"
+        ],
+        "mask_shapes": [
+          [
+            4096,
+            4096
+          ],
+          [
+            4096,
+            4096
+          ],
+          [
+            4096,
+            4096
+          ],
+          [
+            4096,
+            4096
+          ],
+          [
+            4096,
+            4096
+          ],
+          [
+            4096,
+            4096
+          ]
+        ],
+        "mask_numel": 100663296,
+        "dtype_histogram": {
+          "torch.float32": 92967344,
+          "torch.bool": 100663296
+        }
+      },
+      {
+        "name": "kristal_b1_5_epoch2.pt",
+        "path": "data/kristal_b1_5_epoch2.pt",
+        "sha256": "25c43aa8cf0251656f1a795a3559b6d9cbf9b4371091533205c80dda96b5714b",
+        "size_bytes": 472572529,
+        "lm_head_rows": 32816,
+        "n_embd": 768,
+        "n_layer": 6,
+        "block_size": 4096,
+        "key_count": 113,
+        "total_numel": 193630640,
+        "numel_excluding_masks": 92967344,
+        "mask_keys": [
+          "blocks.0.attn.mask",
+          "blocks.1.attn.mask",
+          "blocks.2.attn.mask",
+          "blocks.3.attn.mask",
+          "blocks.4.attn.mask",
+          "blocks.5.attn.mask"
+        ],
+        "mask_shapes": [
+          [
+            4096,
+            4096
+          ],
+          [
+            4096,
+            4096
+          ],
+          [
+            4096,
+            4096
+          ],
+          [
+            4096,
+            4096
+          ],
+          [
+            4096,
+            4096
+          ],
+          [
+            4096,
+            4096
+          ]
+        ],
+        "mask_numel": 100663296,
+        "dtype_histogram": {
+          "torch.float32": 92967344,
+          "torch.bool": 100663296
+        }
+      },
+      {
+        "name": "kristal_b1_5_epoch3.pt",
+        "path": "data/kristal_b1_5_epoch3.pt",
+        "sha256": "02e15b8198f8f3334609eb52691d699e80f88972245377c1a79772cb42ae1679",
+        "size_bytes": 472572529,
+        "lm_head_rows": 32816,
+        "n_embd": 768,
+        "n_layer": 6,
+        "block_size": 4096,
+        "key_count": 113,
+        "total_numel": 193630640,
+        "numel_excluding_masks": 92967344,
+        "mask_keys": [
+          "blocks.0.attn.mask",
+          "blocks.1.attn.mask",
+          "blocks.2.attn.mask",
+          "blocks.3.attn.mask",
+          "blocks.4.attn.mask",
+          "blocks.5.attn.mask"
+        ],
+        "mask_shapes": [
+          [
+            4096,
+            4096
+          ],
+          [
+            4096,
+            4096
+          ],
+          [
+            4096,
+            4096
+          ],
+          [
+            4096,
+            4096
+          ],
+          [
+            4096,
+            4096
+          ],
+          [
+            4096,
+            4096
+          ]
+        ],
+        "mask_numel": 100663296,
+        "dtype_histogram": {
+          "torch.float32": 92967344,
+          "torch.bool": 100663296
+        }
+      },
+      {
+        "name": "kristal_carpenter_model.pt",
+        "path": "data/kristal_carpenter_model.pt",
+        "sha256": "5f0b8c71727d15e338e4301634b0d05652c3230cebc532b1124aff3761e93b4d",
+        "size_bytes": 374026701,
+        "lm_head_rows": 32137,
+        "n_embd": 768,
+        "n_layer": 6,
+        "block_size": 1024,
+        "key_count": 113,
+        "total_numel": 98215177,
+        "numel_excluding_masks": 91923721,
+        "mask_keys": [
+          "blocks.0.attn.mask",
+          "blocks.1.attn.mask",
+          "blocks.2.attn.mask",
+          "blocks.3.attn.mask",
+          "blocks.4.attn.mask",
+          "blocks.5.attn.mask"
+        ],
+        "mask_shapes": [
+          [
+            1024,
+            1024
+          ],
+          [
+            1024,
+            1024
+          ],
+          [
+            1024,
+            1024
+          ],
+          [
+            1024,
+            1024
+          ],
+          [
+            1024,
+            1024
+          ],
+          [
+            1024,
+            1024
+          ]
+        ],
+        "mask_numel": 6291456,
+        "dtype_histogram": {
+          "torch.float32": 91923721,
+          "torch.bool": 6291456
+        }
+      },
+      {
+        "name": "kristal_model.pt",
+        "path": "data/kristal_model.pt",
+        "sha256": "02e15b8198f8f3334609eb52691d699e80f88972245377c1a79772cb42ae1679",
+        "size_bytes": 472572529,
+        "lm_head_rows": 32816,
+        "n_embd": 768,
+        "n_layer": 6,
+        "block_size": 4096,
+        "key_count": 113,
+        "total_numel": 193630640,
+        "numel_excluding_masks": 92967344,
+        "mask_keys": [
+          "blocks.0.attn.mask",
+          "blocks.1.attn.mask",
+          "blocks.2.attn.mask",
+          "blocks.3.attn.mask",
+          "blocks.4.attn.mask",
+          "blocks.5.attn.mask"
+        ],
+        "mask_shapes": [
+          [
+            4096,
+            4096
+          ],
+          [
+            4096,
+            4096
+          ],
+          [
+            4096,
+            4096
+          ],
+          [
+            4096,
+            4096
+          ],
+          [
+            4096,
+            4096
+          ],
+          [
+            4096,
+            4096
+          ]
+        ],
+        "mask_numel": 100663296,
+        "dtype_histogram": {
+          "torch.float32": 92967344,
+          "torch.bool": 100663296
+        }
+      },
+      {
+        "name": "kristal_model_backup.pt",
+        "path": "data/kristal_model_backup.pt",
+        "sha256": "eb0d5350262196d121ffc002244b8163bc922850f3f631ce10ee24fd57faa131",
+        "size_bytes": 343943271,
+        "lm_head_rows": 27244,
+        "n_embd": 768,
+        "n_layer": 6,
+        "block_size": 1024,
+        "key_count": 113,
+        "total_numel": 90694636,
+        "numel_excluding_masks": 84403180,
+        "mask_keys": [
+          "blocks.0.attn.mask",
+          "blocks.1.attn.mask",
+          "blocks.2.attn.mask",
+          "blocks.3.attn.mask",
+          "blocks.4.attn.mask",
+          "blocks.5.attn.mask"
+        ],
+        "mask_shapes": [
+          [
+            1024,
+            1024
+          ],
+          [
+            1024,
+            1024
+          ],
+          [
+            1024,
+            1024
+          ],
+          [
+            1024,
+            1024
+          ],
+          [
+            1024,
+            1024
+          ],
+          [
+            1024,
+            1024
+          ]
+        ],
+        "mask_numel": 6291456,
+        "dtype_histogram": {
+          "torch.float32": 84403180,
+          "torch.bool": 6291456
+        }
+      },
+      {
+        "name": "kristal_model_backup_v160.pt",
+        "path": "data/kristal_model_backup_v160.pt",
+        "sha256": "bf2805a0bfa228e2f4234c35d8a4826f32d111a0b5d254e0394528108d478ca3",
+        "size_bytes": 463601831,
+        "lm_head_rows": 31357,
+        "n_embd": 768,
+        "n_layer": 6,
+        "block_size": 4096,
+        "key_count": 113,
+        "total_numel": 191388157,
+        "numel_excluding_masks": 90724861,
+        "mask_keys": [
+          "blocks.0.attn.mask",
+          "blocks.1.attn.mask",
+          "blocks.2.attn.mask",
+          "blocks.3.attn.mask",
+          "blocks.4.attn.mask",
+          "blocks.5.attn.mask"
+        ],
+        "mask_shapes": [
+          [
+            4096,
+            4096
+          ],
+          [
+            4096,
+            4096
+          ],
+          [
+            4096,
+            4096
+          ],
+          [
+            4096,
+            4096
+          ],
+          [
+            4096,
+            4096
+          ],
+          [
+            4096,
+            4096
+          ]
+        ],
+        "mask_numel": 100663296,
+        "dtype_histogram": {
+          "torch.float32": 90724861,
+          "torch.bool": 100663296
+        }
+      },
+      {
+        "name": "kristal_model_base.pt",
+        "path": "data/kristal_model_base.pt",
+        "sha256": "c77849d272e31fc52495ff27aad854ca47859b55ebe3360f8eeb6e707312c4da",
+        "size_bytes": 281717382,
+        "lm_head_rows": 25665,
+        "n_embd": 768,
+        "n_layer": 4,
+        "block_size": 1024,
+        "key_count": 85,
+        "total_numel": 73567681,
+        "numel_excluding_masks": 69373377,
+        "mask_keys": [
+          "blocks.0.attn.mask",
+          "blocks.1.attn.mask",
+          "blocks.2.attn.mask",
+          "blocks.3.attn.mask"
+        ],
+        "mask_shapes": [
+          [
+            1024,
+            1024
+          ],
+          [
+            1024,
+            1024
+          ],
+          [
+            1024,
+            1024
+          ],
+          [
+            1024,
+            1024
+          ]
+        ],
+        "mask_numel": 4194304,
+        "dtype_histogram": {
+          "torch.float32": 69373377,
+          "torch.bool": 4194304
+        }
+      },
+      {
+        "name": "kristal_model_pre_clean.pt",
+        "path": "data/kristal_model_pre_clean.pt",
+        "sha256": "d1f04433d81b5691f310bca691baf50f90be0527701c4b757460e5c1b368dcac",
+        "size_bytes": 463601831,
+        "lm_head_rows": 31357,
+        "n_embd": 768,
+        "n_layer": 6,
+        "block_size": 4096,
+        "key_count": 113,
+        "total_numel": 191388157,
+        "numel_excluding_masks": 90724861,
+        "mask_keys": [
+          "blocks.0.attn.mask",
+          "blocks.1.attn.mask",
+          "blocks.2.attn.mask",
+          "blocks.3.attn.mask",
+          "blocks.4.attn.mask",
+          "blocks.5.attn.mask"
+        ],
+        "mask_shapes": [
+          [
+            4096,
+            4096
+          ],
+          [
+            4096,
+            4096
+          ],
+          [
+            4096,
+            4096
+          ],
+          [
+            4096,
+            4096
+          ],
+          [
+            4096,
+            4096
+          ],
+          [
+            4096,
+            4096
+          ]
+        ],
+        "mask_numel": 100663296,
+        "dtype_histogram": {
+          "torch.float32": 90724861,
+          "torch.bool": 100663296
+        }
+      },
+      {
+        "name": "kristal_model_sft.pt",
+        "path": "data/kristal_model_sft.pt",
+        "sha256": "b6764c7062ce627a0ba9437cf052a28d0ac4e2e4cf3b3df3e3110d05a1ba2957",
+        "size_bytes": 374025447,
+        "lm_head_rows": 32137,
+        "n_embd": 768,
+        "n_layer": 6,
+        "block_size": 1024,
+        "key_count": 113,
+        "total_numel": 98215177,
+        "numel_excluding_masks": 91923721,
+        "mask_keys": [
+          "blocks.0.attn.mask",
+          "blocks.1.attn.mask",
+          "blocks.2.attn.mask",
+          "blocks.3.attn.mask",
+          "blocks.4.attn.mask",
+          "blocks.5.attn.mask"
+        ],
+        "mask_shapes": [
+          [
+            1024,
+            1024
+          ],
+          [
+            1024,
+            1024
+          ],
+          [
+            1024,
+            1024
+          ],
+          [
+            1024,
+            1024
+          ],
+          [
+            1024,
+            1024
+          ],
+          [
+            1024,
+            1024
+          ]
+        ],
+        "mask_numel": 6291456,
+        "dtype_histogram": {
+          "torch.float32": 91923721,
+          "torch.bool": 6291456
+        }
+      },
+      {
+        "name": "kristal_model_step_a_ep1.pt",
+        "path": "data/kristal_model_step_a_ep1.pt",
+        "sha256": "2c29e7f7179d0c929ae89c2ec13cef6a64326ea9ab580a5d71d9c6d6cf3d7812",
+        "size_bytes": 468454020,
+        "lm_head_rows": 32146,
+        "n_embd": 768,
+        "n_layer": 6,
+        "block_size": 4096,
+        "key_count": 113,
+        "total_numel": 192600850,
+        "numel_excluding_masks": 91937554,
+        "mask_keys": [
+          "blocks.0.attn.mask",
+          "blocks.1.attn.mask",
+          "blocks.2.attn.mask",
+          "blocks.3.attn.mask",
+          "blocks.4.attn.mask",
+          "blocks.5.attn.mask"
+        ],
+        "mask_shapes": [
+          [
+            4096,
+            4096
+          ],
+          [
+            4096,
+            4096
+          ],
+          [
+            4096,
+            4096
+          ],
+          [
+            4096,
+            4096
+          ],
+          [
+            4096,
+            4096
+          ],
+          [
+            4096,
+            4096
+          ]
+        ],
+        "mask_numel": 100663296,
+        "dtype_histogram": {
+          "torch.float32": 91937554,
+          "torch.bool": 100663296
+        }
+      },
+      {
+        "name": "kristal_model_step_a_ep2.pt",
+        "path": "data/kristal_model_step_a_ep2.pt",
+        "sha256": "ae36f36d25ed88b6db27638e7af0b3d4cfd8718fb66fe835a5fe47ad987fa301",
+        "size_bytes": 468454020,
+        "lm_head_rows": 32146,
+        "n_embd": 768,
+        "n_layer": 6,
+        "block_size": 4096,
+        "key_count": 113,
+        "total_numel": 192600850,
+        "numel_excluding_masks": 91937554,
+        "mask_keys": [
+          "blocks.0.attn.mask",
+          "blocks.1.attn.mask",
+          "blocks.2.attn.mask",
+          "blocks.3.attn.mask",
+          "blocks.4.attn.mask",
+          "blocks.5.attn.mask"
+        ],
+        "mask_shapes": [
+          [
+            4096,
+            4096
+          ],
+          [
+            4096,
+            4096
+          ],
+          [
+            4096,
+            4096
+          ],
+          [
+            4096,
+            4096
+          ],
+          [
+            4096,
+            4096
+          ],
+          [
+            4096,
+            4096
+          ]
+        ],
+        "mask_numel": 100663296,
+        "dtype_histogram": {
+          "torch.float32": 91937554,
+          "torch.bool": 100663296
+        }
+      },
+      {
+        "name": "kristal_model_step_a_ep3.pt",
+        "path": "data/kristal_model_step_a_ep3.pt",
+        "sha256": "f6d8ee88a05de407860a441b3da4f1b3354d10b45cfd3d01436be3d31757e698",
+        "size_bytes": 468454020,
+        "lm_head_rows": 32146,
+        "n_embd": 768,
+        "n_layer": 6,
+        "block_size": 4096,
+        "key_count": 113,
+        "total_numel": 192600850,
+        "numel_excluding_masks": 91937554,
+        "mask_keys": [
+          "blocks.0.attn.mask",
+          "blocks.1.attn.mask",
+          "blocks.2.attn.mask",
+          "blocks.3.attn.mask",
+          "blocks.4.attn.mask",
+          "blocks.5.attn.mask"
+        ],
+        "mask_shapes": [
+          [
+            4096,
+            4096
+          ],
+          [
+            4096,
+            4096
+          ],
+          [
+            4096,
+            4096
+          ],
+          [
+            4096,
+            4096
+          ],
+          [
+            4096,
+            4096
+          ],
+          [
+            4096,
+            4096
+          ]
+        ],
+        "mask_numel": 100663296,
+        "dtype_histogram": {
+          "torch.float32": 91937554,
+          "torch.bool": 100663296
+        }
+      },
+      {
+        "name": "kristal_model_step_a_final.pt",
+        "path": "data/kristal_model_step_a_final.pt",
+        "sha256": "809bba6d851b16ffd5382e0bd3548b34fd35430345415f217576d06b05740861",
+        "size_bytes": 468454258,
+        "lm_head_rows": 32146,
+        "n_embd": 768,
+        "n_layer": 6,
+        "block_size": 4096,
+        "key_count": 113,
+        "total_numel": 192600850,
+        "numel_excluding_masks": 91937554,
+        "mask_keys": [
+          "blocks.0.attn.mask",
+          "blocks.1.attn.mask",
+          "blocks.2.attn.mask",
+          "blocks.3.attn.mask",
+          "blocks.4.attn.mask",
+          "blocks.5.attn.mask"
+        ],
+        "mask_shapes": [
+          [
+            4096,
+            4096
+          ],
+          [
+            4096,
+            4096
+          ],
+          [
+            4096,
+            4096
+          ],
+          [
+            4096,
+            4096
+          ],
+          [
+            4096,
+            4096
+          ],
+          [
+            4096,
+            4096
+          ]
+        ],
+        "mask_numel": 100663296,
+        "dtype_histogram": {
+          "torch.float32": 91937554,
+          "torch.bool": 100663296
+        }
+      },
+      {
+        "name": "kristal_model_step_b1_ep1.pt",
+        "path": "data/kristal_model_step_b1_ep1.pt",
+        "sha256": "4d2bcfa66a3b3c304f0d4a478b72609ce4dc37cad0db06af74f237eed8c49720",
+        "size_bytes": 468515643,
+        "lm_head_rows": 32156,
+        "n_embd": 768,
+        "n_layer": 6,
+        "block_size": 4096,
+        "key_count": 113,
+        "total_numel": 192616220,
+        "numel_excluding_masks": 91952924,
+        "mask_keys": [
+          "blocks.0.attn.mask",
+          "blocks.1.attn.mask",
+          "blocks.2.attn.mask",
+          "blocks.3.attn.mask",
+          "blocks.4.attn.mask",
+          "blocks.5.attn.mask"
+        ],
+        "mask_shapes": [
+          [
+            4096,
+            4096
+          ],
+          [
+            4096,
+            4096
+          ],
+          [
+            4096,
+            4096
+          ],
+          [
+            4096,
+            4096
+          ],
+          [
+            4096,
+            4096
+          ],
+          [
+            4096,
+            4096
+          ]
+        ],
+        "mask_numel": 100663296,
+        "dtype_histogram": {
+          "torch.float32": 91952924,
+          "torch.bool": 100663296
+        }
+      },
+      {
+        "name": "kristal_model_step_b1_ep2.pt",
+        "path": "data/kristal_model_step_b1_ep2.pt",
+        "sha256": "9a9f46a002bc3f713faa9395e6af7d0d088b30c5bc4d380f63626b528d2604aa",
+        "size_bytes": 468515643,
+        "lm_head_rows": 32156,
+        "n_embd": 768,
+        "n_layer": 6,
+        "block_size": 4096,
+        "key_count": 113,
+        "total_numel": 192616220,
+        "numel_excluding_masks": 91952924,
+        "mask_keys": [
+          "blocks.0.attn.mask",
+          "blocks.1.attn.mask",
+          "blocks.2.attn.mask",
+          "blocks.3.attn.mask",
+          "blocks.4.attn.mask",
+          "blocks.5.attn.mask"
+        ],
+        "mask_shapes": [
+          [
+            4096,
+            4096
+          ],
+          [
+            4096,
+            4096
+          ],
+          [
+            4096,
+            4096
+          ],
+          [
+            4096,
+            4096
+          ],
+          [
+            4096,
+            4096
+          ],
+          [
+            4096,
+            4096
+          ]
+        ],
+        "mask_numel": 100663296,
+        "dtype_histogram": {
+          "torch.float32": 91952924,
+          "torch.bool": 100663296
+        }
+      },
+      {
+        "name": "kristal_model_step_b1_ep3.pt",
+        "path": "data/kristal_model_step_b1_ep3.pt",
+        "sha256": "99497f5cf476c2338659dabeea2af8f3752c11d71c1059368f6365900e980d4c",
+        "size_bytes": 468515643,
+        "lm_head_rows": 32156,
+        "n_embd": 768,
+        "n_layer": 6,
+        "block_size": 4096,
+        "key_count": 113,
+        "total_numel": 192616220,
+        "numel_excluding_masks": 91952924,
+        "mask_keys": [
+          "blocks.0.attn.mask",
+          "blocks.1.attn.mask",
+          "blocks.2.attn.mask",
+          "blocks.3.attn.mask",
+          "blocks.4.attn.mask",
+          "blocks.5.attn.mask"
+        ],
+        "mask_shapes": [
+          [
+            4096,
+            4096
+          ],
+          [
+            4096,
+            4096
+          ],
+          [
+            4096,
+            4096
+          ],
+          [
+            4096,
+            4096
+          ],
+          [
+            4096,
+            4096
+          ],
+          [
+            4096,
+            4096
+          ]
+        ],
+        "mask_numel": 100663296,
+        "dtype_histogram": {
+          "torch.float32": 91952924,
+          "torch.bool": 100663296
+        }
+      },
+      {
+        "name": "kristal_model_step_b1_final.pt",
+        "path": "data/kristal_model_step_b1_final.pt",
+        "sha256": "01d7918e4e5fa8e4fdbf0c4628b41a734639d9736d54f3307b44a0b5fd77174e",
+        "size_bytes": 468515881,
+        "lm_head_rows": 32156,
+        "n_embd": 768,
+        "n_layer": 6,
+        "block_size": 4096,
+        "key_count": 113,
+        "total_numel": 192616220,
+        "numel_excluding_masks": 91952924,
+        "mask_keys": [
+          "blocks.0.attn.mask",
+          "blocks.1.attn.mask",
+          "blocks.2.attn.mask",
+          "blocks.3.attn.mask",
+          "blocks.4.attn.mask",
+          "blocks.5.attn.mask"
+        ],
+        "mask_shapes": [
+          [
+            4096,
+            4096
+          ],
+          [
+            4096,
+            4096
+          ],
+          [
+            4096,
+            4096
+          ],
+          [
+            4096,
+            4096
+          ],
+          [
+            4096,
+            4096
+          ],
+          [
+            4096,
+            4096
+          ]
+        ],
+        "mask_numel": 100663296,
+        "dtype_histogram": {
+          "torch.float32": 91952924,
+          "torch.bool": 100663296
+        }
+      },
+      {
+        "name": "kristal_rag_arm_a_best.pt",
+        "path": "data/kristal_rag_arm_a_best.pt",
+        "sha256": "e276081526db9af76afad35cb63c4de84ff4b763594dbb08efa66dddf42be81d",
+        "size_bytes": 472572950,
+        "lm_head_rows": 32816,
+        "n_embd": 768,
+        "n_layer": 6,
+        "block_size": 4096,
+        "key_count": 113,
+        "total_numel": 193630640,
+        "numel_excluding_masks": 92967344,
+        "mask_keys": [
+          "blocks.0.attn.mask",
+          "blocks.1.attn.mask",
+          "blocks.2.attn.mask",
+          "blocks.3.attn.mask",
+          "blocks.4.attn.mask",
+          "blocks.5.attn.mask"
+        ],
+        "mask_shapes": [
+          [
+            4096,
+            4096
+          ],
+          [
+            4096,
+            4096
+          ],
+          [
+            4096,
+            4096
+          ],
+          [
+            4096,
+            4096
+          ],
+          [
+            4096,
+            4096
+          ],
+          [
+            4096,
+            4096
+          ]
+        ],
+        "mask_numel": 100663296,
+        "dtype_histogram": {
+          "torch.float32": 92967344,
+          "torch.bool": 100663296
+        }
+      },
+      {
+        "name": "kristal_rag_arm_b_best.pt",
+        "path": "data/kristal_rag_arm_b_best.pt",
+        "sha256": "27802a2d837f6e3efe4ecd6961c15366fa87f8e829e23af459be384db9685d3b",
+        "size_bytes": 472794262,
+        "lm_head_rows": 32852,
+        "n_embd": 768,
+        "n_layer": 6,
+        "block_size": 4096,
+        "key_count": 113,
+        "total_numel": 193685972,
+        "numel_excluding_masks": 93022676,
+        "mask_keys": [
+          "blocks.0.attn.mask",
+          "blocks.1.attn.mask",
+          "blocks.2.attn.mask",
+          "blocks.3.attn.mask",
+          "blocks.4.attn.mask",
+          "blocks.5.attn.mask"
+        ],
+        "mask_shapes": [
+          [
+            4096,
+            4096
+          ],
+          [
+            4096,
+            4096
+          ],
+          [
+            4096,
+            4096
+          ],
+          [
+            4096,
+            4096
+          ],
+          [
+            4096,
+            4096
+          ],
+          [
+            4096,
+            4096
+          ]
+        ],
+        "mask_numel": 100663296,
+        "dtype_histogram": {
+          "torch.float32": 93022676,
+          "torch.bool": 100663296
+        }
+      },
+      {
+        "name": "kristal_rag_arm_c_best.pt",
+        "path": "data/kristal_rag_arm_c_best.pt",
+        "sha256": "1bd6e444f71b822057a8f2d25b14e2917cafe2ef39e3e325a89d5270d686affa",
+        "size_bytes": 472794262,
+        "lm_head_rows": 32852,
+        "n_embd": 768,
+        "n_layer": 6,
+        "block_size": 4096,
+        "key_count": 113,
+        "total_numel": 193685972,
+        "numel_excluding_masks": 93022676,
+        "mask_keys": [
+          "blocks.0.attn.mask",
+          "blocks.1.attn.mask",
+          "blocks.2.attn.mask",
+          "blocks.3.attn.mask",
+          "blocks.4.attn.mask",
+          "blocks.5.attn.mask"
+        ],
+        "mask_shapes": [
+          [
+            4096,
+            4096
+          ],
+          [
+            4096,
+            4096
+          ],
+          [
+            4096,
+            4096
+          ],
+          [
+            4096,
+            4096
+          ],
+          [
+            4096,
+            4096
+          ],
+          [
+            4096,
+            4096
+          ]
+        ],
+        "mask_numel": 100663296,
+        "dtype_histogram": {
+          "torch.float32": 93022676,
+          "torch.bool": 100663296
+        }
+      }
+    ],
+    "bit_identical_groups": [
+      {
+        "sha256": "02e15b8198f8f3334609eb52691d699e80f88972245377c1a79772cb42ae1679",
+        "size_bytes": 472572529,
+        "member_count": 3,
+        "members": [
+          "kristal_b1_5_best.pt",
+          "kristal_b1_5_epoch3.pt",
+          "kristal_model.pt"
+        ]
+      }
+    ],
+    "singletons": [
+      "kristal_b1_5_entity_ready.pt",
+      "kristal_b1_5_epoch1.pt",
+      "kristal_b1_5_epoch2.pt",
+      "kristal_carpenter_model.pt",
+      "kristal_model_backup.pt",
+      "kristal_model_backup_v160.pt",
+      "kristal_model_base.pt",
+      "kristal_model_pre_clean.pt",
+      "kristal_model_sft.pt",
+      "kristal_model_step_a_ep1.pt",
+      "kristal_model_step_a_ep2.pt",
+      "kristal_model_step_a_ep3.pt",
+      "kristal_model_step_a_final.pt",
+      "kristal_model_step_b1_ep1.pt",
+      "kristal_model_step_b1_ep2.pt",
+      "kristal_model_step_b1_ep3.pt",
+      "kristal_model_step_b1_final.pt",
+      "kristal_rag_arm_a_best.pt",
+      "kristal_rag_arm_b_best.pt",
+      "kristal_rag_arm_c_best.pt"
+    ],
+    "epoch_weight_change_analysis": {
+      "hypothesis": "472.572.529 baytlık 5 dosya bit-özdeştir (eğitim no-op)",
+      "measured_groups": {
+        "02e15b8198f8f3334609eb52691d699e80f88972245377c1a79772cb42ae1679": [
+          "kristal_b1_5_best.pt",
+          "kristal_b1_5_epoch3.pt",
+          "kristal_model.pt"
+        ],
+        "7e5f07fe08c0ac076addab8d7b5eb0dd4e4fe03ddc8d0263e2f653f822d92e85": [
+          "kristal_b1_5_epoch1.pt"
+        ],
+        "25c43aa8cf0251656f1a795a3559b6d9cbf9b4371091533205c80dda96b5714b": [
+          "kristal_b1_5_epoch2.pt"
+        ]
+      },
+      "identical_group_members": [
+        "kristal_b1_5_best.pt",
+        "kristal_b1_5_epoch3.pt",
+        "kristal_model.pt"
+      ],
+      "distinct_epochs": {
+        "kristal_b1_5_epoch1.pt": "7e5f07fe08c0ac076addab8d7b5eb0dd4e4fe03ddc8d0263e2f653f822d92e85",
+        "kristal_b1_5_epoch2.pt": "25c43aa8cf0251656f1a795a3559b6d9cbf9b4371091533205c80dda96b5714b",
+        "kristal_b1_5_epoch3.pt": "02e15b8198f8f3334609eb52691d699e80f88972245377c1a79772cb42ae1679"
+      },
+      "verdict": "CURUDU",
+      "explanation": "5 dosyalık grubun tamamı bit-özdeş DEĞİLDİR. Yalnızca kristal_b1_5_epoch3.pt, kristal_b1_5_best.pt ve kristal_model.pt (3 üye) bit-özdeştir. kristal_b1_5_epoch1.pt ve kristal_b1_5_epoch2.pt'nin SHA256 özetleri farklıdır. Dolayısıyla epoch'lar arasında ağırlık değişimi gerçekleşmiştir; B1.5 eğitimi no-op değildir."
+    },
+    "pair_comparisons": {
+      "rag_arm_a_vs_pilot_best": {
+        "rag_arm_a_best_sha256": "e276081526db9af76afad35cb63c4de84ff4b763594dbb08efa66dddf42be81d",
+        "rag_pilot_best_sha256": "19a23a11396997cc64ed883b37e4473af2a5b05ce67364d4e741190bee8d1c73",
+        "both_size_bytes": 472572950,
+        "bit_identical": false,
+        "verdict": "CURUDU (aynı boyutta fakat farklı hash)"
+      },
+      "rag_arm_b_vs_rag_arm_c": {
+        "rag_arm_b_best_sha256": "27802a2d837f6e3efe4ecd6961c15366fa87f8e829e23af459be384db9685d3b",
+        "rag_arm_c_best_sha256": "1bd6e444f71b822057a8f2d25b14e2917cafe2ef39e3e325a89d5270d686affa",
+        "both_size_bytes": 472794262,
+        "bit_identical": false,
+        "verdict": "CURUDU (aynı boyutta fakat farklı hash)"
+      }
+    },
+    "mask_buffers_analysis": {
+      "model": "kristal_model.pt",
+      "mask_count": 6,
+      "mask_shape": [
+        4096,
+        4096
+      ],
+      "mask_dtype": "torch.bool",
+      "mask_keys": [
+        "blocks.0.attn.mask",
+        "blocks.1.attn.mask",
+        "blocks.2.attn.mask",
+        "blocks.3.attn.mask",
+        "blocks.4.attn.mask",
+        "blocks.5.attn.mask"
+      ],
+      "all_masks_bitwise_identical": true,
+      "single_mask_numel": 16777216,
+      "total_mask_numel": 100663296,
+      "total_checkpoint_numel": 193630640,
+      "numel_excluding_masks": 92967344,
+      "mask_numel_percentage": 51.9873,
+      "mask_file_byte_percentage": 21.3011,
+      "notes": "6 adet 4096² bool mask tamponu toplam 100.663.296 öğe oluşturur. Bu sayı toplam parametre öğelerinin %51,987'sine, dosya bayt boyutunun ise %21,301'ine karşılık gelir. Her 6 tampon da nedensel üçgenleme açısından bit düzeyinde birbirine eşittir.",
+      "claim_status": "DOGRULANDI"
+    }
+  },
+  "B_vocab_mismatch": {
+    "vocab_metadata": {
+      "data/vocab.json": {
+        "stoi_length": 31357,
+        "next_id": 31357,
+        "max_id": 31356,
+        "sha256": "4b40eebee9c996c8dd3150f6b3c8896de85764ee1cf0b08e6c636e5c002a0e69"
+      },
+      "data/vocab_entity.json": {
+        "stoi_length": 32852,
+        "next_id": 32852,
+        "max_id": 32851,
+        "sha256": "7611b6a523a2bb524cc21aa9cc64235aa6a2ae99f87f46ac51cb2915e61164ad"
+      },
+      "data/rebuild/vocab_b1_5_32816.json": {
+        "stoi_length": 32816,
+        "next_id": 32816,
+        "max_id": 32815,
+        "sha256": "8cc31d82d144cff0e9f55342ba7168a17890a79cdf8439549569c699c08b7fdc"
+      },
+      "data/rebuild/vocab_base_32816.json": {
+        "stoi_length": 32816,
+        "next_id": 32816,
+        "max_id": 32815,
+        "sha256": "8cc31d82d144cff0e9f55342ba7168a17890a79cdf8439549569c699c08b7fdc"
+      },
+      "data/rebuild/vocab_carpenter_32137.json": {
+        "stoi_length": 32137,
+        "next_id": 32137,
+        "max_id": 32136,
+        "sha256": "7184fbba1d7bb7ef13567a9cbe2738ae740a1ff08aea1a892c83b9faa8ab4987"
+      },
+      "data/rebuild/vocab_step_b1_final_32156.json": {
+        "stoi_length": 32156,
+        "next_id": 32156,
+        "max_id": 32155,
+        "sha256": "2f6fc3b38b2696e00117c09cf0cbf00b58a04e14912d7729f81471beb9fa97d0"
+      }
+    },
+    "checkpoint_vocab_matching_table": [
+      {
+        "checkpoint": "kristal_b1_5_best.pt",
+        "lm_head_rows": 32816,
+        "matching_vocab": "data/rebuild/vocab_b1_5_32816.json, data/rebuild/vocab_base_32816.json",
+        "has_matching_vocab_on_disk": true
+      },
+      {
+        "checkpoint": "kristal_b1_5_entity_ready.pt",
+        "lm_head_rows": 32852,
+        "matching_vocab": "data/vocab_entity.json",
+        "has_matching_vocab_on_disk": true
+      },
+      {
+        "checkpoint": "kristal_b1_5_epoch1.pt",
+        "lm_head_rows": 32816,
+        "matching_vocab": "data/rebuild/vocab_b1_5_32816.json, data/rebuild/vocab_base_32816.json",
+        "has_matching_vocab_on_disk": true
+      },
+      {
+        "checkpoint": "kristal_b1_5_epoch2.pt",
+        "lm_head_rows": 32816,
+        "matching_vocab": "data/rebuild/vocab_b1_5_32816.json, data/rebuild/vocab_base_32816.json",
+        "has_matching_vocab_on_disk": true
+      },
+      {
+        "checkpoint": "kristal_b1_5_epoch3.pt",
+        "lm_head_rows": 32816,
+        "matching_vocab": "data/rebuild/vocab_b1_5_32816.json, data/rebuild/vocab_base_32816.json",
+        "has_matching_vocab_on_disk": true
+      },
+      {
+        "checkpoint": "kristal_carpenter_model.pt",
+        "lm_head_rows": 32137,
+        "matching_vocab": "data/rebuild/vocab_carpenter_32137.json",
+        "has_matching_vocab_on_disk": true
+      },
+      {
+        "checkpoint": "kristal_model.pt",
+        "lm_head_rows": 32816,
+        "matching_vocab": "data/rebuild/vocab_b1_5_32816.json, data/rebuild/vocab_base_32816.json",
+        "has_matching_vocab_on_disk": true
+      },
+      {
+        "checkpoint": "kristal_model_backup.pt",
+        "lm_head_rows": 27244,
+        "matching_vocab": "eşleşme yok",
+        "has_matching_vocab_on_disk": false
+      },
+      {
+        "checkpoint": "kristal_model_backup_v160.pt",
+        "lm_head_rows": 31357,
+        "matching_vocab": "data/vocab.json",
+        "has_matching_vocab_on_disk": true
+      },
+      {
+        "checkpoint": "kristal_model_base.pt",
+        "lm_head_rows": 25665,
+        "matching_vocab": "eşleşme yok",
+        "has_matching_vocab_on_disk": false
+      },
+      {
+        "checkpoint": "kristal_model_pre_clean.pt",
+        "lm_head_rows": 31357,
+        "matching_vocab": "data/vocab.json",
+        "has_matching_vocab_on_disk": true
+      },
+      {
+        "checkpoint": "kristal_model_sft.pt",
+        "lm_head_rows": 32137,
+        "matching_vocab": "data/rebuild/vocab_carpenter_32137.json",
+        "has_matching_vocab_on_disk": true
+      },
+      {
+        "checkpoint": "kristal_model_step_a_ep1.pt",
+        "lm_head_rows": 32146,
+        "matching_vocab": "eşleşme yok",
+        "has_matching_vocab_on_disk": false
+      },
+      {
+        "checkpoint": "kristal_model_step_a_ep2.pt",
+        "lm_head_rows": 32146,
+        "matching_vocab": "eşleşme yok",
+        "has_matching_vocab_on_disk": false
+      },
+      {
+        "checkpoint": "kristal_model_step_a_ep3.pt",
+        "lm_head_rows": 32146,
+        "matching_vocab": "eşleşme yok",
+        "has_matching_vocab_on_disk": false
+      },
+      {
+        "checkpoint": "kristal_model_step_a_final.pt",
+        "lm_head_rows": 32146,
+        "matching_vocab": "eşleşme yok",
+        "has_matching_vocab_on_disk": false
+      },
+      {
+        "checkpoint": "kristal_model_step_b1_ep1.pt",
+        "lm_head_rows": 32156,
+        "matching_vocab": "data/rebuild/vocab_step_b1_final_32156.json",
+        "has_matching_vocab_on_disk": true
+      },
+      {
+        "checkpoint": "kristal_model_step_b1_ep2.pt",
+        "lm_head_rows": 32156,
+        "matching_vocab": "data/rebuild/vocab_step_b1_final_32156.json",
+        "has_matching_vocab_on_disk": true
+      },
+      {
+        "checkpoint": "kristal_model_step_b1_ep3.pt",
+        "lm_head_rows": 32156,
+        "matching_vocab": "data/rebuild/vocab_step_b1_final_32156.json",
+        "has_matching_vocab_on_disk": true
+      },
+      {
+        "checkpoint": "kristal_model_step_b1_final.pt",
+        "lm_head_rows": 32156,
+        "matching_vocab": "data/rebuild/vocab_step_b1_final_32156.json",
+        "has_matching_vocab_on_disk": true
+      },
+      {
+        "checkpoint": "kristal_rag_arm_a_best.pt",
+        "lm_head_rows": 32816,
+        "matching_vocab": "data/rebuild/vocab_b1_5_32816.json, data/rebuild/vocab_base_32816.json",
+        "has_matching_vocab_on_disk": true
+      },
+      {
+        "checkpoint": "kristal_rag_arm_b_best.pt",
+        "lm_head_rows": 32852,
+        "matching_vocab": "data/vocab_entity.json",
+        "has_matching_vocab_on_disk": true
+      },
+      {
+        "checkpoint": "kristal_rag_arm_c_best.pt",
+        "lm_head_rows": 32852,
+        "matching_vocab": "data/vocab_entity.json",
+        "has_matching_vocab_on_disk": true
+      }
+    ],
+    "b2_claim_verification": {
+      "claim": "vocab.json (31.357) her checkpoint'in GERİSİNDE ve sessizce kırpılıyordu",
+      "total_checkpoints": 23,
+      "checkpoints_with_rows_greater_than_31357": 19,
+      "checkpoints_with_rows_equal_to_31357": 2,
+      "checkpoints_with_rows_less_than_31357": 2,
+      "verdict": "CURUDU",
+      "explanation": "İddia evrensel ('her checkpoint') olarak ÇÜRÜDÜ, fakat aktif/modern modeller açısından KISMEN DOĞRULANDI. 23 checkpoint'in 19'unda (%82,6) lm_head_rows > 31.357'dir (32137, 32146, 32156, 32816, 32852) ve bu modeller vocab.json ile yüklendiğinde kırpılmaktadır. Ancak 2 checkpoint (kristal_model_backup_v160.pt, kristal_model_pre_clean.pt) tam olarak 31.357 satırdır (birebir eşleşir); 2 checkpoint (kristal_model_backup.pt: 27.244, kristal_model_base.pt: 25.665) ise 31.357'den KÜÇÜKTÜR."
+    },
+    "b3_punctuation_block_analysis": {
+      "vocab_json_max_id": 31356,
+      "has_token_ge_32137_in_vocab_json": false,
+      "token_list_ge_32137_in_vocab_json": [],
+      "standalone_punct_in_vocab_json": [],
+      "punctuation_block_in_vocab_b1_5_32816": {
+        ".": 32137,
+        ",": 32138,
+        "?": 32139,
+        "!": 32140,
+        "-": 32141,
+        ":": 32142,
+        ";": 32143,
+        "(": 32144,
+        ")": 32145
+      },
+      "punctuation_block_start_id": 32137,
+      "verdict": "DOGRULANDI",
+      "explanation": "data/vocab.json stoi'sinde ID >= 32.137 olan HİÇBİR token YOKTUR (max_id=31.356). Ayrıca data/vocab.json bağımsız noktalama işaretlerini (., ? ! : ; vb.) de içermemektedir (0 token). Noktalama bloğu rebuild sözlüklerinde tam olarak 32.137 indeksinde başlamaktadır ('.', 32137), (',', 32138), ('?', 32139), ('!', 32140), ('-', 32141), (':', 32142), (';', 32143), ('(', 32144), (')', 32145)."
+    }
+  },
+  "C_loadability": {
+    "canonical_path_results": [
+      {
+        "checkpoint": "kristal_b1_5_best.pt",
+        "status": "TEMIZ",
+        "warning": "",
+        "error_type": "",
+        "error_msg": ""
+      },
+      {
+        "checkpoint": "kristal_b1_5_entity_ready.pt",
+        "status": "TEMIZ",
+        "warning": "",
+        "error_type": "",
+        "error_msg": ""
+      },
+      {
+        "checkpoint": "kristal_b1_5_epoch1.pt",
+        "status": "TEMIZ",
+        "warning": "",
+        "error_type": "",
+        "error_msg": ""
+      },
+      {
+        "checkpoint": "kristal_b1_5_epoch2.pt",
+        "status": "TEMIZ",
+        "warning": "",
+        "error_type": "",
+        "error_msg": ""
+      },
+      {
+        "checkpoint": "kristal_b1_5_epoch3.pt",
+        "status": "TEMIZ",
+        "warning": "",
+        "error_type": "",
+        "error_msg": ""
+      },
+      {
+        "checkpoint": "kristal_carpenter_model.pt",
+        "status": "TEMIZ",
+        "warning": "",
+        "error_type": "",
+        "error_msg": ""
+      },
+      {
+        "checkpoint": "kristal_model.pt",
+        "status": "TEMIZ",
+        "warning": "",
+        "error_type": "",
+        "error_msg": ""
+      },
+      {
+        "checkpoint": "kristal_model_backup.pt",
+        "status": "TEMIZ",
+        "warning": "",
+        "error_type": "",
+        "error_msg": ""
+      },
+      {
+        "checkpoint": "kristal_model_backup_v160.pt",
+        "status": "TEMIZ",
+        "warning": "",
+        "error_type": "",
+        "error_msg": ""
+      },
+      {
+        "checkpoint": "kristal_model_base.pt",
+        "status": "TEMIZ",
+        "warning": "",
+        "error_type": "",
+        "error_msg": ""
+      },
+      {
+        "checkpoint": "kristal_model_pre_clean.pt",
+        "status": "TEMIZ",
+        "warning": "",
+        "error_type": "",
+        "error_msg": ""
+      },
+      {
+        "checkpoint": "kristal_model_sft.pt",
+        "status": "TEMIZ",
+        "warning": "",
+        "error_type": "",
+        "error_msg": ""
+      },
+      {
+        "checkpoint": "kristal_model_step_a_ep1.pt",
+        "status": "TEMIZ",
+        "warning": "",
+        "error_type": "",
+        "error_msg": ""
+      },
+      {
+        "checkpoint": "kristal_model_step_a_ep2.pt",
+        "status": "TEMIZ",
+        "warning": "",
+        "error_type": "",
+        "error_msg": ""
+      },
+      {
+        "checkpoint": "kristal_model_step_a_ep3.pt",
+        "status": "TEMIZ",
+        "warning": "",
+        "error_type": "",
+        "error_msg": ""
+      },
+      {
+        "checkpoint": "kristal_model_step_a_final.pt",
+        "status": "TEMIZ",
+        "warning": "",
+        "error_type": "",
+        "error_msg": ""
+      },
+      {
+        "checkpoint": "kristal_model_step_b1_ep1.pt",
+        "status": "TEMIZ",
+        "warning": "",
+        "error_type": "",
+        "error_msg": ""
+      },
+      {
+        "checkpoint": "kristal_model_step_b1_ep2.pt",
+        "status": "TEMIZ",
+        "warning": "",
+        "error_type": "",
+        "error_msg": ""
+      },
+      {
+        "checkpoint": "kristal_model_step_b1_ep3.pt",
+        "status": "TEMIZ",
+        "warning": "",
+        "error_type": "",
+        "error_msg": ""
+      },
+      {
+        "checkpoint": "kristal_model_step_b1_final.pt",
+        "status": "TEMIZ",
+        "warning": "",
+        "error_type": "",
+        "error_msg": ""
+      },
+      {
+        "checkpoint": "kristal_rag_arm_a_best.pt",
+        "status": "TEMIZ",
+        "warning": "",
+        "error_type": "",
+        "error_msg": ""
+      },
+      {
+        "checkpoint": "kristal_rag_arm_b_best.pt",
+        "status": "TEMIZ",
+        "warning": "",
+        "error_type": "",
+        "error_msg": ""
+      },
+      {
+        "checkpoint": "kristal_rag_arm_c_best.pt",
+        "status": "TEMIZ",
+        "warning": "",
+        "error_type": "",
+        "error_msg": ""
+      }
+    ],
+    "documented_path_results": [
+      {
+        "checkpoint": "kristal_b1_5_best.pt",
+        "status": "HATA",
+        "error_type": "RuntimeError",
+        "error_msg": "Error(s) in loading state_dict for KristalLM:\n\tsize mismatch for embedding.embedding.weight: copying a param with shape torch.Size([32816, 768]) from checkpoint, the shape in current model is torch.Size([31357, 768]).\n\tsize mismatch for lm_head.weight: copying a param with shape torch.Size([32816, 768]) from checkpoint, the shape in current model is torch.Size([31357, 768]).\n\tsize mismatch for lm_head.bias: copying a param with shape torch.Size([32816]) from checkpoint, the shape in current model is torch.Size([31357])."
+      },
+      {
+        "checkpoint": "kristal_b1_5_entity_ready.pt",
+        "status": "HATA",
+        "error_type": "RuntimeError",
+        "error_msg": "Error(s) in loading state_dict for KristalLM:\n\tsize mismatch for embedding.embedding.weight: copying a param with shape torch.Size([32852, 768]) from checkpoint, the shape in current model is torch.Size([31357, 768]).\n\tsize mismatch for lm_head.weight: copying a param with shape torch.Size([32852, 768]) from checkpoint, the shape in current model is torch.Size([31357, 768]).\n\tsize mismatch for lm_head.bias: copying a param with shape torch.Size([32852]) from checkpoint, the shape in current model is torch.Size([31357])."
+      },
+      {
+        "checkpoint": "kristal_b1_5_epoch1.pt",
+        "status": "HATA",
+        "error_type": "RuntimeError",
+        "error_msg": "Error(s) in loading state_dict for KristalLM:\n\tsize mismatch for embedding.embedding.weight: copying a param with shape torch.Size([32816, 768]) from checkpoint, the shape in current model is torch.Size([31357, 768]).\n\tsize mismatch for lm_head.weight: copying a param with shape torch.Size([32816, 768]) from checkpoint, the shape in current model is torch.Size([31357, 768]).\n\tsize mismatch for lm_head.bias: copying a param with shape torch.Size([32816]) from checkpoint, the shape in current model is torch.Size([31357])."
+      },
+      {
+        "checkpoint": "kristal_b1_5_epoch2.pt",
+        "status": "HATA",
+        "error_type": "RuntimeError",
+        "error_msg": "Error(s) in loading state_dict for KristalLM:\n\tsize mismatch for embedding.embedding.weight: copying a param with shape torch.Size([32816, 768]) from checkpoint, the shape in current model is torch.Size([31357, 768]).\n\tsize mismatch for lm_head.weight: copying a param with shape torch.Size([32816, 768]) from checkpoint, the shape in current model is torch.Size([31357, 768]).\n\tsize mismatch for lm_head.bias: copying a param with shape torch.Size([32816]) from checkpoint, the shape in current model is torch.Size([31357])."
+      },
+      {
+        "checkpoint": "kristal_b1_5_epoch3.pt",
+        "status": "HATA",
+        "error_type": "RuntimeError",
+        "error_msg": "Error(s) in loading state_dict for KristalLM:\n\tsize mismatch for embedding.embedding.weight: copying a param with shape torch.Size([32816, 768]) from checkpoint, the shape in current model is torch.Size([31357, 768]).\n\tsize mismatch for lm_head.weight: copying a param with shape torch.Size([32816, 768]) from checkpoint, the shape in current model is torch.Size([31357, 768]).\n\tsize mismatch for lm_head.bias: copying a param with shape torch.Size([32816]) from checkpoint, the shape in current model is torch.Size([31357])."
+      },
+      {
+        "checkpoint": "kristal_carpenter_model.pt",
+        "status": "HATA",
+        "error_type": "RuntimeError",
+        "error_msg": "Error(s) in loading state_dict for KristalLM:\n\tsize mismatch for embedding.embedding.weight: copying a param with shape torch.Size([32137, 768]) from checkpoint, the shape in current model is torch.Size([31357, 768]).\n\tsize mismatch for lm_head.weight: copying a param with shape torch.Size([32137, 768]) from checkpoint, the shape in current model is torch.Size([31357, 768]).\n\tsize mismatch for lm_head.bias: copying a param with shape torch.Size([32137]) from checkpoint, the shape in current model is torch.Size([31357])."
+      },
+      {
+        "checkpoint": "kristal_model.pt",
+        "status": "HATA",
+        "error_type": "RuntimeError",
+        "error_msg": "Error(s) in loading state_dict for KristalLM:\n\tsize mismatch for embedding.embedding.weight: copying a param with shape torch.Size([32816, 768]) from checkpoint, the shape in current model is torch.Size([31357, 768]).\n\tsize mismatch for lm_head.weight: copying a param with shape torch.Size([32816, 768]) from checkpoint, the shape in current model is torch.Size([31357, 768]).\n\tsize mismatch for lm_head.bias: copying a param with shape torch.Size([32816]) from checkpoint, the shape in current model is torch.Size([31357])."
+      },
+      {
+        "checkpoint": "kristal_model_backup.pt",
+        "status": "HATA",
+        "error_type": "RuntimeError",
+        "error_msg": "Error(s) in loading state_dict for KristalLM:\n\tsize mismatch for embedding.embedding.weight: copying a param with shape torch.Size([27244, 768]) from checkpoint, the shape in current model is torch.Size([31357, 768]).\n\tsize mismatch for lm_head.weight: copying a param with shape torch.Size([27244, 768]) from checkpoint, the shape in current model is torch.Size([31357, 768]).\n\tsize mismatch for lm_head.bias: copying a param with shape torch.Size([27244]) from checkpoint, the shape in current model is torch.Size([31357])."
+      },
+      {
+        "checkpoint": "kristal_model_backup_v160.pt",
+        "status": "SUCCESS",
+        "error_type": "",
+        "error_msg": ""
+      },
+      {
+        "checkpoint": "kristal_model_base.pt",
+        "status": "HATA",
+        "error_type": "RuntimeError",
+        "error_msg": "Error(s) in loading state_dict for KristalLM:\n\tsize mismatch for embedding.embedding.weight: copying a param with shape torch.Size([25665, 768]) from checkpoint, the shape in current model is torch.Size([31357, 768]).\n\tsize mismatch for lm_head.weight: copying a param with shape torch.Size([25665, 768]) from checkpoint, the shape in current model is torch.Size([31357, 768]).\n\tsize mismatch for lm_head.bias: copying a param with shape torch.Size([25665]) from checkpoint, the shape in current model is torch.Size([31357])."
+      },
+      {
+        "checkpoint": "kristal_model_pre_clean.pt",
+        "status": "SUCCESS",
+        "error_type": "",
+        "error_msg": ""
+      },
+      {
+        "checkpoint": "kristal_model_sft.pt",
+        "status": "HATA",
+        "error_type": "RuntimeError",
+        "error_msg": "Error(s) in loading state_dict for KristalLM:\n\tsize mismatch for embedding.embedding.weight: copying a param with shape torch.Size([32137, 768]) from checkpoint, the shape in current model is torch.Size([31357, 768]).\n\tsize mismatch for lm_head.weight: copying a param with shape torch.Size([32137, 768]) from checkpoint, the shape in current model is torch.Size([31357, 768]).\n\tsize mismatch for lm_head.bias: copying a param with shape torch.Size([32137]) from checkpoint, the shape in current model is torch.Size([31357])."
+      },
+      {
+        "checkpoint": "kristal_model_step_a_ep1.pt",
+        "status": "HATA",
+        "error_type": "RuntimeError",
+        "error_msg": "Error(s) in loading state_dict for KristalLM:\n\tsize mismatch for embedding.embedding.weight: copying a param with shape torch.Size([32146, 768]) from checkpoint, the shape in current model is torch.Size([31357, 768]).\n\tsize mismatch for lm_head.weight: copying a param with shape torch.Size([32146, 768]) from checkpoint, the shape in current model is torch.Size([31357, 768]).\n\tsize mismatch for lm_head.bias: copying a param with shape torch.Size([32146]) from checkpoint, the shape in current model is torch.Size([31357])."
+      },
+      {
+        "checkpoint": "kristal_model_step_a_ep2.pt",
+        "status": "HATA",
+        "error_type": "RuntimeError",
+        "error_msg": "Error(s) in loading state_dict for KristalLM:\n\tsize mismatch for embedding.embedding.weight: copying a param with shape torch.Size([32146, 768]) from checkpoint, the shape in current model is torch.Size([31357, 768]).\n\tsize mismatch for lm_head.weight: copying a param with shape torch.Size([32146, 768]) from checkpoint, the shape in current model is torch.Size([31357, 768]).\n\tsize mismatch for lm_head.bias: copying a param with shape torch.Size([32146]) from checkpoint, the shape in current model is torch.Size([31357])."
+      },
+      {
+        "checkpoint": "kristal_model_step_a_ep3.pt",
+        "status": "HATA",
+        "error_type": "RuntimeError",
+        "error_msg": "Error(s) in loading state_dict for KristalLM:\n\tsize mismatch for embedding.embedding.weight: copying a param with shape torch.Size([32146, 768]) from checkpoint, the shape in current model is torch.Size([31357, 768]).\n\tsize mismatch for lm_head.weight: copying a param with shape torch.Size([32146, 768]) from checkpoint, the shape in current model is torch.Size([31357, 768]).\n\tsize mismatch for lm_head.bias: copying a param with shape torch.Size([32146]) from checkpoint, the shape in current model is torch.Size([31357])."
+      },
+      {
+        "checkpoint": "kristal_model_step_a_final.pt",
+        "status": "HATA",
+        "error_type": "RuntimeError",
+        "error_msg": "Error(s) in loading state_dict for KristalLM:\n\tsize mismatch for embedding.embedding.weight: copying a param with shape torch.Size([32146, 768]) from checkpoint, the shape in current model is torch.Size([31357, 768]).\n\tsize mismatch for lm_head.weight: copying a param with shape torch.Size([32146, 768]) from checkpoint, the shape in current model is torch.Size([31357, 768]).\n\tsize mismatch for lm_head.bias: copying a param with shape torch.Size([32146]) from checkpoint, the shape in current model is torch.Size([31357])."
+      },
+      {
+        "checkpoint": "kristal_model_step_b1_ep1.pt",
+        "status": "HATA",
+        "error_type": "RuntimeError",
+        "error_msg": "Error(s) in loading state_dict for KristalLM:\n\tsize mismatch for embedding.embedding.weight: copying a param with shape torch.Size([32156, 768]) from checkpoint, the shape in current model is torch.Size([31357, 768]).\n\tsize mismatch for lm_head.weight: copying a param with shape torch.Size([32156, 768]) from checkpoint, the shape in current model is torch.Size([31357, 768]).\n\tsize mismatch for lm_head.bias: copying a param with shape torch.Size([32156]) from checkpoint, the shape in current model is torch.Size([31357])."
+      },
+      {
+        "checkpoint": "kristal_model_step_b1_ep2.pt",
+        "status": "HATA",
+        "error_type": "RuntimeError",
+        "error_msg": "Error(s) in loading state_dict for KristalLM:\n\tsize mismatch for embedding.embedding.weight: copying a param with shape torch.Size([32156, 768]) from checkpoint, the shape in current model is torch.Size([31357, 768]).\n\tsize mismatch for lm_head.weight: copying a param with shape torch.Size([32156, 768]) from checkpoint, the shape in current model is torch.Size([31357, 768]).\n\tsize mismatch for lm_head.bias: copying a param with shape torch.Size([32156]) from checkpoint, the shape in current model is torch.Size([31357])."
+      },
+      {
+        "checkpoint": "kristal_model_step_b1_ep3.pt",
+        "status": "HATA",
+        "error_type": "RuntimeError",
+        "error_msg": "Error(s) in loading state_dict for KristalLM:\n\tsize mismatch for embedding.embedding.weight: copying a param with shape torch.Size([32156, 768]) from checkpoint, the shape in current model is torch.Size([31357, 768]).\n\tsize mismatch for lm_head.weight: copying a param with shape torch.Size([32156, 768]) from checkpoint, the shape in current model is torch.Size([31357, 768]).\n\tsize mismatch for lm_head.bias: copying a param with shape torch.Size([32156]) from checkpoint, the shape in current model is torch.Size([31357])."
+      },
+      {
+        "checkpoint": "kristal_model_step_b1_final.pt",
+        "status": "HATA",
+        "error_type": "RuntimeError",
+        "error_msg": "Error(s) in loading state_dict for KristalLM:\n\tsize mismatch for embedding.embedding.weight: copying a param with shape torch.Size([32156, 768]) from checkpoint, the shape in current model is torch.Size([31357, 768]).\n\tsize mismatch for lm_head.weight: copying a param with shape torch.Size([32156, 768]) from checkpoint, the shape in current model is torch.Size([31357, 768]).\n\tsize mismatch for lm_head.bias: copying a param with shape torch.Size([32156]) from checkpoint, the shape in current model is torch.Size([31357])."
+      },
+      {
+        "checkpoint": "kristal_rag_arm_a_best.pt",
+        "status": "HATA",
+        "error_type": "RuntimeError",
+        "error_msg": "Error(s) in loading state_dict for KristalLM:\n\tsize mismatch for embedding.embedding.weight: copying a param with shape torch.Size([32816, 768]) from checkpoint, the shape in current model is torch.Size([31357, 768]).\n\tsize mismatch for lm_head.weight: copying a param with shape torch.Size([32816, 768]) from checkpoint, the shape in current model is torch.Size([31357, 768]).\n\tsize mismatch for lm_head.bias: copying a param with shape torch.Size([32816]) from checkpoint, the shape in current model is torch.Size([31357])."
+      },
+      {
+        "checkpoint": "kristal_rag_arm_b_best.pt",
+        "status": "HATA",
+        "error_type": "RuntimeError",
+        "error_msg": "Error(s) in loading state_dict for KristalLM:\n\tsize mismatch for embedding.embedding.weight: copying a param with shape torch.Size([32852, 768]) from checkpoint, the shape in current model is torch.Size([31357, 768]).\n\tsize mismatch for lm_head.weight: copying a param with shape torch.Size([32852, 768]) from checkpoint, the shape in current model is torch.Size([31357, 768]).\n\tsize mismatch for lm_head.bias: copying a param with shape torch.Size([32852]) from checkpoint, the shape in current model is torch.Size([31357])."
+      },
+      {
+        "checkpoint": "kristal_rag_arm_c_best.pt",
+        "status": "HATA",
+        "error_type": "RuntimeError",
+        "error_msg": "Error(s) in loading state_dict for KristalLM:\n\tsize mismatch for embedding.embedding.weight: copying a param with shape torch.Size([32852, 768]) from checkpoint, the shape in current model is torch.Size([31357, 768]).\n\tsize mismatch for lm_head.weight: copying a param with shape torch.Size([32852, 768]) from checkpoint, the shape in current model is torch.Size([31357, 768]).\n\tsize mismatch for lm_head.bias: copying a param with shape torch.Size([32852]) from checkpoint, the shape in current model is torch.Size([31357])."
+      }
+    ],
+    "test_model_cli_run": {
+      "command": "venv/bin/python test_model.py",
+      "exit_code": 1,
+      "stdout": "============================================================\n KRİSTAL-VEKTÖREL MİMARİSİ: MODEL TEST VE ÇIKARIM (INFERENCE)\n============================================================\nÇıkarım yapılacak cihaz: mps\nSözlük Yüklendi. Kelime dağarcığı boyutu: 31357\n",
+      "stderr": "Traceback (most recent call last):\n  File \"/Users/hakankilicaslan/Git/tr_llm/test_model.py\", line 174, in <module>\n    main()\n    ~~~~^^\n  File \"/Users/hakankilicaslan/Git/tr_llm/test_model.py\", line 49, in main\n    model.load_state_dict(state_dict, strict=False)\n    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/hakankilicaslan/Git/tr_llm/venv/lib/python3.14/site-packages/torch/nn/modules/module.py\", line 2639, in load_state_dict\n    raise RuntimeError(\n    ...<3 lines>...\n    )\nRuntimeError: Error(s) in loading state_dict for KristalLM:\n\tsize mismatch for embedding.embedding.weight: copying a param with shape torch.Size([32816, 768]) from checkpoint, the shape in current model is torch.Size([31357, 768]).\n\tsize mismatch for lm_head.weight: copying a param with shape torch.Size([32816, 768]) from checkpoint, the shape in current model is torch.Size([31357, 768]).\n\tsize mismatch for lm_head.bias: copying a param with shape torch.Size([32816]) from checkpoint, the shape in current model is torch.Size([31357]).\n"
+    },
+    "dropped_keys_by_mask_filter": {
+      "kristal_b1_5_best.pt": [
+        "blocks.0.attn.mask",
+        "blocks.1.attn.mask",
+        "blocks.2.attn.mask",
+        "blocks.3.attn.mask",
+        "blocks.4.attn.mask",
+        "blocks.5.attn.mask"
+      ],
+      "kristal_b1_5_entity_ready.pt": [
+        "blocks.0.attn.mask",
+        "blocks.1.attn.mask",
+        "blocks.2.attn.mask",
+        "blocks.3.attn.mask",
+        "blocks.4.attn.mask",
+        "blocks.5.attn.mask"
+      ],
+      "kristal_b1_5_epoch1.pt": [
+        "blocks.0.attn.mask",
+        "blocks.1.attn.mask",
+        "blocks.2.attn.mask",
+        "blocks.3.attn.mask",
+        "blocks.4.attn.mask",
+        "blocks.5.attn.mask"
+      ],
+      "kristal_b1_5_epoch2.pt": [
+        "blocks.0.attn.mask",
+        "blocks.1.attn.mask",
+        "blocks.2.attn.mask",
+        "blocks.3.attn.mask",
+        "blocks.4.attn.mask",
+        "blocks.5.attn.mask"
+      ],
+      "kristal_b1_5_epoch3.pt": [
+        "blocks.0.attn.mask",
+        "blocks.1.attn.mask",
+        "blocks.2.attn.mask",
+        "blocks.3.attn.mask",
+        "blocks.4.attn.mask",
+        "blocks.5.attn.mask"
+      ],
+      "kristal_carpenter_model.pt": [
+        "blocks.0.attn.mask",
+        "blocks.1.attn.mask",
+        "blocks.2.attn.mask",
+        "blocks.3.attn.mask",
+        "blocks.4.attn.mask",
+        "blocks.5.attn.mask"
+      ],
+      "kristal_model.pt": [
+        "blocks.0.attn.mask",
+        "blocks.1.attn.mask",
+        "blocks.2.attn.mask",
+        "blocks.3.attn.mask",
+        "blocks.4.attn.mask",
+        "blocks.5.attn.mask"
+      ],
+      "kristal_model_backup.pt": [
+        "blocks.0.attn.mask",
+        "blocks.1.attn.mask",
+        "blocks.2.attn.mask",
+        "blocks.3.attn.mask",
+        "blocks.4.attn.mask",
+        "blocks.5.attn.mask"
+      ],
+      "kristal_model_backup_v160.pt": [
+        "blocks.0.attn.mask",
+        "blocks.1.attn.mask",
+        "blocks.2.attn.mask",
+        "blocks.3.attn.mask",
+        "blocks.4.attn.mask",
+        "blocks.5.attn.mask"
+      ],
+      "kristal_model_base.pt": [
+        "blocks.0.attn.mask",
+        "blocks.0.attn.rotary_emb.cos_cached",
+        "blocks.0.attn.rotary_emb.sin_cached",
+        "blocks.1.attn.mask",
+        "blocks.1.attn.rotary_emb.cos_cached",
+        "blocks.1.attn.rotary_emb.sin_cached",
+        "blocks.2.attn.mask",
+        "blocks.2.attn.rotary_emb.cos_cached",
+        "blocks.2.attn.rotary_emb.sin_cached",
+        "blocks.3.attn.mask",
+        "blocks.3.attn.rotary_emb.cos_cached",
+        "blocks.3.attn.rotary_emb.sin_cached"
+      ],
+      "kristal_model_pre_clean.pt": [
+        "blocks.0.attn.mask",
+        "blocks.1.attn.mask",
+        "blocks.2.attn.mask",
+        "blocks.3.attn.mask",
+        "blocks.4.attn.mask",
+        "blocks.5.attn.mask"
+      ],
+      "kristal_model_sft.pt": [
+        "blocks.0.attn.mask",
+        "blocks.1.attn.mask",
+        "blocks.2.attn.mask",
+        "blocks.3.attn.mask",
+        "blocks.4.attn.mask",
+        "blocks.5.attn.mask"
+      ],
+      "kristal_model_step_a_ep1.pt": [
+        "blocks.0.attn.mask",
+        "blocks.1.attn.mask",
+        "blocks.2.attn.mask",
+        "blocks.3.attn.mask",
+        "blocks.4.attn.mask",
+        "blocks.5.attn.mask"
+      ],
+      "kristal_model_step_a_ep2.pt": [
+        "blocks.0.attn.mask",
+        "blocks.1.attn.mask",
+        "blocks.2.attn.mask",
+        "blocks.3.attn.mask",
+        "blocks.4.attn.mask",
+        "blocks.5.attn.mask"
+      ],
+      "kristal_model_step_a_ep3.pt": [
+        "blocks.0.attn.mask",
+        "blocks.1.attn.mask",
+        "blocks.2.attn.mask",
+        "blocks.3.attn.mask",
+        "blocks.4.attn.mask",
+        "blocks.5.attn.mask"
+      ],
+      "kristal_model_step_a_final.pt": [
+        "blocks.0.attn.mask",
+        "blocks.1.attn.mask",
+        "blocks.2.attn.mask",
+        "blocks.3.attn.mask",
+        "blocks.4.attn.mask",
+        "blocks.5.attn.mask"
+      ],
+      "kristal_model_step_b1_ep1.pt": [
+        "blocks.0.attn.mask",
+        "blocks.1.attn.mask",
+        "blocks.2.attn.mask",
+        "blocks.3.attn.mask",
+        "blocks.4.attn.mask",
+        "blocks.5.attn.mask"
+      ],
+      "kristal_model_step_b1_ep2.pt": [
+        "blocks.0.attn.mask",
+        "blocks.1.attn.mask",
+        "blocks.2.attn.mask",
+        "blocks.3.attn.mask",
+        "blocks.4.attn.mask",
+        "blocks.5.attn.mask"
+      ],
+      "kristal_model_step_b1_ep3.pt": [
+        "blocks.0.attn.mask",
+        "blocks.1.attn.mask",
+        "blocks.2.attn.mask",
+        "blocks.3.attn.mask",
+        "blocks.4.attn.mask",
+        "blocks.5.attn.mask"
+      ],
+      "kristal_model_step_b1_final.pt": [
+        "blocks.0.attn.mask",
+        "blocks.1.attn.mask",
+        "blocks.2.attn.mask",
+        "blocks.3.attn.mask",
+        "blocks.4.attn.mask",
+        "blocks.5.attn.mask"
+      ],
+      "kristal_rag_arm_a_best.pt": [
+        "blocks.0.attn.mask",
+        "blocks.1.attn.mask",
+        "blocks.2.attn.mask",
+        "blocks.3.attn.mask",
+        "blocks.4.attn.mask",
+        "blocks.5.attn.mask"
+      ],
+      "kristal_rag_arm_b_best.pt": [
+        "blocks.0.attn.mask",
+        "blocks.1.attn.mask",
+        "blocks.2.attn.mask",
+        "blocks.3.attn.mask",
+        "blocks.4.attn.mask",
+        "blocks.5.attn.mask"
+      ],
+      "kristal_rag_arm_c_best.pt": [
+        "blocks.0.attn.mask",
+        "blocks.1.attn.mask",
+        "blocks.2.attn.mask",
+        "blocks.3.attn.mask",
+        "blocks.4.attn.mask",
+        "blocks.5.attn.mask"
+      ]
+    },
+    "summary": {
+      "canonical_clean_count": 23,
+      "canonical_adjusted_count": 0,
+      "canonical_error_count": 0,
+      "documented_success_count": 2,
+      "documented_error_count": 21
+    }
+  },
+  "D_device_mps": {
+    "execution_mode": "outside_sandbox (BypassSandbox: true)",
+    "device": "mps",
+    "torch_version": "2.11.0",
+    "mps_built": true,
+    "mps_available": true,
+    "mps_allocation_success": true,
+    "mps_allocation_device": "mps:0",
+    "mps_allocation_error": "",
+    "claim_status": "DOGRULANDI"
+  },
+  "E_pytest_integrity": {
+    "cot_vault_pre": {
+      "sha256": "97b06fe5befd6613b520d28dc20a74deaeb30e4e8f7e6675a23720a019ff5619",
+      "line_count": 91
+    },
+    "cot_vault_post": {
+      "sha256": "97b06fe5befd6613b520d28dc20a74deaeb30e4e8f7e6675a23720a019ff5619",
+      "line_count": 91
+    },
+    "cot_vault_bit_level_identical": true,
+    "pytest_run": {
+      "command": "venv/bin/pytest -q tests/",
+      "exit_code": 0,
+      "stdout": "........................................................................ [ 54%]\n............................................................             [100%]\n132 passed in 8.20s",
+      "stderr": ""
+    },
+    "reference_sha256": "97b06fe5befd6613b520d28dc20a74deaeb30e4e8f7e6675a23720a019ff5619",
+    "reference_lines": 91,
+    "matches_canonical_reference": true,
+    "claim_status": "DOGRULANDI"
+  },
+  "F_live_inference": {
+    "inference_parameters": {
+      "device": "mps",
+      "sampling_method": "greedy (argmax)",
+      "temperature": 0.0,
+      "seed": 0,
+      "max_new_tokens": 32,
+      "prompts_evaluated": [
+        {
+          "name": "plain_continuation",
+          "text": "Akmayan su kımıldanmayan yer"
+        },
+        {
+          "name": "punctuation_probe",
+          "text": "Akmayan su, kımıldanmayan yer; ne zaman akar?"
+        },
+        {
+          "name": "sft_json_envelope",
+          "text": "{\"instruction\": \"Kelimedeki kök morfemini bul.\", \"input\": \"kitaplarda\", \"output\": \"\"} (kesme noktası: <OUTPUT>)"
+        }
+      ]
+    },
+    "determinism_verification": {
+      "run_1_sha256": "8fe23a65c889c912a154339a9a2ec843b127b700cb2dd6653190df6f3b4d7e5d",
+      "run_2_sha256": "8fe23a65c889c912a154339a9a2ec843b127b700cb2dd6653190df6f3b4d7e5d",
+      "is_deterministic": true,
+      "claim_status": "DOGRULANDI"
+    },
+    "cells_12_matrix": {
+      "F1_BASE": {
+        "plain_continuation": {
+          "prompt_name": "plain_continuation",
+          "prompt_text": "Akmayan su kımıldanmayan yer",
+          "prompt_tokens": [
+            2,
+            364,
+            87,
+            69,
+            298,
+            380,
+            87,
+            69,
+            330,
+            3
+          ],
+          "out_of_bounds_prompt_tokens": [],
+          "generated_token_ids": [
+            2,
+            11,
+            11,
+            11,
+            11,
+            11,
+            11,
+            11,
+            11,
+            11,
+            11,
+            11,
+            11,
+            11,
+            11,
+            11,
+            11,
+            11,
+            11,
+            11,
+            11,
+            11,
+            11,
+            11,
+            11,
+            11,
+            11,
+            11,
+            11,
+            11,
+            11,
+            11
+          ],
+          "generated_token_count": 32,
+          "unk_count": 0,
+          "unk_ratio": 0.0,
+          "ended_with_eos": false,
+          "raw_output_text": "<BOS> çek çek çek çek çek çek çek çek çek çek çek çek çek çek çek çek çek çek çek çek çek çek çek çek çek çek çek çek çek çek çek"
+        },
+        "punctuation_probe": {
+          "prompt_name": "punctuation_probe",
+          "prompt_text": "Akmayan su, kımıldanmayan yer; ne zaman akar?",
+          "prompt_tokens": [
+            2,
+            364,
+            87,
+            69,
+            298,
+            0,
+            380,
+            87,
+            69,
+            330,
+            0,
+            49,
+            634,
+            456,
+            0,
+            3
+          ],
+          "out_of_bounds_prompt_tokens": [
+            32138,
+            32143,
+            32139
+          ],
+          "generated_token_ids": [
+            2,
+            11,
+            11,
+            11,
+            11,
+            11,
+            11,
+            11,
+            11,
+            11,
+            11,
+            11,
+            11,
+            11,
+            11,
+            11,
+            11,
+            11,
+            11,
+            11,
+            11,
+            11,
+            11,
+            11,
+            11,
+            11,
+            11,
+            11,
+            11,
+            11,
+            11,
+            11
+          ],
+          "generated_token_count": 32,
+          "unk_count": 0,
+          "unk_ratio": 0.0,
+          "ended_with_eos": false,
+          "raw_output_text": "<BOS> çek çek çek çek çek çek çek çek çek çek çek çek çek çek çek çek çek çek çek çek çek çek çek çek çek çek çek çek çek çek çek"
+        },
+        "sft_json_envelope": {
+          "prompt_name": "sft_json_envelope",
+          "prompt_text": "{\"instruction\": \"Kelimedeki kök morfemini bul.\", \"input\": \"kitaplarda\", \"output\": \"\"}",
+          "prompt_tokens": [
+            2,
+            1707,
+            1091,
+            29,
+            0,
+            3805,
+            16655,
+            28,
+            53,
+            948,
+            0,
+            1708,
+            1704,
+            249,
+            70,
+            29,
+            1709,
+            1706
+          ],
+          "out_of_bounds_prompt_tokens": [
+            27244,
+            32137
+          ],
+          "generated_token_ids": [
+            29,
+            11,
+            11,
+            11,
+            11,
+            11,
+            11,
+            11,
+            11,
+            11,
+            11,
+            11,
+            11,
+            11,
+            11,
+            11,
+            11,
+            11,
+            11,
+            11,
+            11,
+            11,
+            11,
+            11,
+            11,
+            11,
+            11,
+            11,
+            11,
+            11,
+            11,
+            11
+          ],
+          "generated_token_count": 32,
+          "unk_count": 0,
+          "unk_ratio": 0.0,
+          "ended_with_eos": false,
+          "raw_output_text": "CASE_LOC çek çek çek çek çek çek çek çek çek çek çek çek çek çek çek çek çek çek çek çek çek çek çek çek çek çek çek çek çek çek çek"
+        }
+      },
+      "F2_CHAIN_TOP": {
+        "plain_continuation": {
+          "prompt_name": "plain_continuation",
+          "prompt_text": "Akmayan su kımıldanmayan yer",
+          "prompt_tokens": [
+            2,
+            364,
+            87,
+            69,
+            298,
+            380,
+            87,
+            69,
+            330,
+            3
+          ],
+          "out_of_bounds_prompt_tokens": [],
+          "generated_token_ids": [
+            715,
+            130,
+            40,
+            0,
+            52,
+            173,
+            6170,
+            51,
+            29,
+            115,
+            32137
+          ],
+          "generated_token_count": 11,
+          "unk_count": 1,
+          "unk_ratio": 0.0909,
+          "ended_with_eos": true,
+          "raw_output_text": "son DERIV_sIz bir <UNK> ol GERUND_ArAk tanımlan INF_mAk CASE_LOC COPULA_AORIST ."
+        },
+        "punctuation_probe": {
+          "prompt_name": "punctuation_probe",
+          "prompt_text": "Akmayan su, kımıldanmayan yer; ne zaman akar?",
+          "prompt_tokens": [
+            2,
+            364,
+            87,
+            69,
+            298,
+            32138,
+            380,
+            87,
+            69,
+            330,
+            32143,
+            49,
+            634,
+            456,
+            32139,
+            3
+          ],
+          "out_of_bounds_prompt_tokens": [],
+          "generated_token_ids": [
+            11341,
+            39,
+            28,
+            53,
+            32138,
+            2306,
+            1743,
+            39,
+            28,
+            53,
+            1924,
+            50,
+            39,
+            646,
+            39,
+            28,
+            53,
+            3613,
+            56,
+            539,
+            29,
+            301,
+            1541,
+            147,
+            4494,
+            69,
+            6593,
+            6977,
+            1319,
+            115,
+            32137
+          ],
+          "generated_token_count": 31,
+          "unk_count": 0,
+          "unk_ratio": 0.0,
+          "ended_with_eos": true,
+          "raw_output_text": "marangoz DERIV_lIk POSS_2SG CASE_ACC , zıvana geniş DERIV_lIk POSS_2SG CASE_ACC veya de DERIV_lIk derin DERIV_lIk POSS_2SG CASE_ACC milimetre CASE_GEN on CASE_LOC biri hassasiyet CASE_INS ölç PART_An hassas mekanik alet COPULA_AORIST ."
+        },
+        "sft_json_envelope": {
+          "prompt_name": "sft_json_envelope",
+          "prompt_text": "{\"instruction\": \"Kelimedeki kök morfemini bul.\", \"input\": \"kitaplarda\", \"output\": \"\"}",
+          "prompt_tokens": [
+            2,
+            1707,
+            1091,
+            29,
+            27244,
+            3805,
+            16655,
+            28,
+            53,
+            948,
+            32137,
+            1708,
+            1704,
+            249,
+            70,
+            29,
+            1709,
+            1706
+          ],
+          "out_of_bounds_prompt_tokens": [],
+          "generated_token_ids": [
+            16656,
+            32142,
+            249
+          ],
+          "generated_token_count": 3,
+          "unk_count": 0,
+          "unk_ratio": 0.0,
+          "ended_with_eos": true,
+          "raw_output_text": "root : kitap"
+        }
+      },
+      "F3_B1_5": {
+        "plain_continuation": {
+          "prompt_name": "plain_continuation",
+          "prompt_text": "Akmayan su kımıldanmayan yer",
+          "prompt_tokens": [
+            2,
+            364,
+            87,
+            69,
+            298,
+            380,
+            87,
+            69,
+            330,
+            3
+          ],
+          "out_of_bounds_prompt_tokens": [],
+          "generated_token_ids": [
+            715,
+            130,
+            40,
+            0,
+            52,
+            173,
+            6170,
+            51,
+            29,
+            115,
+            32137
+          ],
+          "generated_token_count": 11,
+          "unk_count": 1,
+          "unk_ratio": 0.0909,
+          "ended_with_eos": true,
+          "raw_output_text": "son DERIV_sIz bir <UNK> ol GERUND_ArAk tanımlan INF_mAk CASE_LOC COPULA_AORIST ."
+        },
+        "punctuation_probe": {
+          "prompt_name": "punctuation_probe",
+          "prompt_text": "Akmayan su, kımıldanmayan yer; ne zaman akar?",
+          "prompt_tokens": [
+            2,
+            364,
+            87,
+            69,
+            298,
+            32138,
+            380,
+            87,
+            69,
+            330,
+            32143,
+            49,
+            634,
+            456,
+            32139,
+            3
+          ],
+          "out_of_bounds_prompt_tokens": [],
+          "generated_token_ids": [
+            11341,
+            39,
+            28,
+            53,
+            32138,
+            2306,
+            1743,
+            39,
+            28,
+            53,
+            1924,
+            50,
+            39,
+            646,
+            39,
+            28,
+            53,
+            3613,
+            56,
+            539,
+            29,
+            301,
+            1541,
+            147,
+            4494,
+            69,
+            6593,
+            6977,
+            1319,
+            115,
+            32137
+          ],
+          "generated_token_count": 31,
+          "unk_count": 0,
+          "unk_ratio": 0.0,
+          "ended_with_eos": true,
+          "raw_output_text": "marangoz DERIV_lIk POSS_2SG CASE_ACC , zıvana geniş DERIV_lIk POSS_2SG CASE_ACC veya de DERIV_lIk derin DERIV_lIk POSS_2SG CASE_ACC milimetre CASE_GEN on CASE_LOC biri hassasiyet CASE_INS ölç PART_An hassas mekanik alet COPULA_AORIST ."
+        },
+        "sft_json_envelope": {
+          "prompt_name": "sft_json_envelope",
+          "prompt_text": "{\"instruction\": \"Kelimedeki kök morfemini bul.\", \"input\": \"kitaplarda\", \"output\": \"\"}",
+          "prompt_tokens": [
+            2,
+            1707,
+            1091,
+            29,
+            27244,
+            3805,
+            16655,
+            28,
+            53,
+            948,
+            32137,
+            1708,
+            1704,
+            249,
+            70,
+            29,
+            1709,
+            1706
+          ],
+          "out_of_bounds_prompt_tokens": [],
+          "generated_token_ids": [
+            16656,
+            32142,
+            249
+          ],
+          "generated_token_count": 3,
+          "unk_count": 0,
+          "unk_ratio": 0.0,
+          "ended_with_eos": true,
+          "raw_output_text": "root : kitap"
+        }
+      },
+      "F4_CARPENTER": {
+        "plain_continuation": {
+          "prompt_name": "plain_continuation",
+          "prompt_text": "Akmayan su kımıldanmayan yer",
+          "prompt_tokens": [
+            2,
+            364,
+            87,
+            69,
+            298,
+            380,
+            87,
+            69,
+            330,
+            3
+          ],
+          "out_of_bounds_prompt_tokens": [],
+          "generated_token_ids": [
+            2,
+            1707,
+            40,
+            11341,
+            7779,
+            28,
+            56,
+            1349,
+            13,
+            10,
+            1851,
+            81,
+            2014,
+            28,
+            715,
+            1676,
+            5619,
+            28,
+            29,
+            0,
+            2014,
+            2029,
+            56,
+            5619,
+            28,
+            20,
+            779,
+            1168,
+            173,
+            7422,
+            28,
+            386
+          ],
+          "generated_token_count": 32,
+          "unk_count": 1,
+          "unk_ratio": 0.0312,
+          "ended_with_eos": false,
+          "raw_output_text": "<BOS> <INSTRUCTION> bir marangoz çırak POSS_2SG CASE_GEN soru POSS_3SG CASE_DAT_N cevap ver ahşap POSS_2SG son kat yüzey POSS_2SG CASE_LOC <UNK> ahşap parça CASE_GEN yüzey POSS_2SG CASE_DAT sıfır otur GERUND_ArAk birleşim POSS_2SG dışarı"
+        },
+        "punctuation_probe": {
+          "prompt_name": "punctuation_probe",
+          "prompt_text": "Akmayan su, kımıldanmayan yer; ne zaman akar?",
+          "prompt_tokens": [
+            2,
+            364,
+            87,
+            69,
+            298,
+            0,
+            380,
+            87,
+            69,
+            330,
+            0,
+            49,
+            634,
+            456,
+            0,
+            3
+          ],
+          "out_of_bounds_prompt_tokens": [
+            32138,
+            32143,
+            32139
+          ],
+          "generated_token_ids": [
+            2,
+            1707,
+            2014,
+            4508,
+            13,
+            2669,
+            39,
+            46,
+            6958,
+            5708,
+            13,
+            284,
+            945,
+            1924,
+            3221,
+            7422,
+            13,
+            652,
+            2063,
+            3865,
+            273,
+            696,
+            115,
+            1708,
+            1704,
+            1709,
+            1706,
+            3865,
+            7098,
+            3865,
+            7098,
+            4
+          ],
+          "generated_token_count": 32,
+          "unk_count": 0,
+          "unk_ratio": 0.0,
+          "ended_with_eos": false,
+          "raw_output_text": "<BOS> <INSTRUCTION> ahşap atölye POSS_3SG güven DERIV_lIk ve imalat rehber POSS_3SG bu köşe veya kayıt birleşim POSS_3SG için hangi teknik en uygun COPULA_AORIST </INSTRUCTION> <INPUT> </INPUT> <OUTPUT> teknik çözüm teknik çözüm <PROPER_NOUN>"
+        },
+        "sft_json_envelope": {
+          "prompt_name": "sft_json_envelope",
+          "prompt_text": "{\"instruction\": \"Kelimedeki kök morfemini bul.\", \"input\": \"kitaplarda\", \"output\": \"\"}",
+          "prompt_tokens": [
+            2,
+            1707,
+            1091,
+            29,
+            27244,
+            3805,
+            16655,
+            28,
+            53,
+            948,
+            0,
+            1708,
+            1704,
+            249,
+            70,
+            29,
+            1709,
+            1706
+          ],
+          "out_of_bounds_prompt_tokens": [
+            32137
+          ],
+          "generated_token_ids": [
+            3865,
+            7098,
+            4,
+            6056,
+            0,
+            0,
+            2373,
+            13,
+            24,
+            0,
+            2014,
+            2029,
+            56,
+            2506,
+            189,
+            39,
+            4028,
+            147,
+            1062,
+            173,
+            2506,
+            189,
+            39,
+            945,
+            3378,
+            12,
+            13,
+            5318,
+            6646,
+            7,
+            84,
+            5018
+          ],
+          "generated_token_count": 32,
+          "unk_count": 3,
+          "unk_ratio": 0.0938,
+          "ended_with_eos": false,
+          "raw_output_text": "teknik çözüm <PROPER_NOUN> yağı <UNK> <UNK> uygulama POSS_3SG CASE_LOC_N <UNK> ahşap parça CASE_GEN <NUMBER> derece DERIV_lIk açı CASE_INS kesil GERUND_ArAk <NUMBER> derece DERIV_lIk köşe oluştur PART_DIk POSS_3SG lif bitim POSS_3PL CASE_ACC_N gizle"
+        }
+      }
+    }
+  },
+  "G_write_and_frozen_boundaries": {
+    "writes_contract_paths": [
+      "data/eval/",
+      "scratch/",
+      "scripts/t0027_measure_models.py"
+    ],
+    "frozen_paths_touched": 0,
+    "checkpoints_invariant_count": 23,
+    "all_23_checkpoints_mtime_size_unchanged": true,
+    "mismatched_checkpoints": [],
+    "four_inference_models_sha256_identical": true,
+    "four_models_sha_details": {
+      "kristal_model_base.pt": {
+        "sha_pre": "c77849d272e31fc52495ff27aad854ca47859b55ebe3360f8eeb6e707312c4da",
+        "sha_post": "c77849d272e31fc52495ff27aad854ca47859b55ebe3360f8eeb6e707312c4da",
+        "identical": true
+      },
+      "kristal_model.pt": {
+        "sha_pre": "02e15b8198f8f3334609eb52691d699e80f88972245377c1a79772cb42ae1679",
+        "sha_post": "02e15b8198f8f3334609eb52691d699e80f88972245377c1a79772cb42ae1679",
+        "identical": true
+      },
+      "kristal_b1_5_best.pt": {
+        "sha_pre": "02e15b8198f8f3334609eb52691d699e80f88972245377c1a79772cb42ae1679",
+        "sha_post": "02e15b8198f8f3334609eb52691d699e80f88972245377c1a79772cb42ae1679",
+        "identical": true
+      },
+      "kristal_carpenter_model.pt": {
+        "sha_pre": "5f0b8c71727d15e338e4301634b0d05652c3230cebc532b1124aff3761e93b4d",
+        "sha_post": "5f0b8c71727d15e338e4301634b0d05652c3230cebc532b1124aff3761e93b4d",
+        "identical": true
+      }
+    },
+    "src_rag_rag_pipeline_preservation": {
+      "path": "src/rag/rag_pipeline.py",
+      "exists_on_disk": true,
+      "size_bytes": 7053,
+      "mtime": "2026-09-15T09:37:22.337621+00:00",
+      "status": "DOGRULANDI (Dosya silinmedi, diskte duruyor)"
+    },
+    "git_rules": {
+      "git_add_all_prohibited": true,
+      "commit_push_prohibited": true,
+      "no_untracked_data_staged": true
+    }
+  }
+}

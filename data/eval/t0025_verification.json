@@ -1,0 +1,240 @@
+{
+  "verification_id": "t0025",
+  "task_id": "T-0025",
+  "verified_by": "claude (danisman)",
+  "verified_at_utc": "2026-09-15T08:47:00Z",
+  "task_window_utc": [
+    "2026-09-15T07:48:52Z (acilis)",
+    "2026-09-15T08:33:07Z (sonuc dosyasi)"
+  ],
+  "dogrulama_penceresi_utc": "2026-09-15T08:35Z - 08:47Z",
+  "verdict": "PASS_WITH_FINDINGS",
+  "verdict_gerekce": "Yedi kabul maddesinin altisi DOGRULANDI (A,B,C,D,E,F,G1,G3), G2 kabul metninin HARFIYLE uyusmuyor (uygulama hata vermiyor, basariyla yaziyor) — yurutucu bunu kanit metninde ACIKCA yazmis, gizlememis. Yurutucunun verdigi sayilarin hepsi bagimsiz olarak tuttu. Bes kayitli bulgu var; ikisi (F2,F5) orta onemde. Kanaryanin KENDISI vakum degil (repoya gercek sessiz dosya koyarak kanitladim), ama kanaryayi sinayan UNIT TEST sentetik.",
+  "claims_verified": [
+    {
+      "claim": "A) 9 tanim -> 5 gurultulu tanim; 0 sessiz tanim kaldi",
+      "olcum": "BAGIMSIZ: git show HEAD:<dosya> uzerinde kendi AST dedektorumu kostum -> ONCE 9 tanim / 4 SESSIZ. Su anki calisma agacinda -> 5 tanim / 0 SESSIZ. Ham grep 7 satir donuyor: 5 gercek def + 2 satir tests/test_prompt_contract.py icindeki dedektor iskeleti (regex assert'i ve mutant string'i).",
+      "sonuc": "DOGRULANDI (sayilar); ANCAK yurutucunun '(3 sessiz)' ifadesi eksik — bkz N4"
+    },
+    {
+      "claim": "B) Mutant kanarya: sessiz kopya yerlestirilince dedektor kirmizi yaniyor, vakum degil",
+      "olcum": "BAGIMSIZ: scratch/_t0025_mutant_probe.py olarak eski sessiz sablonu REPOYA koydum -> audit_repo_resize_state_dict_definitions() buldu, kapi testi KIRMIZI: 'AssertionError: Found 1 silent resize_state_dict definitions in repo: [{path: scratch/_t0025_mutant_probe.py, is_silent: True}]'. Dosya silindi, kapi yesile dondu.",
+      "sonuc": "DOGRULANDI (dedektor vakum degil) — AMA yurutucunun gosterdigi TEST bunu kanitlamiyor, bkz F2"
+    },
+    {
+      "claim": "C) 128 passed; cot_vault.jsonl sha256 kosum oncesi/sonrasi bit-for-bit ayni",
+      "olcum": "BAGIMSIZ tam kosu `venv/bin/pytest -q` (CWD=repo koku, kriterin istedigi komut): 127 passed + 1 failed; tek dusen tests/test_agent_gateway.py::test_gateway_http_server_endpoints, sebep SANDBOX ('PermissionError: [Errno 1] Operation not permitted' -> socket.bind). Sandbox disinda o dosya 7/7 gecti. Toplam populasyon ayni: 128. cot_vault sha256 ONCE=SONRA=97b06fe5befd6613b520d28dc20a74deaeb30e4e8f7e6675a23720a019ff5619, 91 satir.",
+      "sonuc": "DOGRULANDI"
+    },
+    {
+      "claim": "D) Degisen tum dosyalar writes[] icinde; donmus yollara 0 dokunma",
+      "olcum": "BAGIMSIZ: `git status --porcelain` -> degisen 7 kod dosyasinin hepsi writes[] icinde (scripts/ x4, src/gateway/, tests/ x2). Donmus yollar: src/llm/tokenizer.py, src/compiler/** (6 dosya), data/vocab.json, data/vocab_entity.json ve 37 .pt/.bin dosyasi icin mtime taramasi yaptim. Pencere 10:40-11:45 YEREL; hicbiri pencerede degil. ONEMLI: data/vocab_entity.json ve tum .pt/.bin UNTRACKED (git ls-files disi), bu yuzden `git status` onlari gostermez — mtime ile ayrica dogruladim, hepsi 09-09..09-14 tarihli.",
+      "sonuc": "DOGRULANDI"
+    },
+    {
+      "claim": "E) 11 temsilcisiz dosyanin 9'u gurultulu koke bagli, 2'si PyTorch yerel RuntimeError firlatiyor",
+      "olcum": "BAGIMSIZ: zincirleri cozdum. 9 dosya: test_user_case->verify_rag->prompt_contract; verify_clean_models->chat_prompt->prompt_contract; diagnostics_history_gap / evaluate_b1_5_rigorous / evaluate_carpenter_generation_100 -> evaluate_mcq_conditioning -> prompt_contract; merge_teacher_dataset->train.py (yerel, print'li); train_step_a_ablation->prompt_contract; agent_gateway->prompt_contract; verify_rag->prompt_contract. 2 dosya (measure_forward_pass.py:22, verify_pedagogical_models.py:35) resize CAGRMIYOR, dogrudan load_state_dict(strict=False) yapiyor. torch 2.11.0 ile OLCUM: sekil uyusmazliginda strict=False GERCEKTEN RuntimeError firlatiyor (strict=True ile ayni hata metni) — strict=False yalnizca eksik/fazla ANAHTARI yutar, sekil uyusmazligini YUTMAZ.",
+      "sonuc": "DOGRULANDI"
+    },
+    {
+      "claim": "F) Degistirilen site 4, kalan sessiz site 0, kalan gurultulu tanim 5",
+      "olcum": "BAGIMSIZ: 4 dosyadan (test_rag_interactive, evaluate_chat, evaluate_on_train_data, run_experiment_c) sessiz tanim git diff'te silinmis, yerine import gelmis. Su anki agacta 0 sessiz / 5 gurultulu tanim.",
+      "sonuc": "DOGRULANDI"
+    },
+    {
+      "claim": "G1) Fail-open kapatildi; CWD repo koku DISINDA iken de mutlak gercek kasa yolu ENGELLENIR",
+      "olcum": "BAGIMSIZ IKI YONLU KONTROL: (i) CWD=repo koku + 'data/pedagogy/cot_vault.jsonl' -> RuntimeError 'Guvenlik Ihlali...'; (ii) CWD=/tmp + MUTLAK kanonik yol -> RuntimeError; ek olarak (ii') CWD=/tmp + '<root>/data/pedagogy/../pedagogy/cot_vault.jsonl' -> RuntimeError (realpath normalizasyonu calisiyor). _CANONICAL_PROD_VAULT = /Users/hakankilicaslan/Git/tr_llm/data/pedagogy/cot_vault.jsonl (__file__ uzerinden sabit). Kosum sonrasi cot_vault hash'i DEGISMEDI.",
+      "sonuc": "DOGRULANDI"
+    },
+    {
+      "claim": "G2) Dizin bileseni bos ise sessizce False DONMEZ, ACIK HATA verir",
+      "olcum": "BAGIMSIZ: tmpdir'de vault_path='flat_vault.jsonl' -> fonksiyon ISTISNA FIRLATMADI, dondu=True, dosya OLUSTU. Yani 'sessizce False donme' kusuru kapandi, ancak kabul metninin istedigi 'acik hata' VERILMIYOR.",
+      "sonuc": "KISMEN — bkz F1"
+    },
+    {
+      "claim": "G3) ALLOW_PROD_VAULT_WRITE belgelendi",
+      "olcum": "BAGIMSIZ grep: yalnizca src/gateway/pedagogical_supervisor.py icinde 3 gecis (docstring aciklamasi + kosul + hata mesaji). Kabul 'docstring/README metni' secenegine uyuyor. Kosul: ALLOW_PROD_VAULT_WRITE=1 iken kapi aciliyor (kacis kapisi calisiyor).",
+      "sonuc": "DOGRULANDI"
+    }
+  ],
+  "findings": [
+    {
+      "id": "F1",
+      "severity": "DUSUK",
+      "title": "G2 kabul metni ile uygulama celisiyor: 'acik hata verir' istendi, 'basariyla yazar' teslim edildi",
+      "olcum": "Kabul G2: 'vault_path dizin bileseni icermiyorsa fonksiyon sessizce False DONMEZ, ACIK HATA verir; hata mesaji ve cagri cikti olarak gosterilir.' Uygulama: `dir_name = os.path.dirname(target_vault); if dir_name: os.makedirs(...)` — duz ad verilince makedirs atlanip dosya normal sekilde yaziliyor. Ham cikti: SONUC: dondu=True, dosya var mi=True.",
+      "mekanizma_olculdu": "Uygulama davranisi kabul metnini harfi harfine karsilamiyor; yurutucu bunu kanit metninde durustce yazmis ('dir_name bos ise os.makedirs yapilmiyor, duz dosya adi basariyla yaziliyor') ama SAPMA olarak ETIKETLEMEMIS.",
+      "neden_onemli": "Projede 'kabul metni ile teslim edilen davranis ayrismasi' tam olarak T-0016/T-0018'de yakalanan iyimserlik sinifidir. Burada yon MASUM (daha iyi davranis), ama etiket eksik.",
+      "oneri": "Karar danismana ait: (a) uygulama kabulden daha iyi oldugu icin kabul metni guncellenir ve sapma kapanir, YA DA (b) 'acik hata' gercekten isteniyorsa fail-fast eklenir. Ben (a)'yi oneririm — duz dosya adina yazmak MESRU bir islem, hata vermek yanlis olur.",
+      "kapsam_notu": "Kabul metni bu gorevin kendi spec'inde; degisiklik gerekiyorsa YENI GOREV acmaya gerek yok, T-0025 kapanis notuna yazilabilir."
+    },
+    {
+      "id": "F2",
+      "severity": "ORTA",
+      "title": "Mutant kanarya testi SENTETIK: repoya dosya koymuyor, audit fonksiyonunu hic cagirmiyor",
+      "olcum": "test_canary_e_silent_resize_mutant_detector govdesi mutant metnini STRING olarak ayristirip yalnizca is_resize_state_dict_silent() cagiriyor, sonra `simulated_defs=[{...}]` diye ELLE kurulmus bir liste uzerinde assertion'i tekrar ediyor. KANIT: audit_repo_resize_state_dict_definitions fonksiyonunu 'cagrilirsa patlat' ile monkeypatch ettim -> test YINE GECTI. Yani dosya sistemi taramasi hic calismiyor.",
+      "mekanizma_olculdu": "DedektORUN KENDISI saglam (F2'yi ben gercek dosyayla sinadim: kirmizi yandi). Kusur dedektorde degil, onu sinayan TESTTE: test, 'repodaki dosyalari bulma' katmanindaki bir gerilemeyi yakalayamaz. Ornek: audit fonksiyonunun atlama listesine ileride 'scratch' eklenirse (ya da os.walk repo kokune degil CWD'ye baglanirsa) kanarya sessizce YESIL kalir.",
+      "neden_onemli": "Bellek kaydi 'vakum kanarya': yanlis sey yesil yaniyorsa kapi yoktur. Burada kapi VAR ama onu koruyan test yok — kapinin kendisi bir sonraki refaktorde sessizce olursa kimse fark etmez.",
+      "oneri": "test_canary_e_silent_resize_mutant_detector icinde mutant dosyasi tmpdir YERINE repo icine (ornegin scratch/_mutant_probe_<pid>.py) yazilsin, audit_repo_resize_state_dict_definitions() CAGRILSIN, kirmizi yandigi assert edilsin, finally ile SILINSIN. Bu, benim bagimsiz kosumumun testlestirilmis halidir.",
+      "kapsam_notu": "tests/ zaten writes[] icinde; duzeltme yeni gorev gerektirmez."
+    },
+    {
+      "id": "F3",
+      "severity": "DUSUK",
+      "title": "Dedektorun kor noktasi: 'min(' veya 'shape' metni icermeyen sessiz doldurma kapiyi YESIL birakiyor",
+      "olcum": "scratch/_t0025_blindspot2.py: `.size()` + `torch.nn.functional.pad` ile sessizce dolduran, hicbir print/uyari basmayan bir resize_state_dict yazdim -> is_silent=False, kapi YESIL, dosya tarama listesinde GORUNUYOR (yani bulma calisiyor, SINIFLANDIRMA kaciriyor).",
+      "mekanizma_olculdu": "has_shape_slicing = ('min(' in fn_text or 'shape' in fn_text). Iki jeton da yoksa fonksiyon sessiz olsa bile 'sessiz degil' sayiliyor.",
+      "neden_onemli": "Kanaryanin iddiasi evrensel: 'repoda 0 sessiz resize var'. Bu iddia, tarihsel sablon (min+shape) icin dogru, keyfi sessiz uygulama icin degil.",
+      "oneri": "Dusuk oncelikli: tehdit modeli 'eski sablon geri gelir' ise mevcut olcut yeterli. Genisletilmek istenirse olcut tersine cevrilmeli (uyari/raise YOKSA ve fonksiyon agirlik yaziyorsa sessiz say) — jeton aramak yerine.",
+      "kapsam_notu": "tests/ yazma kapsaminda; ama oncelik dusuk, T-0025 kapanisini bloklamaz."
+    },
+    {
+      "id": "F4",
+      "severity": "DUSUK",
+      "title": "Varsayilan kasa yolu hala CWD'ye bagli: repo disi CWD'de kapi devreye girmiyor, yazim BASKA yere sessizce gidiyor",
+      "olcum": "CWD=/tmp + vault_path=None -> hedef '<cwd>/data/pedagogy/cot_vault.jsonl' olarak cozuluyor, kanonik yolla esit OLDUGU icin kapi devreye GIRMIYOR ve fonksiyon yazmaya calisiyor (benim sandbox'imda makedirs('data') PermissionError verdi; normal ortamda dosya sessizce olusurdu).",
+      "mekanizma_olculdu": "Kapi KARSILASTIRMASI artik CWD'den bagimsiz (mutlak kanonik yol her CWD'den yakalaniyor — G1 dogrulandi). CWD'ye bagli kalan sey VARSAYILANIN KENDISI: `os.environ.get('COT_VAULT_PATH', 'data/pedagogy/cot_vault.jsonl')` hala goreli.",
+      "neden_onemli": "Kabul G1 yalnizca 'mutlak gercek yol verildiginde engelle' diyordu ve o KAPANDI; bu farkli bir kose. Pratikte pytest CWD=repo koku ile kosuyor, yani test guvenligi bozulmuyor; risk, repo disi CWD'den kosan bir alt surec/entegrasyon.",
+      "oneri": "Varsayilan da __file__ uzerinden mutlak yapilsin (ornegin os.path.join(_REPO_ROOT, 'data/pedagogy/cot_vault.jsonl')) — boylece 'varsayilan' her CWD'de ayni dosyayi isaret eder ve kapi da onu yakalar.",
+      "kapsam_notu": "src/gateway/ writes[] icinde."
+    },
+    {
+      "id": "F5",
+      "severity": "ORTA",
+      "title": "record_to_cot_vault artik hicbir istisnayi yutmuyor; cagri yeri korumasiz — kasa yazimi hatasi pedagojik istegi dusurebilir",
+      "olcum": "Eski govde: try/except Exception -> print + return False (SESSIZ yutma). Yeni govde: try/except TAMAMEN KALDIRILMIS; guard RuntimeError firlatiyor, I/O hatalari da yukari cikiyor. Cagri yeri src/gateway/pedagogical_supervisor.py:810 civari: `record_to_cot_vault(...)` dogrudan, try/except OLMADAN cagriliyor.",
+      "mekanizma_olculdu": "Davranis degisikligi kabul metinlerinin hicbirinde istenmiyor; guard'in firlatmasi isteniyor (G2/G1), ama guard DISINDAKI hatalarin akibeti tanimlanmamis. CLAUDE.md 'sessizce gecistirilmemeli' der — ama 'yut' ile 'korumasiz firlat' arasi bir tercih var ve o tercih kayda gecmemis.",
+      "neden_onemli": "Bu yol bir GUNLUK/KAYIT yoludur (best-effort), karar yolu degil. Disk dolu, izin hatasi veya bos bir COT_VAULT_PATH ortam degiskeni artik ogretmen dongusunu ortasinda dusurur. Kusur sinifi: duzeltmenin yan etkisi.",
+      "oneri": "Guard (test kapisi) firlatmaya devam etsin; onun ALTINDAKI I/O kismi try/except ile yakalanip LOGLANSIN ve False donsun. Yani: guard yukarida, koruma asagida.",
+      "kapsam_notu": "src/gateway/ writes[] icinde; yeni gorev gerekmez."
+    }
+  ],
+  "non_findings": [
+    {
+      "id": "N1",
+      "title": "BENIM HATAM (1): 'PyTorch strict=False sekil uyusmazligini sessizce yutar' varsayimim YANLIS cikti",
+      "detay": "Yurutucunun E maddesindeki '2 dosya PyTorch yerel RuntimeError firlatiyor' iddiasini once SUPHELI buldum (strict=False yutar diye bekliyordum). torch 2.11.0 ile olctum: strict=False sekil uyusmazliginda GERCEKTEN RuntimeError firlatiyor (strict=True ile ayni 'size mismatch' metni); strict=False yalnizca eksik/fazla ANAHTARI yutar. Yurutucunun iddiasi DOGRU. Ders: iddiayi curutmeden once olc."
+    },
+    {
+      "id": "N2",
+      "title": "BENIM HATAM (2): '.size() kullanani dedektor kacirir' hipotezim CURUDU",
+      "detay": "min( + shape jetonlarindan kacmak icin .size() ile yazilmis bir sessiz varyant denedim; 'min(' jetonu hala bulundugu icin dedektor onu YAKALADI (is_silent=True). Kor nokta ancak HER IKI jeton da yoksa olusuyor (bkz F3) — yani cok daha dar."
+    },
+    {
+      "id": "N3",
+      "title": "BENIM HATAM (3): kendi 'cozulmez cagri' sayacim yanlis pozitif uretti",
+      "detay": "Ilk taramamda 9 dosyayi 'resize_state_dict cagiriyor ama ne tanimliyor ne import ediyor' diye isaretledim. SEBEP KENDI REGEX'IMDI: `import resize_state_dict` alt-dizgisini aradim, oysa dosyalar `from src.llm.prompt_contract import render_prompt, resize_state_dict` yaziyor (birlesik import). Duzeltilmis tarama: 26 cagiran dosya, 0 cozulmez cagri."
+    },
+    {
+      "id": "N4",
+      "title": "CELISKI DEGIL: A maddesindeki '3 sessiz' ile F maddesindeki '4 site' farkli populasyonlar",
+      "detay": "A: 'oncesi 9 tanim (3 sessiz)' — 3 sayisi F0'in TEMSILCI kuralindan geliyor (her uzlastirma noktasindan tek satir; F0'in 31 sitesinde sessiz sinif 3). Gercek repoda ONCE 4 sessiz tanim vardi: test_rag_interactive, evaluate_chat, evaluate_on_train_data VE run_experiment_c. Git HEAD icerigi uzerinde kendi dedektorumu kosturarak dogruladim: 9 tanim / 4 SESSIZ. F maddesi (4 site) zaten dogru sayiyi veriyor. Yani ic celiski yok, ama A'nin parantezi repodaki gercek sessiz sayisini EKSIK gosteriyor."
+    }
+  ],
+  "kisit_aciklamasi": "Bu turda egitim kosusu baslatmadim, .pt/.bin uretmedim, hicbir DONMUS yola yazmadim. Repoya yazdigim tek sey dogrulama artefaktlaridir: dogrulama dosyasi (data/eval/t0025_verification.json) ve GECICI mutant prob dosyalari (scratch/_t0025_mutant_probe.py, scratch/_t0025_blindspot.py, scratch/_t0025_blindspot2.py) — ucu de kosum sonunda SILINDI. cot_vault.jsonl sha256 dogrulama boyunca 97b06fe5...5619 sabit kaldi (91 satir). pytest yalnizca okuma amaciyla kosuldu, kapi calisti.",
+  "downstream": [
+    {
+      "oneri": "F2 (sentetik mutant testi) icin AYRI GOREV ACMIYORUM: tests/ zaten T-0025'in writes[] kapsaminda ve duzeltme ~15 satir. Bir sonraki F turuna 'kapi testlerini gercek artefaktla sinama' basligiyla eklenmesi yeterli."
+    },
+    {
+      "oneri": "F5 (korumasiz firlatma) EN ONEMLI bulgu: bir sonraki tura 'kayit yollarinda guard-yukarida/koruma-asagida' maddesi olarak girmeli; yoksa bir sonraki kapi duzeltmesi ayni sinifi tekrar uretir."
+    },
+    {
+      "oneri": "F1 bir DANISMAN KARARI bekliyor: G2 kabul metni mi guncellenecek, uygulama mi degisecek. Ben (a) sikkini oneririm."
+    },
+    {
+      "oneri": "T-0025 kapanisini bloklayan bulgu YOK. F1-F5'in hepsi iyilestirme sinifinda."
+    }
+  ],
+  "danisman_notu": "Bu tur BEGENDIGIM bir tur: yurutucu sayilarinin hepsi bagimsiz olarak tuttu (A,B,C,D,E,F,G1,G3) ve G2 sapmasini kanit metninde GIZLEMEDEN yazmis. F2'nin onemi sudur: kanaryanin KENDISI saglam oldugu icin (bunu gercek dosyayla ben kanitladim) kabul B maddesi MADDEN gecti — ama yurutucunun sundugu TEST o kaniti uretmiyor, yalnizca BENIM bagimsiz kosumum uretiyor. Yani 'yesil gecti' kanitinin arkasinda bu kez gercek bir olcum VAR, ancak o olcum testlestirilmemis. Kalici kilmak icin F2'deki 15 satir sart.",
+  "ikinci_tur_2026_09_15": {
+    "neden": "Birinci tur (08:47Z) sonuc dosyasini yazdi ANCAK BILDIRIM ADIMI YARIDA KALDI: log/events.jsonl'de 08:30Z sonrasi claude'a ait message_sent YOK; antigravity gelen kutusundaki son claude mesaji 08:21:24Z (uyari). Bu tur (a) o adimi tamamlamak, (b) birinci turun OLCMEDIGI iki ekseni olcmek icin kosuldu: kanaryanin EVRENI ve F0 census'unun bu evren icindeki DOGRULUGU.",
+    "verified_at_utc": "2026-09-15T08:52:43Z",
+    "birinci_turla_uyum": "Sekiz iddia (A,B,C,D,E,F,G1,G3) SIFIRDAN yeniden olculdu; birinci turun sonuclariyla BIREBIR tuttu. G2 sapmasi da aynen dogrulandi. Yani birinci tur doğruydu; bu tur onu DEGISTIRMIYOR, GENISLETIYOR.",
+    "claims_re_verified": [
+      {
+        "claim": "A) 5 tanim / 0 sessiz",
+        "olcum": "BAGIMSIZ: grep 'def resize_state_dict' ham cikti 7 satir -> 5 gercek def + 2 satir tests/test_prompt_contract.py icindeki dedektor iskeleti (satir 349 regex assert'i, satir 359 mutant dizgesi). Kanaryanin KENDI fonksiyonu kosturuldu: 5 tanim, is_silent hepsi False, SESSIZ TOPLAM=0.",
+        "sonuc": "DOGRULANDI"
+      },
+      {
+        "claim": "B) dedektor vakum degil",
+        "olcum": "BAGIMSIZ, YONTEM FARKLI: birinci tur mutant'i scratch/ icine koymustu; bu tur REPO DISINDA ($TMPDIR) bir agac kurup audit_repo_resize_state_dict_definitions(agac) cagirdim -> mutant BULUNDU (is_silent=True), sessiz>0. Yani tarama makinesi gercek dosyayla calisiyor.",
+        "sonuc": "DOGRULANDI (yontem bagimsiz)"
+      },
+      {
+        "claim": "C) 128 passed + cot_vault sabit",
+        "olcum": "BAGIMSIZ: sandbox icinde 127 passed / 1 failed (test_agent_gateway soket bind -> PermissionError, SANDBOX kaynakli); sandbox DISINDA ayni takim 128 passed. Toplam populasyon ayni: 128. cot_vault sha256 97b06fe5...5619 ve 91 satir, ONCE=SONRA, iki kosuda da degismedi. Ayrica kasa $TMPDIR'e yedeklendi ve probe sonunda yedekle karsilastirildi.",
+        "sonuc": "DOGRULANDI"
+      },
+      {
+        "claim": "D) donmus yollara 0 dokunma",
+        "olcum": "BAGIMSIZ, PENCERE TABANLI: T-0025 penceresi (08:06-08:40Z) icinde 10 donmus desenin (src/llm/tokenizer.py, src/compiler/**, data/lexicon/**, data/realistic_rag/**, data/b1_5_splits/**, data/pedagogy_canonical/**, data/vocab.json, data/vocab_entity.json) altinda degisen dosya sayisi = 0. data/*.pt|*.bin pencerede degisen = 0. cot_vault mtime 07:37:37Z (pencerenin DISINDA, T-0022 kalintisi). NOT: git status'ta '?? data/b1_5_splits/' gibi gorunenler UNTRACKED donmus dizinlerdir, DEGISMIS degil — ilk fnmatch taramam onlari yanlislikla 'kesisim' saydi, mtime ile curutuldu.",
+        "sonuc": "DOGRULANDI"
+      },
+      {
+        "claim": "E) 11 dosyanin 9'u gurultulu koke bagli, 2'si yerel RuntimeError",
+        "olcum": "BAGIMSIZ import taramasi: diagnostics_history_gap / evaluate_b1_5_rigorous / evaluate_carpenter_generation_100 -> evaluate_mcq_conditioning -> prompt_contract; train_step_b1_canonical / train_step_b1_5_rigorous de ayni; merge_teacher_dataset -> train (yerel, print'li); train_step_a_ablation / agent_gateway / verify_rag -> prompt_contract; test_user_case -> verify_rag; verify_clean_models -> chat_prompt.",
+        "sonuc": "DOGRULANDI"
+      },
+      {
+        "claim": "F) 4 site degisti, 0 sessiz kaldi, 5 gurultulu tanim kaldi",
+        "olcum": "BAGIMSIZ git diff: 4 dosyada sessiz tanim SILINMIS, yerine 'from src.llm.prompt_contract import resize_state_dict' gelmis (test_rag_interactive:26, evaluate_chat:26, evaluate_on_train_data:23, run_experiment_c:20). Kalan 5 tanimin govdesi tek tek okundu: 4'u print('Resizing weights for: ...'), 1'i print('[SOZLESME_UYARI] ...') -> hepsi gurultulu.",
+        "sonuc": "DOGRULANDI"
+      },
+      {
+        "claim": "G1) kapi CWD'den bagimsiz",
+        "olcum": "BAGIMSIZ IKI YONLU KONTROL, bu tur YENIDEN: (i) CWD=repo koku + varsayilan yol -> RuntimeError; (ii) CWD=/private/tmp/claude-501 + MUTLAK GERCEK kasa yolu -> RuntimeError. Her iki vakadan sonra cot_vault sha256 dogrulandi: DEGISMEDI (kapi yazmadan firlatiyor).",
+        "sonuc": "DOGRULANDI"
+      },
+      {
+        "claim": "G2) 'acik hata verir'",
+        "olcum": "BAGIMSIZ yeniden: CWD=$TMPDIR + vault_path='g2_flat.jsonl' -> istisna YOK, donus=True, dosya CWD'de OLUSTU. Sessiz False kapandi, ama kabul metninin istedigi ACIK HATA YOK.",
+        "sonuc": "KISMEN — birinci turdaki F1 aynen gecerli"
+      },
+      {
+        "claim": "G3) ALLOW_PROD_VAULT_WRITE belgelendi",
+        "olcum": "BAGIMSIZ: docstring'de 'Kacis Kapisi (Escape Hatch)' basligi altinda tanimli; kabul 'docstring/README' secenegine uyuyor.",
+        "sonuc": "DOGRULANDI"
+      }
+    ],
+    "findings": [
+      {
+        "id": "F6",
+        "severity": "DUSUK-ORTA",
+        "title": "Kanaryanin EVRENI: kapatilan sey 'def resize_state_dict' ailesidir; bu ailenin DISINDA bir sessiz kirpma yolu KALDI",
+        "olcum": "src/rag/rag_pipeline.py satir 80-88: '# Resize state dict if vocab changed' yorumu altinda new_state_dict uzerinde satir ici sessiz min() kirpma dongusu. Dosyadaki tek print'ler satir 67 ve 72 (model yukleme mesaji ve dosya-yok hatasi); kirpma blogunda print/warn/raise YOK. Yani F0'in SESSIZ tanimina harfi harfine uyuyor, ama resize_state_dict ADI TASIMADIGI icin kanaryanin taramasina GIRMIYOR.",
+        "neden_celiski_degil": "Kabul A maddesinin evreni acikca 'def resize_state_dict' TANIMLARIDIR ve o evrende sonuc DOGRU (0 sessiz). Ancak GOREVIN HEDEF CUMLESI 'repo capinda sessiz kirpma / sozluk uyumsuzlugu yolunu kapatmak' diyor — bu cumle aile ile sinirli degil. Ikisi CELISMIYOR, farkli iki kume; hangi kumenin kapandigi yazili olmali.",
+        "etki": "PRATIKTE DUSUK cunku dosya OLU: hicbir modul import etmiyor (grep: yalnizca wiki/*.md referanslari ve tests/test_phase2.py:86'da yalnizca ADI gecen bir test metodu; import YOK) ve dosya ZATEN PARSE EDILEMIYOR (bkz F7) — yani kod calisamaz.",
+        "oneri": "src/rag/ zaten T-0025 writes[] icinde. Bu blok ya prompt_contract.resize_state_dict cagrisina baglanmali ya da dosya ile birlikte ele alinmali. Yeni gorev gerektirmez."
+      },
+      {
+        "id": "F7",
+        "severity": "ORTA",
+        "title": "Kanaryanin KOR NOKTASI olculdu: parse edilemeyen dosya TAMAMEN atlaniyor — ve repoda tam olarak o dosya, F6'daki sessiz yolu barindiriyor",
+        "olcum": "test_prompt_contract.py:315-328: dosya okuma + ast.parse TEK try blogunda ve 'except Exception: pass' ile YUTULUYOR. IZOLE PROBE (kanit): sessiz bir 'def resize_state_dict' ICEREN ama SONUNDA kasitli sozdizimi hatasi bulunan bir dosya yazdim -> audit_repo_resize_state_dict_definitions(agac) BOS LISTE dondurdu. Yani sozdizimi hatasi olan bir dosyadaki sessiz tanim kanarya icin YOK HUKMUNDE.",
+        "neden_onemli": "Repoda tam olarak BIR boyle dosya var ve o dosya F6'daki sessiz kirpma yolunu barindiriyor: src/rag/rag_pipeline.py (SyntaxError satir 82). Yani kanaryanin 'repoda 0 sessiz' iddiasi bu dosya icin DOGRULANAMAZ — kor nokta ile artik yol AYNI dosyada cakisiyor. Ayrica 'except Exception: pass' CLAUDE.md'nin 'beklenmeyen durumlar sessizce gecistirilmemeli' kuralinin kendisini ihlal ediyor.",
+        "ikinci_bulgu": "src/rag/rag_pipeline.py TAKIP EDILEN bir dosya ve SOZDIZIMI BOZUK olarak COMMIT'LI: 'git show HEAD:src/rag/rag_pipeline.py' kopyasi da py_compile'da SyntaxError veriyor (satir 82, 'for k, v in old_v_items := list(...)'). git status'ta dosya TEMIZ -> hata 9e59830'da commit edilmis. Python dosyasi parse edilemiyorsa o modul hicbir zaman calismamis demektir.",
+        "oneri": "Kanaryaya 'parse edilemeyen dosya' farkindaligi eklenmeli (en azindan sayisi loglanmali veya assert edilmeli); sessiz yolun iddiasi ancak tarama kapsami kanitlanirsa anlamli. Kapsam: tests/ + src/rag/, ikisi de writes[] icinde."
+      },
+      {
+        "id": "F8",
+        "severity": "DUSUK",
+        "title": "F0 census'u bu site icin YANLIS: 'HATA — dogrudan RuntimeError firlatir' yaziyor, kod once SESSIZCE kirpiyor",
+        "olcum": "data/eval/f0_identity_scope_2026-09-15.json -> silent_truncation_sweep.sites[18] = {site: 'src/rag/rag_pipeline.py:90', classification: 'HATA', pattern: 'model.load_state_dict(state_dict, strict=False)', behavior: 'Boyut uyusmazliginda dogrudan RuntimeError firlatir.'} ANCAK ayni dosyanin 80-88 satirlari, :90 cagrisindan ONCE sekilleri sessizce uzlastiriyor (state_dict[k] = new_state_dict[k]). Sekil uyusmazligi :90'a ULASAMAZ -> RuntimeError FIRLAMAZ. Kayitli davranis, kodun yaptigi seyin TERSI.",
+        "neden_gozden_kacti": "T-0022 dogrulamasi siniflandirmanin IC TUTARLILIGINI olctu (16+12+3=31 -> DOGRULANDI); her sitenin davranisinin DOGRULUGUNU olcmedi. Ben de bu turda olcene kadar kaydi dogru varsaydim.",
+        "etki": "F0 raporu F1 fazinin referansidir; yanlis 'HATA' kaydi, bu siteyi 'zaten guvenli' gostererek sessiz yolun gozden kacmasina katkida bulunur. Ayrica dosya parse edilemedigi icin dogru siniflandirma ne HATA ne SESSIZ, 'OLU (parse edilemiyor)'dur.",
+        "oneri": "F0 raporu DONMUS DEGIL (data/eval/ yazilabilir) ama T-0022'nin dogrulanmis artefakti; yerinde duzeltmek o dogrulamanin hash'ini gecersiz kilar. Dogru yol: bir sonraki turda T-0024 deseniyle (rapor metni duzeltme gorevi) ele alinmasi."
+      }
+    ],
+    "non_findings": [
+      {
+        "id": "N5",
+        "title": "BENIM HATAM (bu tur): kendi kaba AST/grep siniflandiricim iki YANLIS POZITIF uretti",
+        "detay": "Ilk taramamda tests/test_prompt_contract.py:349 ve :359'u 'SESSIZ tanim' diye isaretledim. Ikisi de TANIM DEGIL: 349 kanaryanin kendi regex assert'i (r'^\\s*def resize_state_dict'), 359 mutant DIZGESI. Yani kanaryayi sinayan dosyanin icindeki metin, benim regex'ime 'tanim' gibi gorundu. Gercek tanim sayisi 7 satir degil 5'tir ve bu, yurutucunun sayisiyla birebir tutar. Ders: 'def X' iceren SATIR saymak yetmez; AST FunctionDef dugumunu say (yurutucunun kanaryasi bunu dogru yapiyor)."
+      }
+    ],
+    "verdict_etkisi": "DEGISMEDI: PASS_WITH_FINDINGS. F6/F7/F8 kabul maddelerinin HICBIRINI dusurmez (A maddesinin evreni 'tanimlar'dir ve o evren temiz). F7 ORTA onemdedir cunku kanaryanin kapsam iddiasini sinirlar; F8 F0 raporunun bir kaydini duzeltir. Ucu de iyilestirme sinifinda, T-0025 kapanisini bloklamaz.",
+    "kisit_aciklamasi": "Bu turda egitim kosusu baslatilmadi, .pt/.bin uretilmedi, hicbir DONMUS yola yazilmadi (pencere taramasi: 0). Repoya yazilan tek artefakt bu dogrulama dosyasinin kendisidir (data/eval/). Gecici mutant/probe dosyalari $TMPDIR altinda tutuldu, REPOYA KONULMADI. cot_vault.jsonl sha256 butun tur boyunca 97b06fe5...5619 / 91 satir sabit kaldi; ayrica $TMPDIR'e yedeklenip probe sonrasi yedekle karsilastirildi."
+  }
+}

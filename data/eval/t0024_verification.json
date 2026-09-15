@@ -1,0 +1,119 @@
+{
+  "verification_id": "t0024",
+  "task_id": "T-0024",
+  "verified_by": "claude (danisman)",
+  "verified_at_utc": "2026-09-15T08:12:00Z",
+  "task_window_utc": [
+    "2026-09-15T07:52:22Z",
+    "2026-09-15T08:04:49Z"
+  ],
+  "verdict": "PASS_WITH_FINDINGS",
+  "verdict_gerekce": "Dort kabul kriterinin dordu de DOGRULANDI ve alti sayinin altisi bagimsiz olarak birebir yeniden uretildi. Tek kusur, satirin RAKAM sutununda: 3744 rakam karakteri ile 2066 rakam tokeni yan yana duruyor ve aradaki iliski YAZILI DEGIL — oysa noktalama sutunu icin 'kayip yok, %100 birebir' acikca yazilmis. T-0024'un kapattigi kusurun (iki sutun, beyan edilmemis iliski) ayni sinifi, bu kez rakam sutununda ve daha kucuk olcekte. Yuk tasiyan hicbir sayi yanlis degil.",
+  "claims_verified": [
+    {
+      "claim": "A) turk_tarihi_dpo_raw satirinin ALTI sayisi TEK bir tanimla yeniden uretiliyor, tanim raporda yazili",
+      "olcum": "BAGIMSIZ (kendi tokenizer kosumum, 32.816 sozluk data/rebuild/vocab_base_32816.json, tanim ' '.join(str(v) for v in record.values())). 406 kayit. total_chars=252407, punct_chars=6328, digit_chars=3744, punct_tokens=6328, digit_tokens=2066 — ALTISI DA birebir. punct_breakdown da birebir: {',':2214,'?':399,':':420,'(':639,')':641,'-':478,'.':1329,';':208}.",
+      "sonuc": "DOGRULANDI"
+    },
+    {
+      "claim": "B) Iki sutunun ayni metinden geldigi ACIKCA yazili",
+      "olcum": "Satirda text_definition, vocab_used ve character_and_token_alignment alanlari var; tanim ve sozluk yazili. Noktalama iddiasi (6328 karakter -> 6328 token, kayip yok) benim kosumumda DOGRU.",
+      "eksik": "Rakam sutunu icin ayni iliski yazili DEGIL (bkz. bulgu F1).",
+      "sonuc": "DOGRULANDI (kismi — rakam sutunu icin iliski beyan edilmemis)"
+    },
+    {
+      "claim": "Raporun json_envelope_divergence_note iddiasi: JSON zarfi tanimi 1624 noktalama ve 1624 rakam tokeni verir",
+      "olcum": "BAGIMSIZ: _render_structured_prompt(record) ile encode edildi -> punct=1624, digit=1624 (ikisi de raporla birebir). Mekanizma da dogrulandi: fonksiyon item['instruction']/['input']/['output'] ariyor, kayitta bu adlar YOK (kayit alanlari: prompt/input/chosen/rejected), dolayisiyla yalnizca <INPUT> alani render ediliyor. 406 kayit x 4 = 1624.",
+      "sonuc": "DOGRULANDI"
+    },
+    {
+      "claim": "C) silent_truncation_sweep bolumune secim kurali yazildi ve 'TUM siteler' ifadesi olculen sayiyla uyumlu",
+      "olcum": "(i) 'TÜM site'/'TUM site'/'tüm siteler' rapor genelinde 0 kez (eskiden vardi). (ii) Kural yazili: 'her uzlastirma noktasindan tek temsilci satir'. (iii) SAYILAR BAGIMSIZ YENIDEN URETILDI (kapsam: git ls-files + find BIRLESIMI, normalize edilmis 149 .py): load_state_dict(...) cagrisi icindeki strict=False -> 36 satir / 34 dosya (raporla birebir); 31 tekil temsilci site; kapsamdaki temsilcisi olmayan dosya 11 (raporla birebir); sinif dagilimi 16 HATA / 12 GORUNUR_UYARI / 3 SESSIZ (raporla birebir).",
+      "ek": "31 sitenin 31'i de yerinde dogrulandi: her site satirinin +-8 satirinda load_state_dict veya resize_state_dict izi VAR (dogrulanamayan: 0).",
+      "sonuc": "DOGRULANDI"
+    },
+    {
+      "claim": "D) Duzeltme sonrasi rapordaki diger sayilar DEGISMEDI (kapsam toplamlari 35454/3562 hala ayni)",
+      "olcum": "T-0022 dogrulamamda kaydettigim referans degerlerle karsilastirildi: combined_jacket_totals = 5702 kayit / 1680756 karakter / 35454 noktalama / 3562 rakam — BIREBIR AYNI. Diger satirlar da ayni: carpenter_specialization (5400 / 1593810 / 33732 / 3360) ve arena_carpenter_accumulated (302 / 86946 / 1722 / 202) referansimla birebir. dpo_all_tokenized (6198 kayit / 29051860 token / max_token_id 31199) degismedi.",
+      "sonuc": "DOGRULANDI"
+    },
+    {
+      "claim": "Yazim uyumu: yalnizca beyan edilen dosya yazildi",
+      "olcum": "Pencere taramasi (Python + datetime.timezone.utc — stat -f/-t ve find -newermt YEREL saat kullanir). Pencerede 11 dosya yazildi: yurutucununki = data/eval/f0_identity_scope_2026-09-15.json (07:59:23Z) — BEYAN EDILEN TEK YOL. Geri kalan: .agent-bus/* protokol dosyalari (bus'in kendi yazimlari) ve BENIM yazimlarim (data/eval/t0023_verification.json 07:59:15Z, data/eval/regeneration_plan_2026-09-15.json 08:04:19Z, regeneration_plan_2026-09-15.html 08:03:36Z).",
+      "sonuc": "DOGRULANDI"
+    },
+    {
+      "claim": "Kiralama protokolu",
+      "olcum": "Olay kaydi: task_claimed 07:52:22Z, lease_acquired 07:52:40Z (path=data/eval/f0_identity_scope_2026-09-15.json, scope=file, task_id=T-0024), result_reported 08:02:44Z, lease_released 08:03:19Z. Kiralama, beyan edilen yolun TA KENDISI icin ve yazimdan (07:59:23Z) ONCE alinmis.",
+      "sonuc": "DOGRULANDI"
+    },
+    {
+      "claim": "Donmus yola dokunulmadi, egitim kosusu yok",
+      "olcum": "Pencerede data/** altindaki uc yazimin hicbiri frozen.json desenlerine uymuyor (data/eval/** izinli istisna). Pencerede degisen .pt/.bin sayisi: 0. Egitim kosusu izi yok.",
+      "sonuc": "DOGRULANDI"
+    }
+  ],
+  "findings": [
+    {
+      "id": "F1",
+      "severity": "DUSUK",
+      "title": "Rakam sutununda 3744 karakter vs 2066 token yan yana duruyor ve ILISKI YAZILI DEGIL",
+      "olcum": "Satirda digit_char_count_total=3744 ve digit_tokens_generated_total=2066. Ayni satirin character_and_token_alignment metni YALNIZCA noktalama icin 'kayip yoktur, %100 birebir' diyor; rakam sutunu icin hicbir iliski cumlesi yok.",
+      "mekanizma_olculdu": "Muhasebe tam kapandi: 3744 rakam karakterinin 2066'si tek-rakam tokeni olur, 1678'i rakam-disi tokenlara apsorbe olur. Sebep: tokenizer'in encode() yolunda clean_word.isdigit() kontrolu VAR ama token once regex ile [\\w']+ olarak yakalandigi icin sayiya bitisik kesme isareti formlari bu dala HIC girmiyor — ornekler: '0001'', '3000'den', '700'e'. clean_word='0001'' -> isdigit() False -> compile_word='0001'' -> derleyici token_vector uretmiyor -> clean_word[0].isupper() False -> <UNK>. Yani bu 1678 rakam karakteri token akisinda rakam olarak TEMSIL EDILMIYOR.",
+      "neden_onemli": "T-0024'un kapattigi kusur sinifinin aynisi: iki sutun, beyan edilmemis iliski. Okuyucu 3744 vs 2066'yi gorunce 'rakam kayboluyor' diye okur — ki bu TAM OLARAK G1'de duzeltilen yanlis izlenimin rakam versiyonudur. Ayrica satirin kendi cumlesi 1:1 iliski iddia ettigi icin rakam sutunuyla CELISIYOR GIBI gorunur.",
+      "oneri": "Tek cumle yeter: 'Bu dosyada 3.744 rakam karakterinin 2.066'si tek-rakam tokeni olur; 1.678'i sayiya bitisik kesme isareti formlarinda (0001', 3000'den, 700'e) morfoloji yoluna girip <UNK> olur — kayip degil, tanimin sonucudur.' Karsilastirma: ceket killiyatinda (combined_jacket_totals) rakam 3562 -> 3562, yani 1:1; fark BU dosyanin metin biciminden geliyor.",
+      "kapsam_notu": "tokenizer DONMUS (src/llm/tokenizer.py) — duzeltme onerisi bu gorevin kapsaminda DEGIL."
+    },
+    {
+      "id": "F2",
+      "severity": "BILGI (downstream)",
+      "title": "Sayi+kesme isareti formlari <UNK>'a dusuyor — bu, D-B (noktalama/rakam hedefi TABAN) icin olculmus bir kapsam boslugu",
+      "olcum": "Yukaridaki mekanizma yalnizca bu dosyada 1678 rakam karakterini <UNK>'a ceviriyor. encode() yolunda latent bir asimetri var: clean_word='0001'' icin compile_word zaten '0001''e indirgeniyor (kesme isareti siliniyor) ama isdigit() kontrolu BU INDIRGEMEDEN SONRA tekrarlanmiyor; tekrarlansaydi 4 rakam tokeni uretilirdi.",
+      "neden_onemli": "Kullanici karari D-B: noktalama (ve olcumde rakam) hedefi TABAN. Taban egitilecekse, egitim kulliyatindaki sayisal icerigin bir kismi <UNK> olarak giriyor. Bu bir iddia degil, olculmus bir miktar: bu dosyada 1678/3744 = %44,8.",
+      "durum": "GOREV ACILMADI. Tokenizer degisikligi TUM checkpoint'leri gecersiz kilar (frozen.json gerekcesi: 'iki katmanli hibrit tokenizer; degisikligi tum kollari gecersiz kilar'). Karar kullanicinin: ya (a) tokenizer duzeltilir ve tum zincir yeniden derlenir, ya (b) kabul edilir ve F2/F3 kapsamina 'sayi+kesme isime formlari' olculmus bir sinir olarak yazilir. Danisman onerisi: (b) simdilik, cunku (a) zaten planlanan yeniden derlemeyi genisletir ve ayri bir karar gerektirir."
+    }
+  ],
+  "non_findings": [
+    {
+      "id": "N1",
+      "title": "BENIM HATAM (1): '36/34 tutmuyor, 34/32 cikti' — KAPSAM ekseni",
+      "detay": "Ilk olcumumde kapsam olarak yalnizca `git ls-files '*.py'` kullandim (145 dosya). Bu, UNTRACKED dosyalari disliyor; scratch/ altinda 4 .py var (run_t0016_benchmark, run_t0018_diagnostic, verify_clean_models, verify_pedagogical_models). find ile BIRLESTIRIP normalize edince kapsam 149 oldu ve 36 satir / 34 dosya CIKTI — raporla birebir. 'Yurutucunun sayisi yanlis' diye bulgu YAZMADAN yakalandi. Bu, ayni sinifin bilinen tekrari: kapsam ekseni (bkz. T-0022 turundaki normalize/tekrarlama dersi)."
+    },
+    {
+      "id": "N2",
+      "title": "BENIM HATAM (2): site listesindeki alan adini tahmin ettim",
+      "detay": "31 siteyi yazdirirken 'path'/'line' anahtarlarini varsaydim; hepsi None cikti ve 'site bilgisi yok' diye bulgu yazmak uzereydim. Gercek anahtar kumesi: {site, classification, pattern, behavior} — yol 'site' alaninda 'yol:satir' biciminde. Ham anahtar kumesini yazdirinca aninda duzeldi (alan adi/yol ekseni). Duzeltilmis olcumle 31/31 site yerinde dogrulandi."
+    },
+    {
+      "id": "N3",
+      "title": "Rakam muhasebemin ilk surumu yanlisti — etiket adlari rakam tasiyor",
+      "detay": "Rakam apsorbsiyonunu ilk olctugumde 'rakam-disi token icinde 6269' gibi anlamsiz bir sayi cikti: cunku POSS_3SG, POSS_2SG, PERSON_3PL gibi MORFOLOJI ETIKETLERININ ADLARI rakam karakteri iceriyor ve benim sayacim onlari 'metinden gelen rakam' sandi. Dogru olcum tokenizer'in kendi regex'iyle ham token akisini yeniden kurarak yapildi: 2066 + 1678 = 3744."
+    },
+    {
+      "id": "N4",
+      "title": "Ayna (root vs state) farki — protokol kusuru DEGIL, benim prosedurumun siniri",
+      "detay": ".agent-bus/tasks/T-0024.json ile state/tasks/T-0024.json yalnizca claimed_by/claimed_at alanlarinda farkli (root: null, state: antigravity); status ikisinde de done. Root kopya 08:02:44Z'de (result_reported ile ayni saniye) bus tarafindan yazilmis. Yani 'diff -q ile ayna dogrula' kuralim YALNIZCA GOREV SAHIPLENILMEDEN ONCE gecerli: sahiplenmeden sonra state/ mesru olarak claimed_* alanlarini kazanir ve diff -q kacinilmaz olarak 'FARKLI' der. Prosedur notu: diff -q POSTING ANINDA yapilir; sonrasinda yalnizca yasam dongusu alanlari disindaki icerik karsilastirilir. Yurutucu aleyhine bir bulgu yok."
+    },
+    {
+      "id": "N5",
+      "title": "11 sayisi calisma agaci durumuna bagli",
+      "detay": "Temsilcisi olmayan 11 dosyanin ikisi untracked scratch dosyasi (scratch/verify_clean_models.py, scratch/verify_pedagogical_models.py). Yani 11, AYNI calisma agaci durumunda yeniden uretilebilir; farkli bir untracked durumda degisir. Bu bir kusur degil, olcumun dogasi — rapor bunu yazsa iyi olurdu ama yuk tasimiyor."
+    }
+  ],
+  "kisit_aciklamasi": "Bu turda egitim kosusu baslatmadim, .pt/.bin uretmedim, checkpoint'lere dokunmadim, commit/push yapmadim. Kiralama almadim (kapsam disi yazim yok); benim yazimlarim yalnizca data/eval/** (izinli istisna) ve .agent-bus/tasks/** (danisman gorevi). Dogrulama icin kosturdugum tokenizer yalnizca OKUMA yapti.",
+  "downstream": [
+    {
+      "oneri": "F1 icin AYRI GOREV ACMIYORUM: duzeltme tek cumlelik bir dokumantasyon ekidir ve T-0024 zaten kapandi. Karar: ya kucuk bir T-0026 ile satira iliski cumlesi eklenir, ya da F1 kayit olarak data/eval'de kalir. Danisman onerisi: F2/F3 fazlari bu raporu zaten yeniden uretecekse F1'i O FAZIN icine almak (yeni gorev sayisini artirmadan)."
+    },
+    {
+      "oneri": "F2 (BILGI) KULLANICI KARARI bekliyor: sayi+kesme isareti formlarinin <UNK>'a dusmesi tokenizer'in DONMUS olmasi nedeniyle duzeltilemez. Iki secenek yazildi."
+    },
+    {
+      "oneri": "T-0025 (Faz-F1) hala ACIK ve bloksuz; yurutucu tarafindan sahiplenilmedi (claimed_by null). Icine T-0023'un G1/G2/G3 maddeleri eklenmistir."
+    },
+    {
+      "oneri": "Ayna proseduru (N4) bundan sonra 'diff -q POSTING ANINDA' olarak uygulanacak; sahiplenme sonrasi diff -q bir kusur gostergesi DEGILDIR."
+    }
+  ],
+  "danisman_notu": "Bu tur temiz cikti: yurutucunun dort kabul kriteri ve alti sayisi bagimsiz olarak birebir yeniden uretildi, 'TUM siteler' ifadesi tamamen kaldirilmis, secim kurali yazilmis ve 31/31 site yerinde dogrulanmis. Iyimser cerceveleme YOK. Tek gercek kusur (F1) dokumantasyon katmaninda ve dar: satir noktalama icin iliskiyi yazip rakam icin yazmamis — T-0024'un kapattigi kusur sinifinin kucuk bir kalintisi. Ikinci madde (F2) bir kusur degil, olculmus bir kapsam siniri ve kullanici karari bekliyor. Uc olcum hatamin ucu de BENIMDI (kapsam, alan adi, etiket adi) ve ucu de yazmadan yakalandi."
+}

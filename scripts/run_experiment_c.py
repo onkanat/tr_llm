@@ -17,7 +17,7 @@ import torch
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from src.llm.tokenizer import KristalTokenizer, Vocabulary
-from src.llm.prompt_contract import render_prompt
+from src.llm.prompt_contract import render_prompt, resize_state_dict
 from scripts.train_step_demo import KristalLM
 from src.compiler.decompiler import MorphemeDecompiler
 from src.compiler.lexicon import LexiconManager
@@ -25,19 +25,6 @@ from src.compiler.morphotactics import build_default_graph
 from src.compiler.core import CrystalCompiler
 
 DEVICE = torch.device("mps" if torch.backends.mps.is_available() else ("cuda" if torch.cuda.is_available() else "cpu"))
-
-def resize_state_dict(model: torch.nn.Module, old_state_dict: dict) -> dict:
-    new_state_dict = model.state_dict()
-    for k, v in old_state_dict.items():
-        if k in new_state_dict:
-            if v.shape != new_state_dict[k].shape:
-                if len(v.shape) == 2:
-                    new_state_dict[k][:min(v.shape[0], new_state_dict[k].shape[0]), :min(v.shape[1], new_state_dict[k].shape[1])] = v[:min(v.shape[0], new_state_dict[k].shape[0]), :min(v.shape[1], new_state_dict[k].shape[1])]
-                elif len(v.shape) == 1:
-                    new_state_dict[k][:min(v.shape[0], new_state_dict[k].shape[0])] = v[:min(v.shape[0], new_state_dict[k].shape[0])]
-            else:
-                new_state_dict[k] = v
-    return new_state_dict
 
 def generate(model: KristalLM, tokenizer: KristalTokenizer, prompt_str: str, max_tokens: int = 128, temp: float = 0.0) -> str:
     input_ids = tokenizer.encode(prompt_str)
@@ -95,19 +82,27 @@ def generate(model: KristalLM, tokenizer: KristalTokenizer, prompt_str: str, max
             
     return tokenizer.decode(generated).strip()
 
-def run_exp_c():
+def run_exp_c(vocab_path: str = "data/vocab.json", ckpt_path: str = "data/kristal_carpenter_model.pt"):
     lexicon = LexiconManager()
     lexicon.load_from_tsv("data/lexicon/roots.tsv")
     graph = build_default_graph()
     compiler = CrystalCompiler(lexicon, graph)
     vocab = Vocabulary()
-    vocab.load("data/vocab.json")
+    vocab.load(vocab_path)
     tokenizer = KristalTokenizer(compiler, vocab)
     decompiler = MorphemeDecompiler(compiler, vocab)
     
-    ckpt_path = "data/kristal_carpenter_model.pt"
-    model = KristalLM(vocab_size=len(vocab.stoi), n_embd=768, vocab=vocab, block_size=4096, n_layer=6, n_head=6)
+    model_rows = len(vocab.stoi)
     state = torch.load(ckpt_path, map_location="cpu")
+    ckpt_rows = state["lm_head.weight"].shape[0] if "lm_head.weight" in state else model_rows
+    
+    print(f"Model Yapılandırması: model_rows={model_rows}, ckpt_rows={ckpt_rows} (vocab={vocab_path}, ckpt={ckpt_path})")
+    if model_rows != ckpt_rows:
+        print(f"[UYARI] model_rows ({model_rows}) != ckpt_rows ({ckpt_rows})! Checkpoint satırları modele göre kırpılıyor/yeniden boyutlandırılıyor.")
+    else:
+        print(f"[BİLGİ] model_rows == ckpt_rows ({model_rows}). Checkpoint tam satır boyutunda yüklendi (kırpma yok).")
+
+    model = KristalLM(vocab_size=model_rows, n_embd=768, vocab=vocab, block_size=4096, n_layer=6, n_head=6)
     new_sd = resize_state_dict(model, state)
     model.load_state_dict(new_sd)
     model.to(DEVICE)
@@ -201,5 +196,20 @@ def run_exp_c():
     for cid, _, _, dec, _ in c2_results:
         print(f"  * {cid:25}: {dec[:75]}...")
 
+    return {
+        "vocab_path": vocab_path,
+        "ckpt_path": ckpt_path,
+        "model_rows": model_rows,
+        "ckpt_rows": ckpt_rows,
+        "device": str(DEVICE),
+        "c1_results": c1_results,
+        "c2_results": c2_results
+    }
+
 if __name__ == "__main__":
-    run_exp_c()
+    import argparse
+    parser = argparse.ArgumentParser(description="Experiment C: Channel-Aligned Inference")
+    parser.add_argument("--vocab", type=str, default="data/vocab.json", help="Path to vocabulary json (default: data/vocab.json)")
+    parser.add_argument("--ckpt", type=str, default="data/kristal_carpenter_model.pt", help="Path to checkpoint pt (default: data/kristal_carpenter_model.pt)")
+    args = parser.parse_args()
+    run_exp_c(vocab_path=args.vocab, ckpt_path=args.ckpt)

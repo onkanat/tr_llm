@@ -1,0 +1,149 @@
+{
+  "verification_id": "t0023",
+  "task_id": "T-0023",
+  "verified_by": "claude (danisman)",
+  "verified_at_utc": "2026-09-15T08:02:00Z",
+  "task_window_utc": [
+    "2026-09-15T07:45:07Z",
+    "2026-09-15T07:51:36Z"
+  ],
+  "verdict": "PASS_WITH_FINDINGS",
+  "verdict_gerekce": "Duzeltme GERCEK ve kendi kosumla dogrulandi: bagimsiz pytest kosum cot_vault'u bit duzeyinde degistirmedi ve data/** altinda 0 dosya degisti. Iki DUSUK bulgu var; ikisi de uretim kodundaki guvenlik kapisinin kendisiyle ilgili, kabul kriterleriyle degil.",
+  "claims_verified": [
+    {
+      "claim": "A) pytest oncesi/sonrasi data/pedagogy/cot_vault.jsonl sha256 AYNI",
+      "olcum": "BAGIMSIZ olarak yeniden uretildi — bu, T-0022 turunda KIRILAN kriterin ta kendisi. Benim kosumum oncesi: 97b06fe5befd6613b520d28dc20a74deaeb30e4e8f7e6675a23720a019ff5619, 91 satir, 91867 bayt. Kosum sonrasi: AYNI sha256, 91 satir. Once/sonra farki YOK.",
+      "karsilastirma": "T-0022 turunda ayni kosum 87 -> 89 satir yapmisti. Simdi 0 degisim. Duzeltme islevsel.",
+      "sonuc": "DOGRULANDI"
+    },
+    {
+      "claim": "Yurutucunun bildirdigi 'once' degeri (97b06fe5..., 91 satir)",
+      "olcum": "Kosum baslamadan once dosyayi okudum: birebir ayni. Yurutucu taban degerini dogru raporlamis.",
+      "sonuc": "DOGRULANDI"
+    },
+    {
+      "claim": "C) Test sayisi dusmedi (>=123 passed)",
+      "olcum": "venv/bin/pytest -q (sandbox ICI) -> 123 passed, 1 failed, 124 test, 5.54s. Tek hata sandbox kaynakli: tests/test_agent_gateway.py::test_gateway_http_server_endpoints -> PermissionError: [Errno 1] Operation not permitted (socketserver.py:478). Bu bilinen sandbox kisiti (socket.bind), kodla ilgili DEGIL.",
+      "tutarlilik": "Yurutucu '124/124' bildirdi (sandbox DISINDA). Ben 123+1 ortamsal hata olctum. Toplam test sayisi 124 ikisinde de AYNI; tek fark sandbox. Celiski yok.",
+      "sonuc": "DOGRULANDI"
+    },
+    {
+      "claim": "+1 test guvenlik kapisi testi",
+      "olcum": "Toplam 124 (onceki turlarda 123). Eklenen test tests/test_cot_vault_and_dual_parser.py::test_record_to_cot_vault_blocks_prod_write_in_tests. Artis = 1, kod kanitiyla esli.",
+      "sonuc": "DOGRULANDI"
+    },
+    {
+      "claim": "D) Kosu sirasinda data/** altinda hicbir dosya degismedi",
+      "olcum": "BAGIMSIZ YONTEM (Python, datetime.timezone.utc — spec'in uyardigi stat/find YEREL-saat tuzagina dusmeden): kosum oncesi data/** altinda 164 dosyanin mtime'i alindi, kosum sonrasi karsilastirildi. DEGISEN DOSYA SAYISI: 0.",
+      "not": "Yurutucunun 'find -newermt BOŞ' iddiasi kendi araciyla; benim bagimsiz yontemim ayni sonucu verdi. Tanim/kapsam farki yok.",
+      "sonuc": "DOGRULANDI"
+    },
+    {
+      "claim": "B) Her iki testte vault yolu tmpdir'e bagli (kod kaniti)",
+      "olcum": "Fark okundu. tests/test_cot_vault_and_dual_parser.py: supervisor artik `with tempfile.TemporaryDirectory() as tmpdir:` blogunun ICINDE ve vault_path=isolated_vault ile kuruluyor (eskiden with'in DISINDA ve vault_path'siz idi — olu degisken kusurunun ta kendisi). Ustune `assertTrue(os.path.exists(isolated_vault))` ve icerik assert'i eklenmis. tests/test_agent_gateway.py: ayni sekilde self.tmp_dir altindaki isolated_vault baglanmis.",
+      "sonuc": "DOGRULANDI"
+    },
+    {
+      "claim": "Guvenlik kapisi gercekten bekci (test vakum DEGIL)",
+      "olcum": "POZITIF KONTROL, iki yon, yazma riski olmadan: (1) PYTEST_CURRENT_TEST set + varsayilan kasa yolu -> RuntimeError FIRLADI ('Guvenlik Ihli: Test ortaminda varsayilan uretim kasasi...'). (2) izole tmpdir yolu -> donus True, dosya olustu, 1 satir. (3) her iki cagri boyunca uretim kasasi hash'i DEGISMEDI (97b06fe5..., 91 satir).",
+      "ek": "Kapinin `raise` ifadesi try blogunun DISINDA — yani asagidaki `except Exception` onu YUTMUYOR. Kod duzeni dogru.",
+      "sonuc": "DOGRULANDI"
+    },
+    {
+      "claim": "Kapi cagri yolunda yutulmuyor",
+      "olcum": "execute_supervision_step (satir 708) icinde 787'deki record_to_cot_vault cagrisini saran try/except YOK (708-787 arasinda hic `except` yok; dosyadaki try bloklari 322/567/618/673'te). Yani RuntimeError metodun DISINA cikar. KAPSAM NOTU: bunu yalnizca sinif icinde olctum; bir UST cagiranin kendi try/except'i olup olmadigini olcmedim.",
+      "sonuc": "DOGRULANDI (sinif ici kapsamda)"
+    },
+    {
+      "claim": "writes[] butunlugu — src/gateway/pedagogical_supervisor.py beyan edilmis bir yazim mi?",
+      "olcum": "EVET. Gorev dosyasinin writes listesi uc yol iceriyor ve ucuncusu src/gateway/pedagogical_supervisor.py. Olay kaydi: ilk iki kiralama 07:45:10Z (iki test dosyasi), UCUNCU kiralama 07:45:51Z (src/gateway/pedagogical_supervisor.py) — dosyanin mtime'i 07:46:55Z, yani kiralama yazimdan ONCE. Spec zaten 'degistireceksen once kiralama al ve writes listesine ekle' diyordu; yurutucu tam bunu yapti.",
+      "sonuc": "DOGRULANDI — IHLAL YOK (bkz. non_findings N1)"
+    },
+    {
+      "claim": "Pencerede yalnizca beyan edilen dosyalar yazildi",
+      "olcum": "T-0023 penceresinde (07:45:07Z-07:51:36Z, Python/UTC) yazilan 21 dosyadan kaynak olanlar: src/gateway/pedagogical_supervisor.py (07:46:55), tests/test_cot_vault_and_dual_parser.py (07:47:05), tests/test_agent_gateway.py (07:47:20) — UCU DE BEYAN EDILMIS. Geri kalan 16'si __pycache__ artefakti, 2'si BENIM yazimim (data/eval/regeneration_plan_2026-09-15.json 07:50:02, regeneration_plan_2026-09-15.html 07:50:40).",
+      "sonuc": "DOGRULANDI (yurutucu icin)"
+    }
+  ],
+  "findings": [
+    {
+      "id": "G1",
+      "severity": "DUSUK (guvenlik kapisi fail-open)",
+      "title": "Kapinin 'uretim kasasi' tanimi CWD'ye bagli — CWD repo koku degilse kapi ACAK veriyor",
+      "olcum": "Koddaki yuklem birebir kopyalanip olculdu: prod_vault_abs = os.path.abspath('data/pedagogy/cot_vault.jsonl') — CWD'ye gore kuruluyor. CWD = repo koku iken mutlak gercek yol verilince kapi True (engelliyor). CWD = baska bir dizin iken MUTLAK GERCEK YOL verilince kapi False (ENGELLEMIYOR).",
+      "neden_onemli": "Guvenlik kapisi YANLIS YONE aciyor: korumasi gereken dosyaya yazimi, ortam degisince sessizce serbest birakiyor. Test CWD'si bugun repo koku oldugu icin pratikte tetiklenmiyor — bu yuzden DUSUK. Ama kapi, tanimi geregi ortamdan bagimsiz olmali.",
+      "oneri": "prod_vault_abs'i modul/repo kokune sabitle (__file__ uzerinden) ya da iki tarafi os.path.realpath ile karsilastir. Ayrica symlink'li bir yol da ayni sekilde kacabilir; realpath bunu da kapatir.",
+      "sinama": "Yalnizca YUKLEM mantigi olculdu (gercek kasaya yazma riski alinmadi) — yuklem koddan birebir kopyalandi."
+    },
+    {
+      "id": "G2",
+      "severity": "DUSUK",
+      "title": "vault_path dizin bileseni icermezse fonksiyon SESSIZCE False donuyor",
+      "olcum": "os.makedirs(os.path.dirname(target_vault), exist_ok=True) — target_vault duz bir dosya adi ise ('v.jsonl') os.path.dirname '' doner ve makedirs('') FileNotFoundError firlatir; bu hata asagidaki `except Exception as e: print(...)` tarafindan YUTULUR ve fonksiyon False doner.",
+      "neden_onemli": "Bu davranis ONCEDEN de vardi (yeni bir kusur degil), ama artik fonksiyonun acik bir guvenlik sozlesmesi var: yanlis yapilandirilmis bir vault_path hata vermek yerine sessizce hicbir sey yapmiyor. CLAUDE.md'nin 'OOV ve beklenmeyen durumlar sessizce gecistirilmemeli' kuraliyla ayni ailede.",
+      "kapsam_notu": "Mevcut iki cagri yeri de (testler) tmpdir'li MUTLAK yol verdigi icin bugun tetiklenmiyor.",
+      "oneri": "Guvenlik kapisinin yanina ikinci bir fail-fast: dirname bos ise acik hata."
+    },
+    {
+      "id": "G3",
+      "severity": "BILGI",
+      "title": "PYTEST_CURRENT_TEST alt sureclere MIRAS kaliyor",
+      "olcum": "Kapi kosulunun ilk dali 'PYTEST_CURRENT_TEST' in os.environ. pytest bu degiskeni os.environ'a yazdigi icin, bir testin baslattigi ALT SUREC de onu miras alir.",
+      "sonuc": "Bir entegrasyon testi gercek boru hattini alt surec olarak baslatirsa, o surecte MESRU bir kasa yazimi artik RuntimeError firlatir. Fail-fast niyetiyle tutarli olabilir; ALLOW_PROD_VAULT_WRITE env kacis kapisi var ama HICBIR YERDE BELGELENMEMIS (grep: yalnizca kodun kendisinde geciyor).",
+      "oneri": "Ya belgele, ya kapiyi alt sureclerde devre disi birak (or. yalnizca ust surecte etkin olsun)."
+    },
+    {
+      "id": "G4",
+      "severity": "BILGI",
+      "title": "Kabul kriteri A'nin taban degeri KIRLENMIS durumu donduruyor",
+      "olcum": "A kriterinin 'once' degeri 97b06fe5... / 91 satir. Bu, T-0022 turunda BENIM pytest kosumumun ekledigi 4 sentetik kaydi zaten ICEREN durumdur (olay oncesi dogru deger f43864bc... / 87 satir idi).",
+      "sonuc": "Onemli ayrim: kriter A 'duzeltme calisiyor mu' sorusunu DOGRU yanitliyor (kosum dosyayi degistirmiyor) — bunu bizzat dogruladim. Ama 'veri olaydan onceki haline dondu' DEMIYOR; dosyada hala fazladan 4 kayit var. T-0022 dogrulamasindaki kullanici komutu (head -87 > ...) hala gecerli ve bu gorevin kapsami DISINDA (spec madde 4 zaten boyle diyor).",
+      "kullanici_karari": "Data/pedagogy/cot_vault.jsonl: 87 satira (f43864bcb02e0d5bd4d922ac891e80818b91f458cad2390b59b92e2d73c07d8e) donulsun mu? Donulurse T-0023'un A kriteri referans degeri artik gecersiz olur ve yeniden olculmelidir."
+    }
+  ],
+  "non_findings": [
+    {
+      "id": "N1",
+      "title": "BENIM HATAM: 'pedagogical_supervisor.py beyan edilmemis yazim' suphesi YANLIS",
+      "detay": "Penceredeki degisen dosyalari gorunce, ozet bilgime dayanarak T-0023'un writes listesinin IKI yolu oldugunu ve supervisor dosyasinin kapsam disi yazildigini dusundum (T-0010 deseni). Diskteki gorev dosyasini actim: writes UC yol iceriyor ve spec acikca 'src/gateway/pedagogical_supervisor.py'yi DEGISTIRECEKSEN once bus_acquire_lease al ve writes listesine ekle' diyor. Olay kaydi da ucuncu kiralamayi gosteriyor. Benim ozetim eksikti; ARTEFAKT yetkiliydi. Raporlamadan once yakalandi.",
+      "ders": "Bir kapsam ihlali ilan etmeden once gorev dosyasini DISKTAN oku, ozetten hatirlama."
+    },
+    {
+      "id": "N2",
+      "title": "123+1 (ben) vs 124/124 (yurutucu) — celiski degil, ORTAM farki",
+      "detay": "Tek fark sandbox'in socket.bind'i engellemesi (bilinen kisit, tests/test_agent_gateway.py::test_gateway_http_server_endpoints). Test SAYISI ikisinde de 124. Tanim/kapsam ekseni hatasi degil."
+    },
+    {
+      "id": "N3",
+      "title": "Yurutucunun 'find -newermt BOŞ' iddiasi ile benim Python/UTC taramam ayni sonucu verdi",
+      "detay": "Iki farkli arac, ayni hükum. Spec zaten stat/find'in YEREL saat tuzagini yaziyordu; yurutucu kriteri tutturmus. Burada duzeltilecek bir sey yok."
+    },
+    {
+      "id": "N4",
+      "title": "Penceredeki data/** yazimi BENIM, yurutucunun degil",
+      "detay": "data/eval/regeneration_plan_2026-09-15.json (07:50:02Z) ve regeneration_plan_2026-09-15.html (07:50:40Z) bu turda danisman olarak benim yazimlarim. data/eval/ kullanicinin izin verdigi TEK istisna. Yurutucunun data/** altinda yazimi YOK."
+    }
+  ],
+  "kisit_aciklamasi": "Kabul kriterini (pytest) bagimsiz dogrulamak icin kosuyu ben kostum. Sandbox icinde kosuldu: 1 test ortamsal olarak basarisiz (socket.bind PermissionError), 123 gecti. Bu kosum cot_vault'a HICBIR SEY EKLEMEDI (T-0022 turunda ayni kosum +4 satir eklemisti) — duzeltmenin kaniti budur. Kosum sirasinda benim tek yazimim: T-0025 gorev dosyasi ve iki plan artefakti.",
+  "downstream": [
+    {
+      "oneri": "T-0025 (Faz-F1) artik BLOKSuz — on kosulu T-0023 kapandi. Sessiz kirpma kapanisi icin sirada."
+    },
+    {
+      "oneri": "G1 (fail-open kapi) icin YENI gorev ACMIYORUM: T-0025 zaten src/gateway/ ve tests/ yaziyor ve ayni ailede. T-0025'in spec'ine eklenecek kucuk bir madde olarak postaladim (bkz. bus_send). Boylece gorev sayisi artmaz."
+    },
+    {
+      "oneri": "G2 (sessiz False) ayni sekilde T-0025 kapsamina uygun; ayni ailede (sessiz yutma)."
+    },
+    {
+      "oneri": "G3 (env belgeleme) dusuk oncelikli; T-0025 spec'ine 'belgele ya da kapsamla' olarak gecti."
+    },
+    {
+      "oneri": "G4: cot_vault'un 87 satira donup donmemesi KULLANICI KARARI. Donulurse T-0023'un A kriteri referans degeri gecersiz olur."
+    },
+    {
+      "oneri": "T-0024 (F0 rapor metni) hala ACIK ve bagimsiz; onu bloklamiyor."
+    }
+  ],
+  "danisman_notu": "Bu turda dogrulama katmani TEMIZ cikti: yurutucunun bildirdigi sayilarin tamami birebir tuttu ve asil kriter (salt-okunur veriye yazmama) bagimsiz kosumla kanitlandi. Iyimser cerceveleme deseni YOK — ozet metni de olculemeye dayali. Iki bulgu, duzeltmenin KENDI aracinda (guvenlik kapisi) ve ikisi de fail-open sinifinda: kapi, ortam degisince korumuyor ve yanlis yapilandirmada sessizce susuyor. Bir guvenlik kapisinin 'ortama gore kapanmasi' tipik bir tasarim kusurudur, bu yuzden kayda geciyor."
+}

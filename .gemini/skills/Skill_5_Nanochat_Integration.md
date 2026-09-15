@@ -21,7 +21,7 @@ Geleneksel istatistiksel BPE (Byte-Pair Encoding) yerine, morfem ID'lerini ve se
     *   `<PROPER_NOUN>` (ID: 11) $\rightarrow$ Özel isimler.
     *   `<ARA>` / `</ARA>` $\rightarrow$ Otonom Self-RAG arama sorgusu tetikleme etiketleri.
     *   `<BELGE>` / `</BELGE>` $\rightarrow$ Geri çağrılan RAG dokümanı bağlam etiketleri.
-*   **Sözlük Boyutu ve Genişleme:** Temel sözlük ~31.322 token kapasitesine sahiptir. Yeni morfemler `add_token(token)` metoduyla dinamik eklenir.
+*   **Sözlük Boyutu ve Genişleme:** Temel sözlük 31.357 token kapasitesine sahiptir (`data/vocab.json`). Güncel modeller 32.816 (`data/rebuild/vocab_b1_5_32816.json`) ve 32.852 (`data/vocab_entity.json`) token boyutundadır. Yeni morfemler `add_token(token)` metoduyla dinamik eklenir.
 *   **Ağırlık Boyutlandırma (`resize_state_dict`):** Model kontrol noktaları (checkpoints) yüklenirken, sözlük boyutu genişlemişse `embedding.weight` ve `lm_head.weight` tensörleri sıfırdan eğitilmeden mevcut ağırlıklar korunarak otomatik genişletilir.
 
 ### 2. `KristalTokenizer` Sınıfı

@@ -1,0 +1,171 @@
+{
+  "verification_id": "t0022",
+  "task_id": "T-0022",
+  "title": "F0: Kimlik, dondurma ve kapsam olcumu — BAGIMSIZ DOGRULAMA",
+  "verified_by": "claude (danisman)",
+  "verified_at_utc": "2026-09-15T07:45:00Z",
+  "task_window_utc": [
+    "2026-09-15T07:00:49Z",
+    "2026-09-15T07:11:54Z"
+  ],
+  "verdict": "PASS_WITH_FINDINGS",
+  "verdict_gerekce": "Yuk tasiyan iddialarin TAMAMI bagimsiz olarak birebir yeniden uretildi (kapsam boslugu 35.454/3.562 tam, checkpoint bit-ozdesligi, sifirlanmis sozlukler, 0 yeni .pt/.bin, pytest 123/123, protokol uyumu). Iki kusur var: (F1 ORTA) test takimi salt-okunur bir veri dosyasina yaziyor ve bu kabul kosusunun KENDISI tarafindan tetikleniyor; (F3 ORTA-DUSUK) kapsam boslugu raporunun bir yan satirinda iki farkli metin tanimi karismis. Ikisi de yuk tasiyan iddiayi degistirmiyor.",
+  "claims_verified": [
+    {
+      "claim": "kristal_model.pt / kristal_b1_5_best.pt / kristal_b1_5_epoch3.pt bit-ozdes",
+      "olcum": "sha256 02e15b8198f8f3334609eb52691d699e80f88972245377c1a79772cb42ae1679 (ucu de ayni), 472572529 B, mtime farki 1.05874 s",
+      "sonuc": "DOGRULANDI"
+    },
+    {
+      "claim": "data/vocab.json ve data/vocab_entity.json sha256 DEGISMEDI",
+      "olcum": "vocab.json 4b40eebee9c9... / vocab_entity.json 7611b6a523a2... — t0020_verification.json ve vocab_restore_recheck_2026-09-15.json'da kayitli degerlerle BIREBIR; ayrica `git diff HEAD -- data/vocab.json` bos (HEAD ile ayni)",
+      "sonuc": "DOGRULANDI"
+    },
+    {
+      "claim": "vocab_step_b1_final_32156.json ve vocab_base_32816.json tam ve onek birebir",
+      "olcum": "len(stoi)=32156 / 32816, next_id ayni, id'ler 0..N-1 kesintisiz, ikisi de vocab_entity.json'un TAM oneki; ':'=32142",
+      "sonuc": "DOGRULANDI"
+    },
+    {
+      "claim": "Sessiz kirpma: 3 site (test_rag_interactive.py:30, evaluate_chat.py:30, evaluate_on_train_data.py:27) gercekten SESSIZ",
+      "olcum": "uc dosyadaki resize_state_dict kopyalarinin govdesinde print/log/warn YOK (bayt-benzer uc kopya)",
+      "sonuc": "DOGRULANDI"
+    },
+    {
+      "claim": "Kapsam boslugu: ceket killiyati 35.454 noktalama + 3.562 rakam tokeni uretir (yeni veri gerekmez)",
+      "olcum": "BAGIMSIZ YENIDEN URETIM, alti sayinin altisi da birebir. carpenter_specialization: kayit 5400, karakter 1593810, nok_kar 33732, rak_kar 3360, nok_tok 33732, rak_tok 3360. arena_carpenter_accumulated (domain metadata alani HARIC): 302, 86946, 1722, 202, 1722, 202. Toplam = 5702 kayit / 1680756 karakter / 35454 noktalama / 3562 rakam. Tanim: ' '.join(record.values()), sozluk data/rebuild/vocab_base_32816.json.",
+      "sonuc": "DOGRULANDI",
+      "ek_saglamlik": "Token toplamlari ZARF TANIMINDAN BAGIMSIZ: ayni olcum json.dumps(record) zarfiyla da nok_tok=33732/1722 ve rak_tok=3360/202 veriyor. Yani 'domain' alani dahil edilse de edilmese de iddia ayni sayiyi tutuyor."
+    },
+    {
+      "claim": "0 yeni/degisen .pt, 0 yeni/degisen .bin",
+      "olcum": "find data -name '*.pt' -o -name '*.bin' -newermt 2026-09-15T00:00 yerel -> BOS. En yeni checkpoint 2026-09-14 (T-0022'den ~20 saat once)",
+      "sonuc": "DOGRULANDI"
+    },
+    {
+      "claim": "0 egitim kosusu",
+      "olcum": "Pencerede yeni/degisen hicbir .pt/.bin/log yok (dogru UTC penceresi taramasi: yalnizca 5 dosya, hicbiri kosu artefakti degil). Ikincil kanit.",
+      "sonuc": "DOGRULANDI (dolayli)"
+    },
+    {
+      "claim": "pytest 123/123",
+      "olcum": "venv/bin/pytest -q -> '123 passed in 11.64s'",
+      "sonuc": "DOGRULANDI (bkz. F1: bu kosu bir yan etki uretiyor)"
+    },
+    {
+      "claim": "Disk butcesi: 20.22 GiB bos, 2x senaryosu < 1 GiB (%4.6)",
+      "olcum": "df: 20 GiB avail. data/*.pt ust duzey = 23 dosya 9825.34 MiB (raporla BIREBIR); data/*.bin = 14 dosya 166.9 MiB (BIREBIR)",
+      "sonuc": "DOGRULANDI"
+    },
+    {
+      "claim": "protokol: kiralama olmadan yazma yok",
+      "olcum": "events.jsonl: task_claimed 07:05:09Z; lease_acquired x3 07:05:11Z (scope=file) TAM beyan edilen 3 yol icin; result_reported 07:11:54Z; lease_released x3 07:11:58Z",
+      "sonuc": "DOGRULANDI"
+    },
+    {
+      "claim": "Yalnizca 3 dosya yazildi",
+      "olcum": "Pencerede executor kaynakli yazim = tam 3 beyan edilmis dosya. (Penceredeki diger 4 yazim bana ait: t0021_verification.json, regeneration_plan_2026-09-15.html — danismanin kendi ciktilari. Bkz. F4 ve kisit_aciklamasi.)",
+      "sonuc": "DOGRULANDI (executor icin)"
+    },
+    {
+      "claim": "Siniflandirma ic tutarliligi 16 HATA + 12 GORUNUR_UYARI + 3 SESSIZ = 31",
+      "olcum": "Toplam 31, dagilim birebir. Ayrica sinif semantigi DOGRU: 16 HATA satirinin tamami load_state_dict cagrisi, ve bunlar boyut uyusmazliginda RuntimeError firlatir (strict=False olsa dahi eslesen anahtar icin firlatir) — tanimla uyumlu",
+      "sonuc": "DOGRULANDI"
+    }
+  ],
+  "findings": [
+    {
+      "id": "F1",
+      "severity": "ORTA",
+      "title": "Test takimi salt-okunur veri dosyasina yaziyor — hem de kabul kosusunun KENDISI tarafindan",
+      "olcum": "Bagimsiz pytest kosum data/pedagogy/cot_vault.jsonl'i DEGISTIRDI: sha256 f43864bcb02e0d5b... -> 16fc2faf3f0de26a..., satir 87 -> 89. Tek tek kosulan iki test dosyasi da +1'er satir ekledi (89->90->91).",
+      "mekanizma": "tests/test_cot_vault_and_dual_parser.py::test_pedagogical_supervisor_isolation_flow bir tempfile.TemporaryDirectory() aciyor ama onu supervizore HIC BAGLAMIYOR (olu degisken) — PedagogicalSupervisor `with` bloGUNUN DISINDA ve vault_path parametresi verilmeden kuruluyor; bu yuzden record_to_cot_vault varsayilan data/pedagogy/cot_vault.jsonl yoluna yaziyor. tests/test_agent_gateway.py::test_pedagogical_supervisor_evaluation_and_step hic izolasyon kurmuyor. Eklenen iki kaydin `query` alanlari bu iki testin probuyla BIREBIR ('Kirlangic kuyrugu nerelerde kullanilir?' ve 'Acik istiare nedir?'), timestamp'leri kosu anina esit -> atif kesin.",
+      "sonuc": "Her 'pytest N/N' kabul kosusu, beyan edilen writes[] disinda bir yazma uretiyor (SPEC kural 1). Ayrica cot_vault, README'ye gore 'Evre 5 morfemik akil yurutme egitimi'ne girdi olan bir veri dosyasi — her test kosusu oraya 2 sentetik kayit ekliyor.",
+      "bagimsiz_kanit": "Kosum oncesi hash f43864bc... ve 87 satir; sonrasi 16fc2faf... ve 89 satir. Tek dosya kosulari 90 ve 91."
+    },
+    {
+      "id": "F2",
+      "severity": "DUSUK (yeniden uretilebilirlik)",
+      "title": "Kriter F 'TUM siteler' diyor; secim kurali yazili degil ve sayi tam degil",
+      "olcum": "Rapor 31 site (file:satir) listeliyor. Repo capi: 36 adet load_state_dict(..., strict=False) satiri, 34 dosya — bunlarin 11'inde raporda hic temsilci yok. Raporun sectigi satirlar 'uzlastirma noktasi basina TEK temsilci satir' kuralina uyuyor (or. train.py:19 print satiri listelenmis, train.py:109 load cagrisi listelenmemis) ama bu kural raporda YAZILI DEGIL.",
+      "sonuc": "Ucuncu bir taraf 31 sayisini raporun kendi satir listesini okumadan yeniden uretemez. T-0019'daki G2'nin ayni ailesi (tanim eksik). Maddi kapatilicilik SAGLAM — bkz. N3.",
+      "not": "'TUM siteler' ifadesi bu haliyle fazla iddiali; 'her uzlastirma noktasindan bir temsilci' denmeli."
+    },
+    {
+      "id": "F3",
+      "severity": "ORTA-DUSUK",
+      "title": "turk_tarihi_dpo_raw satirinda iki farkli metin tanimi karismis",
+      "olcum": "Rapor: karakter=252407, nok_kar=6328, rak_kar=3744, nok_tok=1624, rak_tok=1624. Bagimsiz tarama: karakter/nok_kar/rak_kar UCU de yalnizca ' '.join(record.values()) duz-metin tanimiyla tutuyor; nok_tok/rak_tok IKISI de yalnizca json.dumps(record, ensure_ascii=False) zarf tanimiyla tutuyor. Genisletilmis tarama (15 alan altkumesi x 7 ayirici x 2 sarma = 210 aday) ALTI SAYIYI BIRDEN tutan TEK BIR TANIM BULAMADI.",
+      "sonuc": "Ayni satirin karakter sutunu ile token sutunu ayni metne ait degil; satirin ima ettigi '6328 noktalama karakteri -> yalnizca 1624 token' boslugu metnin ozelligi DEGIL, tanim degistirmenin urunu. Ayni duz metin tokenize edilince nok_tok=6328 (kayip YOK), zarfla 1624.",
+      "yon": "ONEMLI: bu kusur iddiayi IYIMSER degil KOTUMSER gosteriyor (ceket killiyati oldugundan daha fazla noktalama kaybediyor gibi). Bu turda iyimser cerceveleme RISKI gerceklesmedi — olculdu, yon ters.",
+      "etki": "Yuk tasimiyor: bu satir combined_jacket_totals'a DAHIL DEGIL (toplam = carpenter + arena)."
+    },
+    {
+      "id": "F4",
+      "severity": "BILGI",
+      "title": "cot_vault.jsonl'de IKI ayri ekleme mekanizmasi var",
+      "olcum": "HEAD 4 satir. Benim kosularimdan once 87 satir (+83 ekleme) ve bu 83 satirin ic timestamp'leri 2026-09-12/09-13 — yani ESKI. record_to_cot_vault timestamp'i now() ile yaziyor; dolayisiyla 07:11:12Z'deki (T-0022 penceresi) yazim record_to_cot_vault DEGIL, bir arsiv yeniden-oynatma mekanizmasi.",
+      "sonuc": "Penceredeki 07:11:12Z yaziminin yazari artefaktlardan BELIRLENEMIYOR. F1'deki pytest mekanizmasi bundan BAGIMSIZ olarak kanitlandi (now()-damgali +2 satir)."
+    },
+    {
+      "id": "F5",
+      "severity": "DUZELTME (kendi onceki turlarim)",
+      "title": "T-0019/T-0020/T-0021 dogrulamalarim cot_vault buyumesini YANLIS atfetmis",
+      "olcum": "Onceki uc dogrulamam bu dosyanin buyumesini 'canli bir veri toplama akisinin urunu, T-XXXX'in spec'iyle ilgisiz' diye N (bulgu degil) kaydetmisti. Gerekceyi miras almak yerine bu turda MEKANIZMAYI yeniden urettim: gercek neden test takimidir (F1).",
+      "sonuc": "Bu tur F1'i onceki non-finding'lerin YERINE gecirir. Ders: 'ilgisizdir' gerekcesi de bir iddiadir ve olculmeden devralinmamali."
+    }
+  ],
+  "non_findings": [
+    {
+      "id": "N1",
+      "title": "Benim 'kapsam boslugu FARKLI' hukmum kendi aygit hatamdi (10. vaka)",
+      "detay": "Ilk olcumum karakter 1831410/107180 (rapor 1593810/86946) ve nok_tok 0 (rapor 33732) verdi. Iki ayri hata: (a) TANIM — ben json.dumps(record) zarfini olctum, rapor string alanlarin boslukla birlesimini; (b) SOZLUK — data/vocab.json 31.357 token ve noktalama id'leri YOK, bu yuzden her noktalama <UNK>(0) oluyor ve token sayisi mekanik olarak 0 cikiyor. Raporun kendi yazdigi tanim ('32.816 sozluk') ve dogru tanimla alti sayinin altisi da birebir tuttu. [[iki-sayi-celisiyor-sanma-once-kume]] deseninin 10. ornegi."
+    },
+    {
+      "id": "N2",
+      "title": "arena total_chars farki: rapor 'domain' metadata alanini haric tutmus",
+      "detay": "Benim 4 alanli ' '.join olcumum 89966 verdi (rapor 86946); alan altkumesi taramasi raporun instruction+input+output (domain HARIC) tanimini kullandigini gosterdi — o zaman alti sayi da birebir. Kusur degil: token toplamlari 'domain' dahil edilse de AYNI (1722/202), yani yuk tasiyan iddia tanimdan bagimsiz."
+    },
+    {
+      "id": "N3",
+      "title": "Onceki turda suphelendigim 4 dosya sessiz DEGIL — zincir kokune kadar izlendi",
+      "detay": "scripts/diagnostics_history_gap.py, scripts/evaluate_b1_5_rigorous.py, scripts/evaluate_carpenter_generation_100.py, verify_rag.py: dordu de resize_state_dict'i IMPORT ediyor (yerel kopya tanimlamiyor). Zincir kokleri: evaluate_mcq_conditioning/chat_prompt/verify_rag -> src/llm/prompt_contract.resize_state_dict (raporun :115'te GORUNUR_UYARI dedigi gurultulu ortak surum); merge_teacher_dataset -> train.resize_state_dict (print basiyor); diagnostics_history_gap -> evaluate_mcq_conditioning -> ortak. Yani repo capinda load_state_dict(...,strict=False) iceren 34 dosyanin HICBIRINDE kacmis SESSIZ yol yok. 3 SESSIZ site gercekten tek sessiz kopyalar."
+    },
+    {
+      "id": "N4",
+      "title": "data_pt_total_count 23 vs benim 38'im: kapsam farki",
+      "detay": "Rapor ust duzey data/*.pt sayiyor (23 dosya, 9825.34 MiB — birebir dogrulandi). Benim 38'im data/_archive/ ve data/b1_5_splits/ altindakileri de katiyor. Celiski degil."
+    },
+    {
+      "id": "N5",
+      "title": "state/tasks/T-0022.json'da claimed_by/claimed_at None",
+      "detay": "Aynali gorev dosyasi claim bilgisini tasimiyor, ama events.jsonl task_claimed 07:05:09Z kaydini tutuyor ve kiralama kayitlari tam. Protokol islevsel olarak saglanmis; bu yalnizca aynalama alaninin eksikligi (T-0018..T-0022 dosyalarinin hepsinde ayni)."
+    }
+  ],
+  "kisit_aciklamasi": {
+    "durum": "dogrulama sirasinda ISTEM DISI YAZMA",
+    "ne": "Kabul kriterini ('pytest 123/123') bagimsiz dogrulamak icin pytest kostum; bu kosu F1 mekanizmasi geregi data/pedagogy/cot_vault.jsonl'e 4 satir ekledi (87 -> 91).",
+    "geri_yukleme": "DENENDI, REDDEDILDI — izin siniflandiricisi 'kullanicinin adlandirmadigi salt-okunur yolda yikici yazma' gerekcesiyle engelledi. Etrafindan dolasilmadi.",
+    "kullanici_icin_komut": "head -87 data/pedagogy/cot_vault.jsonl > /tmp/cv && mv /tmp/cv data/pedagogy/cot_vault.jsonl   # hedef sha256: f43864bcb02e0d5bd4d922ac891e80818b91f458cad2390b59b92e2d73c07d8e",
+    "mevcut_durum": "91 satir, sha256 97b06fe5befd6613b520d28dc20a74deaeb30e4e8f7e6675a23720a019ff5619. Eklenen 4 satir pytest kosularimin urunu; kimlikleri kayitli (timestamp 07:35:43 / 07:35:44 / 07:37:29 / 07:37:37).",
+    "not": "Bu yazma F1'in kendisinin kanitidir: ayni mekanizma yurutucunun kabul kosusunda da tetiklenir."
+  },
+  "downstream": [
+    {
+      "oneri": "T-XXXX (duzeltme, ORTA): tests/test_cot_vault_and_dual_parser.py::test_pedagogical_supervisor_isolation_flow icindeki kullanilmayan tempfile.TemporaryDirectory()'yi supervizore BAGLA (vault_path parametresi) ve tests/test_agent_gateway.py::test_pedagogical_supervisor_evaluation_and_step'e ayni izolasyonu ekle. Kabul kriteri: 'pytest -q kosusundan ONCE ve SONRA data/pedagogy/cot_vault.jsonl sha256 AYNI' (bu turda olculen ihlal: f43864bc -> 16fc2faf). Ayrica PedagogicalSupervisor'in varsayilan vault_path'i test baglaminda sessizce gercek veriye yazmamali — uygun varsayilan ya acik hata ya tmpdir olmali."
+    },
+    {
+      "oneri": "T-XXXX (kucuk, DUSUK): f0 raporunun silent_truncation_sweep bolumune SECIM KURALINI yaz — 'her uzlastirma noktasindan bir temsilci satir' — ve 'TUM siteler' ifadesini duzelt (repo capi 36 strict=False satiri / 34 dosya). T-0019'da G2 icin yapilan duzeltmenin ayni ailesi."
+    },
+    {
+      "oneri": "T-XXXX (kucuk, ORTA-DUSUK): turk_tarihi_dpo_raw satirini TEK tanimla yeniden olc (duz metin onerilir: 6328 nok_kar -> 6328 nok_tok, kayip yok) ya da iki sutunun farkli tanimdan geldigini raporda ACIKCA yaz. Su haliyle satir 'noktalama kayboluyor' izlenimi veriyor, ki bu metnin ozelligi degil."
+    },
+    {
+      "oneri": "F1'in veri etkisi ayrica degerlendirilmeli: her test kosusu cot_vault'a 2 sentetik kayit ekliyor ve bu dosya 'Evre 5 morfemik akil yurutme egitimi' girdisi. Duzeltilene kadar pytest kosularinin bu dosyayi buyuttugu varsayilmali."
+    },
+    {
+      "oneri": "Danisman kendi onceki non-finding'lerini (N3 dili) bu kayitla GERI ALDI: cot_vault buyumesi 'ilgisiz canli akis' degil, test takimi kaynakli."
+    }
+  ],
+  "danisman_notu": "Yuk tasiyan iddialarin tamami olculdu ve tuttu — ozellikle kapsam boslugu iddiasi (35.454/3.562) alti sayinin altisi da birebir yeniden uretildi ve zarf tanimindan bagimsiz cikti, ki bu onu guclendirir. Iyimser cerceveleme riski bu turda gerceklesmedi: bulunan iki kusur da iddiayi kotumser/karmasik gosteriyor, iyimser degil. Buna karsilik iki kusur da 'olcum' degil 'yeniden uretilebilirlik' ve 'yan etki' katmaninda."
+}

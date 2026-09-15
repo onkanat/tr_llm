@@ -1,0 +1,190 @@
+{
+  "task_id": "T-0028",
+  "title": "Talimat yüzeyi hizalaması + /docs_update eki — BAĞIMSIZ DOĞRULAMA",
+  "verifier": "claude",
+  "verified_at": "2026-09-15T12:12:54Z",
+  "verdict": "PASS_WITH_FINDINGS",
+  "verdict_gerekce": "Yürütücünün 11 iddiasının tamamı bağımsız ölçümle yeniden üretildi ve sayılar birebir tuttu (A envanteri 16/16 sha+satır+bayt+mtime; B dört tanım + 10 iddia yeri; C'nin YANLIŞ hükmü güçlendirilerek doğrulandı; D pytest 132/132 ve test_model.py exit 1; H sha'ları ve frontmatter). Hiçbir sayı çürümedi. 6 bulgu çıktı: V1 düzeltmenin TAMAMLANMADIĞINI gösteriyor (düzeltilen dosyanın kendisiyle çelişmesi), V2-V5 rapor/atıf hassasiyeti, V6 kök nedenin bir katmanda sürdüğünü gösteriyor. Hiçbiri işi geçersiz kılmaz; V1 telafi turu gerektirir.",
+
+  "method": {
+    "ilke": "Yürütücünün kanıt metnine güvenilmedi; her sayı diskten yeniden ölçüldü. 'Önce' değerleri git HEAD'den, 'sonra' değerleri çalışma ağacından okundu.",
+    "araclar": ["git show HEAD:<yol>", "hashlib.sha256", "datetime.timezone.utc (yerel mtime tuzağına karşı)", "os.walk sayımları", "venv/bin/pytest", "test_model.py fiili koşum", "diff -u + PyYAML"],
+    "sandbox_notu": "pytest sandbox İÇİNDE 1 failed verir (PermissionError, socketserver.py:478 — sandbox socket bind'i engelliyor); sandbox DIŞINDA 132/132. Bu bir ölçüm artefaktıdır, raporun kusuru değil."
+  },
+
+  "independent_measurements": {
+    "A_envanter": {
+      "sonuc": "DOGRULANDI (16/16)",
+      "olcum": "Envanterdeki 16 satırın tamamı için sha256 + satır sayısı + bayt + UTC mtime bağımsız hesaplandı; TEK uyuşmazlık yok.",
+      "docs_dizini": "os.path.exists('docs') = False → /docs_update'in etkin kapsamı fiilen 3 dosya (README/USER_GUIDE/CHANGELOG). İddia doğru."
+    },
+    "B_sayisal_iddialar": {
+      "sonuc": "DOGRULANDI (sayılar birebir; tek etiket belirsizliği → V2)",
+      "roots_tsv_dort_tanim": {
+        "raw_satir": 52374,
+        "govde_satiri": 52373,
+        "tekil_col0": 48200,
+        "tekil_tr_lower_TURKCE_KURALLI": 47916,
+        "tekil_tr_lower_DUZ_python": 47924,
+        "tekil_NFC": 48200,
+        "tekil_NFC_lower_TURKCE_KURALLI": 47916,
+        "rapor_degerleri": [52374, 52373, 48200, 47916, 48200, 47916],
+        "hukum": "Raporun altı değerinin altısı da yeniden üretildi."
+      },
+      "pos_dagilimi": {
+        "NOUN": 33170, "VERB": 10364, "ADJ": 6352, "ADV": 2024,
+        "INTERJ": 284, "PRON": 76, "POSTP": 56, "CONJ": 47,
+        "toplam": 52373, "govde_satiri": 52373,
+        "not": "Kuyruktaki POSTP+CONJ (103 satır) raporun tablosunda var; toplam satır sayısıyla tam kapanıyor."
+      },
+      "veri_kumesi_satirlari": "8/8 birebir eşleşti (infancy 3682, parenting 40001, lexical 25000, carpenter 5400, chat 6000, rag 6599, dpo 321, dpo_all 6198).",
+      "tokenizer_boyutlari": {"vocab.json": 31357, "vocab_entity.json": 32852, "vocab_b1_5_32816.json": 32816, "vocab_base_32816.json": 32816},
+      "iddia_yeri_dogrulamasi": "10 iddianın tamamı için 'iddia metni' git HEAD'de belirtilen SATIRDA birebir bulundu (GEMINI.md:34; AGENT.md:15,52; Skill_1:45; Skill_7:13,18,21,31,32,33; Skill_5:24). Uydurma atıf yok."
+    },
+    "C_zaman_penceresi": {
+      "sonuc": "DOGRULANDI ve GUCLENDIRILDI — raporun 'BAYAT değil YANLIŞ' hükmü tutuyor",
+      "olcum": {
+        "frozen_json_mtime_utc": "2026-09-14T09:40:04Z",
+        "roots_tsv_mtime_utc": "2026-09-14T18:50:29Z",
+        "git_diff_HEAD_roots": "BOŞ (çalışma ağacı HEAD ile birebir)",
+        "izlenen_dosya_mi": "EVET (git ls-files) — 'untracked olduğu için diff boş' tuzağı ELEME ile test edildi, geçti",
+        "tarihsel_tekil_lemma_sayilari": {
+          "c182841 (2026-05-05)": 6,
+          "c250c1f (2026-05-06)": 261,
+          "b56f1ab (2026-05-09)": 46300,
+          "d75e71d (2026-09-09, son içerik değişimi)": 48200
+        },
+        "aday_tanim_taramasi": "48.614'ü veren HİÇBİR tanım bulunamadı (tekil lemma 48200 [fark -414], TR-lower 47916, (lemma,pos) 52373, NFC 48200, ASCII-dışı hariç 23810 …). En yakın aday bile 414 sapıyor."
+      },
+      "hukum": "48.614 hiçbir commit'li durumda doğru olmadı; frozen.json yazıldığı anda (14 Eyl 09:40Z) dosya zaten d75e71d içeriğindeydi (14 Eyl 18:50'deki yazım içeriği DEĞİŞTİRMEMİŞ — diff boş). Yani 'yazıldığı anda doğruydu, sonra bayatladı' hipotezi ÖLÇÜMLE ELENDİ. Rapor 'YANLIŞ' diyor: DOĞRU."
+    },
+    "D_davranissal_iddialar": {
+      "pytest": {
+        "sandbox_disi": "132 passed in 7.48s, exit 0 → raporun '132/132' iddiası BİREBİR",
+        "sandbox_ici": "1 failed, 131 passed (PermissionError @ socketserver.py:478 = sandbox artefaktı)",
+        "cot_vault_oncesi_sha256": "97b06fe5befd6613b520d28dc20a74deaeb30e4e8f7e6675a23720a019ff5619",
+        "cot_vault_sonrasi_sha256": "97b06fe5befd6613b520d28dc20a74deaeb30e4e8f7e6675a23720a019ff5619",
+        "cot_vault_satir": 91,
+        "vakum_kontrolu": "Koşumun GERÇEKTEN koştuğunun kanıtı var (132 passed + exit 0); 'değişmedi' iddiası boşluk değil. Raporun bildirdiği hash ve 91 satır BİREBİR."
+      },
+      "test_model_py": {
+        "exit_code": 1,
+        "hata_metni_birebir": "RuntimeError: size mismatch — lm_head.weight [32816,768] vs [31357,768]; embedding.embedding.weight aynı; lm_head.bias [32816] vs [31357]; satır 49 load_state_dict(strict=False)",
+        "degismemis": "git status temiz; çalışma ağacı HEAD ile özdeş (175 satır) → kabul I ('bu görevde düzeltilmez') TUTUYOR",
+        "satir_atiflari": "satır 25 vocab.json, 27 len(vocab.stoi), 49 load_state_dict — raporun tanısı doğru; resize_state_dict ÇAĞRILMIYOR (grep: hiç 'resize' yok)"
+      },
+      "non_code_iddiasi_sayilari": {
+        "src": "26 .py / 51 toplam", "tests": "21 .py / 69 toplam", "scripts": "82 .py / 91 toplam (rapor anında)",
+        "py_toplam": 129,
+        "pt": "kök = 0, data/*.pt = 23, özyinelemeli = 38",
+        "kural": "Raporun kuralı: *_total_files __pycache__ DAHİL, *_python_files HARİÇ → src 51/26, tests 69/21, scripts 91/82 altında kendi içinde TUTARLI.",
+        "uyari": "Doğrulayıcı olarak benim ilk sayımım scripts için 93 verdi; fark BENİM ölçüm artefaktımdı (aşağıda)."
+      }
+    },
+    "F_duzeltmeler": {
+      "sonuc": "DOGRULANDI",
+      "olcum": "7 dosyanın 9 değişiklik kaydı için 'önce' metni git HEAD'de ilgili satırda, 'sonra' metni çalışma ağacında ilgili satırda bulundu (8/8 birebir eşleşen; 2'si '…' ile ÖZETLENMİŞ bileşik metin — token bazında sınandı: GEMINI.md '20,500'→'48,200'+'52,373'; Skill_7 '1.000/30.000/20.500/10.000/5.792'→'3.682/40.001/25.000/5.400/321/6.198' hepsi mevcut).",
+      "uydurma_sonra_degeri": "YOK — her yeni sayı diskten ölçülen değerle aynı."
+    },
+    "G_claude_md_kisitlari": {
+      "sonuc": "DOGRULANDI",
+      "olcum": "frozen.json'un 10 deseninin 10'u CLAUDE.md'de mevcut (data/vocab.json + data/vocab_entity.json 'data/vocab*.json' olarak birleşik). SPEC.md çıpası, data/eval/ istisnası, 'git add -A YASAKTIR', bus_acquire_lease zorunluluğu metinde var. Kural, CLAUDE.md'de TEKRARLANMAYIP SPEC.md'ye atıfla bağlanmış (istenen çıpa kuralı)."
+    },
+    "H_docs_update_eki": {
+      "sonuc": "DOGRULANDI",
+      "sha256": {"canli_skill": "5e082ae8215ca67fa57eb461e555ce74b88a5fd31d23fcb390e383a5114696d7", "raporun_bildirdigi": "5e082ae8215ca67fa57eb461e555ce74b88a5fd31d23fcb390e383a5114696d7", "yedek": "b5d174b16d5e47e6774fbd078752e1610e4e8aa6cce3515669b738387503370b", "raporun_bildirdigi_yedek": "b5d174b16d5e47e6774fbd078752e1610e4e8aa6cce3515669b738387503370b"},
+      "frontmatter": "venv PyYAML ile GERÇEKTEN ayrıştırıldı: name='docs_update', description=str (önce/sonra BİREBİR aynı) → bozulmamış.",
+      "yalniz_ekleme_mi": "HAYIR, 4 satır YENİDEN YAZILDI (silinmiş görünen satırlar). Karşılıkları tek tek ölçüldü: (1) tanıtım satırı genişletildi, (2) 'Mevcut Döküman Taraması' → 'Mevcut Döküman ve Talimat Taraması' — ORİJİNAL ÜÇ DÖKÜMAN + docs/*.md KORUNMUŞ (tarama kümesi DARALMAMIŞ, üstüne eklenmiş), (3) 'Yapsı' → 'Yapısı' yazım düzeltmesi, (4) 'Etmen projeyi tarar' → '…ve talimat yüzeyini tarar'. Hiçbir içerik kaybı yok.",
+      "eklenenler": "2.b aşaması (KOD KAZANIR), talimat dosyaları güncelleme standartları bölümü, kural 5 (git add -A yasak / data/** yalnız data/eval/ / donmuş yollar / kiralama) — üçü de raporda beyan edildiği gibi VAR.",
+      "repo_disi_beyani": "Rapor bu düzenlemeyi AYIRCA beyan etmiş (kabul H şartı) ve kiralama muafiyetini gerekçelendirmiş."
+    },
+    "J_wiki": {
+      "sonuc": "DOGRULANDI",
+      "olcum": "wiki/ = 11 dosya; mtime aralığı 2026-06-14T18:18:23Z … 2026-06-22T02:49:37Z; frontmatter 11/11; Eylül 2026 izleri (b1_5/carpenter/rag_arm/prompt_contract/agent_bus/cot_vault) = 0 eşleşme. wiki/ bu görevde DEĞİŞTİRİLMEDİ (kabul J)."
+    },
+    "K_yazim_siniri": {
+      "sonuc": "DOGRULANDI — ihlal yok",
+      "pencere": "2026-09-15T11:06:01Z … 11:52:30Z (devralma → rapor)",
+      "olcum": "Pencerede yazılan dosyalar: 7 talimat dosyası (CLAUDE.md 11:43:43Z, GEMINI.md 11:44:58Z, AGENT.md 11:46:15Z, Skill_1 11:46:49Z, Skill_5 11:47:38Z, Skill_7 11:48:30Z, llmcoder.md 11:49:21Z) + rapor + scratch/generate_t0028_report.py. data/ altında pencerede yazılan TEK dosya: data/eval/t0028_instruction_alignment_2026-09-15.json → DONMUŞ BÖLGEYE 0 DOKUNMA. .agent-bus/ altında pencerede 0 yazım (SPEC.md ve frozen.json DEĞİŞMEMİŞ). git'te silinmiş dosya YOK. src/rag/rag_pipeline.py 7053 bayt, duruyor (DOSYAYI SİLMEYİN).",
+      "changed_files_kapsami": "Bildirilen 9 dosya, kabul L'nin istediği kümeyi (düzeltilen talimat dosyaları + rapor + skill yedeği) TAM karşılıyor. Fazladan bildirilen yok; eksik bildirilen yok."
+    }
+  },
+
+  "findings": [
+    {
+      "id": "V1",
+      "severity": "ORTA",
+      "baslik": "Düzeltme TAMAMLANMADI: Skill_7 hâlâ kendisiyle ÇELİŞİYOR (5.792 düzeltilmeden kaldı)",
+      "olcum": ".gemini/skills/Skill_7_Pedagogy_and_Specialization.md:37 (tablo) düzeltildi → 'DPO Tercih Çiftleri (Aktif/Tüm) 321 / 6.198'. AYNI DOSYANIN 48. satırı HİÇ DEĞİŞTİRİLMEDİ → 'DPO Tercih Hizalaması (train_dpo.py): 5.792 adet tercih çifti …'. git diff: satır 48 HEAD ile birebir (AYNI).",
+      "neden_bulgu": "(a) Aynı popülasyon (DPO tercih çiftleri) aynı dosyada iki farklı sayıyla beyan ediliyor — düzeltme yeni bir TUTARSIZLIK doğurdu. (b) Raporun F bölümü 'before' metninde 'DPO: 5.792' değerini düzeltilen değerler arasında sayıyor; okuyucu 5.792'nin TÜM geçişlerinin düzeltildiğini sanır. (c) 5.792 diskte hiçbir ölçümle karşılık bulmuyor (repo genelinde yalnız bu satır + wiki'de geçiyor); raporun kendi kabul ettiği değerler 321/6.198.",
+      "kapsam_notu": "wiki/synthesis.md:44 ve wiki/log.md:38 da 5.792 taşıyor ama wiki/ kabul J gereği T-0029'un kapsamında ve tarihsel kayıttır — bu bulgu onları kapsamaz.",
+      "oneri": "T-0029 öncesi kısa bir telafi turu: Skill_7:48 (ve varsa diğer DPO geçişleri) raporun kanıtladığı 321/6.198 ile hizalanır; F bölümüne 'düzeltilen geçiş sayısı' sütunu eklenir ki kısmi düzeltme bir daha görünmez kalmasın."
+    },
+    {
+      "id": "V2",
+      "severity": "DUSUK",
+      "baslik": "roots.tsv 'tr_lower' tanımının etiketi belirsiz (47.916 vs 47.924)",
+      "olcum": "rapor 'definition_3_unique_tr_lower_lemma: 47916' ve 'definition_4b_nfc_tr_lower: 47916'. Düz Python .lower() ile ölçüm 47924 verir; 47916 yalnız TÜRKÇE KURALLI katlamayla (I→ı, İ→i) çıkar. İkisi de ölçülebilir, ikisi de 'doğru'.",
+      "neden_bulgu": "Rapor sayıyı veriyor ama hangi katlamayı kullandığını yazmıyor; .lower() ile yeniden üretmeye çalışan okuyucu 8 farklı bir sayı bulur ve sayıyı yanlış sanır. (Bu, 'iki sayı çelişiyor sanma, önce kümeyi doğrula' tuzağının TANIM eksenidir — bulgu bu yüzden 'sayı yanlış' değil 'etiket eksik'.)",
+      "etki": "İddiaya karşı SEÇİLEN tanım (48.200, büyük/küçük harfe duyarlı tekil) etkilenmiyor; hükümler değişmiyor.",
+      "oneri": "Tanım adı 'unique_tr_lower (TÜRKÇE kurallı I/İ katlaması)' olarak yazılsın."
+    },
+    {
+      "id": "V3",
+      "severity": "DUSUK",
+      "baslik": "A_inventory alan adı yanıltıcı: 'top_level_checkpoints_pt'",
+      "olcum": "Kök dizinde .pt = 0 (ölçüldü). 23 sayısı data/*.pt'ye karşılık gelir (data/_archive/… 11, data/b1_5_splits/ 4 ile birlikte özyinelemeli 38).",
+      "neden_bulgu": "'top_level' repo kökünü çağrıştırıyor; değer doğru popülasyona (data/ üst düzeyi) ait ama ad o popülasyonu söylemiyor. 23/38 çifti birlikte sunulduğu için niyet kurtarılabilir — bu yüzden DÜŞÜK.",
+      "oneri": "Alan adı 'data_top_level_checkpoints_pt' olsun. (Raporun E/C-01 metni zaten 'data/*.pt (23 checkpoint)' diye DOĞRU yazıyor; yalnızca A alan adı sapa.)"
+    },
+    {
+      "id": "V4",
+      "severity": "DUSUK",
+      "baslik": "Skill_7:38 'TOPLAM KONSOLİDE SFT 87.629' ölçülmeden bırakılmış, BELİRSİZ de işaretlenmemiş",
+      "olcum": "Tablodaki düzeltilmiş satırların toplamı 87.003 (321 ile) veya 92.880 (6.198 ile); düzeltme ÖNCESİ toplam 87.891. Yani 87.629 tablonun toplamı DEĞİL — farklı popülasyon (data/train_deep_sft.bin kayıt sayısı). Rapor bu satıra hiç değinmiyor.",
+      "neden_bulgu": "Bu bir 'iki sayı çelişiyor' bulgusu DEĞİLDİR (farklı popülasyon — o tuzağa düşmedim). Kusur, kabul E'nin kuralıdır: 'ölçülemeyen iddialar BELİRSİZ olarak işaretlenir ve nedeni yazılır'. Rapor ne ölçtü ne işaretledi.",
+      "oneri": "train_deep_sft.bin kayıt sayısı ölçülebiliyorsa ölçülür; ölçülemiyorsa E tablosuna BELİRSİZ + gerekçe satırı eklenir."
+    },
+    {
+      "id": "V5",
+      "severity": "NIT",
+      "baslik": "Skill_7:21,34 atfı bileşik metin (alıntı hassasiyeti)",
+      "olcum": "İddia metni 'Alan Uzmanlığı (Marangozluk & Zanaat): 10.000 örnek' olarak tek parça verilmiş ve kaynak ':21,34' gösterilmiş; oysa literal metin satır 21'de (düz metin), satır 34'te ise tablo satırı olarak ('| **Marangozluk Uzmanlığı** | … | 10.000 |') duruyor. Değer (10.000) HER İKİ sitede de mevcut — atıf özde doğru.",
+      "oneri": "Etkilenmeyen bir hassasiyet kaydı; alıntı satır bazında ayrıştırılırsa daha iyi."
+    },
+    {
+      "id": "V6",
+      "severity": "DUSUK",
+      "baslik": "Kök neden bir katmanda SÜRÜYOR: skill'in TETİKLEME açıklaması hâlâ yalnız üç dökümanı sayıyor",
+      "olcum": "docs_update SKILL.md frontmatter description ÖNCE ve SONRA birebir aynı: 'Aktif projedeki README.md, USER_GUIDE.md, CHANGELOG.md ve tüm proje dökümantasyonunu …'. Yeni tarama kümesi (CLAUDE.md, GEMINI.md, llmcoder.md, .gemini/AGENT.md, .gemini/skills/*.md, .agent-bus/SPEC.md) description'da GEÇMİYOR.",
+      "neden_bulgu": "Kabul H description'ın BOZULMAMASINI istiyordu, güncellenmesini değil — yani rapor kabulü İHLAL ETMİYOR. Ancak düzeltilen kök neden şuydu: 'güncellenmeyen şey, güncelleyicinin GÖREMEDİĞİ şeydir.' Modelin /docs_update'i çağırıp çağırmayacağına bu description ile karar verdiği düşünülürse, talimat yüzeyi hâlâ araç tarafından GÖRÜNMEZ olarak ilan ediliyor. Kusur tam olarak kapanmamış.",
+      "oneri": "description'a talimat/sözleşme dosyaları eklenir (tek satır). T-0029 turuna bağlanabilir."
+    }
+  ],
+
+  "verifier_artifacts_disclosed": [
+    {
+      "artefakt": "scripts/__pycache__ altında 2 yeni .pyc (prepare_wiki_dataset, prepare_all_phases_with_wiki)",
+      "neden": "Kendi py_compile kontrolüm (D3) bunları üretti; mtime 15:07:23 yerel (= 12:07Z, benim koşumum).",
+      "sonuc": "İlk sayımımda 'scripts toplam 93' (rapor 91) çıktı; fark BENİM artefaktımdı, raporun değil. Raporun kuralıyla (toplam __pycache__ dahil / python_files hariç) 91 = 82 .py + 9 .pyc, rapor anında doğruydu. YANLIŞ BULGU ÜRETİLMEDEN yakalandı."
+    },
+    {
+      "artefakt": "pytest'in sandbox içi/dışı farkı",
+      "neden": "Sandbox içinde socket bind engelli → 1 failed (PermissionError).",
+      "sonuc": "Raporun '132/132' iddiası sandbox DIŞINDA birebir doğrulandı (132 passed, exit 0)."
+    },
+    {
+      "artefakt": "cot_vault.jsonl",
+      "neden": "'Kabul koşusu ölçtüğü artefaktı değiştirir' riski.",
+      "sonuc": "Önce/sonra sha256 AYNI ve raporun bildirdiği hash ile aynı (97b06fe5…, 91 satır); koşumun gerçekten koştuğu exit 0 + '132 passed' ile kanıtlı."
+    }
+  ],
+
+  "could_not_verify": [
+    "frozen.json'daki 48.614'ün YAZARININ hangi işlemle ürettiği (hiçbir aday tanım eşleşmedi; 'yanlış' olduğu kanıtlandı, kaynağı bilinmiyor).",
+    "data/train_deep_sft.bin'in gerçek kayıt sayısı (V4) — format çözülmeden ölçülmedi.",
+    "Skill_2/3/4/6'nın 'düzeltme gerekmedi' gerekçesinin SAYISAL kısmı sınandı ve geçti (≥100 olan tek sayı 'localhost:6333' portu; tarayıcı canary olarak 6333'ü buldu, yani tarama vakum değil); ancak bu dosyaların DAVRANIŞSAL iddiaları (algoritma tarifleri) kodla satır satır karşılaştırılmadı."
+  ],
+
+  "oneri_sonraki_tur": "V1 (Skill_7:48 telafisi) + V6 (description satırı) tek küçük turda kapatılabilir; ikisi de aynı kök nedenin (kısmi/görünmez düzeltme) kalıntısıdır. V2-V5 rapor şemasına işlenir. Bunlar T-0029 (wiki) turundan ÖNCE yapılmalı, çünkü T-0029 talimat dosyalarını yeniden okuyacak."
+}

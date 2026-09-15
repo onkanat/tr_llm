@@ -13,6 +13,19 @@ Bu dosya, Kristal-Vektörel Mimarisi projesindeki kodlama adımlarını, eğitim
 
 ## 📅 Kronolojik Loglar
 
+### 2026-09-15: agent-bus Koordinasyonu, Sözleşme Kapanışları ve Mimari Doğrulamalar (T-0001 .. T-0030)
+* **T-0001..T-0011 (agent-bus Altyapısı):** Çift etmenli (Claude/Antigravity) koordinasyon protokolü, MCP stdio araçları, kiralama mekanizması ve `.agent-bus/frozen.json` değişmezleri devreye alındı.
+* **T-0012 (B1.5 Bölme Sözleşmesi):** Kapalı-sınıf iskelet anahtarlarının analiziyle eğitim ve test arasındaki cevap düzeyinde veri sızıntısı tespit edildi; ayrık kök sözleşmesi tanımlandı (`data/eval/f0_identity_scope_2026-09-15.json`).
+* **T-0013 & T-0015 (Kanonik İstem Zarfı ve Çift BOS Çözümü):** Değerlendirme kodlarında istem başına fazladan eklenen çift `<BOS>` belirteci kapatıldı; tüm sistem [prompt_contract.py](file:///Users/hakankilicaslan/Git/tr_llm/src/llm/prompt_contract.py) içindeki tekil `render_prompt` fonksiyonuna bağlandı ve kanarya testleri eklendi.
+* **T-0016..T-0019 (Exp C ve Ezber Tanılaması):** Kanonik zarfla MPS üzerinde Exp C temel çizgisi diske kaydedildi; modelin C1'i neden ezberlemediğine dair teacher-forcing kanıtları ve soykütüğü analiz edildi (`data/eval/t0018_why_no_memorization.json`).
+* **T-0020 & T-0021 (Sözlük Restorasyonu):** Noktalama bloğunun genişletilmiş modellerde tam olarak 32.137 indeksinde başladığı saptandı ve Exp C modelin gerçek kelime dağarcığıyla yeniden ölçüldü (`data/eval/vocab_restore_recheck_2026-09-15.json`).
+* **T-0022 & T-0024 (F0 Envanter ve Kapsam Boşluğu):** Kapsam boşluğu tanımlandı ve süpürme seçim kuralı yazıldı.
+* **T-0023 (cot_vault İzolasyonu):** Birim testlerin üretim kasasına (`data/pedagogy/cot_vault.jsonl`) sahte kayıt yazması engellendi; geçici test kasası izolasyonu sağlandı ve SHA-256 bütünlük çıpası konuldu.
+* **T-0025 & T-0026 (Kanonik Boyutlandırma ve Sessiz Kırpma Yasağı):** [resize_state_dict](file:///Users/hakankilicaslan/Git/tr_llm/src/llm/prompt_contract.py) fonksiyonu tek kanonik kapı haline getirildi; sessiz kırpma yasaklanarak açık `ValueError` fırlatması sağlandı; mutant testleri eklendi.
+* **T-0027 (Model Durumu ve Çıkarım Envanteri):** 23 checkpoint incelendi; bit-özdeş gruplar ve 4096^2 maske tamponları belgelendi; 4 model üzerinden deterministik çıkarım kanıtlandı (`data/eval/t0027_model_state_2026-09-15.json`).
+* **T-0028 & T-0029 (Talimat Yüzeyi Hizalaması ve docs_update Genişletmesi):** KOD KAZANIR ilkesiyle tüm talimatlar (`CLAUDE.md`, `GEMINI.md`, `llmcoder.md`, `AGENT.md`, `skills/`) güncellendi; kök (48.200) ile kelime dağarcığı (31.357 / 32.816) ayrıldı; Skill_7 DPO çelişkisi giderildi; repo dışı `/docs_update` yeteneğine talimat taraması eklendi (`data/eval/t0028_instruction_alignment_2026-09-15.json`, `data/eval/t0029_v1_v6_reconciliation_2026-09-15.json`).
+* **T-0030 (Wiki Canlandırma):** 22 Haziran'dan beri dondurulan `wiki/` dizini Eylül 2026 mimari çalışmalarıyla (8 yeni konsept/varlık sayfası) eşitlendi; `llmcoder.md` Kural 2 canlı hale getirildi.
+
 ### 2026-06-18: Ortaokul Sohbet SFT Hizalama Eğitimi ve Hata Çözümleri
 * **Olay:** Modelin ortaokul düzeyinde samimi bir sohbet üslubu kazanması amacıyla 125 özgün sohbet çifti (`middle_school_chat.jsonl`) içeren veri kümesi derlendi. Ebeveynlik ve Bilimsel SFT veri kümeleri ile dengelenerek `data/train_chat_sft.bin` derlendi.
 * **Olay (Hata Çözümü):** Yeni eklenen morfemlerin (`"bıkma"`) diske kaydedilmemesinden kaynaklanan `IndexError: index out of range` hatası, [prepare_chat_fine_tune_dataset.py](file:///Users/hakankilicaslan/Git/tr_llm/scripts/prepare_chat_fine_tune_dataset.py) dosyasına `vocab.save()` eklenerek ve antrenmanda `resize_state_dict` entegre edilerek çözüldü.

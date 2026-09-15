@@ -691,14 +691,28 @@ class AgentBus:
         status: str,
         summary: str,
         evidence: Optional[List[str]] = None,
-        changed_files: Optional[List[str]] = None
+        changed_files: Optional[List[str]] = None,
+        narrative_log: Optional[Dict[str, Any]] = None
     ) -> Dict[str, Any]:
         self.ensure_directories()
         validate_task_id(task_id, "task_id")
         if status not in ("done", "blocked"):
             raise ValueError(f"Geçersiz görev sonucu statüsü: '{status}'. 'done' veya 'blocked' olmalıdır.")
 
-        result_data = {
+        clean_narrative = None
+        if narrative_log is not None:
+            if not isinstance(narrative_log, dict):
+                raise ValueError("narrative_log bir sözlük (dict) olmalıdır.")
+            if "path" not in narrative_log or "sha256" not in narrative_log or "ozet" not in narrative_log:
+                raise ValueError("narrative_log 'path', 'sha256' ve 'ozet' alanlarını içermelidir.")
+            clean_path = sanitize_rel_path(str(narrative_log["path"]))
+            clean_narrative = {
+                "path": clean_path,
+                "sha256": str(narrative_log["sha256"]),
+                "ozet": str(narrative_log["ozet"])
+            }
+
+        result_data: Dict[str, Any] = {
             "task_id": task_id,
             "status": status,
             "finished": now_utc_iso(),
@@ -706,6 +720,9 @@ class AgentBus:
             "evidence": evidence or [],
             "changed_files": [sanitize_rel_path(f) for f in (changed_files or [])]
         }
+        if clean_narrative is not None:
+            result_data["narrative_log"] = clean_narrative
+
         res_path = os.path.join(self.results_dir, f"{task_id}.json")
         atomic_write_json(res_path, result_data)
 
@@ -899,7 +916,17 @@ TOOL_DEFINITIONS = [
                 "status": {"type": "string", "enum": ["done", "blocked"], "description": "Nihai durum"},
                 "summary": {"type": "string", "description": "Yapılan işin özeti"},
                 "evidence": {"type": "array", "items": {"type": "string"}, "description": "Kanıtlar ve komut çıktıları"},
-                "changed_files": {"type": "array", "items": {"type": "string"}, "description": "Değiştirilen dosya yolları"}
+                "changed_files": {"type": "array", "items": {"type": "string"}, "description": "Değiştirilen dosya yolları"},
+                "narrative_log": {
+                    "type": "object",
+                    "description": "Opsiyonel yürütücü anlatı günlüğü (.agent-bus/notes/T-XXXX.md) işaretçisi",
+                    "properties": {
+                        "path": {"type": "string", "description": "Not dosyasının göreceli yolu (.agent-bus/notes/T-XXXX.md)"},
+                        "sha256": {"type": "string", "description": "Not dosyasının SHA-256 özeti"},
+                        "ozet": {"type": "string", "description": "Yürütümün kısa özeti"}
+                    },
+                    "required": ["path", "sha256", "ozet"]
+                }
             },
             "required": ["task_id", "status", "summary"]
         }
@@ -996,7 +1023,8 @@ def execute_tool_call(bus: AgentBus, name: str, args: Dict[str, Any]) -> Any:
             status=args["status"],
             summary=args["summary"],
             evidence=args.get("evidence"),
-            changed_files=args.get("changed_files")
+            changed_files=args.get("changed_files"),
+            narrative_log=args.get("narrative_log")
         )
     elif name == "bus_send":
         return bus.send_message(

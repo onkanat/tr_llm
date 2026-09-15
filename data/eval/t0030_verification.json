@@ -1,0 +1,108 @@
+{
+  "task_id": "T-0030",
+  "verdict": "PASS_WITH_FINDINGS",
+  "verified_by": "claude (danisman)",
+  "verified_at": "2026-09-15T13:56:26.039210+00:00",
+  "method": "Bagimsiz dogrulama turu: spec + sonuc raporu + 14 degisen dosya okundu; yurutucunun kanit metnine guvenilmedi, her iddia diskten yeniden olculdu.",
+  "closure_signals": {
+    "1_executor_message": "2026-09-15T13-31-44Z-antigravity.json ('T-0030 Tamamlandi: Wiki Canlandirma ve llmcoder.md Duzeltmesi')",
+    "2_leases_released": "T-0030 kiralari yok; canli 5 kira T-0031'e ait",
+    "3_changed_files_full_scope": "14 yol = wiki/ + llmcoder.md + data/eval/ (beyan edilen writes[] kapsaminin tamami)"
+  },
+  "acceptance_criteria_measured": {
+    "1_frontmatter_schema": "GECTI — 19/19 wiki .md dosyasi --- ile basliyor ve tam olarak tags,date,sources,status tasiyor. DENETCI KANARYA ILE SINANDI: eksik-anahtar / basliksiz / gecersiz-tag kanaryalarinin ucu de yakalandi (vakum degil).",
+    "2_llmcoder_stale_ref": "GECTI — grep -rn 'T-0029 kapsaminda' ve 'T-0029 kapsamında' ve ciplak 'T-0029' llmcoder.md icinde 0 eslesme.",
+    "3_tags_line_per_file": "GECTI — 19/19 dosyada tam 1 'tags: [' satiri; anomali 0.",
+    "4_writes_boundary": "GECTI — son 110 dk icinde degisen 42 dosyanin mtime taramasi: T-0030'un dokundugu her sey (13:18:47Z..13:31:20Z) tam olarak wiki/, llmcoder.md, data/eval/ icinde. Kapsam disi yazim YOK.",
+    "5_pytest_outside_sandbox": "GECTI — sandbox DISINDA 'venv/bin/pytest -q' -> 135 passed, exit 0. (Yurutucunun raporladigi 132 kapanis aninda DOGRUYDU; fark T-0031'in sonradan ekledigi tests/test_agent_bus_narrative.py dosyasindaki 3 testtir. 132+3=135.)",
+    "6_cot_vault_invariant": "GECTI — sha256 97b06fe5...5619 ve 91 satir; benim pytest kosumum ONCESI ve SONRASI birebir ayni (T-0023 duzeltmesi tutuyor).",
+    "7_git_ls_files_wiki": "GECTI — git ls-files wiki/ = 11 dosya (silme yok); 8 yeni sayfa untracked."
+  },
+  "numerical_claims_independently_measured": {
+    "roots.tsv tekil lemma 48200": "DOGRU — cut -f1|tail -n +2|sort -u|wc -l = 48200 (dosya 52374 satir; 52373 giris)",
+    "vocab.json stoi 31357": "DOGRU — len(json['stoi']) = 31357 (next_id 31357)",
+    "vocab.json noktalama icermiyor": "DOGRU — '.',',','?','!','-',':',';','(',')' hicbiri stoi'de yok (max_id 31356)",
+    "noktalama blogu 32137": "DOGRU (kalifiye — bkz V3) — data/rebuild/vocab_b1_5_32816.json'da [32137..32145] = 9 isaret, birebir wiki'de listelenen sirayla",
+    "data/*.pt = 23": "DOGRU — glob = 23",
+    "maske 4096^2 (kristal_model.pt)": "DOGRU — n_layer=6, mask_shapes 6x[4096,4096], mask_numel 100663296",
+    "cot_vault sha256 + 91 satir": "DOGRU — birebir",
+    "DPO 321 / 6198": "DOGRU — dpo_tokenized.jsonl 321, dpo_all_tokenized.jsonl 6198",
+    "train_deep_sft.bin 87629": "DOGRU — 22.433.024 bayt / 2 = 11.216.512 uint16 token; prepare_deep_dataset.py block_size=128 -> 11.216.512/128 = 87629,0 (KENDIM urettim; raporun command alani calistirilabilir degil, bkz V6)",
+    "bit-ozdes grup {kristal_b1_5_best, kristal_b1_5_epoch3, kristal_model}": "DOGRU — sha 02e15b8198f8f333... ucu de ayni",
+    "epoch1 != epoch2": "DOGRU — 7e5f07fe... vs 25c43aa8..., ayri sha'lar",
+    "21% maske bayt payi": "SAYI DOGRU (t0027 mask_file_byte_percentage=21.3011) — ama kapsam etiketi genis, bkz V2"
+  },
+  "findings": [
+    {
+      "id": "V1",
+      "severity": "ORTA",
+      "file": "wiki/concepts/b1_5_split_contract.md",
+      "line": "frontmatter sources (satir 4) + govde satir 28",
+      "claim": "Sayfanin kanit temeli olan iki kaynak yolu DISKTE YOK.",
+      "measurement": "`src/data/b1_5_splitter.py` — `src/data/` dizini hic yok (src/ altinda yalniz compiler, gateway, llm, rag). `scripts/prepare_b1_5_splits.py` — yok; gercek ad `scripts/prepare_b1_5_datasets.py`. `grep -rln b1_5_splitter .` tum repoda YALNIZ bu wiki sayfasini donduruyor.",
+      "spec_violation": "Ilke 3 ('sources GERCEK repo yollaridir (uydurma yol yazilmaz)') ve YASAKLAR ('Uydurma sayi, uydurma kaynak yolu, uydurma tarih YASAK'). Ayrica KOD KAZANIR: bolme mantiginin gosterilen yeri yok.",
+      "also_affected": "Ayni sayfa govde satir 28 bu yolu markdown file:// baglantisi olarak da veriyor (kirik bag).",
+      "real_paths": "Dogru adaylar: scripts/prepare_b1_5_datasets.py (split_stratum_3way, satir 222; 'answer-level leakage' olcumu satir 286-306), scripts/train_step_b1_5_rigorous.py, scripts/evaluate_b1_5_rigorous.py, tests/test_b1_5_split_leakage.py",
+      "not_flagged_by_executor": "Raporun unverified_claims alani BOS — bu iki yol dogrulanamaz olarak isaretlenmemis, 'dogrulandi' sayilmis."
+    },
+    {
+      "id": "V2",
+      "severity": "DUSUK",
+      "file": "wiki/synthesis.md",
+      "line": "'Aktif ve Devam Eden Mimari Borclar' bolumu, 4096^2 maddesi",
+      "claim": "'23 model checkpoint'inin tensor baytlarinin %21'ini olusturan ... maske tamponlari'",
+      "measurement": "t0027 mask_buffers_analysis.mask_file_byte_percentage = 21.3011 — bu deger TEK model (kristal_model.pt) icin hesaplanmis. 23 checkpoint TOPLAMI ayni tanimla %18,79. 4096^2 maske tasiyan 19 modelin toplami %21,42.",
+      "verdict": "Sayinin KAYNAGI dogru, KAPSAM ETIKETI genis: %21 tek modele ait, cumle 23 modele yaziyor. (%18,8-21,4 araligi buyuklugu dogruluyor, yani 'yanlis sayi' degil 'yanlis kume'.)"
+    },
+    {
+      "id": "V3",
+      "severity": "DUSUK",
+      "file": "wiki/concepts/vocabulary_alignment.md",
+      "line": 25,
+      "claim": "'Genisletilmis modellerde noktalama blogu tam olarak 32.137 indeksinde baslamaktadir' (9 isaret listelenmis)",
+      "measurement": "Kendim olctum — '.' -> 32137: vocab_b1_5_32816.json(32816) OK, vocab_base_32816.json(32816) OK, vocab_step_b1_final_32156.json(32156) OK, vocab_entity.json(32852) OK. 9 isaretin sira ve indeksleri [32137..32145] birebir dogru. ANCAK data/rebuild/vocab_carpenter_32137.json (stoi=32137) HIC noktalama icermiyor — ve bu sozluk kristal_carpenter_model.pt'nin (lm_head_rows=32137) eslesen sozlugu.",
+      "verdict": "Iddia 'genisletilmis modeller' kumesinin 4 uyyesi icin dogru, en az 1 uyesi icin YANLIS. Nicelleyici (çoğul) olcumden genis."
+    },
+    {
+      "id": "V4",
+      "severity": "DUSUK",
+      "file": "wiki/entities/model_checkpoints.md",
+      "line": 32,
+      "claim": "'Model mimarisinde her blokta (blocks.0..5.attn.mask) 4096^2 boyutunda ucgen nedensel bool maske tamponlari kaydedilmektedir'",
+      "measurement": "23 checkpoint'in popülasyonu: 19'unda 6x[4096,4096] DOGRU; 3'unde 6x[1024,1024] (kristal_carpenter_model.pt, kristal_model_backup.pt, kristal_model_sft.pt); 1'inde 4x[1024,1024] (kristal_model_base.pt). Yani 4/23 checkpoint hem boyut hem blok sayisi bakimindan cumleyi curutuyor.",
+      "verdict": "Kapsamsiz genelleme; n_layer gercekten 6 (blok sayisi blok tarafinda dogru), boyut yanlis."
+    },
+    {
+      "id": "V5",
+      "severity": "DUSUK",
+      "file": "wiki (coklu)",
+      "claim": "Ilke 2 (UCUCU SAYI KOPYALAMA YASAGI) kismen uygulanmis.",
+      "instances": "vocabulary_alignment.md:25 '32.137' (kalin, satir ici); vocabulary_alignment.md:38 '23 modelin'; model_checkpoints.md:32 '4096^2'; synthesis.md '%21' + '23 model checkpoint'inin'.",
+      "assessment": "Sayfalar ilgili data/eval raporunu AYRI bir bolumde aniyor, yani tam ihlal degil KISMI uyum — ama ilke 2'nin (b) secenegi sayinin 'YALNIZCA ... atifla' verilmesini istiyor. Somut risk gerceklesti: '23' sayisi artik UC ayri wiki yuzeyinde duruyor (log.md tarihli kayit, vocabulary_alignment.md, synthesis.md) — biri guncellenmezse dosya kendisiyle celisir, ki ilke 2 tam da bunu onlemek icin konuldu.",
+      "note": "log.md'deki sayilar ilke 2(a)'ya UYGUN (tarih damgali + T-kimlikli) ve ihlal sayilmaz."
+    },
+    {
+      "id": "V6",
+      "severity": "DUSUK",
+      "file": "data/eval/t0030_wiki_revival_2026-09-15.json",
+      "claim": "Raporun atif alanlarinda uc kusur.",
+      "instances": "(a) 'Noktalama blogunun baslangic indeksi' iddiasinin command alani 'data/eval/t0027_model_state_2026-09-15.json B_vocab_alignment bolumu' diyor — oyle bir bolum YOK; gercek anahtar B_vocab_mismatch/b3_punctuation_block_analysis. (b) 87.629 iddiasinin command alani 'python3 -c \"import numpy as np; ...\" (T-0029 dogrulama kaniti)' — calistirilabilir komut degil, onceki bir dogrulamanin kanitina gonderme; sayiyi ben bagimsiz urettim (22433024/2/128=87629). (c) files_audited 13 dosya, changed_files 14 — eksik olan raporun KENDISI (kendi hash'ini iceremez; mesru ama raporda not edilmemis).",
+      "verdict": "Sayilar curumedi; yalniz atif/etiket duzeyinde kusur (T-0028 V1'in 'tanimin ADI' ailesi)."
+    }
+  ],
+  "structural_finding_lease_collision": {
+    "observation": "Dogrulama dosyasi YAZILAMADI: T-0031 (antigravity, pid 69646 CANLI) data/eval/ uzerinde DIR kiralamasi tutuyor (13:34:09Z, bitis 15:34:09Z). bus_acquire_lease iki kez reddedildi (13:41Z ve 13:54Z). UCUNCU ve DORDUNCU ret: 13:58:38Z ve 14:10:23Z oncesi; kira dosyasi (.agent-bus/state/leases/data__eval.json) nihayet 14:10:23Z'de silindi, kira 14:10:23Z'de alindi.",
+    "significance": "Protokolde danismanin dogrulama yazimi, data/eval/ beyan eden HERHANGI bir gorev kosarken yapisal olarak bloke olur — cunku executor tek-gorev kuralina (SPEC yurutucu cevrimi madde 5) tabi ama danisman dogrulamasi bir SONRAKI gorevle zamanda ORTUSUR. Bu, SPEC'te tanimlanmis bir hakem mekanizmasi olmayan gercek bir cakisma.",
+    "root_cause": "writes[] dizin duzeyinde beyan ediliyor ('data/eval/'), oysa gorev tek bir dosya uretiyor. T-0030 ve T-0031 spec'lerinin ikisi de 'data/eval/' yazmis — bu benim spec tasarimim.",
+    "proposed_fix": "writes[] uretilen DOSYAYI beyan etsin (or. 'data/eval/t0031_notes_surface_2026-09-15.json'); boylece hem kira hem beyan daralir ve cakisma dogmaz. Alternatif: dogrulama dosyalari icin ayri bir alt dizin + o dizinin hicbir gorev tarafindan beyan edilmemesi.",
+    "status": "COZULDU (gecici): kira serbest kalir kalmaz yazildi. Kusur YAPISAL olarak duruyor — bir sonraki gorev yine 'data/eval/' beyan ederse ayni blokaj dogar."
+  },
+  "notes": [
+    "Kendi olcum artefaktlarim (bulgu DEGIL): (1) file:// baglanti tarayicim 'scripts/train_step_demo.py#L145-L184' capasini yol sandi ve kristal_lm.md'yi kirik gosterdi — dosya VAR, HEAD'de de ayni, T-0030 disi. (2) '21%' icin once numel orani hesapladim (%51,99) ve 'yanlis sayi' sanacaktim; t0027'nin kendi tanimi mask_file_byte_percentage=21.3011 cikti — sayi dogru, benim olcumum farkli tanimdi.",
+    "Benim pytest kosumum .pytest_cache ve __pycache__ yazdi (sayi olcen bir karsilastirmada kendi adiminin izi).",
+    "Kapsam disi birakilan (spec'te 'kapsam disi — kullanici karari' ilan edilmis): walkthrough.md 8.x migrasyonu. Rapor bunu oneri olarak sunmus; spec'in RAPOR madde 5'i karsilanmis.",
+    "Yazim gecikmesi 39 dk (olcum 13:56:26Z, yazim 2026-09-15T14:10:56Z) — neden: T-0031'in data/eval/ dizin kiralamasi. Gecikme boyunca dogrulanan artefaktlar DEGISMEDI: 13 dosyanin sha256 ve satir sayilari yazim aninda yeniden olculdu, sapma 0. T-0031'in changed_files listesinde wiki/ ve llmcoder.md yok."
+  ],
+  "written_at": "2026-09-15T14:10:56Z",
+  "measurement_period": "2026-09-15T13:31:20Z (yurutucu bitis) .. 2026-09-15T13:56:26Z (olcum bitti); yazim 2026-09-15T14:10:56Z"
+}

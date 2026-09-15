@@ -1,5 +1,5 @@
 ---
-tags: [entity, tool]
+tags: [entity]
 date: 2026-06-15
 sources: [chat_prompt.py]
 status: active

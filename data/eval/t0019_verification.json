@@ -1,0 +1,77 @@
+{
+  "task_id": "T-0019",
+  "verified_by": "danisman (Claude Code)",
+  "verified_at": "2026-09-15",
+  "subject": "T-0018 raporunun metin/etiket katmani duzeltmesi (F1-F6) + A6_stale_bin yeni alani",
+  "verdict": "PASS",
+  "verdict_gerekce": "Dokuz kabul kriterinin (A-I) DOKUZU da bagimsiz olarak dogrulandi. Dogrulanmis hicbir sayisal alan degismedi. Iki DUSUK bulgu var; ikisi de olculmus bir sayiya veya bir kabul kriterine dokunmuyor (makine-okunur alanda yazim hatasi, ve record_impact dagiliminin hangi metin uzerinde olculdugunun belirtilmemesi).",
+
+  "criteria": [
+    {"id":"A","claim":"Dogrulanmis tum sayisal alanlar ayni","verdict":"DOGRULANDI",
+     "method":"t0018_why_no_memorization.json icinde kabul kriterinde listelenen 24 sayisal literal arandi (1.3945, 0.3966, 0.8227, 0.0331, 1.3011, 7.1064, 0.4408, 0.1512, 0.3697, 357.737284, 281.362151, 91923721, 0.377307, 0.270966, 0.4209, 0.3927, 0.3248, 220, 1799, 3683, 7930, 7224, 5702, 391103).",
+     "result":"EKSIK YOK. Ayrica B4.first_20_tokens icindeki ham olcumler (rank/percentile/nll) DEGISMEMIS: percentile_caveat AYRI bir alan olarak eklenmis, olculen alanlar ezilmemis. Dogru davranis."},
+
+    {"id":"B","claim":"'%99.90' hic gecmiyor; summary'deki her nicel cumle bir sayisal alana atif veriyor","verdict":"DOGRULANDI",
+     "method":"metinde '99.90' sayimi + summary'nin cumle cumle alan atiflari okundu.",
+     "result":"0 kez. Summary artik B4'un gercek dagilimini yaziyor: 'C1_1 icin 19/20 token rank <= 2, en kotu rank=32 (pozisyon 4, morpheme_tag=dolgu, nll=6.2793, avg_nll=0.4408); C1_2 en kotu rank=3; C1_3 en kotu rank=23 (teacher_forcing.B4)'. Nicel cumlelerin tamami alan yolu tasiyor."},
+
+    {"id":"C","claim":"ccd552c gecmiyor; 9e59830 ve iki tarih geciyor","verdict":"DOGRULANDI",
+     "method":"data_identity.A2.divergence_explanation metni okundu.",
+     "result":"'ccd552c' YOK. '9e59830' VAR, '2026-09-13T07:12:46' VAR, '2026-09-15' VAR. Mekanizma cumlesi (token.strip + 'if not clean_word: continue' ile noktalama dusuruluyordu, UNK uretilmiyordu) korunmus ve DOGRU."},
+
+    {"id":"D","claim":"A6_stale_bin makine-okunur: census + record_impact sayisal","verdict":"DOGRULANDI (bagimsiz yeniden uretim)",
+     "method":"census'un 14 girdisi tek tek okundu; record_impact BAGIMSIZ OLARAK yeniden hesaplandi: 9e59830^ commit'indeki tokenizer (git show) ile guncel tokenizer karsilastirildi, 5702 kayit iki farkli metin tanimiyla (tam JSON ve yalniz instruction) kodlandi.",
+     "result":"census: 14/14 .bin, hepsi stale_relative_to_9e59830=True (dogru alan adi bu; ilk sayimimda 'stale' aradigim icin 0 bulmustum — BENIM alan adi hatam). record_impact: ozdes=0, sapan=5702, oran=%100.00 — IKI BAGIMSIZ VARYANTTA DA birebir ayni cikti. Yuksek iddia ('tum kayitlar sapiyor') DOGRULANDI."},
+
+    {"id":"E","claim":"status ile verdict celisen kayit yok","verdict":"DOGRULANDI",
+     "result":"H1 ELENDI/ELENDI, H2 DESTEKLENDI/DESTEKLENDI, H3 ELENDI/ELENDI, H4 DESTEKLENDI/DESTEKLENDI, H5 DESTEKLENDI/DESTEKLENDI. Celiski yok."},
+
+    {"id":"F","claim":"exp_c_recheck onceki dogrulanmis alanlar degismemis + stale_bin_caveat eklenmis","verdict":"DOGRULANDI",
+     "method":"git show HEAD:data/eval/exp_c_recheck_2026-09-15.json ile guncel dosya karsilastirildi; 6 case nesnesi JSON-duzeyinde alan alan diff'lendi.",
+     "result":"6/6 case nesnesi DEGISMEMIS (0 fark). Ust seviyede tek eklenen anahtar 'stale_bin_caveat'. Diff istatistigi: 7 ekleme, 2 silme, 2 hunk (@251 summary nitelendirmesi, @316 stale_bin_caveat). Ham cikti olcumleri byte-ozdes."},
+
+    {"id":"G","claim":"Egitim kosusu yok, degisen .pt/.bin = 0","verdict":"DOGRULANDI",
+     "method":"find data -name '*.pt' -o -name '*.bin' -newermt '2026-09-15 00:00'",
+     "result":"BOS. Bugun hicbir checkpoint veya bin degismedi/yazilmadi."},
+
+    {"id":"H","claim":"pytest 123/123 (sandbox disi)","verdict":"DOGRULANDI",
+     "result":"123 passed in 10.22s (sandbox disi; sandbox ici socket.bind PermissionError veriyor, bilinen sinir)."},
+
+    {"id":"I","claim":"writes listesi disinda dosya degismedi","verdict":"DOGRULANDI",
+     "method":"git status --short, oturum basi anlik goruntusuyle karsilastirildi.",
+     "result":"Izlenen dosyalarda degisen tek sey data/eval/exp_c_recheck_2026-09-15.json (writes listesinde). Diger 6 ' M' dosyasi (future_train_*, cot_vault, high_school_foundation, turk_tarihi_*) OTURUM BASINDAN ONCE de ayni durumdaydi — T-0019 kaynakli degil. t0018_why_no_memorization.json de writes listesinde."}
+  ],
+
+  "findings": [
+    {"id":"G1","severity":"DUSUK",
+     "where":"data_identity.A6_stale_bin",
+     "issue":"Ayni nesnede HEM 'punct_set_commit' HEM de yazim hatali kopyasi 'punt_set_commit' var. Makine-okunur ciktiya yanlis adli fazladan anahtar girmis; 'punt_set_commit' okuyan bir tuketici deger bulur ama ad yanlistir.",
+     "impact":"Olculen hicbir sayiyi etkilemiyor. Bir kabul kriterini ihlal etmiyor.",
+     "fix":"'punt_set_commit' anahtarini sil; tek dogru ad 'punct_set_commit' kalsin."},
+
+    {"id":"G2","severity":"DUSUK",
+     "where":"data_identity.A6_stale_bin.record_impact.all_first_mismatch_indices_distribution",
+     "issue":"BASLIK SAYILARI dogru (5702/0/%100.00 — bagimsiz yeniden uretildi), ancak ilk-sapma indeks DAGILIMI benim iki bagimsiz varyantimla da birebir ortusmedi. Dosya top10: {7:1383, 10:1211, 8:903, 4:900, 11:550, ...}. Benim (yalniz instruction): {7:1381, 8:908, 4:897, 10:761, 11:540, ...}. Yaklasik 450 kayit benim olcumumde indeks 2-3'te, dosyada indeks 10'da sapiyor. Alan HANGI METNIN kodlandigini belirtmiyor (tam json.dumps mi, yalniz instruction mi, render_prompt mu), bu yuzden dagilim yeniden uretilemiyor.",
+     "impact":"Kabul kriteri D yalnizca record_impact'in SAYISAL olmasini istiyor — karsilaniyor. Baslik iddiasi saglam.",
+     "fix":"record_impact'e 'encoded_text' alani ekle (hangi metin uzerinde olculdu) ve dagilimi o tanimla yeniden uret. Bir sayi tutmadi diye dagilimi DEGISTIRME; once tanimi yaz."}
+  ],
+
+  "non_findings": [
+    {"id":"N1","issue":"Ilk sayimimda census 'stale=0' cikti ve bulgu yazmak uzereydim.",
+     "truth":"Alan adi 'stale_relative_to_9e59830'; 'stale' diye aradim. Gercek deger 14/14 True. BENIM hatam."},
+    {"id":"N2","issue":"data_identity.B4.percentile_caveat -> null okudum.",
+     "truth":"Caveat 'teacher_forcing.B4.percentile_caveat' altinda ve MEVCUT. B4 'data_identity' altinda degil, 'teacher_forcing' altinda. BENIM yol hatam."},
+    {"id":"N3","issue":"Census'ta 5 girdide has_meta=True ama created_at=None — kusur gibi gorunuyor.",
+     "truth":"data/train.bin.meta.json GERCEKTEN var (6.8M, Jun 14) ama icinde created_at alani yok; train_chat_balanced meta formati da created_at tasimiyor. None DURUST, uydurma degil. Kusur degil."},
+    {"id":"N4","issue":"'67.5' metinde 1 kez geciyor — F5 duzeltilmemis olabilir mi?",
+     "truth":"Gecis 'token popülasyonunun %67.52'si (100 - prob_sampled_at_least_once * 100)' icinde; hem token duzeyine cevrilmis hem alan adi anilmis. F5 TAM duzeltilmis; eski 'kayitlarin %67.5'i' cumlesi yok."},
+    {"id":"N5","issue":"A6_stale_bin'de 'affected_scope' tum .bin'leri bayat ilan ediyor — asiri genelleme mi?",
+     "truth":"Olculdu: 9e59830 (2026-09-15) oncesi derlenmis tum .bin'ler gercekten bayat; census'daki 14 dosyanin en yenisi 2026-09-13. Ifade dogru ve sinirli (alan adi 'stale_relative_to_9e59830')."}
+  ],
+
+  "downstream": {
+    "T-0020": "L1 — sozluk restorasyonu (vocab_entity.json'un tam oneki) + run_experiment_c.py'nin checkpoint'in GERCEK vocab boyutuyla kosulmasi. Exp C su an 32137 satirli carpenter'i 31357'ye KIRPIYOR (scripts/run_experiment_c.py:109).",
+    "T-0021": "G1 + G2 duzeltmesi (typo anahtar, record_impact metin tanimi).",
+    "uyari": "T-0019'un konusu olan metin/etiket katmani KAPANDI. Bu dogrulama yeni bir olcum iddiasi uretmedi; yalnizca mevcut olcumleri denetledi."
+  }
+}

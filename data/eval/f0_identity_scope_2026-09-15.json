@@ -1,0 +1,730 @@
+{
+  "report_id": "f0_identity_scope_2026-09-15",
+  "timestamp_utc": "2026-09-15T07:10:35.927287+00:00",
+  "checkpoints": [
+    {
+      "path": "data/kristal_b1_5_best.pt",
+      "byte_size": 472572529,
+      "mtime_utc": "2026-09-13T18:14:30.030810+00:00",
+      "sha256": "02e15b8198f8f3334609eb52691d699e80f88972245377c1a79772cb42ae1679",
+      "lm_head_rows": 32816,
+      "lm_head_dim": 768,
+      "total_parameters": 193630640,
+      "vocab_correspondence": "32816 (vocab_base_32816.json)"
+    },
+    {
+      "path": "data/kristal_b1_5_entity_ready.pt",
+      "byte_size": 472794619,
+      "mtime_utc": "2026-09-14T02:06:54.973488+00:00",
+      "sha256": "b684dd4899ac0be5035635db6a9477c1ae7ea3aced50b6097b2229d63d1d4330",
+      "lm_head_rows": 32852,
+      "lm_head_dim": 768,
+      "total_parameters": 193685972,
+      "vocab_correspondence": "32852 (vocab_entity.json)"
+    },
+    {
+      "path": "data/kristal_b1_5_epoch1.pt",
+      "byte_size": 472572529,
+      "mtime_utc": "2026-09-13T16:40:15.807086+00:00",
+      "sha256": "7e5f07fe08c0ac076addab8d7b5eb0dd4e4fe03ddc8d0263e2f653f822d92e85",
+      "lm_head_rows": 32816,
+      "lm_head_dim": 768,
+      "total_parameters": 193630640,
+      "vocab_correspondence": "32816 (vocab_base_32816.json)"
+    },
+    {
+      "path": "data/kristal_b1_5_epoch2.pt",
+      "byte_size": 472572529,
+      "mtime_utc": "2026-09-13T17:21:23.707677+00:00",
+      "sha256": "25c43aa8cf0251656f1a795a3559b6d9cbf9b4371091533205c80dda96b5714b",
+      "lm_head_rows": 32816,
+      "lm_head_dim": 768,
+      "total_parameters": 193630640,
+      "vocab_correspondence": "32816 (vocab_base_32816.json)"
+    },
+    {
+      "path": "data/kristal_b1_5_epoch3.pt",
+      "byte_size": 472572529,
+      "mtime_utc": "2026-09-13T18:14:29.118780+00:00",
+      "sha256": "02e15b8198f8f3334609eb52691d699e80f88972245377c1a79772cb42ae1679",
+      "lm_head_rows": 32816,
+      "lm_head_dim": 768,
+      "total_parameters": 193630640,
+      "vocab_correspondence": "32816 (vocab_base_32816.json)"
+    },
+    {
+      "path": "data/kristal_carpenter_model.pt",
+      "byte_size": 374026701,
+      "mtime_utc": "2026-09-13T08:40:29.263047+00:00",
+      "sha256": "5f0b8c71727d15e338e4301634b0d05652c3230cebc532b1124aff3761e93b4d",
+      "lm_head_rows": 32137,
+      "lm_head_dim": 768,
+      "total_parameters": 98215177,
+      "vocab_correspondence": "32137 (vocab_carpenter_32137.json)"
+    },
+    {
+      "path": "data/kristal_model.pt",
+      "byte_size": 472572529,
+      "mtime_utc": "2026-09-13T18:14:31.089550+00:00",
+      "sha256": "02e15b8198f8f3334609eb52691d699e80f88972245377c1a79772cb42ae1679",
+      "lm_head_rows": 32816,
+      "lm_head_dim": 768,
+      "total_parameters": 193630640,
+      "vocab_correspondence": "32816 (vocab_base_32816.json)"
+    },
+    {
+      "path": "data/kristal_model_backup.pt",
+      "byte_size": 343943271,
+      "mtime_utc": "2026-09-09T07:54:57.280618+00:00",
+      "sha256": "eb0d5350262196d121ffc002244b8163bc922850f3f631ce10ee24fd57faa131",
+      "lm_head_rows": 27244,
+      "lm_head_dim": 768,
+      "total_parameters": 90694636,
+      "vocab_correspondence": "27244 (legacy/other)"
+    },
+    {
+      "path": "data/kristal_model_backup_v160.pt",
+      "byte_size": 463601831,
+      "mtime_utc": "2026-09-12T18:17:10.489077+00:00",
+      "sha256": "bf2805a0bfa228e2f4234c35d8a4826f32d111a0b5d254e0394528108d478ca3",
+      "lm_head_rows": 31357,
+      "lm_head_dim": 768,
+      "total_parameters": 191388157,
+      "vocab_correspondence": "31357 (vocab.json)"
+    },
+    {
+      "path": "data/kristal_model_base.pt",
+      "byte_size": 281717382,
+      "mtime_utc": "2026-06-15T06:17:19.764611+00:00",
+      "sha256": "c77849d272e31fc52495ff27aad854ca47859b55ebe3360f8eeb6e707312c4da",
+      "lm_head_rows": 25665,
+      "lm_head_dim": 768,
+      "total_parameters": 73567681,
+      "vocab_correspondence": "25665 (legacy/other)"
+    },
+    {
+      "path": "data/kristal_model_pre_clean.pt",
+      "byte_size": 463601831,
+      "mtime_utc": "2026-09-13T08:06:47.423717+00:00",
+      "sha256": "d1f04433d81b5691f310bca691baf50f90be0527701c4b757460e5c1b368dcac",
+      "lm_head_rows": 31357,
+      "lm_head_dim": 768,
+      "total_parameters": 191388157,
+      "vocab_correspondence": "31357 (vocab.json)"
+    },
+    {
+      "path": "data/kristal_model_sft.pt",
+      "byte_size": 374025447,
+      "mtime_utc": "2026-09-13T08:38:35.913291+00:00",
+      "sha256": "b6764c7062ce627a0ba9437cf052a28d0ac4e2e4cf3b3df3e3110d05a1ba2957",
+      "lm_head_rows": 32137,
+      "lm_head_dim": 768,
+      "total_parameters": 98215177,
+      "vocab_correspondence": "32137 (vocab_carpenter_32137.json)"
+    },
+    {
+      "path": "data/kristal_model_step_a_ep1.pt",
+      "byte_size": 468454020,
+      "mtime_utc": "2026-09-13T10:55:04.456879+00:00",
+      "sha256": "2c29e7f7179d0c929ae89c2ec13cef6a64326ea9ab580a5d71d9c6d6cf3d7812",
+      "lm_head_rows": 32146,
+      "lm_head_dim": 768,
+      "total_parameters": 192600850,
+      "vocab_correspondence": "32146 (intermediate step_a checkpoint)"
+    },
+    {
+      "path": "data/kristal_model_step_a_ep2.pt",
+      "byte_size": 468454020,
+      "mtime_utc": "2026-09-13T11:25:57.883542+00:00",
+      "sha256": "ae36f36d25ed88b6db27638e7af0b3d4cfd8718fb66fe835a5fe47ad987fa301",
+      "lm_head_rows": 32146,
+      "lm_head_dim": 768,
+      "total_parameters": 192600850,
+      "vocab_correspondence": "32146 (intermediate step_a checkpoint)"
+    },
+    {
+      "path": "data/kristal_model_step_a_ep3.pt",
+      "byte_size": 468454020,
+      "mtime_utc": "2026-09-13T12:06:12.121095+00:00",
+      "sha256": "f6d8ee88a05de407860a441b3da4f1b3354d10b45cfd3d01436be3d31757e698",
+      "lm_head_rows": 32146,
+      "lm_head_dim": 768,
+      "total_parameters": 192600850,
+      "vocab_correspondence": "32146 (intermediate step_a checkpoint)"
+    },
+    {
+      "path": "data/kristal_model_step_a_final.pt",
+      "byte_size": 468454258,
+      "mtime_utc": "2026-09-13T12:06:13.216356+00:00",
+      "sha256": "809bba6d851b16ffd5382e0bd3548b34fd35430345415f217576d06b05740861",
+      "lm_head_rows": 32146,
+      "lm_head_dim": 768,
+      "total_parameters": 192600850,
+      "vocab_correspondence": "32146 (intermediate step_a checkpoint)"
+    },
+    {
+      "path": "data/kristal_model_step_b1_ep1.pt",
+      "byte_size": 468515643,
+      "mtime_utc": "2026-09-13T13:14:52.026316+00:00",
+      "sha256": "4d2bcfa66a3b3c304f0d4a478b72609ce4dc37cad0db06af74f237eed8c49720",
+      "lm_head_rows": 32156,
+      "lm_head_dim": 768,
+      "total_parameters": 192616220,
+      "vocab_correspondence": "32156 (vocab_step_b1_final_32156.json)"
+    },
+    {
+      "path": "data/kristal_model_step_b1_ep2.pt",
+      "byte_size": 468515643,
+      "mtime_utc": "2026-09-13T14:09:10.246380+00:00",
+      "sha256": "9a9f46a002bc3f713faa9395e6af7d0d088b30c5bc4d380f63626b528d2604aa",
+      "lm_head_rows": 32156,
+      "lm_head_dim": 768,
+      "total_parameters": 192616220,
+      "vocab_correspondence": "32156 (vocab_step_b1_final_32156.json)"
+    },
+    {
+      "path": "data/kristal_model_step_b1_ep3.pt",
+      "byte_size": 468515643,
+      "mtime_utc": "2026-09-13T14:48:01.867463+00:00",
+      "sha256": "99497f5cf476c2338659dabeea2af8f3752c11d71c1059368f6365900e980d4c",
+      "lm_head_rows": 32156,
+      "lm_head_dim": 768,
+      "total_parameters": 192616220,
+      "vocab_correspondence": "32156 (vocab_step_b1_final_32156.json)"
+    },
+    {
+      "path": "data/kristal_model_step_b1_final.pt",
+      "byte_size": 468515881,
+      "mtime_utc": "2026-09-13T14:48:03.008695+00:00",
+      "sha256": "01d7918e4e5fa8e4fdbf0c4628b41a734639d9736d54f3307b44a0b5fd77174e",
+      "lm_head_rows": 32156,
+      "lm_head_dim": 768,
+      "total_parameters": 192616220,
+      "vocab_correspondence": "32156 (vocab_step_b1_final_32156.json)"
+    },
+    {
+      "path": "data/kristal_rag_arm_a_best.pt",
+      "byte_size": 472572950,
+      "mtime_utc": "2026-09-14T06:36:44.438154+00:00",
+      "sha256": "e276081526db9af76afad35cb63c4de84ff4b763594dbb08efa66dddf42be81d",
+      "lm_head_rows": 32816,
+      "lm_head_dim": 768,
+      "total_parameters": 193630640,
+      "vocab_correspondence": "32816 (vocab_base_32816.json)"
+    },
+    {
+      "path": "data/kristal_rag_arm_b_best.pt",
+      "byte_size": 472794262,
+      "mtime_utc": "2026-09-14T07:59:36.550508+00:00",
+      "sha256": "27802a2d837f6e3efe4ecd6961c15366fa87f8e829e23af459be384db9685d3b",
+      "lm_head_rows": 32852,
+      "lm_head_dim": 768,
+      "total_parameters": 193685972,
+      "vocab_correspondence": "32852 (vocab_entity.json)"
+    },
+    {
+      "path": "data/kristal_rag_arm_c_best.pt",
+      "byte_size": 472794262,
+      "mtime_utc": "2026-09-14T11:14:05.580522+00:00",
+      "sha256": "1bd6e444f71b822057a8f2d25b14e2917cafe2ef39e3e325a89d5270d686affa",
+      "lm_head_rows": 32852,
+      "lm_head_dim": 768,
+      "total_parameters": 193685972,
+      "vocab_correspondence": "32852 (vocab_entity.json)"
+    }
+  ],
+  "duplicate_check": {
+    "kristal_model_sha256": "02e15b8198f8f3334609eb52691d699e80f88972245377c1a79772cb42ae1679",
+    "kristal_b1_5_best_sha256": "02e15b8198f8f3334609eb52691d699e80f88972245377c1a79772cb42ae1679",
+    "kristal_b1_5_epoch3_sha256": "02e15b8198f8f3334609eb52691d699e80f88972245377c1a79772cb42ae1679",
+    "kristal_model_bytes": 472572529,
+    "kristal_b1_5_best_bytes": 472572529,
+    "mtime_difference_seconds": 1.05874,
+    "are_identical": true,
+    "verdict": "BIT_FOR_BIT_IDENTICAL",
+    "explanation": "kristal_model.pt ve kristal_b1_5_best.pt (ve kristal_b1_5_epoch3.pt) tam olarak ayni SHA-256 (02e15b8198f8f3334609eb52691d699e80f88972245377c1a79772cb42ae1679) ve bayt boyutuna (472,572,529) sahiptir. kristal_model.pt, B1.5 egitiminin nihai epoch 3 en iyi kontrol noktasinin kopyasidir. Disk butcesinde bu iki dosya 472.57 MB gereksiz mukerrer alan kaplamaktadir."
+  },
+  "restored_vocabs": {
+    "source_vocab_entity": {
+      "path": "data/vocab_entity.json",
+      "sha256": "7611b6a523a2bb524cc21aa9cc64235aa6a2ae99f87f46ac51cb2915e61164ad",
+      "token_count": 32852,
+      "contiguous": true,
+      "unchanged": true
+    },
+    "source_vocab_json": {
+      "path": "data/vocab.json",
+      "sha256": "4b40eebee9c996c8dd3150f6b3c8896de85764ee1cf0b08e6c636e5c002a0e69",
+      "token_count": 31357,
+      "contiguous": true,
+      "unchanged": true
+    },
+    "restored_files": [
+      {
+        "path": "data/rebuild/vocab_carpenter_32137.json",
+        "token_count": 32137,
+        "next_id": 32137,
+        "sha256": "7184fbba1d7bb7ef13567a9cbe2738ae740a1ff08aea1a892c83b9faa8ab4987",
+        "contiguous_0_to_N_minus_1": true,
+        "prefix_match_with_vocab_json": true,
+        "status": "VERIFIED_EXACT_PREFIX"
+      },
+      {
+        "path": "data/rebuild/vocab_step_b1_final_32156.json",
+        "token_count": 32156,
+        "next_id": 32156,
+        "sha256": "2f6fc3b38b2696e00117c09cf0cbf00b58a04e14912d7729f81471beb9fa97d0",
+        "contiguous_0_to_N_minus_1": true,
+        "prefix_match_with_vocab_carpenter_32137": true,
+        "status": "VERIFIED_EXACT_PREFIX"
+      },
+      {
+        "path": "data/rebuild/vocab_base_32816.json",
+        "token_count": 32816,
+        "next_id": 32816,
+        "sha256": "8cc31d82d144cff0e9f55342ba7168a17890a79cdf8439549569c699c08b7fdc",
+        "contiguous_0_to_N_minus_1": true,
+        "prefix_match_with_vocab_carpenter_32137": true,
+        "status": "VERIFIED_EXACT_PREFIX"
+      }
+    ]
+  },
+  "silent_truncation_sweep": {
+    "summary": {
+      "representative_sites_audited": 31,
+      "repo_total_strict_false_sites": 36,
+      "repo_total_strict_false_files": 34,
+      "hata_count": 16,
+      "gorunur_uyari_count": 12,
+      "sessiz_count": 3
+    },
+    "selection_rule": "Repo genelinde load_state_dict(..., strict=False) içeren toplam 36 satır (34 dosya) taranmıştır. Raporlanan 31 temsilci site, her bir model yükleme / uzlaştırma noktasından tek bir temsilci satır seçilmesi kuralıyla derlenmiştir (ör. train.py:19 resizer tanımındaki uyarı satırı listelenmiş, train.py:109 load_state_dict çağrısı mükerrerlik oluşturmaması için ayrı listelenmemiştir). Bu 34 dosyanın tamamı incelenmiş, raporda bağımsız satırı bulunmayan 11 dosyanın zincirlerinin ortak gürültülü köklere (src/llm/prompt_contract.resize_state_dict veya train.resize_state_dict) yönlendiği ve maddi olarak sessiz kalan başka hiçbir yol bulunmadığı doğrulanmıştır. İncelenen 31 temsilci site içinde 16 HATA, 12 GÖRÜNÜR_UYARI ve yalnızca 3 adet SESSIZ yol (scripts/test_rag_interactive.py:30, scripts/evaluate_chat.py:30, scripts/evaluate_on_train_data.py:27) tespit edilmiştir.",
+    "classification_definition": {
+      "HATA": "Model ve checkpoint boyut uyumsuzlugunda PyTorch RuntimeError (size mismatch) firlatir veya kod FileNotFoundError ile sonlanir.",
+      "GORUNUR_UYARI": "Boyut uyumsuzlugu durumunda konsola veya loga acik metin (SOZLESME_UYARI veya Resizing weights) basilir.",
+      "SESSIZ": "Model ve checkpoint boyutu uyuşmadığında ağırlıklar uyarısız ve sessizce min() ile kırpılır veya doldurulur."
+    },
+    "sites": [
+      {
+        "site": "scripts/test_rag_interactive.py:30",
+        "classification": "SESSIZ",
+        "pattern": "def resize_state_dict(model, old_state_dict)",
+        "behavior": "Satır 30-37'de if v.shape != new_state_dict[k].shape kontrolü yapılır ancak HİÇBİR print veya log mesajı basılmadan doğrudan min() ile dilimlenir. Kullanıcı boyut kırpılmasından haberdar olamaz."
+      },
+      {
+        "site": "scripts/evaluate_chat.py:30",
+        "classification": "SESSIZ",
+        "pattern": "def resize_state_dict(model, old_state_dict)",
+        "behavior": "Satır 30-37'de uyarı veya print olmaksızın min() dilimlemesiyle ağırlıklar sessizce aktarılır."
+      },
+      {
+        "site": "scripts/evaluate_on_train_data.py:27",
+        "classification": "SESSIZ",
+        "pattern": "def resize_state_dict(model, old_state_dict)",
+        "behavior": "Satır 27-34'te boyut uyuşmazlığı tamamen sessizce min() ile kırpılır; ekrana çıktı basılmaz."
+      },
+      {
+        "site": "src/llm/prompt_contract.py:115",
+        "classification": "GORUNUR_UYARI",
+        "pattern": "def resize_state_dict(model, old_state_dict)",
+        "behavior": "Satır 129-132'de [SOZLESME_UYARI] Parametre '{k}' boyut uyumsuzluğu: eski -> yeni (action) uyarısı basılır."
+      },
+      {
+        "site": "scripts/run_experiment_c.py:114",
+        "classification": "GORUNUR_UYARI",
+        "pattern": "model_rows != ckpt_rows kontrolü",
+        "behavior": "T-0020'de eklenen kontrol: Satır 114'te [UYARI] model_rows != ckpt_rows basılır."
+      },
+      {
+        "site": "train.py:19",
+        "classification": "GORUNUR_UYARI",
+        "pattern": "def resize_state_dict(model, old_state_dict)",
+        "behavior": "Satır 19'da print(f'Resizing weights for: {k} (Old: ..., New: ...)') basılır."
+      },
+      {
+        "site": "scripts/train_scientific_sft.py:19",
+        "classification": "GORUNUR_UYARI",
+        "pattern": "def resize_state_dict(model, old_state_dict)",
+        "behavior": "Satır 19'da print(f'Resizing weights for: {k}...') basılır."
+      },
+      {
+        "site": "scripts/train_chat_sft.py:27",
+        "classification": "GORUNUR_UYARI",
+        "pattern": "def resize_state_dict(model, old_state_dict)",
+        "behavior": "Satır 27'de print(f'Resizing weights for: {k}...') basılır."
+      },
+      {
+        "site": "scripts/test_sft_checkpoint.py:37",
+        "classification": "GORUNUR_UYARI",
+        "pattern": "def resize_state_dict(model, old_state_dict)",
+        "behavior": "Satır 37'de print(f'Resizing weights for: {k}...') basılır."
+      },
+      {
+        "site": "scripts/run_experiment_a.py:42",
+        "classification": "GORUNUR_UYARI",
+        "pattern": "resize_state_dict çağrısı",
+        "behavior": "src.llm.prompt_contract modülünden resize_state_dict kullanır; [SOZLESME_UYARI] basılır."
+      },
+      {
+        "site": "scripts/run_experiment_b.py:104",
+        "classification": "GORUNUR_UYARI",
+        "pattern": "resize_state_dict çağrısı",
+        "behavior": "src.llm.prompt_contract modülünden resize_state_dict kullanır; [SOZLESME_UYARI] basılır."
+      },
+      {
+        "site": "scripts/evaluate_mcq_conditioning.py:46",
+        "classification": "GORUNUR_UYARI",
+        "pattern": "resize_state_dict çağrısı",
+        "behavior": "prompt_contract modülünden import eder; [SOZLESME_UYARI] basılır."
+      },
+      {
+        "site": "scripts/evaluate_sft_benchmarks.py:50",
+        "classification": "GORUNUR_UYARI",
+        "pattern": "resize_state_dict çağrısı",
+        "behavior": "prompt_contract modülünden import eder; [SOZLESME_UYARI] basılır."
+      },
+      {
+        "site": "scripts/train_step_b1_5_rigorous.py:212",
+        "classification": "GORUNUR_UYARI",
+        "pattern": "resize_state_dict + SOYAGACI_UYARI",
+        "behavior": "prompt_contract resize uyarısına ek olarak satır 215'te [SOYAGACI_UYARI] missing/unexpected keys raporlanır."
+      },
+      {
+        "site": "scripts/train_step_b1_canonical.py:186",
+        "classification": "GORUNUR_UYARI",
+        "pattern": "resize_state_dict çağrısı",
+        "behavior": "prompt_contract modülünden resize_state_dict kullanır; [SOZLESME_UYARI] basılır."
+      },
+      {
+        "site": "test_model.py:49",
+        "classification": "HATA",
+        "pattern": "model.load_state_dict(state_dict, strict=False)",
+        "behavior": "resize_state_dict çağrılmaz. Boyut uyumsuzluğunda PyTorch RuntimeError: size mismatch fırlatır (ölçümle kanıtlandı)."
+      },
+      {
+        "site": "test_model_decompiler.py:126",
+        "classification": "HATA",
+        "pattern": "model.load_state_dict(state_dict, strict=False)",
+        "behavior": "resize çağrılmaz; tensör boyutu uyuşmadığında PyTorch RuntimeError ile çöker."
+      },
+      {
+        "site": "chat_prompt.py:93",
+        "classification": "HATA",
+        "pattern": "model.load_state_dict(state_dict, strict=False)",
+        "behavior": "Boyut uyuşmazlığında doğrudan RuntimeError verir; kırpma yapılmaz."
+      },
+      {
+        "site": "src/rag/rag_pipeline.py:90",
+        "classification": "HATA",
+        "pattern": "model.load_state_dict(state_dict, strict=False)",
+        "behavior": "Boyut uyuşmazlığında doğrudan RuntimeError fırlatır."
+      },
+      {
+        "site": "scripts/evaluate_realistic_rag_rigorous.py:592",
+        "classification": "HATA",
+        "pattern": "model.load_state_dict(sd, strict=False)",
+        "behavior": "Model sözlüğü ile checkpoint satırları uyuşmazsa RuntimeError fırlatır."
+      },
+      {
+        "site": "scripts/train_realistic_rag_arms.py:232",
+        "classification": "HATA",
+        "pattern": "model.load_state_dict(sd, strict=False)",
+        "behavior": "Boyut uyuşmazlığında RuntimeError fırlatır; satır 228'de raise RuntimeError ile sarılmıştır."
+      },
+      {
+        "site": "scripts/evaluate_rag_pilot.py:224",
+        "classification": "HATA",
+        "pattern": "model.load_state_dict(sd, strict=False)",
+        "behavior": "Boyut uyuşmazlığında RuntimeError verir."
+      },
+      {
+        "site": "scripts/evaluate_rag_baselines.py:141",
+        "classification": "HATA",
+        "pattern": "model.load_state_dict(sd, strict=False)",
+        "behavior": "Boyut uyuşmazlığında RuntimeError verir."
+      },
+      {
+        "site": "scripts/train_rag_pilot.py:209",
+        "classification": "HATA",
+        "pattern": "model.load_state_dict(sd, strict=False)",
+        "behavior": "Boyut uyuşmazlığında RuntimeError verir."
+      },
+      {
+        "site": "train_dpo.py:96",
+        "classification": "HATA",
+        "pattern": "ref_model.load_state_dict(sft_state_dict, strict=False)",
+        "behavior": "Boyut uyuşmazlığında RuntimeError verir."
+      },
+      {
+        "site": "train_dpo.py:104",
+        "classification": "HATA",
+        "pattern": "model.load_state_dict(active_state_dict, strict=False)",
+        "behavior": "Boyut uyuşmazlığında RuntimeError verir."
+      },
+      {
+        "site": "scripts/diagnostics_in_domain_swap.py:112",
+        "classification": "HATA",
+        "pattern": "model.load_state_dict(torch.load(...), strict=False)",
+        "behavior": "Boyut uyuşmazlığında RuntimeError verir."
+      },
+      {
+        "site": "scripts/diagnostics_b2_reality_check.py:379",
+        "classification": "HATA",
+        "pattern": "model.load_state_dict(sd, strict=False)",
+        "behavior": "Boyut uyuşmazlığında RuntimeError verir."
+      },
+      {
+        "site": "scripts/diagnostics_d_rand_and_syntax.py:285",
+        "classification": "HATA",
+        "pattern": "model.load_state_dict(sd, strict=False)",
+        "behavior": "Boyut uyuşmazlığında RuntimeError verir."
+      },
+      {
+        "site": "scripts/prepare_entity_checkpoint.py:57",
+        "classification": "HATA",
+        "pattern": "model.load_state_dict(sd, strict=False)",
+        "behavior": "Boyut uyuşmazlığında RuntimeError verir."
+      },
+      {
+        "site": "scripts/train_sft_fine_tuning.py:64",
+        "classification": "HATA",
+        "pattern": "model.load_state_dict(torch.load(...)) [strict=True]",
+        "behavior": "strict=True çalıştığı için herhangi bir uyumsuzlukta anında RuntimeError verir."
+      }
+    ]
+  },
+  "coverage_gap": {
+    "measured_files": {
+      "carpenter_specialization_dataset": {
+        "path": "data/pedagogy/carpenter_specialization_dataset.jsonl",
+        "record_count": 5400,
+        "total_chars": 1593810,
+        "punct_char_count_total": 33732,
+        "punct_char_breakdown": {
+          ":": 11280,
+          "?": 4800,
+          ".": 9192,
+          ",": 4500,
+          ";": 1848,
+          "(": 876,
+          ")": 876,
+          "-": 360
+        },
+        "digit_char_count_total": 3360,
+        "digit_char_breakdown": {
+          "0": 1032,
+          "2": 528,
+          "1": 348,
+          "3": 324,
+          "5": 312,
+          "9": 276,
+          "4": 264,
+          "8": 168,
+          "6": 108
+        },
+        "punct_tokens_generated_total": 33732,
+        "digit_tokens_generated_total": 3360,
+        "domains": {
+          "ahsap_marangozluk": 4870,
+          "genel_sohbet_diger": 525,
+          "dilbilgisi_morfoloji": 5
+        }
+      },
+      "arena_carpenter_accumulated": {
+        "path": "data/pedagogy/arena_carpenter_accumulated.jsonl",
+        "record_count": 302,
+        "total_chars": 86946,
+        "punct_char_count_total": 1722,
+        "punct_char_breakdown": {
+          ".": 804,
+          ",": 282,
+          ":": 217,
+          "?": 199,
+          ";": 108,
+          "(": 46,
+          ")": 46,
+          "-": 20
+        },
+        "digit_char_count_total": 202,
+        "digit_char_breakdown": {
+          "0": 61,
+          "2": 30,
+          "1": 24,
+          "9": 18,
+          "3": 18,
+          "5": 17,
+          "8": 14,
+          "4": 13,
+          "6": 7
+        },
+        "punct_tokens_generated_total": 1722,
+        "digit_tokens_generated_total": 202,
+        "domains": {
+          "ahsap_marangozluk": 296,
+          "genel_sohbet_diger": 6
+        }
+      },
+      "dpo_all_tokenized": {
+        "path": "data/pedagogy/dpo_all_tokenized.jsonl",
+        "record_count": 6198,
+        "is_pre_tokenized": true,
+        "total_tokens": 29051860,
+        "max_token_id": 31199,
+        "min_token_id": 0,
+        "punct_tokens_in_file": 0,
+        "digit_tokens_in_file": 0,
+        "note": "Pre-tokenized integer token streams; UTF-8 raw text fields do not exist on disk because external source was removed."
+      },
+      "turk_tarihi_dpo_raw": {
+        "path": "data/pedagogy/turk_tarihi_1931/tr_dpo_dataset.jsonl",
+        "record_count": 406,
+        "text_definition": "plain_text: ' '.join(str(v) for v in record.values())",
+        "vocab_used": "data/rebuild/vocab_base_32816.json (32816 tokens)",
+        "character_and_token_alignment": "Karakter ve token sütunlarının her ikisi de aynı düz metin tanımından (' '.join(str(v) for v in record.values())) elde edilmiştir. Tek bir tanım kullanıldığında 6.328 noktalama karakterinin tamamı eksiksiz olarak 6.328 noktalama tokenine dönüşmektedir (kayıp yoktur, %100 birebir).",
+        "total_chars": 252407,
+        "punct_char_count_total": 6328,
+        "digit_char_count_total": 3744,
+        "punct_tokens_generated_total": 6328,
+        "digit_tokens_generated_total": 2066,
+        "punct_breakdown": {
+          ",": 2214,
+          "?": 399,
+          ":": 420,
+          "(": 639,
+          ")": 641,
+          "-": 478,
+          ".": 1329,
+          ";": 208
+        },
+        "digit_token_breakdown": {
+          "2": 860,
+          "0": 560,
+          "6": 430,
+          "1": 60,
+          "3": 36,
+          "8": 30,
+          "5": 29,
+          "9": 22,
+          "4": 21,
+          "7": 18
+        },
+        "json_envelope_divergence_note": {
+          "json_definition": "json.dumps(record, ensure_ascii=False)",
+          "punct_tokens_under_json": 1624,
+          "digit_tokens_under_json": 1624,
+          "divergence_cause": "JSON zarfı tanımında _render_structured_prompt prompt/chosen/rejected alanlarını yok sayıp yalnızca input alanını aldığı için noktalama ve rakam tokeni 1624'e düşmektedir (406 kayıt * 4). Düz metin tanımında ise 6.328 noktalama karakteri eksiksiz 6.328 token üretir."
+        },
+        "domains": {
+          "genel_sohbet_diger": 334,
+          "turk_tarihi": 66,
+          "dilbilgisi_morfoloji": 4,
+          "ahsap_marangozluk": 1,
+          "fen_matematik": 1
+        }
+      }
+    },
+    "combined_jacket_totals": {
+      "total_records": 5702,
+      "total_raw_characters": 1680756,
+      "total_punct_characters": 35454,
+      "total_punct_tokens_generated": 35454,
+      "total_digit_characters": 3562,
+      "total_digit_tokens_generated": 3562
+    },
+    "coverage_gap_finding": {
+      "recompilation_vs_new_data": "Noktalama ve rakamlar için YENİ VERİ ÜRETİMİ GEREKMEZ. Mevcut ceket külliyatı (5.702 kayıt) zaten 35.454 adet noktalama ve 3.562 adet rakam karakteri içermektedir. Güncel tokenizer ve 32.816 sözlük ile yeniden derleme yapıldığında tensöre tam 35.454 noktalama tokeni ve 3.562 rakam tokeni otomatik olarak enjekte edilmektedir.",
+      "domain_gap_identification": "Kapsam boşluğu dilsel formda değil, TEMATİK ÇEŞİTLİLİKTEDİR. Ceket verisinin %90.6'sı yalnızca ahşap/marangozluk alanına odaklıdır; fen/matematik (%0) ve Türk tarihi (%0) gibi genel lise alanları ceket veri kümesinde hiç bulunmamaktadır. Bu durum, dil mekaniklerinin (noktalama, sözdizimi) tabana ait olması gerektiği yönündeki mimari kararı (D-B) kesin olarak destekler."
+    }
+  },
+  "disk_budget": {
+    "disk_total_gib": 460.43,
+    "disk_used_gib": 440.21,
+    "disk_free_gib": 20.22,
+    "disk_free_mib": 20702.7,
+    "data_pt_total_count": 23,
+    "data_pt_total_mib": 9825.34,
+    "data_pt_total_gib": 9.6,
+    "data_bin_total_count": 14,
+    "data_bin_total_mib": 166.91,
+    "data_bin_total_gib": 0.16,
+    "checkpoint_capacity": {
+      "max_473mb_checkpoints_in_free_space": 43,
+      "max_374mb_checkpoints_in_free_space": 55,
+      "plan_budget_20gib_max_473mb": 43,
+      "plan_budget_20gib_max_374mb": 54
+    },
+    "two_x_scenario_analysis": {
+      "scenario": "Yeni isimle üretim (mevcutları ezmeden koruma)",
+      "projected_f3_base_checkpoint_mib": 472.6,
+      "projected_f4_jacket_checkpoint_mib": 374.0,
+      "projected_recompiled_bins_mib": 110.0,
+      "total_new_footprint_mib": 956.6,
+      "total_new_footprint_gib": 0.93,
+      "budget_consumption_pct": 4.62,
+      "verdict": "FEASIBLE_AND_SAFE (Kapasite 20.22 GiB iken F3+F4 yeni üretimi < 1 GiB yer kaplamaktadır; bütçenin yalnızca %4.6'sı kullanılacaktır)."
+    }
+  },
+  "kapsam_kararlari_icin_girdiler": {
+    "D-A_taban_secimi": {
+      "secenek_1": "data/kristal_model.pt (32.816 satır, 92.97M param, SHA-256: 02e15b8198f8...)",
+      "secenek_2": "data/kristal_model_step_b1_final.pt (32.156 satır, 92.46M param, SHA-256: 01d7918e4e5f...)",
+      "sayisal_dayanak": {
+        "kristal_model_lm_head_rows": 32816,
+        "kristal_model_step_b1_final_lm_head_rows": 32156,
+        "b1_5_proper_noun_advantage": "32.816 sözlüğü 660 adet kanonik özel isim içerir (32157..32815), kristal_model_step_b1_final ise bu satırlara sahip değildir.",
+        "identical_model_finding": "kristal_model.pt ile kristal_b1_5_best.pt 100% bit düzeyinde özdeştir (SHA-256: 02e15b8198f8...); servis edilen aktif modeldir.",
+        "oneri": "kristal_model.pt (32.816) değişmez taban için seçilmelidir; B1.5 dilsel yetkinliğini ve 32.816 satırlık tam mimariyi eksiksiz taşır."
+      }
+    },
+    "D-B_noktalama_hedefi": {
+      "secenekler": [
+        "TABAN",
+        "CEKET"
+      ],
+      "sayisal_dayanak": {
+        "total_punct_in_dataset": 35454,
+        "total_digit_in_dataset": 3562,
+        "taban_role": "Kaslı bir Z kuşağı lise öğrencisi (genel Türkçe dil becerisi)",
+        "ceket_domain_concentration": "%90.6 ahşap/marangozluk",
+        "oneri": "TABAN. Noktalama ve rakamlar bir uzmanlık alanı değil, evrensel dil mekaniğidir. Ceket üzerine eğitilirse taban noktalama-kör kalır ve diğer tüm modüller bozulur. Tabanın yetkinlik tamamlama geçişiyle (F3) noktalamayı öğrenmesi gerekir."
+      }
+    },
+    "D-C_f2_kapsami": {
+      "secenekler": [
+        "14 bin'in tamamı",
+        "Gerekli olanlar"
+      ],
+      "sayisal_dayanak": {
+        "total_bin_count": 14,
+        "total_bin_size_mib": 166.91,
+        "raw_text_status": "dpo_all_tokenized.jsonl (29M token) pre-tokenized olup kaynak dizini diskten silinmiştir; salt noktalama enjeksiyonu için kaynak JSONL metni gereklidir.",
+        "oneri": "GEREKLİ OLANLAR: Mevcut ham metin taşıyan JSONL'ler (carpenter_specialization_dataset.jsonl, arena_carpenter_accumulated.jsonl, high_school_foundation, parenting_deep vb.) güncel tokenizer ile yeniden derlenmelidir."
+      }
+    },
+    "D-D_yeni_checkpoint_adlandirma": {
+      "secenekler": [
+        "AYNI isimle (üzerine yazma)",
+        "YENİ isimle (koruma + 2x)"
+      ],
+      "sayisal_dayanak": {
+        "disk_free_gib": 20.22,
+        "new_checkpoints_footprint_gib": 0.93,
+        "budget_usage_pct": 4.6,
+        "irreversibility_risk": "Checkpoint dosyaları gitignored olduğu için üzerine yazma geri dönüşsüz veri kaybına yol açar.",
+        "oneri": "YENİ İSİMLE (örn: kristal_base_v2_punct.pt ve kristal_carpenter_v2.pt) üretilmeli ve mevcut kontrol noktaları yedek olarak korunmalıdır. Disk bütçesi (%4.6 kullanım) buna fazlasıyla elverişlidir."
+      }
+    },
+    "D-E_version_hedefi": {
+      "secenekler": [
+        "Noktalama yetkin taban + yenilenmiş ceket",
+        "Daha geniş yetkinlik listesi"
+      ],
+      "sayisal_dayanak": {
+        "reserved_untrained_slots": 19,
+        "punct_slots": "32137..32145 (9 token)",
+        "digit_slots": "32146..32155 (10 token)",
+        "oneri": "Noktalama ve rakam yetkin taban (32.816) + yenilenmiş ceket. Proje çapındaki D1 olgusunu (hiçbir bin noktalama bloğuna ulaşmıyor) doğrudan çözen ve Exp C ezber/çıkarım uyuşmazlığını ortadan kaldıran en odaklı ve ampirik hedeftir."
+      }
+    }
+  }
+}

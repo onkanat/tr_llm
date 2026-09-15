@@ -1,0 +1,546 @@
+{
+  "plan_id": "regeneration_full_chain_2026-09-15",
+  "author": "claude (danisman)",
+  "created_at": "2026-09-15T07:15:00Z",
+  "authorized_by": "kullanici: 'Kristal LLM bir cocuk buyuyecek, carpenter onun giyecegi ceket. duzeltilmis kod tabani ile yeni version uretimde sakinca gormuyorum. Kristal LLM her zaman kasli bir z kusagi lise ogrencisi. degisim ve egitime maruz kalacak carpenter ve benzeri modulleri ustune giyecek. mimariyi ozumle full zincir planla. yeni veri uretmek gerekirse gemini API ve Ollama API sistemde var.'",
+  "architecture": {
+    "taban": {
+      "role": "DEGISMEZ (invariant)",
+      "metaphor": "kasli bir z kusagi lise ogrencisi",
+      "meaning": "Genel Turkce yetkinligi. Uzmanlik DEGIL. Dil becerisi tabana aittir.",
+      "artifact_candidates": [
+        "data/kristal_model.pt (32816 satir)",
+        "data/kristal_model_step_b1_final.pt (32156 satir)"
+      ],
+      "decided": false
+    },
+    "ceket": {
+      "role": "DEGISKEN (mutable)",
+      "metaphor": "ustune giyecegi ceket",
+      "meaning": "Uzmanlik modulleri. Degisime ve egitime maruz kalir; tabanin USTUNE giyilir.",
+      "artifacts": [
+        "data/kristal_carpenter_model.pt (32137 satir)",
+        "benzeri moduller"
+      ]
+    },
+    "duzeltilmis_kod_tabani": {
+      "meaning": "PUNCT_SET iceren guncel tokenizer + dogru sozluk eslemesi (sessiz kirpma kapali)",
+      "state": "tokenizer 9e59830'da duzeltildi; sessiz kirpma T-0020'de run_experiment_c.py icin gorunur kilindi"
+    }
+  },
+  "decisive_finding": {
+    "id": "D1",
+    "statement": "PROJE CAPINDA: hicbir .bin noktalama bloguna ULASMIYOR. 14/14 .bin'de max token id <= 32136; noktalama blogu 32137'de basliyor.",
+    "measurement": "her .bin numpy uint16 olarak okundu; max_id: train.bin 25664, train_all_chosen 28260, train_balanced_sft 32136, train_carpenter_specialization 31327, train_chat_balanced 32136, train_chat_sft 28259, train_corpus 16652, train_deep_sft 31321, train_dpo_chosen 17285, train_future_finetune 31338, train_infancy 16654, train_parenting 16656, train_pedagogy_highschool 31356, train_wiki 27243",
+    "positive_control": "6 bin'de n_uint16 == meta.total_tokens BIREBIR (train_carpenter_specialization 391103, train_chat_balanced 3120000, train_deep_sft 11216512, train_future_finetune 6204420, train_pedagogy_highschool 2344149, +1) -> dtype uint16 DOGRULANDI; uint32 okunusunda max 1.68e9 gibi absurt deger cikiyor",
+    "code_proof": "9e59830 ONCESI tokenizer: regex r'<[^>]+>|[^\\s]+' (yalniz bosluk boler), ardindan clean_word=token.strip('.,!?\"...-;:') ve 'if not clean_word: continue' -> noktalama HIC token uretmiyordu. 9e59830 SONRASI: regex'e [.,!?;:()\"--] alternatifi eklendi, PUNCT_SET dali vocab.encode(token) cagiriyor. Tek commit: 9e59830.",
+    "consequences": [
+      "Noktalama (32137-32145) ve rakam (32146-32155) blogu HER checkpoint'te REZERVE ama HIC EGITILMEMIS satirlardir.",
+      "32137 satirli carpenter icin bu id'ler YOK -> guncel tokenizer ':' icin <UNK>(0) uretir.",
+      "32816 satirli taban icin bu id'ler VAR ama egitilmemis -> <UNK> degil, ANLAMSIZ bir embedding satiri uretir. Iki model FARKLI bicimde bozulur.",
+      "Yani noktalama 'kotu ogrenilmis' degil: modelin deneyiminde HIC YOK. Proje capinda."
+    ],
+    "architectural_implication": "Noktalama bir UZMANLIK degil, DIL BECERISIDIR. Kullanicinin mimarisinde dil becerisi TABANA aittir. Dolayisiyla 'noktalama uretebilen ceket' yanlis hedeftir: kasli lise ogrencisi noktalama kullanamazsa, eksik olan ceket degil ogrencinin kendisidir. Hedef: TABANA bir YETKINLIK TAMAMLAMA gecisi."
+  },
+  "why_the_impossibility_no_longer_blocks": {
+    "prior_verdict": "data/eval/regeneration_recon_2026-09-15.json -> 'zincirin tamami yenilenemez': (i) /Users/hakankilicaslan/Prompts/Outputs/datasets/ diskten silinmis, train.bin'in kaynagi yok; (ii) carpenter'in gercek atasini train_step_b1_5_rigorous.py:354 ezmis; (iii) arena asamalari canli Gemini cagiriyor.",
+    "reconciliation": "Bu engel, mimarinin KAPSAM DISI ilan ettigi parcaya aittir. Taban DEGISMEZ ise, tabanin on-egitim kulliyatini yeniden uretmek GEREKMEZ. Yenilenmesi gereken sey CEKET'tir ve ceket diskteki veriden URETILEBILIR. Yani imkansizlik kaniti, mimariyi curutmez — mimariyle tam olarak ortusur.",
+    "jacket_reproducibility_evidence": [
+      "data/pedagogy/dpo_all_tokenized.jsonl (131 MB, 2026-09-12 18:47) VAR",
+      "carpenter_specialization_dataset.jsonl VAR",
+      "data/pedagogy/arena_carpenter_accumulated.jsonl VAR"
+    ],
+    "base_needs_no_lost_corpus": "YETKINLIK TAMAMLAMA, sifirdan on-egitim DEGILDIR. Mevcut tabandan DEVAM egitimi ile yapilir; girdi, MEVCUT kulliyatin duzeltilmis tokenizer'la YENIDEN DERLENMIS halidir. Kayip corpus gerekmez."
+  },
+  "new_data_policy": {
+    "authorized": "Gemini API ve Ollama API sistemde mevcut; Antigravity ve claude veri seti olusturabilir.",
+    "rule": "Yeni veri, KAYIP corpus'un yerine gecmek icin DEGIL, OLCULMUS KAPSAM BOSLUGU icin uretilir.",
+    "why": "Noktalama duzeltmesi YENI VERI GEREKTIRMEZ: mevcut JSONL'lerin METNI zaten noktalama iceriyor; kusur tokenizer'in onu DUSURMESIYDI. Duzeltilmis tokenizer'la yeniden derleme, noktalama token'larini otomatik olarak egitim tensorune sokar (olculen sisme: ilk 100 kayitta 7224 -> 7930, +%9.77).",
+    "when_new_data_is_actually_needed": [
+      "Olculen kapsam boslugu (Faz-0'da belirlenecek; ornegin rakam yogun bicimler, ceket alanina ozgu terimler)",
+      "Noktalama-dogru davranisini ogretmek icin gerekli DEGIL (bkz. yukarisi)"
+    ]
+  },
+  "phases": [
+    {
+      "phase": "F0",
+      "name": "Kimlik, dondurma ve kapsam olcumu",
+      "kind": "SALT OLCUM (uretim yok)",
+      "steps": [
+        "Degismez TABANI sec: kristal_model.pt (32816) vs kristal_model_step_b1_final.pt (32156). Gerekce olculsun: Frobenius mesafesi, soyagaci log'lari, Exp C temel cizgisi.",
+        "kristal_model.pt ile kristal_b1_5_best.pt ayni mi? (ikisi de 472572529 byte, mtime 1.09s arayla) -> sha256 ile karar ver.",
+        "Her checkpoint icin TAM sozluk dosyasini vocab_entity.json onekinden uret (32137 T-0020'de uretildi; 32156 ve 32816 kaldi).",
+        "Sessiz kirpma SUPURMESI: vocab.load(...) + resize_state_dict / vocab_size=len(vocab.stoi) iceren TUM siteleri bul.",
+        "Disk butcesi: 20 GiB. Her checkpoint 374-473 MB. Kac yeni artefakt sigar?"
+      ],
+      "gate_G0": "Her checkpoint icin len(taban_sozluk) == checkpoint lm_head satir sayisi. Projede HICBIR yerde sessiz kirpma kalmadi (mutant testiyle kanitla)."
+    },
+    {
+      "phase": "F1",
+      "name": "Sessiz kirpma ve sozluk uyumsuzlugunu repo capinda kapat",
+      "kind": "kod degisikligi (kucuk)",
+      "steps": [
+        "T-0020 run_experiment_c.py'yi kapatti. Kalan siteler: train_step_demo.py, train_step_b1_5_rigorous.py, run_goal_pipeline.py, test_model.py, import_examples.py:136 (bellekteki kalinti).",
+        "Her sitede: uyumsuzlukta HATA ver ya da GORUNUR uyari bas. Sessiz resize YASAK."
+      ],
+      "gate_G1": "Pozitif kontrol: uyumsuzlugu yeniden sokan bir mutant testi KIRMIZI yanmali. Sadece 'yesil gecti' yetmez."
+    },
+    {
+      "phase": "F2",
+      "name": "Bayat .bin'lerin duzeltilmis tokenizer'la yeniden derlenmesi",
+      "kind": "URETIM (.bin)",
+      "prerequisite": "9e59830 oncesi derlenen 14/14 .bin bayat (PUNCT_SET 9e59830'da girdi).",
+      "scope_decision_needed": "14'unun tamami mi, yoksa ceketin ve yetkinlik tamamlamanin ihtiyaci olanlar mi? Disk 20 GiB — tamami muhtemelen SIGMAZ (en buyugu train_balanced_sft 46.7 MB uint16 ama train_all_chosen 36 MB, toplam ~110 MB; asil kisit checkpoint'ler).",
+      "frozen_implication": "data/*.bin DONMUS ve fnmatch '*' '/' asiyor -> data/rebuild/bins/*.bin de DONMUS. Yeni .bin icin: gorev writes[] beyani + DIZIN kapsamli kiralama (SPEC kural 2). data/rebuild/*.json SERBEST, data/rebuild/*.bin DEGIL.",
+      "gate_G2": "Yeniden derlenen bin'de max_id >= 32145 (noktalama FIILEN tensor'de). Ayrica tur-dongusu: bin'den cozulen kayitlar kaynak JSONL ile eslesiyor."
+    },
+    {
+      "phase": "F3",
+      "name": "TABANA yetkinlik tamamlama gecisi",
+      "kind": "URETIM (.pt) — egitim kosusu",
+      "why_base_not_jacket": "Noktalama dil becerisidir; dil becerisi tabanin isidir. Ceket yalniz kendi dar alaninda noktalama ogrenebilir.",
+      "steps": [
+        "ONCE YEDEK: mevcut taban checkpoint'leri gitignored ve atalari kismen kayip -> geri donusumsuz. Kopyala.",
+        "Devam egitimi (sifirdan DEGIL): mevcut taban + F2'nin yeniden derlenmis bin'leri.",
+        "Vocab: tabanin GERCEK sozlugu (32816), sessiz kirpma kapali.",
+        "device == 'mps' kabul kriteri (sandbox MPS'i gizler)."
+      ],
+      "gate_G3": "Noktalama uretim testi (projede ILK KEZ): model '.' ',' ':' uretebiliyor mu? Taban cizgi 0 — cunku egitimde hic gormedi. Ayrica teacher-forcing kaybi tutuluyor mu (felaket unutma kontrolu).",
+      "rollback": "Yedekten geri don; yeni checkpoint AYRI isimle yazilir, mevcutlarin uzerine YAZILMAZ."
+    },
+    {
+      "phase": "F4",
+      "name": "CEKET yeniden egitimi",
+      "kind": "URETIM (.pt)",
+      "definition": "F3'te yetkinligi tamamlanmis taban + duzeltilmis tokenizer + ceket verisi",
+      "data": "mevcut: dpo_all_tokenized.jsonl, carpenter_specialization_dataset.jsonl, arena_carpenter_accumulated.jsonl. Eksik kapsam varsa Gemini/Ollama ile uretilir.",
+      "gate_G4": "Ceket noktalama uretebiliyor mu? Exp C kanonik zarfla + ESLESEN tokenizer'la yeniden kosuldu; kayitli temel cizgiyle (1/22, 1/18, 0/17) karsilastirildi."
+    },
+    {
+      "phase": "F5",
+      "name": "Degerlendirme ve bagimsiz dogrulama",
+      "kind": "SALT OLCUM",
+      "steps": [
+        "Exp C yeni ceketle; eski temel cizgiyle yan yana.",
+        "Noktalama uretim orani (yeni test).",
+        "Her sayinin bagimsiz dogrulamasi (danisman). Yurutucu raporu HIPOTEZ, kanit degil."
+      ]
+    },
+    {
+      "phase": "F6",
+      "name": "Version uretimi",
+      "kind": "surum",
+      "steps": [
+        "CHANGELOG.md, README.md, USER_GUIDE.md guncelle",
+        "surum etiketi",
+        "commit/push YALNIZCA kullanici acikca isterse"
+      ]
+    }
+  ],
+  "cross_cutting_rules": [
+    "data/** DONMUS. data/eval/** tek istisna (rapor json'lari).",
+    "Yeni .bin/.pt data/ altinda -> gorev writes[] beyani + DIR kapsamli kiralama. Kiralamasiz yazma yok (SPEC kural 1).",
+    "Tum kosular SANDBOX DISINDA (sandbox MPS'i gizler, device sessizce cpu'ya duser).",
+    "Disk 20 GiB: her fazdan ONCE olc.",
+    ".pt/.bin gitignored -> geri donusumsuz. Degistirmeden once yedekle.",
+    "git add -A YASAK (47 untracked donmus veri).",
+    "Egitim kosusunu DANISMAN baslatmaz; gorev spec'i olarak yazilir, yurutucu kosar.",
+    "Her kapi bagimsiz dogrulanir; 'yesil gecti' tek basina kanit degil, mutant/pozitif kontrol gerekir."
+  ],
+  "open_decisions_for_user_DURUM": "TARIHSEL KAYIT — asagidaki D-A..D-E sorularinin TAMAMI 15 Eyl 2026'da kullanici tarafindan karara baglandi (bkz. decisions_resolved_2026_09_15). Canli bekleyen karar YOKTUR; bu liste yalnizca sorularin ne oldugunu kaydeder. ÖNEMLİ: bekleyen-karar listesi buradan KOPYALANMAZ, decisions_resolved icinde 'cevap' alani 'onay bekliyor' iceren madde aranarak ÖLÇÜLÜR.",
+  "open_decisions_for_user": [
+    "D-A: Degismez TABAN hangisi? kristal_model.pt (32816, en genis) mi, kristal_model_step_b1_final.pt (32156) mi?",
+    "D-B: Noktalama hedefi TABAN mi CEKET mi? Danisman onerisi: TABAN (dil becerisi oraya ait). Ceket tek basina alanina hapsolur.",
+    "D-C: F2 kapsami — 14 bin'in tamami mi, gerekli olanlar mi?",
+    "D-D: Yeni checkpoint'ler AYNI isimle mi (geri donusu yok) yoksa YENI isimle mi (disk 2x)? Danisman onerisi: YENI isim + yedek.",
+    "D-E: Version hedefi — 'noktalama yetkin taban + yenilenmis ceket' mi, yoksa daha genis bir yetkinlik listesi mi?"
+  ],
+  "not_done_deliberately": [
+    "Hicbir egitim kosusu baslatilmadi.",
+    "Hicbir .pt/.bin uretilmedi veya degistirilmedi.",
+    "Checkpoint'lere dokunulmadi.",
+    "Commit/push yapilmadi.",
+    "F0 disindaki fazlar icin gorev ACILMADI: F0 saf olcumdur ve kapsam kararlarini (D-A..D-E) besler; ondan sonrasi kullanici karari bekler."
+  ],
+  "my_writes": [
+    "data/eval/t0020_verification.json",
+    "data/eval/regeneration_plan_2026-09-15.json"
+  ],
+  "decisions_resolved_2026_09_15": {
+    "karar_veren": "kullanici",
+    "tarih": "2026-09-15",
+    "D-A": {
+      "cevap": "kristal_model.pt (32.816 satir)",
+      "anlam": "Degismez taban = kristal_model.pt. 32.156 satirlik ara asama taban DEGIL.",
+      "not": "F0 yine soyagaci mesafesini olcecek ama karar artik ona bagli degil."
+    },
+    "D-B": {
+      "cevap": "Taban",
+      "anlam": "Noktalama hedefi tabandir, ceket degil. F3'un varlik sebebi boylece onaylandi.",
+      "reddedilen": "Noktalama uretebilen ceket — eksik olan cocugun kendisi.",
+      "genisleme_2026_09_15": {
+        "kullanici_karari": "Rakam ve Kesme temel modele tasinmali.",
+        "anlam": "D-B kapsami genisledi: NOKtalama + RAKAM + KESME ISARETI (ek ayirici) ucu de tabanin dil becerisidir.",
+        "olculen_gerekce": "Sayiya bitisik kesme formlari ('0001'', '3000'den', '700'e') tokenizer'in [\\w']+ dalinda yakalanip clean_word.isdigit() False donuyor -> <UNK>. Olcum: data/pedagogy/turk_tarihi_1931/tr_dpo_dataset.jsonl tek dosyasinda 3.744 rakam karakterinin 1.678'i (%44,8) rakam olarak temsil edilmiyor. Noktalama icin kayip YOK (6.328 -> 6.328, 1:1). Ceket kulliyatinda rakam da 1:1 (3.562 -> 3.562).",
+        "uygulama": "DONMUS src/llm/tokenizer.py DEGISMEZ (eski zinciri gecersiz kilardi). Duzeltilmis tokenizer YENI TABAN SURUMUYLA (D-D: yeni isim) gelir.",
+        "yeni_kabul_olcutu": "Yeni tabanin kabulu 'noktalama orani > 0' ile sinirli degil: sayiya bitisik kesme formlarinin rakam olarak temsil edilmesi de olculur (bugun %44,8 kayip)."
+      }
+    },
+    "D-C": {
+      "cevap": "Gerekenler (14 degil)",
+      "anlam": "Yalnizca surum icin gerekli ikili dosyalar yeniden derlenir.",
+      "olculen_kapsam": [
+        "data/train_carpenter_specialization_v2.bin — F4 icin. Kaynak 5400+302=5702 = meta.total_records BIREBIR.",
+        "taban yetkinlik-tamamlama kulliyati — F3 icin, YENI dosya. Kaynaklar: high_school_foundation 688, middle_school_chat 125, turk_tarihi_sft 6507, literature_poetry 220, infancy 3682, parenting 19342, chat_conversations 6000, turk_tarihi_chat 6101, arena_base 899 (hepsi diskte VAR)."
+      ],
+      "kapsam_disi": "Diger 12 .bin: kaynaklari diskten silinmis (train, train_wiki, train_corpus) ya da coktan bitmis kosulara ait tarihsel artefakt."
+    },
+    "D-D": {
+      "cevap": "Yeni isim",
+      "anlam": "Yeni checkpoint'ler ve yeni .bin'ler yeni ad alir; eskiler referans olarak dokunulmadan kalir.",
+      "sonuc": "G2 kapisina 'hicbir eski .bin uzerine yazilmadi' sha256 kaniti eklendi."
+    },
+    "D-E": {
+      "cevap": "ONAYLANDI — iki parcali minimum surum kabul edildi",
+      "onaylayan": "kullanici",
+      "onay_tarihi": "2026-09-15T12:45:38Z",
+      "onay_kanali": "danisman oturumu (kullanici: 'onaylıyorum, iki parçalı minimum kalsın')",
+      "onay_sonucu": "Surum hedefi ARTIK BAGLAYICI: (1) noktalama+rakam+kesme uretebilen taban, (2) o taban uzerine giydirilmis ceket. Kabul olcutleri bu maddenin 'kabul' listesindeki dort madde olarak kalir.",
+      "oneri": "Iki parcali, tamamen olculmus minimum surum: (1) noktalama uretebilen taban, (2) o taban uzerine giydirilmis ceket.",
+      "kabul": [
+        "Taban noktalama uretiyor: '.' ',' ':' uretim orani > 0 (taban cizgi bugun 0)",
+        "Ceket Exp C taban cizgisini bozmuyor (1/22, 1/18, 0/17'den kotuye gitmiyor)",
+        "Felaket unutma kapisi: tabanin genel yetkinligi korunuyor (metrik F3 spec'inde tanimlanacak)",
+        "Kapsam listesi F0'in olctugu boslukla GENISLEYEBILIR; surum yine bu uc maddeyle tanimlanir"
+      ],
+      "neden_daha_uzun_bir_liste_degil": "Olculmemis bir yetkinlik listesi vaat etmek dogrulanamayan bir iddia olurdu."
+    }
+  },
+  "f2_scope_measurement_2026_09_15": {
+    "yontem": "Her .bin icin uretici betik grep'lendi; kaynak JSONL'ler diskte ve HEAD'de sayildi; meta semasi karsilastirildi.",
+    "bulgu_S1_recompile_betigi_bayat": {
+      "yer": "scripts/recompile_datasets.py:48-58",
+      "iddia": "Betik data/train_chat_balanced.bin'i 4 kaynaktan urettigini soyluyor: chat_conversations + turk_tarihi_chat + arena_base_accumulated + future_train_vector = 13001 kayit.",
+      "gercek": "data/train_chat_balanced.bin.meta.json kendi dataset_composition'inda BAMBASKA 8 kaynak yaziyor: chat_conversations 6000, middle_school_chat 375, parenting_deep 2500, lexical_semantics 1500, carpenter_specialization 2500, rag_interactive 2500, classic_rag 3500, turk_tarihi_1931_chat 3000.",
+      "sonuc": "Betik oldugu gibi kosulursa iyi bir referans artefaktin UZERINE sessizce yanlis bir dosya yazar. Ayrica meta semasi farkli (dataset_composition'li sema = prepare_chat_balanced_dataset.py ureticisi).",
+      "dogru_olan": "Ayni betigin carpenter yolu (satir 61-69) hala BIREBIR dogru: 5400+302=5702=meta.total_records."
+    },
+    "bulgu_S2_dort_farkli_meta_semasi": {
+      "aciklama": "total_records farkli ureticilerde farkli sey sayiyor; iki .bin'in total_records'unu karsilastirmak anlamsiz.",
+      "semalar": {
+        "boundaries+record_count": [
+          "train.bin",
+          "train_corpus.bin",
+          "train_infancy.bin",
+          "train_parenting.bin"
+        ],
+        "block_size+created_at+total_records+total_tokens+vocab_size": [
+          "train_balanced_sft.bin",
+          "train_carpenter_specialization.bin"
+        ],
+        "block_size+dataset_composition+total_records+total_tokens+vocab_size": [
+          "train_chat_balanced.bin",
+          "train_deep_sft.bin"
+        ],
+        "backlog_samples+oversample_factor+total_samples+total_tokens": [
+          "train_future_finetune.bin"
+        ],
+        "block_size+created_at+dataset_name+distribution+total_samples+total_tokens+vocab_size": [
+          "train_pedagogy_highschool.bin"
+        ],
+        "META YOK": [
+          "train_all_chosen.bin",
+          "train_chat_sft.bin",
+          "train_dpo_chosen.bin",
+          "train_wiki.bin"
+        ]
+      },
+      "ders": "total_records karsilastirmasi yapmadan once meta SEMASININ ayni oldugunu dogrula. Ayni ada sahip alan, farkli ureticide farkli popülasyon sayiyor."
+    },
+    "bulgu_S3_kaynak_dogru_kumesi": {
+      "train_balanced_sft": "Derleme zamani kaynak toplami 31434 (HEAD revizyonu + diskteki arena_base 899), meta 31433 -> FARK 1. Popülasyon DOGRULANDI.",
+      "train_chat_balanced": "Kaynak listesi uyusmuyor (S1) -> bu bin icin recompile_datasets.py GUVENILMEZ.",
+      "train_carpenter_specialization": "5400+302=5702 = meta BIREBIR -> TEK tam yeniden uretilebilir yol."
+    },
+    "bulgu_S4_git_disi_yuk_tasiyan_kaynaklar": {
+      "arena_base_accumulated.jsonl": "899 kayit, GIT'TE YOK (untracked) — sadece calisma agacinda.",
+      "arena_carpenter_accumulated.jsonl": "302 kayit, GIT'TE YOK — carpenter'in 5702'sinin 302'si burada.",
+      "risk": "Carpenter'in yeniden uretilebilirligi bu iki izlenmeyen dosyaya bagli; surum kontrolunde yedegi yok.",
+      "future_train_vector.jsonl": "DISKTE 0 BAYT, HEAD'de 1 kayit -> GIT'TEN KURTARILABILIR (git show HEAD:data/future_train_vector.jsonl). Kaynak listesinde oldugu icin F2 oncesi geri getirilmeli."
+    },
+    "bulgu_S5_donmus_yol_sonucu": {
+      "olcum": "frozen.json'daki 'data/*.bin' deseni fnmatch ile '/' uzerinden de eslesiyor.",
+      "sonuc": "data/ altinda HERHANGI bir yeni .bin (alt dizin dahil) DONMUS sayilir; SPEC kural 2 geregi gorev writes[] beyani + DIR kapsamli kiralama gerekir. Tek dosya kiralamasi reddedilir."
+    }
+  },
+  "f1_f2_posting_karari": {
+    "karar": "Faz-F1 POSTALANDI (T-0025). Faz-F2 hala bekliyor.",
+    "tetik_gerceklesti": "T-0022 (F0) 2026-09-15T07:11:54Z'de done oldu ve bagimsiz dogrulandi (data/eval/t0022_verification.json, verdict PASS_WITH_FINDINGS). Plan kendi tetigini boylece atesledi.",
+    "neden_ikinci_kez_supurme_yok": "F1'in spec'i F0'in urettigi sessiz-kirpma supurmesini REFERANS aliyor (data/eval/f0_identity_scope_2026-09-15.json -> silent_truncation_sweep), yeniden uretmiyor. Supurme zaten bagimsiz dogrulandi.",
+    "sira_kosulu": "T-0023 -> T-0025. Olculmus gerekce: T-0025'in kabul kosusu pytest gerektiriyor ve pytest su an salt-okunur data/pedagogy/cot_vault.jsonl'e yaziyor (F1 bulgusu). T-0023 kapanmadan T-0025 kendi kabulunu gecersiz kilar.",
+    "T-0024_ile_iliski": "PARALEL. T-0024 yalnizca F0 raporunun METNINI duzeltiyor (secim kurali + 'TUM siteler' ifadesi); T-0025'in kapsami o metne degil olculen sayilara dayaniyor.",
+    "F2_tetigi": "Faz-F2 (bayat .bin'lerin yeniden derlenmesi), T-0025 kapisi G1 gectikten sonra postalanir."
+  },
+  "ek_not": "15 Eyl 2026 (restart oncesi) — T-0023 ve T-0024 dogrulandi; T-0025 (Faz-F1) yurutucude. UC YENI KAYIT: (1) KULLANICI KARARI — 'Rakam ve Kesme temel modele tasinmali': D-B genisledi, noktalama+rakam+kesme isareti ucu de taban; donmus tokenizer degismez, yeni taban surumu duzeltilmis tokenizer'la gelir (olcum: kesme formlarinda %44,8 kayip). (2) G4 HUKMU (danisman, olculu) — cot_vault.jsonl KIRPILMAYACAK: 91 kayit yalnizca 3 tekil soru, source hepsinde ayni, HEAD'de temiz referans yok, kasa bugun Yol C geregi modele girmiyor; asil risk Faz 5 .bin'inde. (3) ACIK BUS KUSURU — okuma state/ten yazma koke: T-0025'in devralmasi ve tamamlanmasi bus_list_tasks'te gorunmuyor (izole probe ile uretildi); dogrulama state/results'tan yurutulmeli, duzeltme kullanici karari. T-0024'un kalan kusuru dar ve dokumantasyon katmaninda (rakam sutununda iliski cumlesi yok); T-0025 acik ve bloksuz, T-0023'un G1/G2/G3 kapi maddeleri eklendi.",
+  "f1_scope_measurement_2026_09_15": {
+    "yontem": "git ls-files + find ile 149 .py dosyasi; yollar normalize edildi (./ oneki); iki AYRI tanim olculdu.",
+    "tanim_A_yukleme_cagrisi": "load_state_dict(...) cagrisi icinde strict=False -> 36 site / 34 dosya. (T-0022'ye yazilan sayi; kendi tanimiyla birebir tutuyor.)",
+    "tanim_B_metin": "metinde gecen her 'strict=False' -> 56 site / 34 dosya. AYNI 34 dosya; site sayisi tanim farki, celiski degil.",
+    "resize_state_dict": "53 cagri / 27 dosya; 9 dosya kendi tanimini yaziyor.",
+    "sessiz_tanimlayicilar": [
+      "scripts/test_rag_interactive.py:30",
+      "scripts/evaluate_chat.py:30",
+      "scripts/evaluate_on_train_data.py:27"
+    ],
+    "temsilcisiz_11_dosya": [
+      "scratch/measure_forward_pass.py",
+      "scratch/test_user_case.py",
+      "scratch/verify_clean_models.py",
+      "scratch/verify_pedagogical_models.py",
+      "scripts/diagnostics_history_gap.py",
+      "scripts/evaluate_b1_5_rigorous.py",
+      "scripts/evaluate_carpenter_generation_100.py",
+      "scripts/merge_teacher_dataset.py",
+      "scripts/train_step_a_ablation.py",
+      "src/gateway/agent_gateway.py",
+      "verify_rag.py"
+    ],
+    "danismanin_kendi_hatasi": "Ilk taramada yollar ./ ile ve ./ olmadan iki kez sayildi (kume 102'ye sisdi) ve HER strict=False satiri sayildi (56) -> 'temsilcisiz 13 dosya' gibi gorundu. Normalize edilince 34 dosya / 11 temsilcisiz dosya. Yazmadan once yakalandi; iki-sayi-celisiyor-sanma ekseninin 11. ornegi olacakti.",
+    "kapsam_disi": "vocab_size=len(vocab.stoi) iceren 48 site/48 dosya: bunlar yukleme sitesi DEGIL (model kurulumu), F1'in hedefi degil — ama sessiz kirpmanin ON KOSULU olduklari icin spec'te anildi."
+  },
+  "t0023_dogrulama_2026_09_15": {
+    "kayit": "data/eval/t0023_verification.json",
+    "verdict": "PASS_WITH_FINDINGS",
+    "ozet": "T-0023'un duzeltmesi BAGIMSIZ OLARAK KANITLANDI: dogrulama icin kosturulan pytest'in KENDISI kanitin kendisidir — ayni kosu (T-0022 turunda cot_vault'u 87->89 yapan kosunun ta kendisi) bu kez dosyayi bit duzeyinde degistirmedi (97b06fe5... / 91 satir -> ayni) ve data/** altinda 164 dosyadan degisen 0. Kabul kosusunun kendi olctugu artefakti degistirmesi sorunu KAPANDI.",
+    "bagimsiz_yontem": "Pencere taramasi Python + datetime.timezone.utc ile yapildi (stat -f/-t ve find -newermt YEREL saat kullanir — spec'in uyardigi tuzak). Test sayisi sandbox icinde 123 passed + 1 ortamsal failure (socket.bind) = 124; yurutucunun 124/124'u ile toplam AYNI, celiski yok.",
+    "bulgular": [
+      {
+        "id": "G1",
+        "severity": "DUSUK",
+        "baslik": "Kapi FAIL-OPEN: 'uretim kasasi' tanimi os.path.abspath ile CWD'ye bagli — CWD repo koku disindayken mutlak gercek yol verilince kapi ENGELLEMIYOR",
+        "durum": "T-0025 spec EK MADDE + G maddesi (iki yonlu pozitif kontrol zorunlu)"
+      },
+      {
+        "id": "G2",
+        "severity": "DUSUK",
+        "baslik": "Dizin bileseni olmayan vault_path -> os.makedirs('') FileNotFoundError -> except Exception yutuyor -> SESSIZ False",
+        "durum": "T-0025 spec EK MADDE + G maddesi"
+      },
+      {
+        "id": "G3",
+        "severity": "BILGI",
+        "baslik": "PYTEST_CURRENT_TEST alt sureclere miras kaliyor; ALLOW_PROD_VAULT_WRITE belgelenmemis",
+        "durum": "T-0025 spec EK MADDE + G maddesi"
+      },
+      {
+        "id": "G4",
+        "severity": "BILGI",
+        "baslik": "A kriterinin taban degeri (97b06fe5/91) T-0022 turunda DANISMANIN kosumunun ekledigi 4 sentetik kaydi iceriyor; kriter 'duzeltme calisiyor mu'yu dogru yanitliyor ama 'veri eski haline dondu' DEMIYOR",
+        "durum": "KULLANICI KARARI — kapsam disi; 87 satira donulurse A kriteri referans degeri gecersiz olur"
+      }
+    ],
+    "non_findings": [
+      "N1: Danismanin 'pedagogical_supervisor.py beyan edilmemis yazim' suphesi YANLIS cikti — gorev dosyasi writes[]'inde uc yol var ve spec bunu acikca talimat veriyor; ucuncu kiralama (07:45:51Z) dosya mtime'indan (07:46:55Z) once. Yurutucu aleyhine kapsam ihlali YOK.",
+      "N2: 123+1 (sandbox) vs 124/124 (disarida) = ortam farki, celiski degil.",
+      "N3: Yurutucunun find -newermt iddiasi ile danismanin Python/UTC taramasi ayni hukmu verdi.",
+      "N4: Penceredeki data/** yazimi danismanin (data/eval/regeneration_plan_2026-09-15.json + .html); yurutucunun data/** yazimi yok."
+    ],
+    "aksiyon": "G1/G2/G3 icin AYRI GOREV ACILMADI — T-0025 zaten src/gateway/ ve tests/ yaziyor ve ayni ailede; ucu T-0025 spec'ine EK MADDE ve yeni G kabul maddesi olarak girdi (kabul maddesi sayisi 6 -> 7). T-0025 artik BLOKSuz.",
+    "guncellenen_dosyalar": [
+      ".agent-bus/state/tasks/T-0025.json",
+      ".agent-bus/tasks/T-0025.json",
+      "regeneration_plan_2026-09-15.html"
+    ]
+  },
+  "t0024_dogrulama_2026_09_15": {
+    "kayit": "data/eval/t0024_verification.json",
+    "verdict": "PASS_WITH_FINDINGS",
+    "ozet": "Dort kabul kriterinin dordu ve alti sayinin altisi bagimsiz olarak birebir yeniden uretildi (252407 / 6328 / 3744 / 6328 / 2066 / breakdown 8/8). 'TUM siteler' rapor genelinde 0 kez. Secim kurali yazili; 36 satir / 34 dosya / 31 temsilci site / 11 temsilcisiz dosya / 16-12-3 dagilimi BIREBIR. 31 sitenin 31'i yerinde dogrulandi. Kapsam toplamlari 35454/3562 ve diger satirlar DEGISMEDI (T-0022 referansimla birebir).",
+    "bulgular": [
+      {
+        "id": "F1",
+        "severity": "DUSUK",
+        "baslik": "Rakam sutununda 3744 karakter vs 2066 token yan yana ve ILISKI YAZILI DEGIL (noktalama icin yazilmis)",
+        "mekanizma": "3744'un 2066'si tek-rakam tokeni, 1678'i rakam-disi tokenlara apsorbe. Sebep: encode() isdigit() dalina sayiya bitisik kesme isareti formlari hic girmiyor ('0001'', '3000'den', '700'e') -> <UNK>. Ceket killiyatinda rakam 3562->3562 (1:1); fark bu dosyanin metin biciminden.",
+        "durum": "Ayri gorev acilmadi; F2/F3 bu raporu zaten yeniden uretecekse oraya alinabilir."
+      },
+      {
+        "id": "F2",
+        "severity": "BILGI (downstream)",
+        "baslik": "Sayi+kesme isareti formlari <UNK>'a dusuyor — D-B (noktalama/rakam hedefi TABAN) icin olculmus kapsam siniri (%44,8)",
+        "durum": "KULLANICI KARARI. Tokenizer DONMUS; degisiklik tum checkpoint'leri gecersiz kilar. (a) tokenizer duzeltilir + zincir yeniden derlenir, (b) kabul edilir ve F2/F3 kapsamina olculmus sinir olarak yazilir. Danisman onerisi: (b) simdilik."
+      }
+    ],
+    "non_findings": [
+      "N1 (BENIM HATAM, kapsam ekseni): ilk olcumde yalnizca git ls-files kullandim (untracked haric) -> 34 satir/32 dosya; 'yurutucunun 36/34'u yanlis' diye bulgu yazmak uzereydim. find ile BIRLESTIRIP normalize edince 149 dosya ve 36/34 — raporla birebir.",
+      "N2 (BENIM HATAM, alan adi ekseni): site listesinde 'path'/'line' varsaydim; gercek anahtar kumesi {site, classification, pattern, behavior}.",
+      "N3 (BENIM HATAM, etiket adi): ilk rakam muhasebem POSS_3SG / PERSON_3PL gibi etiket ADLARINDAKI rakamlari 'metinden gelen rakam' sandi; dogru olcum 2066 + 1678 = 3744.",
+      "N4 (prosedur): root vs state ayna farki yalnizca claimed_by/claimed_at; 'diff -q ile ayna dogrula' kurali YALNIZCA sahiplenilmeden ONCE gecerli. Bundan sonra diff -q POSTING ANINDA yapilir.",
+      "N5: '11' sayisi calisma agaci durumuna bagli (ikisi untracked scratch dosyasi) — kusur degil."
+    ],
+    "guncellenen_dosyalar": [
+      ".agent-bus/tasks/T-0024.json (ayna farki, yalnizca claimed_* — benim duzeltmem gerekmiyor)",
+      "regeneration_plan_2026-09-15.html"
+    ]
+  },
+  "devir_notu_2026_09_15_restart_oncesi": {
+    "tarih": "2026-09-15",
+    "neden": "Kullanici yazilim guncellemesi nedeniyle restart duyurdu; oturum devamliligi icin kayit.",
+    "nerede_kalindi": "T-0025 (Faz-F1) KAPANDI ve DOGRULANDI: yurutucu sonucu 08:33:07Z, bagimsiz dogrulama 08:47Z + 2. tur 08:52Z (data/eval/t0025_verification.json, PASS_WITH_FINDINGS). T-0026 (T-0025 kapi duzeltmesinin yan etkileri: F1-F5) 08:54:49Z'de ACILDI, yurutucu 08:56:34Z'de DEVRALDI, TTL 180 dk -> son 11:56:34Z. Bu not yazildiginda ACIK VE YURUTUCUDE; sonuc dosyasi (state/results/T-0026.json) HENUZ YOK. t0012..t0025 dogrulama kayitlari eksiksiz.",
+    "acik_bus_kusuru": {
+      "baslik": "Okuma state/ten, yazma 'kokte dosya VARSA koke' gidiyor — kusur KODDA duruyor ama 'tamamlanan gorev bus'ta sonsuza dek open kalir' hukmu OLCUMLE CURUDU (15 Eyl 08:57Z: 25 done kaydi, T-0025 done gorunuyor). Gorunurluk kaybi yalnizca AYNASI SENKRONLANMAMIS gorevlerde.",
+      "kanit": "Kusur KODDA duruyor: get_task() okumada state/tasks/'i once deniyor (269-272), get_task_file_path() yazmada koke dosya VARSA koku seciyor (282-288) — asimetrik. ANCAK T-0025'te GORUNMEDI: yurutucu 08:41Z'de iki kopyayi senkronladi (mesaj: 'kok/state ayna asimetrisi giderilerek gorev durumu senkronize edildi'). OLCULDU 2026-09-15T08:57Z: state ve kok ikisi de done/antigravity; bus_list_tasks(status='done') 25 kayit donuyor ve T-0025 done/antigravity olarak LISTEDE GORUNUYOR. Yani onceki 'sonsuza dek open kalir / done listesi bos' hukmu YANLIS cikti — kusur yalnizca aynayi senkronlamayan gorevlerde gorunur.",
+      "kok_neden": "agent_bus_mcp.py: get_task() okuma sirasi [state/tasks, .agent-bus/tasks] (state kazanir, 269-272); get_task_file_path() yazmada koke dosya varsa KOKU secer (285-288). Ikisi asimetrik.",
+      "izole_probe": "state=(open,None)+root=(open,None) ile: claim -> kok=(claimed,antigravity), state=(open,None), list_tasks HALÂ open, list_tasks(status='claimed') BOS; report_result(done) -> kok=(done,None) (claimed_by silinir), state HALÂ open, list_tasks(status='done') BOS; tekrar claim -> ok:True.",
+      "sonuc": "Yurutucuye uyari gonderildi (state/inbox/antigravity/2026-09-15T08-21-24Z-claude.json): bitirince tekrar kosma/yeniden devralma. Dogrulama state/results/T-XXXX.json + bus mesajindan yurutulur; bus_list_tasks artik tam liste veriyor ama yine de TEK KAYNAK sayilmaz.",
+      "duzeltme": "KULLANICI KARARI. Ya get_task_file_path okumayla simetrik yapilir (state'te varsa state; T-0001..T-0011 yalniz koke oldugu icin geri dusus sart), ya danismanin gorev yazarken kok kopya olusturma proseduru KALDIRILIR. T-0026 kaniti ikinci secenegi destekliyor (aynasiz posting tutarli calisti). Bu kusur icin GOREV ACILMADI.",
+      "guvenli_mod": "AYNASIZ posting TUTARLIDIR ve tercih edilen moddur. T-0026 yalniz state/tasks/ altinda (kok kopya YOK) -> get_task_file_path state'i secer, devralma VE rapor AYNI dosyaya yazar, okuma da state'i once okur. Asimetriyi yaratan sey AYNANIN VARLIGIDIR, eksikligi degil. Bu yuzden T-0026 icin kok kopya SIMDI OLUSTURULMADI: olusturulsaydi yurutucunun report_result(done) cagrisi koke yazar, state 'claimed'de kalirdi — kusur cozulmez, COGALIRDI.",
+      "olay_sozlugu_boslugu": "EK MADDE gibi spec degisiklikleri olay kaydinda IZ BIRAKMAZ — cunku bus'ta 'task_updated' diye bir olay TIPI HIC YOK: 14 task_posted + 27 task_claimed + 94 lease + 26 result + 90 lease_released + 36 message = tum log; task_updated 0. Yani bu 'dusurulmus log satiri' DEGIL, SOZLESMEDE KARSILIGI OLMAYAN ISLEM. Dogru cozum: SPEC'e amendment olayi eklemek (veya spec'i degistirmeyi bus_send + sonuc dosyasi ile zorunlu kilmak, ki SPEC zaten 'SESSIZCE genisletilmez, sonuc dosyasinda AYIRCA bildirilir' diyor)."
+    },
+    "G4_hukmu": {
+      "soru": "cot_vault.jsonl'deki sentetik kayitlar cok onemli mi?",
+      "karar": "HAYIR — KIRPMA YAPILMAYACAK, dusuk oncelik.",
+      "olcumler": [
+        "91 kayit ama yalnizca 3 TEKIL soru: 'Acik istiare nedir?' 70x, 'Kirlangic kuyrugu nerelerde kullanilir?' 18x, 'Kosuk nedir? Hangi torenlerde soylenirdi?' 3x. Dosyanin bilgi icerigi 3 kayit; 4 satirlik kirlilik tartismasi bu olcekte anlamsiz.",
+        "source alani 91 kaydin HEPSINDE ayni ('Gemini (gemini-2.5-flash)') — test probu ile canli kayit ayirt edilemiyor; sozde 'temiz 87 satir' taban cizgisi de zaten ayni iki demo sorusuyla dolu (ilk prob-eszlesen kayit indeks 0, tarih 2026-09-11).",
+        "HEAD'de dosya 4 satir (sha 8b9f25e3) — git'te temiz referans YOK; geri donus yalniz 'head -87' kirpmasi olurdu.",
+        "Kasa bugun modele GIRMIYOR: README:110 karari Yol C (Retrieval-Only) — dusunce izleri model icine zorlanmayacak, ajan seviyesinde harici RAG baglami olarak sunulacak. train.py ve prepare_all_phases_with_wiki.py'de cot_vault 0 eslesme."
+      ],
+      "neden_kirpma_yanlis_arac": "Salt-eklenen arsivde geri donussuz; T-0023'un dogrulanmis A kriteri hash'ini (97b06fe5 / 91 satir) bosa gecersiz kilar; karsiliginda bugun sifir kazanc (hicbir egitim hatti okumuyor).",
+      "gercek_risk_F2_F3_e": "scripts/prepare_reasoning_dataset.py kasayi okuyup data/train_reasoning_cot.bin (Evre 5) uretiyor — Faz 5 kosulursa .bin bugun %97'si iki tekrar soru olan bir kulliyattan derlenir. Once filtre/temizlik gerekir.",
+      "curutulen_suphe": "prepare_reasoning_dataset.py'nin kasayi kirpma ihtimali OLULDU ve CURUDU: satir 71 'if not os.path.exists' guard'li, mevcut dosyayi 'w' ile acmiyor."
+    },
+    "siradaki_adim": [
+      "T-0026 ACIK VE YURUTUCUDE (F1-F5'in tamami: gercek mutant kanaryasi, guard-yukarida/koruma-asagida, G2 docstring, varsayilan kasa yolu mutlak, dedektor kor noktasi). Bu gorev sirasinda YENI IS ACILMAZ; kapaninca YALNIZCA bagimsiz dogrulama turu yapilir (en son dogrulanan t0025, sonraki isaret data/eval/t0026_verification.json olacak).",
+      "T-0026 KAPSAMI DISINDA KALAN, sonraki tura taşınacak maddeler: (6) T-0024'un kalan F1 bulgusu — turk_tarihi_dpo_raw rakam sutununda beyan edilmemis 3744<->2066 iliskisi; (7) F6 aile disi sessiz kirpma yolu + kapanis cumlesinin evreninin yazilmasi + F7b src/rag/rag_pipeline.py sozdizimi hatasi (T-0026 spec'i kanarya/dedektor tarafini aliyor, rag_pipeline'in kendisini DEGIL); (8) rakam+kesme TABANA (yeni taban tokenizer'i, DONMUS src/llm/tokenizer.py DEGISMEZ).",
+      "Kullanici yeni is baslatmamayi istedi ('mevcut gorev bitince ben durdururum'). ZAMANLAYICI RESTART'TA OLUR — yeni oturumda once yeniden kurulmali."
+    ],
+    "duzeltme_2026_09_15T08_57Z": {
+      "ne_duzeltildi": [
+        "nerede_kalindi: 'T-0025 yurutucude' -> T-0025 kapandi, T-0026 acik ve yurutucude.",
+        "acik_bus_kusuru.kanit: 'T-0025 sonsuza dek open gorunur / done listesi bos' -> OLCUMLE CURUDU (T-0025 done gorunuyor, 25 kayit).",
+        "acik_bus_kusuru.sonuc: ayni gerekceyle guncellendi."
+      ],
+      "neden": "Bu notun tek isi restart sonrasi DOGRU okunmak. Yanlis devir notu, devir notu olmamasindan kotudur; bu yuzden kanit alani yeniden olculup duzeltildi.",
+      "ne_degismedi": "Dogrulanmis kayitlar (t0012..t0025 verification json'lari, G4 hukmu, kararlar) ELLE TUTULMADI; yalnizca devir notunun kendi durum cumleleri duzeltildi.",
+      "olcum_zamani": "2026-09-15T08:57:04Z"
+    }
+  },
+  "t0025_dogrulama_2026_09_15": {
+    "kayit": "data/eval/t0025_verification.json (2. tur eki: ikinci_tur_2026_09_15)",
+    "verdict": "PASS_WITH_FINDINGS",
+    "ozet": "Sekiz iddia (A,B,C,D,E,F,G1,G3) SIFIRDAN yeniden olculdu ve YURUTUCUNUN SAYILARININ HEPSI TUTTU: 9 tanim -> 5 gurultulu / 0 sessiz; degisen 4 site; 128 test (sandbox icinde 127+1, dusen soket testi SANDBOX kaynakli, disarida 128); cot_vault 97b06fe5...5619 / 91 satir sabit; donmus yollarda pencerede degisen 0. Kanaryanin KENDISI vakum degil (gercek dosyayla sinadim). G2 kabul metninin HARFIYLE uyusmuyor (uygulama hata vermiyor, basariyla yaziyor) — yurutucu bunu kanit metninde gizlemeden yazmis.",
+    "bulgular": [
+      {
+        "id": "F1",
+        "severity": "DUSUK",
+        "baslik": "G2 kabulu 'acik hata verir' diyor, uygulama duz adi CWD'ye basariyla yaziyor",
+        "karar": "Uygulama kabulden DAHA IYI; kabul metni guncellenecek, fail-fast EKLENMEYECEK."
+      },
+      {
+        "id": "F2",
+        "severity": "ORTA",
+        "baslik": "Mutant kanarya testi SENTETIK: mutanti diske koymuyor, audit fonksiyonunu hic cagirmiyor",
+        "kanit": "audit_repo_resize_state_dict_definitions monkeypatch-boom ile patlatildi -> test YINE GECTI.",
+        "duzeltme": "mutant tmpdir yerine gercek agaca yazilsin, audit CAGRILSIN, kirmizi assert edilsin, finally ile silinsin."
+      },
+      {
+        "id": "F3",
+        "severity": "DUSUK",
+        "baslik": "Dedektorun jeton tabanli kor noktasi: 'min('/'shape' jetonu yoksa sessiz doldurma YESIL kalir"
+      },
+      {
+        "id": "F4",
+        "severity": "DUSUK",
+        "baslik": "Varsayilan kasa yolu hala CWD'ye bagli (kapi artik CWD'den bagimsiz ama VARSAYILAN degil)"
+      },
+      {
+        "id": "F5",
+        "severity": "ORTA",
+        "baslik": "record_to_cot_vault artik hicbir istisnayi yutmuyor, cagri yeri try/except'siz",
+        "oneri": "guard yukarida, koruma asagida: guard firlatsin, alttaki I/O yakalanip LOGLANSIN ve False donsun."
+      },
+      {
+        "id": "F6",
+        "severity": "DUSUK-ORTA",
+        "baslik": "Kapatilan EVREN 'def resize_state_dict' ailesidir; aile DISINDA sessiz kirpma kaldi",
+        "kanit": "src/rag/rag_pipeline.py:80-88 satir ici min() kirpma, print/warn/raise YOK (dosyadaki tek print'ler 67 ve 72, ilgisiz).",
+        "not": "Kabul A'nin evreni 'tanimlar' oldugu icin A TEMIZ; hedef cumlesi 'repo capinda' diyor. CELISKI DEGIL, iki farkli kume."
+      },
+      {
+        "id": "F7",
+        "severity": "ORTA",
+        "baslik": "Kanaryanin KOR NOKTASI olculdu: parse edilemeyen dosya TAMAMEN atlaniyor",
+        "kanit": "tests/test_prompt_contract.py:315-328 tek try + 'except Exception: pass'. IZOLE PROBE: sessiz tanim ICEREN ama sonunda sozdizimi hatasi olan dosya -> audit BOS liste.",
+        "ikinci_bulgu": "src/rag/rag_pipeline.py TAKIP EDILEN ve SOZDIZIMI BOZUK olarak COMMIT'LI (git show HEAD kopyasi da SyntaxError, satir 82) -> hata 9e59830'da girmis; hicbir modul import etmiyor, OLU dosya.",
+        "oneri": "Kanaryaya 'parse edilemeyen dosya' farkindaligi; sessiz yol iddiasi ancak tarama kapsami kanitlanirsa anlamli."
+      },
+      {
+        "id": "F8",
+        "severity": "DUSUK",
+        "baslik": "F0 census'u bu site icin YANLIS: 'HATA — dogrudan RuntimeError firlatir' yaziyor, kod once SESSIZCE kirpiyor",
+        "kanit": "silent_truncation_sweep.sites[18] = src/rag/rag_pipeline.py:90 / HATA. Ama 80-88 satirlari :90'dan ONCE sekilleri uzlastiriyor -> uyusmazlik :90'a ULASAMAZ, RuntimeError FIRLAMAZ.",
+        "neden_gozden_kacti": "T-0022 dogrulamasi siniflandirmanin IC TUTARLILIGINI olctu (16+12+3=31), her sitenin DAVRANISINI degil.",
+        "oneri": "T-0024 deseniyle rapor metni duzeltme gorevi; yerinde duzeltmek T-0022'nin hash'ini gecersiz kilar."
+      }
+    ],
+    "non_findings": [
+      {
+        "id": "N1",
+        "baslik": "'PyTorch strict=False sekil uyusmazligini yutar' varsayimim YANLIS; torch 2.11.0 olcumu: RuntimeError firlatiyor (yalniz eksik/fazla ANAHTARI yutar)."
+      },
+      {
+        "id": "N2",
+        "baslik": "'.size() kullanani dedektor kacirir' hipotezim CURUDU ('min(' jetonu hala bulunuyor)."
+      },
+      {
+        "id": "N3",
+        "baslik": "Kendi 'cozulmez cagri' sayacim yanlis pozitif uretti (birlesik import satirini regex'im gormedi)."
+      },
+      {
+        "id": "N4",
+        "baslik": "CELISKI DEGIL: A'nin '(3 sessiz)' ifadesi F0'in TEMSILCI kuralindan geliyor; repoda gercekte 4 sessiz tanim vardi."
+      },
+      {
+        "id": "N5",
+        "baslik": "Kendi kaba AST/grep siniflandiricim test_prompt_contract.py:349 ve :359'u 'sessiz tanim' sandi; ikisi de tanim degil (regex assert'i ve mutant DIZGESI). Gercek sayi 5."
+      }
+    ],
+    "kisit": "Egitim kosusu yok, .pt/.bin uretimi yok, donmus yola yazim yok. data/eval/ disinda hicbir sey yazilmadi. Gecici probe dosyalari $TMPDIR'de tutuldu. cot_vault butun tur boyunca sabit (97b06fe5...5619 / 91 satir) ve $TMPDIR'e yedeklenip probe sonrasi karsilastirildi.",
+    "downstream": "F1-F8 icin AYRI GOREV ACILMADI: hepsi iyilestirme sinifinda ve tamami T-0025'in writes[] kapsaminda (scripts/, src/gateway/, src/rag/, tests/). Kullanici restart oncesi 'mevcut gorev bitince durduracagim' dedi; yeni is baslatilmadi. Siralama devir notunda."
+  },
+  "t0026_acik_gorev_2026_09_15": {
+    "kayit": ".agent-bus/state/tasks/T-0026.json (YALNIZ STATE — kok kopya yok)",
+    "baslik": "T-0025 kapi duzeltmesinin yan etkileri: gercek mutant testi, korumasiz firlatma, dedektor kor noktasi, varsayilan kasa yolu",
+    "kapsam": "T-0025 dogrulamasinin F1-F5 bulgulari + EK MADDE ile F6/F7/F7b/F8. Kabul maddeleri A-K (11).",
+    "writes": [
+      "src/gateway/",
+      "tests/",
+      "scratch/",
+      "src/rag/"
+    ],
+    "zaman_cizelgesi": {
+      "acildi": "2026-09-15T08:54:49Z (actor: claude)",
+      "devralindi": "2026-09-15T08:56:34Z (actor: antigravity)",
+      "ttl_minutes": 180,
+      "ttl_sonu": "2026-09-15T11:56:34Z",
+      "sonuc_dosyasi": "YOK (08:57Z itibariyla)"
+    },
+    "canlilik_olcumu_08_57Z": "Devralmadan 30 sn sonra: kiralama YOK, writes[] altinda son 10 dk'da degisen dosya 0 — gorev henuz yazma asamasina girmemis.",
+    "dogrulama_notu": "Kapaninca YALNIZCA bagimsiz dogrulama yapilir (en son dogrulanan t0025 -> bu gorev siradaki hedef). bus_list_tasks bu kez tam liste veriyor. Dogrulamada ARANACAK UC SEY: (1) src/rag/ kiralamasi alinmis mi; (2) spec genislemesi sonuc dosyasinda bildirilmis mi; (3) F7b icin dosya SILINMEMIS mi.",
+    "donmus_sinir": "Spec: src/llm/tokenizer.py ve src/compiler/** DONMUS; data/** salt-okunur, bu gorev data/** altina HICBIR SEY yazmaz. Dogrulama turu data/eval/ altina yazar (izinli istisna).",
+    "ek_madde_2026_09_15": {
+      "ne": "T-0026 spec'ine ACILIS SONRASI (devralmadan ~1.5 dk sonra, ~08:58Z) EK MADDE 6-9 + kabul I/J/K eklendi.",
+      "neden": "F7 ayni dosyada (tests/test_prompt_contract.py) F2/F3 ile ayni aileyi paylasiyor; F6/F7b ayni yazma kapsamina giriyor; ayri tur yerine tek sozlesmede toplamak daha az tur.",
+      "eklenen_bulgular": {
+        "F7 (ORTA)": "audit_repo_resize_state_dict_definitions (tests/test_prompt_contract.py:315-328) dosya okuma + ast.parse'i TEK try'da yapip 'except Exception: pass' ile yutuyor; probe: sessiz tanim + kasten sozdizimi hatasi olan dosya -> audit BOS liste. Kabul I.",
+        "F7b (ORTA)": "src/rag/rag_pipeline.py TAKIP EDILIYOR ve COMMIT'li SyntaxError (satir 82, for hedefinde walrus); 'git show HEAD:' kopyasi da ayni; hicbir modul import etmiyor -> OLU DOSYA. DANISMAN TALIMATI: SILME; yalniz olu oldugunu kanitla. Kabul J.",
+        "F6 (DUSUK-ORTA)": "Aile disinda sessiz kirpma kaldi: rag_pipeline.py:80-88 satir ici min(), print/warn/raise yok. Celiski degil, IKI FARKLI KUME (A'nin evreni 'def'ler). Kanit STATIK/AST olmali — dosya CALISTIRILAMAZ. Kabul K.",
+        "F8 (DUSUK)": "F0 sites[18] (rag_pipeline.py:90, 'HATA') YANLIS: 80-88 sekilleri sessizce uzlastiriyor -> uyusmazlik :90'a ulasmaz. data/** salt-okunur -> F0 raporu DUZELTILMEZ, yalniz sonuc dosyasinda bildirilir."
+      },
+      "olay_kaydi": "events.jsonl'de karsiligi YOK (bus'ta task_updated olay tipi hic yok) — bkz. acik_bus_kusuru.olay_sozlugu_boslugu."
+    },
+    "kiralama_boslugu": "OLCULDU 09:04Z: T-0026'nin kiralamalari yalnizca 4 (src/gateway/pedagogical_supervisor.py, tests/test_prompt_contract.py, tests/test_cot_vault_and_dual_parser.py, scratch/ — hepsi 08:57:39Z, TTL 11:57:39Z) ve HICBIRI src/rag/'i kapsamiyor; oysa EK MADDE writes[]'e src/rag/ ekledi. Logdaki 'src/rag' olaylarinin TAMAMI T-0013'e ait (14 Eyl 19:03Z) — T-0026'ya ait DEGIL. Yurutucuye bus_send ile 'src/rag/ icin AYRI kiralama al' uyarisi gonderildi (2026-09-15T09:00:56Z). Kiralama alinmadan src/rag/'a yazilirsa SPEC kural 1 ('Kiralama olmadan yazma yok') ihlali olur — DOGRULAMA TURUNDA ILK BAKILACAK SEY: yurutucu bu uyariyi uyguladi mi (events.jsonl'de T-0026 icin src/rag lease_acquired satiri var mi) VE spec genislemesini sonuc dosyasinda AYIRCA bildirdi mi.",
+    "olcum_09_04Z": "T-0026 hala claimed, sonuc dosyasi (state/results/T-0026.json) YOK, devralmadan beri writes[] altinda degisen dosya 0. Devralma 08:56:34Z -> olcum 09:04:11Z: 7.5 dk, yazma asamasina girmemis."
+  }
+}

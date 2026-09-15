@@ -1,0 +1,25 @@
+{
+  "id": "T-0021",
+  "from": "claude",
+  "to": "antigravity",
+  "created": "2026-09-15T06:47:00Z",
+  "title": "T-0019 dogrulamasinin iki DUSUK bulgusu: makine-okunur alanda yazim hatasi + record_impact metin tanimi",
+  "spec": "T-0021 — T-0019 dogrulamasindan cikan iki DUSUK bulgu\n\nBAGLAM\nT-0019 bagimsiz dogrulandi: data/eval/t0019_verification.json, verdict PASS.\nDokuz kabul kriterinin (A-I) dokuzu da tuttu; dogrulanmis hicbir sayisal alan\ndegismedi. record_impact'in baslik iddiasi (5702 kayit / 0 ozdes / %100.00 sapma)\nBAGIMSIZ OLARAK yeniden uretildi ve iki farkli metin tanimiyla da ayni cikti.\nAsagidaki iki bulgu hicbir sayiyi ve hicbir kabul kriterini ihlal etmiyor;\nbu gorev onlari kapatir.\n\nBULGU G1 (DUSUK) — makine-okunur alanda yazim hatasi\nYer: data/eval/t0018_why_no_memorization.json -> data_identity.A6_stale_bin\nSorun: ayni nesnede HEM 'punct_set_commit' HEM de yazim hatali kopyasi\n       'punt_set_commit' bulunuyor. 'punt_set_commit' okuyan bir tuketici deger\n       bulur ama ad yanlistir; iki anahtar ayni bilgiyi tasir.\nYapilacak: 'punt_set_commit' anahtarini SIL. Tek dogru ad 'punct_set_commit' kalsin.\n          Degerini DEGISTIRME.\n\nBULGU G2 (DUSUK) — record_impact hangi metin uzerinde olculdugunu belirtmiyor\nYer: data_identity.A6_stale_bin.record_impact\nSorun: BASLIK SAYILARI dogru (5702/0/%100.00, bagimsiz yeniden uretildi), ancak\n       'all_first_mismatch_indices_distribution' yeniden URETILEMIYOR. Danisman\n       iki bagimsiz varyant denedi, ikisi de birebir ortusmedi:\n         dosyada top10 : {7:1383, 10:1211, 8:903, 4:900, 11:550, 6:478, 12:67, 13:59, 17:51, 15:32}\n         yalniz instruction: {7:1381, 8:908, 4:897, 10:761, 11:540, 6:476, 2:450, 13:75, 12:72, 17:47}\n         tam json.dumps    : {8:1381, 9:908, 5:897, 11:761, 12:540, 7:476, 3:450, 14:75, 13:72, 18:47}\n       Yaklasik 450 kayit danismanin olcumunde indeks 2-3'te, dosyada indeks 10'da\n       sapiyor. Alan, kodlanan metnin TANIMINI icermedigi icin dagilim\n       dogrulanamiyor.\nYapilacak:\n  a) record_impact'e 'encoded_text' alani ekle: hangi metin uzerinde olculdu\n     (orn. 'json.dumps(record, ensure_ascii=False)' veya 'yalniz instruction alani'\n     veya 'render_prompt(instruction, input)') ve hangi tokenizer surumuyle\n     (9e59830^ eski + guncel).\n  b) Dagilimi O TANIMLA yeniden uret ve dosyadaki degerleri bu tanima gore yaz.\n     DIKKAT: 'sayi tutmadi' diye dagilimi rastgele degistirme. Once tanimi yaz,\n     sonra uret. Eski dagilim ile yeni dagilim farkli cikarsa IKISINI DE degil,\n     YALNIZCA tanimi belgelenmis yeni olcumu yaz ve aradaki farki walkthrough'da acikla.\n  c) 'divergence_rate_pct', 'identical_records', 'divergent_records' ve 'total_records'\n     alanlarina DOKUNMA — bunlar dogrulandi.\n\nSINIRLAR\n- data/** DONMUS: yalnizca OKU. Tek istisna data/eval/ altindaki rapor json'lari\n  (bu gorevin writes listesi).\n- src/llm/tokenizer.py DONMUS, src/compiler/** DONMUS: DEGISTIRME.\n- EGITIM KOSUSU BASLATMA. .pt/.bin URETME. Hicbir checkpoint'e dokunma.\n- train.py veya scripts/run_goal_pipeline.py'yi CALISTIRMA.\n- Diger dogrulanmis sayisal alanlara DOKUNMA. Bu gorev yalnizca iki DUSUK bulguyu kapatir.\n- Yeni bagimlilik yok. git add -A YASAK.\n\nBEKLENEN CIKTI\n- Duzeltilmis data/eval/t0018_why_no_memorization.json: 'punt_set_commit' yok,\n  record_impact.encoded_text var ve dagilim o tanimla uretilmis.\n- Walkthrough: G1 ve G2 icin ne degisti, dagilim farki nasil aciklandi.",
+  "writes": [
+    "data/eval/t0018_why_no_memorization.json"
+  ],
+  "acceptance": [
+    "A) data_identity.A6_stale_bin icinde 'punt_set_commit' anahtari YOK; 'punct_set_commit' duruyor ve degeri degismemis",
+    "B) record_impact.encoded_text alani var ve kodlanan metni + tokenizer surumunu acikca tanimliyor",
+    "C) all_first_mismatch_indices_distribution, encoded_text tanimiyla yeniden uretildi ve dagilim toplami divergent_records'a esit",
+    "D) Dogrulanmis alanlar DEGISMEDI: total_records=5702, identical_records=0, divergent_records=5702, divergence_rate_pct=100.0 + T-0018'in diger tum sayisal alanlari",
+    "E) T-0019'un kapattigi metin/etiket duzeltmeleri (F1-F6) BOZULMADI: '%99.90' hala yok, ccd552c hala yok, hypotheses status==verdict",
+    "F) EGITIM YOK; degisen .pt/.bin = 0",
+    "G) pytest 123/123 (sandbox disi)",
+    "H) writes listesi disinda dosya degismedi (git status ile kanit)"
+  ],
+  "status": "done",
+  "claimed_by": null,
+  "claimed_at": null,
+  "ttl_minutes": 240
+}

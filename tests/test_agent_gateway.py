@@ -7,6 +7,7 @@ import json
 import time
 import tempfile
 import unittest
+from unittest.mock import MagicMock
 import urllib.request
 import threading
 import torch
@@ -92,7 +93,11 @@ class TestAgentGateway(unittest.TestCase):
         self.assertIn("Kırlangıç kuyruğu", check_res[0]["text"])
 
     def test_pedagogical_supervisor_evaluation_and_step(self):
-        supervisor = PedagogicalSupervisor(gateway=self.gateway)
+        isolated_vault = os.path.join(self.tmp_dir.name, "isolated_supervisor_vault.jsonl")
+        supervisor = PedagogicalSupervisor(
+            gateway=self.gateway,
+            vault_path=isolated_vault
+        )
         
         # Test heuristic quality evaluation
         sat, msg = supervisor.evaluate_response_quality("ahşap mobilya ve köşe birleştirme", ["köşe", "ahşap"])
@@ -100,6 +105,18 @@ class TestAgentGateway(unittest.TestCase):
         
         unsat, u_msg = supervisor.evaluate_response_quality("alakasız bir cevap", ["köşe", "zıvana"])
         self.assertFalse(unsat)
+
+        # Mock teacher call to isolate from external network/API and test CoT recording safely
+        teacher_output = (
+            "<DUSUNCE>\n"
+            "Kırlangıç kuyruğu çekmece kasalarında ve masif sandık köşelerinde yüksek mukavemet sağlar.\n"
+            "</DUSUNCE>\n"
+            "<BILGI_KARTI>\n"
+            "Kırlangıç kuyruğu geçme, çekmecelerde ve sandıklarda yüksek çekme direnci için kullanılır.\n"
+            "</BILGI_KARTI>"
+        )
+        supervisor.call_gemini = MagicMock(return_value=teacher_output)
+        supervisor.gemini_api_key = "dummy_key"
 
         # Test single supervision step
         probe = {
@@ -113,6 +130,13 @@ class TestAgentGateway(unittest.TestCase):
         self.assertIn("first_attempt", step_result)
         self.assertIn("is_satisfactory", step_result)
         self.assertIn("knowledge_injected", step_result)
+        self.assertTrue(os.path.exists(isolated_vault))
+        with open(isolated_vault, "r", encoding="utf-8") as f:
+            lines = f.readlines()
+        self.assertEqual(len(lines), 1)
+        vault_data = json.loads(lines[0])
+        self.assertEqual(vault_data["query"], "Kırlangıç kuyruğu nerelerde kullanılır?")
+        self.assertIn("çekmece kasalarında", vault_data["thought_trace"])
 
     def test_retrain_pipeline_compile(self):
         # Create 2 mock records in future_train_vector.jsonl

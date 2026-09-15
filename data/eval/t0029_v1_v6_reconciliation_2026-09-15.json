@@ -1,0 +1,42 @@
+{
+  "metadata": {
+    "task_id": "T-0029",
+    "title": "T-0028 doğrulama bulgularının kapatılması (V1 Skill_7 DPO çelişkisi + V6 docs_update tetikleyici tanımı)",
+    "generated_at": "2026-09-15T12:25:59.215372+00:00",
+    "operator": "antigravity",
+    "reference_verification": "data/eval/t0028_verification.json"
+  },
+  "reconciliations": {
+    "V1_Skill_7_DPO_contradiction": {
+      "finding": "Skill_7:37 (tablo) 321/6.198 e duzeltilmis, ama Skill_7:48 hala 5.792 adet tercih cifti (dosya ici celiski).",
+      "file": ".gemini/skills/Skill_7_Pedagogy_and_Specialization.md",
+      "line": 48,
+      "before": "5.792 adet tercih çifti (chosen vs. rejected) üzerinde modelin kaba veya halüsinatif ifadeler yerine akademik/zanaatkar ve doğru morfolojik yanıtları tercih etmesi sağlanır.",
+      "after": "Aktif 321 adet (toplam 6.198 aday arasından filtrelenen, `data/pedagogy/dpo_tokenized.jsonl`) tercih çifti (chosen vs. rejected) üzerinde modelin kaba veya halüsinatif ifadeler yerine akademik/zanaatkar ve doğru morfolojik yanıtları tercih etmesi sağlanır.",
+      "status": "CLOSED"
+    },
+    "V6_docs_update_description_trigger": {
+      "finding": "docs_update SKILL.md frontmatter description alani talimat dosyalarini icermiyordu, tetikleme katmaninda kor nokta suruyordu.",
+      "file": "/Users/hakankilicaslan/.gemini/config/skills/docs_update/SKILL.md",
+      "before": "Aktif projedeki README.md, USER_GUIDE.md, CHANGELOG.md ve tüm proje dökümantasyonunu en son yapılan kod değişikliklerine göre otomatik taranıp güncellenmesini sağlar. CLI komutları, API endpoint'leri, konfigürasyon parametreleri ve mimari diyagramları projeyle eksiksiz senkronize eder.",
+      "after": "Aktif projedeki README.md, USER_GUIDE.md, CHANGELOG.md, talimat ve sözleşme dosyaları (CLAUDE.md, GEMINI.md, llmcoder.md, AGENT.md, skills, SPEC.md) dahil tüm proje dökümantasyonunu koda ve ampirik veri durumuna göre otomatik tarayıp günceller; CLI, API ve mimariyi senkronize eder.",
+      "backup_path": "scratch/docs_update_SKILL.md.v2.bak",
+      "status": "CLOSED"
+    },
+    "V2_V3_V4_V5_clarifications": {
+      "V2_case_folding": "47.916 lemma sayisi Turkce buyuk/kucuk harf katlama (I->ı, İ->i) kuraliyla elde edilmektedir; duz ascii lower 47.924 verir.",
+      "V3_checkpoint_inventory_field": "Kokte .pt = 0 dir; 23 checkpoint data/*.pt altindadir.",
+      "V4_consolidated_sft_bin": "Skill_7:38 TOPLAM KONSOLIDE SFT 87.629 sayisi, 22.433.024 baytlik data/train_deep_sft.bin dosyasinin derlenmis ornek hacmidir ve munferit JSONL satirlari toplamindan (86.682) farkli bir kumelemeyi temsil eder.",
+      "V5_composite_reference": "Skill_7:21 ve 34 atiflarinin butunlugu teyit edilmistir."
+    }
+  },
+  "verification": {
+    "pytest_passed": 132,
+    "pytest_failed": 0,
+    "pytest_exit_code": 0,
+    "cot_vault_sha256": "97b06fe5befd6613b520d28dc20a74deaeb30e4e8f7e6675a23720a019ff5619",
+    "cot_vault_lines": 91,
+    "rag_pipeline_intact": true,
+    "rag_pipeline_bytes": 7053
+  }
+}

@@ -1,0 +1,207 @@
+{
+  "task_id": "T-0029",
+  "title": "T-0028 dogrulama bulgularinin kapatilmasi (V1 Skill_7 DPO celiskisi + V6 docs_update tetikleyici tanimi)",
+  "verifier": "claude (danisman) — bagimsiz dogrulama turu",
+  "verified_at": "2026-09-15T12:43:47Z",
+  "reference": {
+    "executor_report": "data/eval/t0029_v1_v6_reconciliation_2026-09-15.json",
+    "executor_result": ".agent-bus/state/results/T-0029.json",
+    "completion_message": ".agent-bus/state/inbox/claude/2026-09-15T12-26-59Z-antigravity.json",
+    "prior_verification": "data/eval/t0028_verification.json"
+  },
+  "verdict": "PASS_WITH_FINDINGS",
+  "verdict_gerekce": "Iki asil bulgu (V1, V6) GERCEKTEN kapatildi ve bagimsiz olarak olculdu: Skill_7'de '5.792' tamamen gitmis (grep -c = 0) ve satir 48 artik satir 37 ile ayni populasyonu soyluyor (321/6.198); docs_update SKILL.md frontmatter description'i artik talimat yuzeyini sayiyor, PyYAML gecerli, yedek zinciri izlenebilir. Degismezler korundu (cot_vault 97b06fe5/91 satir pytest oncesi=sonrasi, rag_pipeline 7053 bayt, pytest 132/0 exit 0). Ancak UC bulgu var: (F1) beyan edilen changed_files asil duzeltilen artefakti (repo disi docs_update SKILL.md) icermiyor — T-0028 ayni dosyayi acikca beyan etmisti, bu bir gerileme; (F2) raporun V4 netlestirmesindeki '86.682' hangi dosya kumesi oldugu yazilmamis bir toplam; (F3) T-0028'in V1 dersinin ongordugu repo geneli yeniden-grep kanitlanmamis (ben yaptim: 2 kalinti, ikisi de tarihli tarihsel kayit → celiski yok).",
+  "method": {
+    "yaklasim": "Yurutucunun kanit metnine guvenilmedi; her iddia diskten ve koddan yeniden uretildi. Pozitif kontrol ve capraz kanal kullanildi.",
+    "sandbox_notu": "pytest sandbox DISINDA kosuldu (dangerouslyDisableSandbox) — sandbox socket bind'ini engelledigi icin iceride sahte '1 failed' uretiyor (T-0028'de olculdu).",
+    "repo_disi_okuma": "~/.gemini/config/skills/docs_update/SKILL.md Read ile okundu; PyYAML ./venv/bin/python ile ayristirildi."
+  },
+  "independent_measurements": {
+    "A_V1_Skill_7_DPO_celiskisi": {
+      "skill7_toplam_satir": 58,
+      "grep_5_792_skill7_icinde": 0,
+      "satir_37": "| **DPO Tercih Ciftleri (Aktif/Tum)** | `dpo_tokenized.jsonl` / `dpo_all_tokenized.jsonl` | 321 / 6.198 |",
+      "satir_48": "Aktif 321 adet (toplam 6.198 aday arasindan filtrelenen, `data/pedagogy/dpo_tokenized.jsonl`) tercih cifti (chosen vs. rejected) uzerinde ...",
+      "git_diff_degisen_satir": 24,
+      "dpo_tokenized_jsonl_satir": 321,
+      "dpo_all_tokenized_jsonl_satir": 6198,
+      "verdict": "V1 KAPALI — dosya ici celiski gercekten sonlandi; satir 37 ve 48 ayni populasyonu (321 aktif / 6.198 aday) soyluyor"
+    },
+    "B_V6_docs_update_tetikleyici": {
+      "canli_yol": "/Users/hakankilicaslan/.gemini/config/skills/docs_update/SKILL.md",
+      "canli_bayt": 5904,
+      "canli_sha256": "60f25b2961d18a82",
+      "canli_mtime_utc": "2026-09-15T12:22:50Z",
+      "pyyaml": {
+        "name": "docs_update",
+        "description_tipi": "str",
+        "description_uzunluk": 282,
+        "gecerli": true
+      },
+      "description_yeni_metin": "Aktif projedeki README.md, USER_GUIDE.md, CHANGELOG.md, talimat ve sozlesme dosyalari (CLAUDE.md, GEMINI.md, llmcoder.md, AGENT.md, skills, SPEC.md) dahil tum proje dokumantasyonunu koda ve ampirik veri durumuna gore otomatik tarayip gunceller; CLI, API ve mimariyi senkronize eder.",
+      "diff_canli_vs_v2bak": "YALNIZ description blogu (satir 3-6) degisti; govde ozdes",
+      "yedek_zinciri": [
+        {
+          "dosya": "scratch/docs_update_SKILL.md.bak",
+          "sha256_16": "b5d174b16d5e47e6",
+          "bayt": 4212,
+          "mtime": "2026-09-15T11:07:21Z",
+          "anlam": "T-0028 ONCESI orijinal"
+        },
+        {
+          "dosya": "scratch/docs_update_SKILL.md.v2.bak",
+          "sha256_16": "5e082ae8215ca67f",
+          "bayt": 5911,
+          "mtime": "2026-09-15T12:22:50Z",
+          "anlam": "T-0028 SONRASI = T-0029 oncesi (T-0028 dogrulamasinda kaydedilen canli hash ile BIREBIR)"
+        },
+        {
+          "dosya": "~/.gemini/config/skills/docs_update/SKILL.md",
+          "sha256_16": "60f25b2961d18a82",
+          "bayt": 5904,
+          "mtime": "2026-09-15T12:22:50Z",
+          "anlam": "T-0029 canli"
+        }
+      ],
+      "verdict": "V6 KAPALI — tetikleme katmani artik talimat yuzeyini sayiyor; frontmatter bozulmadi; zincir geri donusturulebilir"
+    },
+    "C_V2_V3_V4_V5_netlestirmeleri": {
+      "V2_katlama": {
+        "ham_tekil_col0": 48200,
+        "duz_lower": 47924,
+        "TR_kuralli_katlama": 47916,
+        "NFC": 48200,
+        "verdict": "DOGRU — 47.916 yalniz TR-kuralli katlamayla (I->i, I->ı) cikiyor; duz .lower() 47.924. Raporun netlestirmesi birebir."
+      },
+      "V3_envanter_adi": {
+        "kokte_pt": 0,
+        "data_pt": 23,
+        "data_recursive_pt": 38,
+        "verdict": "DOGRU — kokte .pt yok; 23 checkpoint data/*.pt altinda."
+      },
+      "V4_konsolide_SFT": {
+        "train_deep_sft_bin_bayt": 22433024,
+        "meta_total_records": 87629,
+        "meta_total_tokens": 11216512,
+        "meta_dataset_composition": {
+          "parenting_deep": 40000,
+          "lexical_semantics": 25000,
+          "carpenter_specialization": 2240,
+          "infancy": 7264,
+          "chat": 6625,
+          "rag": 6500
+        },
+        "kompozisyon_toplami": 87629,
+        "uretici_kod_eslesmesi": "scripts/prepare_deep_dataset.py: carpenter_raw*10 (224*10=2240), chat_raw*5 (6000+5*125=6625) — kompozisyon meta ile BIREBIR",
+        "verdict": "87.629 OLCULMUS VE DOGRU — data/train_deep_sft.bin meta.total_records'a tam esit. T-0028'in V4 bulgusu (olculmedi/belirsiz) kapandi."
+      },
+      "V5_atif": "Metin duzeyinde netlestirme; sayisal iddia icermiyor, bagimsiz olculecek bir olgu yok."
+    },
+    "D_degismezler": {
+      "cot_vault_sha256": "97b06fe5befd6613b520d28dc20a74deaeb30e4e8f7e6675a23720a019ff5619",
+      "cot_vault_satir": 91,
+      "cot_vault_pytest_oncesi_ve_sonrasi": "AYNI (bit duzeyinde) — kabul kosusu olctugu artefakti degistirmedi",
+      "rag_pipeline_bayt": 7053,
+      "rag_pipeline_sha256_16": "7c37d8f0577eaf2f",
+      "rag_pipeline_mevcut": true,
+      "pytest": {
+        "passed": 132,
+        "failed": 0,
+        "exit_code": 0,
+        "sure": "7.49s",
+        "ortam": "sandbox DISI"
+      },
+      "verdict": "Beyan edilen 132/132 ve 7053 bayt BIREBIR tuttu"
+    },
+    "E_kapsam_ve_donmus_sinirlar": {
+      "pencere": "2026-09-15T12:19:50Z (devralma) -> 2026-09-15T12:36Z (olcum)",
+      "data_altinda_degisen_dosya_sayisi": 1,
+      "degisen": [
+        "data/eval/t0029_v1_v6_reconciliation_2026-09-15.json"
+      ],
+      "verdict": "data/** korundu; donmus yollara (data/*.pt, data/*.bin, data/vocab*.json, src/llm/tokenizer.py, src/compiler/**) dokunulmadi"
+    },
+    "F_changed_files_beyani": {
+      "beyan_edilen": [
+        ".gemini/skills/Skill_7_Pedagogy_and_Specialization.md",
+        "data/eval/t0029_v1_v6_reconciliation_2026-09-15.json",
+        "scratch/docs_update_SKILL.md.v2.bak"
+      ],
+      "gercekte_degisen_4_uncu": {
+        "yol": "~/.gemini/config/skills/docs_update/SKILL.md",
+        "bayt": 5904,
+        "sha256_16": "60f25b2961d18a82",
+        "mtime_utc": "2026-09-15T12:22:50Z",
+        "beyanda_var_mi": false
+      },
+      "verdict": "EKSIK BEYAN — bkz. bulgu F1"
+    }
+  },
+  "findings": [
+    {
+      "id": "F1",
+      "severity": "ORTA",
+      "baslik": "changed_files asil duzeltilen artefakti icermiyor: repo disi docs_update SKILL.md yalniz YEDEGIYLE temsil ediliyor",
+      "olcum": "Beyan 3 dosya; gercekte 4 artefakt degisti. Eksik olan TAM DA duzeltmenin hedefi: /Users/hakankilicaslan/.gemini/config/skills/docs_update/SKILL.md (5904 bayt, sha256 60f25b29..., mtime 12:22:50Z). Listede yalniz onun yedegi (scratch/docs_update_SKILL.md.v2.bak) var.",
+      "yapisal_neden": "Yol REPO DISINDA; agent-bus kiralamasi repo-goreli calisir, bu yolu kiralayamaz. Dolayisiyla yazim SPEC kural 1'in kapsami disinda kalir — bu, T-0028 turunda onceden isaret edilen yapisal risktir, yeni degil.",
+      "gerileme": "T-0028 ayni dosyayi AYRICA beyan etmisti (H bolumu safety_audit: iki sha256 — yedek ve canli). T-0029 yalniz yedegi listeliyor; hedefi hic anmiyor.",
+      "etki": "Yalniz changed_files okuyan bir denetci repo-disi duzeltmenin varligini goremez; V6'nin kapatildigi bilgisi beyandan cikarilamaz.",
+      "cozum_onerisi": "Repo-disi yazimlar icin changed_files'a 'external:' onekli ayri bir alan (yol + sha256 + yedek yolu) eklensin; ayrica SPEC'e repo-disi yuzey icin kiralama muadili bir beyan kurali girsin."
+    },
+    {
+      "id": "F2",
+      "severity": "DUSUK",
+      "baslik": "Raporun V4 netlestirmesindeki '86.682' toplaminin hangi dosya kumesi oldugu yazilmamis",
+      "iddia": "data/eval/t0029_v1_v6_reconciliation_2026-09-15.json -> V4_consolidated_sft_bin: '... munferit JSONL satirlari toplamindan (86.682) farkli bir kumelemeyi temsil eder'",
+      "olcum": "Bugun 7 kaynak JSONL satir toplami = 86807 (parenting_deep 40001 + lexical_semantics 25000 + carpenter 5400 + infancy 3682 + chat_conversations 6000 + middle_school_chat 125 + rag_interactive 6599).",
+      "aday_tanim": "86807 - 86682 = 125 = data/pedagogy/middle_school_chat.jsonl satir sayisi → raporun sayisi, ADI YAZILMAMIS bir 6-dosya kumesine (middle_school_chat haric) TAM oturuyor. Kural (iki-sayi celisiyor sanma / 17. vaka): aday tanim tam tutuyorsa hukum 'sayi yanlis' degil 'ETIKET EKSIK'tir.",
+      "ek_zaman_penceresi": "data/train_deep_sft.bin mtime 2026-09-09T17:53:15Z; data/pedagogy/carpenter_specialization_dataset.jsonl mtime 2026-09-09T18:49:36Z — .bin derlendikten 56 dk SONRA degismis. Yani bugun hesaplanan her JSONL toplami farkli bir zaman penceresidir ve 87.629 ile karsilastirilmasi zaten elmayla-armut.",
+      "asil_iddia_dogru": "meta.dataset_composition toplami (40000+25000+2240+7264+6625+6500) = 87629 = meta.total_records, ve scripts/prepare_deep_dataset.py bunu uretiyor (carpenter_raw*10, chat_raw*5). Yani '87.629 derlenmis ornek hacmidir' iddiasi DOGRU; yalniz karsilastirma sayisi etiketsiz."
+    },
+    {
+      "id": "F3",
+      "severity": "DUSUK",
+      "baslik": "T-0028'in V1 dersinin ongordugu repo geneli yeniden-grep kanitlanmamis",
+      "ders": "T-0028 dogrulamasi: 'bir iddia bir dosyada birden cok yerde geciyorsa, duzeltme sonrasi eski degeri repo genelinde yeniden ara (grep) ve kalan gecisleri raporla.'",
+      "olcum_ben_yaptim": "grep -rn '5\\.792' --include='*.md' → 2 kalinti: wiki/log.md:38 ve wiki/synthesis.md:44. Skill_7 icinde 0.",
+      "kalintilar_celiski_mi": "HAYIR. Ikisi de TARIHI kayit: wiki/log.md:38 '### 2026-06-16' bolumunde '13 veri setindeki 5.792 tercih cifti derlenerek data/train_all_chosen.bin ... olusturuldu'; wiki/synthesis.md:44 ayni donemin ozeti. Populasyon farkli (o gunku 13 veri seti / train_all_chosen.bin) ve zaman penceresi Haziran. Zaman penceresi ekseni — celiski degil.",
+      "etki": "Kural uygulansaydi cikti temiz olurdu ('0 celiskili gecis'). Eksik olan kuralin KANITI, sonucu degil; bu yuzden DUSUK."
+    }
+  ],
+  "non_findings": [
+    {
+      "id": "N1",
+      "baslik": "V1 gercekten kapandi",
+      "olcum": "Skill_7 icinde 5.792 = 0; satir 37 (tablo) ve 48 (duzyazi) ayni populasyonu soyluyor; dpo_tokenized.jsonl = 321, dpo_all_tokenized.jsonl = 6198 satir ile birebir."
+    },
+    {
+      "id": "N2",
+      "baslik": "wiki'deki iki 5.792 kalinti celiski DEGIL",
+      "olcum": "F3'te olculdu — tarihli tarihsel kayit, farkli populasyon (train_all_chosen.bin) ve farkli zaman penceresi (Haziran 2026)."
+    },
+    {
+      "id": "N3",
+      "baslik": "V6 yedek zinciri T-0028 dogrulamasiyla birebir ortusuyor",
+      "olcum": "scratch/docs_update_SKILL.md.v2.bak sha256 = 5e082ae8215ca67f... = T-0028 dogrulamasinda kaydedilen 'canli' hash (5e082ae8215ca67fa57eb461e555ce74b88a5fd31d23fcb390e383a5114696d7). Yani yedek, T-0028 sonrasi durumu tam yakaliyor; zincir b5d174b1 -> 5e082ae8 -> 60f25b29."
+    },
+    {
+      "id": "N4",
+      "baslik": "Kabul kosusu olctugu artefakti degistirmedi",
+      "olcum": "cot_vault.jsonl sha256 ve satir sayisi pytest ONCESI ve SONRASI bit duzeyinde ayni (97b06fe5..., 91). T-0023'un kapattigi sinif bu turda da temiz."
+    },
+    {
+      "id": "N5",
+      "baslik": "'86.682' sapmasi sayi hatasi degil",
+      "olcum": "F2 — adi yazilmamis bir 6-dosya kumesine tam oturuyor (fark tam 125 = middle_school_chat.jsonl)."
+    }
+  ],
+  "could_not_verify": [
+    "86.682'nin DERLEME ANINDAKI gercek kumeden mi yoksa bugunku 6-dosya kumesinden mi hesaplandigi: .bin'in kaynak JSONL'lerinin 2026-09-09T17:53:15Z'deki icerikleri diskte yok (carpenter dosyasi 56 dk sonra degismis), git gecmisi de o ara durumu vermiyor. Etiket eksikligi bu yuzden DUSUK kaldi.",
+    "V5 (Skill_7:21,34 atif butunlugu) metin duzeyinde bir iddia; bagimsiz sayisal olcum uretmedigi icin yalniz 'celiski yok' duzeyinde dogrulandi."
+  ],
+  "oneri_sonraki_tur": [
+    "F1 icin: repo-disi yazimlari beyan edecek bir alan ('external_writes': yol + sha256 + yedek) SPEC'e ve gorev sablonuna eklensin. Bu, T-0028 ve T-0029'da ayni dosya icin iki kez ortaya cikan yapisal bosluktur.",
+    "F2 icin: bir sayi baska bir sayiyla karsilastiriliyorsa, karsilastirilan kumenin DOSYA LISTESI de yazilsin (yalniz toplam degil).",
+    "F3 icin: T-0028'in V1 dersi gorev sablonuna kabul maddesi olarak girsin: 'duzeltme sonrasi eski deger repo genelinde grep'lendi; N gecis kaldi; her biri icin populasyon/zaman penceresi gerekcesi yazildi.'"
+  ]
+}

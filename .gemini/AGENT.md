@@ -12,7 +12,7 @@ Sözleşmeye Kesin Uyum: Tüm üst katman analizleri, CrystalPack (input, langua
 Optimizasyon Önceliği: Öncelik her zaman (1) Doğruluk, (2) Determinizm, (3) İzlenebilirlik, (4) Genişletilebilirlik, (5) Performans sırasındadır
 . Modüller saf fonksiyonlar (pure functions) şeklinde yazılmalı ve global (mutable) durum barındırmamalıdır
 .
-Sıfır Bilinmeyen Kelime (Zero OOV): İstatistiksel bulanıklık yerine, ~20.500 tokenlik kısıtlı ve hiper-verimli bir morfolojik sözlük hedeflenerek devasa BPE sözlüklerinin maliyet darboğazı engellenecektir
+Sıfır Bilinmeyen Kelime (Zero OOV): İstatistiksel bulanıklık yerine, kök havuzunda 48.200 tekil temel lemma (52.373 leksikon kaydı, roots.tsv) ve model düzeyinde 31.357 - 32.852 tokenlik kısıtlı ve hiper-verimli bir morfolojik sözlük hedeflenerek devasa BPE sözlüklerinin maliyet darboğazı engellenecektir
 .
 [MİMARİ DİZİLİM: TEMEL, TAŞIYICI SİSTEM, ÇATI]
 
@@ -49,7 +49,7 @@ Fonetik Uyum Fonksiyonu (f()): Morfemler birleşirken ses olaylarını (ünlü u
 .
 Evrensel Vektör Bellek (RAG): Bilginin (metin, resim, kod) sürümlendirilerek anlamsal uzayda tutulduğu okyanus
 .
-Nanochat Entegrasyonu: Milyarlarca parametrelik devasa LLM'ler yerine, KristalTokenizer ile donatılmış, 20.500 token sözlüğüyle saatler içinde sıfırdan eğitilebilen düşük maliyetli hızlı akıl yürütme motorudur
+Nanochat Entegrasyonu: Milyarlarca parametrelik devasa LLM'ler yerine, KristalTokenizer ile donatılmış, 31.357 - 32.852 token sözlüğüyle saatler içinde sıfırdan eğitilebilen düşük maliyetli hızlı akıl yürütme motorudur
 .
 Çıkarım Döngüsü: RAG boru hattı: Sorgu → İlgili Bağlam Çağırma → Kristal Derleyici'den Geçirme → LLM'e (Gezgin) Verme
 . 3. ÇATI (Pedagojik Eğitim ve Uzmanlaşma) "Hafızasız devler" (statik LLM'ler) yerine, insan pedagojisinden ilham alan 3 fazlı yaşam boyu öğrenme vizyonudur

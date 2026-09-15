@@ -1,0 +1,152 @@
+{
+ "verification_id": "t0027",
+ "task_id": "T-0027",
+ "verified_by": "claude (danisman)",
+ "verified_at_utc": "2026-09-15T10:56:36Z",
+ "task_window_utc": [
+  "2026-09-15T10:12:56Z (devralma)",
+  "2026-09-15T10:44:58Z (sonuc dosyasi)"
+ ],
+ "dogrulama_penceresi_utc": "2026-09-15T10:47Z - 10:56Z",
+ "verdict": "PASS_WITH_FINDINGS",
+ "verdict_gerekce": "Onuc kabul maddesinin onucu de bagimsiz olarak YENIDEN OLCULDU; hicbir sayi yurutucunun kanit metninden alinmadi. 23 checkpoint'in sha256'si KENDI taramamla yeniden hesaplandi (10,3 GB), 6 sozluk dosyasinin sha256+len(stoi)+max_id+next_id'si birebir cikti, canli cikarim 4 model x 3 istem KENDI iki surecimde yeniden uretildi ve raporla 12/12 hucrede TAM AYNI cikti, pytest sandbox DISINDA kosuldu (132 passed) ve cot_vault bit duzeyinde degismedi, belgelenmis test_model.py yolu KENDIM kosuldu (exit 1). Iki bulgu var: biri ORTA (kanonik yuklenebilirlik testi YAPI GEREGI totolojik), biri DUSUK (tamamlandi mesajinda maske nufusu alt-sayimi).",
+ "bagimsiz_olcum_yontemi": [
+  "Envanter: torch.load(map_location='meta', mmap=True) ile sekil/anahtar okuma + hashlib ile 23 dosyanin tam sha256'si",
+  "Sozluk: 6 dosyanin sha256 + len(stoi) + max_id + next_id yeniden hesaplandi",
+  "Pozitif kontrol (F1 icin): ayni resize_state_dict, projenin VARSAYILAN sozluguyle (31357) 4 checkpoint uzerinde kosuldu",
+  "Belgelenmis yol: venv/bin/python test_model.py KENDIM kosuldu, exit code + tam traceback yakalandi",
+  "Pytest: sandbox ICINDE ve DISINDA kosuldu; cot_vault sha256+satir sayisi kosu oncesi/sonrasi",
+  "Canli cikarim: raporun beyan ettigi yapilandirma (greedy, manual_seed(0), 32 token, master_vocab=vocab_b1_5_32816) ile AYRI IKI SURECTE",
+  "Sinirlar: gorev penceresinde (10:12:56Z sonrasi) butun repo agacinin mtime taramasi; git diff --cached; donmus yollar"
+ ],
+ "claims_verified": [
+  {
+   "k": "K1",
+   "iddia": "Rapor gecerli JSON, A-G tam, iddialar etiketli",
+   "sonuc": "DOGRULANDI",
+   "olcum": "8 bolum parse edildi (metadata, A..G); 10 etiket: 6 DOGRULANDI + 2 CURUDU + 2 'CURUDU (ayni boyutta farkli hash)' + 1 aciklayici status"
+  },
+  {
+   "k": "K2",
+   "iddia": "23 satir envanter; 38 vs 23 kapsam farki",
+   "sonuc": "DOGRULANDI",
+   "olcum": "23/23 satir karsilastirildi: sha256, size_bytes, lm_head_rows, key_count, numel_excluding_masks, n_layer, n_embd -> 0 UYUSMAZLIK. Kapsam: data/*.pt=23, data/**/*.pt=38, _archive=11, b1_5_splits=4, fark=15 (birebir)"
+  },
+  {
+   "k": "K3",
+   "iddia": "Bit-ozdes grup tam uyelikle; epoch agirlik degisimi var",
+   "sonuc": "DOGRULANDI",
+   "olcum": "Kendi hash'lerimden gruplama: TEK bit-ozdes grup = {kristal_b1_5_best, kristal_b1_5_epoch3, kristal_model} sha 02e15b8198f8... (472.572.529 b). 472.572.529 b'lik aile 5 uye; epoch1 (7e5f07fe...) ve epoch2 (25c43aa8...) AYRI -> no-op hipotezi gercekten CURUDU. rag_arm_a vs pilot_best (472.572.950 b) ve rag_arm_b vs rag_arm_c (472.794.262 b) ayni boyut FARKLI hash -> birebir"
+  },
+  {
+   "k": "K4",
+   "iddia": "6 adet 4096^2 bool maske + numel_excluding_masks",
+   "sonuc": "DOGRULANDI",
+   "olcum": "kristal_model.pt: 6 anahtar ['blocks.0..5.attn.mask'], sekil (4096,4096), dtype bool, tek maske 16.777.216 oge, toplam 100.663.296. GERCEK VERIDEN mmap ile karsilastirma: 6 maske de bit-ozdes. numel_excluding_masks=92.967.344, toplam=193.630.640 -> %51,987 / %21,301 birebir"
+  },
+  {
+   "k": "K5",
+   "iddia": "Sozluk tablosu; vocab.json=31.357, vocab_entity=32.852 (32.816 ile KARISTIRILMAMIS); 'her checkpoint gerisinde' etiketli",
+   "sonuc": "DOGRULANDI",
+   "olcum": "6 sozluk dosyasinin tamami birebir: vocab.json 31357/31356/31357, vocab_entity 32852/32851/32852, rebuild/b1_5_32816 ve base_32816 32816/32815/32816, carpenter 32137/32136/32137, step_b1_final 32156/32155/32156 (sha256 hepsi esit). 32.816 ile karistirma YOK. Tabloda 6 checkpoint icin 'eslesme yok' (backup 27244, base 25665, step_a_ep1/ep2/ep3/final 32146) — dogru"
+  },
+  {
+   "k": "K6",
+   "iddia": "Noktalama blogu (>=32.137) sorusu: net cevap",
+   "sonuc": "DOGRULANDI",
+   "olcum": "vocab.json stoi'de id>=32137 token sayisi = 0 (max_id 31356); tek basina noktalama tokeni = 0. rebuild/vocab_b1_5_32816'da id 32137..32145 tam olarak ['.', ',', '?', '!', '-', ':', ';', '(', ')'] — raporun blogu birebir"
+  },
+  {
+   "k": "K7",
+   "iddia": "Iki yol tablosu: kanonik 23 satir sinifli + test_model.py exit code + tam istisna",
+   "sonuc": "DOGRULANDI_AMA_YONTEM_TOTOLOJIK",
+   "olcum": "Belgelenmis yol KENDIM kosuldu: exit code 1, RuntimeError satir 49 load_state_dict, 'shape torch.Size([32816, 768]) ... current model torch.Size([31357, 768])' — raporun metniyle ayni. ANCAK kanonik yolun '23/23 TEMIZ, 0 DUZELTILDI, 0 HATA' sonucu YAPI GEREIGI: betik modeli vocab_size=lm_head_rows ile kuruyor (satir 360-390), yani sekil hic uyusmuyor ve kirpma/doldurma ile HATA dallari ERISILEMEZ. Detay F1'de"
+  },
+  {
+   "k": "K8",
+   "iddia": "test_model.py 'mask' filtresinin dusurdugu anahtarlar listelendi",
+   "sonuc": "DOGRULANDI",
+   "olcum": "Checkpoint'te 'mask' alt-dizgisini iceren TAM anahtar kumesi = 6 maske (baska 'masked' vb. YOK); cos_cached/sin_cached anahtarlari HIC YOK -> filtrenin dusurdugu liste tam. Raporun per-checkpoint listesiyle ayni"
+  },
+  {
+   "k": "K9",
+   "iddia": "device alani + kosu SANDBOX DISINDA + MPS tahsis",
+   "sonuc": "DOGRULANDI",
+   "olcum": "Sandbox ICINDE: mps_available=False, is_built=True. Sandbox DISINDA: torch 2.11.0, is_built=True, is_available=True, gercek tahsis mps:0'da BASARILI (64x64 matmul). Raporun D blogu birebir. NOT: yurutucunun kosusunun MPS kullandigi dogrudan dogrulanamaz (kendi kosum CPU'da), ama cihazdan bagimsizlik F'de olculdu"
+  },
+  {
+   "k": "K10",
+   "iddia": "cot_vault sha256+satir sayisi pytest oncesi/sonrasi AYNI; passed/failed sayilari",
+   "sonuc": "DOGRULANDI",
+   "olcum": "Kendi kosum: ONCE 97b06fe5befd6613b520d28d... 91 satir; SONRA ayni (bit duzeyinde). Sandbox DISINDA pytest: 132 passed in 8.37s, exit 0 — raporun '132 passed' iddiasi birebir. NOT: sandbox ICINDE kosunca test_agent_gateway.py::test_gateway_http_server_endpoints socket.bind PermissionError ile duser (sandbox kisiti, gercek kusur degil)"
+  },
+  {
+   "k": "K11",
+   "iddia": "4 model x 3 istem ham cikarim; AYRI IKI SURECTE ayni sha256",
+   "sonuc": "DOGRULANDI",
+   "olcum": "KENDI iki ayri surecimde ayni ciktilar (sha256 79bf2cc93059a444...) -> determinizm bagimsiz dogrulandi. Rapora karsi hucre hucre: 12/12 hucrede prompt_tokens, generated_token_ids ve raw_output_text TAM AYNI (ben CPU'da, yurutucu MPS'te) — cihazlar arasi da bit-ozdes"
+  },
+  {
+   "k": "K12",
+   "iddia": "Yazim siniri; donmus yollara 0 dokunma; rag_pipeline SILINMEDI; 23 checkpoint mtime+size sabit",
+   "sonuc": "DOGRULANDI",
+   "olcum": "src/rag/rag_pipeline.py diskte VAR (7053 bayt, mtime 09:37:22Z = T-0026 yazimi, degismemis). git diff --cached BOS -> git add -A yapilmamis. data/*.pt ve data/*.bin TEMIZ. 23 checkpoint'in sha256'si A_inventory ile 0 uyusmazlik; en yeni checkpoint mtime 2026-09-14T11:14:05Z -> gorev baslangicindan ONCE. Gorev penceresinde (10:12:56Z sonrasi) butun agac taramasi: data/** altinda data/eval HARIC tek yazma YOK"
+  },
+  {
+   "k": "K13",
+   "iddia": "Tamamlandi mesaji + kiralar serbest + changed_files tam kapsam",
+   "sonuc": "DOGRULANDI",
+   "olcum": "Inbox'ta 2026-09-15T10-45-56Z-antigravity.json (farkli ISO damga) VAR; aktif kira 0; changed_files = 2 beyan edilen urun + tam olarak penceredeki 5 scratch dosyasi -> kapsam tam"
+  }
+ ],
+ "findings": [
+  {
+   "id": "F1",
+   "severity": "ORTA",
+   "alan": "C_loadability / K7 yontemi",
+   "iddia": "'Kanonik yol ile 23 checkpoint'in 23'u de TEMIZ yuklendi'",
+   "kusur": "Test YAPI GEREIGI totolojik. Betik modeli her checkpoint icin vocab_size=lm_head_rows ile kuruyor (scripts/t0027_measure_models.py:360-390), yani sekil hicbir zaman uyusmuyor; resize_state_dict'in kirpma/doldurma dali ve HATA dali ERISILEMEZ. K7'nin istedigi uc sinifli siniflandirma (TEMIZ/DUZELTILDI/HATA) tek erisilebilir degere cokuyor, dolayisiyla 'TEMIZ' etiketi 'uyarlama gerekmedi' degil 'model zaten uydurulmustu' demek.",
+   "kanit": "POZITIF KONTROL (kendi kosum): ayni resize_state_dict, projenin VARSAYILAN sozluguyle (data/vocab.json, 31357) -> kristal_model.pt 1459 satir KIRPILDI, kristal_model_base.pt 5692 satir DOLDURULDU, kristal_model_step_a_final.pt 789 satir KIRPILDI (her biri 3 [SOZLESME_UYARI]), kristal_model_backup_v160.pt (31357) uyarisiz. Yani gercek nufus: 21 DUZELTILDI + 2 TEMIZ.",
+   "etki": "Rapor okundugunda 'butun checkpointler sorunsuz yukleniyor' sonucu cikar; oysa B tablosunun asil bilgisi 6 checkpoint icin diskte ESLESEN SOZLUK OLMADIGI (27244, 25665, 32146x4) ve projenin varsayilan sozluguyle 21'inin sessizce kirpilip dolduruldugudur.",
+   "oneri": "Raporun C.summary'sine 'yapilandirma notu' eklenmeli ve TEMIZ yerine 'TEMIZ (eslesen sozlukle kuruldu)' etiketi kullanilmali; alternatif olarak kanonik test sabit bir referans sozlukle de kosulup DUZELTILDI sinifi raporlanmali."
+  },
+  {
+   "id": "F2",
+   "severity": "DUSUK",
+   "alan": "Tamamlandi mesaji (kanit metni) — rapor DOSYASI temiz",
+   "iddia": "'kristal_model.pt ve diger 18 modelde tam 6 adet 4096^2 bool mask tamponu yer alir'",
+   "kusur": "Maske nufusu ALT-SAYILMIS: 6 maskeli model sayisi 22 (kristal_model_base.pt 4 katmanli ve 4 maskeli). Mesajdaki 19, 'lm_head_rows > 31.357' populasyonuna denk dusuyor — iki farkli kume karistirilmis. Ayrica verilen oranlar (%51,987 / %21,301) yalniz kristal_model.pt icin gecerli (toplam oge 193.630.640), genel degil.",
+   "kanit": "Kendi envanterim: (6 maske, lm_head>31357)=19; (6 maske, lm_head<=31357)=3; (4 maske)=1 -> 6 maskeli toplam 22, maskesiz 0. Rapor dosyasinda '18 model/19 model' ifadesi HIC GECMIYOR (grep bos), yani kusur dosyada degil mesajin cercevelemesinde.",
+   "etki": "Okuyucu 4 modeli maskesiz sanir. Rapor dosyasi kendisi dogru oldugu icin kayit bozulmamis; duzeltme mesaj duzeyinde yeterli.",
+   "oneri": "Bundan sonraki tamamlandi mesajlarinda nufus iddialari da rapor dosyasindaki makine-okunur alandan turetilsin."
+  }
+ ],
+ "non_findings": [
+  {
+   "id": "N1",
+   "konu": "Maske yonu iddia edilmemis; ben olctum",
+   "olcum": "True kumesi TAM OLARAK kesin ust ucgen: True sayisi 8.386.560 = (4096^2-4096)/2; ilk satir [F,T,T,T,T,T], son satir tumu False. Yani bu modelde True ENGELLENEN/gelecek konumlari isaretliyor (yaygin 'True=koru' konvansiyonunun tersi). Rapor yon iddia etmedigi icin celiski YOK; kayit icin olculdu."
+  },
+  {
+   "id": "N2",
+   "konu": "data/** altinda data/eval disinda 6 'M' dosya — ihlal mi?",
+   "olcum": "HAYIR. Hepsinin mtime'i gorevden ONCE: future_train_archive/vector 09-13T07:09, high_school_foundation 09-13T07:08, turk_tarihi_chat/sft 09-13T08:02, cot_vault 09-15T07:37:37 (T-0023 penceresi). Donmus yollar altindaki untracked dizinler de (b1_5_splits, pedagogy_canonical, realistic_rag, vocab_entity.json, _archive) 09-13/09-14 tarihli. Gorev penceresinde bu yollara YAZMA YOK."
+  },
+  {
+   "id": "N3",
+   "konu": "test_model.py 'mask' filtresi fazla anahtar dusuruyor mu?",
+   "olcum": "HAYIR. Checkpoint'lerde cos_cached/sin_cached anahtari HIC YOK; 'mask' alt-dizgisi yalnizca 6 nedensel maske anahtarini yakaliyor. Raporun listesi tam."
+  },
+  {
+   "id": "N4",
+   "konu": "vocab.json 'her checkpoint'in gerisinde' iddiasinin CURUDU etiketi",
+   "olcum": "DOGRU etiket. 23 checkpoint'in 19'unda lm_head_rows>31357, 2'sinde =31357 (v160, pre_clean), 2'sinde <31357 (backup 27244, base 25665). Evrensel iddia gercekten CURUR; 'aktif/modern modeller icin kismen dogru' nitelemesi de olcumle uyumlu. Bu, danismanin hafizasindaki 'her checkpoint'in gerisinde' hukmunu duzeltir."
+  }
+ ],
+ "kisit_aciklamasi": "Bu turda HICBIR donmus yola yazmadim, .pt/.bin uretmedim, egitim kosusu baslatmadim; src/rag/rag_pipeline.py'yi SILMEDIM. Kendi problarimi $TMPDIR altinda kostum, raporun betigini CALISTIRMADIM (olctugu artefakti ezme riski). Dogrudan dogrulayamadigim iki sey: (1) yurutucunun kosusunun fiilen MPS kullandigi — ortam destegi dogrulandi ama kosum kaniti onlarin; cihazdan bagimsizlik 12/12 hucre esitligiyle dolayli olarak gosterildi; (2) raporun kendi determinizm sha256'si (8fe23a65...) — benim serilestirmem farkli oldugu icin karsilastirilamaz, yerine kendi iki surecimin esitligi ve 12/12 hucre esitligi konuldu.",
+ "downstream": [
+  "T-0028 (talimat dosyalari + /docs_update eki): F1 ve K7 kaniti CLAUDE.md'deki 'Model Cikarim Testi: venv/bin/python test_model.py' komutunun belgelenmis ama KIRIK oldugunu gosterir (exit 1, RuntimeError). Duzeltme icin gereken kanit artik diskte.",
+  "Rakam+kesme / yeni taban plani: 'noktalama blogu 32137'de basliyor' olcumu bagimsiz dogrulandi; vocab.json'da >=32137 token YOK — mevcut regeneration planinin dayanagi saglam."
+ ],
+ "danisman_notu": "Yurutucunun sayilari bu turda TEMIZ cikti (envanter, sozluk, cikarim, pytest, sinirlar) — iyimserlik RISKI bu kez sayilarda degil ETIKETTE gorundu: 'TEMIZ' etiketi dogru bir olcumun yanlis okunmasina yol aciyor (F1). F2 ise bilinen desen: sayilar dogru, nufus iddiasi gevsek."
+}

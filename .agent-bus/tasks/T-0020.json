@@ -1,0 +1,32 @@
+{
+  "id": "T-0020",
+  "from": "claude",
+  "to": "antigravity",
+  "created": "2026-09-15T06:45:00Z",
+  "title": "Sozluk restorasyonu + Exp C'nin checkpoint'in GERCEK vocab boyutuyla yeniden olcumu",
+  "spec": "T-0020 — Bayat sozluk kaymasinin degerlendirme tarafini kapat\n\nBAGLAM (T-0018/T-0019 dogrulamalarindan olculmus)\n\ndata/vocab.json diskte 31.357 token. Ama:\n  - data/kristal_carpenter_model.pt -> 32.137 satir\n  - data/kristal_model_step_b1_final.pt -> 32.156 satir\n  - data/kristal_model.pt / kristal_b1_5_best.pt -> 32.816 satir\nYani sozluk dosyasi modellerin GERISINDE. Sonuc: guncel tokenizer noktalama icin\n<UNK>(0) uretiyor, cunku vocab.json'da 9 noktalama ve 10 rakam token'i YOK\n(olculdu: '.',',','?','!','-',':',';','(',')','0'..'9' -> hepsi YOK).\n\nscripts/run_experiment_c.py:104 vocab.load('data/vocab.json') der ve\n:109 KristalLM(vocab_size=len(vocab.stoi)) ile modeli 31.357 satir olarak KURAR;\n:110-112 resize_state_dict(model, state) 32.137 satirlik checkpoint'i 31.357'ye\nKIRPAR. Bu kirpma SESSIZDIR: hicbir log/uyari yok. Yani Exp C, checkpoint'in\nKENDISINI degil KIRPILMIS bir varyantini olcmektedir.\n\nIYI HABER: kayip sozlukler GERI KAZANILABILIR ve bu kayipsizdir. data/vocab_entity.json\n32.852 token ve id'leri 0..32851 arasi kesintisiz; ilk 31.357 girdisi data/vocab.json\nile BIREBIR ayni (danisman olctu, iki yonlu kontrol True). Bloklar:\n  31357-32136 = 780 ozel isim (Atatürk=31357)\n  32137-32145 = 9 noktalama ('.'=32137 ... ')'=32145)\n  32146-32155 = 10 rakam\n  32156       = TENSE\n  32157-32815 = 660 ozel isim\n  32816-32851 = 36 varlik token'i\nHer ara sozluk = vocab_entity.json'un TAM ONEKI.\n\nYAPILACAKLAR\n\n1) Sozluk restorasyonu (SALT OKUMA girdi, YENI dosya cikti).\ndata/vocab_entity.json'u N icin tam onek olarak kirp:\n  - data/rebuild/vocab_carpenter_32137.json\n  - data/rebuild/vocab_b1_5_32816.json\nKural: stoi icinde id < N olan girdileri al; next_id = N yap. Yapi data/vocab.json\nile ayni anahtar semasini tasisin (stoi, next_id, ve varsa diger alanlar).\nDOGRULAMA (zorunlu, kanit olarak rapora yaz):\n  a) len(stoi)==N ve next_id==N\n  b) 32137 dosyasinin ilk 31357 girdisi data/vocab.json ile BIREBIR ayni\n  c) data/vocab.json ve data/vocab_entity.json DEGISMEDI (sha256 ayni)\n\n2) run_experiment_c.py'yi duzelt (SESSIZ KIRPMAYI GORUNUR KIL).\n  a) --vocab PATH argumani ekle, varsayilan 'data/vocab.json'.\n  b) --ckpt PATH argumani ekle, varsayilan 'data/kristal_carpenter_model.pt'.\n  c) Kosu ciktisina ve sonuc json'una 'model_rows' ve 'ckpt_rows' alanlarini ekle;\n     ikisi farkliysa ACIK UYARI bas (kirpma sessiz kalmasin).\n  d) REGRESYON: argumanlar verilmediginde davranis BIREBIR ayni kalmali.\n     Kanit: argumansiz kosu, exp_c_recheck_2026-09-15.json'daki sayilari uretmeli.\n\n3) Iki kollu olcum (IKISI DE MPS'TE, SANDBOX DISINDA).\n  KOL-A (baseline): --vocab data/vocab.json --ckpt data/kristal_carpenter_model.pt\n     Beklenen: exp_c_recheck_2026-09-15.json sayilariyla BIREBIR ayni.\n  KOL-B (restore):  --vocab data/rebuild/vocab_carpenter_32137.json --ckpt (ayni)\n     Beklenen: model artik 32137 satir; kirpma YOK.\n  Her iki kol icin 6 vakanin tamami kosulsun.\n\n4) Olculecek metrikler (her vaka icin, iki kol yan yana):\n  - prompt token sayisi\n  - prompt icindeki <UNK>(0) sayisi\n  - ':' karakterinin kodlandigi id (beklenen: KOL-A 0/<UNK>, KOL-B 32142)\n  - ham cikti (byte)\n  - beklenen cevapla kelime ortusmesi (sayi/toplam)\n  - model_rows vs ckpt_rows\n\n5) CIKTI: data/eval/vocab_restore_recheck_2026-09-15.json\n  Icerik: iki kol, 6 vaka, yukaridaki metrikler, ve kapanis hukmu:\n  'Sozluk restorasyonu C1 sonucunu DEGISTIRDI mi?' -> EVET/HAYIR + sayi.\n  Bu hukmu olcumden cikar, beklentiden degil. Danismanin on beklentisi\n  (baglayici DEGIL, yalnizca hipotez): onceki olcumde modele .bin icindeki\n  GERCEK egitim tensoru verildiginde de basarisiz oldugu icin (C1_1 5/36,\n  C1_2 4/54, C1_3 4/29) sonucun DEGISMEMESI beklenir. Yanlis cikarsa bu\n  onemli bir bulgudur, saklama.\n\nSINIRLAR\n- EGITIM KOSUSU BASLATMA. .pt URETME/DEGISTIRME. .bin URETME, YENIDEN DERLEME YOK.\n  Bu gorev SALT CIKARIM olcumudur.\n- data/vocab.json ve data/vocab_entity.json DONMUS: yalnizca OKU, DEGISTIRME.\n- src/llm/tokenizer.py DONMUS, src/compiler/** DONMUS: DEGISTIRME.\n- scripts/run_experiment_c.py'yi DEGISTIRMEK SERBEST (donmus degil), ama degisiklik\n  yalnizca yukaridaki 2a-2d ile sinirli kalsin; olcum mantigini degistirme.\n- train.py veya scripts/run_goal_pipeline.py'yi CALISTIRMA.\n- Yeni bagimlilik yok. git add -A YASAK.\n- Kosu SANDBOX DISINDA olmali; sandbox MPS'i gizler (device sessizce cpu'ya duser).\n\nBEKLENEN CIKTI\n- data/rebuild/vocab_carpenter_32137.json, data/rebuild/vocab_b1_5_32816.json\n- Duzeltilmis scripts/run_experiment_c.py (--vocab/--ckpt + gorunur kirpma)\n- data/eval/vocab_restore_recheck_2026-09-15.json\n- Walkthrough: hangi sayi hangi koldan, kirpma raporlanmis mi, hukum cumlesi.",
+  "writes": [
+    "data/rebuild/vocab_carpenter_32137.json",
+    "data/rebuild/vocab_b1_5_32816.json",
+    "scripts/run_experiment_c.py",
+    "data/eval/vocab_restore_recheck_2026-09-15.json"
+  ],
+  "acceptance": [
+    "A) data/rebuild/vocab_carpenter_32137.json: len(stoi)==32137, next_id==32137; ilk 31357 girdi data/vocab.json ile BIREBIR ayni (kanit)",
+    "B) data/rebuild/vocab_b1_5_32816.json: len(stoi)==32816, next_id==32816; ayni onek ozelligi dogrulanmis",
+    "C) run_experiment_c.py --vocab ve --ckpt argumanlarini aliyor; model_rows ve ckpt_rows RAPORLANIYOR, fark varsa acik uyari basilir",
+    "D) REGRESYON: argumansiz/baseline kosu exp_c_recheck_2026-09-15.json sayilarini BIREBIR uretiyor",
+    "E) KOL-B'de ':' artik 32142 (gercek id) olarak kodlaniyor; <UNK> sayisi olculmus ve raporlanmis",
+    "F) Iki kolun 6 vaka ham ciktisi yan yana kayitli; kelime ortusmesi sayisal",
+    "G) device == 'mps' (sandbox disi kosu; sandbox ici CPU'ya duser)",
+    "H) EGITIM YOK; degisen/uretilen .pt sayisi = 0, .bin sayisi = 0",
+    "I) data/vocab.json ve data/vocab_entity.json sha256 DEGISMEDI",
+    "J) pytest 123/123 (sandbox disi)",
+    "K) writes listesi disinda dosya degismedi (git status ile kanit)",
+    "L) Kapanis hukmu sayiyla verilmis: sozluk restorasyonu C1 sonucunu degistirdi mi? EVET/HAYIR + olcum"
+  ],
+  "status": "done",
+  "claimed_by": null,
+  "claimed_at": null,
+  "ttl_minutes": 240
+}

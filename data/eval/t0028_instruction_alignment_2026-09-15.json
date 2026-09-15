@@ -1,0 +1,788 @@
+{
+  "metadata": {
+    "task_id": "T-0028",
+    "title": "Talimat yüzeyi hizalaması (koda karşı denetim) + /docs_update ekinin talimat dosyalarını kapsaması",
+    "generated_at": "2026-09-15T11:51:22.859223+00:00",
+    "operator": "antigravity",
+    "repo_root": "/Users/hakankilicaslan/Git/tr_llm"
+  },
+  "A_inventory": {
+    "inventory_table": [
+      {
+        "path": "CLAUDE.md",
+        "role": "Temel komutlar, kodlama standartları ve proje güvenlik kısıtları",
+        "mtime_utc": "2026-09-15T11:43:43Z",
+        "line_count": 38,
+        "size_bytes": 2903,
+        "sha256_prefix12": "0c8c3435172c",
+        "sha256": "0c8c3435172c8e5e0da3d8a0c0e1f87c5bcf70b2bc9b62cb514dddb28022294d",
+        "git_tracked": true,
+        "in_original_docs_update_scope": false,
+        "in_extended_docs_update_scope": true
+      },
+      {
+        "path": "GEMINI.md",
+        "role": "Kristal-Vektörel mimarisi kavramsal çerçevesi ve leksikon felsefesi",
+        "mtime_utc": "2026-09-15T11:44:58Z",
+        "line_count": 34,
+        "size_bytes": 4267,
+        "sha256_prefix12": "5b4b03f1924a",
+        "sha256": "5b4b03f1924a0e5f8ac6f16b057029544d21abc338400311e7033beb1e8d33a2",
+        "git_tracked": true,
+        "in_original_docs_update_scope": false,
+        "in_extended_docs_update_scope": true
+      },
+      {
+        "path": "llmcoder.md",
+        "role": "Etmen öncelikli yazılım geliştirme kalıbı ve wiki kuralları",
+        "mtime_utc": "2026-09-15T11:49:21Z",
+        "line_count": 29,
+        "size_bytes": 1683,
+        "sha256_prefix12": "48c5610e5051",
+        "sha256": "48c5610e5051999aea1f92fb2bf98f103d91744bdce45777e5d23050aba3306e",
+        "git_tracked": true,
+        "in_original_docs_update_scope": false,
+        "in_extended_docs_update_scope": true
+      },
+      {
+        "path": ".gemini/AGENT.md",
+        "role": "Mimari başmühendisi persona tanımı ve ontolojik kurallar",
+        "mtime_utc": "2026-09-15T11:46:15Z",
+        "line_count": 62,
+        "size_bytes": 3483,
+        "sha256_prefix12": "8c20729f5413",
+        "sha256": "8c20729f5413ea5fa35d6fb2f32bae8ab929da6abbd2e85cda4ea893799f4db4",
+        "git_tracked": true,
+        "in_original_docs_update_scope": false,
+        "in_extended_docs_update_scope": true
+      },
+      {
+        "path": ".gemini/skills/Skill_1_Lexicon_Management.md",
+        "role": "Leksikon yönetimi ve kök havuzu morfoloji alt sistemi",
+        "mtime_utc": "2026-09-15T11:46:49Z",
+        "line_count": 69,
+        "size_bytes": 4283,
+        "sha256_prefix12": "515b6147a214",
+        "sha256": "515b6147a214c02e14f36f9bd0a1febbcd6d9563fb0d5dda8ddbbba7e887f5a6",
+        "git_tracked": true,
+        "in_original_docs_update_scope": false,
+        "in_extended_docs_update_scope": true
+      },
+      {
+        "path": ".gemini/skills/Skill_2_Morphotactics_Graph.md",
+        "role": "Morfotaktik durum makinesi ve ek dizilimi grafı",
+        "mtime_utc": "2026-09-09T18:18:21Z",
+        "line_count": 58,
+        "size_bytes": 4792,
+        "sha256_prefix12": "5a60ec7c10c4",
+        "sha256": "5a60ec7c10c4fb74eb46b00960c9503d641efe8e7cb094d077e4b04f0370f5f7",
+        "git_tracked": true,
+        "in_original_docs_update_scope": false,
+        "in_extended_docs_update_scope": true
+      },
+      {
+        "path": ".gemini/skills/Skill_3_Phonology_Engine.md",
+        "role": "Sesbilim motoru ve fonetik uyum kuralları",
+        "mtime_utc": "2026-09-09T18:18:26Z",
+        "line_count": 56,
+        "size_bytes": 3682,
+        "sha256_prefix12": "a56f4360a091",
+        "sha256": "a56f4360a091806b47b05d45109db06919fbf80ea81bc013986e1a8bd2f31b7e",
+        "git_tracked": true,
+        "in_original_docs_update_scope": false,
+        "in_extended_docs_update_scope": true
+      },
+      {
+        "path": ".gemini/skills/Skill_4_Kristal_Compiler.md",
+        "role": "Kristal derleyici ana orkestrasyon motoru",
+        "mtime_utc": "2026-09-09T18:18:31Z",
+        "line_count": 75,
+        "size_bytes": 4544,
+        "sha256_prefix12": "3815550c6f6f",
+        "sha256": "3815550c6f6f18e6d4e180fa678e0b79128979afb23bc6e21f58439330ef9b0c",
+        "git_tracked": true,
+        "in_original_docs_update_scope": false,
+        "in_extended_docs_update_scope": true
+      },
+      {
+        "path": ".gemini/skills/Skill_5_Nanochat_Integration.md",
+        "role": "KristalTokenizer ve akıl yürütme motoru entegrasyonu",
+        "mtime_utc": "2026-09-15T11:47:38Z",
+        "line_count": 65,
+        "size_bytes": 5591,
+        "sha256_prefix12": "439a9be3df66",
+        "sha256": "439a9be3df663f22f5a06e923d1c5f390a2fa80ce34d1f03f7b1f877a3cadb55",
+        "git_tracked": true,
+        "in_original_docs_update_scope": false,
+        "in_extended_docs_update_scope": true
+      },
+      {
+        "path": ".gemini/skills/Skill_6_VectorRover_and_RAG.md",
+        "role": "Evrensel vektör bellek ve RAG boru hattı",
+        "mtime_utc": "2026-09-09T18:18:47Z",
+        "line_count": 55,
+        "size_bytes": 4130,
+        "sha256_prefix12": "3702b160db62",
+        "sha256": "3702b160db624bb94b4b527863d12127faef3b6b5b24c74bcd8b87585703f5c7",
+        "git_tracked": true,
+        "in_original_docs_update_scope": false,
+        "in_extended_docs_update_scope": true
+      },
+      {
+        "path": ".gemini/skills/Skill_7_Pedagogy_and_Specialization.md",
+        "role": "3 fazlı pedagojik eğitim ve uzmanlaşma vizyonu",
+        "mtime_utc": "2026-09-15T11:48:30Z",
+        "line_count": 57,
+        "size_bytes": 3857,
+        "sha256_prefix12": "3b73730d9c8d",
+        "sha256": "3b73730d9c8de1c092a55aeda4458fabacdc98fc2c2113671790bb90087ee9dc",
+        "git_tracked": true,
+        "in_original_docs_update_scope": false,
+        "in_extended_docs_update_scope": true
+      },
+      {
+        "path": ".agent-bus/SPEC.md",
+        "role": "Yürürlükteki görev kuyruğu sözleşmesi ve yürütücü çevrimi",
+        "mtime_utc": "2026-09-14T13:03:27Z",
+        "line_count": 218,
+        "size_bytes": 10562,
+        "sha256_prefix12": "b90479328f3d",
+        "sha256": "b90479328f3d56bec72034c1c0a91398cd24efb1674f8a17b1c35915217437a8",
+        "git_tracked": true,
+        "in_original_docs_update_scope": false,
+        "in_extended_docs_update_scope": true
+      },
+      {
+        "path": ".agent-bus/frozen.json",
+        "role": "Donmuş yollar ve değiştirilemezlik gerekçeleri",
+        "mtime_utc": "2026-09-14T09:40:04Z",
+        "line_count": 24,
+        "size_bytes": 1086,
+        "sha256_prefix12": "c2eb9a69492d",
+        "sha256": "c2eb9a69492d7a4e6eba78d3a7b3ded1544182fe1d88950e7e7f627dacdf77fa",
+        "git_tracked": true,
+        "in_original_docs_update_scope": false,
+        "in_extended_docs_update_scope": true
+      },
+      {
+        "path": "README.md",
+        "role": "Proje vizyonu, mimari genel bakış ve yol haritası",
+        "mtime_utc": "2026-09-15T02:49:54Z",
+        "line_count": 258,
+        "size_bytes": 23328,
+        "sha256_prefix12": "4d554f9962f9",
+        "sha256": "4d554f9962f9405e39e8df8f3097225b199b6120a3c85adf0505cf74e9c0fe52",
+        "git_tracked": true,
+        "in_original_docs_update_scope": true,
+        "in_extended_docs_update_scope": true
+      },
+      {
+        "path": "USER_GUIDE.md",
+        "role": "Kullanıcı kılavuzu, iş akışları ve komut referansı",
+        "mtime_utc": "2026-09-15T02:50:18Z",
+        "line_count": 451,
+        "size_bytes": 22990,
+        "sha256_prefix12": "09d5fa5da4ae",
+        "sha256": "09d5fa5da4aeab61ea3fe97db058e7381350078260f54a3c219994ab2ae76397",
+        "git_tracked": true,
+        "in_original_docs_update_scope": true,
+        "in_extended_docs_update_scope": true
+      },
+      {
+        "path": "CHANGELOG.md",
+        "role": "Kronolojik sürüm ve geliştirme geçmişi",
+        "mtime_utc": "2026-09-15T03:30:22Z",
+        "line_count": 297,
+        "size_bytes": 28227,
+        "sha256_prefix12": "ba726f7e0484",
+        "sha256": "ba726f7e0484d3ffa3ff372c38e7be705140c089ce4a6809ebf7229b7f7a234b",
+        "git_tracked": true,
+        "in_original_docs_update_scope": true,
+        "in_extended_docs_update_scope": true
+      }
+    ],
+    "docs_directory_audit": {
+      "path": "docs/",
+      "exists_on_disk": false,
+      "is_directory": false,
+      "effective_original_scope_file_count": 3,
+      "effective_original_scope_files": [
+        "README.md",
+        "USER_GUIDE.md",
+        "CHANGELOG.md"
+      ],
+      "finding": "docs/ dizini diskte bulunmamaktadır. Dolayısıyla /docs_update yeteneğinin etkin tarama kümesi fiilen yalnızca 3 dosyadan (README/USER_GUIDE/CHANGELOG) ibarettir. Bu durum talimat dosyalarının 3-4,5 aydır güncellenmemesinin temel yapısal nedenidir."
+    },
+    "verdict": "DOGRULANDI"
+  },
+  "B_numerical_claims": {
+    "roots_tsv_four_definitions": {
+      "definition_1_raw_line_count": 52374,
+      "definition_1b_body_line_count": 52373,
+      "definition_2_unique_col0_lemma": 48200,
+      "definition_3_unique_tr_lower_lemma": 47916,
+      "definition_4_unique_nfc_lemma": 48200,
+      "definition_4b_unique_nfc_tr_lower_lemma": 47916,
+      "pos_breakdown": {
+        "NOUN": 33170,
+        "ADJ": 6352,
+        "VERB": 10364,
+        "INTERJ": 284,
+        "ADV": 2024,
+        "POSTP": 56,
+        "CONJ": 47,
+        "PRON": 76
+      },
+      "selected_definition_for_claim": "definition_2_unique_col0_lemma (48.200)",
+      "justification": "Morfotaktik ve ontolojik açıdan 'temel kök' (M_k), leksikondaki büyük/küçük harf duyarlı tekil lemma girdilerini ifade eder. Eş sesli kelimeler farklı POS etiketleriyle birden fazla satırda yer alabildiğinden (33.170 NOUN + 10.364 VERB + 6.352 ADJ + 2.024 ADV vb. = 52.373), tekil kök sayısı 48.200'dür."
+    },
+    "dataset_line_counts": {
+      "data/pedagogy/infancy_dataset.jsonl": 3682,
+      "data/pedagogy/parenting_deep_dataset.jsonl": 40001,
+      "data/pedagogy/lexical_semantics_dataset.jsonl": 25000,
+      "data/pedagogy/carpenter_specialization_dataset.jsonl": 5400,
+      "data/pedagogy/chat_conversations.jsonl": 6000,
+      "data/pedagogy/rag_interactive_dataset.jsonl": 6599,
+      "data/pedagogy/dpo_tokenized.jsonl": 321,
+      "data/pedagogy/dpo_all_tokenized.jsonl": 6198
+    },
+    "numerical_claims_audit": [
+      {
+        "claim_text": "approximately 20,500 base lemmas (M_k)",
+        "source_location": "GEMINI.md:34",
+        "population": "lexicon_roots (data/lexicon/roots.tsv)",
+        "measured_value": 48200,
+        "definition": "unique 1st column lemma",
+        "verdict": "BAYAT",
+        "notes": "Mayıs 2026'daki erken ontoloji tasarımında hedeflenen ~20.500 sayısı, leksikonun Eylül 2026 itibarıyla 48.200 tekil lemmaya (52.373 satır) genişlemesiyle güncelliğini yitirmiştir."
+      },
+      {
+        "claim_text": "~20.500 tokenlik kısıtlı ve hiper-verimli bir morfolojik sözlük",
+        "source_location": ".gemini/AGENT.md:15",
+        "population": "lexicon_roots_and_vocab",
+        "measured_value": {
+          "roots_tsv_unique_lemmas": 48200,
+          "vocab_json_tokens": 31357,
+          "vocab_b1_5_tokens": 32816
+        },
+        "definition": "Kök leksikonu tekil lemmaları vs. tokenizer sözlük boyutu",
+        "verdict": "BAYAT",
+        "notes": "İddia kök havuzu ile token sözlüğünü tek bir cümlede harmanlamıştır. Leksikonda 48.200 tekil lemma varken, aktif tokenizer sözlükleri 31.357 ile 32.852 token aralığındadır."
+      },
+      {
+        "claim_text": "20.500 token sözlüğüyle saatler içinde sıfırdan eğitilebilen",
+        "source_location": ".gemini/AGENT.md:52",
+        "population": "tokenizer_vocab (data/vocab.json, vocab_b1_5_32816.json)",
+        "measured_value": "31.357 - 32.852",
+        "definition": "Tokenizer Vocabulary stoi uzunluğu",
+        "verdict": "BAYAT",
+        "notes": "Model hiçbir zaman 20.500 satırlık sözlükle eğitilmemiştir; en erken taban modeli (kristal_model_base.pt) 25.665, ara modeller 31.357, güncel B1.5 ve servis modelleri 32.816 satırdır."
+      },
+      {
+        "claim_text": "Yaklaşık 20.500 doğrulanmış temel kök (roots.tsv)",
+        "source_location": ".gemini/skills/Skill_1_Lexicon_Management.md:45",
+        "population": "lexicon_roots (data/lexicon/roots.tsv)",
+        "measured_value": 48200,
+        "definition": "unique 1st column lemma",
+        "verdict": "BAYAT",
+        "notes": "Kök havuzu 48.200 tekil lemmaya ulaşmıştır."
+      },
+      {
+        "claim_text": "20.500 temel kökün sözlük tanımları ve semantik alanları",
+        "source_location": ".gemini/skills/Skill_7_Pedagogy_and_Specialization.md:18",
+        "population": "pedagogy_dataset (data/pedagogy/lexical_semantics_dataset.jsonl)",
+        "measured_value": 25000,
+        "definition": "Satır / kayıt sayısı",
+        "verdict": "BAYAT",
+        "notes": "TDK GTS anlamsal sözlük veri kümesinde 20.500 değil, tam 25.000 kayıt yer almaktadır."
+      },
+      {
+        "claim_text": "| **TDK GTS Anlamsal Sözlük** | lexical_semantics_dataset.jsonl | 20.500 |",
+        "source_location": ".gemini/skills/Skill_7_Pedagogy_and_Specialization.md:33",
+        "population": "pedagogy_dataset (data/pedagogy/lexical_semantics_dataset.jsonl)",
+        "measured_value": 25000,
+        "definition": "Satır / kayıt sayısı",
+        "verdict": "BAYAT",
+        "notes": "Tablo satırındaki 20.500 değeri diskteki 25.000 kayıtla uyuşmamaktadır."
+      },
+      {
+        "claim_text": "Hacim: 1.000 örnek (data/pedagogy/infancy_dataset.jsonl)",
+        "source_location": ".gemini/skills/Skill_7_Pedagogy_and_Specialization.md:13,31",
+        "population": "pedagogy_dataset (data/pedagogy/infancy_dataset.jsonl)",
+        "measured_value": 3682,
+        "definition": "Satır / kayıt sayısı",
+        "verdict": "BAYAT",
+        "notes": "Bebeklik veri kümesi 1.000 değil, 3.682 örnektir."
+      },
+      {
+        "claim_text": "Ebeveynlik Derin: 30.000 örnek",
+        "source_location": ".gemini/skills/Skill_7_Pedagogy_and_Specialization.md:17,32",
+        "population": "pedagogy_dataset (data/pedagogy/parenting_deep_dataset.jsonl)",
+        "measured_value": 40001,
+        "definition": "Satır / kayıt sayısı",
+        "verdict": "BAYAT",
+        "notes": "Derin ebeveynlik veri kümesi 30.000 değil, 40.001 örnektir."
+      },
+      {
+        "claim_text": "Alan Uzmanlığı (Marangozluk & Zanaat): 10.000 örnek",
+        "source_location": ".gemini/skills/Skill_7_Pedagogy_and_Specialization.md:21,34",
+        "population": "pedagogy_dataset (data/pedagogy/carpenter_specialization_dataset.jsonl)",
+        "measured_value": 5400,
+        "definition": "Satır / kayıt sayısı",
+        "verdict": "BAYAT",
+        "notes": "Marangozluk uzmanlık kümesi 10.000 değil, 5.400 örnektir."
+      },
+      {
+        "claim_text": "Temel sözlük ~31.322 token kapasitesine sahiptir",
+        "source_location": ".gemini/skills/Skill_5_Nanochat_Integration.md:24",
+        "population": "tokenizer_vocab (data/vocab.json)",
+        "measured_value": 31357,
+        "definition": "Vocabulary stoi uzunluğu",
+        "verdict": "BAYAT",
+        "notes": "data/vocab.json tam 31.357 tokendir (fark: 35 token eksik bildirilmiştir)."
+      }
+    ]
+  },
+  "C_temporal_window_analysis": {
+    "case_frozen_json_48614_lemma": {
+      "claim_location": ".agent-bus/frozen.json:19 _rationale['data/lexicon/**']",
+      "claim_text": "roots.tsv — 48.614 lemma; sözlük değişikliği tüm tokenizasyonu kaydırır",
+      "frozen_json_mtime_utc": "2026-09-14T09:40:04Z",
+      "roots_tsv_mtime_utc": "2026-09-14T18:50:29Z",
+      "git_commit_status": {
+        "latest_git_commit_touching_roots": "d75e71d (2026-09-09T18:23:15Z)",
+        "git_head_roots_body_lines": 52373,
+        "git_head_roots_unique_lemmas": 48200,
+        "working_tree_diff_vs_head": "0 fark (çalışma ağacındaki roots.tsv HEAD ile birebir özdeştir)"
+      },
+      "temporal_verdict": "YANLIS",
+      "temporal_analysis": "frozen.json dosyasının mtime değeri (2026-09-14T09:40:04Z), roots.tsv'nin disk mtime değerinden (2026-09-14T18:50:29Z) eskidir. Fakat git kayıtları incelendiğinde roots.tsv'nin en son 9 Eylül 2026'da (d75e71d) güncellendiği, çalışma ağacında hiçbir değişiklik olmadığı (git diff boş) ve 14 Eylül saat 09:40'ta dosyanın TAM OLARAK bugünkü 48.200 tekil lemma / 52.373 satır boyutunda olduğu kanıtlanmıştır. Dolayısıyla 48.614 sayısı, dosyanın sonradan değişmesinden kaynaklanan 'BAYAT' bir sayı DEĞİLDİR; iddianın yazıldığı anda yazar tarafından yaklaşık/hatalı hesaplanmış (+414 lemma sapma) bir 'YANLIŞ' sayıdır. Bu ayrım, tarihsel hata ile bayatlık arasındaki farkı netleştirmektedir."
+    }
+  },
+  "D_behavioral_claims": {
+    "claude_md_command_verification": [
+      {
+        "command": "venv/bin/pytest",
+        "purpose": "Birim Testlerini Çalıştır",
+        "exit_code": 0,
+        "status": "DOGRULANDI",
+        "details": "........................................................................ [ 54%]\n............................................................             [100%]\n132 passed in 7.65s"
+      },
+      {
+        "command": "venv/bin/python test_model.py",
+        "purpose": "Model Çıkarım Testi",
+        "exit_code": 1,
+        "status": "YANLIS (Belgelenmiş komut kırık)",
+        "stdout_snippet": [
+          "============================================================",
+          " KRİSTAL-VEKTÖREL MİMARİSİ: MODEL TEST VE ÇIKARIM (INFERENCE)",
+          "============================================================",
+          "Çıkarım yapılacak cihaz: mps",
+          "Sözlük Yüklendi. Kelime dağarcığı boyutu: 31357"
+        ],
+        "stderr_snippet": [
+          "    ...<3 lines>...",
+          "    )",
+          "RuntimeError: Error(s) in loading state_dict for KristalLM:",
+          "\tsize mismatch for embedding.embedding.weight: copying a param with shape torch.Size([32816, 768]) from checkpoint, the shape in current model is torch.Size([31357, 768]).",
+          "\tsize mismatch for lm_head.weight: copying a param with shape torch.Size([32816, 768]) from checkpoint, the shape in current model is torch.Size([31357, 768]).",
+          "\tsize mismatch for lm_head.bias: copying a param with shape torch.Size([32816]) from checkpoint, the shape in current model is torch.Size([31357])."
+        ],
+        "root_cause": "test_model.py satır 25-28'de data/vocab.json (31.357) yüklemekte, satır 37'de KristalLM'i 31.357 sözlük boyutuyla kurmakta ve satır 49'da load_state_dict(strict=False) ile 32.816 satırlı kristal_model.pt'yi yüklemeye çalışmaktadır. strict=False PyTorch'ta şekil uyuşmazlığını yutmadığı ve betik kanonik resizer'ı (src.llm.prompt_contract.resize_state_dict) çağırmadığı için RuntimeError ile çökmektedir.",
+        "canonical_alternative": "src/llm/prompt_contract.py::resize_state_dict ve scripts/run_experiment_c.py"
+      },
+      {
+        "command": "venv/bin/python scripts/prepare_wiki_dataset.py",
+        "purpose": "Wikipedia Veri Kümesini Hazırla",
+        "file_exists": true,
+        "py_compile_exit": 0,
+        "status": "DOGRULANDI"
+      },
+      {
+        "command": "venv/bin/python scripts/prepare_all_phases_with_wiki.py",
+        "purpose": "5 Fazlı Birleşik Veri Kümesini Derle",
+        "file_exists": true,
+        "py_compile_exit": 0,
+        "status": "DOGRULANDI"
+      },
+      {
+        "command": "venv/bin/python train.py",
+        "purpose": "Modeli Eğit (MPS GPU)",
+        "file_exists": true,
+        "py_compile_exit": 0,
+        "status": "DOGRULANDI"
+      }
+    ],
+    "gemini_md_non_code_repository_claim": {
+      "claim_text": "It is a non-code repository that defines the 'Kristal-Vektörel Mimarisi'",
+      "source_location": "GEMINI.md:5",
+      "measured_counts": {
+        "src_python_files": 26,
+        "src_total_files": 51,
+        "tests_python_files": 21,
+        "tests_total_files": 69,
+        "scripts_python_files": 82,
+        "scripts_total_files": 91,
+        "top_level_checkpoints_pt": 23,
+        "recursive_checkpoints_pt": 38
+      },
+      "verdict": "YANLIS (Miras alınmış bayat açıklama)",
+      "analysis": "Repoda 129 adet Python kaynak dosyası, 132 geçen birim testi ve 23 aktif PyTorch checkpoint'i bulunmaktadır. Proje tam teşekküllü bir üretim kod tabanıdır."
+    }
+  },
+  "E_conflict_table": {
+    "rule": "KOD KAZANIR. Koddan türetilmemiş hiçbir tahmini değer kabul edilmez.",
+    "conflict_table": [
+      {
+        "id": "C-01",
+        "subject": "Depo Türü Tanımı",
+        "source": "GEMINI.md:5",
+        "claim": "Non-code repository",
+        "measurement": "src (26 py), tests (21 py), scripts (82 py), data/*.pt (23 checkpoint)",
+        "verdict": "YANLIS",
+        "winner": "KOD KAZANIR",
+        "action": "GEMINI.md güncellendi (tam teşekküllü referans kod tabanı olarak açıklandı)"
+      },
+      {
+        "id": "C-02",
+        "subject": "Kök Sayısı",
+        "source": "GEMINI.md:34",
+        "claim": "approximately 20,500 base lemmas",
+        "measurement": "48.200 tekil lemma / 52.373 satır (roots.tsv)",
+        "verdict": "BAYAT",
+        "winner": "KOD KAZANIR",
+        "action": "GEMINI.md güncellendi (48,200 unique base lemmas)"
+      },
+      {
+        "id": "C-03",
+        "subject": "Ajan Sözlük Tanımı",
+        "source": ".gemini/AGENT.md:15",
+        "claim": "~20.500 tokenlik kısıtlı sözlük",
+        "measurement": "Leksikon: 48.200 lemma; Tokenizer: 31.357 - 32.852 token",
+        "verdict": "BAYAT",
+        "winner": "KOD KAZANIR",
+        "action": ".gemini/AGENT.md güncellendi (popülasyonlar ayrıştırıldı)"
+      },
+      {
+        "id": "C-04",
+        "subject": "Nanochat Sözlüğü",
+        "source": ".gemini/AGENT.md:52",
+        "claim": "20.500 token sözlüğüyle",
+        "measurement": "31.357 - 32.852 token",
+        "verdict": "BAYAT",
+        "winner": "KOD KAZANIR",
+        "action": ".gemini/AGENT.md güncellendi (31.357 - 32.852 token)"
+      },
+      {
+        "id": "C-05",
+        "subject": "Leksikon Yönetimi Kök Havuzu",
+        "source": "Skill_1_Lexicon_Management.md:45",
+        "claim": "Yaklaşık 20.500 doğrulanmış temel kök",
+        "measurement": "48.200 tekil kök / 52.373 leksikon kaydı",
+        "verdict": "BAYAT",
+        "winner": "KOD KAZANIR",
+        "action": "Skill_1 güncellendi"
+      },
+      {
+        "id": "C-06",
+        "subject": "Temel Sözlük Kapasitesi",
+        "source": "Skill_5_Nanochat_Integration.md:24",
+        "claim": "Temel sözlük ~31.322 token",
+        "measurement": "31.357 token (data/vocab.json)",
+        "verdict": "BAYAT",
+        "winner": "KOD KAZANIR",
+        "action": "Skill_5 güncellendi (31.357 token)"
+      },
+      {
+        "id": "C-07",
+        "subject": "Pedagoji Veri Kümeleri Boyutları",
+        "source": "Skill_7_Pedagogy_and_Specialization.md:13,18,21,31-34",
+        "claim": "Infancy: 1.000, Parenting: 30.000, GTS: 20.500, Carpenter: 10.000",
+        "measurement": "Infancy: 3.682, Parenting: 40.001, GTS: 25.000, Carpenter: 5.400",
+        "verdict": "BAYAT",
+        "winner": "KOD KAZANIR",
+        "action": "Skill_7 metin ve tablosu diskteki sayılarla birebir güncellendi"
+      },
+      {
+        "id": "C-08",
+        "subject": "frozen.json Gerekçesi Kök Sayısı",
+        "source": ".agent-bus/frozen.json:19",
+        "claim": "roots.tsv — 48.614 lemma",
+        "measurement": "48.200 tekil lemma / 52.373 satır (roots.tsv)",
+        "verdict": "YANLIS",
+        "winner": "KOD KAZANIR",
+        "action": "frozen.json donmuş/okunur sözleşme olduğu için değiştirilmedi; raporda açıklandı"
+      },
+      {
+        "id": "C-09",
+        "subject": "Model Çıkarım Testi",
+        "source": "CLAUDE.md:11",
+        "claim": "venv/bin/python test_model.py (başarılı çıkarım)",
+        "measurement": "Exit code 1 (RuntimeError: size mismatch 32816 vs 31357)",
+        "verdict": "YANLIS",
+        "winner": "KOD KAZANIR",
+        "action": "CLAUDE.md'ye sınırlılık uyarısı ve kanonik resizer alternatifi eklendi"
+      },
+      {
+        "id": "C-10",
+        "subject": "CLAUDE.md Sert Güvenlik Kısıtları",
+        "source": "CLAUDE.md (genel)",
+        "claim": "Proje güvenlik kısıtları belgelenmemişti",
+        "measurement": "SPEC.md Kural 1, Kural 2, frozen.json kısıtları repoda aktif",
+        "verdict": "BAYAT / EKSIK",
+        "winner": "KOD KAZANIR",
+        "action": "CLAUDE.md'ye SPEC.md çıpalı güvenlik kısıtları bölümü eklendi"
+      },
+      {
+        "id": "C-11",
+        "subject": "Wiki Senkronizasyon Kuralı",
+        "source": "llmcoder.md:27",
+        "claim": "Her yapısal değişiklikten sonra wiki/ güncellenmelidir",
+        "measurement": "wiki/ 22 Haziran 2026'dan beri dondurulmuş (11 dosya; Eylül işi 0 eşleşme)",
+        "verdict": "BAYAT",
+        "winner": "KOD KAZANIR",
+        "action": "llmcoder.md'ye T-0029 incelemesi ve canlı takip notu eklendi"
+      }
+    ]
+  },
+  "F_corrections_made": {
+    "modified_files": [
+      {
+        "path": "CLAUDE.md",
+        "language": "Türkçe (korundu)",
+        "changes": [
+          {
+            "section": "Temel Komutlar",
+            "before": "* **Model Çıkarım Testi:** `venv/bin/python test_model.py`",
+            "after": "* **Model Çıkarım Testi (Bilinen Boyut Sınırlılığı):** `venv/bin/python test_model.py` (+ UYARI kutusu: 32816 vs 31357 boyut uyumsuzluğu ve kanonik resizer yönlendirmesi)"
+          },
+          {
+            "section": "Yeni Bölüm Eklendi",
+            "before": "(Mevcut değildi)",
+            "after": "## 🛡️ Proje Güvenlik Kısıtları ve Sözleşme Çıpası (Kiralama, Donmuş Yollar, Veri Kısıtı, Git Yasağı)"
+          }
+        ]
+      },
+      {
+        "path": "GEMINI.md",
+        "language": "English (korundu)",
+        "changes": [
+          {
+            "line": 5,
+            "before": "It is a non-code repository that defines the 'Kristal-Vektörel Mimarisi'...",
+            "after": "This directory contains the architectural design, theoretical framework, and reference implementation... hosts a full production codebase (`src/` compiler and tokenizer, `tests/` test suite, `scripts/` training and evaluation pipelines, and active PyTorch checkpoints under `data/`)..."
+          },
+          {
+            "line": 34,
+            "before": "...approximately 20,500 base lemmas (`M_k`) with strict phonetic attributes...",
+            "after": "...48,200 unique base lemmas (`M_k`) across 52,373 entries with strict phonetic attributes..."
+          }
+        ]
+      },
+      {
+        "path": ".gemini/AGENT.md",
+        "language": "Türkçe (korundu)",
+        "changes": [
+          {
+            "line": 15,
+            "before": "Sıfır Bilinmeyen Kelime (Zero OOV): İstatistiksel bulanıklık yerine, ~20.500 tokenlik kısıtlı ve hiper-verimli bir morfolojik sözlük hedeflenerek devasa BPE sözlüklerinin maliyet darboğazı engellenecektir",
+            "after": "Sıfır Bilinmeyen Kelime (Zero OOV): İstatistiksel bulanıklık yerine, kök havuzunda 48.200 tekil temel lemma (52.373 leksikon kaydı, roots.tsv) ve model düzeyinde 31.357 - 32.852 tokenlik kısıtlı ve hiper-verimli bir morfolojik sözlük hedeflenerek devasa BPE sözlüklerinin maliyet darboğazı engellenecektir"
+          },
+          {
+            "line": 52,
+            "before": "Nanochat Entegrasyonu: Milyarlarca parametrelik devasa LLM'ler yerine, KristalTokenizer ile donatılmış, 20.500 token sözlüğüyle saatler içinde sıfırdan eğitilebilen düşük maliyetli hızlı akıl yürütme motorudur",
+            "after": "Nanochat Entegrasyonu: Milyarlarca parametrelik devasa LLM'ler yerine, KristalTokenizer ile donatılmış, 31.357 - 32.852 token sözlüğüyle saatler içinde sıfırdan eğitilebilen düşük maliyetli hızlı akıl yürütme motorudur"
+          }
+        ]
+      },
+      {
+        "path": ".gemini/skills/Skill_1_Lexicon_Management.md",
+        "language": "Türkçe (korundu)",
+        "changes": [
+          {
+            "line": 45,
+            "before": "*   **Kök Havuzu:** Yaklaşık 20.500 doğrulanmış temel kök (`roots.tsv`).",
+            "after": "*   **Kök Havuzu:** 48.200 doğrulanmış tekil temel kök (52.373 leksikon kaydı, `roots.tsv`)."
+          }
+        ]
+      },
+      {
+        "path": ".gemini/skills/Skill_5_Nanochat_Integration.md",
+        "language": "Türkçe (korundu)",
+        "changes": [
+          {
+            "line": 24,
+            "before": "*   **Sözlük Boyutu ve Genişleme:** Temel sözlük ~31.322 token kapasitesine sahiptir. Yeni morfemler `add_token(token)` metoduyla dinamik eklenir.",
+            "after": "*   **Sözlük Boyutu ve Genişleme:** Temel sözlük 31.357 token kapasitesine sahiptir (`data/vocab.json`). Güncel modeller 32.816 (`data/rebuild/vocab_b1_5_32816.json`) ve 32.852 (`data/vocab_entity.json`) token boyutundadır. Yeni morfemler `add_token(token)` metoduyla dinamik eklenir."
+          }
+        ]
+      },
+      {
+        "path": ".gemini/skills/Skill_7_Pedagogy_and_Specialization.md",
+        "language": "Türkçe (korundu)",
+        "changes": [
+          {
+            "lines": "13, 18, 21, 31-37",
+            "before": "Infancy: 1.000, Parenting Deep: 30.000, GTS: 20.500, Carpenter: 10.000, DPO: 5.792",
+            "after": "Infancy: 3.682, Parenting Deep: 40.001, GTS: 25.000, Carpenter: 5.400, DPO (Aktif/Tüm): 321 / 6.198"
+          }
+        ]
+      },
+      {
+        "path": "llmcoder.md",
+        "language": "Türkçe (korundu)",
+        "changes": [
+          {
+            "line": 27,
+            "before": "2. **Wiki Senkronizasyonu:** Kodda yapılan her yapısal değişiklikten sonra `wiki/` altındaki ilgili dokümanlar güncellenmelidir.",
+            "after": "2. **Wiki Senkronizasyonu (T-0029 İncelemesinde):** Kodda yapılan her yapısal değişiklikten sonra `wiki/` altındaki ilgili dokümanlar güncellenmelidir (Not: Haziran 2026'dan beri dondurulan `wiki/` dizininin canlandırılması veya kaldırılması T-0029 kapsamında kararlaştırılacaktır; güncel mimari kararlar `.agent-bus/` ve `data/eval/` üzerinden yürütülmektedir)."
+          }
+        ]
+      }
+    ],
+    "unmodified_files": [
+      {
+        "path": ".gemini/skills/Skill_2_Morphotactics_Graph.md",
+        "rationale": "Morfotaktik durum makinesi kuralları ve yönlendirilmiş çizge algoritmaları kodla tam uyumludur; bayat sayısal iddia içermemektedir."
+      },
+      {
+        "path": ".gemini/skills/Skill_3_Phonology_Engine.md",
+        "rationale": "Fonetik sesbilim kuralları (ünlü uyumu, ünsüz yumuşaması) kurallı motorla uyumludur; düzeltme gerekmemiştir."
+      },
+      {
+        "path": ".gemini/skills/Skill_4_Kristal_Compiler.md",
+        "rationale": "Derleyici DFS algoritması ve CrystalPack şeması geçerlidir; düzeltme gerekmemiştir."
+      },
+      {
+        "path": ".gemini/skills/Skill_6_VectorRover_and_RAG.md",
+        "rationale": "Vektör bellek, stop words ve RAG mimari prensipleri günceldir; düzeltme gerekmemiştir."
+      },
+      {
+        "path": ".agent-bus/SPEC.md",
+        "rationale": "Canlı ve yürürlükteki yürütücü sözleşmesidir; salt-okunurdur ve değiştirilemez."
+      },
+      {
+        "path": ".agent-bus/frozen.json",
+        "rationale": "Donmuş yollar sözleşmesidir; salt-okunurdur ve değiştirilemez."
+      }
+    ]
+  },
+  "G_claude_md_strict_constraints": {
+    "status": "DOGRULANDI",
+    "anchored_specification": ".agent-bus/SPEC.md",
+    "added_constraints": [
+      "Yazmadan önce bus_acquire_lease kiralama zorunluluğu (SPEC.md Kural 1)",
+      "Donmuş yollar (.agent-bus/frozen.json) salt-okunurdur (SPEC.md Kural 2)",
+      "data/** dizini salt-okunurdur; TEK istisna data/eval/ rapor dizinidir",
+      "git add -A veya git add . kullanımı kesinlikle yasaktır",
+      "Çıpa kuralı: Kurallar CLAUDE.md'de yinelenmez, canlı sözleşme belgesi olan SPEC.md'ye atıfla bağlanır"
+    ]
+  },
+  "H_docs_update_skill_extension": {
+    "status": "DOGRULANDI",
+    "external_file_path": "/Users/hakankilicaslan/.gemini/config/skills/docs_update/SKILL.md",
+    "is_repo_external": true,
+    "bus_lease_exemption_declared": true,
+    "safety_audit": {
+      "backup_path": "scratch/docs_update_SKILL.md.bak",
+      "backup_sha256": "b5d174b16d5e47e6774fbd078752e1610e4e8aa6cce3515669b738387503370b",
+      "post_edit_sha256": "5e082ae8215ca67fa57eb461e555ce74b88a5fd31d23fcb390e383a5114696d7",
+      "frontmatter_yaml_parsed_cleanly": true,
+      "name_field_intact": "docs_update",
+      "description_field_intact": true,
+      "standard_sections_preserved": [
+        "README.md Güncelleme Standartları",
+        "USER_GUIDE.md Güncelleme Standartları",
+        "CHANGELOG.md Güncelleme Standartları"
+      ]
+    },
+    "added_capabilities": [
+      "Tarama kümesine talimat ve sözleşme dosyaları eklendi (CLAUDE.md, GEMINI.md, llmcoder.md, .gemini/AGENT.md, .gemini/skills/*.md, .agent-bus/SPEC.md)",
+      "Aşama 2.b eklendi: Talimat Çelişki Denetimi (KOD KAZANIR ilkesiyle sayısal ve davranışsal iddiaların yeniden üretilip sınanması)",
+      "Uygulama kurallarına güvenlik sınırları eklendi (git add -A yasağı, data/** salt-okunurluğu + data/eval/ istisnası, donmuş yollar ve kiralama şartı)"
+    ]
+  },
+  "I_test_model_proposal": {
+    "status": "PROPOSAL_ONLY (Karar verilmedi, test_model.py değiştirilmedi)",
+    "diagnosed_defect": "test_model.py satır 25'te data/vocab.json (31.357) yükleyip satır 37'de modeli 31.357 sözlükle kuruyor; satır 38'de kristal_model.pt (32.816 satır) yüklendiğinde load_state_dict(strict=False) şekil uyumsuzluğu nedeniyle RuntimeError fırlatıyor. Kanonik resize_state_dict fonksiyonunu hiç çağırmıyor.",
+    "options": [
+      {
+        "option_id": "OPT-1",
+        "title": "Kanonik Resizer Entegrasyonu (Minimal Düzeltme)",
+        "description": "test_model.py içine 'from src.llm.prompt_contract import resize_state_dict' satırı eklenir ve load_state_dict öncesinde çağrılır.",
+        "pros": "Projedeki kanonik sözleşmeyle anında hizalanır; ~5 satır kod; tüm modelleri uyarılı yükler.",
+        "cons": "Eğer model 31.357 sözlükle kurulursa 32.816 satırlık modelin 1.459 satırı kırpılır (tam potansiyeli test edilmez).",
+        "cost": "Çok Düşük (~15 dakika)"
+      },
+      {
+        "option_id": "OPT-2",
+        "title": "Dinamik Checkpoint Satır Algılama ve Sözlük Seçimi (Tam Çözüm)",
+        "description": "test_model.py checkpoint'i okur, lm_head_rows değerini tespit eder (örn. 32.816) ve matching sözlüğü (data/rebuild/vocab_b1_5_32816.json) yükleyerek modeli kurar.",
+        "pros": "Sıfır kırpma, tam yerel sözlükle doğru çıkarım; kanonik yolla %100 uyumlu.",
+        "cons": "test_model.py içinde sözlük eşleştirme mantığı gerektirir (~15 satır).",
+        "cost": "Düşük (~30 dakika)"
+      },
+      {
+        "option_id": "OPT-3",
+        "title": "test_model.py'nin Kullanımdan Kaldırılması (Deprecation)",
+        "description": "test_model.py kök dizinden arşivlenir veya kaldırılır; CLAUDE.md yönergesi çıkarım testi için scripts/run_experiment_c.py betiğine yönlendirilir.",
+        "pros": "Kök dizindeki eski tekil betik bakım yükü elenir; tek çıkarım değerlendirme standardı Exp C olur.",
+        "cons": "Bağımsız hızlı bir model kontrol betiği isteyen kullanıcılar için ayrı bir betik gerekebilir.",
+        "cost": "Düşük (~20 dakika)"
+      }
+    ],
+    "recommendation": "Gelecek turda OPT-2 (veya en azından OPT-1) uygulanarak test_model.py'nin kanonik prompt sözleşmesine bağlanması önerilir."
+  },
+  "J_llmcoder_wiki_analysis_and_proposal": {
+    "status": "PROPOSAL_ONLY (wiki/ değiştirilmedi, karar T-0029'a bırakıldı)",
+    "current_wiki_state": {
+      "file_count": 11,
+      "earliest_mtime_utc": "2026-06-14T18:18:23Z",
+      "latest_mtime_utc": "2026-06-22T02:49:37Z",
+      "frontmatter_coverage": "11/11 (%100 YAML frontmatter mevcut)",
+      "file_list": [
+        "wiki/concepts/causal_prompt_masking.md",
+        "wiki/concepts/rope.md",
+        "wiki/concepts/sign_inversion.md",
+        "wiki/entities/chat_prompt.md",
+        "wiki/entities/kristal_lm.md",
+        "wiki/entities/kristal_tokenizer.md",
+        "wiki/entities/rag_pipeline.md",
+        "wiki/entities/vector_memory.md",
+        "wiki/index.md",
+        "wiki/log.md",
+        "wiki/synthesis.md"
+      ]
+    },
+    "september_2026_coverage": {
+      "evaluated_concepts": [
+        "b1_5",
+        "carpenter",
+        "rag_arm",
+        "prompt_contract",
+        "agent_bus",
+        "cot_vault"
+      ],
+      "matches_in_wiki": 0,
+      "finding": "Eylül 2026 döneminde geliştirilen B1.5, Marangoz ceketi, 3'lü RAG kolları, kanonik prompt sözleşmesi, agent-bus görev kuyruğu ve 23 checkpoint mimarisi wiki'ye HİÇ GİRMEMİŞTİR. wiki/ 22 Haziran 2026'dan bu yana (~85 gündür) dondurulmuş durumdadır."
+    },
+    "options": [
+      {
+        "option_id": "WIKI-OPT-A",
+        "title": "CANLANDIR (Revive & Synchronize)",
+        "description": "Eylül 2026 mimari bileşenleri için wiki/ altına ~10-15 yeni entity/concept dokümanı yazılır; llmcoder kuralı her görevde zorunlu kılınır.",
+        "pros": "Geleneksel wiki felsefesi ('Kod Gövdedir, Wiki Zihindir') yaşatılır.",
+        "cons": "Çok yüksek çift belgeleme yükü; agent-bus'ın SPEC/task/result mekanizmasıyla sürekli senkronizasyon gerektirir; bayatlama riski çok yüksektir.",
+        "cost": "Yüksek (T-0029 kapsamında ~3-4 saatlik yazım + sürekli bakım)"
+      },
+      {
+        "option_id": "WIKI-OPT-B",
+        "title": "KALDIR / AGENT-BUS VE DOCS İLE HİZALA (Deprecate or Consolidate)",
+        "description": "wiki/ arşive kaldırılır; llmcoder.md'deki 'Wiki Senkronizasyonu' kuralı güncel gerçeklikle (.agent-bus/ ve data/eval/ raporlama döngüsü) hizalanır.",
+        "pros": "Çift başlılık ve bayat dokümantasyon birikimi tamamen engellenir; tek yetkili yürütücü sözleşmesi agent-bus kalır; sıfır bakım maliyeti.",
+        "cons": "Eski wiki sayfaları doğrudan erişimden çıkarılır (arşiv dizinine taşınabilir).",
+        "cost": "Çok Düşük (~30 dakika)"
+      }
+    ]
+  }
+}

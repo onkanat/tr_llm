@@ -1,0 +1,185 @@
+{
+  "metadata": {
+    "task_id": "T-0030",
+    "title": "Wiki canlandirma: Eylul 2026 mimari isinin wiki/ yuzeyine islenmesi + llmcoder.md bayat ileri-atfinin duzeltilmesi",
+    "generated_at": "2026-09-15T13:30:56.644407+00:00",
+    "operator": "antigravity",
+    "status": "done"
+  },
+  "files_audited": [
+    {
+      "path": "wiki/concepts/b1_5_split_contract.md",
+      "action": "added",
+      "sha256": "02ff0ce6c27d5685fad06248b7cd5dff86d5c9d1e1040db995fd000cb96eab41",
+      "line_count": 43,
+      "size_bytes": 2525
+    },
+    {
+      "path": "wiki/concepts/canonical_prompt_contract.md",
+      "action": "added",
+      "sha256": "c5b01f7f00b8e7952568164f6b51d2b9d228e92687020005e7139569c423d3d2",
+      "line_count": 41,
+      "size_bytes": 2062
+    },
+    {
+      "path": "wiki/entities/agent_bus.md",
+      "action": "added",
+      "sha256": "706fd14661ebd9fd2a39ba5b9901ed0d6b5aeaf8144311c89fe251b570f7a601",
+      "line_count": 44,
+      "size_bytes": 2338
+    },
+    {
+      "path": "wiki/concepts/vocabulary_alignment.md",
+      "action": "added",
+      "sha256": "5bce555979e8d3d6abd69d7cc78158325297ae8cd74d2a78ca6c8f398016711c",
+      "line_count": 46,
+      "size_bytes": 2308
+    },
+    {
+      "path": "wiki/concepts/state_dict_resizing.md",
+      "action": "added",
+      "sha256": "d24be3ccc1ee6ba1373ea8a34d610e9328155945c8e0c56a034217339ca3976d",
+      "line_count": 42,
+      "size_bytes": 2071
+    },
+    {
+      "path": "wiki/entities/cot_vault.md",
+      "action": "added",
+      "sha256": "b469f4e0f098a3b5f72158c722a4bba46ecdf2150b112ab67845642892322045",
+      "line_count": 31,
+      "size_bytes": 1527
+    },
+    {
+      "path": "wiki/entities/model_checkpoints.md",
+      "action": "added",
+      "sha256": "58789e558b81418c350bb1f2fc2c501db5fe32d6f5ca9d1ade85832d405ea127",
+      "line_count": 45,
+      "size_bytes": 1886
+    },
+    {
+      "path": "wiki/concepts/base_and_jacket_architecture.md",
+      "action": "added",
+      "sha256": "010c875e80d1751ca2843d9a9133c933c815d44531c20dc707bcca9d7d40249e",
+      "line_count": 49,
+      "size_bytes": 2294
+    },
+    {
+      "path": "wiki/index.md",
+      "action": "modified",
+      "sha256": "df233e6d825625ddba8c316dba5da438b0a1c544564e0b39678f8e7eb427f472",
+      "line_count": 41,
+      "size_bytes": 2302
+    },
+    {
+      "path": "wiki/log.md",
+      "action": "modified",
+      "sha256": "2788dff77f2c0e565bb3846d0a76cad7dd937526c71de02deb42e5fd4ee8eee3",
+      "line_count": 87,
+      "size_bytes": 12926
+    },
+    {
+      "path": "wiki/synthesis.md",
+      "action": "modified",
+      "sha256": "2325787504c2cf33664ef2cf7d078945ece1fa1508ad8ba17ea159fa479c5ddb",
+      "line_count": 76,
+      "size_bytes": 6847
+    },
+    {
+      "path": "wiki/entities/chat_prompt.md",
+      "action": "modified",
+      "sha256": "b02f8a5a94a42c7c4278818b6dd06bca70a8825da8d06b6d1e40354d5f1f6b93",
+      "line_count": 72,
+      "size_bytes": 2791
+    },
+    {
+      "path": "llmcoder.md",
+      "action": "modified",
+      "sha256": "620f8573cc52e616355a9509880e99fc02089d23a928698f42ef19fdb08351b6",
+      "line_count": 29,
+      "size_bytes": 1625
+    }
+  ],
+  "numerical_claims_derivation": [
+    {
+      "claim": "roots.tsv tekil kök lemma sayısı (48.200)",
+      "source_path": "data/lexicon/roots.tsv",
+      "command": "cut -f1 data/lexicon/roots.tsv | tail -n +2 | sort -u | wc -l",
+      "measured_value": 48200
+    },
+    {
+      "claim": "vocab.json temel sözlük boyutu (31.357)",
+      "source_path": "data/vocab.json",
+      "command": "python3 -c \"import json; print(len(json.load(open('data/vocab.json'))['stoi']))\"",
+      "measured_value": 31357
+    },
+    {
+      "claim": "Genişletilmiş checkpoint model sözlük boyutları (32.816 / 32.852)",
+      "source_path": "data/*.pt",
+      "command": "scripts/t0027_measure_models.py (data/eval/t0027_model_state_2026-09-15.json)",
+      "measured_value": "32816 ve 32852"
+    },
+    {
+      "claim": "Noktalama bloğunun başlangıç indeksi (32.137)",
+      "source_path": "data/eval/t0027_model_state_2026-09-15.json",
+      "command": "data/eval/t0027_model_state_2026-09-15.json B_vocab_alignment bölümü",
+      "measured_value": 32137
+    },
+    {
+      "claim": "Üst düzey checkpoint adedi (23)",
+      "source_path": "data/*.pt",
+      "command": "python3 -c \"import glob; print(len(glob.glob('data/*.pt')))\"",
+      "measured_value": 23
+    },
+    {
+      "claim": "Dikkat maske tamponu boyutu (4096^2)",
+      "source_path": "data/kristal_model.pt",
+      "command": "python3 -c \"import torch; ckpt=torch.load('data/kristal_model.pt', map_location='cpu'); print(ckpt['blocks.0.attn.mask'].shape)\"",
+      "measured_value": "[4096, 4096]"
+    },
+    {
+      "claim": "cot_vault satır sayısı (91)",
+      "source_path": "data/pedagogy/cot_vault.jsonl",
+      "command": "wc -l data/pedagogy/cot_vault.jsonl",
+      "measured_value": 91
+    },
+    {
+      "claim": "cot_vault SHA-256 özeti",
+      "source_path": "data/pedagogy/cot_vault.jsonl",
+      "command": "sha256sum data/pedagogy/cot_vault.jsonl",
+      "measured_value": "97b06fe5befd6613b520d28dc20a74deaeb30e4e8f7e6675a23720a019ff5619"
+    },
+    {
+      "claim": "DPO aktif ve tüm tercih çiftleri (321 / 6.198)",
+      "source_path": "data/pedagogy/dpo_tokenized.jsonl ve dpo_all_tokenized.jsonl",
+      "command": "wc -l data/pedagogy/dpo_tokenized.jsonl data/pedagogy/dpo_all_tokenized.jsonl",
+      "measured_value": "321 ve 6198"
+    },
+    {
+      "claim": "Konsolide SFT derlenmiş ikili örnek sayısı (87.629)",
+      "source_path": "data/train_deep_sft.bin",
+      "command": "python3 -c \"import numpy as np; ...\" (T-0029 doğrulama kanıtı)",
+      "measured_value": 87629
+    }
+  ],
+  "llmcoder_md_correction": {
+    "file": "llmcoder.md",
+    "rule": 2,
+    "before": "2. **Wiki Senkronizasyonu (T-0029 İncelemesinde):** Kodda yapılan her yapısal değişiklikten sonra `wiki/` altındaki ilgili dokümanlar güncellenmelidir (Not: Haziran 2026'dan beri dondurulan `wiki/` dizininin canlandırılması veya kaldırılması T-0029 kapsamında kararlaştırılacaktır; güncel mimari kararlar `.agent-bus/` ve `data/eval/` üzerinden yürütülmektedir).",
+    "after": "2. **Wiki Senkronizasyonu:** Kodda yapılan her yapısal değişiklikten sonra `wiki/` altındaki ilgili dokümanlar güncellenmelidir (T-0030 ile canlandırılmıştır; uçucu ampirik sayılar doğrudan kavram/varlık sayfalarına kopyalanmaz, `wiki/log.md` kronolojisine veya `data/eval/*.json` raporlarına atıfla verilir).",
+    "grep_stale_reference_count": 0
+  },
+  "unverified_claims": [],
+  "walkthrough_migration_proposal": {
+    "note": "Kapsam dışı öneri (Kullanıcı kararı gerektirir)",
+    "proposal": "Brain dizinindeki walkthrough.md dokümanının 8.1..8.23 bölümlerinde yer alan operasyonel yürütüm günlüklerinin, proje içi kalıcı bilgi yönetimi için wiki/log.md veya wiki/history/ altında alt sayfalara taşınması/indekslenmesi değerlendirilebilir."
+  },
+  "acceptance_criteria_results": {
+    "1_frontmatter_schema_python_verified": true,
+    "2_grep_stale_t0029_in_llmcoder": 0,
+    "3_grep_tags_line_count_per_file": 1,
+    "4_writes_boundary_strictly_respected": true,
+    "5_pytest_sandbox_outside_passed": 132,
+    "6_cot_vault_invariant": true,
+    "7_git_ls_files_wiki_count": 11
+  }
+}

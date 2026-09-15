@@ -1,0 +1,129 @@
+{
+  "report": "regeneration_recon",
+  "date": "2026-09-15",
+  "author": "danisman (Claude Code)",
+  "purpose": "Kullanici 'Bayat veriler yenilenebilir' notu + 'Zincirin tamami' kapsamini secti. Yeniden uretim plani yazilmadan once zincirin gercekten yenilenebilir olup olmadigi bagimsiz olarak olculdu.",
+  "verdict": "KAPSAM KISMAN IMKANSIZ. 'Zincirin tamami' teknik olarak yurutulemez; ayrica yurutulebilen kisim, yenilenme gerekcesini olusturan Exp C sonucunu DEGISTIRMEZ.",
+
+  "measured_facts": [
+    {
+      "id": "R1",
+      "claim": "Stage-1 on egitim girdisi data/train.bin kaynagindan yeniden uretilemez.",
+      "evidence": "data/train.bin = birlestirme(corpus, infancy, parenting, dpo_chosen, wiki). Iki akis harici: scripts/prepare_dpo_dataset.py <- /Users/hakankilicaslan/Prompts/Outputs/datasets/dpo_preference_turkce.jsonl ve scripts/prepare_wiki_dataset.py <- .../open-wikipedia-markdown/tr/tr-00000.parquet",
+      "measurement": "ls -la /Users/hakankilicaslan/Prompts/Outputs/datasets/ -> 'No such file or directory' (dizin TAMAMEN yok, yalniz iki dosya degil)",
+      "consequence": "data/train.bin, data/train_wiki.bin, data/train_dpo_chosen.bin yeniden uretilemez. Zincirin 1. halkasi kapali."
+    },
+    {
+      "id": "R2",
+      "claim": "data/vocab.json (31357) diskteki HER checkpoint'ten kucuktur.",
+      "measurement": "data/vocab.json: next_id=31357 len(stoi)=31357. data/vocab_entity.json: next_id=32852 len(stoi)=32852. Checkpoint satirlari (yurutucu raporundan): carpenter=32137, step_b1_final=32156, b1_5_best=kristal_model.pt=32816.",
+      "consequence": "Sözlük dosyasi modellerin GERISINDE. Guncel tokenizer noktalama icin <UNK>(0) uretiyor."
+    },
+    {
+      "id": "R3",
+      "claim": "data/vocab.json'da 9 noktalama ve 10 rakam token'i YOK.",
+      "measurement": "vocab.json['.'] [','] ['?'] ['!'] ['-'] [':'] [';'] ['('] [')'] ve '0'..'9' -> hepsi YOK",
+      "consequence": "Her istemdeki noktalama <UNK> oluyor."
+    },
+    {
+      "id": "R4",
+      "claim": "Kayip sozlukler TAM ve BELIRSIZLIKSIZ geri kazanilabilir.",
+      "measurement": "vocab_entity.json id'leri 0..32851 arasi kesintisiz. Dogrulama: entity'nin ilk 31357 girdisi vocab.json ile BIREBIR ayni (iki yonlu kontrol True). Bloklar: 31357-32136 = 780 ozel isim (Atatürk=31357), 32137-32145 = 9 noktalama, 32146-32155 = 10 rakam, 32156 = TENSE, 32157-32815 = 660 ozel isim, 32816-32851 = 36 varlik token'i.",
+      "consequence": "Her ara sozluk (32137/32146/32156/32816) = vocab_entity.json'un tam oneki. Geri kazanma islemi kayipsiz."
+    },
+    {
+      "id": "R5",
+      "claim": "Exp C, checkpoint'in KENDISINI degil, KIRPILMIS bir varyantini olcuyor.",
+      "evidence": "scripts/run_experiment_c.py:104 vocab.load('data/vocab.json') -> 31357; :109 KristalLM(vocab_size=len(vocab.stoi)) -> 31357 satirli model; :110-112 resize_state_dict(model, state) -> 32137 satirli checkpoint 31357'ye KIRPILIR.",
+      "consequence": "data/eval/exp_c_recheck_2026-09-15.json'daki sonuclar 32137 satirli carpenter'i degil, onun 31357 satirli kirpilmis halini tanimlar. Kirpma SESSIZ (log/uyari yok)."
+    },
+    {
+      "id": "R6",
+      "claim": "Bu kayma C1 sonucunun NEDENI DEGIL.",
+      "evidence": "Onceki oturumda olculdu: modele .bin icindeki GERCEK egitim tensoru verildiginde de basarisiz (C1_1 5/36, C1_2 4/54, C1_3 4/29).",
+      "consequence": "Sozluk/tokenizer kaymasi duzeltilse bile C1 'ezber yok' sonucu degismez. Yenilemenin gerekcesi ile yenilemenin etkisi ayrisiyor."
+    },
+    {
+      "id": "R7",
+      "claim": "Carpenter'in GERCEK atasi (32137 satirli DPO-sonrasi model) kayip.",
+      "measurement": "mtime: kristal_carpenter_model.pt 2026-09-13 11:40:29; kristal_model_step_b1_final.pt 2026-09-13 17:48:03; kristal_model.pt 2026-09-13 21:14:31. Carpenter kendisinden ~6 saat SONRA dogan iki artefakttan once yazilmis; kristal_model.pt sonradan (b1_5 kopyasi ile) ezilmis.",
+      "consequence": "Carpenter'in atasina birebir donus yok. En yakin sag kalan: data/kristal_model_sft.pt (32137, DPO-ONCESI snapshot, 2026-09-13 11:38:35)."
+    },
+    {
+      "id": "R8",
+      "claim": "Carpenter yine de bastan kurulabilir, ama DPO adimi tekrarlanarak.",
+      "evidence": "data/pedagogy/dpo_all_tokenized.jsonl MEVCUT (131 MB, 2026-09-12 18:47, train_dpo.py varsayilani); data/pedagogy/carpenter_specialization_dataset.jsonl MEVCUT; data/pedagogy/arena_carpenter_accumulated.jsonl MEVCUT.",
+      "consequence": "sft_snapshot -> DPO -> derlenmis bin -> 150 adim yolu acik. Gemini'ye ve harici veriye ihtiyac YOK."
+    },
+    {
+      "id": "R9",
+      "claim": "data/*.bin ve data/*.pt, data/ altinda HER derinlikte donmus.",
+      "evidence": "scripts/agent_bus_mcp.py:261 fnmatch.fnmatch kullanir; Python fnmatch'te '*' '/' isaretini de esler.",
+      "measurement": "fnmatch: data/rebuild/x.bin -> DONMUS; data/rebuild/sub/z.bin -> DONMUS; data/rebuild/x.pt -> DONMUS; data/rebuild/vocab.json -> SERBEST (data/vocab.json deseni tam-yol, data/*.json deseni yok).",
+      "consequence": "data/ altinda yeni artefakt yazmak SPEC kural 2 geregi mumkun ama gorev writes[] bildirimi + dizin geneli kiralama gerektirir. Geri donusu olmayan ezme YOK; yan yana insa mumkun."
+    },
+    {
+      "id": "R10",
+      "claim": "Disk darbogazi.",
+      "measurement": "df -h . -> 460Gi toplam, 20Gi bos (%96 dolu). data/ = 14 GB; 23 .pt dosyasi ~9.3 GB.",
+      "consequence": "Tam yedek icin yer yok. Yan yana insa (yeni artefaktlar ~0.5-1 GB) sinirda mumkun."
+    }
+  ],
+
+  "impossibility_proof": {
+    "scope_requested": "Zincirin tamami (step_b1_final -> kristal_model -> carpenter)",
+    "blocking_step": "Stage-1 on egitim (data/train.bin)",
+    "reason": "R1: train.bin'in 5 girdi akisindan 2'sinin kaynagi olan dizin diskten tamamen silinmis. Geri getirilemez.",
+    "secondary": "R7: carpenter'in gercek atasi da ezilmis; birebir ayni zincir yeniden kurulamaz.",
+    "verdict": "Zincirin tamami YENIDEN URETILEMEZ. Bu bir planlama tercihi degil, olculmus bir olgudur."
+  },
+
+  "achievable_ladder": [
+    {
+      "step": "L1",
+      "name": "Sozluk restorasyonu + degerlendirme duzeltmesi",
+      "training": false,
+      "cost": "dakikalar",
+      "content": "vocab_entity.json'u tam onek olarak kirp -> 32137 / 32816 sozlukleri. run_experiment_c.py'ye --vocab/--ckpt ekle ve model_rows vs ckpt_rows'u RAPORLA (sessiz kirpmayi gorunur kil). Exp C'yi iki kolla kos: mevcut (31357) ve gercek (32137).",
+      "resolves": "R2, R3, R5. Degerlendirme kusurunu kapatir; iddiayi 'checkpoint olculdu' haline getirir.",
+      "risk": "Yok. Geri donusu olmayan yazma yok; data/eval ve data/rebuild disinda yazmaz."
+    },
+    {
+      "step": "L2",
+      "name": "Binlerin yeniden derlenmesi",
+      "training": false,
+      "cost": "dakikalar",
+      "content": "Restore edilmis sozluk + guncel tokenizer (PUNCT_SET) ile train_carpenter_specialization / train_chat_balanced / train_balanced_sft binlerini data/rebuild/ altina yeniden derle.",
+      "resolves": "Bayat .bin sorunu ([[bayat-bin-tokenizer-kaymasi]]). Gelecekteki egitimi dogru hale getirir.",
+      "caveat": "train.bin HARIC (R1). train_balanced_sft'in girdilerinden future_train_vector.jsonl artik 0 satir."
+    },
+    {
+      "step": "L3",
+      "name": "Carpenter'in yeniden egitimi",
+      "training": true,
+      "cost": "~saatler (MPS), 150 adim",
+      "content": "kristal_model_sft.pt -> DPO (dpo_all_tokenized.jsonl) -> L2 bin -> 150 adim, lr 3e-4 -> data/rebuild/kristal_carpenter_v2.pt",
+      "resolves": "Noktalama egitim verisinde GERCEKTEN bulunan ilk model.",
+      "caveat": "R8: DPO adimi tekrarlanir, birebir ayni ata degil. Sonuc YENI bir temel cizgidir, eskiyle kiyaslanabilir ama esdeger degil.",
+      "expected_value": "R6 geregi C1 'ezber' sorusunu degistirmesi BEKLENMEZ. Yalnizca 'noktalama egitimde olsaydi davranis degisir miydi' sorusunu yanitlar."
+    },
+    {
+      "step": "L4",
+      "name": "b1_5 / tam zincir",
+      "training": true,
+      "cost": "gunler + Gemini API",
+      "content": "Arena fazlarini yeniden kosmak gerekir; bunlar canli Gemini 2.5 Flash cagirir ve veriyi STOKASTIK uretir (arena_*_accumulated.jsonl untracked).",
+      "verdict": "ONERILMEZ. Zincir zaten R1 ile kapali; arena yeniden kosusu sonucu 'duzeltilmis eski model' degil 'yeni veri + yeni model' yapar. Kiyaslanabilirlik kaybolur, para ve anahtar harcanir."
+    }
+  ],
+
+  "recommendation": "L1'i hemen yap (geri donusu yok, diske yalniz yeni dosya yazar, mevcut dogrulanmis temel cizgiyi korur). L2'yi L1'in sonucuna gore degerlendir. L3/L4 kullanici karari; L4'u onermiyorum.",
+
+  "not_done_deliberately": [
+    "Hicbir .pt/.bin URETILMEDI veya DEGISTIRILMEDI.",
+    "Hicbir egitim kosusu BASLATILMADI.",
+    "data/vocab.json'a DOKUNULMADI (donmus).",
+    "Kutle yedek ALINMADI (disk R10).",
+    "Commit/push YAPILMADI."
+  ]
+}

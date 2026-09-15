@@ -1,0 +1,21 @@
+{
+  "id": "T-0024",
+  "from": "claude",
+  "to": "antigravity",
+  "created": "2026-09-15T07:44:12Z",
+  "title": "F0 raporu: kapsam boslugu satirinda tanim birligi + supurme secim kuralini yaz",
+  "spec": "T-0024 — T-0022 bagimsiz dogrulamasindan cikan IKI DUSUK/ORTA-DUSUK bulgu (rapor tanim katmani)\n\nBULGU G1 — turk_tarihi_dpo_raw satirinda IKI FARKLI METIN TANIMI karismis (ORTA-DUSUK)\nRaporun coverage_gap.measured_files.turk_tarihi_dpo_raw satiri:\n   karakter=252407  nok_kar=6328  rak_kar=3744  nok_tok=1624  rak_tok=1624\n\nBAGIMSIZ OLCUM (210 aday tanim tarandi: 15 alan altkumesi x 7 ayirici x 2 sarma)\n- karakter/nok_kar/rak_kar UCU de YALNIZCA duz-metin tanimiyla tutuyor:\n      \" \".join(str(v) for v in record.values())\n- nok_tok/rak_tok IKISI de YALNIZCA JSON zarfi tanimiyla tutuyor:\n      json.dumps(record, ensure_ascii=False)\n- ALTI SAYIYI BIRDEN tutan TEK BIR TANIM YOK.\n\nSONUC: ayni satirin karakter sutunu ile token sutunu ayni metne ait degil. Satirin ima\nettigi \"6328 noktalama karakteri -> yalnizca 1624 token\" boslugu metnin ozelligi DEGIL,\ntanim degistirmenin urunu. Dogrusu: ayni duz metin tokenize edilince nok_tok=6328\n(kayip YOK), zarf tanimiyla 1624. Okuyucu su haliyle \"DPO hattinda noktalama kayboluyor\"\nizlenimi aliyor — bu YANLIS.\n\nYON NOTU: bu kusur iddiayi IYIMSER degil KOTUMSER gosteriyor (kayip oldugundan buyuk\ngorunuyor). Danisman bunu acikca kaydetti; iyimser cerceveleme riski bu turda olusmadi.\n\nBULGU G2 — silent_truncation_sweep: secim kurali yazili degil, 'TUM siteler' fazla iddiali (DUSUK)\nRapor 31 site listeliyor; summary.total_sites_audited=31. Ama:\n- repo capi load_state_dict(..., strict=False) satiri: 36 (34 dosya)\n- bu dosyalarin 11'inde raporda HIC temsilci yok\n- rapor \"TUM siteler\" diyor; sayi tam degil\nRaporun fiilen kullandigi kural olcümle gorunur: \"her uzlastirma noktasindan TEK temsilci\nsatir\" (or. train.py:19 print satiri listelenmis, train.py:109 load cagrisi listelenmemis).\nBu kural raporda YAZILI DEGIL, dolayisiyla 31 sayisi raporun kendi satir listesi okunmadan\nyeniden uretilemiyor. T-0019'daki G2'nin ayni ailesi.\n\nMADDI KAPATILICILIK SAGLAM (kusur degil, kayda gecsin): repo capinda strict=False iceren\n34 dosyanin HICBIRINDE kacmis SESSIZ yol yok. resizer zincirleri kokune kadar izlendi:\n  evaluate_mcq_conditioning / chat_prompt / verify_rag -> src/llm/prompt_contract.resize_state_dict\n  merge_teacher_dataset -> train.resize_state_dict (print basiyor)\n  diagnostics_history_gap -> evaluate_mcq_conditioning -> ortak\nUc SESSIZ site (test_rag_interactive.py:30, evaluate_chat.py:30, evaluate_on_train_data.py:27)\ngercekten tek sessiz kopyalar ve dogrulandi.\n\nYAPILACAKLAR\n1) turk_tarihi_dpo_raw satirini TEK tanimla yeniden olc. Oneri: duz metin\n   (\" \".join(record.values())) — cunku satirin amaci \"ham metinde ne var\" sorusunu\n   cevaplamak. O zaman 6328 noktalama karakteri -> 6328 noktalama tokeni cikar ve satir\n   \"kayip yok\" der. Zarf tanimini tercih edersen IKISINI de ayni tanimla olc.\n2) Hangi metin taniminin ve hangi sozlugun (32.816) kullanildigini satirin yanina YAZ.\n3) silent_truncation_sweep'e secim kuralini ekle ve 'TUM siteler' ifadesini olculen\n   sayiyla uyumlu hale getir (36 strict=False satiri / 34 dosya, temsilci basina 1 satir).\n   Kurali yazinca 31 sayisi ucuncu bir taraf icin yeniden uretilebilir olmali.\n\nDEGISTIRME: kapsam toplamlari (35454 noktalama / 3562 rakam) DOGRULANMIS ve\nDEGISMEMELI — onlari ellersen dogrulama gecersiz olur.\n\nSINIRLAR\n- data/** salt-okunur; yalnizca data/eval/ altindaki rapor json'lari yazilabilir.\n- Egitim kosusu yok, .pt/.bin uretimi yok.\n- Commit/push YOK.\n\nARKA PLAN\ndata/eval/t0022_verification.json (bulgular F2 ve F3)",
+  "writes": [
+    "data/eval/f0_identity_scope_2026-09-15.json"
+  ],
+  "acceptance": [
+    "A) turk_tarihi_dpo_raw satirinin altı sayisi TEK bir tanimla yeniden uretiliyor ve tanim raporda yazili",
+    "B) Satirin iki sutununun ayni metinden geldigi (ya da gelmedigi) ACIKCA yazili",
+    "C) silent_truncation_sweep bolumune secim kurali yazildi ve 'TUM siteler' ifadesi olculen sayiyla uyumlu",
+    "D) Duzeltme sonrasi rapordaki diger sayilar DEGISMEDI (bagimsiz dogrulama: kapsam toplamlari 35454/3562 hala ayni)"
+  ],
+  "status": "done",
+  "claimed_by": null,
+  "claimed_at": null,
+  "ttl_minutes": 240
+}

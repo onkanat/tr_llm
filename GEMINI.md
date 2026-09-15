@@ -2,7 +2,7 @@
 
 ## Directory Overview
 
-This directory contains the architectural design, theoretical framework, and role definitions for a novel Large Language Model (LLM) architecture specifically tailored for Turkish and other agglutinative languages. It is a non-code repository that defines the **"Kristal-Vektörel Mimarisi"**, which aims to replace traditional statistical BPE tokenization with a deterministic, morpheme-based mathematical language ontology.
+This directory contains the architectural design, theoretical framework, and reference implementation for a novel Large Language Model (LLM) architecture specifically tailored for Turkish and other agglutinative languages. While initially designed as a conceptual blueprint, it hosts a full production codebase (`src/` compiler and tokenizer, `tests/` test suite, `scripts/` training and evaluation pipelines, and active PyTorch checkpoints under `data/`) defining the **"Kristal-Vektörel Mimarisi"**, which replaces traditional statistical BPE tokenization with a deterministic, morpheme-based mathematical language ontology.
 
 The core concept shifts AI from being "memoryless giants" (static LLMs) to dynamic entities ("Vektörel Gezgin" or Vector Rover) that continuously learn and navigate a universal semantic vector database.
 
@@ -31,4 +31,4 @@ When interacting within this workspace:
 
 ## Architectural Rules & Conventions
 
-*   **Lexicon Philosophy (Zero-OOV):** The Kristal Compiler rejects the use of massive, noisy statistical corpus dumps (e.g., raw Wikipedia dumps or uncurated text scrapes). The mathematics of Turkish ( $C = \Sigma [f(M_k \Sigma M_e)]$ ) dictates that infinite surface forms are generated at runtime from a finite set of atomic roots. Therefore, the lexicon (`roots.tsv`) must remain a highly curated, mathematically pure list of approximately 20,500 base lemmas (`M_k`) with strict phonetic attributes (e.g., `VOICING`, `VOWEL_DROP`). Do not pollute the lexicon with derivational forms or statistical noise.
+*   **Lexicon Philosophy (Zero-OOV):** The Kristal Compiler rejects the use of massive, noisy statistical corpus dumps (e.g., raw Wikipedia dumps or uncurated text scrapes). The mathematics of Turkish ( $C = \Sigma [f(M_k \Sigma M_e)]$ ) dictates that infinite surface forms are generated at runtime from a finite set of atomic roots. Therefore, the lexicon (`roots.tsv`) must remain a highly curated, mathematically pure list of 48,200 unique base lemmas (`M_k`) across 52,373 entries with strict phonetic attributes (e.g., `VOICING`, `VOWEL_DROP`). Do not pollute the lexicon with derivational forms or statistical noise.

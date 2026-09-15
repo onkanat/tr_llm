@@ -248,7 +248,7 @@
     }
   ],
   "summary": {
-    "c1_memorization": "C1 istemleri eğitim instruction dizgeleriyle birebir aynı olmasına rağmen model eğitim cevaplarını ÜRETMEMİŞTİR; beklenen-vs-gerçek kelime örtüşmesi C1_1 1/22 (yalnızca \"ve\"), C1_2 1/18 (yalnızca \"ahşap\"), C1_3 0/17. C1_1 ham çıktısı dolgu verniği yerine kereste kurutma/fırınlama deformasyonunu, C1_2 kurt dişi boylamasına ekleme yerine mekanik kilitlenme ve takoz-kama masa birleşimini anlatmakta, C1_3 ise kayın ağacı yerine doğrudan maun ağacına ait özellikler üretmektedir (alan karışması). Sonuç: C1 ezber testi BAŞARISIZDIR; model eğitimde gördüğü cevap metinlerini kelimesi kelimesine ezberden getirememiştir.",
+    "c1_memorization": "C1 istemleri eğitim kaynak metinleriyle yüzeysel olarak aynı görünse de (commit 9e59830 öncesi derlenen bayat .bin nedeniyle token düzeyinde prompt_matches=0 sapması mevcuttur; bkz. stale_bin_caveat ve T-0018 A2/A3), model eğitim cevaplarını ÜRETMEMİŞTİR; beklenen-vs-gerçek kelime örtüşmesi C1_1 1/22 (yalnızca \"ve\"), C1_2 1/18 (yalnızca \"ahşap\"), C1_3 0/17. C1_1 ham çıktısı dolgu verniği yerine kereste kurutma/fırınlama deformasyonunu, C1_2 kurt dişi boylamasına ekleme yerine mekanik kilitlenme ve takoz-kama masa birleşimini anlatmakta, C1_3 ise kayın ağacı yerine doğrudan maun ağacına ait özellikler üretmektedir (alan karışması). Sonuç: C1 ezber testi BAŞARISIZDIR; model eğitimde gördüğü cevap metinlerini kelimesi kelimesine ezberden getirememiştir.",
     "c2_generalization": "C2 istemleri eğitimde geçmeyen parafraz sorulardır. Beklenen cevap alanları \"...\" içeren kırpılmış yer tutucular olduğundan sayısal doğruluk oranı hesaplanamaz ve uydurulmamalıdır. Model parafraz istemlerde marangozluk zanaatı terminolojisini (\"bağıl nem\" [C2_1], \"zeytin ağaç/tabla\" [C2_2]) koruyarak alana özgü teknik üslup ile yanıt üretmiştir. (NOT: Önceki raporda hatalı olarak model çıktısı sanılan \"masif ahşap\" ifadesi F1 bulgusu uyarınca kaldırılmıştır; terim yalnızca prompt instruction alanında mevcuttur).",
     "envelope_effect": "Zarf düzeltmesi (çift <BOS> kusurunun kaldırılması ve kanonik render_prompt standardına geçilmesi) 6 vakanın 3\"ünde (C1_1, C1_2, C2_2) ham model çıktısını doğrudan değiştirmiştir. Bu durum, çift <BOS> kusurunun modelin üretim dağılımı üzerinde etkisiz olmadığını ve gerçek bir çıkarım kayması (confound) yarattığını kanıtlamaktadır."
   },
@@ -313,5 +313,10 @@
       "found_by": "T-0016 bagimsiz dogrulamasi (danisman, claude)",
       "verified_at": "2026-09-15T04:45:00Z"
     }
-  ]
+  ],
+  "stale_bin_caveat": {
+    "status": "APPLIED",
+    "identified_by": "T-0018 / T-0019 (data_identity.A2, A3, A6_stale_bin)",
+    "detail": "Exp C deney kurgusunda C1 istemlerinin eğitim kütüğüyle birebir aynı olduğu varsayılmıştır. Ancak T-0018 tanı ölçümleri (A2, A3) ve T-0019 analizi kanıtlamıştır ki: data/train_carpenter_specialization.bin 2026-09-13T07:12:46Z tarihinde derlenmiş, PUNCT_SET ise 9e59830 commit'i ile 2026-09-15 tarihinde eklenmiştir. Bu bayatlık nedeniyle güncel tokenizer iki nokta (':') karakterini <UNK> (token 0) olarak kodlarken, eğitim ikili dosyasında indeks 11'de doğrudan 'ahşap' (token 2014) yer almaktadır. C1 istemlerinin güncel tokenizer ile eğitim ikili tensöründeki tam eşleşme sayısı 0'dır (cases_current_tokenizer.C1_1.prompt_matches=0). Ham model çıktıları (raw_output) ve determinizm geçerliliğini korumaktadır; sınırlandırılan husus 'istemlerin eğitim tensörüyle token düzeyinde özdeş olduğu' önkabulüdür."
+  }
 }

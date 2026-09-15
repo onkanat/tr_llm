@@ -1,0 +1,152 @@
+{
+  "verification_id": "t0026",
+  "task_id": "T-0026",
+  "verified_by": "claude (danisman)",
+  "verified_at_utc": "2026-09-15T09:56:00Z",
+  "task_window_utc": ["2026-09-15T08:54:49Z (acilis)", "2026-09-15T09:46:10Z (sonuc dosyasi, TAM surum)"],
+  "dogrulama_penceresi_utc": "2026-09-15T09:48Z - 09:56Z",
+  "verdict": "PASS_WITH_FINDINGS",
+  "verdict_gerekce": "Onbir kabul maddesinin (A-K) onu DOGRULANDI; hepsi bagimsiz olarak yeniden olculdu. A(i) icin yurutucunun testine guvenmedim: KENDI mutant dosyami scratch/ icine koydum -> kanarya KIRMIZI (assertion mutantin gercek yolunu gosterdi), sildim -> YESIL. A(ii) monkeypatch-panic testi DUSURUYOR, yani kanarya artik GERCEKTEN audit'i cagiriyor (T-0025'teki vakum kapanmis). Yalniz J(ii) teslim edilen artefakt icin gecerli degil (F1) ve kapsam genisletmesi sonuc dosyasinda AYIRCA anlatilmiyor (F2); ikisi de DUSUK ve kapanisi bloklamaz.",
+  "teslim_sonucu_yeniden_olcum": {
+    "not": "ONEMLI: 09:29:59Z'de yazilan ILK sonuc dosyasi YARIMDI (yalniz F1-F5, changed_files'da src/rag/ YOK). 09:46:10Z'de TAM surum yazildi.",
+    "ilk_sonuc_dosyasi": "2026-09-15T09:29:59Z / changed_files: src/gateway, tests/test_cot_vault..., tests/test_prompt_contract.py",
+    "tam_sonuc_dosyasi": "2026-09-15T09:46:10Z / changed_files: src/gateway/pedagogical_supervisor.py, tests/test_cot_vault_and_dual_parser.py, tests/test_prompt_contract.py, src/rag/rag_pipeline.py",
+    "src_rag_kiralamasi": "2026-09-15T09:32:43Z, scope=dir, owner=antigravity, pid=69646 (olay kaydindan bagimsiz olarak dogrulandi)",
+    "kiralar_serbest": "bus_lease_status -> [] ; state/leases/ altinda 0 dosya",
+    "tamamlandi_mesaji": "state/inbox/claude/2026-09-15T09-48-05Z-antigravity.json",
+    "uyari": "Doğrulamayi yalnizca sonuc dosyasinin VARLIGINA bakarak baslatmak ERKEN olurdu: 09:30-09:46 arasi EK MADDE isleniyordu. Uc kosul (mesaj + kiralar serbest + changed_files'da src/rag/) birlikte aranmaliydi."
+  },
+  "claims_verified": [
+    {
+      "claim": "A(i) F2: gercek mutant dosyasi repoya konunca kanarya KIRMIZI, silinince YESIL",
+      "olcum": "BAGIMSIZ: kendi mutantimi (scratch/_danisman_probe_mutant.py, satir ici min() kirpma) repoya koydum; pytest test_canary_e_no_silent_resize_state_dict_in_repo -> 1 failed; AssertionError metni mutantin GERCEK yolunu gosterdi ('where 1 = len([{is_silent: True, line: 1, path: .../scratch/_danisman_probe_mutant.py}])'). Dosyayi silince -> 1 passed. Kalinti: scratch/'ta _danisman_probe* YOK.",
+      "sonuc": "DOGRULANDI"
+    },
+    {
+      "claim": "A(ii) F2: testin audit_repo_resize_state_dict_definitions'i GERCEKTEN cagirdigi, 'cagrilirsa patlat' monkeypatch'i ile gosterilir (monkeypatch'li kosu GECMEMELI)",
+      "olcum": "BAGIMSIZ: modul globalini boom() ile degistirip test_canary_e_silent_resize_mutant_detector'i dogrudan cagirdim -> AssertionError: 'KASITLI PATLAMA: audit_repo_resize_state_dict_definitions cagrildi!'. Yani test dusuyor; audit'i gercekten cagiriyor. T-0025'te bu kosu GECIYORDU (vakum).",
+      "sonuc": "DOGRULANDI — vakum kapanmis"
+    },
+    {
+      "claim": "A(iii) kosu sonrasi repoda mutant dosyasi kalmadigi ls ciktisi",
+      "olcum": "BAGIMSIZ: scratch/ tam listesi alindi; '_mutant*' / '_unparseable*' / '_danisman_probe*' kalibi YOK. Testler finally blogunda siliyor.",
+      "sonuc": "DOGRULANDI"
+    },
+    {
+      "claim": "B(a) F5: kapi GEVSETILMEDI — test ortaminda kanonik yola yazim HALA RuntimeError firlatir",
+      "olcum": "BAGIMSIZ: PYTEST_CURRENT_TEST=1 + vault_path=None -> record_to_cot_vault RuntimeError firlatti ('Guvenlik Ihlali: Test ortaminda varsayilan uretim kasasi ... engellendi').",
+      "sonuc": "DOGRULANDI"
+    },
+    {
+      "claim": "B(b) F5: yazilamayan vault_path cagriyi DUSURMEZ, loglanir + False doner",
+      "olcum": "BAGIMSIZ: COT_VAULT_PATH=/nonexistent_root_dir_99999/vault.jsonl -> istisna disari TASMADI, donus False, stderr'e '[COT_VAULT_HATA] Hedef kasaya yazilamadi (...)' dustu. CLAUDE.md 'logla + makul varsayilan don' kuralina uygun.",
+      "sonuc": "DOGRULANDI"
+    },
+    {
+      "claim": "C F1: record_to_cot_vault docstring'inde duz dosya adi davranisi ACIKCA yazili; kod davranisi DEGISMEDI",
+      "olcum": "BAGIMSIZ: git diff'te docstring satiri goruldu ('Duz dosya adi davranisi: vault_path dizin bileseni icermiyorsa os.makedirs cagrilmaz; dosya gecerli CWD'ye yazilir.'). Kod tarafinda os.path.dirname(target_vault) bos ise makedirs ATLANIYOR (if dir_name guard'i) — yani davranis gercekten bu.",
+      "sonuc": "DOGRULANDI"
+    },
+    {
+      "claim": "D F4: CWD=/tmp + vault_path=None -> hedef kanonik MUTLAK yol olur ve RuntimeError firlatir; COT_VAULT_PATH verilirse dokunulmaz",
+      "olcum": "BAGIMSIZ, iki yon: (1) cwd=/tmp, COT_VAULT_PATH silinmis, PYTEST_CURRENT_TEST=1 -> RuntimeError firladi (yol artik CWD'ye bagli DEGIL). (2) COT_VAULT_PATH=/tmp/claude/probe_custom.jsonl -> sonuc True ve dosya OLUSTU; kanonik kasa etkilenmedi.",
+      "sonuc": "DOGRULANDI"
+    },
+    {
+      "claim": "E F3: iki prob birlikte — (i) tarihsel min() HALA kirmizi, (ii) .size()+pad varyanti ARTIK kirmizi",
+      "olcum": "BAGIMSIZ: is_resize_state_dict_silent'i dogrudan cagirdim (importlib ile modulu yukleyip). (i) min() sablonu -> True. (ii) .size()+F.pad varyanti -> True. Ek olarak kendi varyantlarimi denedim: del ile anahtar silme -> True, dict.update -> True, in-place .zero_()/.add_ -> True.",
+      "sonuc": "DOGRULANDI"
+    },
+    {
+      "claim": "F pytest >= 128 passed (iddia: 132) VE cot_vault.jsonl sha256 + satir sayisi kosum oncesi/sonrasi AYNI",
+      "olcum": "BAGIMSIZ, sandbox DISINDA: './venv/bin/pytest -q tests/' -> 132 passed in 7.73s. cot_vault sha256 kosu ONCESI ve SONRASI: 97b06fe5befd6613b520d28dc20a74deaeb30e4e8f7e6675a23720a019ff5619 / 91 satir (bit-for-bit ayni). Ek: find ile data/** altinda kosu penceresinde degisen dosya sayisi 0.",
+      "sonuc": "DOGRULANDI"
+    },
+    {
+      "claim": "G Degisen her yol beyan edilen writes[] icinde; hicbir DONMUS yola dokunulmamis; data/** altinda degisen 0",
+      "olcum": "BAGIMSIZ: git status --porcelain -> src/gateway/pedagogical_supervisor.py, src/rag/rag_pipeline.py, tests/test_agent_gateway.py, tests/test_cot_vault_and_dual_parser.py, tests/test_prompt_contract.py — hepsi writes[] (src/gateway/, tests/, scratch/, src/rag/) icinde. src/llm/tokenizer.py ve src/compiler/ TEMIZ. data/*.pt + data/*.bin toplu sha256 (9064c9c1...) kosu oncesi/sonrasi AYNI. Python+UTC ile yapilan tarama: data/** altinda T-0026 penceresinde degisen dosya 0. NOT: 'find -newermt' ve 'stat -f %Sm' YEREL saat kullanir; bu olcum Python'da datetime.timezone.utc ile yapildi (bkz. [[zaman-dilimi-karisikligi]]).",
+      "sonuc": "DOGRULANDI"
+    },
+    {
+      "claim": "I F7: sessiz 'except Exception: pass' KALMADIGI; sozdizimi bozuk probe ile dosya artik GORUNUYOR",
+      "olcum": "BAGIMSIZ: kaynak okundu — except dali artik 'unparseable.append({path, error})' yapiyor, return_unparseable=False iken 'raise SyntaxError(f\"... failed to parse {len(unparseable)} files...\")'. Sessiz pass YOK. Test_canary_e_unparseable_probe_fails_canary 132 gecen testin icinde.",
+      "sonuc": "DOGRULANDI"
+    },
+    {
+      "claim": "J(i) F7b: rag_pipeline'i import eden 0 dosya",
+      "olcum": "BAGIMSIZ: grep -rn rag_pipeline --include=*.py . -> TEK eslesme: tests/test_phase2.py:86 'def test_rag_pipeline_integration(self)' — bir test METODU adi, import degil.",
+      "sonuc": "DOGRULANDI"
+    },
+    {
+      "claim": "J(ii) F7b: py_compile SyntaxError satir 82",
+      "olcum": "BAGIMSIZ: './venv/bin/python -m py_compile src/rag/rag_pipeline.py' -> exit 0, HATA YOK. Hatanin gercek oldugu ayrica dogrulandi: 'git show HEAD:src/rag/rag_pipeline.py' kopyasi AYNI hatayi veriyor (SyntaxError: invalid syntax, 'for k, v in old_v_items := ...'). Yani olcum dogruydu ama TESLIM EDILEN artefakt icin artik gecerli degil.",
+      "sonuc": "KISMEN — bkz. F1"
+    },
+    {
+      "claim": "J(iii) F7b: dosya SILINMEDI",
+      "olcum": "BAGIMSIZ: src/rag/rag_pipeline.py diskte mevcut, 7053B, mtime 09:37:22Z. Silme karari danismana birakilmis; danisman karari BEKLER (bu turda silinmedi).",
+      "sonuc": "DOGRULANDI"
+    },
+    {
+      "claim": "K F6: rag_pipeline.py:80-88 satir ici sessiz min() dilimlemesi kaldirilip kanonik resize_state_dict'e baglandi",
+      "olcum": "BAGIMSIZ: git diff okundu — 9 satirlik satir ici min() blogu silindi, yerine 'from src.llm.prompt_contract import resize_state_dict; state_dict = resize_state_dict(model, state_dict)' geldi. Imza uyumu dogrulandi: prompt_contract.resize_state_dict(model, old_state_dict) -> dict ve govdesinde '[SOZLESME_UYARI]' print'i VAR (yani yeni yol GURULTULU). Statik kanit; dosya artik derlendigi icin 'kosulamaz' gerekcesi de ortadan kalkti (bkz. F1).",
+      "sonuc": "DOGRULANDI"
+    },
+    {
+      "claim": "K F8: F0 sites[18] kaydinin YANLIS oldugu; f0 raporu DEGISTIRILMEDI (data/** salt-okunur)",
+      "olcum": "BAGIMSIZ: ham kayit okundu -> sites[18] = {site: 'src/rag/rag_pipeline.py:90', classification: 'HATA', pattern: 'model.load_state_dict(state_dict, strict=False)', behavior: 'Boyut uyusmazliginda dogrudan RuntimeError firlatir.'}. Duzeltme ONCESI 80-88 satirlari sekilleri sessizce uzlastiriyordu ve sonuc state_dict[k] MODELIN seklinini tasiyordu -> load_state_dict uyusmazlik GORMEZ -> RuntimeError FIRLAMAZ. Kayit gercekten YANLIS. Siniflandirma dagilimi (HATA 16 / GORUNUR_UYARI 12 / SESSIZ 3 = 31) degismemis; f0 raporu T-0026 penceresinde degismedi (data/** degisen 0).",
+      "sonuc": "DOGRULANDI"
+    }
+  ],
+  "findings": [
+    {
+      "id": "F1",
+      "severity": "DUSUK",
+      "title": "J(ii) kaniti teslim edilen artefakt icin GECERSIZ: 'SyntaxError satir 82' artik yeniden uretilmiyor (F6 duzeltmesi onu kaldirdi)",
+      "olcum": "Rapor Kriter J(ii): 'py_compile ciktisi: SyntaxError satir 82'. Bugun olctum: py_compile -> exit 0. Hata gercekti (HEAD kopyasi hala ayni hatayi veriyor) ve tam da F6'nin yeniden yazdigi 80-88 satirlarinin icindeydi (walrus, satir 82) — yani duzeltme onu yan etki olarak kaldirdi.",
+      "etki": "F7b'nin 'OLU DOSYA' hukmu artik yalnizca 'import eden yok' ayagina dayaniyor; dosya artik IMPORT EDILEBILIR. Hukum yine dogru (canli degil), ama J(ii) kabul maddesi teslim edilen artefakt icin KARSILANAMAZ hale geldi: kabul metni ile teslim edilen urun cakisiyor. Ayrica F6 sayesinde dosya yasatilirsa sessiz yol CANLANMAZ, gurultulu yol canlanir — bu bir kazanc, yazilmali.",
+      "sinif": "CERCEVELEME/BAYAT KANIT (olcum yanlis degil, etiket bayat) — [[yurutucu-raporlari-bagimsiz-dogrulanmali]] ailesi",
+      "kapanis_onerisi": "Yeni gorev ACMIYORUM. Bir sonraki F turunda ya (a) J(ii) kabulune 'VE F6 sonrasi hala gecerli mi' sarti eklenir ya da F7b kaniti 'import eden yok + import edilebilir ama canli degil' olarak yeniden yazilir. Danisman karari bekleyen silme karari (asagida) ile birlikte ele alinmali."
+    },
+    {
+      "id": "F2",
+      "severity": "DUSUK",
+      "title": "Kapsam genisletmesi sonuc dosyasinda AYIRCA bildirilmiyor",
+      "olcum": "SPEC: 'Kapsami genisletmek gerekirse SESSIZCE genisletilmez; sonuc dosyasinda AYIRCA bildirilir.' Sonuc dosyasi Kriter G'de 'Degisen dosyalar guncellenen writes[] (src/gateway/, tests/, scratch/, src/rag/) icindedir' diyor — yani genislemeyi ZIKREDIYOR ama devralmadan SONRA dustugunu, zamanlamasini ve EK MADDE'yi AYRI bir bildirim olarak yazmiyor.",
+      "etki": "Denetim izi spec + bus_send'e (state/inbox/antigravity/2026-09-15T09-00-25Z-claude.json) dagilmis durumda; sonuc dosyasindan tek basina 'kapsam ne zaman genisledi' okunamiyor. Bu, [[spec-duzenlemesi-devralma-ile-yarisir]] dersinin sonuc-dosyasi tarafindaki esi.",
+      "sinif": "DENETIM IZI (ihlal degil — genisleme spec'te ve bus_send'de acikca bildirilmisti)",
+      "kapanis_onerisi": "Bu turda duzeltme yapmadim (sonuc dosyasi yurutucunun artefakti, benim yazma kapsamimda degil). Bir sonraki gorevde kabul maddesi olarak 'kapsam genislemesi sonuc dosyasinda ayrica bildirilir' cumlesi eklenmeli."
+    }
+  ],
+  "non_findings": [
+    {
+      "id": "N1",
+      "title": "BENIM ONGORDUM CURUDU: F3 dedektorunun 'atamasiz in-place mutasyon' kor noktasi YOK",
+      "detay": "Kaynagi okuyunca dedektorun writes_weights olcutunun 'ast.Assign/AugAssign' icerdigini gordum ve su hipotezi kurdum: atama kullanmadan yalnizca new[k].zero_() ile sessizce bozan bir resize fonksiyonu 'sessiz' sayilmaz, yani kanarya YANLIS YESIL kalir. Uc prob yazip olctum (zero_, add_, del, dict.update) — HEPSI True dondu. Neden: dedektör herhangi bir Assign dugumunu (new = model.state_dict() gibi zararsiz olani bile) 'agirlik yaziyor' sayiyor, dolayisiyla pratikte fail-closed davraniyor. Hipotezimi kayda geciyorum cunku [[iki-sayi-celisiyor-sanma-once-kume]] ailesinin dersi bu: once olc, sonra huküm ver."
+    },
+    {
+      "id": "N2",
+      "title": "Aşiri isaretleme yonu — kanarya icin GUVENLI yon, ama sinyalin anlami daraliyor",
+      "detay": "Olctum: agirliga HIC dokunmayan, yalnizca yerel degisken atayan ve print'i olmayan bir 'resize_state_dict' de is_silent=True donuyor; yalnizca 'return model.state_dict()' yapan fonksiyon False donuyor. Yani dedektorun olctuugu sey 'agirliklari sessizce kirpiyor mu' degil, 'iceriginde atama var ve hicbir print/uyari/raise yok mu'. Bu YANLIS KIRMIZI uretir (gurultulu, guvenli) — yanlis YESIL uretmez. Kusur saymiyorum; bir sonraki turda dedektorun adi/olcusu daraltilmak istenirse bilinsin diye kaydediyorum."
+    },
+    {
+      "id": "N3",
+      "title": "F5'in log kanali: stderr'e print — CLAUDE.md'ye uygun",
+      "detay": "'[COT_VAULT_HATA] ... file=sys.stderr' ile loglanip False donuluyor. 'Sessizce gecistirmeme' kuralinin ihlali DEGIL; sessizlik iz birakmadan yutmaktir, bu iz birakiyor."
+    }
+  ],
+  "kisit_aciklamasi": "Bu turda egitim kosusu baslatmadim, .pt/.bin uretmedim, hicbir DONMUS yola yazmadim, src/rag/rag_pipeline.py'yi SILMEDIM (karar danismana birakildi, bu turda verilmedi). Repoya yazdigim tek sey bu dogrulama artefaktidir: data/eval/t0026_verification.json (owner=claude, scope=file, T-0026 kiralamasi altinda yazildi, sonra serbest birakildi). Probe'larim gecici dosyalari scratch/ ve $TMPDIR altinda tuttu ve hepsini sildi (kontrol edildi: kalinti YOK). cot_vault.jsonl sha256 ve satir sayisi dogrulama boyunca bit-for-bit sabit kaldi: 97b06fe5befd6613b520d28dc20a74deaeb30e4e8f7e6675a23720a019ff5619 / 91.",
+  "downstream": [
+    {
+      "oneri": "KULLANICI KARARI BEKLEYEN IKI MADDE (T-0026 kapsami disinda, bu turda karar verilmedi):",
+      "maddeler": [
+        "src/rag/rag_pipeline.py'nin akibeti: silinsin mi / yasatilsin mi. F7b olu oldugunu kanitladi ve dosya SILINMEDI. NOT (bu turun ekledigi yeni veri): F6 sonrasi dosya ARTIK DERLENIYOR, yani 'olu' hukmu yalniz 'import eden yok' ekseninde duruyor ve yasatilirsa sessiz yol degil GURULTULU yol canlanir.",
+        "Rakam + kesme isaretinin TABANA tasinmasi (yeni taban surumu; DONMUS src/llm/tokenizer.py DEGISMEZ)."
+      ]
+    },
+    {
+      "oneri": "F1/F2 icin AYRI GOREV ACMIYORUM: ikisi de DUSUK ve kapanisi bloklamiyor; bir sonraki F turunda kabul maddesi duzeltmesi olarak ele alinmali. F8'in f0 kaydindaki yanlis site[18] duzeltmesi de ayni turda (T-0024 deseni)."
+    }
+  ],
+  "danisman_notu": "Bu tur, T-0025 dogrulamasinda 'ORTA' cikan iki kusurun (F2 sentetik mutant, F7 sessiz pass) GERCEKTEN kapandigini gosterdi ve A(ii)'yi kendi elimle sinadim: monkeypatch-panic testi artik DUSURUYOR. Kendi mutantimla kanaryayi kirmizi yaktim. Ama bir sey daha ogrendim: 09:29:59Z'de yazilan sonuc dosyasi YARIMDI ve 'status: done' yaziyordu — o ana bakip dogrulamaya baslasaydim F6/F7/F7b/F8'i hic olcmeden PASS verirdim. Bu projede ONUNCU kez ayni aile: bir kaydin VARLIGI, o kaydin ne dedigini kanitlamiyor. Uc kosul birlikte aranmaliydi (tamamlandi mesaji + kiralar serbest + changed_files'da genisletilmis yol)."
+}
