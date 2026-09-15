@@ -7,8 +7,9 @@ Format [Keep a Changelog](https://keepachangelog.com/tr/1.0.0/) standardına day
 ## [1.8.0] - 2026-09-13
 
 ### Eklendi (Added)
-- **Sıfır Sızıntılı 3 Yollu Bölme Protokolü (`scripts/prepare_b1_5_datasets.py`):**
-  - Normalize soru metni (`clean_q`) ve kapalı-sınıf biçimbirim iskeleti ($k=2$) üzerinden çift anahtarlı kümeleme ile `Train ∩ Test = 0`, `Train ∩ Val = 0`, `Val ∩ Test = 0` garantili bölme (`data/b1_5_splits/train.jsonl`, `val.jsonl`, `test.jsonl`).
+- **3 Yollu Bölme Protokolü — Soru Düzeyinde Sıfır Çakışma (`scripts/prepare_b1_5_datasets.py`):**
+  - Normalize soru metni (`clean_q`) ve normalize cevap metni üzerinden çift anahtarlı Union-Find kümelemesi ile `Train ∩ Test = 0`, `Train ∩ Val = 0`, `Val ∩ Test = 0` **soru düzeyinde** garantili bölme (`data/b1_5_splits/train.jsonl`, `val.jsonl`, `test.jsonl`).
+  - **Beyan edilen sınır:** Gönderilen bölme dosyaları düzeltme öncesi kodla üretildiğinden cevap düzeyinde sızıntı taşır — test cevaplarının 704/1.622'si (%43,4), val cevaplarının 717/1.622'si (%44,2) train kümesinde de bulunur. Dosyalar bilinçli olarak yeniden üretilmemiştir (kullanıcı kararı, 14 Eyl 2026). Ölçüm: `data/eval/b1_5_split_leakage_report.json`.
   - Külliyat dengelendi ve tekleştirildi (Dedup): Marangozluk (3.825 tekil), Türk Tarihi (6.507 tekil), Lise Temel Bilim (298 tekil), Edebiyat (198 tekil), Ortaokul (125 tekil), Parenting morfoloji tavanı (5.300 dengeli kayıt). Toplam 16.253 kayıt.
 - **Sözcüksel Taban Modeli (Null Hipotezi - `scripts/evaluate_lexical_baseline.py`):**
   - Test verisine kesinlikle bakılmadan, **yalnızca** `train.jsonl` (13.009 örnek, 35.284 terim) üzerinden eğitilen TF-IDF sözcüksel tabanı.

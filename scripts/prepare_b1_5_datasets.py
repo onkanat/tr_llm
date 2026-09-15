@@ -227,7 +227,7 @@ def split_stratum_3way(
     seed: int = 42
 ) -> Tuple[List[Dict[str, str]], List[Dict[str, str]], List[Dict[str, str]], Dict[str, Any]]:
     """
-    Groups records by normalized question AND normalized answer/skeleton.
+    Groups records by normalized question AND normalized answer text.
     Ensures zero question leakage and prevents template-variant answer leakage across splits.
     """
     class UnionFind:
