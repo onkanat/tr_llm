@@ -1,0 +1,137 @@
+{
+  "task_id": "T-0012",
+  "verified_by": "claude",
+  "role": "danisman (bagimsiz dogrulama)",
+  "verified_at": "2026-09-14T19:15:00Z",
+  "verdict": "PASS",
+  "verdict_note": "Tum cekirdek iddialar olcumle birebir dogrulandi. 4 hijyen/kapsam bulgusu var; hicbiri cekirdek iddiayi curutmez.",
+  "claims_verified": [
+    {
+      "claim": "Soru duzeyi sizinti 0/1622 (%0,0)",
+      "method": "bagimsiz yeniden olcum (data/b1_5_splits uzerinde)",
+      "result": "0/1622 (%0,0)",
+      "status": "DOGRULANDI"
+    },
+    {
+      "claim": "Cevap duzeyi sizinti 704/1622 (%43,4; 408 kisa etiket, 296 icerik cevabi)",
+      "method": "bagimsiz yeniden olcum",
+      "result": "704/1622 (%43,4), bilesen dagilimi 408+296 birebir tuttu",
+      "status": "DOGRULANDI"
+    },
+    {
+      "claim": "Val sizintisi 717/1622 (%44,2)",
+      "method": "bagimsiz yeniden olcum",
+      "result": "717/1622 (%44,2)",
+      "status": "DOGRULANDI"
+    },
+    {
+      "claim": "Split sayilari 13009/1622/1622, toplam 16253",
+      "method": "rapor dosyasi + .bin okuma",
+      "result": "birebir tuttu",
+      "status": "DOGRULANDI"
+    },
+    {
+      "claim": "data/b1_5_splits/** sha256 degismedi, 0 bayt degisim",
+      "method": "16 dosyanin sha256 + mtime karsilastirmasi",
+      "result": "mtime'lar 13 Eyl (T-0012 oncesi), ozetler ayni; frozen dizin dokunulmamis",
+      "status": "DOGRULANDI"
+    },
+    {
+      "claim": "Union-Find refaktoru ayni cevabin sablon kopyalarini ayni bolmeye dusuruyor",
+      "method": "kod okuma + vakum testi (yapay kulliyat)",
+      "result": "yapisal olarak dogru; vakum testinde 80/10/10 ve iki duzeyde 0 sizinti",
+      "status": "DOGRULANDI"
+    },
+    {
+      "claim": "Tam test takimi 109/109",
+      "method": "venv/bin/pytest (sandbox DISINDA, test_agent_gateway icin)",
+      "result": "109 gecti. Sandbox ICINDE 108 gecer + test_gateway_http_server_endpoints socket.bind PermissionError ile duser (sandbox kaynakli, hatali degil)",
+      "status": "DOGRULANDI"
+    },
+    {
+      "claim": "import_examples.py FileNotFoundError ile sessiz bos sozlugu engelliyor",
+      "method": "git diff okuma",
+      "result": "if os.path.exists -> raise FileNotFoundError olarak degistirilmis; sessiz yol kapanmis",
+      "status": "DOGRULANDI"
+    },
+    {
+      "claim": "README/USER_GUIDE olculen gercekle hizalandi",
+      "method": "grep + git diff",
+      "result": "43,4% cevap duzeyi sizinti her iki dosyada acikca yazili (README:133, USER_GUIDE:176) — durust",
+      "status": "DOGRULANDI"
+    },
+    {
+      "claim": "Rapor dosyasi data/eval/b1_5_split_leakage_report.json uretildi",
+      "method": "dosya okuma",
+      "result": "var, icerigi olcumle tutarli, root_cause eski skel_in/skel_out olu kodunu isaret ediyor",
+      "status": "DOGRULANDI"
+    }
+  ],
+  "findings": [
+    {
+      "id": "B1",
+      "severity": "orta",
+      "kind": "olu_kod",
+      "title": "Olu kod temizleme gorevi ~28 satir YENI olu kod birakti",
+      "detail": "CLOSED_PREFIXES (scripts/prepare_b1_5_datasets.py:217) ve extract_closed_prefix (:225-244) artik HICBIR yerden cagrilmiyor. Repo geneli grep yalnizca tanimi buluyor. T-0012'nin konusu olu kod eleme oldugu icin bu, gorevin kendi ciktisinda tekrarlanan kusur.",
+      "evidence": "grep -rn 'extract_closed_prefix\\|CLOSED_PREFIXES' --include=*.py -> yalnizca tanim satirlari"
+    },
+    {
+      "id": "B2",
+      "severity": "orta",
+      "kind": "doc_kod_uyusmazligi",
+      "title": "T-0012'nin kendi ekledigi dokuman cumlesi, T-0012'nin OLU biraktigi yolu tarif ediyor",
+      "detail": "README:133 ve USER_GUIDE:176 kumelemeyi 'normalize cevap/bicimbirim iskeletiyle kumelenmis' diye tanimliyor. Ama gonderilen kod bicimbirim iskeleti KULLANMIYOR: norm_a = ' '.join(output.strip().lower().split()) (:278) — duz metin normalizasyonu. Iskelet yolu (CLOSED_PREFIXES/CASE_, TENSE_ ...) B1 bulgusundaki olu koddur. Dokuman olu yolu anlatiyor.",
+      "evidence": "git diff HEAD -- README.md -> cumle '+' ile T-0012 tarafindan eklendi; kodda karsiligi yok"
+    },
+    {
+      "id": "B3",
+      "severity": "orta",
+      "kind": "baslik_abartmasi",
+      "title": "Ayni bolumun basligi 'Sifir Sizintili' derken govdesi %43,4 sizinti bildiriyor",
+      "detail": "T-0012'nin ekledigi yeni bolum basligi 'Kulliyat ve Sifir Sizintili Veri Dagilimi (Adim B1.5)'. Govde ayni bolumde cevap duzeyi %43,4 sizintiyi acikca yaziyor. Govde durust, baslik fazla iddiali — basligi okuyan biri gövdeyi okumazsa yanlis hukme varir.",
+      "evidence": "README:129 (baslik) vs README:133 (govde); USER_GUIDE:171/173/175 basliklari ayni kalipta"
+    },
+    {
+      "id": "B4",
+      "severity": "dusuk",
+      "kind": "kirilganlik",
+      "title": "Bolme dengesi tohuma (seed) duyarli ve sapma UYARISIZ",
+      "detail": "split_stratum_3way icinde 'or len(val_indices) == 0' / 'or len(test_indices) == 0' ilk uygun bileseni boyutuna BAKMADAN zorla aliyor. seed=42 ile 80/10/10 cikiyor (dogru), ama seed=99 ile test %26,9'a cikiyor. Fonksiyon hedef orandan sapmayi loglamiyor — sessiz sapma.",
+      "evidence": "seed taramasi: seed=42 -> val/test ~%10; seed=99 -> test %26,9, uyari yok"
+    }
+  ],
+  "non_findings": [
+    {
+      "id": "N1",
+      "title": "README/USER_GUIDE '99/99' test iddiasi ile olculen 109 CELISMIYOR",
+      "detail": "Once tutarsizlik sandim; olcum curuttu. HEAD'de izlenen test dosyalari tam 99 test topluyor (untracked 3 dosya haric tutuldugunda: 99 collected). 109, calisma agacindaki 10 untracked testi (test_two_layer_tokenizer 6, test_morphology_regression 2, test_b1_5_split_leakage 2) sayiyor. README commit'lenmis durumu dogru belgeliyor; kusur yok.",
+      "evidence": "venv/bin/pytest --collect-only --ignore=<3 untracked dosya> -> 99 tests collected"
+    }
+  ],
+  "scope_compliance": {
+    "data_frozen_untouched": true,
+    "no_training_run": true,
+    "no_pt_created_or_modified": true,
+    "note": "T-0012'nin data/**'a yazmadigi dogrulandi; donmus split dizini mtime'lari T-0012 oncesine ait."
+  },
+  "downstream": {
+    "T-0012_status": "done (SPEC: done tekrar acilmaz)",
+    "decision_by_user": "2026-09-14: B2 ve B3 duzeltmesi T-0013 KAPANANA KADAR ERTELENDI; ayri bir 'dokuman hizalama' turunda toplanacak ve o tur COMMIT + PUSH ICERECEK.",
+    "implication": "B2 ve B3 README.md/USER_GUIDE.md icinde ve bu dosyalar T-0012'nin kapsamindaydi; T-0012 kapandigi icin duzeltme AYRI bir gorev gerektirir.",
+    "do_not_open_task_yet": "bus cekme tabanli ve yurutucu EN KUCUK ACIK ID'yi alir — T-0013 kapanmadan acilan gorev hemen sahiplenilir. Gorev ancak T-0013 done olduktan sonra post edilmeli.",
+    "deferred_items": [
+      "Bolum basligi 'Sifir Sizintili Veri Dagilimi' -> cevap duzeyi olcumlu bir ifadeye cevrilmeli (B3)",
+      "README:133 / USER_GUIDE:176 'bicimbirim iskeletiyle kumeleme' cumlesi gonderilen koda hizalanmali (B2)",
+      "CLOSED_PREFIXES + extract_closed_prefix olu kodu silinmeli (B1)"
+    ],
+    "commit_push_hazards_measured": {
+      "upstream": "master dalinin upstream'i YOK; git push -u origin master gerekir (remote: onkanat/tr_llm)",
+      "frozen_paths_untracked": "26 untracked dosya donmus yollarda (data/b1_5_splits/**, realistic_rag/**, pedagogy_canonical/**; ~139 MB) — git bunlari IZLEMIYOR, naif 'git add -A' donmus veriyi commit'e sokar",
+      "agent_bus_not_ignored": ".agent-bus/ gitignore DEGIL -> task/lease/inbox gurultusu commit'e girer",
+      "volume": "31 izlenen degisiklik + 102 untracked = 133 dosya; commit kapsami ayrica kararlastirilmali"
+    },
+    "non_finding_do_not_fix": "N1: README'nin '99/99' iddiasi kusur DEGIL. HEAD'de izlenen dosyalar tam 99 test topluyor; 109 calisma agacindaki 10 untracked testi sayiyor. Bu sayiyi 'duzeltmeye' kalkisma.",
+    "T-0013_status_at_verification": "claimed by antigravity; 23 kiralama alindi (19:03:17Z), tam olarak bildirdigi 23 yazma dosyasi uzerinde — kapsam disiplini iyi."
+  }
+}

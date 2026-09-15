@@ -1,0 +1,32 @@
+{
+  "timestamp": "2026-09-14T18:42:57.759637+00:00",
+  "splits_dir": "/Users/hakankilicaslan/Git/tr_llm/data/b1_5_splits",
+  "split_counts": {
+    "train": 13009,
+    "val": 1622,
+    "test": 1622,
+    "total": 16253
+  },
+  "question_level": {
+    "train_test_overlap_count": 0,
+    "train_test_overlap_pct": 0.0,
+    "train_val_overlap_count": 0,
+    "val_test_overlap_count": 0,
+    "status": "zero_leakage"
+  },
+  "answer_level": {
+    "test_in_train_count": 704,
+    "test_in_train_total": 1622,
+    "test_in_train_pct": 43.4,
+    "val_in_train_count": 717,
+    "val_in_train_total": 1622,
+    "val_in_train_pct": 44.2,
+    "composition": {
+      "short_labels_count": 408,
+      "short_labels_description": "<=4 kelimelik kapalı-sınıf etiketi (örn. PLURAL: Evet, CASE: CASE_DAT)",
+      "content_answers_count": 296,
+      "content_answers_description": "18-21 kelimelik şablon öneki farklı fakat output birebir aynı olan cevaplar"
+    }
+  },
+  "root_cause": "Eski prepare_b1_5_datasets.py satır 264-268'de skel_in/skel_out hesaplayıp atan ölü kod nedeniyle, şablonla çeşitlendirilmiş aynı cevaplar farklı kümelere dağılarak train/test arasına sızıyordu."
+}

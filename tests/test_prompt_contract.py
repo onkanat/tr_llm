@@ -108,7 +108,8 @@ def evaluate_site_tokens(filepath: str, content: str = None, tok = None, bos_id:
         "role": "Rol.",
         "z_inst": "Uzman.",
         "z_q": "Zıvana?",
-        "q_text": "Soru?"
+        "q_text": "Soru?",
+        "inst_text": "Uzman olarak."
     }
     relevant_targets = {"prompt", "prompt_str", "full_str", "p_a_str", "p_b_str"}
     for node in ast.walk(tree):
@@ -141,6 +142,7 @@ PROMPT_FILES = [
     "scripts/evaluate_mcq_conditioning.py",
     "scripts/evaluate_sft_benchmarks.py",
     "scripts/diagnostics_t3_t4.py",
+    "scripts/run_experiment_c.py",
 ]
 
 
@@ -150,6 +152,8 @@ def test_canary_a_token_measurement_no_double_bos(filepath, env):
     assert os.path.exists(filepath), f"File {filepath} must exist"
     sites = evaluate_site_tokens(filepath, tok=env["tokenizer"], bos_id=env["bos_id"])
     assert len(sites) > 0, f"Expected at least one prompt construction site in {filepath}, found 0"
+    if filepath == "scripts/run_experiment_c.py":
+        assert len(sites) == 2, f"Expected exactly 2 prompt construction sites in {filepath}, found {len(sites)}"
     for lineno, target_var, expr, tokens in sites:
         assert tokens[:2] != [env["bos_id"], env["bos_id"]], (
             f"Double <BOS> detected at {filepath}:{lineno} ({target_var} = {expr}): tokens[:3] == {tokens[:3]}"
@@ -191,6 +195,42 @@ def test_canary_a_mutant_detector_catches_double_bos_regression(env):
 
     with pytest.raises(AssertionError, match="Double <BOS> detected"):
         evaluate_site_tokens(test_file, content=mutant_concat, tok=env["tokenizer"], bos_id=env["bos_id"])
+
+
+def test_canary_a_run_experiment_c_mutant_detector(env):
+    """
+    Mutant Test for run_experiment_c.py:
+    1. Proves that double <BOS> regression is caught if literal <BOS> is reintroduced.
+    2. Proves that site loss is caught if one of the 2 sites disappears.
+    """
+    test_file = "scripts/run_experiment_c.py"
+    assert os.path.exists(test_file)
+    with open(test_file, "r", encoding="utf-8") as f:
+        orig_content = f.read()
+
+    # Normal state: exactly 2 sites found
+    normal_sites = evaluate_site_tokens(test_file, content=orig_content, tok=env["tokenizer"], bos_id=env["bos_id"])
+    assert len(normal_sites) == 2, f"Expected exactly 2 sites in normal run_experiment_c.py, got {len(normal_sites)}"
+
+    # Mutant 1: double <BOS> injected into first site
+    mutant_bos = orig_content.replace(
+        'prompt = render_prompt(inst_text, "")',
+        'prompt = f"<BOS> {render_prompt(inst_text, \'\')}"',
+        1
+    )
+    assert mutant_bos != orig_content
+    with pytest.raises(AssertionError, match="Double <BOS> detected"):
+        evaluate_site_tokens(test_file, content=mutant_bos, tok=env["tokenizer"], bos_id=env["bos_id"])
+
+    # Mutant 2: site loss (one site deleted/renamed)
+    mutant_loss = orig_content.replace(
+        'prompt = render_prompt(inst_text, "")',
+        'ignored_prompt = "dummy"',
+        1
+    )
+    assert mutant_loss != orig_content
+    sites_after_loss = evaluate_site_tokens(test_file, content=mutant_loss, tok=env["tokenizer"], bos_id=env["bos_id"])
+    assert len(sites_after_loss) == 1, f"Expected 1 site after removing one, got {len(sites_after_loss)}"
 
 
 def test_canary_d_tokenizer_config_validation_and_describe(env, capsys):

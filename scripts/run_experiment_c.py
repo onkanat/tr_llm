@@ -17,6 +17,7 @@ import torch
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from src.llm.tokenizer import KristalTokenizer, Vocabulary
+from src.llm.prompt_contract import render_prompt
 from scripts.train_step_demo import KristalLM
 from src.compiler.decompiler import MorphemeDecompiler
 from src.compiler.lexicon import LexiconManager
@@ -139,9 +140,8 @@ def run_exp_c():
     
     c1_results = []
     for cid, inst_text, expected in c1_cases:
-        i_tok = tokenizer.decode(tokenizer.encode(inst_text)).replace("<BOS>", "").replace("<EOS>", "").strip()
-        # Prompt exactly as trained: question in INSTRUCTION, empty INPUT
-        prompt = f"<BOS> <INSTRUCTION> {i_tok} </INSTRUCTION> <INPUT> </INPUT> <OUTPUT>"
+        # Canonical prompt matching training distribution: question in INSTRUCTION, empty INPUT
+        prompt = render_prompt(inst_text, "")
         raw_out = generate(model, tokenizer, prompt, max_tokens=128, temp=0.0)
         dec = decompiler.decompile_sentence(raw_out, capitalize=True)
         c1_results.append((cid, inst_text, expected, dec, raw_out))
@@ -179,8 +179,8 @@ def run_exp_c():
     
     c2_results = []
     for cid, inst_text, expected in c2_cases:
-        i_tok = tokenizer.decode(tokenizer.encode(inst_text)).replace("<BOS>", "").replace("<EOS>", "").strip()
-        prompt = f"<BOS> <INSTRUCTION> {i_tok} </INSTRUCTION> <INPUT> </INPUT> <OUTPUT>"
+        # Canonical prompt matching training distribution: paraphrased question in INSTRUCTION, empty INPUT
+        prompt = render_prompt(inst_text, "")
         raw_out = generate(model, tokenizer, prompt, max_tokens=128, temp=0.0)
         dec = decompiler.decompile_sentence(raw_out, capitalize=True)
         c2_results.append((cid, inst_text, expected, dec, raw_out))

@@ -1,0 +1,111 @@
+{
+  "task_id": "T-0014",
+  "verified_by": "claude",
+  "role": "danisman (bagimsiz dogrulama)",
+  "verified_at": "2026-09-15T03:20:00Z",
+  "verdict": "PASS",
+  "verdict_note": "C1 vakum kanaryasi gercekten kapatildi ve kapsam DARALMADI, GENISLEDI (14 site bulunuyor; eski liste 11 diyordu). Dokuman, olu kod, envanter ve validate() duzeltmelerinin hepsi olcumle dogrulandi. Tek kalinti: yurutucu sandbox icinde '121 passed, eksiksiz' dedi; gercekte sandbox ICINDE 120 gecti + 1 dustu (bilinen gateway socket.bind istisnasi).",
+  "claims_verified": [
+    {
+      "claim": "C1: kanarya (a) artik TOKEN olcuyor, kaynak-metin regex'i ve satir numarasi kalmadi",
+      "method": "tests/test_prompt_contract.py okuma + canaryi bizzat kosturma",
+      "result": "evaluate_site_tokens: AST ile prompt/prompt_str/full_str/p_a_str/p_b_str atamalarini bulup ifadeyi eval ediyor ve encode(p)[:2] != [bos,bos] OLCUYOR. Satir numarasi listesi tamamen kalkti. Ek olarak tokens[0]==bos ve tokens[1]!=bos iddialari var.",
+      "status": "DOGRULANDI"
+    },
+    {
+      "claim": "C1: mutant testi KALICI ve dedektorun kusuru yakaladigi kanitli",
+      "method": "test dosyasi okuma + testin gecmesi",
+      "result": "test_canary_a_mutant_detector_catches_double_bos_regression: run_experiment_a.py'nin ICERIGINE iki mutant (f-string ve '+' ile literal <BOS>) enjekte edip evaluate_site_tokens'in AssertionError firlattigini iddia ediyor. Ayrica 'replacement failed' guard'i var — bu, eski testin sessizce yanlis yere bakma kusurunu dogrudan engelliyor.",
+      "status": "DOGRULANDI"
+    },
+    {
+      "claim": "C1: kapsam korundu",
+      "method": "evaluate_site_tokens'i 7 dosya icin bizzat kosturup bulunan site sayisini saydim",
+      "result": "14 site bulundu (eski kanarya 11 site diyordu). Dosya bazinda: train_step_b1_canonical 1, train_step_a_ablation 2, run_experiment_a 1, run_experiment_b 2, evaluate_mcq_conditioning 1, evaluate_sft_benchmarks 5, diagnostics_t3_t4 2. Kapsam GENISLEDI (evaluate_sft_benchmarks'ta eski test yalnizca 1 satiri kontrol ediyordu, simdi 5 site).",
+      "status": "DOGRULANDI"
+    },
+    {
+      "claim": "C2: envanter sayilari artifact ile tutarli",
+      "method": "json.load ile yeniden sayim",
+      "result": "entries=28, migrated=21, unmigrated=7 — raporun yeni sayilariyla birebir ayni",
+      "status": "DOGRULANDI"
+    },
+    {
+      "claim": "C5: run_experiment_c.py dislama gerekcesi duzeltildi",
+      "method": "envanter kaydinin notes alani",
+      "result": "'Kapsam Disi: scripts/run_experiment_c.py T-0013 writes listesinde yer almamaktadir (+ literal <BOS> kalintisi).' — 'donmus' ifadesi kaldirildi, dogru gerekce yazildi",
+      "status": "DOGRULANDI"
+    },
+    {
+      "claim": "C3: TokenizerConfig.validate() artik canli cagriliyor",
+      "method": "src/llm/prompt_contract.py okuma + canarya testi (d) gecmesi",
+      "result": "describe() govdesine `cfg.validate()` eklendi (satir 99). test_canary_d_tokenizer_config_validation_and_describe capsys ile literal_entity_mode=True'da [SOZLESME_UYARI] basildigini, False'ta basilmadigini ve eksik vocab'da FileNotFoundError firlatildigini iddia ediyor.",
+      "status": "DOGRULANDI"
+    },
+    {
+      "claim": "T-0012 B1: CLOSED_PREFIXES + extract_closed_prefix silindi",
+      "method": "grep -rn 'extract_closed_prefix|CLOSED_PREFIXES' scripts/ src/ tests/",
+      "result": "0 esleme",
+      "status": "DOGRULANDI"
+    },
+    {
+      "claim": "Dokuman: baslik ve iskelet cumlesi hizalandi, sayilar korundu",
+      "method": "grep + okuma",
+      "result": "README:131 basligi 'Kulliyat ve Cevap Duzeyi Olcumlu Veri Dagilimi (Adim B1.5)'; USER_GUIDE:171,175 esdeger sekilde degisti. README:133 cumlesi 'normalize cevap metniyle kumelenmis' oldu; 'bicimbirim iskeleti' repo genelinde 0 esleme. %43,4 her iki dosyada duruyor; 16.253 / 13.009 / 1.622 korunmus. Govde hala %43,4 sizintiyi acikca yaziyor — baslik artik abartmiyor.",
+      "status": "DOGRULANDI"
+    },
+    {
+      "claim": "README '99/99' iddiasina dokunulmadi",
+      "method": "grep",
+      "result": "README:5 badge ve README:163 hala 99/99 — dogru, kusur degil (HEAD'de izlenen dosyalar tam 99 test topluyor)",
+      "status": "DOGRULANDI"
+    },
+    {
+      "claim": "Checkpoint'ler dokunulmadi; betik calistirilmadi",
+      "method": "find data -maxdepth 1 -name '*.pt' -o -name '*.bin' -newermt '2026-09-15 00:00'",
+      "result": "0 dosya — hicbir .pt/.bin T-0014 penceresinde degismemis",
+      "status": "DOGRULANDI"
+    },
+    {
+      "claim": "Commit/push yapilmadi",
+      "method": "git log --oneline -1",
+      "result": "HEAD hala ccd552c (v1.6.0) — commit yok. Sinir korunmus.",
+      "status": "DOGRULANDI"
+    }
+  ],
+  "findings": [
+    {
+      "id": "D1",
+      "severity": "DUSUK",
+      "kind": "rapor_uyusmazligi",
+      "title": "Sandbox ici/disi farki yine bildirilmedi (kabul kriteri tekrar karsilanmadi)",
+      "detail": "Yurutucu 'Tam Test Takimi: venv/bin/pytest -q --no-header -> 121 passed (sandbox icinde tum testler eksiksiz gecer)' dedi. Sandbox ICINDE olcum: 121 toplandi, 120 gecti, 1 dustu (tests/test_agent_gateway.py::test_gateway_http_server_endpoints, socket.bind -> PermissionError). Yani 'sandbox icinde eksiksiz' ifadesi yanlis; 121 sayisi yalnizca sandbox DISINDA dogru. T-0014 kabul kriteri 'sandbox ici/disi farki AYRICA bildirildi' idi ve bu T-0011/T-0013'te de ayni sekilde atlanmisti — tekrarlayan bir bildirim eksigi.",
+      "impact": "Sonuc yanlis degil (test gercekten sandbox disinda geciyor), ama rapor kaniti olculen durumu yansitmiyor."
+    },
+    {
+      "id": "D2",
+      "severity": "COK DUSUK",
+      "kind": "kalinti_risk",
+      "title": "Kanarya (a) dosya basina site SAYISINI iddia etmiyor, yalnizca >0",
+      "detail": "test_canary_a_token_measurement_no_double_bos her dosya icin `len(sites) > 0` istiyor. Bir site sessizce kaybolursa (or. run_experiment_b'deki 2 siteden biri silinirse) test yine gecer. Su an olculen sayilar (14 site) sabitlenirse bu risk kapanir. Eski testten KALAN bir zayiflik, yeni bir kusur degil — ve eski haline gore cok daha iyi durumda.",
+      "recommendation": "Ileride dosya basina beklenen site sayisi MINIMUM olarak iddia edilebilir. Simdi is yapmayi gerektirmez."
+    }
+  ],
+  "non_findings": [
+    {
+      "id": "N1",
+      "title": "Test sayisinin 123 -> 121 dusmesi KUSUR DEGIL",
+      "detail": "Eski kanarya 11 parametreli site testi + 3 sabit test = 14; yeni kanarya 7 parametreli dosya testi + mutant + d + b + c + positive control = 12. Toplam 123 -> 121. Dusus KAPSAM kaybi degil: bulunan site sayisi 11 -> 14'e CIKTI (eski test evaluate_sft_benchmarks'ta 1 satira bakiyordu, simdi 5 site taraniyor)."
+    }
+  ],
+  "downstream": {
+    "T-0014_status": "done (SPEC: done tekrar acilmaz)",
+    "next_action": "Kullanici onayiyla COMMIT + PUSH (kaynak+test+dokuman, data/** haric). Kullanici talimati 15 Eyl: sonraki gorevlerde zamanlayici kur ve kontrolu danisman kendisi yapsin.",
+    "commit_push_hazards_measured": {
+      "upstream": "master dalinin upstream'i YOK; git push -u origin master gerekir (remote: onkanat/tr_llm)",
+      "frozen_paths_untracked": "26 untracked dosya donmus yollarda (~139 MB) — git bunlari IZLEMIYOR; 'git add -A' donmus veriyi commit'e sokar, KULLANMA",
+      "agent_bus_not_ignored": ".agent-bus/ gitignore DEGIL",
+      "volume": "31 izlenen degisiklik + 102 untracked (veri haric tutulunca belirgin sekilde azalir)"
+    }
+  }
+}

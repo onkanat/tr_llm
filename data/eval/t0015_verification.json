@@ -1,0 +1,124 @@
+{
+  "task_id": "T-0015",
+  "verified_by": "claude",
+  "role": "danisman (bagimsiz dogrulama)",
+  "verified_at": "2026-09-15T04:35:00Z",
+  "verdict": "PASS",
+  "verdict_note": "run_experiment_c.py'deki cift <BOS> kusuru gercekten kapatildi ve duzeltme EGITIM HATTINA yaklastirdi: ayni kayit icin egitim akisi ile yeni kanonik promptun ortak oneki 2 -> 32'ye cikti (literal <BOS> ile 1 idi; yani eski hal egitimden 1 token sonra, duzeltilmis hal 32 token boyunca birebir ayni). Kanarya artik run_experiment_c.py'yi goruyor ve 2 site buluyor. Duzeltme iki mutant tarafindan KANITLANABILIR sekilde korunuyor: her iki mutant da GERCEK test fonksiyonunu dusurdu (danismanin kendi pozitif kontrolu). Tek uyusmazlik, yurutucunun sandbox-ici test sayisidir (asagida F1); sonucu etkilemez.",
+  "claims_verified": [
+    {
+      "claim": "Iki site (144 ve 183) de artik 'prompt = render_prompt(inst_text, \"\")' kullaniyor; literal <BOS> kaldirildi.",
+      "method": "scripts/run_experiment_c.py:136-190 okundu + AST ile site taramasi",
+      "result": "Iki sitede de tam olarak 'prompt = render_prompt(inst_text, \"\")'. ciftBOS=False.",
+      "status": "DOGRULANDI"
+    },
+    {
+      "claim": "Yeni prompt tokenlari [2, 1707, 2014, 4508].",
+      "method": "venv/bin/python ile render_prompt(gercek_instruction,'') encode edildi",
+      "result": "Gercek ahsap/marangozluk instruction'i ile tokens[:4] == [2, 1707, 2014, 4508] — birebir tuttu. (Kanaryadaki sahte inst_text='Uzman olarak.' ile [2,1707,6754,52,173,0] cikar; iki sayi FARKLI POPULASYONLARDIR.)",
+      "status": "DOGRULANDI"
+    },
+    {
+      "claim": "Yeni Exp C <-> egitim akisi ortak onek = 32 token (tam esitlik).",
+      "method": "carpenter_specialization_dataset.jsonl kayitlari icin tok.encode(json.dumps(rec)) (EGITIM HATTI, run_goal_pipeline.py:80) ile tok.encode(render_prompt(inst,'')) karsilastirildi",
+      "result": "kayit 0: ortak onek = 32 (egitim[:6] == yeni[:6] == [2,1707,2014,4508,13,2669]). kayit 1: 31, kayit 2: 19 — fark, instruction metni farkli oldugu icin beklenen; sayi iddia edildigi kayitta dogru. KONTROL: eski hatali hal (f\"<BOS> {render_prompt(...)}\") ile ortak onek = 1 ve ciftBOS=True — duzeltme egitim hattina 1 -> 32 iyilesme sagladi.",
+      "status": "DOGRULANDI"
+    },
+    {
+      "claim": "grep '<BOS>' run_experiment_c.py -> yalnizca satir 51.",
+      "method": "grep -n '<BOS>' scripts/run_experiment_c.py",
+      "result": "Tek esleme: satir 51 (masked_tags listesi icindeki '<BOS>' dizesi — zarf kurmuyor, maske listesi).",
+      "status": "DOGRULANDI"
+    },
+    {
+      "claim": "Kanarya run_experiment_c.py'yi artik kapsiyor ve 2 site buluyor.",
+      "method": "tests/test_prompt_contract.py okundu (PROMPT_FILES'e eklendi, satir 145; assert len(sites)==2 satir 156) + canary kosturuldu",
+      "result": "Dosya kapsamda; normal halde 2 site bulunuyor ve ikisi de temiz.",
+      "status": "DOGRULANDI"
+    },
+    {
+      "claim": "run_experiment_c icin kalici mutant testi eklendi.",
+      "method": "tests/test_prompt_contract.py:200-233 okundu",
+      "result": "test_canary_a_run_experiment_c_mutant_detector mevcut: mutant_bos (literal <BOS>) ve mutant_loss (site silme) dali var.",
+      "status": "DOGRULANDI"
+    },
+    {
+      "claim": "Duzeltme iki mutant tarafindan korunuyor.",
+      "method": "DANISMANIN KENDI POZITIF KONTROLU: $TMPDIR/mutantplug.py eklentisi ile open() kandirilarak mutant icerik GERCEK test fonksiyonuna (test_canary_a_token_measurement_no_double_bos[scripts/run_experiment_c.py]) verildi",
+      "result": "MUTANT=loss -> 'AssertionError: Expected exactly 2 prompt construction sites in scripts/run_experiment_c.py, found 1' (1 failed). MUTANT=bos -> 'AssertionError: Double <BOS> detected in scripts/run_experiment_c.py:144: tokens[:3]=[2, 2, 1707]' (1 failed). Dosya hash'i oncesi/sonrasi ayni (42cf0019...) — mutasyon kalinti birakmadi.",
+      "status": "DOGRULANDI"
+    },
+    {
+      "claim": "Tam test takimi sandbox DISINDA 123 passed.",
+      "method": "venv/bin/pytest -q --no-header (sandbox disi)",
+      "result": "123 passed in 10.96s. Dogrulandi.",
+      "status": "DOGRULANDI"
+    },
+    {
+      "claim": "Tam test takimi sandbox ICINDE de 123 passed (fark yok).",
+      "method": "venv/bin/pytest -q --no-header (sandbox ici, ayni ortam)",
+      "result": "1 failed, 122 passed in 24.56s. Dusan test: tests/test_agent_gateway.py::TestAgentGateway::test_gateway_http_server_endpoints -> PermissionError: [Errno 1] Operation not permitted (socketserver.py:478 self.socket.bind). Bu, sandbox'in socket.bind'i engellemesinden kaynaklanan BILINEN ortam farki; T-0015 degisikligiyle ilgisi yok. Bkz. F1.",
+      "status": "KISMEN_DOGRULANDI"
+    },
+    {
+      "claim": "Envanter: 28 toplam / 23 migrate / 5 unmigrated.",
+      "method": "data/eval/prompt_contract_inventory.json bagimsiz sayildi",
+      "result": "entries=28, migrated=23, unmigrated=5. Bes unmigrated kaydin TAMAMI sapma=null: run_goal_pipeline.py:80, prepare_balanced_sft_dataset.py:68, prepare_chat_balanced_dataset.py:41, prepare_chat_fine_tune_dataset.py:41, scratch/measure_forward_pass.py:17. run_experiment_c.py'nin 144 ve 183 kayitlari migrated=true.",
+      "status": "DOGRULANDI"
+    },
+    {
+      "claim": "Hicbir .pt/.bin checkpoint'e dokunulmadi; commit yapilmadi.",
+      "method": "find data -maxdepth 1 \\( -name '*.pt' -o -name '*.bin' \\) -newermt '2026-09-15 00:00' | wc -l  +  git rev-parse --short HEAD",
+      "result": "0 dosya (yerel gece yarisindan sonra degisen checkpoint yok; gorev penceresi 03:50Z = 06:50 yerel). HEAD hala 8b3b48a. git status: yalnizca scripts/run_experiment_c.py + tests/test_prompt_contract.py (M) ve .agent-bus/tasks/T-0015.json (??).",
+      "status": "DOGRULANDI"
+    },
+    {
+      "claim": "Satir 143/182'deki yanlis yorumlar duzeltildi.",
+      "method": "Dosya okundu",
+      "result": "Her iki yerde de 'Canonical prompt matching training distribution: question in INSTRUCTION, empty INPUT'. Eski '# Prompt exactly as trained' iddiasi kaldirilmis.",
+      "status": "DOGRULANDI"
+    }
+  ],
+  "findings": [
+    {
+      "id": "F1",
+      "severity": "DUSUK",
+      "kind": "rapor_uyusmazligi",
+      "title": "Yurutucu sandbox-ici test sayisini yine ortam farkini belirtmeden bildirdi",
+      "detail": "Yurutucu raporu 'Sandbox icinde: 123 passed in 4.91s (tum testler ve test_agent_gateway.py dahil yesil)' diyor. Ayni ortamda olcum: sandbox ICINDE 1 failed, 122 passed (test_gateway_http_server_endpoints, socket.bind PermissionError); sandbox DISINDA 123 passed. Yurutucunun kendi sandbox yapilandirmasi daha gevsek olabilir, bu yuzden 'yanlis rapor' demiyorum; ancak iddia benim ortamimda YENIDEN URETILEMEDI. Ayni uyusmazlik T-0014'te de (D1) bildirilmisti — tekrar eden bir raporlama kali bi.",
+      "impact": "Sonuc etkilenmiyor: gateway testi T-0015 degisikligiyle ilgisiz ve sandbox disinda yesil. Ama kanit, dogrulanabilir olmasi icin ortam etiketiyle verilmeli."
+    },
+    {
+      "id": "F2",
+      "severity": "DUSUK",
+      "kind": "kanit_yetersizligi",
+      "title": "Yurutucunun mutant testi 'assert len(sites) == 2' korumasini DOGRUDAN calistirmiyor",
+      "detail": "test_canary_a_run_experiment_c_mutant_detector, mutant_loss icin evaluate_site_tokens'i dogrudan cagirip 'assert len(sites_after_loss) == 1' diyor. Bu, dedektorun 1 dondurdugunu kanitlar; ancak gercek testteki 'assert len(sites) == 2' satirinin ateslendigini gostermez (o satir bu testte hic yurutulmez). Yani koruma zinciri bir halka eksik kanitlanmisti.",
+      "impact": "Kapatildi: danismanin pozitif kontrolu mutant icerigi GERCEK test fonksiyonuna vererek 'Expected exactly 2 prompt construction sites ... found 1' hatasini uretti. Koruma gercekten calisiyor; eksik olan yalnizca yurutucunun kanit yontemiydi."
+    }
+  ],
+  "non_findings": [
+    {
+      "id": "N1",
+      "title": "Danismanin ilk olcumundeki 'ortak onek = 2' ile yurutucunun '32' celiskisi — BULGU DEGIL",
+      "detail": "Danismanin ilk probe'u kanaryadaki sahte inst_text='Uzman olarak.' kullaniyordu; yurutucu gercek ahsap/marangozluk instruction'ini kullandi. Ayni kayit uzerinde gercek instruction ile yeniden olcum: ortak onek = 32. Iki sayi farkli populasyonlari sayiyordu. (Hafiza kurali: iki sayi celisiyor sanma, once kumeyi dogrula.)"
+    },
+    {
+      "id": "N2",
+      "title": "Envanterdeki 5 unmigrated kaydin sapma=null olmasi KUSUR DEGIL",
+      "detail": "Bu bes dosya egitim/prompt kurmuyor ya da zarf uretmeyen ham JSON hatti (run_goal_pipeline.py:80 = egitim hatti, kanonik encode kullaniyor). sapma=null olmasi 'henuz kategorize edilmemis' degil, 'sapma yok' demek."
+    },
+    {
+      "id": "N3",
+      "title": "run_experiment_c.py'nin egitim hattiyla 32 token ortak onekte KESISMESI kusur degil, HEDEFTIR",
+      "detail": "'INPUT bos olsa da <INPUT></INPUT> blogu var' ile 'egitim akisi tum kaydi json.dumps ile encode ediyor' ayni zarfi uretiyor; ortak onekin 32'ye cikmasi tam da istenen hizalanma."
+    }
+  ],
+  "downstream": {
+    "T_0015_status": "done (SPEC: done tekrar acilmaz)",
+    "prior_results_invalidated": "T-0015 oncesi CALISTIRILMIS her Exp C ciktisi (C1 ezber / C2 genelleme) farkli bir zarf ile uretildi; karsilastirilabilir degil. Exp C yeniden kosulmali ve eski sonuclar 'gecersiz' olarak isaretlenmeli.",
+    "rerun_side_effect_risk": "scripts/run_experiment_c.py hicbir dosya YAZMIYOR (open(...,'w')/json.dump yok — dogrulandi). Yeniden kosmak donmus yollara dokunmaz; ancak model cikarimi yapar (data/kristal_carpenter_model.pt salt-okunur yuklenir) ve MPS kullanir.",
+    "next_action": "Kullanici onayiyla COMMIT + PUSH (scripts/run_experiment_c.py, tests/test_prompt_contract.py, data/eval/*.json; data/**'nin geri kalani ve .pt/.bin HARIC). git add -A KULLANMA.",
+    "scheduler_note": "Oturum ici cron b1fddb8a (9,31,53 * * * *) kurulu; bir sonraki kapanan gorevi kendisi dogrular."
+  }
+}

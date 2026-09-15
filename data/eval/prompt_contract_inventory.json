@@ -1,0 +1,245 @@
+{
+  "_meta": {
+    "task_id": "T-0013",
+    "description": "Repository-wide prompt/envelope construction inventory mapping file:line to migration status and deviation category.",
+    "deviation_types": {
+      "1": "Double <BOS> (literal <BOS> prepended before tokenizer.encode)",
+      "2": "Conditional <INPUT> (skipping <INPUT> block when empty)",
+      "3": "Prompt vs Full-Example confusion (render_prompt vs render_example)",
+      "4": "Lossy decode-encode roundtrip",
+      "5": "Tautology in tokenizer.py:138,140 (documented in contract, tokenizer.py is frozen)",
+      "6": "Content mismatch: 'belge: ... sorgu: ...' instead of '<BELGE> ... </BELGE> ...'"
+    },
+    "summary": {
+      "total_entries": 28,
+      "migrated_entries": 23,
+      "unmigrated_entries": 5
+    }
+  },
+  "entries": [
+    {
+      "file": "scripts/train_step_b1_canonical.py",
+      "line": 85,
+      "description": "MCQ prompt construction in training loop",
+      "migrated": true,
+      "sapma": 1,
+      "notes": "Replaced literal <BOS> with canonical render_prompt(inst, q)"
+    },
+    {
+      "file": "scripts/train_step_a_ablation.py",
+      "line": 84,
+      "description": "Greedy generation evaluation prompt",
+      "migrated": true,
+      "sapma": 1,
+      "notes": "Replaced literal <BOS> and removed decode-encode roundtrip (sapma 4); uses render_prompt(inst, inp)"
+    },
+    {
+      "file": "scripts/train_step_a_ablation.py",
+      "line": 129,
+      "description": "Quick MCQ evaluation prompt",
+      "migrated": true,
+      "sapma": 1,
+      "notes": "Replaced literal <BOS> and removed decode-encode roundtrip (sapma 4); uses render_prompt(inst, q)"
+    },
+    {
+      "file": "scripts/run_experiment_a.py",
+      "line": 136,
+      "description": "Instruction channel isolation experiment prompt",
+      "migrated": true,
+      "sapma": 1,
+      "notes": "Replaced literal <BOS> with render_prompt(inst, question) covering both instruction and no-instruction cases"
+    },
+    {
+      "file": "scripts/run_experiment_b.py",
+      "line": 169,
+      "description": "Correct schema fine-tuning training example (full_str)",
+      "migrated": true,
+      "sapma": 1,
+      "notes": "Replaced literal <BOS> ... <EOS> with canonical render_example(persona_inst, q, a)"
+    },
+    {
+      "file": "scripts/run_experiment_b.py",
+      "line": 241,
+      "description": "Post fine-tuning 5 diversity questions prompt",
+      "migrated": true,
+      "sapma": 1,
+      "notes": "Replaced literal <BOS> with canonical render_prompt(persona_inst, q)"
+    },
+    {
+      "file": "scripts/evaluate_mcq_conditioning.py",
+      "line": 169,
+      "description": "MCQ prompt construction",
+      "migrated": true,
+      "sapma": 1,
+      "notes": "Replaced literal <BOS> with canonical render_prompt(inst, q)"
+    },
+    {
+      "file": "scripts/evaluate_sft_benchmarks.py",
+      "line": 206,
+      "description": "Carpentry questions evaluation prompt",
+      "migrated": true,
+      "sapma": 1,
+      "notes": "Replaced literal <BOS> with canonical render_prompt(inst, q)"
+    },
+    {
+      "file": "scripts/evaluate_sft_benchmarks.py",
+      "line": 238,
+      "description": "Cross-checkpoint isolation questions prompt",
+      "migrated": true,
+      "sapma": 1,
+      "notes": "Replaced literal <BOS> with canonical render_prompt(inst, q)"
+    },
+    {
+      "file": "scripts/evaluate_sft_benchmarks.py",
+      "line": 277,
+      "description": "Out-of-domain questions prompt",
+      "migrated": true,
+      "sapma": 1,
+      "notes": "Replaced literal <BOS> with canonical render_prompt(inst, q)"
+    },
+    {
+      "file": "scripts/evaluate_sft_benchmarks.py",
+      "line": 286,
+      "description": "Temperature and seed test prompt",
+      "migrated": true,
+      "sapma": 1,
+      "notes": "Replaced literal <BOS> with canonical render_prompt(z_inst, z_q)"
+    },
+    {
+      "file": "scripts/evaluate_sft_benchmarks.py",
+      "line": 325,
+      "description": "Answerability/abstain test set prompt",
+      "migrated": true,
+      "sapma": 1,
+      "notes": "Replaced literal <BOS> with canonical render_prompt(inst, q_text)"
+    },
+    {
+      "file": "scripts/diagnostics_t3_t4.py",
+      "line": 126,
+      "description": "Diagnostics Format A prompt (question in instruction)",
+      "migrated": true,
+      "sapma": 1,
+      "notes": "Replaced literal <BOS> with canonical render_prompt(q, '')"
+    },
+    {
+      "file": "scripts/diagnostics_t3_t4.py",
+      "line": 131,
+      "description": "Diagnostics Format B prompt (deployment with role)",
+      "migrated": true,
+      "sapma": 1,
+      "notes": "Replaced literal <BOS> with canonical render_prompt(role, q)"
+    },
+    {
+      "file": "scripts/train_realistic_rag_arms.py",
+      "line": 95,
+      "description": "Realistic RAG Dataset prompt formatting",
+      "migrated": true,
+      "sapma": 2,
+      "notes": "Eliminated conditional 'if inp:' check; now always generates <INPUT> via render_prompt(inst, inp)"
+    },
+    {
+      "file": "src/llm/curriculum.py",
+      "line": 69,
+      "description": "Curriculum item rendering",
+      "migrated": true,
+      "sapma": 3,
+      "notes": "Added separate render_example and render_prompt methods delegating to prompt_contract; aliased render_prompt_template"
+    },
+    {
+      "file": "src/rag/epistemic_agent.py",
+      "line": 303,
+      "description": "Epistemic Curiosity Agent RAG prompt input formatting",
+      "migrated": true,
+      "sapma": 6,
+      "notes": "Replaced 'belge: <tags> sorgu: <tags>' with canonical build_rag_input(doc_text, query)"
+    },
+    {
+      "file": "src/rag/rag_pipeline.py",
+      "line": 126,
+      "description": "End-to-end RAG simulation pipeline prompt input formatting",
+      "migrated": true,
+      "sapma": 6,
+      "notes": "Replaced 'belge: <tags> sorgu: <tags>' with canonical build_rag_input(doc_text, query)"
+    },
+    {
+      "file": "verify_rag.py",
+      "line": 105,
+      "description": "RAG verification script input formatting",
+      "migrated": true,
+      "sapma": 6,
+      "notes": "Replaced 'belge: <tags> sorgu: <tags>' with canonical build_rag_input(doc_text, query_text)"
+    },
+    {
+      "file": "chat_prompt.py",
+      "line": 612,
+      "description": "Interactive CLI SFT mode RAG prompt formatting",
+      "migrated": true,
+      "sapma": 6,
+      "notes": "Replaced 'belge: <tags> sorgu: <tags>' with canonical build_rag_input(doc_text, query)"
+    },
+    {
+      "file": "chat_prompt.py",
+      "line": 701,
+      "description": "Interactive CLI RAG mode prompt formatting",
+      "migrated": true,
+      "sapma": 6,
+      "notes": "Replaced 'belge: <tags> sorgu: <tags>' with canonical build_rag_input(doc_text, query)"
+    },
+    {
+      "file": "scripts/run_experiment_c.py",
+      "line": 144,
+      "description": "Persona isolation experiment prompt (Exp C)",
+      "migrated": true,
+      "sapma": 1,
+      "notes": "Replaced literal <BOS> with canonical render_prompt(inst_text, '')"
+    },
+    {
+      "file": "scripts/run_experiment_c.py",
+      "line": 183,
+      "description": "Carpenter prompt in Exp C",
+      "migrated": true,
+      "sapma": 1,
+      "notes": "Replaced literal <BOS> with canonical render_prompt(inst_text, '')"
+    },
+    {
+      "file": "scripts/run_goal_pipeline.py",
+      "line": 80,
+      "description": "compile_jsonl_to_bin raw JSON input",
+      "migrated": false,
+      "sapma": null,
+      "notes": "Kapsam Dışı: JSONL girdi doğrudan tokenizer.encode'a verilir; tokenizer._normalize_text tarafından kanonik normalize edilir."
+    },
+    {
+      "file": "scripts/prepare_balanced_sft_dataset.py",
+      "line": 68,
+      "description": "Dataset preparation JSON writing",
+      "migrated": false,
+      "sapma": null,
+      "notes": "Kapsam Dışı: Veri seti hazırlama betiği; JSON dict üretir, tokenizer._render_structured_prompt tarafından normalize edilir."
+    },
+    {
+      "file": "scripts/prepare_chat_balanced_dataset.py",
+      "line": 41,
+      "description": "Chat dataset preparation JSON writing",
+      "migrated": false,
+      "sapma": null,
+      "notes": "Kapsam Dışı: Veri seti hazırlama betiği; JSON dict üretir, tokenizer normalize eder."
+    },
+    {
+      "file": "scripts/prepare_chat_fine_tune_dataset.py",
+      "line": 41,
+      "description": "Fine-tune dataset preparation JSON writing",
+      "migrated": false,
+      "sapma": null,
+      "notes": "Kapsam Dışı: Veri seti hazırlama betiği; JSON dict üretir, tokenizer normalize eder."
+    },
+    {
+      "file": "scratch/measure_forward_pass.py",
+      "line": 17,
+      "description": "Benchmark script model loading",
+      "migrated": false,
+      "sapma": null,
+      "notes": "Kapsam Dışı: Scratch benchmark betiği; pozitif kontrol kanaryası için referans olarak korunmuştur."
+    }
+  ]
+}

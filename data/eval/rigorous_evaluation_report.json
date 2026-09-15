@@ -1,0 +1,75 @@
+{
+  "evaluation_target": "val.jsonl",
+  "val_metadata": {
+    "path": "/Users/hakankilicaslan/Git/tr_llm/data/realistic_rag/val.jsonl",
+    "size_bytes": 194775,
+    "mtime_timestamp": 1789375085.0321038,
+    "mtime_iso_utc": "2026-09-14T08:38:05.032104+00:00",
+    "mtime_local_str": "2026-09-14 11:38:05",
+    "sha256": "647e9b33204eed7efc6fd1a489d73847d2c880281413a0513d8045b8054c291f",
+    "total_records": 300,
+    "natural_records": 200,
+    "counterfactual_records": 100
+  },
+  "baselines": {
+    "first_sentence_rouge": 0.29042362452115517,
+    "tfidf_sentence_rouge": 0.29042362452115517,
+    "tfidf_unique_fact_baseline": 0.3701544392345081
+  },
+  "arms": {
+    "arm_A": {
+      "checkpoint": "/Users/hakankilicaslan/Git/tr_llm/data/kristal_rag_arm_a_best.pt",
+      "vocab": "/Users/hakankilicaslan/Git/tr_llm/data/vocab.json",
+      "literal_entity_mode": false,
+      "val_loss": 6.0252968453430045,
+      "val_ppl": 413.7644478444022,
+      "natural_loss": 5.900419899709185,
+      "natural_ppl": 365.19077917736206,
+      "counterfactual_loss": 6.277669740129423,
+      "counterfactual_ppl": 532.5462456636778,
+      "old_reported_loss": 3.7342,
+      "delta": 2.2910968453430045,
+      "sample_counts": {
+        "total": 300,
+        "natural": 200,
+        "counterfactual": 100
+      }
+    },
+    "arm_B": {
+      "checkpoint": "/Users/hakankilicaslan/Git/tr_llm/data/kristal_rag_arm_b_best.pt",
+      "vocab": "/Users/hakankilicaslan/Git/tr_llm/data/vocab_entity.json",
+      "literal_entity_mode": true,
+      "val_loss": 5.80420101911662,
+      "val_ppl": 331.69007341690696,
+      "natural_loss": 5.6957481529517775,
+      "natural_ppl": 297.5993601585572,
+      "counterfactual_loss": 6.019658344340934,
+      "counterfactual_ppl": 411.43800158904435,
+      "old_reported_loss": 3.6262,
+      "delta": 2.1780010191166204,
+      "sample_counts": {
+        "total": 300,
+        "natural": 200,
+        "counterfactual": 100
+      }
+    },
+    "arm_C": {
+      "checkpoint": "/Users/hakankilicaslan/Git/tr_llm/data/kristal_rag_arm_c_best.pt",
+      "vocab": "/Users/hakankilicaslan/Git/tr_llm/data/vocab_entity.json",
+      "literal_entity_mode": true,
+      "val_loss": 5.7079065373312385,
+      "val_ppl": 301.23977349715307,
+      "natural_loss": 5.588280402479353,
+      "natural_ppl": 267.2756178282023,
+      "counterfactual_loss": 5.945562207791643,
+      "counterfactual_ppl": 382.05409471848964,
+      "old_reported_loss": 3.2994,
+      "delta": 2.4085065373312387,
+      "sample_counts": {
+        "total": 300,
+        "natural": 200,
+        "counterfactual": 100
+      }
+    }
+  }
+}

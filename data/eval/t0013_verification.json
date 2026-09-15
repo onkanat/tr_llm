@@ -1,0 +1,164 @@
+{
+  "task_id": "T-0013",
+  "verified_by": "claude",
+  "role": "danisman (bagimsiz dogrulama)",
+  "verified_at": "2026-09-15T00:20:00Z",
+  "verdict": "PASS (cekirdek mimari) + 1 CIDDI test bulgusu",
+  "verdict_note": "Mimari sozlesme iddialarinin hepsi olcumle dogrulandi: render_example token ozdes, render_prompt kanonik, SAPMA 6 kapali, resize_state_dict CANLI (vakum degil), checkpoint'ler dokunulmamis. Ancak kanarya (a) VAKUM: kusurun geri gelisini goremiyor.",
+  "claims_verified": [
+    {
+      "claim": "render_example cikisi _render_structured_prompt ile AYNI token dizisini veriyor",
+      "method": "izole probe: 4 vaka (bos instruction, bos input, literal <OUTPUT> iceren instruction dahil) icin encode(a)==encode(b)",
+      "result": "4/4 OZDES (len 14/9/12/13 birebir)",
+      "status": "DOGRULANDI"
+    },
+    {
+      "claim": "Sozlesme kanonik renderer'a DELEGE ediyor, yeniden yazmiyor",
+      "method": "kod okuma",
+      "result": "render_example dogrudan KristalTokenizer._render_structured_prompt(None, item) cagiriyor; tokenizer.py DEGISTIRILMEMIS",
+      "status": "DOGRULANDI"
+    },
+    {
+      "claim": "render_prompt: tek BOS, kosulsuz <INPUT>, <OUTPUT>'ta biter",
+      "method": "izole probe: 3 vaka (bos instruction / bos input) icin encode(p)[:2], bitis etiketi ve spec'teki referans dize ile karsilastirma",
+      "result": "ilk2=[2, 1707]/[2,1704]/[2,1707] -> cift BOS YOK; biter_OUTPUT=True; referans dize ile AYNI=True (3/3)",
+      "status": "DOGRULANDI"
+    },
+    {
+      "claim": "render_prompt'un rsplit('<OUTPUT>') kirpmasi guvenli",
+      "method": "instruction icine literal '<OUTPUT>' koyup karsilastirma",
+      "result": "bozulmuyor: rsplit son etiketi aliyor, instruction icindeki etiket korunuyor; referans ile AYNI",
+      "status": "DOGRULANDI"
+    },
+    {
+      "claim": "SAPMA 6 kapandi: servis yolunda 'belge: ... sorgu: ...' kalmadi",
+      "method": "grep -rn 'belge: ' src/ chat_prompt.py verify_rag.py",
+      "result": "0 eslesme",
+      "status": "DOGRULANDI"
+    },
+    {
+      "claim": "Siteler gercekten sozlesmeye migrate edildi",
+      "method": "kod okuma (site govdeleri)",
+      "result": "train_step_b1_canonical.py:84 prompt_str = render_prompt(inst, q); run_experiment_a.py:136 prompt = render_prompt(inst, question) — literal <BOS> yok",
+      "status": "DOGRULANDI"
+    },
+    {
+      "claim": "resize_state_dict [SOZLESME_UYARI] ile boyut uyusmazligini bildiriyor (VAKUM DEGIL)",
+      "method": "repo genelinde tanim/import taramasi",
+      "result": "prompt_contract.py:114'teki tanim CANLI: 8 modul ondan import ediyor (verify_rag, chat_prompt, evaluate_mcq_conditioning, run_experiment_a, run_experiment_b, train_step_a_ablation, evaluate_sft_benchmarks, agent_gateway). Uyari yolu gercekten kosuyor.",
+      "status": "DOGRULANDI"
+    },
+    {
+      "claim": "chat_prompt.load_model_instance sessiz yuklemesi kapandi",
+      "method": "kod okuma + canarya testi (c) gecer",
+      "result": "[SOYAGACI] yuklenen=<abs yol> sha256=<...> anahtar=<n> ve [SOYAGACI_UYARI] eksik/fazla satirlari yaziliyor; eksik dosyada FileNotFoundError",
+      "status": "DOGRULANDI"
+    },
+    {
+      "claim": "describe() sozlesme satirini dogru formatta uretiyor",
+      "method": "gercek cagri",
+      "result": "[SOZLESME] zarf=etiket surum=2 vocab=data/vocab.json(31357 token) literal_entity=False — spec'in istedigi format birebir",
+      "status": "DOGRULANDI"
+    },
+    {
+      "claim": "literal_entity_mode servis yolunda ACILMAMIS",
+      "method": "repo genelinde literal_entity_mode taramasi",
+      "result": "servis yolu (agent_gateway) yalnizca resize_state_dict import ediyor; True yalnizca RAG pilot egitim/degerlendirme betiklerinde",
+      "status": "DOGRULANDI"
+    },
+    {
+      "claim": "Hicbir checkpoint'e dokunulmadi",
+      "method": "data/*.pt ve data/*.bin mtime listesi",
+      "result": "en gec mtime 14 Eyl 14:14 (T-0013 ~19:00'da kostu); hicbir .pt/.bin T-0013 penceresinde degismemis",
+      "status": "DOGRULANDI"
+    },
+    {
+      "claim": "Kapsam: yalnizca bildirilen 23 dosya",
+      "method": "git status --short karsilastirmasi",
+      "result": "T-0013'e ait degisiklikler yazma listesiyle ortusuyor; listede olmayan dosyaya dokunulmamis",
+      "status": "DOGRULANDI"
+    },
+    {
+      "claim": "Tam takim 123/123",
+      "method": "venv/bin/pytest -q --no-header",
+      "result": "sandbox ICINDE 122 gecti + 1 dustu (test_gateway_http_server_endpoints, socket.bind PermissionError -> sandbox kaynakli). Toplam 123 dogru.",
+      "status": "DOGRULANDI"
+    }
+  ],
+  "findings": [
+    {
+      "id": "C1",
+      "severity": "CIDDI",
+      "kind": "vakum_kanarya",
+      "title": "Kanarya (a) kusurun geri gelisini GOREMIYOR — kaynak-metin regex'i + bayat satir numaralari",
+      "detail": "Kabul kriteri 'her site icin encode(p)[:2] != [BOS,BOS]' diye TOKEN duzeyinde kanit istiyordu. Test bunun yerine kaynak metinde re.search(r'[\"\\']<BOS>\\s*<', chunk) yapiyor (tests/test_prompt_contract.py:117). Ustelik 11 hedef site ESKI satir numaralarina sabitlenmis (+-10 satir pencere) ve yurutucu bu dosyalari duzenledigi icin numaralar kaymis: 11 siteden 7'si artik prompt kurulum yeri DEGIL, rastgele koda bakiyor (run_experiment_b.py:182 -> 'model.train()', run_experiment_a.py:149 -> 'print(\"=\" * 80)', train_step_a_ablation.py:147 -> 'correct += 1', evaluate_mcq_conditioning.py:182 -> bos satir, evaluate_sft_benchmarks.py:219 -> '\"referans_cevap\": ref').",
+      "proof": "MUTANT DENEYI: scripts/run_experiment_a.py'nin bir kopyasina kusur GERI KONDU (gercek prompt satiri 136 -> f'<BOS> ' + render_prompt(...)). Olculdu: encode(p)[:2] == [2, 2] -> cift BOS GERCEKTEN VAR. Ayni dosyada kanaryanin KENDI mantigi test'in satir numaralariyla (149, 151) calistirildi -> assertion IKISINDE DE GECER. Yani test, korudugunu iddia ettigi kusur dosyada varken yesil yaniyor.",
+      "impact": "Kabul kriteri 3 (SAPMA 1 kapandi) bu testle KANITLANMIS SAYILAMAZ. Yesil isik 'duzeltildi' ile 'baska yere bakiyorum' ayrimini yapamiyor. Bu, spec'in ZORUNLU VAKUM KONTROLU'nun tam olarak engellemek istedigi durumdur.",
+      "not_vacuous_for": "Kanarya (b) token kimligini OLCUYOR (dogru), kanarya (c) pytest.raises ile DAVRANISI olcuyor (dogru). Vakum yalnizca (a)."
+    },
+    {
+      "id": "C2",
+      "severity": "ORTA",
+      "kind": "rapor_uyusmazligi",
+      "title": "Raporun envanter sayilari artifact ile uyusmuyor",
+      "detail": "Yurutucu raporu '26 kayit (18 migrated, 8 kapsam disi)' diyor. data/eval/prompt_contract_inventory.json gercekte 28 entries / 21 migrated=True / 7 migrated=False. Artifact rapordan DAHA IYI, ama makine-okunur iddia artifact'i tutmuyor.",
+      "evidence": "json.load -> _meta + entries(len=28); migrated dagilimi 21/7"
+    },
+    {
+      "id": "C3",
+      "severity": "ORTA",
+      "kind": "olu_kod",
+      "title": "TokenizerConfig.validate() hic cagrilmiyor — guvenlik uyarisi inert",
+      "detail": "Spec 'secim ACIK ve GURULTULU olsun' istiyordu. validate() literal_entity_mode=True'da [SOZLESME_UYARI] basiyor ama repo genelinde .validate() cagrisi SIFIR; describe() de onu cagirmiyor. Yani uyari yalnizca bir insan elle validate() cagirirsa cikiyor. literal_entity_mode servis yolunda kapali (dogru), ama guvenlik yuzeyi nominal.",
+      "evidence": "grep -rn '\\.validate()' --include=*.py -> 0 (venv haric); TokenizerConfig toplam 3 referans"
+    },
+    {
+      "id": "C4",
+      "severity": "DUSUK",
+      "kind": "rapor_eksigi",
+      "title": "Kabul kriteri 15'in 'sandbox istisnasi ayrica bildirilmis' kismi karsilanmamis",
+      "detail": "Rapor yalnizca '123 passed' diyor; sandbox icinde gateway HTTP testinin socket.bind PermissionError ile dustugunu ayrica bildirmemis. Sandbox disinda 123/123 dogru oldugu icin sonuc yanlis degil, ama bildirim eksik."
+    },
+    {
+      "id": "C5",
+      "severity": "DUSUK",
+      "kind": "gerekce_yanlisligi",
+      "title": "Envanterde run_experiment_c.py dislama gerekcesi hatali",
+      "detail": "Kayit 'Kapsam Disi: ... donmus deney betigi' diyor. Ama .agent-bus/frozen.json scripts/run_experiment_c.py'yi LISTELEMIYOR — dosya donmus degil. Dogru gerekce yalnizca 'T-0013 writes listesinde yok'. Dislama karari dogru ve ACIKCA beyan edilmis; yalnizca gerekcesi yanlis."
+    }
+  ],
+  "non_findings": [
+    {
+      "id": "N1",
+      "title": "run_experiment_c.py:144,:183 KAPSAM BOSLUGU DEGIL (kendimi curuttum)",
+      "detail": "Once 'T-0013 a ve b'yi duzeltti, c'yi atladi' diye bulgu sanmistim. Envanterde ACIKCA var: migrated=false, sapma=1, not='T-0013 writes listesinde yer almamaktadir'. Yani kabul kriteri 10'un ('migrate edilmeyenler ACIKCA gorunsun') tam olarak istedigi gibi beyan edilmis. Grep ile bakinca gorunmez, envanteri okumak gerekir. Bu oturumda besinci kez 'celiski' sanip curuttugum bulgu."
+    },
+    {
+      "id": "N2",
+      "title": "generate_infancy_dataset.py:162 f'<BOS> {w1} {w2} <EOS>' KUSUR DEGIL",
+      "detail": "tags_str generate_kristal_vector(token_ids, tags_str) fonksiyonuna METIN anahtari olarak gidiyor, tokenizer.encode'a DEGIL. Grep false positive'i — kaynakta literal <BOS> gormek cift BOS kaniti degildir."
+    },
+    {
+      "id": "N3",
+      "title": "repo genelindeki 76 '<BOS>' eslesmesinin tamami mesru",
+      "detail": "stoi.get('<BOS>', 2), .replace('<BOS>',''), stop-tag listeleri, vocab.encode('<BOS>') — hicbiri prompt dizgesine literal <BOS> yazmiyor. Gercek kalan iki site run_experiment_c.py'de ve beyan edilmis (N1)."
+    }
+  ],
+  "downstream": {
+    "T-0013_status": "done (SPEC: done tekrar acilmaz)",
+    "user_decision_2026_09_14": "Dokuman hizalama turu T-0013 kapanana kadar ertelendi; o tur COMMIT + PUSH icerecek. T-0013 kapandi -> tur artik acilabilir.",
+    "recommended_next_round_scope": [
+      "C1: kanarya (a)'yi token-id olcumuyle degistir (satir numarasi yerine site govdesini/kaynagini hedefle); vakum deneyini kalici test haline getir",
+      "Dokuman hizalama (T-0012'den devir): README/USER_GUIDE basligi ve 'bicimbirim iskeleti' cumlesi",
+      "T-0012 B1: CLOSED_PREFIXES + extract_closed_prefix olu kodunu sil",
+      "C2/C3: envanter sayilarini duzelt; validate() cagrisini describe()'a bagla veya kaldir",
+      "commit + push (upstream YOK -> git push -u origin master; 26 donmus untracked dosyayi EKLEME)"
+    ],
+    "commit_push_hazards_measured": {
+      "upstream": "master dalinin upstream'i YOK; git push -u origin master gerekir",
+      "frozen_paths_untracked": "26 untracked dosya donmus yollarda (data/b1_5_splits/**, realistic_rag/**, pedagogy_canonical/**; ~139 MB) — git bunlari IZLEMIYOR, naif 'git add -A' donmus veriyi commit'e sokar",
+      "agent_bus_not_ignored": ".agent-bus/ gitignore DEGIL",
+      "volume": "31 izlenen degisiklik + 102 untracked"
+    }
+  }
+}
