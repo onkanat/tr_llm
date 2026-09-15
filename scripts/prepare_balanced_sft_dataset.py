@@ -71,16 +71,30 @@ def main():
     print(f"  -> Benzersiz ebeveynlik kayıt sayısı: {len(parenting_records)}")
 
     # 4. Oversample Parenting SFT tasks to balance the dataset
-    # We want parenting tasks to make up about 30% of the dataset
-    # Scientific records: ~5,792
-    # Unique parenting records: ~4,000 (depending on dictionary size)
-    # Let's repeat parenting records 15 times to make it ~60,000 records (balancing token counts)
-    oversample_factor = 15
+    oversample_factor = 10
     oversampled_parenting = parenting_records * oversample_factor
     print(f"  -> Oversampling sonrası ebeveynlik kayıt sayısı: {len(oversampled_parenting)}")
 
-    # 5. Combine and Shuffle
-    all_records = scientific_records + oversampled_parenting
+    # 5. Load and Tokenize Turk Tarihi SFT tasks
+    history_sft_path = 'data/pedagogy/turk_tarihi_sft.jsonl'
+    history_sft_records = []
+    if os.path.exists(history_sft_path):
+        print("Tarih SFT görevleri yükleniyor ve tokenize ediliyor...")
+        with open(history_sft_path, 'r', encoding='utf-8') as f:
+            for line in f:
+                if line.strip():
+                    try:
+                        item = json.loads(line)
+                        raw_prompt = json.dumps(item, ensure_ascii=False)
+                        token_ids = tokenizer.encode(raw_prompt)
+                        if len(token_ids) > 2:
+                            history_sft_records.append(token_ids)
+                    except Exception:
+                        pass
+        print(f"  -> Benzersiz tarih SFT kayıt sayısı: {len(history_sft_records)}")
+
+    # 6. Combine and Shuffle
+    all_records = scientific_records + oversampled_parenting + history_sft_records
     print(f"  -> Toplam birleşik kayıt sayısı: {len(all_records)}")
     
     print("Kayıtlar karıştırılıyor (shuffling)...")

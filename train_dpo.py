@@ -121,10 +121,10 @@ def main():
     optimizer = optim.AdamW(model.parameters(), lr=lr, weight_decay=0.01)
 
     # 5. DPO Training Loop
-    max_steps = 150
-    batch_size = 4  # Gradient accumulation batch size
+    max_steps = 30
+    batch_size = 2  # Gradient accumulation batch size
     beta = 0.1      # DPO temperature parameter
-    eval_interval = 10
+    eval_interval = 5
 
     for arg_idx, arg in enumerate(sys.argv):
         if arg == "--steps" and arg_idx + 1 < len(sys.argv):
@@ -134,7 +134,7 @@ def main():
         if arg == "--beta" and arg_idx + 1 < len(sys.argv):
             beta = float(sys.argv[arg_idx + 1])
 
-    print(f"\nDPO Hizalama Başlatılıyor -> Adım: {max_steps}, Beta: {beta}, LR: {lr}, Batch: {batch_size}")
+    print(f"\nDPO Hizalama Başlatılıyor -> Adım: {max_steps}, Beta: {beta}, LR: {lr}, Batch: {batch_size}", flush=True)
     
     model.train()
     start_time = time.time()
@@ -161,15 +161,15 @@ def main():
             
             prompt_ids = rec["prompt_ids"]
             prompt_len = len(prompt_ids)
-            if prompt_len >= 600:
+            if prompt_len >= 200:
                 continue
                 
             chosen_ids = rec["chosen_ids"]
             rejected_ids = rec["rejected_ids"]
             
-            # Combine to full SFT/DPO sequences, truncated to max 768 tokens for fast CPU execution
-            seq_chosen = (prompt_ids + chosen_ids)[:768]
-            seq_rejected = (prompt_ids + rejected_ids)[:768]
+            # Combine to full SFT/DPO sequences, truncated to max 256 tokens for fast CPU execution
+            seq_chosen = (prompt_ids + chosen_ids)[:256]
+            seq_rejected = (prompt_ids + rejected_ids)[:256]
             
             # Move to tensors
             x_chosen = torch.tensor([seq_chosen], dtype=torch.long, device=device)
@@ -182,11 +182,10 @@ def main():
             pi_chosen_logp = get_logps(logits_chosen, x_chosen, prompt_len)
             pi_rejected_logp = get_logps(logits_rejected, x_rejected, prompt_len)
             
-            # Reference Model LogPs (No gradients computed)
+            # Reference Model LogPs (Frozen)
             with torch.no_grad():
                 ref_logits_chosen, _ = ref_model(x_chosen)
                 ref_logits_rejected, _ = ref_model(x_rejected)
-                
                 ref_chosen_logp = get_logps(ref_logits_chosen, x_chosen, prompt_len)
                 ref_rejected_logp = get_logps(ref_logits_rejected, x_rejected, prompt_len)
                 
@@ -206,9 +205,9 @@ def main():
         optimizer.step()
         loss_history.append(step_loss)
         
-        if step % eval_interval == 0 or step == 1:
+        if step % eval_interval == 0 or step == 1 or step == max_steps:
             elapsed = time.time() - start_time
-            print(f"Adım {step:4d}/{max_steps} | DPO Kayıp (Loss): {step_loss:.6f} | Geçen Süre: {elapsed:.2f}sn")
+            print(f"Adım {step:4d}/{max_steps} | DPO Kayıp (Loss): {step_loss:.6f} | Geçen Süre: {elapsed:.2f}sn", flush=True)
 
     total_time = time.time() - start_time
     print("\n" + "=" * 50)

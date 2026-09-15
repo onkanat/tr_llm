@@ -11,6 +11,7 @@ from src.compiler.lexicon import LexiconManager
 from src.compiler.morphotactics import build_default_graph
 from src.compiler.core import CrystalCompiler
 from src.llm.tokenizer import KristalTokenizer, Vocabulary
+from src.llm.prompt_contract import build_rag_input
 from scripts.train_step_demo import KristalLM
 from src.rag.vector_memory import VectorMemory, generate_kristal_vector, generate_sparse_vector
 
@@ -122,10 +123,7 @@ def main():
     print(f"  -> Eşleşme Skoru (RRF + Penalty): {doc['score']:.4f}")
 
     # 6. Construct highly compact prompt
-    clean_doc_tags = doc_tags.replace("<BOS>", "").replace("<EOS>", "").strip()
-    clean_query_tags = query_tags.replace("<BOS>", "").replace("<EOS>", "").strip()
-    
-    input_str = f"belge: {clean_doc_tags} sorgu: {clean_query_tags}"
+    input_str = build_rag_input(doc_text, query)
     
     sft_item = {
         "instruction": "Belgeye göre cevapla.",

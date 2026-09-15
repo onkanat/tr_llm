@@ -18,6 +18,9 @@ class LexiconManager:
             for row in reader:
                 lemma = row['lemma']
                 self._insert(lemma, row)
+                lower_lemma = lemma.lower()
+                if lower_lemma != lemma:
+                    self._insert(lower_lemma, row)
 
     def _insert(self, word: str, data: Dict[str, Any]):
         """Inserts a word and its metadata into the Trie."""

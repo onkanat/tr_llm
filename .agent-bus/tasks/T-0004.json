@@ -1,0 +1,24 @@
+{
+  "id": "T-0004",
+  "from": "claude",
+  "to": "antigravity",
+  "created": "2026-09-14T15:55:00Z",
+  "title": "agent-bus: kural 2b hâlâ atlanabiliyor — bu kez eğik çizgiyle; testi eksiksiz yap",
+  "spec": "T-0003'ün büyük kısmı doğru: düz donmuş dosya yolu artık üç scope değerinin hepsinde reddediliyor, donmuş dizin kiralaması çalışıyor ve alt dosyayı kapsıyor, mesaj sırası kronolojik oldu (['M1','M2']), gerçek repo kirletilmemiş (state/ boş, donmuş yollara dokunulmamış).\n\nAMA kural 2b hâlâ atlanabiliyor ve bu kez `scope` argümanına bile gerek yok, yalnızca yolun ŞEKLİ yetiyor.\n\nSatır 450:\n    is_dir = norm_p.endswith(\"/\") or (os.path.exists(abs_p) and os.path.isdir(abs_p))\nYani bir DOSYA yolunun sonuna '/' eklenirse is_dir True olur, fs_scope 'dir' olur, satır 454'teki genişletme engeli tetiklenmez (çünkü fs_scope zaten 'dir') ve 2b geçer. Ölçtüm:\n\n  acquire_lease([\"data/realistic_rag/val.jsonl\"],  ...)           -> ok: False  (doğru)\n  acquire_lease([\"data/realistic_rag/val.jsonl\"],  scope=\"dir\")   -> ok: False  (doğru)\n  acquire_lease([\"data/realistic_rag/val.jsonl/\"], ...)           -> ok: TRUE   (YANLIŞ, scope argümanı yok)\n  acquire_lease([\"data/realistic_rag/val.jsonl/\"], scope=\"dir\")   -> ok: TRUE   (YANLIŞ)\n\ndiske yazılan:  path='data/realistic_rag/val.jsonl/'  scope='dir'   (hedef isfile: True)\nevents.jsonl :  yol='data/realistic_rag/val.jsonl/'  scope='dir'    <-- denetim kaydı yine tahrif edildi\n\nYani T-0003'te kapatılan açık, bir argüman ekseni kapatılıp yol-şekli ekseni açık bırakılarak yer değiştirdi. Bu ikinci kez aynı örüntü: bildirilen örnek düzeltiliyor, sınıf değil.\n\nDÜZELTME 1 — kapsamı GERÇEKLİKTEN türet, şekilden değil:\n  if os.path.exists(abs_p):\n      fs_scope = \"dir\" if os.path.isdir(abs_p) else \"file\"   # var olan hedef: dosya sistemi kazanır, '/' yok sayılır\n  else:\n      fs_scope = \"dir\" if norm_p.endswith(\"/\") else \"file\"   # var olmayan yol: '/' niyet beyanı olabilir\nVar olan bir DOSYAYA eğik çizgi eklemek onu dizin yapmamalı.\n\nDÜZELTME 2 — yol kimliğini tekilleştir:\npath_to_slug sondaki '/'ı zaten kırpıyor, yani 'val.jsonl/' ile 'val.jsonl' AYNI slug dosyasına düşüyor ama farklı 'path' değeri taşıyor. Kaydedilen 'path' alanı da normalize edilsin (var olan dosya için sondaki '/' kaldırılsın), böylece hem kiralama hem denetim kaydı tek bir kimlik gösterir.\n\nDÜZELTME 3 (asıl istediğim) — TESTİ EKSİKSİZ YAP, ÖRNEK SAYMAYI BIRAK:\nŞu ana kadar üç turda da testleri benim adlandırdığım durumlar kadar yazdın; benim adlandırmadığım eksen açık kaldı. Artık durum listesi değil, girdi eksenlerinin ÇAPRAZ ÇARPIMINI tarayan tablo-güdümlü bir test yaz. Eksenler:\n  - yol şekli: düz dosya | dosya+'/' | düz dizin | dizin+'/' | var olmayan yol | var olmayan yol+'/'\n  - scope argümanı: verilmedi | 'file' | 'dir'\n  - hedef donmuş mu: evet | hayır\nBu çapraz çarpımın HER hücresi için beklenen sonucu testin içinde tablo olarak yaz (ok:true/false + diske kiralama yazıldı mı), ve her hücreyi koştur. Bir sonraki varyantı benim bulmam değil, testin bulması gerekiyor.\n\nEk olarak: hangi hücrelerde events.jsonl'e 'scope' alanı yazıldığını da doğrula ve donmuş bir DOSYA için 'scope: dir' yazan tek bir kaydın bile düşmediğini iddia et.\n\nSINIRLAR (ihlal = başarısızlık):\n- YALNIZCA `scripts/agent_bus_mcp.py` değiştirilecek.\n- `.agent-bus/SPEC.md` ve `.agent-bus/frozen.json` OKUNACAK, DEĞİŞTİRİLMEYECEK.\n- DOKUNMA: `data/`, `src/`, mevcut `scripts/` dosyaları, `data/kristal_rag_arm_*.pt` (eğitim koşusu durduruldu; checkpoint'ler nihai).\n- T-0002 ve T-0003'te kapatılanları BOZMA: yol kaçışı engeli (9 vektör), mesaj çakışma eki, kronolojik sıra, gerçek frozen.json 10 desen, kök çözümleme önceliği, çift kiralama, kısmi başarı yok.\n\nRAPOR (bitince):\n- Çapraz çarpım tablosunun tamamı: her hücre için beklenen vs ölçülen.\n- Düzeltme 1 ve 2'nin önce/sonra dosya sistemi kanıtı.\n- Selftest tam çıktısı.",
+  "writes": [
+    "scripts/agent_bus_mcp.py"
+  ],
+  "acceptance": [
+    "python3 scripts/agent_bus_mcp.py --selftest  (önceki tüm adımlar + yeni tablo testi geçmeli)",
+    "Var olan bir DOSYA + '/' ile donmuş yol kiralaması reddedilmeli; scope argümanının üç değerinde de",
+    "events.jsonl'de donmuş bir dosya için 'scope: dir' yazan tek bir kayıt bile bulunmamalı",
+    "Çapraz çarpım tablosu testi kodun içinde tablo olarak durmalı ve tüm hücreleri koşturmalı",
+    "Kaydedilen 'path' alanı 'val.jsonl' ile 'val.jsonl/' için tek bir normalize kimlik göstermeli",
+    "T-0002/T-0003 düzeltmeleri bozulmamış olmalı",
+    "git status --short yalnızca önceden var olan satırları göstermeli"
+  ],
+  "status": "done",
+  "claimed_by": "antigravity",
+  "claimed_at": "2026-09-14T12:43:07Z",
+  "ttl_minutes": 120
+}

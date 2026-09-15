@@ -1,0 +1,46 @@
+{
+  "allowNonWorkspaceAccess": true,
+  "enableTerminalSandbox": true,
+  "model": "Gemini 3.7 Flash (High)",
+  "permissions": {
+    "allow": [
+      "command(git status)",
+      "command(pytest)",
+      "unsandboxed(pytest)",
+      "unsandboxed(venv/bin/pytest)",
+      "unsandboxed(venv/bin/python test_model.py)",
+      "command(git diff)",
+      "command(git log)",
+      "command(git rev-parse)",
+      "command(ls)",
+      "command(find)",
+      "command(rg)",
+      "command(head)",
+      "command(tail)",
+      "unsandboxed(venv/bin/python scripts/agent_bus_mcp.py)"
+    ]
+  },
+  "runningLightSpeed": "fast",
+  "statusLine": {
+    "type": "",
+    "command": "",
+    "enabled": true
+  },
+  "trustedWorkspaces": [
+    "/Users/hakankilicaslan/Documents/notlar",
+    "/Users/hakankilicaslan",
+    "/Users/hakankilicaslan/mcpServers",
+    "/Users/hakankilicaslan/Git/model",
+    "/Users/hakankilicaslan/GitHub/Machining_Formulas",
+    "/Users/hakankilicaslan/GitHub/Machining_Formulas/src",
+    "/Users/hakankilicaslan/git/elektor",
+    "/Users/hakankilicaslan/Git/system_prompts",
+    "/Users/hakankilicaslan/jp",
+    "/Users/hakankilicaslan/GitHub/AiTerm",
+    "/Users/hakankilicaslan/vscode101",
+    "/Volumes/KIOXIA_2Tb/MCP",
+    "/Volumes/KIOXIA_2Tb/Analog_design_journal",
+    "/Users/hakankilicaslan/Git/fortran",
+    "/Users/hakankilicaslan/Git/tr_llm"
+  ]
+}

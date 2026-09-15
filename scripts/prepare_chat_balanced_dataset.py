@@ -92,6 +92,9 @@ def main():
     # H. 1931 Türk Tarihi Çok Turlu Sohbet Külliyatı (3,000 kayıt)
     history_chat_records = tokenize_jsonl('data/pedagogy/turk_tarihi_chat.jsonl', tokenizer, max_samples=3000)
 
+    # I. 1931 Türk Tarihi SFT ve Persona Görevleri (2,500 kayıt)
+    history_sft_records = tokenize_jsonl('data/pedagogy/turk_tarihi_sft.jsonl', tokenizer, max_samples=2500)
+
     # 2. Save Vocabulary Update if any new token emerged
     vocab.save('data/vocab.json')
     print(f"\n[2] Sözlük Kontrolü: {initial_vocab_size} -> {len(vocab.stoi)} token.")
@@ -105,7 +108,8 @@ def main():
         carpenter_records +
         rag_records +
         classic_rag_records +
-        history_chat_records
+        history_chat_records +
+        history_sft_records
     )
 
     print(f"\n[3] Toplam Dengeli Sohbet & RAG SFT Kayıt Sayısı: {len(all_records):,}")

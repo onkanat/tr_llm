@@ -30,7 +30,11 @@ COMMON_FALLBACKS = {
     "POTENTIAL": {"template": "(y)Abil", "attributes": "-"},
     "NEG": {"template": "mA", "attributes": "-"},
     "IMPOTENTIAL_NEG": {"template": "(y)AmA", "attributes": "-"},
-    "REL_ki": {"template": "ki", "attributes": "-"}
+    "REL_ki": {"template": "ki", "attributes": "-"},
+    "COPULA_PAST": {"template": "(y)DI", "attributes": "-"},
+    "COPULA_EVIDENTIAL": {"template": "(y)mIş", "attributes": "-"},
+    "COPULA_COND": {"template": "(y)sA", "attributes": "-"},
+    "COPULA_AORIST": {"template": "DIr", "attributes": "-"},
 }
 
 class MorphemeDecompiler:
@@ -87,7 +91,15 @@ class MorphemeDecompiler:
                 root_entry = entry
                 break
                 
-        if not root_entry:
+        is_placeholder = root_lemma in ("[Özel İsim]", "[sayı]", "[?]") or root_lemma.isdigit()
+        is_proper_noun = bool(root_lemma and (root_lemma[0].isupper() or root_lemma.isupper()) and not root_lemma.startswith("["))
+        if is_placeholder:
+            root_surface = root_lemma
+            root_attrs = "-"
+        elif is_proper_noun and not root_entry:
+            root_surface = root_lemma
+            root_attrs = "-"
+        elif not root_entry:
             root_surface = root_lemma
             root_attrs = "-"
         else:
@@ -112,18 +124,22 @@ class MorphemeDecompiler:
                 if affix_id in PAST_PERSON_TEMPLATES:
                     template = PAST_PERSON_TEMPLATES[affix_id]
                     
+            stem_for_phonology = "isim" if is_placeholder and idx == 1 else current_surface
             mutated_stem, resolved_affix = PhonologyEngine.resolve_affix(
-                current_surface,
+                stem_for_phonology,
                 template,
                 current_attrs
             )
             
-            current_surface = mutated_stem + resolved_affix
+            if (is_placeholder or is_proper_noun) and idx == 1:
+                current_surface = f"{root_lemma}'{resolved_affix}"
+            else:
+                current_surface = mutated_stem + resolved_affix
             current_attrs = info.get("attributes", "-")
             
         return current_surface
 
-    def decompile_sentence(self, crystal_tags_str: str) -> str:
+    def decompile_sentence(self, crystal_tags_str: str, capitalize: bool = False) -> str:
         """
         Decompiles a full sequence represented as a space-separated string of morpheme tags.
         Identifies word boundaries, metadata keywords, and decompiles each word individually.
@@ -134,10 +150,111 @@ class MorphemeDecompiler:
         tokens = crystal_tags_str.split()
         reconstructed_words = []
         current_word_tags = []
+
+        in_entity = False
+        entity_chars = []
+        all_caps = False
+        cap_next = False
         
         for tag in tokens:
+            if tag == "<ENT>":
+                if current_word_tags:
+                    reconstructed_words.append(self.decompile_tags(current_word_tags))
+                    current_word_tags = []
+                in_entity = True
+                entity_chars = []
+                all_caps = False
+                cap_next = False
+                continue
+
+            if in_entity:
+                if tag == "</ENT>":
+                    surface_word = "".join(entity_chars)
+                    current_word_tags.append(surface_word)
+                    in_entity = False
+                    continue
+                if tag == "<ALL_CAPS>":
+                    all_caps = True
+                    continue
+                if tag == "<CAP>":
+                    cap_next = True
+                    continue
+                
+                char_str = tag
+                if all_caps:
+                    char_str = char_str.upper()
+                elif cap_next:
+                    char_str = char_str.upper()
+                    cap_next = False
+                entity_chars.append(char_str)
+                continue
+
+            if tag == "<PROPER_NOUN>":
+                if current_word_tags:
+                    reconstructed_words.append(self.decompile_tags(current_word_tags))
+                    current_word_tags = []
+                current_word_tags.append("[Özel İsim]")
+                continue
+
+            if tag == "<UNK>":
+                if current_word_tags:
+                    reconstructed_words.append(self.decompile_tags(current_word_tags))
+                    current_word_tags = []
+                current_word_tags.append("[?]")
+                continue
+
+            if tag == "<NUMBER>":
+                if current_word_tags:
+                    reconstructed_words.append(self.decompile_tags(current_word_tags))
+                    current_word_tags = []
+                current_word_tags.append("[sayı]")
+                continue
+
             # Skip control tokens
             if tag.startswith("<") and tag.endswith(">"):
+                continue
+
+            # Digit handling
+            if tag.isdigit():
+                if current_word_tags:
+                    if current_word_tags[0].isdigit():
+                        current_word_tags[0] += tag
+                        continue
+                    else:
+                        reconstructed_words.append(self.decompile_tags(current_word_tags))
+                        current_word_tags = []
+                if reconstructed_words and (reconstructed_words[-1][-1].isdigit() or reconstructed_words[-1].endswith("-")):
+                    reconstructed_words[-1] = reconstructed_words[-1] + tag
+                else:
+                    reconstructed_words.append(tag)
+                continue
+
+            # Punctuation handling
+            if tag in {".", ",", "?", "!", ":", ";", ")"}:
+                if current_word_tags:
+                    reconstructed_words.append(self.decompile_tags(current_word_tags))
+                    current_word_tags = []
+                if reconstructed_words:
+                    reconstructed_words[-1] = reconstructed_words[-1] + tag
+                else:
+                    reconstructed_words.append(tag)
+                continue
+
+            if tag == "-":
+                if current_word_tags:
+                    reconstructed_words.append(self.decompile_tags(current_word_tags))
+                    current_word_tags = []
+                if reconstructed_words:
+                    reconstructed_words[-1] = reconstructed_words[-1] + "-"
+                else:
+                    reconstructed_words.append("-")
+                continue
+
+            if tag == "(":
+                if current_word_tags:
+                    reconstructed_words.append(self.decompile_tags(current_word_tags))
+                    current_word_tags = []
+                reconstructed_words.append(tag)
                 continue
                 
             is_suf = self.is_suffix(tag)
@@ -165,4 +282,16 @@ class MorphemeDecompiler:
         if current_word_tags:
             reconstructed_words.append(self.decompile_tags(current_word_tags))
             
-        return " ".join(reconstructed_words)
+        text = " ".join(reconstructed_words).strip()
+        if text and capitalize:
+            # Capitalize first character respecting Turkish dotted/undotted I
+            first_ch = text[0]
+            if first_ch == 'i':
+                first_ch_upper = 'İ'
+            elif first_ch == 'ı':
+                first_ch_upper = 'I'
+            else:
+                first_ch_upper = first_ch.upper()
+            text = first_ch_upper + text[1:]
+            
+        return text

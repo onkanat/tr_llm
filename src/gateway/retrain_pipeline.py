@@ -21,6 +21,7 @@ from src.compiler.lexicon import LexiconManager
 from src.compiler.morphotactics import build_default_graph
 from src.compiler.core import CrystalCompiler
 from src.llm.tokenizer import KristalTokenizer, Vocabulary
+from src.llm.prompt_contract import render_example
 import torch
 import torch.nn as nn
 
@@ -140,13 +141,11 @@ class RetrainPipeline:
                     continue
                 try:
                     data = json.loads(line)
-                    # Normalize prompt object for SFT
-                    prompt_obj = {
-                        "instruction": data.get("instruction", "Belgeye göre cevapla."),
-                        "input": data.get("input", ""),
-                        "output": data.get("output", "")
-                    }
-                    raw_str = json.dumps(prompt_obj, ensure_ascii=False)
+                    # Normalize prompt object for SFT via canonical contract
+                    inst = data.get("instruction", "Belgeye göre cevapla.")
+                    inp = data.get("input", "")
+                    out = data.get("output", "")
+                    raw_str = render_example(inst, inp, out)
                     token_ids = tokenizer.encode(raw_str)
                     if len(token_ids) > 2:
                         records.append(token_ids)

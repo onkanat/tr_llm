@@ -4,6 +4,109 @@ Bu projedeki tüm önemli değişiklikler bu dosyada belgelenmektedir.
 
 Format [Keep a Changelog](https://keepachangelog.com/tr/1.0.0/) standardına dayanır ve bu proje [Semantic Versioning (SemVer)](https://semver.org/spec/v2.0.0.html) ilkelerini benimser.
 
+## [1.8.0] - 2026-09-13
+
+### Eklendi (Added)
+- **Sıfır Sızıntılı 3 Yollu Bölme Protokolü (`scripts/prepare_b1_5_datasets.py`):**
+  - Normalize soru metni (`clean_q`) ve kapalı-sınıf biçimbirim iskeleti ($k=2$) üzerinden çift anahtarlı kümeleme ile `Train ∩ Test = 0`, `Train ∩ Val = 0`, `Val ∩ Test = 0` garantili bölme (`data/b1_5_splits/train.jsonl`, `val.jsonl`, `test.jsonl`).
+  - Külliyat dengelendi ve tekleştirildi (Dedup): Marangozluk (3.825 tekil), Türk Tarihi (6.507 tekil), Lise Temel Bilim (298 tekil), Edebiyat (198 tekil), Ortaokul (125 tekil), Parenting morfoloji tavanı (5.300 dengeli kayıt). Toplam 16.253 kayıt.
+- **Sözcüksel Taban Modeli (Null Hipotezi - `scripts/evaluate_lexical_baseline.py`):**
+  - Test verisine kesinlikle bakılmadan, **yalnızca** `train.jsonl` (13.009 örnek, 35.284 terim) üzerinden eğitilen TF-IDF sözcüksel tabanı.
+  - Diskte kilitli sabit test adayları üzerinde taban tahminleri hesaplanarak `lexical_preds_hard.json` ve `lexical_preds_random.json` olarak kaydedildi.
+- **Diskte Sabit Aday Kümeleri ve Eşleştirilmiş McNemar Testi (`scripts/evaluate_b1_5_rigorous.py`):**
+  - Diskte kilitli $N=660$ Zor-Negatif (Biçimbirim Jaccard en benzer çeldiriciler) ve $N=660$ Rastgele Çeldirici kütükleri (`test_candidates_hard.jsonl`, `test_candidates_random.jsonl`).
+  - Model log-olasılıkları ile sözcüksel taban arasında süreklilik düzeltmeli McNemar $\chi^2$ ve tam çift yönlü binom $p$-değeri hesaplama motoru.
+  - **Doğrulama Sonuçları:**
+    - Marangozluk ($N=300$): Model **%92.67**, Taban %34.67, $\chi^2 = 162.66$, $p = 1.40 \times 10^{-46} \implies$ **BAŞARILI** ($p < 0.05$).
+    - Türk Tarihi ($N=300$): Model **%15.67**, Taban %30.33, $\chi^2 = 15.94$, $p = 5.40 \times 10^{-5} \implies$ **BAŞARISIZ** (Model $\le$ Taban, RAG zorunluluğu kanıtlandı).
+    - Lise Temel Bilim ($N=29$): Model %37.93, Taban %58.62 $\implies$ Tanımlayıcı ($N < 300$, hüküm yok).
+    - **Makro (Katman-Eşit) Ortalama (5 Katman):** Model **%37.20**, Taban **%39.21** $\implies$ **TABAN ÜSTÜN**. Örneklem-ağırlıklı toplam (%51.97) yalnızca marangozluk soru hacminin ağırlığını yansıtmaktadır.
+- **Türk Tarihi PMI / LM Prior Derin Ayrıştırma Tanısı (`scripts/diagnostics_history_gap.py`):**
+  - $N=300$ Türk Tarihi zor-negatif sorusunda standart $\log P(A \mid Q)$ ile boş prompt dil modeli öncülü çıkarılmış $\text{PMI} = \log P(A \mid Q) - \log P(A)$ karşılaştırıldı.
+  - Dil modeli öncülü çıkarıldığında Top-1 doğruluğu %15.67'den **%38.33**'e fırladı (sözcüksel tabanı geçti), ortalama sıra 4.62'den **2.48 / 10**'a indi, Top-3 **%78.33** ve Top-5 **%93.67** oldu.
+  - Soruya semantik koşullanma sinyali mevcuttur ancak parametrik ağırlıklardaki yüksek frekanslı şablon öncülü altında maskelenmektedir; RAG Gezgini ampirik olarak zorunludur.
+- **Marangozluk $N=100$ Held-Out Bağımsız Üretim Kalite Testi (`scripts/evaluate_carpenter_generation_100.py`):**
+  - Ezber Oranı: **%0.00** (Eşik: <%10, GEÇTİ).
+  - Tutarsızlık Oranı: **%8.00** (Eşik: <%5, KALDI).
+  - ROUGE-L: **0.3849** (Medyan: 0.3972, Eşik: >=0.35, GEÇTİ).
+  - Soruyla İçerik Kesişimi: **%53.00** (Eşik: >=%80, KALDI).
+  - Hüküm: **BAŞARISIZ (2/4)**; çoktan seçmeli ayırt etme gücü (%92.67) yüksek olsa da küçük modellerde serbest sentaks sentezinde zaaf sürdüğü doğrulandı.
+- **Katman 4 Toplu Üretim Kalite Metrikleri ($N=100$ Genel Held-out):**
+  - Ezber Oranı: **%0.00** (Ön-kayıtlı eşik: $< \%10.0$, eğitimdeki 163.779 4-gram'dan sıfır ezber).
+  - Koşullanma Skoru: **ROUGE-L 0.4655** (Ön-kayıtlı eşik: $\ge 0.35$, parenting kutupları ortalamayı yükseltmektedir).
+  - Tutarsızlık Oranı: %39.00 (Test kümesindeki %35 parenting kök etiket çıktılarından, %3 tarih cümle kesilmelerinden, %1 marangozluktan kaynaklı).
+- **Doğrulanmış Model Mimarisi ve Parametre Dökümü (`KristalLM`):**
+  - Model tensör düzeyinde doğrudan sayıldı: Toplam parametre sayısı **92.966.960 (~93M)** (Transformer gövdesi: 42.528.768, Kelime tabloları: 50.438.192, %54.2).
+  - Ağırlık paylaşımı (Weight Tying) bulunmamaktadır (`model.lm_head.weight is model.embedding.embedding.weight == False`).
+  - FFN mimarisi iki katmanlı Vanilla GELU'dur (`Linear(768, 3072) -> GELU() -> Linear(3072, 768)`). SwiGLU iddiası düzeltildi.
+  - Sıfırdan eğitilen 93M model 2.5M token ile Chinchilla optimalinin (%0.13) binde biri oranında veri açlığı yaşamaktadır; kelime tablosunun %85.3'ü (27.991 token) sıfır gradyan almıştır.
+- **Faz B2 RAG-Sentez Pilot Protokolü (`implementation_plan.md`):**
+  - Kopyalamayı önleyen Üçlü Sentez Metriği (Sadakat $\ge \%60$ + Uzunluk $\le 1.5\times$ + Soru Kökü $\ge 2$).
+  - Üç karşılaştırmalı baz hat (Zero-shot, Belge-İlk-Cümle, Rastgele).
+  - Varlık etkisini ölçen Kol A vs. Kol C tasarımı ve `block_size=256` bağlam penceresi.
+  - Stratified Bootstrap %95 GA karar bantları ve Val Loss tabanlı FAIL-A (veri açlığı) vs. FAIL-B (mimari tıkanıklık) ayrımı.
+- **Kök Sözlüğü & Ontoloji Frekans Aydınlatması (`roots.tsv` & `vocab.json`):**
+  - `roots.tsv`: 53.109 satır, 48.936 tekil lemma (33.245 NOUN, 10.364 VERB, 6.352 ADJ, 2.024 ADV, 660 PROPER_NOUN).
+  - 16.253 kayıtlık eğitim külliyatında görülen lemmalar: 4.825 (%9.86), külliyatta henüz geçmeyen geniş TDK GTS ontolojisi: 44.111 (%90.14).
+  - Model kelime dağarcığı: 32.816 token (32.715 kök embedding'i + 101 dilbilgisi eki/özel belirteç).
+- **Phase B2 Uçtan Uca RAG Ön-Kayıt Protokolü (`pre_registration_b2_rag.md`):**
+  - Dört operasyonel yargıç (`QueryRuleJudge`, `BidirectionalFaithfulnessJudge`, `AbstainExactMatchJudge`, `NgramCardinalityJudge`) ve iki aşamalı fallback mekanizması (Tier 1 hiperparametre ince ayarı, Tier 2 modüler/45M mimari fallback) ön-kaydedildi.
+- **Morfoloji Regresyon Test Paketi (`tests/test_morphology_regression.py`):**
+  - E7 morfoloji koruma kuralını denetleyen 100 altın standart morfolojik analiz testi (`tests/morphology_regression_100.json`) ve kök sözlük bütünlük testi; toplam birim test sayısı 99/99 (%100 yeşil) oldu.
+- **Hızlı Tensör Önbellekleme ve MPS Eğitimi (`scripts/train_step_b1_5_rigorous.py`):**
+  - Blok boyutu 128 ve önceden hesaplanmış `sign_mask` tensörleri ile MPS üzerinde adım başına eğitim süresi 4.7 saniyeden 0.58 saniyeye indirildi.
+  - Validation loss her epoch'ta düzenli olarak düştü ($2.0974 \to 1.6339 \to 1.5589 \to 1.5525$, PPL: 4.72); Epoch 3 checkpoint'i (`kristal_b1_5_best.pt`) seçildi.
+
+### Değiştirildi (Changed)
+- **Kelime Dağarcığı & Kök Sözlüğü Hijyeni (`data/lexicon/roots.tsv` & `data/vocab.json`):**
+  - Tek haneli rakamlar (`0`..`9`) ve noktalama işaretleri (`.`, `,`, `(`, `)`, `:`, `;`, `"`, `-`, `?`, `!`) morfem seviyesinde tokenize edilecek şekilde genişletildi.
+  - Külliyatta frekansı $\ge 20$ olan 660 adet sık geçen özel isim/terim kökü deterministik olarak eklendi.
+  - Kelime dağarcığı 32.137'den **32.816** token'a çıkarıldı (+679 token).
+- **Kanal Normalizasyonu (Canonical Format):**
+  - Tüm veri kütükleri standart `<INSTRUCTION> ... </INSTRUCTION> <INPUT> ... </INPUT> <OUTPUT> ... </OUTPUT>` kanallarına dönüştürüldü; çiftlenen üretici önekleri temizlendi, boş girdi kusurları giderildi.
+
+---
+
+## [1.7.0] - 2026-09-13
+
+### Düzeltildi (Fixed)
+- **Şablon Çöküşü (Mode Collapse) Kök Neden Çözümü:**
+  - 1931 Türk Tarihi SFT ve Chat kütüklerinde okuma anlama sentetik çıktılarından kalan 281 adet `"Metinde belirtildiği gibi,"` ve `"Metne göre,"` kalıbı tamamen ayıklandı (0 adet kaldı).
+  - SFT dağılımını tek bir çekim noktasına kilitleyen öncül dağılım kırıldı; doğrudan persona soru-cevapları ve abstain (çekinik) örnekleri enjekte edildi.
+- **Decompiler Fonetik Sentez & `y` Kaynaştırma Düzeltmesi (`src/compiler/morphotactics.py` & `src/compiler/decompiler.py`):**
+  - Ek çizgesinde `COPULA_PAST`, `COPULA_EVIDENTIAL` ve `COPULA_COND` geçişleri `(y)DI`, `(y)mIş`, `(y)sA` olarak düzeltildi.
+  - Ünlüyle biten fiil ve isimlerde kaynaştırma harfinin düşmesi engellendi (`göstermektedi` ➔ `göstermekteydi`, `tanımlanmaktadı` ➔ `tanımlanmaktaydı`).
+  - Sessizce yutulan `<UNK>` ve `<NUMBER>` belirteçlerinin decompiler'da `[?]` ve `[sayı]` olarak korunması sağlandı.
+- **CLI Girdi Doğrulaması ve Boş Enter Koruması (`chat_prompt.py`):**
+  - Boş enter basıldığında menünün sessizce tekrar basılması yerine bilgilendirici sarı uyarı mesajı eklendi.
+
+### Eklendi (Added)
+- **Özel İsim Genişletmesi & Sıfır OOV Koruma (`data/lexicon/roots.tsv` & `data/vocab.json`):**
+  - 63 temel tarihi/coğrafi varlık (`Atatürk`, `Anadolu`, `Çin`, `Pers`, `İskit`, `Orhun`, `Cengiz`, `Timur`, `Roma`, `Selçuk`, `Osmanlı` vb.) sözlüğe eklendi.
+  - Kelime dağarcığı 31.357'den 32.137'ye çıkarıldı (+780 kayıtlı morfem).
+  - Model doğrulaması: "Türk kelimesinin kökeni?" sorgusunda `Türk` artık `<PROPER_NOUN>` etiketine düşmeden doğrudan kök token olarak derlenmektedir.
+- **Akıllı Checkpoint & Model Yönlendirmesi (`chat_prompt.py`):**
+  - Persona 6 (Ahşap ve marangozluk) seçildiğinde otomatik olarak `data/kristal_carpenter_model.pt` yüklenir.
+  - Persona 7-9 veya genel sohbet seçildiğinde otomatik olarak `data/kristal_model.pt` yüklenir.
+  - Menü ↔ Checkpoint uyumsuzluğu tamamen giderildi.
+- **Çıkarım Zamanı Logit Maskelemesi:**
+  - `chat_prompt.py` içinde modelin çıktı üretirken `<PAD>`, `<BOS>`, `<INSTRUCTION>`, `</INSTRUCTION>`, `<INPUT>`, `</INPUT>`, `<OUTPUT>`, `<PROPER_NOUN>`, `<UNK>`, `<NUMBER>` etiketlerini üretmesi `-inf` logit maskesiyle engellendi.
+- **M1-M10 Otomasyonel Karşılaştırma Testi (`scripts/evaluate_sft_benchmarks.py`):**
+  - Aynı soruları farklı personalar ve checkpoint'ler altında çalıştırıp şablon klonunu, persona ayrışmasını ve terim yoğunluğunu ölçen standart değerlendirme harness'i eklendi.
+- **Test Kapsamı:**
+  - `tests/test_decompiler.py` genişletildi; tüm testler 97/97 (%100 yeşil) seviyesine ulaştı.
+
+### Değiştirildi (Changed)
+- **5 Aşamalı Monoton Eğitim Boru Hattı (`scripts/retrain_clean_models.py`):**
+  - Causal Prompt Masking ile hedef odaklı eğitim yapıldı.
+  - Aşama 1 (Pretrain): Kayıp 10.53 ➔ 4.52.
+  - Aşama 2 (Balanced SFT): Kayıp 6.03 ➔ 3.83.
+  - Aşama 3 (Chat SFT): Kayıp 7.46 ➔ 3.67.
+  - Aşama 4 (DPO): Kayıp 0.679 ➔ 0.674.
+  - Aşama 5 (Carpenter AI): Kayıp 4.89 ➔ 0.6206.
+
+---
+
 ## [1.6.0] - 2026-09-12
 
 ### Eklendi (Added)

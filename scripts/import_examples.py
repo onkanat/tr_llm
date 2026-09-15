@@ -131,9 +131,11 @@ def import_gts_examples(max_examples=100, reset=True):
     lexicon.load_from_tsv(lexicon_path)
     graph = build_default_graph()
     compiler = CrystalCompiler(lexicon, graph)
+    vocab_path = 'data/vocab.json'
+    if not os.path.exists(vocab_path):
+        raise FileNotFoundError(f"Kelime dağarcığı dosyası bulunamadı (sessiz boş sözlük engellendi): {vocab_path}")
     vocab = Vocabulary()
-    if os.path.exists('data/vocab.json'):
-        vocab.load('data/vocab.json')
+    vocab.load(vocab_path)
     tokenizer = KristalTokenizer(compiler, vocab)
 
     # 2. RAPOR HAZIRLIĞI

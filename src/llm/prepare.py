@@ -41,6 +41,8 @@ def prepare_dataset(input_filepath: str, output_filepath: str):
     lexicon_path = 'data/lexicon/roots.tsv'
     if os.path.exists(lexicon_path):
         lexicon.load_from_tsv(lexicon_path)
+    else:
+        raise FileNotFoundError(f"Leksikon kök dosyası bulunamadı: {lexicon_path}")
 
     graph = build_default_graph()
     compiler = CrystalCompiler(lexicon, graph)
@@ -50,7 +52,7 @@ def prepare_dataset(input_filepath: str, output_filepath: str):
         vocab.load(vocab_path)
         print(f"Loaded existing vocabulary from {vocab_path} with {len(vocab.stoi)} tokens.")
     else:
-        print("Creating a new vocabulary.")
+        raise FileNotFoundError(f"Kelime dağarcığı (vocab) dosyası bulunamadı: {vocab_path}")
 
     tokenizer = KristalTokenizer(compiler, vocab)
 
@@ -59,15 +61,17 @@ def prepare_dataset(input_filepath: str, output_filepath: str):
     boundaries = []
     offset = 0
 
-    if os.path.exists(input_filepath):
-        documents = _load_raw_documents(input_filepath)
-        for document in documents:
-            token_ids = tokenizer.encode(document)
-            if len(token_ids) <= 2:
-                continue
-            token_sequences.extend(token_ids)
-            boundaries.append({"offset": offset, "length": len(token_ids)})
-            offset += len(token_ids)
+    if not os.path.exists(input_filepath):
+        raise FileNotFoundError(f"Girdi veri seti dosyası bulunamadı: {input_filepath}")
+
+    documents = _load_raw_documents(input_filepath)
+    for document in documents:
+        token_ids = tokenizer.encode(document)
+        if len(token_ids) <= 2:
+            continue
+        token_sequences.extend(token_ids)
+        boundaries.append({"offset": offset, "length": len(token_ids)})
+        offset += len(token_ids)
 
     print(f"Processed {len(boundaries)} document segments.")
     print(f"Total morphemes encoded: {offset}")

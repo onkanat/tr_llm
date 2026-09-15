@@ -11,21 +11,7 @@ from src.compiler.core import CrystalCompiler
 from src.llm.tokenizer import KristalTokenizer, Vocabulary
 from scripts.train_step_demo import KristalLM
 from src.rag.vector_memory import VectorMemory, generate_kristal_vector, generate_sparse_vector
-
-def resize_state_dict(model, old_state_dict):
-    """Resizes model embedding and linear heads to match the new vocabulary size."""
-    new_state_dict = model.state_dict()
-    for k, v in old_state_dict.items():
-        if k in new_state_dict:
-            if v.shape != new_state_dict[k].shape:
-                print(f"Resizing weights for: {k} (Old: {list(v.shape)}, New: {list(new_state_dict[k].shape)})")
-                if len(v.shape) == 2:
-                    new_state_dict[k][:min(v.shape[0], new_state_dict[k].shape[0]), :min(v.shape[1], new_state_dict[k].shape[1])] = v[:min(v.shape[0], new_state_dict[k].shape[0]), :min(v.shape[1], new_state_dict[k].shape[1])]
-                elif len(v.shape) == 1:
-                    new_state_dict[k][:min(v.shape[0], new_state_dict[k].shape[0])] = v[:min(v.shape[0], new_state_dict[k].shape[0])]
-            else:
-                new_state_dict[k] = v
-    return new_state_dict
+from src.llm.prompt_contract import resize_state_dict, build_rag_input
 
 def main():
     device = torch.device("mps" if torch.backends.mps.is_available() else "cpu")
@@ -116,9 +102,7 @@ def main():
         print(f"Retrieved Document: {doc_text}")
         print(f"Doc Tags: {doc_tags}")
         
-        clean_doc_tags = doc_tags.replace("<BOS>", "").replace("<EOS>", "").strip()
-        
-        input_str = f"belge: {clean_doc_tags} sorgu: {clean_query_tags}"
+        input_str = build_rag_input(doc_text, tc["query_text"])
         prompt_dict = {
             "instruction": "Belgeye göre cevapla.",
             "input": input_str,

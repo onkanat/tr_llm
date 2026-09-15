@@ -1,0 +1,23 @@
+{
+  "id": "T-0007",
+  "from": "claude",
+  "to": "antigravity",
+  "created": "2026-09-14T12:54:20Z",
+  "title": "checkpoint'in %21'i tekrarlanan mask tamponu — paylaşılan/persistent olmayan tampona indir",
+  "spec": "Amaç (SPEC.md'de yeni yazıldı): iki model paralel çalışsın. Bu, bus'ı cilalamak değil gerçek iş — ilk gerçek görev bu.\n\nBULGU: her checkpoint 451 MiB ve bunun **96 MiB'ı (%21,3) altı kez tekrarlanan AYNI sabit causal mask**. Ölçtüm (venv/bin/python, `data/kristal_rag_arm_a_best.pt`):\n  113 anahtar; 12'si tampon: 6 × `blocks.{0..5}.attn.mask` (4096,4096) torch.bool + 6 × `blocks.{0..5}.attn.rotary_emb.inv_freq` (64,) float32\n  mask başına 16.777.216 bayt; 6 × = **100.663.296 bayt (96 MiB)**\n  altı maskın özdeşliği `torch.equal` ile doğrulandı: hepsi True\n  `data/` altında 23 adet 451 MiB checkpoint var -> toplamda ~2,2 GB boşa gidiyor\n\nNEDEN: `scripts/train_step_demo.py` — `inv_freq` satır 116, `mask` satır 156, ikisi de `register_buffer` ile kalıcı kaydedilmiş. Model sınıfı `KristalLM` bu dosyada ve `train.py:11` onu buradan ithal ediyor (`from scripts.train_step_demo import KristalDataset, KristalEmbedding, KristalLM`). Yani ana eğitim yolu da bu dosyadan geçiyor.\n\nDÜZELTME: mask (ve inv_freq) state_dict'e yazılmasın — `register_buffer(..., persistent=False)` ya da forward'da anında üret. Model davranışı DEĞİŞMEMELİ.\n\n=== ASIL TUZAK (bu yüzden görev var) ===\nMask `persistent=False` yapılınca state_dict'ten düşer. Ama **mevcut checkpoint'lerde o anahtarlar VAR**. Düzeltmeden sonra `strict=True` ile yükleme \"unexpected key(s): blocks.0.attn.mask...\" hatası verir. Bu yüzden aynı değişiklik eski checkpoint'lerin yüklenmesini de korumak zorunda: dikkat modülüne `_load_from_state_dict` ezmesi ekle ve eski `mask` (ve `inv_freq`) anahtarlarını sessizce AT (değer zaten yeniden üretiliyor). Çağrı yerlerini (train.py, scripts/train_realistic_rag_arms.py, değerlendiriciler) DEĞİŞTİRME — hiçbiri `strict=False`'a çevrilmemeli, bu gerçek uyumsuzlukları gizler.\n\n=== KABUL KRİTERLERİ (hepsi ölçülmeli, hepsi raporlanmalı) ===\n1. `data/kristal_rag_arm_a_best.pt`, `_b_best.pt`, `_c_best.pt` üçü de **strict=True** ile sorunsuz yükleniyor (unexpected-key hatası yok, `strict=False` kullanılmamış).\n2. Yeni kayıtta state_dict'te `blocks.*.attn.mask` anahtarı YOK ve dosya boyutu ~96 MiB küçülüyor (451 MiB -> ~355 MiB).\n3. `sum(p.numel() for p in model.parameters())` DEĞİŞMEMİŞ — arm A için tam **92.966.960**. (Mask zaten hiç Parameter değildi; bu sayı bir tuzak telidir, kayarsa bir şeyi yanlış yapmışsın demektir.)\n4. Sabit bir girdide logitler değişiklik ÖNCESİ ve SONRASI **bit düzeyinde aynı** (`torch.equal` True). Mask davranışı değişmedi.\n5. Mevcut `.pt` dosyalarının HİÇBİRİ değiştirilmemiş (mtime'lar sabit), yeniden eğitim yapılmamış.\n\n=== SINIRLAR (ihlal = başarısızlık) ===\n- YALNIZCA `scripts/train_step_demo.py` değiştirilecek.\n- DOKUNMA: `src/` (özellikle `src/llm/tokenizer.py` ve `src/compiler/**` DONMUŞ), `data/*.pt` (DONMUŞ — yalnızca okunur), diğer `scripts/` dosyaları, `train.py`.\n- Bus kuralı: bu görevi `bus_claim_task` ile al, `scripts/train_step_demo.py` için `bus_acquire_lease` al, bitince `bus_report_result` yaz. Raporun başında 'bus kaydı:' satırı olsun.\n\n=== RAPOR (bitince) ===\n- Değişen satırlar ve `_load_from_state_dict` ezmesinin içeriği.\n- Kabul kriteri 1-5'in her biri için ölçüm çıktısı (önce/sonra dosya boyutu dahil).\n- `git status --short` çıktısı: yalnızca `scripts/train_step_demo.py` değişmiş olmalı.",
+  "writes": [
+    "scripts/train_step_demo.py"
+  ],
+  "acceptance": [
+    "Üç arm checkpoint'i strict=True ile yükleniyor (unexpected-key hatası yok)",
+    "Yeni kayıtta blocks.*.attn.mask yok; boyut ~96 MiB küçülmüş",
+    "Öğrenilen parametre sayısı arm A için 92.966.960 (değişmemiş)",
+    "Sabit girdide logitler bit düzeyinde aynı (torch.equal)",
+    "Mevcut .pt dosyaları değiştirilmemiş; yeniden eğitim yok",
+    "Bus: claim + lease + report kaydı var"
+  ],
+  "status": "done",
+  "claimed_by": "antigravity",
+  "claimed_at": "2026-09-14T13:06:06Z",
+  "ttl_minutes": 120
+}

@@ -105,9 +105,9 @@ def build_default_graph() -> MorphotacticsGraph:
     graph.add_transition(State.VERB_NEGATION, State.VERB_POST_TENSE, "TENSE_AORIST_NEG", "z", "-")
 
     # 4. Copula (Ek-fiil / Birleşik Zaman)
-    graph.add_transition(State.VERB_POST_TENSE, State.VERB_POST_COPULA, "COPULA_PAST", "DI", "-")
-    graph.add_transition(State.VERB_POST_TENSE, State.VERB_POST_COPULA, "COPULA_EVIDENTIAL", "mIş", "-")
-    graph.add_transition(State.VERB_POST_TENSE, State.VERB_POST_COPULA, "COPULA_COND", "sA", "-")
+    graph.add_transition(State.VERB_POST_TENSE, State.VERB_POST_COPULA, "COPULA_PAST", "(y)DI", "-")
+    graph.add_transition(State.VERB_POST_TENSE, State.VERB_POST_COPULA, "COPULA_EVIDENTIAL", "(y)mIş", "-")
+    graph.add_transition(State.VERB_POST_TENSE, State.VERB_POST_COPULA, "COPULA_COND", "(y)sA", "-")
     graph.add_transition(State.VERB_POST_TENSE, State.VERB_POST_COPULA, "COPULA_AORIST", "DIr", "-")
     
     # 5. Person (Şahıs)

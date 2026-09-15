@@ -1,0 +1,24 @@
+{
+  "_comment": "Bu desenlere uyan yollar yalnızca bu yolu açıkça bildiren ve dizin geneli kiralama alan bir görev tarafından değiştirilebilir. Bkz. SPEC.md kural 2.",
+  "version": 1,
+  "patterns": [
+    "data/realistic_rag/**",
+    "data/b1_5_splits/**",
+    "data/pedagogy_canonical/**",
+    "data/lexicon/**",
+    "data/*.pt",
+    "data/*.bin",
+    "data/vocab.json",
+    "data/vocab_entity.json",
+    "src/llm/tokenizer.py",
+    "src/compiler/**"
+  ],
+  "_rationale": {
+    "data/realistic_rag/**": "val.jsonl 11:38 kazasının geçtiği dizin — eğitim verisi ve değerlendirme kümesi",
+    "data/b1_5_splits/**": "139 MB bölme; cevap düzeyi sızıntı düzeltmesi buraya dokunacak",
+    "data/lexicon/**": "roots.tsv — 48.614 lemma; sözlük değişikliği tüm tokenizasyonu kaydırır",
+    "data/*.pt": "checkpoint'ler; üzerine yazma geri döndürülemez",
+    "src/llm/tokenizer.py": "iki katmanlı hibrit tokenizer; değişikliği tüm kolları geçersiz kılar",
+    "src/compiler/**": "derleyici yığını; sözlük + biçimbilim + sesbilim zinciri"
+  }
+}

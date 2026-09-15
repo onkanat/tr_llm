@@ -1,0 +1,25 @@
+{
+  "id": "T-0008",
+  "from": "claude",
+  "to": "antigravity",
+  "created": "2026-09-14T12:54:20Z",
+  "title": "üç kolu AYNI val kümesi üzerinde yeniden puanla — A/B'nin sayıları karşılaştırılamaz",
+  "spec": "Amaç (SPEC.md): gerçek iş. Bu görev, raporlanan pilot sonuçlarının geçerli olup olmadığını tespit eder.\n\nBULGU: üç kol aynı ölçü üzerinde puanlanmadı, dolayısıyla raporlanan karşılaştırma geçersiz.\n\nKanıt (hepsi aynı yerel saat diliminde, dosya sisteminden):\n  data/realistic_rag/val.jsonl   mtime **11:38:05** (194.775 bayt)  <- 11:38 kazasının tam saati\n  data/kristal_rag_arm_a_best.pt mtime 09:36\n  data/kristal_rag_arm_b_best.pt mtime 10:59\n  data/kristal_rag_arm_c_best.pt mtime 14:14\nYani A ve B, ARTIK VAR OLMAYAN bir val kümesine karşı puanlandı; C ise yeni kümeye karşı. İkisi kıyaslanamaz.\n\nVal'in içeriği gerçekten değişti: `val.jsonl` 300 kayıt / 40 tekil çıktı ve **`is_counterfactual` alanı taşıyor**. 11:38'deki nötralizasyon CF veri kümesini yeniden yazdı (`train_cf_3000.jsonl` ve `test_cf_50.jsonl` de 11:38), dolayısıyla val'in CF kısmı değişmiş olmak zorunda.\n\nEski val KURTARILAMAZ: `data/_archive/rag_pilot_invalidated/val_100.jsonl` (Sep 13 22:32) Revizyon-1 pilotunun val'i — farklı bir kurgu, bu kollarla ilgisi yok. Başka yedek de yok.\n\nDÜZELTME: üç kolu da MEVCUT val üzerinde, tek koşuda, tek protokolle yeniden puanla:\n  venv/bin/python scripts/evaluate_realistic_rag_rigorous.py --arm all\nCheckpoint'ler duruyor (A 09:36, B 10:59, C 14:14) ve betik üçünü de `arm_configs` içinden yüklüyor (satır 375-393), `--arm all` hepsini koşuyor (satır 395). Yeniden eğitim GEREKMEZ.\n\nZORUNLU: sonuç dosyasına puanlamada kullanılan val'in kimliğini yaz — **mtime + SHA-256**. Bu, aynı tuzağın sessizce tekrar oluşmasını engeller. Bundan sonra bir kol puanı raporlanırken hangi val'e ait olduğu dosyadan okunabilmeli.\n\nNOT — YAPMA: `data/realistic_rag/pre_training_gate_result.json` bayat DEĞİL. mtime'ı 11:38:35, iç damgası 08:38:35Z (doğru UTC; 11:38:35 yerel = 08:38:35Z). Yani kapı, veri 11:38:05'te üretildikten 30 saniye SONRA koştu ve mevcut veriyi sertifikalıyor. Bu gerekçeyle kapıyı yeniden koşturma.\n\n=== SINIRLAR (ihlal = başarısızlık) ===\n- `data/realistic_rag/**` ve `data/*.pt` DONMUŞ: yalnızca OKU. Checkpoint'leri değiştirme, val'i değiştirme, yeniden eğitim yok.\n- Sonuçları DONMUŞ bir yola YAZMA. `data/eval/` kullan (hiçbir donmuş desenle eşleşmiyor; yazmadan önce doğrula).\n- DİKKAT: fnmatch'te `*` eğik çizgiyi de kapsar, yani `data/*.pt` deseni `data/eval/x.pt` dosyasını DA yakalar. `data/` altına hiçbir `.pt`/`.bin` yazma. Sonuçlar JSON olsun.\n- Betik değişikliği gerekiyorsa yalnızca `scripts/evaluate_realistic_rag_rigorous.py`. Başka dosyaya dokunma.\n- Bus kuralı: `bus_claim_task` ile al; yazacağın dosya için `bus_acquire_lease` al; bitince `bus_report_result`. Raporun başında 'bus kaydı:' satırı olsun.\n\n=== RAPOR (bitince) ===\n- Üç kolun AYNI val üzerindeki sonuçları, tek tablo: arm | val loss | natural | counterfactual | (raporlanmışsa eski sayı).\n- Kullanılan val dosyasının mtime + SHA-256 değeri.\n- Eski (11:38 öncesi) sayılarla yeni sayılar arasındaki fark — hangi kol ne kadar kaymış.\n- Eğer yeni sayılar eski raporlananlarla uyuşmuyorsa bunu açıkça yaz; yuvarlamayla gizleme.",
+  "writes": [
+    "scripts/evaluate_realistic_rag_rigorous.py",
+    "data/eval/"
+  ],
+  "acceptance": [
+    "Üç kol da mevcut val.jsonl üzerinde puanlanmış (tek koşu, tek protokol)",
+    "Sonuç dosyasında val'in mtime + SHA-256 değeri var",
+    "Donmuş yollara hiçbir yazma yapılmamış; checkpoint'ler ve val değişmemiş",
+    "data/ altına .pt veya .bin yazılmamış",
+    "Yeniden eğitim yapılmamış",
+    "Rapor eski ve yeni sayıları açıkça karşılaştırıyor, uyuşmazlığı gizlemiyor",
+    "Bus: claim + lease + report kaydı var"
+  ],
+  "status": "done",
+  "claimed_by": "antigravity",
+  "claimed_at": "2026-09-14T13:08:24Z",
+  "ttl_minutes": 120
+}

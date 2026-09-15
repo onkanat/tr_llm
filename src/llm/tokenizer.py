@@ -103,13 +103,29 @@ class KristalTokenizer:
         "<BELGE>", "</BELGE>",
         "<DUSUNCE>", "</DUSUNCE>",
     }
+    ENTITY_MARKERS = ["<ENT>", "</ENT>", "<CAP>", "<ALL_CAPS>"]
+    ENTITY_CHARS = list("abcdefghijklmnopqrstuvwxyzçğıöşü") + ["'", "/"]
 
-    def __init__(self, compiler: CrystalCompiler, vocab: Vocabulary, verbose: bool = False):
+    def __init__(
+        self,
+        compiler: CrystalCompiler,
+        vocab: Vocabulary,
+        verbose: bool = False,
+        literal_entity_mode: bool = False
+    ):
         self.compiler = compiler
         self.vocab = vocab
         self.verbose = verbose
+        self.literal_entity_mode = literal_entity_mode
         for token in self.CONTROL_TOKENS:
             self.vocab.add_token(token)
+        if self.literal_entity_mode:
+            self.ensure_entity_tokens()
+
+    def ensure_entity_tokens(self):
+        """Registers entity markers and lowercase Turkish/Latin character tokens."""
+        new_toks = self.ENTITY_MARKERS + self.ENTITY_CHARS
+        self.vocab.register_new_tokens(new_toks)
 
     def _render_structured_prompt(self, item: Dict[str, str]) -> str:
         instruction = item.get("instruction", "").strip()
@@ -163,6 +179,44 @@ class KristalTokenizer:
             prompts.append(line)
         return " \n ".join(prompts)
 
+    def _encode_entity_chars(self, word: str) -> List[int]:
+        """Encodes an out-of-vocabulary entity into <ENT> ... </ENT> char sequence."""
+        self.ensure_entity_tokens()
+        token_ids = [self.vocab.encode("<ENT>")]
+        if word.isupper() and len(word) > 1:
+            token_ids.append(self.vocab.encode("<ALL_CAPS>"))
+            for ch in word.lower():
+                token_ids.append(self.vocab.encode(ch))
+        else:
+            token_ids.append(self.vocab.encode("<CAP>"))
+            for ch in word.lower():
+                token_ids.append(self.vocab.encode(ch))
+        token_ids.append(self.vocab.encode("</ENT>"))
+        return token_ids
+
+    def _parse_proper_noun_suffixes(self, stem: str, suffix_str: str) -> List[str]:
+        """Parses inflectional affixes attached to a proper noun via apostrophe."""
+        from src.compiler.morphotactics import State
+        target = (stem + suffix_str).lower()
+        res = []
+        init_path = [{"type": "ROOT", "id": stem, "surface": stem.lower(), "pos": "NOUN", "attributes": "-"}]
+        self.compiler._find_paths_recursive(target, stem.lower(), State.NOUN_ROOT, init_path, res)
+        if res:
+            scored = self.compiler._score_paths(res)
+            return [m["id"] for m in scored[0]["morphemes"][1:]]
+
+        # Fallback for acronyms (e.g. TBMM'ye) or irregular foreign stems:
+        # Test against canonical noun anchors (front/back vowel, front/back consonant)
+        for anchor in ("kedi", "masa", "ev", "kol"):
+            anchor_target = (anchor + suffix_str).lower()
+            a_res = []
+            a_path = [{"type": "ROOT", "id": anchor, "surface": anchor, "pos": "NOUN", "attributes": "-"}]
+            self.compiler._find_paths_recursive(anchor_target, anchor, State.NOUN_ROOT, a_path, a_res)
+            if a_res:
+                scored = self.compiler._score_paths(a_res)
+                return [m["id"] for m in scored[0]["morphemes"][1:]]
+        return []
+
     def encode(self, text: str) -> List[int]:
         """
         Tokenizes text by splitting into tokens, running the Kristal
@@ -172,9 +226,14 @@ class KristalTokenizer:
         text = self._normalize_text(text)
         token_ids = [self.vocab.encode("<BOS>")]
 
-        tokens = re.findall(r"<[^>]+>|[^\s]+", text, flags=re.UNICODE)
+        PUNCT_SET = {".", ",", "?", "!", "-", ":", ";", "(", ")"}
+        tokens = re.findall(r"<[^>]+>|[\w\']+|[.,!?;:()\"—–-]", text, flags=re.UNICODE)
         for token in tokens:
             if token in self.CONTROL_TOKENS:
+                token_ids.append(self.vocab.encode(token))
+                continue
+
+            if token in PUNCT_SET:
                 token_ids.append(self.vocab.encode(token))
                 continue
 
@@ -182,23 +241,45 @@ class KristalTokenizer:
             if not clean_word:
                 continue
 
-            is_number = (
-                clean_word.replace(".", "").replace(",", "").isdigit()
-                or clean_word.isnumeric()
-            )
-            if is_number:
-                self.vocab.add_token("<NUMBER>")
-                token_ids.append(self.vocab.encode("<NUMBER>"))
+            if clean_word.isdigit():
+                for d in clean_word:
+                    token_ids.append(self.vocab.encode(d))
                 continue
 
-            compile_word = clean_word.replace("'", "").replace("’", "")
-            
-            # If the clean_word is already a known token in our vocabulary (e.g. suffix tags like POSS_2SG
-            # or special tokens like <UNK> and <PROPER_NOUN>), we encode it directly.
+            # Check if token is already a known token in vocabulary
             if clean_word in self.vocab.stoi:
                 token_ids.append(self.vocab.encode(clean_word))
                 continue
-                
+
+            # Check for apostrophe (proper noun inflection)
+            has_apostrophe = ("'" in clean_word or "’" in clean_word)
+            if self.literal_entity_mode and has_apostrophe:
+                parts = re.split(r"['’]", clean_word, maxsplit=1)
+                stem = parts[0]
+                suffix_str = parts[1] if len(parts) > 1 else ""
+
+                # Encode stem
+                if stem in self.vocab.stoi:
+                    token_ids.append(self.vocab.encode(stem))
+                elif stem and stem[0].isupper():
+                    token_ids.extend(self._encode_entity_chars(stem))
+                else:
+                    res_stem = self.compiler.compile(stem)
+                    if res_stem.get("token_vector"):
+                        for mid in res_stem["token_vector"]:
+                            token_ids.append(self.vocab.encode(mid))
+                    else:
+                        token_ids.append(self.vocab.encode("<UNK>"))
+
+                # Parse and encode suffixes
+                if suffix_str:
+                    affix_tags = self._parse_proper_noun_suffixes(stem, suffix_str)
+                    for atag in affix_tags:
+                        token_ids.append(self.vocab.encode(atag))
+                continue
+
+            compile_word = clean_word.replace("'", "").replace("’", "")
+
             result = self.compiler.compile(compile_word)
 
             if result.get("token_vector"):
@@ -209,10 +290,18 @@ class KristalTokenizer:
                         self.vocab.add_token(morpheme_id)
                         token_ids.append(self.vocab.encode(morpheme_id))
                     else:
-                        token_ids.append(self.vocab.encode("<UNK>"))
+                        if self.literal_entity_mode and (morpheme_id[0].isupper() or clean_word[0].isupper()):
+                            token_ids.extend(self._encode_entity_chars(clean_word))
+                        elif morpheme_id[0].isupper() or clean_word[0].isupper():
+                            token_ids.append(self.vocab.encode("<PROPER_NOUN>"))
+                        else:
+                            token_ids.append(self.vocab.encode("<UNK>"))
             else:
                 if clean_word[0].isupper():
-                    token_ids.append(self.vocab.encode("<PROPER_NOUN>"))
+                    if self.literal_entity_mode:
+                        token_ids.extend(self._encode_entity_chars(clean_word))
+                    else:
+                        token_ids.append(self.vocab.encode("<PROPER_NOUN>"))
                 else:
                     if self.verbose:
                         print(f"Warning OOV: {clean_word!r}")
@@ -248,7 +337,7 @@ def get_morpheme_weight(tag: str) -> float:
     if tag in ("NEG", "IMPOTENTIAL_NEG", "ama", "fakat"):
         return 4.0
         
-    if tag == "<PROPER_NOUN>":
+    if tag in ("<PROPER_NOUN>", "<ENT>", "</ENT>", "<CAP>", "<ALL_CAPS>"):
         return 3.5
         
     if tag.startswith("DERIV_"):

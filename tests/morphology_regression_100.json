@@ -1,0 +1,502 @@
+[
+  {
+    "instruction": "Kelimedeki kök morfemini bul.",
+    "input": "dubaracılık",
+    "output": "ROOT: dubara"
+  },
+  {
+    "instruction": "Kelimedeki kök morfemini bul.",
+    "input": "görkemleşti",
+    "output": "ROOT: görkemleş"
+  },
+  {
+    "instruction": "Kelimedeki kök morfemini bul.",
+    "input": "başarımlarını",
+    "output": "ROOT: başarım"
+  },
+  {
+    "instruction": "Kelimedeki kök morfemini bul.",
+    "input": "bulunmasından",
+    "output": "ROOT: bulunma"
+  },
+  {
+    "instruction": "Kelimedeki kök morfemini bul.",
+    "input": "döneminin",
+    "output": "ROOT: dönem"
+  },
+  {
+    "instruction": "Kelimedeki kök morfemini bul.",
+    "input": "toprakla",
+    "output": "ROOT: toprakla"
+  },
+  {
+    "instruction": "Kelimedeki kök morfemini bul.",
+    "input": "mağaza",
+    "output": "ROOT: mağaza"
+  },
+  {
+    "instruction": "Kelimedeki kök morfemini bul.",
+    "input": "tedrisatın",
+    "output": "ROOT: tedrisat"
+  },
+  {
+    "instruction": "Kelimedeki kök morfemini bul.",
+    "input": "refahlı",
+    "output": "ROOT: refah"
+  },
+  {
+    "instruction": "Kelimedeki kök morfemini bul.",
+    "input": "yolcunun",
+    "output": "ROOT: yol"
+  },
+  {
+    "instruction": "Kelimedeki kök morfemini bul.",
+    "input": "tatlısı",
+    "output": "ROOT: tat"
+  },
+  {
+    "instruction": "Kelimedeki kök morfemini bul.",
+    "input": "potansiyeli",
+    "output": "ROOT: potansiyel"
+  },
+  {
+    "instruction": "Kelimedeki kök morfemini bul.",
+    "input": "bari",
+    "output": "ROOT: bari"
+  },
+  {
+    "instruction": "Kelimedeki kök morfemini bul.",
+    "input": "kokotun",
+    "output": "ROOT: kokot"
+  },
+  {
+    "instruction": "Kelimedeki kök morfemini bul.",
+    "input": "sevgilinin",
+    "output": "ROOT: sevgi"
+  },
+  {
+    "instruction": "Kelimedeki kök morfemini bul.",
+    "input": "bücürü",
+    "output": "ROOT: bücür"
+  },
+  {
+    "instruction": "Kelimedeki kök morfemini bul.",
+    "input": "gölgeler",
+    "output": "ROOT: gölge"
+  },
+  {
+    "instruction": "Kelimedeki kök morfemini bul.",
+    "input": "ilginç",
+    "output": "ROOT: ilginç"
+  },
+  {
+    "instruction": "Kelimedeki kök morfemini bul.",
+    "input": "tazeleyebilme",
+    "output": "ROOT: tazeleyebilme"
+  },
+  {
+    "instruction": "Kelimedeki kök morfemini bul.",
+    "input": "kazaların",
+    "output": "ROOT: kaza"
+  },
+  {
+    "instruction": "Kelimedeki kök morfemini bul.",
+    "input": "arkeolojik",
+    "output": "ROOT: arkeolojik"
+  },
+  {
+    "instruction": "Kelimedeki kök morfemini bul.",
+    "input": "karşıladığı",
+    "output": "ROOT: karşıla"
+  },
+  {
+    "instruction": "Kelimedeki kök morfemini bul.",
+    "input": "başeski",
+    "output": "ROOT: başeski"
+  },
+  {
+    "instruction": "Kelimedeki kök morfemini bul.",
+    "input": "cildiyecilik",
+    "output": "ROOT: cildiye"
+  },
+  {
+    "instruction": "Kelimedeki kök morfemini bul.",
+    "input": "masajlamak",
+    "output": "ROOT: masajla"
+  },
+  {
+    "instruction": "Kelimede çoğul eki (PLURAL) olup olmadığını tespit et.",
+    "input": "töhmetin",
+    "output": "PLURAL: Hayır"
+  },
+  {
+    "instruction": "Kelimede çoğul eki (PLURAL) olup olmadığını tespit et.",
+    "input": "tenha",
+    "output": "PLURAL: Hayır"
+  },
+  {
+    "instruction": "Kelimede çoğul eki (PLURAL) olup olmadığını tespit et.",
+    "input": "ağacının",
+    "output": "PLURAL: Hayır"
+  },
+  {
+    "instruction": "Kelimede çoğul eki (PLURAL) olup olmadığını tespit et.",
+    "input": "şarlatanlaşmak",
+    "output": "PLURAL: Hayır"
+  },
+  {
+    "instruction": "Kelimede çoğul eki (PLURAL) olup olmadığını tespit et.",
+    "input": "kışlatmak",
+    "output": "PLURAL: Hayır"
+  },
+  {
+    "instruction": "Kelimede çoğul eki (PLURAL) olup olmadığını tespit et.",
+    "input": "şapel",
+    "output": "PLURAL: Hayır"
+  },
+  {
+    "instruction": "Kelimede çoğul eki (PLURAL) olup olmadığını tespit et.",
+    "input": "teolojisi",
+    "output": "PLURAL: Hayır"
+  },
+  {
+    "instruction": "Kelimede çoğul eki (PLURAL) olup olmadığını tespit et.",
+    "input": "evresindeki",
+    "output": "PLURAL: Hayır"
+  },
+  {
+    "instruction": "Kelimede çoğul eki (PLURAL) olup olmadığını tespit et.",
+    "input": "mazgal",
+    "output": "PLURAL: Hayır"
+  },
+  {
+    "instruction": "Kelimede çoğul eki (PLURAL) olup olmadığını tespit et.",
+    "input": "kıyılmış",
+    "output": "PLURAL: Hayır"
+  },
+  {
+    "instruction": "Kelimede çoğul eki (PLURAL) olup olmadığını tespit et.",
+    "input": "liberal",
+    "output": "PLURAL: Hayır"
+  },
+  {
+    "instruction": "Kelimede çoğul eki (PLURAL) olup olmadığını tespit et.",
+    "input": "bloksuzluk",
+    "output": "PLURAL: Hayır"
+  },
+  {
+    "instruction": "Kelimede çoğul eki (PLURAL) olup olmadığını tespit et.",
+    "input": "şekillendirilebilmek",
+    "output": "PLURAL: Hayır"
+  },
+  {
+    "instruction": "Kelimede çoğul eki (PLURAL) olup olmadığını tespit et.",
+    "input": "defigam",
+    "output": "PLURAL: Hayır"
+  },
+  {
+    "instruction": "Kelimede çoğul eki (PLURAL) olup olmadığını tespit et.",
+    "input": "mengenesi",
+    "output": "PLURAL: Hayır"
+  },
+  {
+    "instruction": "Kelimede çoğul eki (PLURAL) olup olmadığını tespit et.",
+    "input": "etkisiyle",
+    "output": "PLURAL: Hayır"
+  },
+  {
+    "instruction": "Kelimede çoğul eki (PLURAL) olup olmadığını tespit et.",
+    "input": "boşaltıyor",
+    "output": "PLURAL: Hayır"
+  },
+  {
+    "instruction": "Kelimede çoğul eki (PLURAL) olup olmadığını tespit et.",
+    "input": "hayalen",
+    "output": "PLURAL: Hayır"
+  },
+  {
+    "instruction": "Kelimede çoğul eki (PLURAL) olup olmadığını tespit et.",
+    "input": "arşidüşes",
+    "output": "PLURAL: Hayır"
+  },
+  {
+    "instruction": "Kelimede çoğul eki (PLURAL) olup olmadığını tespit et.",
+    "input": "dogmalaştırmak",
+    "output": "PLURAL: Hayır"
+  },
+  {
+    "instruction": "Kelimede çoğul eki (PLURAL) olup olmadığını tespit et.",
+    "input": "ciğerpare",
+    "output": "PLURAL: Hayır"
+  },
+  {
+    "instruction": "Kelimede çoğul eki (PLURAL) olup olmadığını tespit et.",
+    "input": "dirilebilmek",
+    "output": "PLURAL: Hayır"
+  },
+  {
+    "instruction": "Kelimede çoğul eki (PLURAL) olup olmadığını tespit et.",
+    "input": "kumla",
+    "output": "PLURAL: Hayır"
+  },
+  {
+    "instruction": "Kelimede çoğul eki (PLURAL) olup olmadığını tespit et.",
+    "input": "çevrelerinden",
+    "output": "PLURAL: Hayır"
+  },
+  {
+    "instruction": "Kelimede çoğul eki (PLURAL) olup olmadığını tespit et.",
+    "input": "bağlanmasından",
+    "output": "PLURAL: Hayır"
+  },
+  {
+    "instruction": "Kelimenin aldığı durum eklerini (hâl eklerini) tespit et.",
+    "input": "sıvılarda",
+    "output": "CASE: CASE_LOC"
+  },
+  {
+    "instruction": "Kelimenin aldığı durum eklerini (hâl eklerini) tespit et.",
+    "input": "istidadını",
+    "output": "CASE: CASE_ACC"
+  },
+  {
+    "instruction": "Kelimenin aldığı durum eklerini (hâl eklerini) tespit et.",
+    "input": "yüzeyinden",
+    "output": "CASE: CASE_ABL"
+  },
+  {
+    "instruction": "Kelimenin aldığı durum eklerini (hâl eklerini) tespit et.",
+    "input": "hesabını",
+    "output": "CASE: CASE_ACC"
+  },
+  {
+    "instruction": "Kelimenin aldığı durum eklerini (hâl eklerini) tespit et.",
+    "input": "ibrişimle",
+    "output": "CASE: CASE_INS"
+  },
+  {
+    "instruction": "Kelimenin aldığı durum eklerini (hâl eklerini) tespit et.",
+    "input": "gözenekliliğine",
+    "output": "CASE: CASE_DAT"
+  },
+  {
+    "instruction": "Kelimenin aldığı durum eklerini (hâl eklerini) tespit et.",
+    "input": "yufkayı",
+    "output": "CASE: CASE_ACC"
+  },
+  {
+    "instruction": "Kelimenin aldığı durum eklerini (hâl eklerini) tespit et.",
+    "input": "işittirmeye",
+    "output": "CASE: CASE_DAT"
+  },
+  {
+    "instruction": "Kelimenin aldığı durum eklerini (hâl eklerini) tespit et.",
+    "input": "dolayında",
+    "output": "CASE: CASE_LOC"
+  },
+  {
+    "instruction": "Kelimenin aldığı durum eklerini (hâl eklerini) tespit et.",
+    "input": "hareketlerime",
+    "output": "CASE: CASE_DAT"
+  },
+  {
+    "instruction": "Kelimenin aldığı durum eklerini (hâl eklerini) tespit et.",
+    "input": "sarmalına",
+    "output": "CASE: CASE_DAT"
+  },
+  {
+    "instruction": "Kelimenin aldığı durum eklerini (hâl eklerini) tespit et.",
+    "input": "büyüklerinden",
+    "output": "CASE: CASE_ABL_N"
+  },
+  {
+    "instruction": "Kelimenin aldığı durum eklerini (hâl eklerini) tespit et.",
+    "input": "makamlarından",
+    "output": "CASE: CASE_ABL_N"
+  },
+  {
+    "instruction": "Kelimenin aldığı durum eklerini (hâl eklerini) tespit et.",
+    "input": "ayırmaktadır",
+    "output": "CASE: CASE_LOC"
+  },
+  {
+    "instruction": "Kelimenin aldığı durum eklerini (hâl eklerini) tespit et.",
+    "input": "analarına",
+    "output": "CASE: CASE_DAT_N"
+  },
+  {
+    "instruction": "Kelimenin aldığı durum eklerini (hâl eklerini) tespit et.",
+    "input": "hancının",
+    "output": "CASE: CASE_GEN"
+  },
+  {
+    "instruction": "Kelimenin aldığı durum eklerini (hâl eklerini) tespit et.",
+    "input": "direklerindendir",
+    "output": "CASE: CASE_ABL_N"
+  },
+  {
+    "instruction": "Kelimenin aldığı durum eklerini (hâl eklerini) tespit et.",
+    "input": "nefesinde",
+    "output": "CASE: CASE_LOC"
+  },
+  {
+    "instruction": "Kelimenin aldığı durum eklerini (hâl eklerini) tespit et.",
+    "input": "buralara",
+    "output": "CASE: CASE_DAT"
+  },
+  {
+    "instruction": "Kelimenin aldığı durum eklerini (hâl eklerini) tespit et.",
+    "input": "geçmektedir",
+    "output": "CASE: CASE_LOC"
+  },
+  {
+    "instruction": "Kelimenin aldığı durum eklerini (hâl eklerini) tespit et.",
+    "input": "örtüyle",
+    "output": "CASE: CASE_INS"
+  },
+  {
+    "instruction": "Kelimenin aldığı durum eklerini (hâl eklerini) tespit et.",
+    "input": "hareketini",
+    "output": "CASE: CASE_ACC"
+  },
+  {
+    "instruction": "Kelimenin aldığı durum eklerini (hâl eklerini) tespit et.",
+    "input": "açıklıkta",
+    "output": "CASE: CASE_LOC"
+  },
+  {
+    "instruction": "Kelimenin aldığı durum eklerini (hâl eklerini) tespit et.",
+    "input": "ilerisinde",
+    "output": "CASE: CASE_LOC_N"
+  },
+  {
+    "instruction": "Kelimenin aldığı durum eklerini (hâl eklerini) tespit et.",
+    "input": "soneriye",
+    "output": "CASE: CASE_DAT"
+  },
+  {
+    "instruction": "Kelimedeki eylemin zamanını veya kipini tespit et.",
+    "input": "haşlanmış",
+    "output": "TENSE: TENSE_EVIDENTIAL"
+  },
+  {
+    "instruction": "Kelimedeki eylemin zamanını veya kipini tespit et.",
+    "input": "sapıyorum",
+    "output": "TENSE: TENSE_PROG"
+  },
+  {
+    "instruction": "Kelimedeki eylemin zamanını veya kipini tespit et.",
+    "input": "kaptırmıştım",
+    "output": "TENSE: TENSE_EVIDENTIAL"
+  },
+  {
+    "instruction": "Kelimedeki eylemin zamanını veya kipini tespit et.",
+    "input": "bırakacak",
+    "output": "TENSE: TENSE_FUT"
+  },
+  {
+    "instruction": "Kelimedeki eylemin zamanını veya kipini tespit et.",
+    "input": "söylendi",
+    "output": "TENSE: TENSE_PAST"
+  },
+  {
+    "instruction": "Kelimedeki eylemin zamanını veya kipini tespit et.",
+    "input": "buharlaşmış",
+    "output": "TENSE: TENSE_EVIDENTIAL"
+  },
+  {
+    "instruction": "Kelimedeki eylemin zamanını veya kipini tespit et.",
+    "input": "karışıyor",
+    "output": "TENSE: TENSE_PROG"
+  },
+  {
+    "instruction": "Kelimedeki eylemin zamanını veya kipini tespit et.",
+    "input": "yapmadılar",
+    "output": "TENSE: TENSE_PAST"
+  },
+  {
+    "instruction": "Kelimedeki eylemin zamanını veya kipini tespit et.",
+    "input": "açındırırız",
+    "output": "TENSE: TENSE_AORIST"
+  },
+  {
+    "instruction": "Kelimedeki eylemin zamanını veya kipini tespit et.",
+    "input": "dayıyordu",
+    "output": "TENSE: TENSE_PROG"
+  },
+  {
+    "instruction": "Kelimedeki eylemin zamanını veya kipini tespit et.",
+    "input": "yesem",
+    "output": "TENSE: TENSE_COND"
+  },
+  {
+    "instruction": "Kelimedeki eylemin zamanını veya kipini tespit et.",
+    "input": "aldatmamalı",
+    "output": "TENSE: TENSE_NECESS"
+  },
+  {
+    "instruction": "Kelimedeki eylemin zamanını veya kipini tespit et.",
+    "input": "belertmişti",
+    "output": "TENSE: TENSE_EVIDENTIAL"
+  },
+  {
+    "instruction": "Kelimedeki eylemin zamanını veya kipini tespit et.",
+    "input": "kıvrılmış",
+    "output": "TENSE: TENSE_EVIDENTIAL"
+  },
+  {
+    "instruction": "Kelimedeki eylemin zamanını veya kipini tespit et.",
+    "input": "yeşeriyor",
+    "output": "TENSE: TENSE_PROG"
+  },
+  {
+    "instruction": "Kelimedeki eylemin zamanını veya kipini tespit et.",
+    "input": "dolaşıldı",
+    "output": "TENSE: TENSE_PAST"
+  },
+  {
+    "instruction": "Kelimedeki eylemin zamanını veya kipini tespit et.",
+    "input": "uyandırabilir",
+    "output": "TENSE: TENSE_AORIST"
+  },
+  {
+    "instruction": "Kelimedeki eylemin zamanını veya kipini tespit et.",
+    "input": "atılabilir",
+    "output": "TENSE: TENSE_AORIST"
+  },
+  {
+    "instruction": "Kelimedeki eylemin zamanını veya kipini tespit et.",
+    "input": "destekledi",
+    "output": "TENSE: TENSE_PAST"
+  },
+  {
+    "instruction": "Kelimedeki eylemin zamanını veya kipini tespit et.",
+    "input": "gelmiştir",
+    "output": "TENSE: TENSE_EVIDENTIAL"
+  },
+  {
+    "instruction": "Kelimedeki eylemin zamanını veya kipini tespit et.",
+    "input": "olgunlaşmamış",
+    "output": "TENSE: TENSE_EVIDENTIAL"
+  },
+  {
+    "instruction": "Kelimedeki eylemin zamanını veya kipini tespit et.",
+    "input": "getirilir",
+    "output": "TENSE: TENSE_AORIST"
+  },
+  {
+    "instruction": "Kelimedeki eylemin zamanını veya kipini tespit et.",
+    "input": "tokatlamış",
+    "output": "TENSE: TENSE_EVIDENTIAL"
+  },
+  {
+    "instruction": "Kelimedeki eylemin zamanını veya kipini tespit et.",
+    "input": "adamış",
+    "output": "TENSE: TENSE_EVIDENTIAL"
+  },
+  {
+    "instruction": "Kelimedeki eylemin zamanını veya kipini tespit et.",
+    "input": "seziyor",
+    "output": "TENSE: TENSE_PROG"
+  }
+]

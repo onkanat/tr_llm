@@ -1,0 +1,20 @@
+{
+  "id": "T-0001",
+  "from": "claude",
+  "to": "antigravity",
+  "created": "2026-09-14T14:20:00Z",
+  "title": "agent-bus MCP sunucusunu uygula",
+  "spec": "Bu repoya ajanlar arası koordinasyon veri yolunu kur. Tam tanım `.agent-bus/SPEC.md` dosyasında; onu baştan sona oku ve harfiyen uygula.\n\nYAPILACAK:\n1. `scripts/agent_bus_mcp.py` dosyasını oluştur. SPEC.md'deki 10 MCP aracını, dört dosya şemasını (görev, kiralama, sonuç, mesaj) ve üç değişmez kuralı uygula.\n2. MCP stdio taşıması: satır-sınırlı JSON-RPC 2.0. `initialize`, `tools/list`, `tools/call` yeterli. Yeni bağımlılık YOK — yalnızca Python stdlib.\n3. Ayrı geçici betik yazma. SPEC.md sonundaki 5 adımlık kabul kriteri testini aynı dosyanın içinde `--selftest` bayrağıyla çalışacak şekilde ekle.\n4. `python3 scripts/agent_bus_mcp.py --selftest` komutunu çalıştır ve çıktısını raporla.\n\nSINIRLAR (ihlal = başarısızlık):\n- YALNIZCA `scripts/agent_bus_mcp.py` oluşturulacak. Başka HİÇBİR dosyayı oluşturma, değiştirme veya silme.\n- Özellikle DOKUNMA: `data/` altındaki her şey, `src/` altındaki her şey, mevcut `scripts/` dosyaları, `scripts/train_realistic_rag_arms.py`, `data/realistic_rag/val.jsonl`.\n- venv'e paket eklenmeyecek.\n\nKOD STANDARTLARI (CLAUDE.md):\n- Tip ipuçları zorunlu.\n- Saf fonksiyonlar; global değiştirilebilir durum yok.\n- Deterministik: kararlarda rastgelelik veya duvar saati kullanma; zaman damgası yalnızca üst veri.\n- Hatalar sessizce yutulmaz — loglanır ve uygun varsayılan döner.\n- Atomik yazma: `<dosya>.tmp` yaz, sonra `os.replace`.\n- Yol güvenliği: kök dışına çıkan (`..`) ve mutlak yollar reddedilir.\n\nRAPOR (bitince):\n- Oluşturulan dosyanın satır sayısı ve tanımladığı fonksiyonlar\n- `--selftest` çıktısı (5 adımın her biri için geçti/kaldı)\n- SPEC.md'den bilinçli olarak saptığın her nokta ve gerekçesi",
+  "writes": [
+    "scripts/agent_bus_mcp.py"
+  ],
+  "acceptance": [
+    "python3 scripts/agent_bus_mcp.py --selftest",
+    "5 adımın hepsi geçti; 3. adımda ikinci kiralama ok:false dönmeli VE diskte yeni kiralama dosyası oluşmamalı",
+    "git status --short sadece '?? scripts/agent_bus_mcp.py' göstermeli; başka değişiklik olmamalı"
+  ],
+  "status": "done",
+  "claimed_by": "antigravity",
+  "claimed_at": "2026-09-14T12:43:07Z",
+  "ttl_minutes": 120
+}

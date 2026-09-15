@@ -1,0 +1,4 @@
+# Çalışma zamanı durumu sürümlenmez; SPEC.md ve frozen.json sürümlenir.
+state/
+log/
+*.tmp

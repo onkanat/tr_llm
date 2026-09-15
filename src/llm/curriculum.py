@@ -1,5 +1,6 @@
 import json
 from typing import List, Dict
+from src.llm.prompt_contract import render_example, render_prompt
 
 class PedagogicalPhase:
     INFANCY = "INFANCY"       # Güdümsüz Keşif, Zıtlıklar (Positive/Negative boundaries)
@@ -65,21 +66,31 @@ class CurriculumGenerator:
             ]
         return []
 
+    def render_example(self, item: Dict[str, str]) -> str:
+        """
+        Converts a structured curriculum item into a full plain text example.
+        Delegates to canonical prompt_contract.render_example.
+        """
+        instruction = item.get("instruction", "")
+        input_text = item.get("input", "")
+        output_text = item.get("output", "")
+        return render_example(instruction, input_text, output_text)
+
+    def render_prompt(self, item: Dict[str, str]) -> str:
+        """
+        Converts a structured curriculum item into a plain text prompt stopping at <OUTPUT>.
+        Delegates to canonical prompt_contract.render_prompt.
+        """
+        instruction = item.get("instruction", "")
+        input_text = item.get("input", "")
+        return render_prompt(instruction, input_text)
+
     def render_prompt_template(self, item: Dict[str, str]) -> str:
         """
-        Converts a structured curriculum item into a plain text prompt
-        template.
+        Converts a structured curriculum item into a plain text prompt template.
+        For full training example with <OUTPUT>...</OUTPUT>, delegates to render_example.
         """
-        instruction = item.get("instruction", "").strip()
-        input_text = item.get("input", "").strip()
-        output_text = item.get("output", "").strip()
-
-        parts = []
-        if instruction:
-            parts.extend(["<INSTRUCTION>", instruction, "</INSTRUCTION>"])
-        parts.extend(["<INPUT>", input_text, "</INPUT>"])
-        parts.extend(["<OUTPUT>", output_text, "</OUTPUT>"])
-        return " ".join(parts).strip()
+        return self.render_example(item)
 
     def export_to_prompt_file(self, data: List[Dict[str, str]], filepath: str):
         """Exports the generated curriculum as plain text prompt templates."""

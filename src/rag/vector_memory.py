@@ -1,4 +1,5 @@
 import atexit
+import re
 from qdrant_client import QdrantClient
 from qdrant_client.http import models
 from typing import List, Dict, Any, Optional
@@ -33,8 +34,16 @@ class VectorMemory:
         else:
             client_key = f"remote:{host}:{port}" if host else f"local:{storage_path}"
             if client_key in VectorMemory._shared_clients:
-                self.client, self.storage_type = VectorMemory._shared_clients[client_key]
-            else:
+                cached_client, cached_type = VectorMemory._shared_clients[client_key]
+                try:
+                    cached_client.get_collections()
+                    self.client = cached_client
+                    self.storage_type = cached_type
+                except Exception:
+                    # Client was closed or stale; evict and reconnect
+                    VectorMemory._shared_clients.pop(client_key, None)
+            
+            if not hasattr(self, "client") or self.client is None:
                 connected = False
                 if host:
                     try:
@@ -208,10 +217,21 @@ class VectorMemory:
                     distinctive_query_roots.add(root)
 
         results = []
+        cot_filter_patterns = [
+            r'\bthe user\b', r'\bwe need to\b', r'\bthey want\b', r'\blet\'s produce\b',
+            r'\bhere is\b', r'\bso that should\b', r'\bmake it\b', r'\bfirst, let\b',
+            r'\bin this case\b', r'\bconcise, pedagogically\b', r'<think>', r'<thought>'
+        ]
+        cot_regex = re.compile('|'.join(cot_filter_patterns), re.IGNORECASE)
+
         for scored_point in search_result.points:
             score = scored_point.score
             text = scored_point.payload.get("text", "")
             doc_tags_str = scored_point.payload.get("crystal_tags", "")
+            
+            # Purity Filter: reject English CoT leaks
+            if cot_regex.search(text):
+                continue
             
             # 2. Token-Type Constraint / Penalty Scoring
             has_root_match = True
@@ -257,6 +277,9 @@ class VectorMemory:
 
     def close(self):
         """Cleanly closes this VectorMemory's client connection."""
+        for client_key, (c, _) in list(VectorMemory._shared_clients.items()):
+            if c is self.client:
+                VectorMemory._shared_clients.pop(client_key, None)
         if hasattr(self, "client") and self.client is not None:
             try:
                 self.client.close()

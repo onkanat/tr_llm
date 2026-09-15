@@ -159,6 +159,25 @@ class TestAgentGateway(unittest.TestCase):
         query_data = self.gateway.ask(query="Test sunucu sorusu?")
         self.assertIn("response_text", query_data)
 
+    def test_canary_create_default_raises_on_missing_model(self):
+        # Bu test, model checkpoint'i bulunamadığında sessizce rastgele modelle açılmak yerine
+        # gürültülü bir biçimde FileNotFoundError fırlatıldığını doğrular.
+        with self.assertRaises(FileNotFoundError):
+            AgentGateway.create_default(model_path="/tmp/nonexistent_model_file_canary.pt")
+
+    def test_canary_load_eval_model_raises_on_missing_checkpoint(self):
+        # Bu test, değerlendiricilerde model checkpoint'i bulunamadığında
+        # sessizce rastgele model döndürmek yerine FileNotFoundError fırlatıldığını doğrular.
+        from src.llm.tokenizer import Vocabulary
+        from scripts.evaluate_mcq_conditioning import load_eval_model as load_mcq
+        from scripts.run_experiment_a import load_eval_model as load_exp_a
+        from scripts.evaluate_sft_benchmarks import load_eval_model as load_sft
+        vocab = Vocabulary()
+        vocab.load("data/vocab.json")
+        for name, fn in [("mcq", load_mcq), ("exp_a", load_exp_a), ("sft", load_sft)]:
+            with self.assertRaises(FileNotFoundError, msg=f"{name} did not raise FileNotFoundError"):
+                fn("/tmp/nonexistent_eval_checkpoint.pt", vocab)
+
 
 if __name__ == "__main__":
     unittest.main()

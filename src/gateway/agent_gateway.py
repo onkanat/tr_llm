@@ -85,7 +85,7 @@ class AgentGateway:
     ) -> "AgentGateway":
         """Factory method to load and build the complete default Gateway stack."""
         from scripts.train_step_demo import KristalLM
-        from chat_prompt import resize_state_dict
+        from src.llm.prompt_contract import resize_state_dict
         
         # Load Vocab
         vocab = Vocabulary()
@@ -104,15 +104,35 @@ class AgentGateway:
         general_memory = VectorMemory(collection_name="simulasyon_bellek", vector_size=768, host="localhost", port=6333, storage_path=storage_path)
         
         # Load Model
+        if not os.path.exists(model_path):
+            raise FileNotFoundError(f"Gateway model checkpoint'i bulunamadı (sessiz rastgele model engellendi): {model_path}")
+
+        from scripts.train_step_b1_5_rigorous import compute_sha256
+
         dev = torch.device(device)
         model = KristalLM(vocab_size=vocab_size, n_embd=768, vocab=vocab, block_size=4096, n_layer=6, n_head=6)
-        if os.path.exists(model_path):
+        try:
             state_dict = torch.load(model_path, map_location=dev)
-            keys_to_skip = [k for k in state_dict.keys() if "cos_cached" in k or "sin_cached" in k or "mask" in k]
-            for k in keys_to_skip:
-                del state_dict[k]
-            state_dict = resize_state_dict(model, state_dict)
-            model.load_state_dict(state_dict, strict=False)
+        except Exception as e:
+            raise RuntimeError(f"Gateway model checkpoint yüklenirken hata oluştu ({model_path}): {e}") from e
+
+        sha256_val = compute_sha256(model_path)
+        print(f"[SOYAGACI] yuklenen={os.path.abspath(model_path)} sha256={sha256_val} anahtar={len(state_dict)}")
+
+        keys_to_skip = [k for k in state_dict.keys() if "cos_cached" in k or "sin_cached" in k or "mask" in k]
+        for k in keys_to_skip:
+            del state_dict[k]
+        state_dict = resize_state_dict(model, state_dict)
+        load_res = model.load_state_dict(state_dict, strict=False)
+        if load_res.missing_keys or load_res.unexpected_keys:
+            print(f"[SOYAGACI_UYARI] strict=False ile yüklendi: eksik={len(load_res.missing_keys)}, fazla={len(load_res.unexpected_keys)}")
+            if load_res.missing_keys:
+                print(f"  * Eksik anahtarlar: {load_res.missing_keys[:5]}{'...' if len(load_res.missing_keys) > 5 else ''}")
+            if load_res.unexpected_keys:
+                print(f"  * Fazla anahtarlar: {load_res.unexpected_keys[:5]}{'...' if len(load_res.unexpected_keys) > 5 else ''}")
+        else:
+            print("[SOYAGACI] strict=False ile yüklendi: tam eşleşme (0 eksik, 0 fazla).")
+
         model.to(dev)
         model.eval()
         

@@ -28,6 +28,7 @@ from typing import Dict, Any, Optional, List, Tuple
 
 import torch
 import torch.nn as nn
+from src.llm.prompt_contract import build_rag_input
 
 logger = logging.getLogger("EpistemicAgent")
 
@@ -299,9 +300,7 @@ class EpistemicCuriosityAgent:
         
         if retrieved_doc and match_score >= 0.40: # Valid context
             doc_text = retrieved_doc.get("text", "")
-            doc_crystal_tags = retrieved_doc.get("metadata", {}).get("crystal_tags", "")
-            clean_doc_tags = doc_crystal_tags.replace("<BOS>", "").replace("<EOS>", "").strip()
-            augmented_input = f"belge: {clean_doc_tags} sorgu: {clean_query_tags}"
+            augmented_input = build_rag_input(doc_text, query)
             
         prompt_dict_aug = {
             "instruction": instruction,
@@ -344,15 +343,21 @@ class EpistemicCuriosityAgent:
         
         if is_high_similarity and (has_high_post_entropy or expresses_uncertainty):
             epistemic_failure = True
-            # Training target MUST be the authoritative knowledge from the document, not the failed output
-            target_output = clean_doc_tags if clean_doc_tags else (doc_text or morpheme_output)
+            from src.gateway.pedagogical_supervisor import sanitize_teacher_card
+            # Training target MUST be pure declarative knowledge from document, not CoT or raw failed output
+            clean_doc_text = sanitize_teacher_card(doc_text) or doc_text
+            if clean_doc_text:
+                clean_target = self.tokenizer.decode(self.tokenizer.encode(clean_doc_text)).replace("<BOS>", "").replace("<EOS>", "").strip()
+            else:
+                clean_target = clean_doc_tags or morpheme_output
+                
             record = {
                 "instruction": instruction,
                 "input": augmented_input,
-                "output": target_output,
+                "output": clean_target,
                 "model_failed_output": morpheme_output,
                 "decompiled_output": decompiled_text,
-                "rag_document": doc_text,
+                "rag_document": clean_doc_text,
                 "retrieval_collection": source_coll,
                 "similarity_score": round(match_score, 4),
                 "similarity_threshold": self.similarity_threshold,

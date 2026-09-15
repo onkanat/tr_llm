@@ -113,6 +113,10 @@ def main():
 
     model.to(device)
     
+    for arg_idx, arg in enumerate(sys.argv):
+        if arg == "--lr" and arg_idx + 1 < len(sys.argv):
+            lr = float(sys.argv[arg_idx + 1])
+
     # Using AdamW optimizer
     optimizer = optim.AdamW(model.parameters(), lr=lr, weight_decay=0.01)
     print(f"Model mimarisi kuruldu ve cihaza taşındı. (Öğrenme Oranı: {lr})", flush=True)

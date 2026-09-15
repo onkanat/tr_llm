@@ -42,14 +42,20 @@ def test_decompiler_sentences(decompiler):
     result = decompiler.decompile_sentence(sentence_tags)
     assert result == expected, f"Expected '{expected}', got '{result}'"
 
-def test_decompiler_meta_tokens(decompiler):
-    # Meta tokens should not agglutinate with following tags
+def test_decompiler_copula_past_buffer(decompiler):
     test_cases = [
-        ("root kitap", "root kitap"),
-        ("case CASE_DAT", "case CASE_DAT"),
-        ("ten COPULA_COND TENSE_FUT", "ten COPULA_COND TENSE_FUT"),
-        ("PLURAL evet", "PLURAL evet"),
+        (["tanımlan", "INF_mAk", "CASE_LOC", "COPULA_PAST"], "tanımlanmaktaydı"),
+        (["göster", "INF_mAk", "CASE_LOC", "COPULA_PAST"], "göstermekteydi"),
+        (["gel", "TENSE_EVIDENTIAL", "COPULA_PAST"], "gelmişti"),
+        (["ev", "CASE_LOC", "COPULA_PAST"], "evdeydi"),
     ]
-    for input_tags, expected in test_cases:
-        result = decompiler.decompile_sentence(input_tags)
-        assert result == expected, f"Expected '{expected}', got '{result}'"
+    for tags, expected in test_cases:
+        result = decompiler.decompile_tags(tags)
+        assert result == expected, f"Failed for {tags}: expected {expected}, got {result}"
+
+def test_decompiler_placeholders(decompiler):
+    sentence_tags = "göster INF_mAk CASE_LOC COPULA_PAST <UNK> ve <NUMBER> ile <PROPER_NOUN>"
+    expected = "göstermekteydi [?] ve [sayı] ile [Özel İsim]"
+    result = decompiler.decompile_sentence(sentence_tags)
+    assert result == expected, f"Expected '{expected}', got '{result}'"
+

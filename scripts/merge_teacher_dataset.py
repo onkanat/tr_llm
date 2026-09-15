@@ -183,18 +183,34 @@ def discover_new_tokens_and_expand(
     print(f"  * Sözlük güncellendi: {initial_size} -> {len(vocab.stoi)} morfem tokeni.")
 
     # 2. Weight surgery on Model checkpoint
-    if os.path.exists(model_path):
-        print(f"  * Model ağırlık cerrahisi (Weight Surgery) uygulanıyor: {model_path}...")
+    if not os.path.exists(model_path):
+        raise FileNotFoundError(f"Ağırlık cerrahisi uygulanacak model checkpoint'i bulunamadı: {model_path}")
+    try:
         state_dict = torch.load(model_path, map_location=device)
-        
-        # Instantiate KristalLM with expanded vocab
-        model = KristalLM(vocab_size=len(vocab.stoi), n_embd=768, vocab=vocab)
-        # Resize state dict
-        from train import resize_state_dict
-        new_sd = resize_state_dict(model, state_dict)
-        model.load_state_dict(new_sd, strict=False)
-        torch.save(model.state_dict(), model_path)
-        print("  * Model kontrol noktası yeni kelime haznesi boyutuyla başarıyla kaydedildi.")
+    except Exception as e:
+        raise RuntimeError(f"Checkpoint dosyası mevcut fakat yüklenemedi ({model_path}): {e}") from e
+
+    from scripts.train_step_b1_5_rigorous import compute_sha256
+    sha256_val = compute_sha256(model_path)
+    print(f"[SOYAGACI] yuklenen={os.path.abspath(model_path)} sha256={sha256_val} anahtar={len(state_dict)}")
+    print(f"  * Model ağırlık cerrahisi (Weight Surgery) uygulanıyor: {model_path}...")
+    
+    # Instantiate KristalLM with expanded vocab
+    model = KristalLM(vocab_size=len(vocab.stoi), n_embd=768, vocab=vocab)
+    # Resize state dict
+    from train import resize_state_dict
+    new_sd = resize_state_dict(model, state_dict)
+    load_res = model.load_state_dict(new_sd, strict=False)
+    if load_res.missing_keys or load_res.unexpected_keys:
+        print(f"[SOYAGACI_UYARI] strict=False ile yüklendi: eksik={len(load_res.missing_keys)}, fazla={len(load_res.unexpected_keys)}")
+        if load_res.missing_keys:
+            print(f"  * Eksik anahtarlar: {load_res.missing_keys[:5]}{'...' if len(load_res.missing_keys) > 5 else ''}")
+        if load_res.unexpected_keys:
+            print(f"  * Fazla anahtarlar: {load_res.unexpected_keys[:5]}{'...' if len(load_res.unexpected_keys) > 5 else ''}")
+    else:
+        print("[SOYAGACI] strict=False ile yüklendi: tam eşleşme (0 eksik, 0 fazla).")
+    torch.save(model.state_dict(), model_path)
+    print("  * Model kontrol noktası yeni kelime haznesi boyutuyla başarıyla kaydedildi.")
 
     return sorted_new_tokens
 

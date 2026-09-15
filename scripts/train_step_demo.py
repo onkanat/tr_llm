@@ -113,7 +113,14 @@ class RotaryEmbedding(nn.Module):
         self.dim = dim
         self.theta = theta
         inv_freq = 1.0 / (theta ** (torch.arange(0, dim, 2).float() / dim))
-        self.register_buffer("inv_freq", inv_freq)
+        self.register_buffer("inv_freq", inv_freq, persistent=False)
+
+    def _load_from_state_dict(self, state_dict, prefix, local_metadata, strict,
+                              missing_keys, unexpected_keys, error_msgs):
+        # Eski checkpoint'lerdeki kalıcı inv_freq anahtarını sessizce at (anında yeniden üretiliyor)
+        state_dict.pop(prefix + "inv_freq", None)
+        super()._load_from_state_dict(state_dict, prefix, local_metadata, strict,
+                                     missing_keys, unexpected_keys, error_msgs)
 
     def forward(self, x: torch.Tensor, seq_len: int):
         device = x.device
@@ -151,9 +158,17 @@ class CausalSelfAttention(nn.Module):
         
         self.rotary_emb = RotaryEmbedding(self.head_dim, max_seq_len=block_size)
         
-        # Causal mask: True means masked out in PyTorch
+        # Causal mask: True means masked out in PyTorch (persistent=False ile checkpoint'e yazılmaz)
         mask = torch.triu(torch.ones(block_size, block_size), diagonal=1).bool()
-        self.register_buffer("mask", mask)
+        self.register_buffer("mask", mask, persistent=False)
+
+    def _load_from_state_dict(self, state_dict, prefix, local_metadata, strict,
+                              missing_keys, unexpected_keys, error_msgs):
+        # Eski checkpoint'lerdeki kalıcı mask ve rotary inv_freq anahtarlarını sessizce at (T-0007)
+        state_dict.pop(prefix + "mask", None)
+        state_dict.pop(prefix + "rotary_emb.inv_freq", None)
+        super()._load_from_state_dict(state_dict, prefix, local_metadata, strict,
+                                     missing_keys, unexpected_keys, error_msgs)
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         B, T, C = x.shape

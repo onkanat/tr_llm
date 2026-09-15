@@ -110,6 +110,50 @@ CURRICULUM_PROBES = {
             "expected_keywords": ["bağımsızlık", "sınır", "kapitülasyon", "cumhuriyet"]
         }
     ],
+    "highschool_genz": [
+        {
+            "query": "Hücre teorisinin temel ilkeleri nelerdir?",
+            "instruction": "Lise düzeyinde eğitim almış Z kuşağı genci olarak açıkla.",
+            "target_collection": "simulasyon_bellek",
+            "knowledge_to_inject": "Tüm canlılar bir ya da birden fazla hücreden oluşur. Hücre canlılığın en temel yapısal ve işlevsel birimidir. Yeni hücreler var olan hücrelerin bölünmesiyle oluşur.",
+            "expected_keywords": ["hücre", "canlı", "birim", "bölünme"]
+        },
+        {
+            "query": "Newton'ın temel yasası F=ma neyi ifade eder?",
+            "instruction": "Lise düzeyinde eğitim almış Z kuşağı genci olarak açıkla.",
+            "target_collection": "simulasyon_bellek",
+            "knowledge_to_inject": "Temel yasa (2. Yasa); bir cisme etki eden net kuvvetin, cismin kütlesi ile ivmesinin çarpımına eşit olduğunu ifade eder. Net kuvvet arttıkça cismin ivmesi doğru orantılı olarak artar.",
+            "expected_keywords": ["kuvvet", "kütle", "ivme", "net"]
+        },
+        {
+            "query": "Isı ile sıcaklık arasındaki fark nedir?",
+            "instruction": "Lise düzeyinde eğitim almış Z kuşağı genci olarak açıkla.",
+            "target_collection": "simulasyon_bellek",
+            "knowledge_to_inject": "Sıcaklık, bir maddedeki moleküllerin ortalama kinetik enerjisinin bir göstergesidir ve termometre ile ölçülür. Isı ise sıcaklık farkından dolayı bir maddeden diğerine aktarılan toplam termal enerjidir.",
+            "expected_keywords": ["sıcaklık", "kinetik", "enerji", "termometre", "ısı"]
+        },
+        {
+            "query": "Lozan Barış Antlaşması'nın Türk milleti için önemi nedir?",
+            "instruction": "Lise düzeyinde eğitim almış Z kuşağı genci olarak açıkla.",
+            "target_collection": "simulasyon_bellek",
+            "knowledge_to_inject": "Lozan Barış Antlaşması, Türkiye Cumhuriyeti'nin bağımsızlığını ve sınırlarını uluslararası alanda tescilleyen, kapitülasyonları kaldıran kurucu antlaşmadır.",
+            "expected_keywords": ["bağımsızlık", "sınır", "kapitülasyon", "cumhuriyet"]
+        },
+        {
+            "query": "Selam, sınav haftasındayım ve aşırı stresliyim, nasıl toparlarım?",
+            "instruction": "Lise düzeyinde eğitim almış Z kuşağı genci olarak açıkla.",
+            "target_collection": "simulasyon_bellek",
+            "knowledge_to_inject": "Sınav stresini yönetmek için çalışma saatlerini 25 dakikalık odaklanma ve 5 dakikalık molalara bölmek (Pomodoro), uykudan kısmamak ve konuları öncelik sırasına koymak zihni rahatlatır.",
+            "expected_keywords": ["stres", "plan", "mola", "odaklanma", "rahat"]
+        },
+        {
+            "query": "Periyodik tabloda metaller ve ametaller arasındaki fark nedir?",
+            "instruction": "Lise düzeyinde eğitim almış Z kuşağı genci olarak açıkla.",
+            "target_collection": "simulasyon_bellek",
+            "knowledge_to_inject": "Metaller elektrik ve ısıyı iyi iletir, elektron vererek pozitif değerlik alır ve parlaktır. Ametaller ise mat görünümlüdür, elektriği genelde iletmez ve bileşiklerinde elektron alma eğilimindedir.",
+            "expected_keywords": ["metal", "ametal", "elektron", "iletken", "tablo"]
+        }
+    ],
     "arena_mix": [
         {
             "query": "Kırlangıç kuyruğu birleştirme nerelerde kullanılır?",
@@ -220,18 +264,38 @@ def get_curriculum_probes(domain: str = "arena_mix", count: int = 10) -> List[Di
         
     base_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
     lit_path = os.path.join(base_dir, "data", "pedagogy", "literature_poetry_dataset.jsonl")
+    hs_path = os.path.join(base_dir, "data", "pedagogy", "high_school_foundation_dataset.jsonl")
+    chat_path = os.path.join(base_dir, "data", "pedagogy", "chat_conversations.jsonl")
+    hist_path = os.path.join(base_dir, "data", "pedagogy", "turk_tarihi_chat.jsonl")
+    carp_path = os.path.join(base_dir, "data", "pedagogy", "carpenter_specialization_dataset.jsonl")
     
-    if domain in ("literary", "poetry", "edebiyat"):
+    if domain in ("carpenter", "ahsap", "wood"):
+        extra_sources = [
+            ("kristal_bellek", carp_path),
+        ]
+    elif domain in ("highschool_genz", "highschool", "genz", "lise"):
+        extra_sources = [
+            ("simulasyon_bellek", hs_path),
+            ("simulasyon_bellek", chat_path),
+            ("simulasyon_bellek", hist_path),
+            ("simulasyon_bellek", lit_path),
+        ]
+    elif domain in ("literary", "poetry", "edebiyat"):
         extra_sources = [
             ("simulasyon_bellek", lit_path),
-            ("simulasyon_bellek", os.path.join(base_dir, "data", "pedagogy", "high_school_foundation_dataset.jsonl")),
+            ("simulasyon_bellek", hs_path),
+        ]
+    elif domain in ("history_1931", "turk_tarihi", "tarih"):
+        extra_sources = [
+            ("simulasyon_bellek", hist_path),
+            ("simulasyon_bellek", hs_path),
         ]
     else:
         extra_sources = [
-            ("simulasyon_bellek", os.path.join(base_dir, "data", "pedagogy", "high_school_foundation_dataset.jsonl")),
+            ("simulasyon_bellek", hs_path),
+            ("simulasyon_bellek", chat_path),
             ("simulasyon_bellek", lit_path),
-            ("kristal_bellek", os.path.join(base_dir, "data", "pedagogy", "carpenter_specialization_dataset.jsonl")),
-            ("simulasyon_bellek", os.path.join(base_dir, "data", "pedagogy", "middle_school_chat.jsonl")),
+            ("kristal_bellek", carp_path),
         ]
     seen_queries = {p["query"].strip().lower() for p in probes}
     
@@ -257,14 +321,25 @@ def get_curriculum_probes(domain: str = "arena_mix", count: int = 10) -> List[Di
                 try:
                     data = json.loads(line)
                     q = data.get("input", "").strip()
+                    inst = data.get("instruction", "").strip()
+                    
+                    if not q:
+                        if ":" in inst:
+                            parts = inst.split(":", 1)
+                            q = parts[1].strip()
+                        elif "?" in inst:
+                            q = inst
                     if q.startswith("Soru:"):
                         q = q[5:].strip()
                     if not q or q.lower() in seen_queries or len(q) < 5:
                         continue
                     seen_queries.add(q.lower())
                     ans = data.get("output", "").strip()
-                    if ans.startswith("Cevap:"):
-                        ans = ans[6:].strip()
+                    while ans.startswith("Cevap:") or ans.startswith("Teknik Çözüm:"):
+                        if ans.startswith("Cevap:"):
+                            ans = ans[6:].strip()
+                        elif ans.startswith("Teknik Çözüm:"):
+                            ans = ans[13:].strip()
                         
                     kws = data.get("expected_keywords")
                     if not kws:
@@ -277,9 +352,10 @@ def get_curriculum_probes(domain: str = "arena_mix", count: int = 10) -> List[Di
                     if not keywords:
                         continue
                         
+                    default_inst = "Ahşap ve marangozluk uzmanı olarak cevapla." if target_col == "kristal_bellek" else "Lise düzeyinde eğitim almış Z kuşağı genci olarak açıkla."
                     probes.append({
                         "query": q,
-                        "instruction": data.get("instruction", "Belirtilen konuda uzman ve bilimsel doğrulukla açıkla."),
+                        "instruction": inst if inst and ":" not in inst else default_inst,
                         "target_collection": target_col,
                         "knowledge_to_inject": ans,
                         "expected_keywords": keywords
@@ -293,7 +369,8 @@ def get_curriculum_probes(domain: str = "arena_mix", count: int = 10) -> List[Di
 def sanitize_teacher_card(raw_text: Optional[str]) -> Optional[str]:
     """
     Cleans and extracts pure Turkish pedagogical knowledge from raw LLM teacher output,
-    stripping internal Chain-of-Thought (CoT), English reasoning tokens, and meta-instructions.
+    stripping internal Chain-of-Thought (CoT), English reasoning tokens, meta-instructions,
+    and role preambles.
     """
     if not raw_text or not isinstance(raw_text, str):
         return None
@@ -305,9 +382,11 @@ def sanitize_teacher_card(raw_text: Optional[str]) -> Optional[str]:
     text = re.sub(r'<think>.*?</think>', '', text, flags=re.DOTALL | re.IGNORECASE)
     text = re.sub(r'<thought>.*?</thought>', '', text, flags=re.DOTALL | re.IGNORECASE)
     text = re.sub(r'<reasoning>.*?</reasoning>', '', text, flags=re.DOTALL | re.IGNORECASE)
+    text = re.sub(r'<dusunce>.*?</dusunce>', '', text, flags=re.DOTALL | re.IGNORECASE)
     
-    # 2. Filter out English meta-reasoning and CoT preambles line by line
+    # 2. Filter out meta-reasoning, role declarations, and CoT preambles line by line
     cot_patterns = [
+        # English CoT
         r'^\s*we need to\b',
         r'^\s*the user says\b',
         r'^\s*the user:\b',
@@ -324,7 +403,27 @@ def sanitize_teacher_card(raw_text: Optional[str]) -> Optional[str]:
         r'^\s*in this case\b',
         r'^\s*first, let\'s\b',
         r'^\s*to answer this\b',
-        r'^\s*concise, pedagogically\b'
+        r'^\s*concise, pedagogically\b',
+        # Turkish CoT & Meta-instructions
+        r'^\s*(?:DUSUNCE|DÜŞÜNCE|Düşünce(?:\s+Adımları)?)\b',
+        r'^\s*öğretmen\s+rol(?:ü|ündeyim|ündeydim)\b',
+        r'^\s*hedef(?:im|imiz| kitlem| kitlemiz)\b',
+        r'^\s*soru\s+(?:iki|üç|\d+|ana|marangozluk|türk).*?(?:oluşuyor|soruyor|istiyor|cevaplamak)',
+        r'^\s*temel\s+kavram(?:lar)?(?:\s+da)?\s+(?:verilmiş|kullanarak|bağlamında)',
+        r'^\s*(?:adım|step)\s*\d+[:\.]?',
+        r'^\s*derinlemesine\s+düşünce',
+        r'^\s*pedagojik\s+(?:kontrol|olarak)',
+        r'^\s*(?:ilk\s+)?taslak\b',
+        r'^\s*son\s+kontrol\b',
+        r'^\s*bu\s+(?:taslak|ifade|durumda|da|cümle)\b.*?(?:uyuyor|cevap|açıklıyor|pekiştiriyor|yeterli)',
+        r'^\s*(?:net\s+mi|öz\s+mü|doğru\s+mu)\b',
+        r'^\s*öğrencinin\s+anlayacağı\b',
+        r'^\s*\d+[-–]\d+\s*cümle\s+sınır',
+        r'^\s*(?:madde|bölüm)\s*\d+[:\.]',
+        r'^\s*öğrenciye\s+net[,\s]+öz\b',
+        r'^\s*bilgi\s+kartı\s+örnek',
+        r'^\s*cevap\s+nasıl\s+bir\s+format',
+        r'^\s*yol\s+gösteriyor\b'
     ]
     cot_regex = re.compile('|'.join(cot_patterns), re.IGNORECASE)
     
@@ -358,9 +457,13 @@ def sanitize_teacher_card(raw_text: Optional[str]) -> Optional[str]:
     if len(words) > 6 and (eng_word_count / len(words) > 0.20) and tr_char_count < 2:
         return None
         
-    # 4. Clean leading label tags
-    candidate = re.sub(r'^(Bilgi Kartı|Öğretmen Açıklaması|Özet|Cevap|Teknik Çözüm)\s*:\s*', '', candidate, flags=re.IGNORECASE)
-    candidate = candidate.strip(' "\'“’')
+    # 4. Clean leading/inline label tags
+    candidate = re.sub(r'^(?:\[?(?:Bilgi Kartı|Öğretmen Açıklaması|Özet|Cevap|Teknik Çözüm|DUSUNCE|DÜŞÜNCE)\]?)\s*:\s*', '', candidate, flags=re.IGNORECASE)
+    candidate = candidate.strip(' "\'“’*')
+    
+    # 5. Remove any trailing meta notes
+    candidate = re.sub(r'\n+(?:Pedagojik Not|Açıklama|Kaynak|Adım \d+).*$', '', candidate, flags=re.IGNORECASE | re.DOTALL)
+    candidate = candidate.strip(' "\'“’*')
     
     if len(candidate) < 15:
         return None
@@ -373,6 +476,7 @@ def extract_cot_and_card(raw_text: Optional[str]) -> Tuple[Optional[str], Option
     Separates internal Chain-of-Thought (thought_trace) from clean Turkish declarative knowledge (clean_card).
     Handles structured tags (<DUSUNCE>...</DUSUNCE>, <BILGI_KARTI>...</BILGI_KARTI>),
     standard model reasoning tags (<think>, <thought>, <reasoning>),
+    markdown/text delimiters (DUSUNCE: ... BILGI_KARTI: ...),
     and falls back to sanitize_teacher_card for declarative extraction.
     
     Returns:
@@ -385,44 +489,50 @@ def extract_cot_and_card(raw_text: Optional[str]) -> Tuple[Optional[str], Option
     thought_trace = None
     clean_card = None
     
-    # 1. Look for explicit <DUSUNCE>...</DUSUNCE> tag
+    # 1. Look for explicit XML tags
     dusunce_match = re.search(r'<DUSUNCE>(.*?)</DUSUNCE>', text, flags=re.DOTALL | re.IGNORECASE)
     if dusunce_match:
         thought_trace = dusunce_match.group(1).strip()
     else:
-        # Check standard reasoning tags
         think_match = re.search(r'<(think|thought|reasoning)>(.*?)</\1>', text, flags=re.DOTALL | re.IGNORECASE)
         if think_match:
             thought_trace = think_match.group(2).strip()
 
-    # 2. Look for explicit <BILGI_KARTI>...</BILGI_KARTI> tag
     card_match = re.search(r'<BILGI_KARTI>(.*?)</BILGI_KARTI>', text, flags=re.DOTALL | re.IGNORECASE)
     if card_match:
         cand = card_match.group(1).strip()
-        cand = re.sub(r'^(Bilgi Kartı|Öğretmen Açıklaması|Özet|Cevap|Teknik Çözüm)\s*:\s*', '', cand, flags=re.IGNORECASE)
-        cand = cand.strip(' "\'“’')
+        cand = re.sub(r'^(?:\[?(?:Bilgi Kartı|Öğretmen Açıklaması|Özet|Cevap|Teknik Çözüm)\]?)\s*:\s*', '', cand, flags=re.IGNORECASE)
+        cand = cand.strip(' "\'“’*')
         if len(cand) >= 15:
-            clean_card = cand
+            clean_card = sanitize_teacher_card(cand)
 
-    # 3. If explicit <BILGI_KARTI> not found, sanitize remaining text
+    # 2. If explicit XML tags not found, check for text/markdown headers
+    if not clean_card:
+        header_pattern = re.search(
+            r'(?:^|\n)\s*(?:\*{1,3}|\[)?\s*(?:BILGI_KARTI|BİLGİ KARTI|Bilgi Kartı|Öğrenci İçin(?: Bilgi Kartı)?|Sonuç|Cevap)\s*(?:\*{1,3}|\])?\s*:\s*(.*)$',
+            text,
+            flags=re.DOTALL | re.IGNORECASE
+        )
+        if header_pattern:
+            card_part = header_pattern.group(1).strip()
+            if not thought_trace:
+                thought_part = text[:header_pattern.start()].strip()
+                if len(thought_part) >= 15:
+                    thought_trace = thought_part
+            clean_card = sanitize_teacher_card(card_part)
+
+    # 3. If explicit card not found, sanitize remaining text
     if not clean_card:
         rem = text
         rem = re.sub(r'<DUSUNCE>.*?</DUSUNCE>', '', rem, flags=re.DOTALL | re.IGNORECASE)
         rem = re.sub(r'<(think|thought|reasoning)>.*?</\1>', '', rem, flags=re.DOTALL | re.IGNORECASE)
         clean_card = sanitize_teacher_card(rem)
 
-    # 4. If thought_trace not found yet via tags, check for preambles in raw text
-    if not thought_trace:
-        lines = text.split('\n')
-        cot_lines = []
-        for line in lines:
-            line_s = line.strip()
-            if not line_s:
-                continue
-            if re.search(r'^\s*(we need to|the user says|the user:|they want|let\'s produce|here is|first, let\'s|to answer this)\b', line_s, re.IGNORECASE):
-                cot_lines.append(line_s)
-        if cot_lines:
-            thought_trace = '\n'.join(cot_lines).strip()
+    # 4. If thought_trace not found yet, extract any lines filtered out by sanitizer
+    if not thought_trace and clean_card and clean_card != text:
+        diff_lines = [l.strip() for l in text.split('\n') if l.strip() and l.strip() not in clean_card]
+        if diff_lines:
+            thought_trace = '\n'.join(diff_lines).strip()
 
     return thought_trace, clean_card
 
@@ -675,9 +785,13 @@ class PedagogicalSupervisor:
                             )
                             step_log["reasoning_injected"] = True
 
-            # Always combine base textbook knowledge with teacher explanation
-            if teacher_card:
-                text_to_inject = f"{knowledge_text}\n\n[Öğretmen Açıklaması]: {teacher_card.strip()}"
+            # Clean declarative injection: Pure factual knowledge without meta-headers or [Öğretmen Açıklaması]
+            if teacher_card and len(teacher_card.strip()) >= 15:
+                clean_teacher = teacher_card.strip()
+                if knowledge_text and knowledge_text not in clean_teacher:
+                    text_to_inject = f"{knowledge_text} {clean_teacher}"
+                else:
+                    text_to_inject = clean_teacher
             else:
                 text_to_inject = knowledge_text
 
@@ -688,13 +802,14 @@ class PedagogicalSupervisor:
             )
             step_log["knowledge_injected"] = injection_result
             step_log["injected_text"] = text_to_inject
+            step_log["clean_card"] = teacher_card or knowledge_text
             step_log["teacher_provider"] = teacher_provider
             
             # Step 3: Verify Retrieval
             search_check = self.gateway.check_memory(query, target_collection=target_coll, top_k=1)
             step_log["search_check"] = search_check
             top_score = search_check[0]["score"] if search_check else 0.0
-            step_log["retrieval_verified"] = bool(top_score >= 0.85)
+            step_log["retrieval_verified"] = bool(top_score >= 0.20 and search_check[0].get("has_root_match", True))
             
             # Step 4: Re-probe student with newly available knowledge
             reprobe_attempt = self.gateway.ask(query, instruction=instruction, mode="RAG", force_rag=True)

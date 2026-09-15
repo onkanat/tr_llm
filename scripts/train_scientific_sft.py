@@ -75,23 +75,33 @@ def main():
     base_model_path = 'data/kristal_model.pt'
     loaded_weights = False
     
-    if os.path.exists(base_model_path):
-        try:
-            print("Temel model ağırlıkları yüklenmeye çalışılıyor...")
-            old_state_dict = torch.load(base_model_path, map_location=device)
-            keys_to_skip = [k for k in old_state_dict.keys() if "cos_cached" in k or "sin_cached" in k or "mask" in k]
-            for k in keys_to_skip:
-                del old_state_dict[k]
-            
-            resized_state_dict = resize_state_dict(model, old_state_dict)
-            model.load_state_dict(resized_state_dict, strict=True)
-            print(f"Model ağırlıkları '{base_model_path}' üzerinden yüklendi ve uyarlandı.")
-            loaded_weights = True
-        except Exception as e:
-            print(f"Bilgi: Ağırlık yükleme mimari farkı nedeniyle atlandı ({e}).")
-            print("Model rastgele ağırlıklarla sıfırdan (from scratch) eğitilecektir.")
+    if not os.path.exists(base_model_path):
+        raise FileNotFoundError(f"Temel model checkpoint'i bulunamadı: {base_model_path} (sessiz sıfırdan başlama engellendi)")
+    try:
+        old_state_dict = torch.load(base_model_path, map_location=device)
+    except Exception as e:
+        raise RuntimeError(f"Checkpoint dosyası mevcut fakat yüklenemedi ({base_model_path}): {e}") from e
+
+    from scripts.train_step_b1_5_rigorous import compute_sha256
+    sha256_val = compute_sha256(base_model_path)
+    print(f"[SOYAGACI] yuklenen={os.path.abspath(base_model_path)} sha256={sha256_val} anahtar={len(old_state_dict)}")
+
+    keys_to_skip = [k for k in old_state_dict.keys() if "cos_cached" in k or "sin_cached" in k or "mask" in k]
+    for k in keys_to_skip:
+        del old_state_dict[k]
+    
+    resized_state_dict = resize_state_dict(model, old_state_dict)
+    load_res = model.load_state_dict(resized_state_dict, strict=False)
+    if load_res.missing_keys or load_res.unexpected_keys:
+        print(f"[SOYAGACI_UYARI] strict=False ile yüklendi: eksik={len(load_res.missing_keys)}, fazla={len(load_res.unexpected_keys)}")
+        if load_res.missing_keys:
+            print(f"  * Eksik anahtarlar: {load_res.missing_keys[:5]}{'...' if len(load_res.missing_keys) > 5 else ''}")
+        if load_res.unexpected_keys:
+            print(f"  * Fazla anahtarlar: {load_res.unexpected_keys[:5]}{'...' if len(load_res.unexpected_keys) > 5 else ''}")
     else:
-        print("Temel model bulunamadı. Model sıfırdan eğitilecektir.")
+        print("[SOYAGACI] strict=False ile yüklendi: tam eşleşme (0 eksik, 0 fazla).")
+    print(f"Model ağırlıkları '{base_model_path}' üzerinden yüklendi ve uyarlandı.")
+    loaded_weights = True
 
     model.to(device)
 

@@ -43,21 +43,23 @@ Kurulumun eksiksiz olduğunu doğrulamak için birim testlerini çalıştırın:
 ```bash
 ./venv/bin/pytest
 ```
-*Tüm 87 testin (kök sözlüğü, durum makinesi, ses olayları, decompiler, merak motoru, tri-modal router, agent gateway, pedagojik supervisor, UNK merakı ve sözlük cerrahisi) eksiksiz geçtiğinden emin olun.*
+*Tüm 99 testin (kök sözlüğü, durum makinesi, ses olayları, fonetik sentez ve y türemesi, decompiler, merak motoru, tri-modal router, agent gateway, pedagojik supervisor, UNK merakı, sözlük cerrahisi ve morfoloji regresyon altın paketi) eksiksiz geçtiğinden emin olun.*
 
 ---
 
 ## 2. Etkileşimli CLI ile Sohbet ve Analiz
 
-Modeli terminalden gerçek zamanlı olarak test etmek için `chat_prompt.py` betiği kullanılır. Betik renkli morfem görselleştirmesi, anlık akıtma (streaming) ve `MorphemeDecompiler` desteği sunar.
+Modeli terminalden gerçek zamanlı olarak test etmek için `chat_prompt.py` betiği kullanılır. Betik renkli morfem görselleştirmesi, anlık akıtma (streaming), `MorphemeDecompiler` ve otomatik model yönlendirme desteği sunar.
 
 ```bash
-# Temel Lise Modeli ile başlatma:
+# Temel Lise, Tarih ve Genel Model ile başlatma:
 ./venv/bin/python chat_prompt.py
 
-# Dikey Ahşap Uzmanlık Modülü ile başlatma:
+# Dikey Ahşap Uzmanlık Modeli ile başlatma:
 ./venv/bin/python chat_prompt.py --model data/kristal_carpenter_model.pt
 ```
+
+> **Önemli (Akıllı Model Yönlendirme):** CLI arayüzü, SFT modunda seçilen personaya göre modeli dinamik olarak devreye alır. Örneğin Ahşap Uzmanı (Seçenek 6) seçildiğinde otomatik olarak `kristal_carpenter_model.pt` yüklenir; Tarih veya Genel persona seçildiğinde `kristal_model.pt` devreye girer. Ayrıca CLI içerisinde doğrudan `model` yazılarak dilediğiniz checkpoint seçilebilir.
 
 ### Modlar ve Kullanım
 - **SFT Modu (Varsayılan):** Modelin talimat takip yeteneklerini sınar (kök bulma, çoğul, hâl, zaman tespiti).
@@ -104,7 +106,9 @@ Modelin ana eğitim döngüsü `train.py` betiği üzerinden yönetilir. Causal 
 
 ### Örnek Çalıştırma Senaryoları
 
-#### A. Evre 1-3: Pedagoji ve Temel Lise Eğitimi (46.412 kayıt, 1.84M token)
+> **Tavsiye Edilen Güncel Eğitim:** Mevcut v1.8 sürümünde model; şablon kopyalamalarını önleyen kanonik B1.5 boru hattı (`scripts/train_step_b1_5_rigorous.py`) ile eğitilmiştir (Bkz. [Bölüm 4.5](#5-adım-b15-cevap-düzeyi-ölçümlü-bölme-titiz-eğitim-ve-eşleştirilmiş-mcnemar-doğrulaması)). Aşağıdaki senaryolar, projenin modüler `.bin` kütükleri üzerindeki erken aşama deneysel eğitimlerini gösterir:
+
+#### A. Evre 1-3: Pedagoji ve Temel Lise Eğitimi (Erken Aşama)
 ```bash
 ./venv/bin/python -u train.py --data data/train_pedagogy_highschool.bin --steps 300 --batch-size 16 --device cpu
 ```
@@ -138,6 +142,8 @@ cp data/kristal_model.pt data/kristal_model_sft.pt
 
 Projedeki veri setleri sentetik, deterministik ve pedagojik hiyerarşiye göre yapılandırılmıştır:
 
+> **Mimari Not (v1.8 Geçişi):** Aşağıdaki 1–4 arası veri derleyiciler (`.bin`), projenin önceki gelişim evrelerine aittir. Titiz denetimlerde tespit edilen şablon tekrarlarını ve veri sızıntılarını önlemek amacıyla, güncel ve resmi eğitim kümesi **Bölüm 4.5'te detaylandırılan Adım B1.5 Kanonik Bölme (`data/b1_5_splits/`, 16.253 kayıt)** kümesidir.
+
 ### 1. 1931 Türk Tarihi Külliyatı Hazırlığı ve Entegrasyonu
 Hugging Face üzerindeki [`onkanat/turk-tarihi-1931-sft-dpo`](https://huggingface.co/datasets/onkanat/turk-tarihi-1931-sft-dpo) veri setini (6.477 SFT, 6.071 Chat, 406 DPO) işleyip Qdrant belleğe indekslemek için:
 ```bash
@@ -161,6 +167,43 @@ Hugging Face üzerindeki [`onkanat/turk-tarihi-1931-sft-dpo`](https://huggingfac
 ./venv/bin/python scripts/prepare_chat_balanced_dataset.py
 ```
 *Çıktı: `data/train_chat_balanced.bin` (5.34 MB, 21.875 örnek, 2.80M token).*
+
+### 5. Adım B1.5: Cevap Düzeyi Ölçümlü Bölme, Titiz Eğitim ve Eşleştirilmiş McNemar Doğrulaması
+
+Adım B1.5, modelin girdi istemine gerçek anlamda koşullanıp koşullanmadığını test etmek için **soru düzeyinde sıfır sızıntılı 3 yollu bölme**, **train-only sözcüksel taban (TF-IDF)** ve **diskte sabitlenmiş aday kümeleri üzerinden eşleştirilmiş McNemar testi** uygular.
+
+#### Adım 1: Cevap Düzeyi Ölçümlü Veri Bölme ve Sabit Aday Kümeleri Üretimi
+Normalize soru metni (`clean_q`) ve normalize cevap metniyle kümeleme yapılarak soru düzeyinde %0 sızıntılı (`Train ∩ Test = 0`, %0,0; cevap düzeyi sızıntı: %43,4 / 704 kayıt) Train, Val ve Test kümeleri oluşturulur:
+```bash
+./venv/bin/python scripts/prepare_b1_5_datasets.py
+```
+*Çıktılar:*
+- `data/b1_5_splits/train.jsonl` (13.009 kayıt)
+- `data/b1_5_splits/val.jsonl` (1.622 kayıt)
+- `data/b1_5_splits/test.jsonl` (1.622 kayıt)
+- `data/b1_5_splits/test_candidates_hard.jsonl` ($N=660$, en benzer morfem Jaccard zor-negatif adaylar)
+- `data/b1_5_splits/test_candidates_random.jsonl` ($N=660$, rastgele çeldirici adaylar)
+
+#### Adım 2: Sözcüksel Taban Modelinin Eğitilmesi (Null Hipotezi)
+Test verisinden sıfır sızıntı garantisi için TF-IDF sözcüksel modeli **yalnızca** `train.jsonl` üzerinden eğitilir ve diskteki test adaylarını puanlar:
+```bash
+./venv/bin/python scripts/evaluate_lexical_baseline.py
+```
+*Çıktılar:* `lexical_preds_hard.json` ve `lexical_preds_random.json`.
+
+#### Adım 3: Hızlı Tensör Önbellekleme ile MPS Model Eğitimi
+Blok boyutu 128 ve önceden hesaplanan `sign_mask` tensörleri ile MPS donanımında monoton kayıp düşüşüyle 3 epoch eğitim gerçekleştirilir:
+```bash
+./venv/bin/python scripts/train_step_b1_5_rigorous.py
+```
+*Eğitim İlerlemesi:* Val Loss $2.0974 \to 1.6339 \to 1.5589 \to 1.5525$ (PPL: 4.72). En düşük doğrulama kaybını veren Epoch 3 checkpoint'i `data/kristal_b1_5_best.pt` olarak kilitlenir.
+
+#### Adım 4: Eşleştirilmiş McNemar Testi ve Katman 4 Toplu Üretim Denetimi
+Model ağırlıklarının diskteki sabit adayları çözmesi ve sonuçların sözcüksel tabanla eşleştirilerek McNemar süreklilik düzeltmeli $\chi^2$ ve $p$-değerinin hesaplanması:
+```bash
+./venv/bin/python scripts/evaluate_b1_5_rigorous.py
+```
+*Bu betik ayrıca hiç görülmemiş $N=100$ held-out test örneğinde toplu üretim yaparak Ezber Oranı ($< \%10$), Tutarsızlık Oranı ($< \%5$) ve ortalama ROUGE-L ($\ge 0.35$) metriklerini `data/b1_5_splits/final_evaluation_report.json` dosyasına kaydeder.*
 
 ---
 
@@ -383,10 +426,9 @@ print("Türkçe Karşılık:", turkce_metin)
 
 ## 9. Sorun Giderme ve Sık Karşılaşılan Sorunlar
 
-### 1. macOS Metal (MPS) Üzerinde Eğitim Kilitlenmesi (Deadlock)
-- **Belirti:** `train.py` veya `chat_prompt.py` çalışırken MPS üzerinde `AdamW` adımında işlemin askıda kalması.
-- **Sebep:** PyTorch 2.x Metal backend'inin büyük kelime haznelerinde (~31.000 token) seyrek gradyan güncellemelerinde kilitlenmesi.
-- **Çözüm:** Eğitim her zaman CPU modunda çalıştırılmalıdır (`train.py --device cpu`). Çıkarım (inference) MPS üzerinde sorunsuz çalışır.
+### 1. macOS Metal (MPS) Üzerinde Eğitim Hızı ve Kilitlenmeler
+- **Belirti:** `train.py` çalışırken MPS üzerinde `sign_mask` CPU-GPU aktarımı veya seyrek gradyanlar nedeniyle adım başına 4.7 saniyeye varan yavaşlama.
+- **Çözüm:** Adım B1.5 ile gelen `scripts/train_step_b1_5_rigorous.py` mimarisi kullanılır. Bu mimaride veri kümesi (`train_fast_ds.pt`) ve `sign_mask` tensörleri önceden hesaplanıp MPS belleğine kilitlenir; adım süresi 0.58 saniyeye düşer.
 
 ### 2. Qdrant Bağlantı Hatası (`ConnectionRefusedError`)
 - **Belirti:** `[VectorMemory]` başlatılırken `localhost:6333` adresine bağlanılamadı uyarısı.
@@ -398,3 +440,12 @@ print("Türkçe Karşılık:", turkce_metin)
 ### 3. Boyut Uyuşmazlığı (`RuntimeError: size mismatch for embedding`)
 - **Belirti:** Yeni kontrol belirteçleri (`<ARA>`, `<BELGE>`) eklendikten sonra eski model ağırlıkları yüklenirken hata oluşması.
 - **Çözüm:** Kodlarımızdaki `resize_state_dict` fonksiyonu eski katman ağırlıklarını koruyarak yeni token slotlarını otomatik olarak genişletir. `strict=False` ile yükleme yapılır.
+
+### 4. Ansiklopedik ve Tarih Alanlarında Modelin Düşük Performans Göstermesi veya `<PROPER_NOUN>` Üretmesi
+- **Belirti:** Türk Tarihi veya genel kültür sorularında modelin parametrik belleğinin yetersiz kalması, ardışık özel isimler veya belirsiz ifadeler üretmesi.
+- **Sebep:** 14M parametreli kompakt modelin tüm ansiklopedik olguları statik ağırlıklarında ezberlemesi beklenemez (Nitekim B1.5 zor-negatif testinde tarih doğruluğu %15.67 çıkmıştır).
+- **Çözüm:** Mimari tasarımımızın gereği olarak, bu alanlarda model parametrik ezbere zorlanmamalıdır. **Vector Rover (RAG)** modülü devreye sokularak Qdrant'tan getirilen kanıt belgesi (`<BELGE>...</BELGE>`) üzerinden koşullu sentez yaptırılmalıdır.
+
+### 5. Toplu Üretim Değerlendirmesinde Parenting Çıktılarının Yüklemsiz Görünmesi
+- **Belirti:** `evaluate_b1_5_rigorous.py` çalıştırıldığında Tutarsızlık Oranının yüksek görünmesi.
+- **Sebep:** Test kümesindeki parenting (ebeveynlik) morfoloji talimlerinin (örn. `olmadığına`) hedef çıktısı bir cümle değil salt kök analizidir (`ROOT: ol`). Kök analizleri `TENSE_` veya `COPULA_` çekim eki içermediğinden sentaktik olarak cümlenin yüklemi sayılmaz; bu bir çöküş değil, veri formatının doğal sonucudur.
