@@ -162,9 +162,12 @@ def test_probe_passes_on_new_code_fails_on_old_code(sample_jsonl, tmp_path):
     assert 32850 in tokens_new
 
     # 2. Eski kod testi (T-0040 D3: /tmp önbelleği yerine HER ÇALIŞTIRMADA tmp_path altına çıkarılır)
+    # NOT (16 Eyl 2026): "eski kod" HEAD ile ALINMAZ — HEAD ilerledikçe (ör. 4251c53) bu öncül bozulur
+    # ve test yanlışlıkla kırılır. Eski davranışı temsil eden commit AÇIKÇA sabitlenir.
+    ESKI_KOD_COMMIT = "9e1c1df"   # F2 onarımlarından ÖNCEKİ run_goal_pipeline.py
     eski_path = str(tmp_path / "eski_rgp.py")
     res = subprocess.run(
-        ["git", "show", "HEAD:scripts/run_goal_pipeline.py"],
+        ["git", "show", f"{ESKI_KOD_COMMIT}:scripts/run_goal_pipeline.py"],
         capture_output=True,
         text=True,
         check=True

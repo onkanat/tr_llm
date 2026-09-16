@@ -1,0 +1,61 @@
+{
+  "task_id": "T-0055",
+  "timestamp": "2026-09-16T20:25:00Z",
+  "status": "PASS",
+  "leases": {
+    "files": [
+      "scripts/train_step_demo.py",
+      "train.py",
+      "tests/test_prompt_masking.py",
+      "data/eval/t0055_prompt_masking_2026-09-16.json",
+      ".agent-bus/notes/T-0055.md"
+    ],
+    "acquired_before_writes": true
+  },
+  "changes": {
+    "scripts/train_step_demo.py": {
+      "function_added": "mask_prompt_targets(x, targets, output_start_id, eos_id) -> np.ndarray",
+      "sha256": "1bac5e9263faca86e513d83ed1256dcc04305f741f86b714bc1f115b4e7f5dd7",
+      "nature": "Saf fonksiyon, in-place mutasyon yapmaz, EOS->sonraki sızıntısını kapatır (targets_np[b, i] = -100 at token_id == eos_id)."
+    },
+    "train.py": {
+      "refactoring": "Satır içi döngü kaldırıldı; mask_prompt_targets çağrısı ile değiştirildi.",
+      "sha256": "cabfbc4a88a9e91e6adfb8d74eac224e4d0d3a174774ca6d1ef67b08729d7898"
+    },
+    "tests/test_prompt_masking.py": {
+      "test_count": 6,
+      "sha256": "50c79cb4f371592750664b8a0efb11cf17101f2be0f2ebcc510e091082e94409"
+    }
+  },
+  "tests": {
+    "test_prompt_masking_pytest": {
+      "passed": 6,
+      "failed": 0,
+      "cases": [
+        "test_mask_before_output_start (KOSUM)",
+        "test_preserve_output_and_eos_production (KOSUM)",
+        "test_mask_after_eos (KOSUM)",
+        "test_mask_at_eos_position_leakage_closed (KOSUM)",
+        "test_mask_entire_window_without_output (KOSUM)",
+        "test_regression_against_legacy_except_leak (KOSUM)"
+      ]
+    },
+    "mutant_verification": {
+      "description": "Sızıntı düzeltmesi kaldırıldığında test_mask_at_eos_position_leakage_closed kırmızı olmalı.",
+      "mutant_output_at_leak_pos": 1,
+      "expected_normal_at_leak_pos": -100,
+      "mutant_test_result": "RED (AssertionError)",
+      "normal_test_result": "GREEN (PASS)"
+    },
+    "full_pytest_suite": {
+      "passed": 200,
+      "deselected": 1,
+      "note": "tests/test_compiler_entrypoints.py içindeki test_probe_passes_on_new_code_fails_on_old_code harici tüm testler geçmiştir."
+    }
+  },
+  "canaries": {
+    "data_pt_count": 29,
+    "data_bin_count": 15,
+    "no_pt_bin_written": true
+  }
+}

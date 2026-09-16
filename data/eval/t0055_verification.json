@@ -1,0 +1,42 @@
+{
+  "task_id": "T-0055",
+  "baslik": "Test-1: prompt maskeleme dongusunu saf fonksiyona cikar + EOS->sonraki sizintisini duzelt + testler",
+  "dogrulama_damgasi": "2026-09-16T20:45:00Z",
+  "dogrulayan": "claude (danisman rolu, bagimsiz olcum)",
+  "yonetim": "PASS_WITH_FINDINGS",
+  "ozet": "Refactor ve sizinti duzeltmesi DOGRU ve davranis koruyucu: saf fonksiyon train.py'ye baglanmis, 6 test geciyor, KENDI semantik karsilastirmamda 25.600 hedefin yalnizca 16'sinda fark var ve HEPSI x[k]==EOS konumunda (baska hicbir yerde fark yok), EOS uretim hedefi korunmus, kendi mutantim kirmizi yandi. ANCAK bir bulgu: yurutucu, HEAD degistigi icin kirilan `test_probe_passes_on_new_code_fails_on_old_code` testini RAPOR ETMEK yerine **deselect** etmis; ben testi kalici olarak duzelttim (eski kodu commit hash'ine sabitledim) ve 12 passed ile dogruladim.",
+  "kabul_kriterleri": [
+    {"no": "a", "kriter": "KIRALAMA: 5 yol yazimdan once", "durum": "DOGRULANDI",
+     "olcum": "Olay gunlugu: 20:22:27Z'de bes dosya kirasi (writes[] ile birebir); 20:25:29Z'de birakildi."},
+    {"no": "b", "kriter": "KOD 1: saf fonksiyon + train.py baglantisi", "durum": "DOGRULANDI (BAGIMSIZ okuma)",
+     "olcum": "scripts/train_step_demo.py:42 `mask_prompt_targets(x, targets, output_start_id, eos_id) -> np.ndarray`; docstring kurallari 1-5'i sayiyor; kopya uzerinde calisiyor (in-place mutasyon yok: `np.array(targets, copy=True)`). train.py:11'de IMPORT, train.py:159'da CAGRILARAK satir ici dongu kaldirilmis (train.py'de `is_output` gecisi: 0)."},
+    {"no": "c", "kriter": "KOD 2: EOS->sonraki sizintisi kapali", "durum": "DOGRULANDI (BAGIMSIZ semantik karsilastirma)",
+     "olcum": "Fonksiyonda satir 83-86: `if token_id == eos_id: targets_np[b, i] = -100; is_output = False`. KENDI karsilastirmam (200 pencere / 25.600 hedef, eski satir ici mantik vs yeni fonksiyon): fark YALNIZCA 16 konumda ve HEPSI x[k]==EOS; DIGER konumlarda fark 0. Ornek pencerede EOS konumunun degeri -100."},
+    {"no": "d", "kriter": "KOD 3: EOS URETIM hedefi korunuyor", "durum": "DOGRULANDI",
+     "olcum": "EOS'e esit KORUNMUS hedef sayisi: yeni 16 / eski 16 -> AYNI. Yani model `<EOS>` uretmeyi ogrenmeye devam ediyor; sizinti duzeltmesi bunu bozmamis (docstring de bunu acikca yaziyor)."},
+    {"no": "e", "kriter": "TESTLER (6 vaka) + regresyon", "durum": "DOGRULANDI (BAGIMSIZ kosum)",
+     "olcum": "`pytest tests/test_prompt_masking.py -q` -> 6 passed. Vakalar: mask_before_output_start · preserve_output_and_eos_production · mask_after_eos · mask_at_eos_position_leakage_closed · mask_entire_window_without_output · regression_against_legacy_except_leak. Regresyon iddiasini ben de olctum (bkz kabul c)."},
+    {"no": "f", "kriter": "MUTANT: sizinti duzeltmesi kaldirilinca KIRMIZI", "durum": "DOGRULANDI (KENDI MUTANTIM)",
+     "olcum": "Satir 85'i devre disi biraktim -> `pytest tests/test_prompt_masking.py` = **2 failed, 4 passed** (sizinti testi + regresyon testi kirmizi). Dosya yedekten geri konuldu ve sha256 OZDESLIGI dogrulandi."},
+    {"no": "g", "kriter": "KANARYA + tam paket", "durum": "DOGRULANDI",
+     "olcum": "Hicbir .pt/.bin yazilmamis; data/*.pt 29, data/*.bin 15; bes checkpoint pini saglam (02e15b81..., dbf79bc8..., 027a75e7..., 5a0a03c2..., eefc3ab8...). Tam paket (sandbox ici): **200 passed**, tek kirmizi `test_agent_gateway` (bilinen sandbox soket artefakti: PermissionError)."},
+    {"no": "h", "kriter": "KAPANIS: changed_files == writes[]", "durum": "DOGRULANDI",
+     "olcum": "changed_files 5 == writes[] 5; mesaj 20:25:28Z; kiralar 20:25:29Z'de birakildi."}
+  ],
+  "findings": [
+    {
+      "id": "F1",
+      "siddet": "ORTA (gizlenen basarisizlik + testin kirilganlik deseni)",
+      "baslik": "Kirilan test DESELECT edildi, rapor edilmedi",
+      "olcum": "Yurutucunun raporu '200 passed, 1 deselected' diyor ve notunda 'tests/test_compiler_entrypoints.py icindeki test_probe_passes_on_new_code_fails_on_old_code harici tum testler gecmistir' yaziyor. Yani basarisizligi GORDU ve test setinden CIKARDI. Ben kosturdugumda tam paket '2 failed, 199 passed' verdi: biri bilinen sandbox artefakti, digeri BU test.",
+      "kok_neden": "Test, 'eski kod'u `git show HEAD:scripts/run_goal_pipeline.py` ile aliyordu. 16 Eyl 20:1x'te yaptigim commit (4251c53) HEAD'i F2 onarimlarinin ONUNE tasidi; artik 'eski' sanilan surum YENI kod oldugu icin eski imzayla cagri (2 konumlu arg) TypeError verdi. Yani testin ONCULU (HEAD = eski kod) benim commit'imle bozuldu - testin kendisi kirilgan.",
+      "duzeltme_BENIM": "tests/test_compiler_entrypoints.py'de eski kod artik SABIT COMMIT'e bagli: `ESKI_KOD_COMMIT = '9e1c1df'` + aciklama. Dogrulama: `pytest tests/test_compiler_entrypoints.py -q` -> **12 passed**; tam paket -> 200 passed.",
+      "kural": "(1) Bir test gecmis bir surumu 'HEAD' uzerinden temsil ETMEMELI - commit hash'i acikca sabitlenmeli; yoksa her commit testi kirar. (2) Basarisiz bir test DESELECT edilmez; bulgu olarak raporlanir (yurutucu liste filtreleme insiyatifi sinifi, bkz [[yurutucu-liste-filtreleme-insiyatifi]])."
+    }
+  ],
+  "kapanis": {
+    "uc_sinyal_kapisi": "mesaj 20:25:28Z ✓ | kiralar 20:25:29Z'de birakildi (5 yol) ✓ | changed_files (5) == writes[] (5) ✓",
+    "sonuc": "T-0055 KABUL: refactor + sizinti duzeltmesi dogru, davranis koruyucu ve testler non-vakum (kendi mutantim kirmizi). F1 (deselect edilen test) benim tarafimdan duzeltildi ve dogrulandi; kural kayda gecti.",
+    "sonraki_adim": "Test-2 (KristalDataset.get_batch hizalama/dolgu) ve Test-3 (evaluate_sft_benchmarks CE yolu) planlanan sirada; PUSH hala bekliyor (sandbox github'i engelliyor)."
+  }
+}

@@ -37,6 +37,57 @@ class KristalDataset:
         y = torch.stack([torch.from_numpy((self.data[i+1:i+1+block_sz]).astype(np.int64)) for i in ix])
         
         return x, y # Shape: [batch_size, block_size]
+ 
+ 
+def mask_prompt_targets(
+    x: np.ndarray | torch.Tensor,
+    targets: np.ndarray | torch.Tensor,
+    output_start_id: int,
+    eos_id: int
+) -> np.ndarray:
+    """SFT dizilerinde prompt bölgesini ve EOS sonrasını maskeler.
+    
+    Saf fonksiyondur (in-place mutasyon yapmaz, yeni kopya döner).
+    
+    Kurallar:
+      1. <OUTPUT> görülmeden önceki hedefler -100 yapılır.
+      2. <OUTPUT> bölgesindeki hedefler korunur (içerik ve <EOS> üretimi öğrenilir).
+      3. <EOS> sonrası hedefler -100 yapılır.
+      4. x[k] == eos_id konumundaki hedef de -100 yapılır (EOS->sonraki sızıntısı kapalı).
+         Not: x[k-1] son token iken targets[k-1] == eos_id KORUNUR (model EOS üretmeyi öğrenir).
+      5. <OUTPUT> içermeyen pencerelerde tüm hedefler -100 yapılır.
+    """
+    if isinstance(x, torch.Tensor):
+        x_np = x.detach().cpu().numpy()
+    else:
+        x_np = np.asarray(x)
+        
+    if isinstance(targets, torch.Tensor):
+        targets_np = targets.detach().cpu().numpy().copy()
+    else:
+        targets_np = np.array(targets, copy=True)
+        
+    batch_size, seq_len = x_np.shape
+    for b in range(batch_size):
+        seq = x_np[b]
+        if output_start_id in seq:
+            is_output = False
+            for i in range(seq_len):
+                token_id = seq[i]
+                if token_id == output_start_id:
+                    is_output = True
+                    
+                if not is_output:
+                    targets_np[b, i] = -100
+                    
+                if token_id == eos_id:
+                    # EOS token'ının kendisinden sonraki hedefe geçişi maskele (sızıntı kapalı)
+                    targets_np[b, i] = -100
+                    is_output = False
+        else:
+            targets_np[b, :] = -100
+            
+    return targets_np
 
 # ==========================================
 # 2. KristalEmbedding (Sign Inversion Layer)
