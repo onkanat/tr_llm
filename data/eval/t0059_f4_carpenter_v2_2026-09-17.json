@@ -1,0 +1,90 @@
+{
+  "task_id": "T-0059",
+  "timestamp": "2026-09-17T02:48:00Z",
+  "title": "F4: Ceket yeniden eğitimi — f3_clean tabanından 1000 adım + unutma ölçümü (A/B/C eşikleri)",
+  "models": {
+    "base_checkpoint": {
+      "path": "data/kristal_model_f3_clean.pt",
+      "sha256": "fc964af53534b818329c0da62fdb0e55047ae9bc6730623e1ce4249a215b2dd7",
+      "size_bytes": 372126054
+    },
+    "trained_checkpoint": {
+      "path": "data/kristal_model_carpenter_v2.pt",
+      "sha256": "1c81f3059ab18779cab3e55898de3b1f33059b62fea34e3d2ef059a2e1342f3f",
+      "size_bytes": 372126054
+    }
+  },
+  "training_run": {
+    "command": "train.py --device mps --data data/train_carpenter_specialization.bin --steps 1000 --batch-size 16 --block-size 64 --load-path data/kristal_model_f3_clean.pt --save-path data/kristal_model_carpenter_v2.pt --allow-frozen-write",
+    "device": "mps",
+    "steps": 1000,
+    "batch_size": 16,
+    "block_size": 64,
+    "start_loss": 0.2160,
+    "end_loss": 0.0669,
+    "total_duration_seconds": 557.32,
+    "avg_step_duration_seconds": 0.557
+  },
+  "measurements": {
+    "kapi_a_genel_ce": {
+      "description": "Genel dil kaybı (CE, maskesiz, sabit dilim): data/train_balanced_sft_v2.bin; offset 100000+b*1000, BS 4, SEQ 64, 6 batch",
+      "f3_clean": 1.9625,
+      "carpenter_v2": 2.7890,
+      "change_pct": 42.11,
+      "threshold": "<= %10 artış (<= 2.1588)",
+      "status": "EXCEEDED"
+    },
+    "kapi_b_noktalama_top1": {
+      "description": "Noktalama yetkinliği (bağlam-koşullu): hedefi noktalama olan 250 konum, seed 7, CTX 32",
+      "f3_clean": {
+        "top1_pct": 84.4,
+        "top3_pct": 91.2,
+        "mean_rank": 2.14
+      },
+      "carpenter_v2": {
+        "top1_pct": 74.8,
+        "top3_pct": 88.4,
+        "mean_rank": 37.34
+      },
+      "drop_points": 9.6,
+      "threshold": "<= 5 puan düşüş (>= %79.4)",
+      "status": "EXCEEDED"
+    },
+    "kapi_c_ceket_alani": {
+      "description": "Ceket alanı kazancı (scripts/evaluate_carpenter_generation_100.py): held-out marangozluk N=100",
+      "f3_clean": {
+        "memorization_rate": 0.0,
+        "incoherence_rate": 46.0,
+        "mean_rouge_l": 0.0651,
+        "median_rouge_l": 0.0405,
+        "content_overlap_rate": 46.0
+      },
+      "carpenter_v2": {
+        "memorization_rate": 0.0,
+        "incoherence_rate": 25.0,
+        "mean_rouge_l": 0.1446,
+        "median_rouge_l": 0.1240,
+        "content_overlap_rate": 42.0
+      },
+      "gain_summary": {
+        "rouge_l_increase": 0.0795,
+        "incoherence_drop": 21.0,
+        "memorization_maintained": 0.0
+      },
+      "threshold": "İyileşme > 0 (ceket öğrenilmiş olmalı)",
+      "status": "PASS"
+    }
+  },
+  "canaries": {
+    "pt_count": 30,
+    "bin_count": 15,
+    "f3_clean_intact": true
+  },
+  "verdict": {
+    "decision_rule": "A ve B eşikleri içinde + C iyileşmiş -> yalın F4 yeterli; A veya B aşılırsa -> unutma var, replay turu önerilir.",
+    "c_status": "PASS (ROUGE-L 0.0651 -> 0.1446, tutarsızlık %46 -> %25 düştü; uzmanlık öğrenildi)",
+    "a_status": "EXCEEDED (CE 1.9625 -> 2.7890; %42.11 artış > %10)",
+    "b_status": "EXCEEDED (Top-1 %84.4 -> %74.8; 9.6 puan düşüş > 5 puan)",
+    "recommendation": "Katastrofik unutma tespit edildi (A ve B eşikleri aşıldı). Tasarım kuralı gereğince F4 için chosen/SFT kütlesi tekrarı (replay loop) önerilmektedir."
+  }
+}

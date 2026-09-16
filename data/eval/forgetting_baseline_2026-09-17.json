@@ -1,0 +1,19 @@
+{
+  "baslik": "Unutma olcumu TABAN CIZGISI (F4 oncesi)",
+  "damga": "2026-09-17T02:25 local / 23:25Z",
+  "tasarim": "data/eval/forgetting_measurement_design_2026-09-17.md",
+  "arac": "scratch/forgetting_probe.py (A: CE maskesiz sabit dilim | B: hedefi noktalama olan konumlarda top-1/ilk-3/ort.rank)",
+  "taban_adayi": "data/kristal_model_f3_clean.pt",
+  "olcumler": {
+    "f3_clean": {"A_ce_unmasked": 1.962547, "B_top1_pct": 84.4, "B_top3_pct": 91.2, "B_mean_rank": 2.144},
+    "f3": {"A_ce_unmasked": 2.069454, "B_top1_pct": 80.0, "B_top3_pct": 90.4, "B_mean_rank": 2.016},
+    "taban": {"A_ce_unmasked": 5.489884, "B_top1_pct": 42.4, "B_top3_pct": 47.6, "B_mean_rank": 337.376}
+  },
+  "esikler": {
+    "A_genel_ce": "F4 sonrasi artis <= %10 (f3_clean 1,9625 -> <= 2,1588)",
+    "B_noktalama_top1": "F4 sonrasi dusus <= 5 puan (f3_clean %84,4 -> >= %79,4)",
+    "C_ceket_alani": "evaluate_carpenter_generation_100.py metriklerinde iyilesme > 0"
+  },
+  "determinizm_notu": "f3_clean ve f3 sayilari T-0058'deki BAGIMSIZ olcumle BIREBIR ayni cikti (CE 1,9625 / 2,0695; top-1 %84,4 / %80,0) -> arac ve topluluk deterministik. TABAN sayilari kucuk fark gosteriyor (CE 5,4899 vs T-0058'de 5,5309; top-1 %42,4 vs %41,2) cunku TABAN checkpoint'inin 32816-32851 satirlari resize_state_dict ile RASTGELE baslatiliyor (T-0054 F4 kaydi) - taban referanslari +/- birkac puan oynar, olculen sey bu yuzden f3_clean'dir.",
+  "karar_kurali": "F4 sonrasi A ve B icinde + C iyilesmis -> yalin F4 yeterli; A veya B asilirsa chosen/SFT kutlesi tekrari eklenir (kullanici onayiyla; kutlenin kaynaklari diskte YOK, yalniz mevcut .bin oldugu gibi karistirilabilir ve noktalamasiz olacagi bilinir)."
+}

@@ -67,10 +67,19 @@ def main():
     out_end_id = vocab.stoi.get("</OUTPUT>", 9)
     PREDICATE_TAGS = ("TENSE_", "COPULA_")
     
+    import argparse
+    parser = argparse.ArgumentParser(description="Carpenter generation evaluation")
+    parser.add_argument("--model", type=str, default=None, help="Model checkpoint path")
+    parser.add_argument("--output", type=str, default=None, help="Output JSON results path")
+    args = parser.parse_args()
+
     # 2. Load Model
-    model_path = os.path.join(DATA_DIR, "kristal_b1_5_best.pt")
-    if not os.path.exists(model_path):
-        model_path = os.path.join(DATA_DIR, "kristal_model.pt")
+    if args.model:
+        model_path = args.model
+    else:
+        model_path = os.path.join(DATA_DIR, "kristal_b1_5_best.pt")
+        if not os.path.exists(model_path):
+            model_path = os.path.join(DATA_DIR, "kristal_model.pt")
         
     print(f"Model Yükleniyor: {model_path}")
     model = KristalLM(vocab_size=len(vocab.stoi), n_embd=768, vocab=vocab, block_size=4096, n_layer=6, n_head=6)
@@ -259,10 +268,11 @@ def main():
         "samples": qualitative_samples
     }
     
-    with open(OUTPUT_JSON, "w", encoding="utf-8") as f:
+    target_out_json = args.output if args.output else OUTPUT_JSON
+    with open(target_out_json, "w", encoding="utf-8") as f:
         json.dump(results, f, indent=2, ensure_ascii=False)
         
-    print(f"Sonuçlar Kaydedildi: {OUTPUT_JSON}\n")
+    print(f"Sonuçlar Kaydedildi: {target_out_json}\n")
 
 
 if __name__ == "__main__":

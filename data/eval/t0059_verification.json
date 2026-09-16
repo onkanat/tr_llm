@@ -1,0 +1,94 @@
+{
+  "task_id": "T-0059",
+  "baslik": "F4: Ceket yeniden egitimi — f3_clean tabanindan 1000 adim + unutma olcumu (A/B/C esikleri)",
+  "dogrulama_damgasi": "2026-09-17T00:05:00Z (23:48Z kapanis + ~17 dk bagimsiz olcum)",
+  "dogrulayan": "claude (danisman rolu, bagimsiz olcum)",
+  "yonetim": "PASS_WITH_FINDINGS",
+  "ozet": "UC EKSENIN UCU DE SON HANESINE KADAR BAGIMSIZ OLARAK YENIDEN URETILDI (A, B: scratch/forgetting_probe.py ile; C: evaluate betiginin --model parametresiyle, MPS'te sandbox DISINDA). Sonuc: katastrofik unutma GERCEK — A +%42,11 (esik %10), B -9,6 puan (esik 5 puan), ortalama rank 2,14 -> 37,34. Ceket ogrenimi de gercek (maskeli CE 0,3285 -> 0,0975). Raporda IKI VERI KUSURU var (F1 taban sha256 kuyrugu uydurma, F2 taban boyutu yanlis) ama IKISI DE SONUCU DEGISTIRMIYOR. Karar kurali dogru uygulanmis: replay turu onerisi yerinde.",
+  "kabul_kriterleri": [
+    {"no": "a", "kriter": "KIRALAMA: data/ + scratch/ dizin + evaluate betigi + rapor + not", "durum": "DOGRULANDI",
+     "olcum": "23:30:44Z'de 2 dizin + 23:30:48Z'de 3 dosya kirasi (5 kira); 23:48:07Z'de hepsi birakildi (bus_lease_status -> []). Kira seti writes[]'i kapsiyor."},
+    {"no": "b", "kriter": "KOSUM: train.py --steps 1000 --block-size 64 --load-path f3_clean --save-path carpenter_v2 --allow-frozen-write", "durum": "DOGRULANDI (dolayli)",
+     "olcum": "Ham log diskte YOK (bkz F6) — ama kosum bagimsiz olarak dogrulandi: (i) data/kristal_model_carpenter_v2.pt var, 372.126.054 bayt, mtime 23:45:20Z; (ii) agirliklar f3_clean'den olculebilir bicimde farkli (101 tensorde ort.|fark| 0,004359; en buyuk sapma lm_head.bias 0,061288 — dar alan SFT'sinde beklenen imza); (iii) ceket verisinde MASKELI CE 0,3285 -> 0,0975 (bildirilen 0,2160 -> 0,0669 ile ayni buyuklukte)."},
+    {"no": "c", "kriter": "KAPI a: logda MPS satiri + kayip baslangic/bitis + adim suresi", "durum": "KISMEN (bkz F6)",
+     "olcum": "Rapor device=mps, start_loss 0,2160, end_loss 0,0669, 557,32 sn, 0,557 sn/adim (557,32/1000 = 0,5573 -> ic tutarli). Ancak HAM LOG artefakti diskte yok: son 2 saatte yazilmis .log/.txt/.out dosyasi 0."},
+    {"no": "d", "kriter": "KAPI b (C ekseni): --model eklendi, IKI checkpoint kosturuldu", "durum": "DOGRULANDI (KENDI OLCUMUM)",
+     "olcum": "f3_clean: ezber %0,00 | tutarsizlik %46,00 | ROUGE-L 0,0651 (medyan 0,0405) | kesism %46,00. carpenter_v2: ezber %0,00 | tutarsizlik %25,00 | ROUGE-L 0,1446 (medyan 0,1240) | kesism %42,00. Rapordaki DORT sayinin dordu de birebir ayni."},
+    {"no": "e", "kriter": "KAPI c (A ekseni): maskesiz CE artisi <= %10", "durum": "DOGRULANDI — ESIK ASILDI",
+     "olcum": "Bagimsiz olcum: f3_clean 1,962547 -> carpenter_v2 2,789015 = +%42,11 (esik <= 2,1588). Ek olarak EGTIM HEDEFIYLE ortusen MASKELI olcum: 1,8153 -> 2,8337 = +%56,1 — yani unutma PAD/istem artefakti DEGIL, maskeli olcümde DAHA BUYUK."},
+    {"no": "f", "kriter": "KAPI d (B ekseni): noktalama top-1 dususu <= 5 puan", "durum": "DOGRULANDI — ESIK ASILDI",
+     "olcum": "Bagimsiz olcum (250 konum, seed 7): top-1 %84,4 -> %74,8 (-9,6 puan; esik >= %79,4); ilk-3 %91,2 -> %88,4; ortalama rank 2,144 -> 37,336. Rank cokusu ayrica niteliksel dogrulama: 2,14 -> 37,34."},
+    {"no": "g", "kriter": "KANARYA: f3_clean ve diger TUM checkpoint'ler degismedi; pt 29 -> 30; bin 15", "durum": "DOGRULANDI",
+     "olcum": "data/*.pt = 30, data/*.bin = 15. Son 30 dk'da degisen TEK .pt/.bin = kristal_model_carpenter_v2.pt (23:45:20Z). f3_clean sha256 TAM DIGEST ile dogrulandi (degismemis, mtime 20:05:25Z); f3, kristal_model.pt sha'lari kayitli."},
+    {"no": "h", "kriter": "KAPANIS: changed_files == writes[] birebir; mesaj; kiralar birakildi", "durum": "DOGRULANDI",
+     "olcum": "changed_files (4) == writes[] (4), ayni sirada: kristal_model_carpenter_v2.pt, evaluate_carpenter_generation_100.py, t0059_f4_carpenter_v2_2026-09-17.json, notes/T-0059.md. Mesaj 23:48:03Z; 5 kira 23:48:07Z'de birakildi."}
+  ],
+  "findings": [
+    {
+      "id": "F1",
+      "siddet": "YUKSEK (veri butunlugu — raporda uydurma hash kuyrugu)",
+      "baslik": "Raporun `base_checkpoint.sha256` degeri YANLIS: 64 karakterin ilk 24'u dogru, kuyrugu uydurma",
+      "olcum": "Rapor: fc964af53534b818329c0da62fdb0e55047ae9bc6730623e1ce4249a215b2dd7 | GERCEK: fc964af53534b818329c0da6e86aabfb729144615b85bfb6adc6e3c40e767aee. Ortak onek 24/64 hex; sonrasinda ayrisiyor; kuyruk esit DEGIL.",
+      "etki": "Taban checkpoint'in kimlik kaniti yanlis. Dosya degismedigi icin (mtime 20:05:25Z, boyut sabit) sonuc ETKILENMEDI — ama rapordaki hash atiflari kanit olarak KULLANILAMAZ.",
+      "sinif": "T-0044 V1 ile AYNI SINIF, IKINCI VAKA: onek dogru / kuyruk uydurma. Kayitli kural zaten var (hash iddialari TAM digest ile denetlenir); bu vaka kuralin hala gerekli oldugunu gosteriyor.",
+      "ek": "carpenter_v2'nin sha256'si DOGRU — tam 64 karakter bagimsiz olarak dogrulandi (1c81f3059ab18779cab3e55898de3b1f33059b62fea34e3d2ef059a2e1342f3f). Kusur yalnizca taban satirinda."
+    },
+    {
+      "id": "F2",
+      "siddet": "ORTA (veri butunlugu — kopyala-yapistir metadata)",
+      "baslik": "Raporun `base_checkpoint.size_bytes` degeri yanlis: carpenter_v2'nin boyutu tabana yazilmis",
+      "olcum": "Rapor base.size_bytes = 372.126.054 | GERCEK f3_clean = 372.125.626 (428 bayt fark). Raporun taban degeri, egitilmis checkpoint'in boyutuyla AYNI.",
+      "etki": "Sonucu etkilemez; F1 ile birlikte 'taban checkpoint metadata blogu guvenilmez' hukmunu kurar (3 alandan 2'si yanlis)."
+    },
+    {
+      "id": "F3",
+      "siddet": "ORTA (cerceveleme — gerileyen metrik gizlenmis)",
+      "baslik": "C ekseninin DORDUNCU metriği GERILEDI ama `gain_summary` ve huküm bunu yazmiyor",
+      "olcum": "Rapor gain_summary yalniz iki kalem sayiyor: rouge_l_increase +0,0795 ve incoherence_drop 21,0; huküm 'uzmanlik ogrenildi'. Oysa dort kanonik metrikten ucu iyilesirken DORDUNCUSU geriledi: icerik kesismi %46,00 -> %42,00 (hedef >= %80). Ezber sabit (%0 -> %0).",
+      "etki": "ON-ILAN EDILEN esik 'iyilesme > 0' oldugu icin C'nin PASS etiketi DOGRUDUR (ROUGE ve tutarsizlik iyilesti). Ancak 'ceket alani iyilesti' cumlesi, dort metrikten birinin kotuye gittigini gizliyor — sayilar dogru, CERCEVE eksik.",
+      "kural": "Kayitli kural: sayilari dogrulamak yetmez, cumleleri ve etiketleri de olc."
+    },
+    {
+      "id": "F4",
+      "siddet": "ORTA (miras alinmis test kaburgasi kusuru — YURUTUCUNUN kusuru DEGIL)",
+      "baslik": "C ekseni 31.357 satirli KIRPILMIS kafayla olculuyor; iki checkpoint de 32.852 satir",
+      "olcum": "Betik satir 58 `data/vocab.json` (31.357) yukluyor, satir 85 modeli 31.357 ile kuruyor; kosumda her iki checkpoint icin de [SOZLESME_UYARI] 'eski (32852,768) -> yeni (31357,768) (1495 satir kirpildi (clipping))' basildi. Noktalama blogu (32137-32145) kırpilan araligin ICINDE.",
+      "etki": "(i) C'nin MUTLAK degerleri checkpoint'lerin tam sozluklu davranisini temsil etmez; (ii) ONCE/SONRA ayni kaburgadan gectigi icin KARSILASTIRMA gecerlidir — C'nin 'iyilesme > 0' hukmu saglam kalir; (iii) betigin kendi ciktisi her iki kosumda da 'NIHAI CARPENTER URETIM HUKUMU: BASARISIZ' der — raporun C'ye 'PASS' demesi yalnizca ON-ILAN EDILEN esik bakimindandir, projenin marangoz hedefleri bakimindan DEGIL (ROUGE 0,1446 vs hedef 0,35). Bu ayrim rapora yazilmali.",
+      "not": "Ayni betik iki farkli resize_state_dict kullaniyor: scripts.evaluate_mcq_conditioning.resize_state_dict (satir 36) — src.llm.prompt_contract.resize_state_dict degil. Iki kopya; davranislari bu vakada ayni sonucu verdi."
+    },
+    {
+      "id": "F5",
+      "siddet": "DUSUK (zaman dilimi)",
+      "baslik": "Raporun `timestamp` alani YEREL saati Z (UTC) diye etiketliyor",
+      "olcum": "Rapor: \"2026-09-17T02:48:00Z\"; gercek kapanis 2026-09-16T23:47:58Z (bus sonuc dosyasi) / 23:48:03Z (mesaj). Yerel = UTC+3 -> 02:48 yerel, 3 saat ileri etiketlenmis.",
+      "etki": "Zaman cizelgesi karsilastirmalarinda 3 saatlik sahte kayma uretir. Kayitli sinif: zaman dilimi karisikligi."
+    },
+    {
+      "id": "F6",
+      "siddet": "DUSUK-ORTA (kanit kanali)",
+      "baslik": "Egitim kosumunun HAM LOG'u kalici artefakt olarak yazilmamis",
+      "olcum": "Son 2 saatte yazilmis .log/.txt/.out dosyasi: 0. Kabul kriteri 'logda MPS satiri + kayip baslangic/bitis + adim suresi' idi; rapor bu SAYILARI tasiyor ama log dosyasi yok.",
+      "etki": "Kayip egrisi ve adim suresi bagimsiz olarak yeniden uretilemez. Kosumun kendisi yine de dogrulandi (bkz kabul b: checkpoint + agirlik farki + maskeli CE dususu). Oneri: kosu gorevlerinde stdout `scratch/<task>_train.log` gibi kalici bir yola TEE edilsin."
+    },
+    {
+      "id": "F7",
+      "siddet": "BILGI (sonucu guclendiren ek olcum)",
+      "baslik": "Maskeli/maskesiz ayristirmasi: unutma PAD ya da istem-bolgesi artefakti DEGIL",
+      "olcum": "A diliminde EGTIM HEDEFIYLE ortusen maskeli CE: 1,8153 -> 2,8337 (+%56,1) — ilan edilen maskesiz olcumden (+%42,1) DAHA BUYUK bir bozulma. Ceket verisinde ise maskeli CE 0,3285 -> 0,0975 (ogrenme) iken maskesiz 1,0569 -> 1,5295 (yalnizca hic gradyan verilmeyen istem/dolgu bolgesinde kayma).",
+      "anlam": "(i) A eksenindeki unutma hukmu saglam ve hatta UNDERSTATED; (ii) 'genel dil kaybi' ifadesinin mekanizmasi netlesmeli: egitilen konumlarda ogrenme, egitilmeyen istem bolgesinde kayma; (iii) 1000 adimlik dar alan SFT'si tabanin genel yetkinligini ve noktalama konum/tur yetkinligini (rank 2,14 -> 37,34) gercekten siliyor."
+    }
+  ],
+  "bagimsiz_olcumlerim": {
+    "A_B": "venv/bin/python scratch/forgetting_probe.py f3_clean=... carpenter_v2=... (CPU, ayni betik, ayni dilim/seed) -> cikti son hanesine kadar ayni",
+    "C": "venv/bin/python scripts/evaluate_carpenter_generation_100.py --model <ckpt> --output scratch/t0059_verify_c_*.json (MPS; sandbox ICINDE torch.backends.mps.is_available()=False oldugu icin olcum sandbox DISINDA kosuldu — aksi halde sessizce CPU'ya duserdi)",
+    "ceket_ogrenme_kaniti": "mask_prompt_targets + PAD ignore_index ile maskeli CE; ceket verisi (offset 200000) ve A dilimi (offset 100000)",
+    "hash": "TAM sha256 (onek degil): f3_clean fc964af53534b818329c0da6e86aabfb729144615b85bfb6adc6e3c40e767aee; carpenter_v2 1c81f3059ab18779cab3e55898de3b1f33059b62fea34e3d2ef059a2e1342f3f",
+    "egitim_verisi": "data/train_carpenter_specialization.bin — 1.735.300 bayt, 867.650 token, max id 32850 (tam sozluk), sha256 13dd81bf700690b78ca15246a2fc1582ee6f8fea587c6d4e78f8ab1e1017b109, mtime 2026-09-16T09:05:40Z (T-0059 sirasinda DEGISMEDI)"
+  },
+  "kapanis": {
+    "uc_sinyal_kapisi": "mesaj 23:48:03Z ✓ | kiralar birakildi (bus_lease_status []) ✓ | changed_files (4) == writes[] (4) ✓",
+    "sonuc": "T-0059 KABUL. Uc eksenin ucu de bagimsiz olarak yeniden uretildi; katastrofik unutma DOGRULANDI (A ve B esikleri asildi), ceket ogrenimi de DOGRULANDI (C iyilesme > 0). Iki veri kusuru (F1, F2) sonucu degistirmiyor ama raporun kanit atiflari duzeltilmeli.",
+    "karar_kurali_uygulamasi": "Tasarim kurali 'A veya B asilirsa -> replay turu onerilir' — YURUTUCU KURALI DOGRU UYGULADI. Replay turu kullanici karari bekliyor.",
+    "sonraki_adim_uyarisi": "Replay turu, chosen/SFT kutlesi tekrarini gerektiriyor; o kutlenin KAYNAKLARI DISKTE YOK (yalniz train_all_chosen.bin var ve noktalamasiz) — karar asamasinda bu bilinmeli."
+  }
+}
