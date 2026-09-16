@@ -8,7 +8,7 @@ import numpy as np
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from src.llm.tokenizer import Vocabulary
-from scripts.train_step_demo import KristalDataset, KristalLM
+from scripts.train_step_demo import KristalDataset, KristalLM, mask_prompt_targets
 
 class AlignedKristalDataset(KristalDataset):
     def get_batch(self, batch_size: int):
@@ -136,25 +136,10 @@ def main():
             sign_mask_cpu = model.embedding.compute_sign_mask(x_cpu)
             
             # Apply Causal Prompt Masking on CPU
-            targets_np = y_cpu.numpy().copy()
-            batch_size_curr, seq_len = x_cpu.shape
-            x_list = x_cpu.tolist()
-            
+            targets_np = mask_prompt_targets(x_cpu, y_cpu, output_start_id, eos_id)
             pad_id = vocab.stoi.get("<PAD>", -1)
-            for b in range(batch_size_curr):
-                seq = x_list[b]
-                if output_start_id in seq:
-                    is_output = False
-                    for i in range(seq_len):
-                        token_id = seq[i]
-                        if token_id == output_start_id:
-                            is_output = True
-                        if not is_output or token_id == pad_id:
-                            targets_np[b, i] = -100
-                        if token_id == eos_id:
-                            is_output = False
-                else:
-                    targets_np[b, :] = -100
+            if pad_id != -1:
+                targets_np[x_cpu.numpy() == pad_id] = -100
             
             targets = torch.from_numpy(targets_np).to(device)
             active_targets = (targets != -100).sum().item()

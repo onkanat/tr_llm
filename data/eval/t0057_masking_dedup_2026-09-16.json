@@ -1,0 +1,64 @@
+{
+  "task_id": "T-0057",
+  "timestamp": "2026-09-16T21:03:00Z",
+  "status": "PASS",
+  "leases": {
+    "files": [
+      "scripts/train_scientific_sft.py",
+      "scripts/train_sft_fine_tuning.py",
+      "scripts/train_chat_sft.py",
+      "scripts/evaluate_sft_benchmarks.py",
+      "tests/test_prompt_masking_dedup.py",
+      "data/eval/t0057_masking_dedup_2026-09-16.json",
+      ".agent-bus/notes/T-0057.md"
+    ],
+    "acquired_before_writes": true
+  },
+  "modifications": {
+    "scripts/train_scientific_sft.py": {
+      "sha256": "7619f6a586310185990cdd7d6dbe62186cafc26f2f07458671ae9a26cc379d7b",
+      "lines_changed": "119-138 satır içi döngüsü kaldırıldı -> mask_prompt_targets(x_cpu, y_cpu, output_start_id, eos_id)"
+    },
+    "scripts/train_sft_fine_tuning.py": {
+      "sha256": "b6790f2c50d681f4256afbdcb8fbe4d019e0181da0e8fb9bd5ff3d3c1f5f1e91",
+      "lines_changed": "91-111 satır içi döngüsü kaldırıldı -> mask_prompt_targets(x_cpu, y_cpu, output_start_id, eos_id)"
+    },
+    "scripts/train_chat_sft.py": {
+      "sha256": "1397ca6c38308365858f90c880b079d122e1b66b6e4092b123f3f5bec3f3ef18",
+      "lines_changed": "138-158 satır içi döngüsü kaldırıldı -> mask_prompt_targets çağrıldı, pad_id maskelemesi korundu"
+    },
+    "scripts/evaluate_sft_benchmarks.py": {
+      "sha256": "1f190d095ca612b9c54e5d8e9068bcbe9b928f3b318d48c97d9229400aa80eae",
+      "lines_changed": "84-97 satır içi döngüsü kaldırıldı -> mask_prompt_targets(x_np[None, :], y_np[None, :], output_start_id, eos_id)[0]"
+    }
+  },
+  "behavioral_delta_statement": "Dört sitedeki değişiklik YALNIZCA (a) EOS->sonraki ilk hedefin (ilk <PAD>) maskesiz kalma sızıntısının kapatılması ve (b) satır içi döngülerin paylaşılan mask_prompt_targets fonksiyonuna taşınmasıdır. Bunun dışında hiçbir davranış farkı yoktur.",
+  "tests": {
+    "test_file": "tests/test_prompt_masking_dedup.py",
+    "sha256": "62dcc2e994f0a978f5c0b1e479b77e92e305dca1696c4cb9d6fd74696ac29b5b",
+    "cases_passed": 6,
+    "cases": [
+      "test_no_inline_prompt_masking_copies_left (AST/grep)",
+      "test_compute_val_loss_file_not_found (-1.0)",
+      "test_compute_val_loss_short_file (-1.0)",
+      "test_compute_val_loss_determinism (RandomState(42))",
+      "test_compute_val_loss_finite_loss (sonlu geçerli kayıp)",
+      "test_compute_val_loss_target_difference_only_at_eos (sızıntı kanıtı)"
+    ],
+    "mutant_verification": {
+      "target_file": "scripts/train_chat_sft.py",
+      "mutant_result": "RED (AssertionError: Beklenmeyen dosyalarda is_output kopyası bulundu)",
+      "clean_restored_result": "GREEN (PASS)",
+      "sha256_matched": true
+    },
+    "full_pytest_suite": {
+      "total_passed": 212,
+      "failed": 0
+    }
+  },
+  "canaries": {
+    "data_pt_count": 29,
+    "data_bin_count": 15,
+    "no_pt_bin_written": true
+  }
+}

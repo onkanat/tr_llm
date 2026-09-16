@@ -1,0 +1,38 @@
+{
+  "task_id": "T-0057",
+  "baslik": "Test-3: Maskeleme mantigini tek kaynaga indir (4 satir ici kopya) + EOS sizintisi dort sitede kapansin",
+  "dogrulama_damgasi": "2026-09-17T00:15:00Z",
+  "dogrulayan": "claude (danisman rolu, bagimsiz olcum)",
+  "yonetim": "PASS",
+  "ozet": "Tekillestirme GERCEK: repo genelinde `is_output` artik YALNIZ scripts/train_step_demo.py'de (paylasilan fonksiyon) + iki test dosyasinda geciyor; dort site de `mask_prompt_targets` cagiriyor (import + cagri). 6 test gecti (benim kosumum), KENDI MUTANTIM bir siteye is_output taklidi koyunca guard testini KIRMIZI yaktı ve dosya sha-ozdes geri konuldu. Tam paket 211 passed (+1 sandbox soket artefakti) = yurutucunun 212'si. Kanaryalar saglam. Bulgu YOK; bir kapsam notu.",
+  "kabul_kriterleri": [
+    {"no": "a", "kriter": "KIRALAMA: 7 yol yazimdan once", "durum": "DOGRULANDI",
+     "olcum": "Olay gunlugu: 20:58:34Z'de yedi dosya kirasi (writes[] ile birebir); 21:03:03Z'de birakildi."},
+    {"no": "b", "kriter": "KOD: dort sitede satir ici dongu kalkti, paylasilan fonksiyon cagriliyor", "durum": "DOGRULANDI (BAGIMSIZ grep)",
+     "olcum": "`grep -rln is_output --include=*.py` (repo geneli, venv/scratch haric) -> YALNIZ: scripts/train_step_demo.py, tests/test_prompt_masking.py, tests/test_prompt_masking_dedup.py. Dort sitenin her birinde `mask_prompt_targets` 2 kez geciyor (1 import + 1 cagri) ✓. Raporun satir araliklari ve sha'lari da beyan edilmis."},
+    {"no": "c", "kriter": "DAVRANIS: yalniz EOS sizintisi + tasima", "durum": "DOGRULANDI",
+     "olcum": "Yurutucunun behavioral_delta_statement'i bu yonde. Bagimsiz dayanak: T-0055 dogrulamamda paylasilan fonksiyonun eski satir ici mantikla karsilastirmasi 25.600 hedefte YALNIZCA 16 konumda (hepsi x[k]==EOS) farkliydi; ayni fonksiyon dort siteye baglandigi icin sitelerde de beklenen fark budur. Ayrica yurutucunun (vi) testi (hedef farki yalniz EOS'ta) benim kosumumda GECTI."},
+    {"no": "d", "kriter": "TESTLER (6 vaka)", "durum": "DOGRULANDI (BAGIMSIZ kosum)",
+     "olcum": "`pytest tests/test_prompt_masking_dedup.py -q` -> **6 passed**. Vakalar: satir ici kopya kalmadi (AST/grep) · compute_val_loss dosya yok -> -1.0 · kisa dosya -> -1.0 · DETERMINIZM · sonlu kayip · hedef farki yalniz EOS'ta."},
+    {"no": "e", "kriter": "MUTANT: bir siteye kopya geri konulunca KIRMIZI", "durum": "DOGRULANDI (KENDI MUTANTIM)",
+     "olcum": "`scripts/train_chat_sft.py`'ye `is_output = False  # MUTANT taklit` ekledim -> guard testi (`test_no_inline_prompt_masking_copies_left`) **1 failed**. Dosya yedekten geri konuldu, sha256 OZDESLIGI dogrulandi. Yurutucunun kendi mutant kaniti da ayni sonucu gosteriyor."},
+    {"no": "f", "kriter": "TEST: tam paket + kanarya", "durum": "DOGRULANDI",
+     "olcum": "Ben (sandbox ici): **211 passed, 1 failed** (bilinen sandbox soket artefakti `test_agent_gateway`) -> 211+1 = 212 = yurutucunun sandbox disi sayisi. data/*.pt 29, data/*.bin 15; hicbir uretim kosumu yok."},
+    {"no": "g", "kriter": "KAPANIS", "durum": "DOGRULANDI",
+     "olcum": "changed_files 7 == writes[] 7; mesaj 21:03:04Z; kiralar 21:03:03Z'de birakildi."}
+  ],
+  "findings": [
+    {
+      "id": "Not-1",
+      "siddet": "BILGI (kapsam notu)",
+      "baslik": "Guard testinin tarama kapsami repo genelinden dar",
+      "olcum": "`test_no_inline_prompt_masking_copies_left` yalniz `grep -rln is_output scripts/ train.py` kosuyor. Ben repo GENELINDE taradim ve su an temiz (yalniz paylasilan fonksiyon + testler). Ancak ileride `src/` veya `train_dpo.py` altinda bir kopya olusursa bu test gormez.",
+      "oneri": "Tarama kapsami repo kokune genisletilsin (venv/scratch haric) - tek satirlik degisiklik; kapi o zaman gercekten repo capinda olur."
+    }
+  ],
+  "kapanis": {
+    "uc_sinyal_kapisi": "mesaj 21:03:04Z ✓ | kiralar 21:03:03Z'de birakildi (7 yol) ✓ | changed_files (7) == writes[] (7) ✓",
+    "sonuc": "T-0057 KABUL (hukum: PASS). Maskeleme mantigi tek kaynaga indi; EOS sizintisi dort sitede de kapandi; guard testi mutantla non-vakum oldugu kanitlandi. Degerlendirme yolu (compute_val_loss) artik sabit dilimde AYNI maskeleme semantigini kullaniyor.",
+    "sonraki_adim": "Otonom seansin test borcu turu TAMAM (Test-1/2/3 + iki dedup). Kalan: F4 (kullanici karari: veri karismi + adim butcesi) ve F3-3'ten beri bekleyen G3'un oran/baglam eksenli olcumu."
+  }
+}

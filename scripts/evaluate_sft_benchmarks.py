@@ -24,7 +24,7 @@ from typing import List, Dict, Any, Optional
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from src.llm.tokenizer import KristalTokenizer, Vocabulary
-from scripts.train_step_demo import KristalLM
+from scripts.train_step_demo import KristalLM, mask_prompt_targets
 from src.compiler.decompiler import MorphemeDecompiler
 from src.compiler.lexicon import LexiconManager
 from src.compiler.morphotactics import build_default_graph
@@ -82,18 +82,7 @@ def compute_val_loss(model: KristalLM, bin_path: str, vocab: Vocabulary, block_s
             sign_mask_cpu = model.embedding.compute_sign_mask(x_cpu)
             
             # Causal prompt mask
-            targets_np = y_np.copy()
-            seq = x_np.tolist()
-            if output_start_id in seq:
-                is_output = False
-                for i in range(len(seq)):
-                    tok = seq[i]
-                    if tok == output_start_id:
-                        is_output = True
-                    if not is_output:
-                        targets_np[i] = -100
-                    if tok == eos_id:
-                        is_output = False
+            targets_np = mask_prompt_targets(x_np[None, :], y_np[None, :], output_start_id, eos_id)[0]
                         
             x = x_cpu.to(DEVICE)
             targets = torch.from_numpy(targets_np).unsqueeze(0).to(DEVICE)
