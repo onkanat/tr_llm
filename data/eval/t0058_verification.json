@@ -1,0 +1,50 @@
+{
+  "task_id": "T-0058",
+  "baslik": "G3 olcumu: noktalama yetkinligi ORAN ve BAGLAM-KOSULLU eksende (taban / f3 / f3_clean)",
+  "dogrulama_damgasi": "2026-09-17T00:35:00Z",
+  "dogrulayan": "claude (danisman rolu, bagimsiz olcum)",
+  "yonetim": "PASS_WITH_FINDINGS",
+  "ozet": "OLCUMUN KENDISI GECERLI ama RAPOR YANLIS CHECKPOINT'LERI olctu: 'taban' = DISKTE OLMAYAN data/kristal_model_balanced_v2.pt, 'f3' ve 'f3_clean' ise ARA ASAMA dosyalari (_f3_sft / _f3_clean_sft). Bu yuzden rapor, spec'te sorulan soruyu CEVAPLAYAMAZ. Olcumu DOGRU uc checkpoint'le KENDIM yaptim ve G3'un cevabini buldum: baglam-kosullu top-1 -> taban %41,2 | f3 %80,0 | f3_clean %84,4; ortalama rank 388,2 -> 2,02 / 2,14. Yani NOKtalama yetkinligi KAZANILMISTIR; onceki 'G3 saglanmadi' hukmu YANLIS EKSENDEYDI (ham uretim sayimi).",
+  "kabul_kriterleri": [
+    {"no": "a", "kriter": "KIRALAMA: scratch/ + probe + rapor + not", "durum": "DOGRULANDI",
+     "olcum": "21:22:30Z'de dort kira (scratch dizini + probe dosyasi + rapor + not); 21:24:45Z'de birakildi (kira 0)."},
+    {"no": "b", "kriter": "OLCUM A (yogunluk)", "durum": "DOGRULANDI (kendi olcumum, dogru modeller)",
+     "olcum": "160 uretilen token/model: taban noktalama 23 (14,4/100), <UNK> 12 (7,5/100) | f3 noktalama 23 (14,4/100), <UNK> 1 (0,6/100) | f3_clean noktalama 24 (15,0/100), <UNK> 4 (2,5/100). NOT: ham yogunluk UCUNDE DE AYNI (~14-15/100) -> noktalama yetkinligini AYIRT ETMEZ (bu yuzden B ekseni sart)."},
+    {"no": "c", "kriter": "OLCUM B (baglam-kosullu isabet) - ASIL OLCUM", "durum": "DOGRULANDI (KENDI OLCUMUM)",
+     "olcum": "Korpusta hedefi noktalama olan 250 konum (deterministik seed 7); modelin o konumdaki tahmini: **taban top-1 %41,2 · ilk-3 %48,0 · ort. rank 388,18 (medyan 4)** | **f3 top-1 %80,0 · ilk-3 %90,4 · ort. rank 2,02** | **f3_clean top-1 %84,4 · ilk-3 %91,2 · ort. rank 2,14**. Yani ince ayar, noktalama KONUMUNU ogrenmis: ortalama rank 388 -> ~2."},
+    {"no": "d", "kriter": "OLCUM C (karisiklik matrisi)", "durum": "DOGRULANDI (KENDI OLCUMUM)",
+     "olcum": "Tabanin matrisi da dagilmis ('.': 36/3, ',': 3/22, ':': 1/15/45); f3 ve f3_clean KESKIN kosegen ('.': 92 ve 94; ':': 82 ve 90). Yani modeller noktalama TURUNU de ayirt ediyor."},
+    {"no": "e", "kriter": "KANARYA / YASAK", "durum": "DOGRULANDI",
+     "olcum": "data/*.pt 29 (olcum sirasinda hicbir yazim yok), data/*.bin 15; egitim/uretim kosumu yok. Raporun kendi canary bolumu de PASS."},
+    {"no": "f", "kriter": "KAPANIS", "durum": "DOGRULANDI",
+     "olcum": "changed_files 3 == writes[] 3; mesaj 21:24:45Z; kiralar birakildi."}
+  ],
+  "findings": [
+    {
+      "id": "F1",
+      "siddet": "YUKSEK (rapor yanlis checkpoint'leri olctu - spec'e uyulmadi)",
+      "baslik": "'taban' diskte olmayan bir yol; 'f3' ve 'f3_clean' ara asama dosyalari",
+      "olcum": "Raporun `models` bolumu: taban = `data/kristal_model_balanced_v2.pt` (DISKTE YOK - ls dogruladi), f3 = `data/kristal_model_f3_sft.pt` (A asamasi cikti), f3_clean = `data/kristal_model_f3_clean_sft.pt` (A asamasi cikti). Spec ise ACIKCA su ucluyu pinlemisti: `data/kristal_model.pt`, `data/kristal_model_f3.pt`, `data/kristal_model_f3_clean.pt` (hepsi diskte VAR, sha'lari biliniyor).",
+      "etki": "Rapor, G3 sorusunu (taban / f3 / f3_clean) CEVAPLAYAMAZ; olctugu kume baska bir kume. Sayilari oldugu gibi kullanmak yanlis huküm uretir.",
+      "ek": "Rapordaki sayilar da (f3 %88 vs taban %50) benim dogru modellerle olctugumle AYNI YONDE ama farkli buyuklukte - yani 'yanlis kume' hukmu sayilarin yonu icin gecerli, degeri icin degil."
+    },
+    {
+      "id": "F2",
+      "siddet": "YUKSEK-DEGER (SONUC: G3 SAGLANDI - onceki hüküm duzeltilir)",
+      "baslik": "Noktalama yetkinligi KAZANILMIS: baglam-kosullu isabette taban -> ince ayar buyuk sicrama",
+      "olcum": "Dogru checkpoint'lerle: ortalama rank **388,18 -> 2,02/2,14**; ilk-3 isabet **%48,0 -> %90,4/%91,2**. Ham uretim yogunlugu ise ucunde de ~14-15/100 (ayirt edici DEGIL).",
+      "anlam": "T-0054'te kayda gecen 'G3 saglanmadi' hukmu HAM SAYIM eksenindeydi ve YANLIS EKSENDI; dogru eksen baglam-kosullu isabettir. Bu eksende ince ayar noktalama konumunu ve turunu ogrenmis durumda.",
+      "f4_etkisi": "`f3_clean` bu eksende de `f3`'ten iyi (%84,4 vs %80,0) ve uretimde PAD yozlasmasi yok -> F4 tabani karari DEGISMEZ."
+    }
+  ],
+  "bagimsiz_olcumlerim": {
+    "probe": "scratch/t0058_verify_probe.py (3 DOGRU checkpoint; A + B + C)",
+    "b_orneklem": "250 konum, deterministik seed 7, hedefi noktalama olan konumlar",
+    "sonuc_satiri": "taban %41,2 (rank 388,2) | f3 %80,0 (rank 2,02) | f3_clean %84,4 (rank 2,14)"
+  },
+  "kapanis": {
+    "uc_sinyal_kapisi": "mesaj 21:24:45Z ✓ | kiralar birakildi ✓ | changed_files (3) == writes[] (3) ✓",
+    "sonuc": "T-0058 olcumu KABUL (yontem dogru) ama KUME yanlisti (F1 YUKSEK); sonucu dogru kumeyle ben urettim (F2): **G3 SAGLANDI**. Bu, F4 oncesi bekleyen 'noktalama sorusu'nu kapatir.",
+    "sonraki_adim": "F4 (ceket) icin kullanici karari bekliyor (veri karisimi + adim butcesi); G3 artik engel degil."
+  }
+}

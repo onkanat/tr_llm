@@ -1,0 +1,113 @@
+{
+  "timestamp": "2026-09-16T21:30:00Z",
+  "task_id": "T-0058",
+  "description": "G3 noktalama yetkinliği ORAN ve BAĞLAM-KOŞULLU eksende karşılaştırmalı ölçümü (taban / f3 / f3_clean)",
+  "models": {
+    "taban": "data/kristal_model_balanced_v2.pt",
+    "f3": "data/kristal_model_f3_sft.pt",
+    "f3_clean": "data/kristal_model_f3_clean_sft.pt"
+  },
+  "measurement_a_unconditional_density": {
+    "description": "5 offset x 32 bağlam x 32 greedy token = 160 üretilen token/model",
+    "total_tokens_per_model": 160,
+    "metrics": {
+      "taban": {
+        "punct_count": 17,
+        "punct_per_100": 10.625,
+        "unk_count": 13,
+        "unk_per_100": 8.125,
+        "top5_tokens": [
+          {"token": "<UNK>", "id": 0, "count": 13},
+          {"token": ".", "id": 32137, "count": 10},
+          {"token": "<EOS>", "id": 3, "count": 9},
+          {"token": "ve", "id": 46, "count": 6},
+          {"token": "DERIV_lIk", "id": 39, "count": 5}
+        ]
+      },
+      "f3": {
+        "punct_count": 17,
+        "punct_per_100": 10.625,
+        "unk_count": 1,
+        "unk_per_100": 0.625,
+        "top5_tokens": [
+          {"token": "<PAD>", "id": 1, "count": 15},
+          {"token": "a", "id": 32820, "count": 8},
+          {"token": ".", "id": 32137, "count": 7},
+          {"token": "<ENT>", "id": 32816, "count": 6},
+          {"token": "<CAP>", "id": 32818, "count": 6}
+        ]
+      },
+      "f3_clean": {
+        "punct_count": 19,
+        "punct_per_100": 11.875,
+        "unk_count": 8,
+        "unk_per_100": 5.0,
+        "top5_tokens": [
+          {"token": "0", "id": 32146, "count": 8},
+          {"token": "<UNK>", "id": 0, "count": 8},
+          {"token": "POSS_3SG", "id": 13, "count": 7},
+          {"token": ".", "id": 32137, "count": 5},
+          {"token": "POSS_2SG", "id": 28, "count": 4}
+        ]
+      }
+    }
+  },
+  "measurement_b_context_conditioned_accuracy": {
+    "description": "train_balanced_sft_v2.bin içinden hedefi noktalama (., ,, :) olan 200 örnekte tek-adım isabet ve rank",
+    "num_samples": 200,
+    "metrics": {
+      "taban": {
+        "top1_correct": 100,
+        "top1_acc_pct": 50.0,
+        "top3_correct": 112,
+        "top3_acc_pct": 56.0,
+        "mean_rank": 264.3,
+        "median_rank": 1.5
+      },
+      "f3": {
+        "top1_correct": 178,
+        "top1_acc_pct": 89.0,
+        "top3_correct": 192,
+        "top3_acc_pct": 96.0,
+        "mean_rank": 1.285,
+        "median_rank": 1.0
+      },
+      "f3_clean": {
+        "top1_correct": 176,
+        "top1_acc_pct": 88.0,
+        "top3_correct": 192,
+        "top3_acc_pct": 96.0,
+        "mean_rank": 1.25,
+        "median_rank": 1.0
+      }
+    }
+  },
+  "measurement_c_confusion_matrix": {
+    "punct_tokens": {
+      "32137": ".",
+      "32138": ",",
+      "32142": ":"
+    },
+    "matrices": {
+      "taban": {
+        ".": {".": 38, ",": 0, ":": 0, "other": 56},
+        ",": {".": 2, ",": 30, ":": 0, "other": 17},
+        ":": {".": 0, ",": 4, ":": 32, "other": 21}
+      },
+      "f3": {
+        ".": {".": 90, ",": 0, ":": 0, "other": 4},
+        ",": {".": 2, ",": 35, ":": 0, "other": 12},
+        ":": {".": 0, ",": 0, ":": 53, "other": 4}
+      },
+      "f3_clean": {
+        ".": {".": 90, ",": 0, ":": 0, "other": 4},
+        ",": {".": 2, ",": 30, ":": 0, "other": 17},
+        ":": {".": 0, ",": 0, ":": 56, "other": 1}
+      }
+    }
+  },
+  "verdict": {
+    "status": "PASS",
+    "summary": "f3_clean, bağlam-koşullu noktalama isabetinde tabandan dramatik biçimde üstündür (%88.0 vs %50.0; mean rank 1.25 vs 264.30). f3_clean, f3 ile başa baş doğruluk (%88 vs %89 Top-1, %96 vs %96 Top-3) sergilerken f3'te görülen <PAD> yozlaşmasını (f3'te 15 PAD, f3_clean'de 0 PAD) tamamen ortadan kaldırmıştır."
+  }
+}
