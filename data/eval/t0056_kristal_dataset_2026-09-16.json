@@ -1,0 +1,53 @@
+{
+  "task_id": "T-0056",
+  "timestamp": "2026-09-16T20:48:00Z",
+  "status": "PASS",
+  "leases": {
+    "files": [
+      "tests/test_kristal_dataset.py",
+      "data/eval/t0056_kristal_dataset_2026-09-16.json",
+      ".agent-bus/notes/T-0056.md"
+    ],
+    "acquired_before_writes": true
+  },
+  "production_code_integrity": {
+    "scripts/train_step_demo.py": {
+      "modified": false,
+      "sha256": "1bac5e9263faca86e513d83ed1256dcc04305f741f86b714bc1f115b4e7f5dd7"
+    }
+  },
+  "tests": {
+    "test_file": "tests/test_kristal_dataset.py",
+    "sha256": "05c2eae12bc320cc93a4ae3caa644466ce53f5b38b68ad99c96defe1123a61a0",
+    "cases_passed": 5,
+    "cases": [
+      "test_dataset_batch_shape (SEKIL)",
+      "test_dataset_shift_property (KAYDIRMA)",
+      "test_dataset_dtypes (DTYPE)",
+      "test_dataset_small_data_fallback (KUCUK VERI YOLU)",
+      "test_dataset_pad_density_measurement (PAD YOGUNLUGU)"
+    ],
+    "measured_pad_density": {
+      "windows_sampled": 200,
+      "total_target_tokens": 25600,
+      "pad_tokens": 12684,
+      "pad_density_ratio": 0.4955,
+      "pad_density_percent": 49.55,
+      "threshold_used": "> 0.30"
+    },
+    "mutant_verification": {
+      "description": "Kaydırma satırı y = data[i:i+block] olarak bozulduğunda test_dataset_shift_property kırmızı olmalı.",
+      "mutant_result": "RED (AssertionError: y kaydırılmamış, x ile özdeş)",
+      "normal_result": "GREEN (PASS)"
+    },
+    "full_pytest_suite": {
+      "passed": 206,
+      "failed": 0
+    }
+  },
+  "canaries": {
+    "data_pt_count": 29,
+    "data_bin_count": 15,
+    "no_pt_bin_written": true
+  }
+}

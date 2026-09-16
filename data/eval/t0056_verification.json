@@ -1,0 +1,43 @@
+{
+  "task_id": "T-0056",
+  "baslik": "Test-2: KristalDataset.get_batch icin testler",
+  "dogrulama_damgasi": "2026-09-16T21:00:00Z",
+  "dogrulayan": "claude (danisman rolu, bagimsiz olcum)",
+  "yonetim": "PASS",
+  "ozet": "Bes vaka da dogru ve non-vakum: yeni test dosyasi 5 passed (benim kosumum), KENDI MUTANTIM kaydirma satiri bozulunca 2 failed ile KIRMIZI yandi ve dosya sha-ozdes geri konuldu. Uretim kodu DEGISMEMIS olarak pinlenmis (train_step_demo.py sha'si T-0055 degeriyle AYNI) - saf test isi oldugu kanitli. Tam paket: ben 205 passed (+1 sandbox soket artefakti) / yurutucu 206 passed (sandbox disinda) -> tutarli. Kanaryalar saglam. Bulgu YOK; iki olcum notu.",
+  "kabul_kriterleri": [
+    {"no": "a", "kriter": "KIRALAMA: 3 yol yazimdan once", "durum": "DOGRULANDI",
+     "olcum": "Olay gunlugu: 20:46:33Z'de uc dosya kirasi (writes[] ile birebir); kapanista birakildi (kira simdi 0)."},
+    {"no": "b", "kriter": "TESTLER (5 vaka)", "durum": "DOGRULANDI (BAGIMSIZ kosum)",
+     "olcum": "`pytest tests/test_kristal_dataset.py -q` -> **5 passed**. Vakalar: sekil, KAYDIRMA (y = x'in bir ileri kaymasi), dtype, kucuk-veri yolu, PAD yogunlugu."},
+    {"no": "c", "kriter": "URETIM KODU DEGISMEDI", "durum": "DOGRULANDI",
+     "olcum": "`scripts/train_step_demo.py` sha256 = 1bac5e9263faca86e513d83e... — T-0055 sonrasi degerle BIREBIR ayni. Yani gorev gercekten yalniz test yazmis (raporun 'production_code_integrity' bolumu de bunu beyan ediyor)."},
+    {"no": "d", "kriter": "PAD YOGUNLUGU OLCUMU", "durum": "DOGRULANDI (iki bagimsiz olcum)",
+     "olcum": "Yurutucu: 200 pencere/25.600 hedefte 12.684 PAD = **%49,55** (esik >0.30). Ben (T-0053 olcumum, farkli rastgele pencereler): 12.237 PAD = **%47,80**. Iki deger de '~%48-50' araliginda; fark ORNEKLEME kaynakli (pencere secimi), celiski degil. Test gevsek esik kullaniyor -> veri yeniden derlenirse kirilmaz, yogunluk kaybolursa gorulur."},
+    {"no": "e", "kriter": "MUTANT: kaydirma bozulunca KIRMIZI", "durum": "DOGRULANDI (KENDI MUTANTIM)",
+     "olcum": "Satir 37'de `self.data[i+1:i+1+block_sz]` -> `self.data[i:i+block_sz]` yaptim -> **2 failed, 3 passed** (kaydirma + kucuk-veri vakalari kirmizi). Dosya yedekten geri konuldu, sha256 OZDESLIGI dogrulandi."},
+    {"no": "f", "kriter": "TEST: tam paket", "durum": "DOGRULANDI",
+     "olcum": "Ben (sandbox ici): **205 passed, 1 failed** — tek kirmizi `test_agent_gateway` (bilinen sandbox soket artefakti). Yurutucu (sandbox disinda): 206 passed, 0 failed. 205+1 = 206 -> TUTARLI."},
+    {"no": "g", "kriter": "KANARYA + KAPANIS", "durum": "DOGRULANDI",
+     "olcum": "data/*.pt 29, data/*.bin 15; hicbir uretim kosumu yok. changed_files 3 == writes[] 3; mesaj 20:48:33Z; kiralar birakildi."}
+  ],
+  "findings": [
+    {
+      "id": "Not-1",
+      "siddet": "BILGI (olcum notu)",
+      "baslik": "PAD yogunlugu iki olcumde %47,80 vs %49,55 - ornekleme kaynakli",
+      "aciklama": "Ayni .bin, ayni pencere sayisi, FARKLI rastgele pencereler. Ikisi de ayni buyuklugu (~%48-50) gosteriyor; testin gevsek esigi bu oynakligi tolere eder. Kayit amaci: ileride 'iki sayi celisiyor' sanilmasin."
+    },
+    {
+      "id": "Not-2",
+      "siddet": "BILGI (olumlu uygulama)",
+      "baslik": "Uretim kodu sha'si rapora pinlenmis",
+      "aciklama": "Rapor 'production_code_integrity' bolumunde scripts/train_step_demo.py'nin DEGISMEDIGINI sha ile beyan ediyor; ben de bagimsiz olarak ayni sha'yi hesapladim. Saf test islerinde beklenen disiplin - devam etmeli."
+    }
+  ],
+  "kapanis": {
+    "uc_sinyal_kapisi": "mesaj 20:48:33Z ✓ | kiralar birakildi ✓ | changed_files (3) == writes[] (3) ✓",
+    "sonuc": "T-0056 KABUL (hukum: PASS). Iki bagimsiz mutant (onlarin + benim) testlerin non-vakum oldugunu gosteriyor; uretim kodu degismedi.",
+    "sonraki_adim": "Test-3 (evaluate_sft_benchmarks CE/val-loss yolu) planlanan sirada; PUSH hala beklemede (sandbox)."
+  }
+}
