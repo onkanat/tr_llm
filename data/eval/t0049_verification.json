@@ -1,0 +1,53 @@
+{
+  "task_id": "T-0049",
+  "baslik": "F2-6: retrain_clean_models kapisi + kanonik guard (son kapisiz yazim hedefi)",
+  "dogrulama_damgasi": "2026-09-16T15:33:00Z",
+  "dogrulayan": "claude (danisman rolu, bagimsiz olcum)",
+  "yonetim": "PASS",
+  "ozet": "Kapi dizisinin son halkasi kapandi: iki copyfile hedefi (pre_clean :65, sft :125) guard'li ve guard hedefleri kopya hedefleriyle AYNI; 5 egitim cagrisinin her biri guard'li ve sira dogru; --allow-frozen-write kosullu olarak 5 alt surece geciyor; kanonik yardimci src/llm/frozen_guard.py'de ve uc durumda dogru davraniyor. Kendi IKI MUTANT'IM da KIRMIZI yandi ve dosya sha-ozdes geri yuklendi; pytest sandbox disinda 191 passed; kanaryalar ve iki sayi sabit; hicbir egitim kosulmadi. Bulgu YOK. Iki kayit: (V1) BENIM olcum yanilgim - anlik kira olcumunden 'birakilmadi' hukmu cikardim, oysa birakma 63 sn sonra damgalandi ve durtmem gereksizdi (geri alindi); (V2) guard hala 3 yerel kopya + 1 kanonik olarak yasiyor (devreden temizlik kalemi).",
+  "kabul_kriterleri": [
+    {"no": "a", "kriter": "KANONIK yardimci: uc durum + mesaj kalibi", "durum": "DOGRULANDI (BAGIMSIZ KOSUM)",
+     "olcum": "src/llm/frozen_guard.py'yi kendim yukleyip cagirdim: 'data/kristal_model.pt'+False -> RuntimeError ve mesajda 'Donmuş yola yazma engellendi' kalibi var; +True -> geciyor; 'scratch/x.pt'+False -> geciyor; 'data/kristal_model_pre_clean.pt'+False -> RuntimeError. Dordu de beklendigi gibi."},
+    {"no": "b", "kriter": "KAPI a: iki copyfile hedefi guard'li ve hedefler AYNI", "durum": "DOGRULANDI (BAGIMSIZ AST + kaynak)",
+     "olcum": "Kendi AST yuruyusum: guard :64 -> copyfile :65 (hedef data/kristal_model_pre_clean.pt, guard'in hedefiyle AYNI) ve guard :124 -> copyfile :125 (hedef data/kristal_model_sft.pt, AYNI). Kaynaktan da okudum: :63-65 blogu ayni literali kullaniyor."},
+    {"no": "c", "kriter": "KAPI b: 5 egitim cagrisi guard'li + SIRA", "durum": "DOGRULANDI (BAGIMSIZ AST)",
+     "olcum": "Kendi cagri dizim: (guard 82 -> run_cmd 83) (guard 99 -> run_cmd 100) (guard 117 -> run_cmd 118) (guard 132 -> run_cmd 133) (guard 153 -> run_cmd 154). Hepsi sirali; hedef literali komuttaki '--save-path'/'--output-model' degeriyle ayni (ornek: stage1_cmd icinde '--save-path','data/kristal_model.pt' ve guard ayni literal)."},
+    {"no": "d", "kriter": "KAPI c: --allow-frozen-write girisi + kosullu gecis", "durum": "DOGRULANDI",
+     "olcum": "Kaynakta '--allow-frozen-write' 6 kez geciyor; ekleme kalibi kosullu ('if allow_frozen_write: cmd.append(...)') -> onay verilince 5 alt surec de bayragi aliyor; onay yoksa hicbiri baslamiyor (guard once)."},
+    {"no": "e", "kriter": "MUTANT (STATIK) — KENDI MUTANTLARIM", "durum": "DOGRULANDI (IKISI DE BENIM KOSUMUM)",
+     "olcum": "M1: :64 copyfile guard'i yorumlandi -> pytest -k ast KIRMIZI (tests/test_compiler_entrypoints.py:439 AssertionError, test_ast_retrain_clean_models_has_frozen_guards). M2: Stage-1 guard'i run_cmd'den SONRAYA tasindi (82<->83) -> KIRMIZI (satir 462 AssertionError). Her ikisinde de dosya yedekten geri konuldu ve sha256 OZDESLIGI dogrulandi (7da0833c081c4646...). Yurutucunun kendi mutant kaydi da ayni kirmizilari farkli iddia metinleriyle gosteriyor."},
+    {"no": "f", "kriter": "KOSUM YOK", "durum": "DOGRULANDI",
+     "olcum": "data/ altinda pencerede degisen TEK dosya raporun kendisi (15:23:44Z). Bes checkpoint pinlerle AYNI: kristal_model.pt 02e15b81..., step_b1_final 01d7918e..., pre_clean d1f04433..., sft b6764c70..., carpenter 5f0b8c71... (mtime'lar 13 Eyl). data/*.pt 23, data/*.bin 15; iki artefakt ve vocab/tokenizer sabit."},
+    {"no": "g", "kriter": "TEST: pytest sandbox DISINDA", "durum": "DOGRULANDI (BAGIMSIZ)",
+     "olcum": "Rapor 191 diyor; ben sandbox DISINDA kosturdum: '191 passed in 9.73s' (T-0048'de 190)."},
+    {"no": "h", "kriter": "KAPANIS: changed_files == writes[]", "durum": "DOGRULANDI",
+     "olcum": "writes[] 5 = changed_files 5 (kume esitligi True). message_sent 15:25:25Z. Kiralar 15:27:03Z'de birakildi (5 yol) - bkz V1: benim ilk olcumumden 36 sn SONRA, ama durtmemden 63 sn ONCE."},
+    {"no": "i", "kriter": "HASH IDDIALARI (tam digest)", "durum": "DOGRULANDI - uydurma YOK",
+     "olcum": "15 sha256 iddiasi: 10'u diskle birebir. Eslesmeyen 5'in 3'u BENIM aday listemin eksiğiydi (train_chat_balanced.bin 443f93d3..., eski train_balanced_sft.bin 55863e36... ve frozen_guard'in oncesi), 2'si tarihsel 'before' degeri (retrain_clean_models 22a27b78... = T-0046 sonrasi; tests 57cc3681... = T-0048 sonrasi). Tek bir 'onek dogru/kuyruk yanlis' vakasi yok."}
+  ],
+  "bagimsiz_mutantlar": {
+    "M1_copyfile_guard": "guard :64 yorumlandi -> FAILED (satir 439). Geri yukleme sha ozdes: 7da0833c081c4646...",
+    "M2_guard_sirasi": "Stage-1 guard'i run_cmd'den sonraya tasindi (82<->83) -> FAILED (satir 462). Geri yukleme sha ozdes: 7da0833c081c4646..."
+  },
+  "findings": [
+    {
+      "id": "V1",
+      "siddet": "KAYIT (yontem; kusur BENDE, yurutucude degil)",
+      "baslik": "Anlik kira olcumunden 'birakilmadi' hukmu cikardim; birakma 36 sn sonra geldi ve durtmem gereksizdi",
+      "olcum": "15:24:59Z sonuc bildirildi, 15:25:25Z mesaj gonderildi. Ben 15:26:27Z'de TEK bir anlik olcum aldim: 5 kira canli -> 'birakilmadi' hukmu + durtme mesaji yazdim (15:28:06Z). OLAY GUNLUGU net: birakma damgasi 15:27:03Z, yani olcumumden 36 sn SONRA ve durtmemden 63 sn ONCE. Yurutucu protokole UYDU (gecikme ~2 dk; onceki uc gorevde ~5 sn idi ama SPEC'te gecikme siniri yok).",
+      "kural": "Anlik olcum 'yapilmadi' iddiasini KURMAZ; kapanis/kiralama gibi olaylari OLAY GUNLUGUNDEN (events.jsonl) damgasiyla dogrula. Ayni sinif icin bkz. [[anlik-olcumden-surec-durumu-cikarma]].",
+      "ek": "Durtme mesajini geri aldim (15:29:58Z) ve yurutucuye bir tur harcatti - kayda geciyor."
+    },
+    {
+      "id": "V2",
+      "siddet": "BILGI (devreden temizlik kalemi)",
+      "baslik": "Guard hala 3 yerel kopya + 1 kanonik olarak yasiyor",
+      "olcum": "Kanonik yardimci src/llm/frozen_guard.py'de (YENI, bu gorev) ve retrain_clean_models.py onu kullaniyor; ama run_goal_pipeline.py, train.py, train_dpo.py kendi yerel kopyalarini koruyor; uc ureticide de check_output_path kopyasi var. Toplam 7 kapi uygulamasi.",
+      "karar": "Bu gorevde bilerek yalnizca YENI site kanonige baglandi (dogrulanmis dosyalara dokunmamak icin). Temizlik turu ayri is."
+    }
+  ],
+  "kapanis": {
+    "uc_sinyal_kapisi": "mesaj 15:25:25Z ✓ | kiralar 15:27:03Z'de birakildi (5 yol) ✓ | changed_files (5) == writes[] (5) ✓",
+    "sonuc": "T-0049 KABUL (hukum: PASS). Frozen-write kapi dizisi tamamlandi: pipeline + train.py + train_dpo.py + retrain_clean_models.py hepsi kapili; envanterde ACIK kapisiz yazim hedefi kalmadi (uretimlerin derleme cagrilari zaten kapiliydi). Yeni gorev ACILMADI."
+  }
+}

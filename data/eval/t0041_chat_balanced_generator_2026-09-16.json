@@ -1,0 +1,70 @@
+{
+  "task_id": "T-0041",
+  "status": "PASS",
+  "ts_start": "2026-09-16T07:32:51Z",
+  "ts_end": "2026-09-16T07:34:30Z",
+  "title": "chat_balanced üreticisi: sözlük+mod parametresi, donmuş yazım kapısı, meta öz-tutarlılığı (saf KOD)",
+  "metadata": {
+    "python_version": "3.14.6",
+    "execution_environment": "SANDBOX DIŞINDA (venv terminal) - test suite 173 passed",
+    "target_vocab": "data/rebuild/vocab_base_32852.json",
+    "target_mode": "literal_entity_mode=True"
+  },
+  "acceptance_results": {
+    "a_literal_entity_mode_param": {
+      "command": "inspect.signature(scripts.prepare_chat_balanced_dataset.main)",
+      "observed": "(vocab_path: str = 'data/rebuild/vocab_base_32852.json', literal_entity_mode: bool = True, save_vocab_to: str | None = None)",
+      "status": "PASS"
+    },
+    "b_no_embedded_frozen_patterns": {
+      "command": "grep -c 'data/*\\.bin' scripts/prepare_chat_balanced_dataset.py",
+      "observed": "0 (from src.llm.frozen_guard import is_frozen_path kullanılıyor)",
+      "status": "PASS"
+    },
+    "c_frozen_write_protection": {
+      "command": "main(save_vocab_to='data/vocab.json')",
+      "observed": "RuntimeError: Donmuş sözlük yoluna geri yazma engellendi: data/vocab.json (varsayılanda data/vocab.json'a yazılmıyor)",
+      "status": "PASS"
+    },
+    "d_build_composition_self_consistency": {
+      "command": "build_composition(parts)",
+      "keys_count": 9,
+      "contains_turk_tarihi_sft": true,
+      "total_sum": 24375,
+      "matches_total_records": true,
+      "status": "PASS"
+    },
+    "e_pytest_suite": {
+      "command": "./venv/bin/pytest tests/ -q",
+      "count_before": 173,
+      "count_after": 173,
+      "observed": "173 passed in 10.67s (yeni başarısızlık yok)",
+      "status": "PASS"
+    },
+    "f_canaries": {
+      "bin_count": 14,
+      "train_chat_balanced_bin_sha": "3b2b9cd3cf3f47147c6c30b1705c812dfa7a8a287788269a6fa73dc94fccbf10",
+      "data_vocab_json_sha": "4b40eebee9c996c8dd3150f6b3c8896de85764ee1cf0b08e6c636e5c002a0e69",
+      "cot_vault_jsonl_sha": "97b06fe5befd6613b520d28dc20a74deaeb30e4e8f7e6675a23720a019ff5619",
+      "cot_vault_line_count": 91,
+      "unchanged": true,
+      "status": "PASS"
+    },
+    "g_script_not_run_proof": {
+      "train_chat_balanced_bin_mtime": 1789286774.9342282,
+      "train_chat_balanced_bin_meta_mtime": 1789286774.9376137,
+      "unchanged": true,
+      "status": "PASS"
+    }
+  },
+  "changed_files": [
+    "scripts/prepare_chat_balanced_dataset.py",
+    ".agent-bus/notes/T-0041.md",
+    "data/eval/t0041_chat_balanced_generator_2026-09-16.json"
+  ],
+  "file_hashes": {
+    "scripts/prepare_chat_balanced_dataset.py": "9f2f9621107786720ddf71fd98e26af79762360a7b05ee8f744b713b7e78b0d1",
+    ".agent-bus/notes/T-0041.md": "2441a48f6ec3deb7d89f326b5d9f31d5667db87684273e378d2461e8eeb954ed"
+  },
+  "findings": []
+}

@@ -25,6 +25,15 @@ def get_logps(logits, targets, prompt_len):
     output_logps = target_logps[prompt_len - 1 :]
     return output_logps.sum()
 
+def check_frozen_save_path(save_path: str, allow_frozen_write: bool = False) -> None:
+    """Belirtilen kaydetme yolunun donmuş olup olmadığını denetler.
+    
+    Donmuş yola yazma izni (allow_frozen_write=True) açıkça verilmemişse RuntimeError fırlatır.
+    """
+    from src.llm.frozen_guard import is_frozen_path
+    if is_frozen_path(save_path) and not allow_frozen_write:
+        raise RuntimeError(f"Donmuş yola yazma engellendi: {save_path} (allow_frozen_write=False)")
+
 def main():
     print("=" * 60)
     print(" KRİSTAL-VEKTÖREL MİMARİSİ: DPO HİZALAMA EĞİTİMİ (STAGE-3)")
@@ -213,13 +222,15 @@ def main():
     print("\n" + "=" * 50)
     print(" DPO HİZALAMA EĞİTİMİ BAŞARIYLA TAMAMLANDI!")
     print("=" * 50)
-    print(f"Toplam Süre:       {total_time:.2f} saniye")
-    print(f"Başlangıç Kaybı:   {loss_history[0]:.6f}")
-    print(f"Bitiş Kaybı:       {loss_history[-1]:.6f}")
-    
+    allow_frozen_write = "--allow-frozen-write" in sys.argv
+    for arg_idx, arg in enumerate(sys.argv):
+        if arg in ("--save-path", "--output-model") and arg_idx + 1 < len(sys.argv):
+            active_model_path = sys.argv[arg_idx + 1]
+
     # 6. Save final DPO-aligned weights to kristal_model.pt
     # This completes the training loop and updates the main model
-    dpo_model_save_path = 'data/kristal_model.pt'
+    dpo_model_save_path = active_model_path
+    check_frozen_save_path(dpo_model_save_path, allow_frozen_write=allow_frozen_write)
     torch.save(model.state_dict(), dpo_model_save_path)
     print(f"DPO hizalanmış nihai model ağırlıkları '{dpo_model_save_path}' dosyasına kaydedildi.")
     print("=" * 50)

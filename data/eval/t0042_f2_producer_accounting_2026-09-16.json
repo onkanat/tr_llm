@@ -1,0 +1,98 @@
+{
+  "task_id": "T-0042",
+  "status": "PASS",
+  "date": "2026-09-16",
+  "producer_files": [
+    "scripts/prepare_balanced_sft_dataset.py",
+    "scripts/prepare_carpenter_specialization_dataset.py",
+    "scripts/prepare_chat_balanced_dataset.py"
+  ],
+  "verification_results": {
+    "a_main_signatures": {
+      "scripts/prepare_balanced_sft_dataset.py": "(vocab_path: str = 'data/rebuild/vocab_base_32852.json', literal_entity_mode: bool = True, allow_frozen_write: bool = False) -> None",
+      "scripts/prepare_carpenter_specialization_dataset.py": "(vocab_path: str = 'data/rebuild/vocab_base_32852.json', literal_entity_mode: bool = True, allow_frozen_write: bool = False) -> None",
+      "scripts/prepare_chat_balanced_dataset.py": "(vocab_path: str = 'data/rebuild/vocab_base_32852.json', literal_entity_mode: bool = True, allow_frozen_write: bool = False) -> None"
+    },
+    "b_frozen_authority": {
+      "uses_is_frozen_path": true,
+      "embedded_patterns_in_producers": false
+    },
+    "c_check_output_path": {
+      "status": "PASS",
+      "frozen_write_blocked": true,
+      "allow_frozen_write_bypass": true,
+      "unfrozen_write_allowed": true
+    },
+    "d_accounting_and_identity": {
+      "counters_tracked": [
+        "missing",
+        "raw_lines",
+        "sampled",
+        "json_errors",
+        "encode_errors",
+        "lines_ok",
+        "short_skipped",
+        "kept"
+      ],
+      "four_line_sample_result": {
+        "missing": false,
+        "raw_lines": 4,
+        "sampled": 4,
+        "json_errors": 1,
+        "encode_errors": 0,
+        "lines_ok": 3,
+        "short_skipped": 1,
+        "kept": 2
+      },
+      "d4_identity_verified": true,
+      "d4_identity_formula": "sampled == json_errors + encode_errors + lines_ok (4 == 1 + 0 + 3)"
+    },
+    "e_exception_handling": {
+      "bare_pass_or_continue_count": 0,
+      "error_logging_to_stderr": true,
+      "error_threshold_cap": 5
+    },
+    "f_pytest_suite": {
+      "test_f2_producers": "6 passed in 0.08s",
+      "full_suite_before": "173 passed",
+      "full_suite_after": "179 passed in 9.80s",
+      "failures": 0
+    },
+    "g_canary_hashes": {
+      "data/vocab.json": "4b40eebee9c996c8dd3150f6b3c8896de85764ee1cf0b08e6c636e5c002a0e69",
+      "data/pedagogy/cot_vault.jsonl": "97b06fe5befd6613b520d28dc20a74deaeb30e4e8f7e6675a23720a019ff5619",
+      "src/llm/tokenizer.py": "560a3bfbf32c394a23559c9d3645cfbc3b554223a032156924749dcfa896a7af",
+      "cot_vault_line_count": 91,
+      "data_bin_file_count": 14
+    },
+    "h_producers_not_executed": {
+      "train_balanced_sft.bin": {
+        "sha256": "55863e36b62414c6ada30956b30dc64a5254fe0717582384d43abd5d9cf46a24",
+        "mtime": 1789286687.8059752
+      },
+      "train_carpenter_specialization.bin": {
+        "sha256": "6d5a1d2c3b55ab883a4b9420485f908a8f773a16bade4c501a0c1c9fbf2b1121",
+        "mtime": 1789283566.3481443
+      },
+      "train_chat_balanced.bin": {
+        "sha256": "3b2b9cd3cf3f47147c6c30b1705c812dfa7a8a287788269a6fa73dc94fccbf10",
+        "mtime": 1789286774.9342282
+      },
+      "train_balanced_sft.bin.meta.json": {
+        "sha256": "8d34e25eb8b88b779c91dc1f3c646075baf77859e88b847fad8adec45869de50",
+        "mtime": 1789283478.6269522
+      },
+      "train_carpenter_specialization.bin.meta.json": {
+        "sha256": "939e29c538794aba9d8c8645e8d92df6d2f4c7e19a12b0f130efadf865e7863b",
+        "mtime": 1789283566.3491447
+      },
+      "train_chat_balanced.bin.meta.json": {
+        "sha256": "f5ca63fdc62422ee7bd8103ae21be353410b5732cc3cbe12e219b9d19b21b418",
+        "mtime": 1789286774.9376137
+      }
+    }
+  },
+  "findings": {
+    "V1_fnmatch_pattern_behavior": "fnmatch.fnmatch('data/eval/probe.bin', 'data/*.bin') evaluates to True because standard fnmatch does not treat '/' as a path boundary. Therefore, any .bin under data/ subdirectories is treated as frozen by data/*.bin pattern. In tests, genuinely unfrozen paths like scratch/probe.bin or /tmp were used for positive unfrozen control assertions."
+  }
+}

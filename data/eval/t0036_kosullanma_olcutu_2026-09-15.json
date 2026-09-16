@@ -1,0 +1,532 @@
+{
+  "status": "PASS",
+  "metadata": {
+    "task_id": "T-0036",
+    "title": "Y3: 'Cikti istemle ilgili' olcutunu makineyle olculebilir hale getir — istem kosullanma metriğini tasarla, kendini dogrula, taban/ceket ikilisine uygula",
+    "device": "mps",
+    "python_version": "3.14.6",
+    "torch_version": "2.11.0",
+    "timestamp_start": "2026-09-15T19:35:56.003219+00:00",
+    "timestamp_end": "2026-09-15T19:36:42.179351+00:00",
+    "command_probe": "./venv/bin/python scratch/t0036_kosullanma_probe.py",
+    "command_pytest": "./venv/bin/pytest -q tests/",
+    "pytest_result": "144 passed in 8.77s",
+    "max_tokens_primary": 128,
+    "max_tokens_secondary_comparison": 64
+  },
+  "invariance": {
+    "cot_vault": {
+      "path": "data/pedagogy/cot_vault.jsonl",
+      "sha256": "97b06fe5befd6613b520d28dc20a74deaeb30e4e8f7e6675a23720a019ff5619",
+      "line_count": 91,
+      "status": "UNCHANGED",
+      "command": "./venv/bin/python -c \"import hashlib; print(hashlib.sha256(open('data/pedagogy/cot_vault.jsonl', 'rb').read()).hexdigest(), open('data/pedagogy/cot_vault.jsonl', 'rb').read().count(b'\\n'))\""
+    },
+    "future_train_vector": {
+      "path": "data/future_train_vector.jsonl",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "line_count": 0,
+      "status": "UNCHANGED",
+      "command": "./venv/bin/python -c \"import hashlib; print(hashlib.sha256(open('data/future_train_vector.jsonl', 'rb').read()).hexdigest(), open('data/future_train_vector.jsonl', 'rb').read().count(b'\\n'))\""
+    },
+    "identical": true
+  },
+  "prompt_contract_assertions": {
+    "description": "T-0034 raporundaki (data/eval/t0034_criterion_and_generator_2026-09-15.json) prompt_str zarfları okunmuş ve yerel render_prompt(soru, '') çıktısı assert edilmiştir.",
+    "cases": {
+      "P1_Genel_Edebiyat": {
+        "soru": "Türk edebiyatında Tanzimat döneminin temel özellikleri nelerdir?",
+        "prompt_str": "<INSTRUCTION> Türk edebiyatında Tanzimat döneminin temel özellikleri nelerdir? </INSTRUCTION> <INPUT>  </INPUT> <OUTPUT>",
+        "assert_passed": true
+      },
+      "P2_Noktalama": {
+        "soru": "Şu cümleyi noktalama işaretleriyle birlikte yaz: dun aksam ankara ya gittim ve saat 21 de dondum",
+        "prompt_str": "<INSTRUCTION> Şu cümleyi noktalama işaretleriyle birlikte yaz: dun aksam ankara ya gittim ve saat 21 de dondum </INSTRUCTION> <INPUT>  </INPUT> <OUTPUT>",
+        "assert_passed": true
+      },
+      "P3_Rakam": {
+        "soru": "1973 yılında kurulan okulun 45 öğretmeni ve 812 öğrencisi vardı. Bu cümledeki sayıları listele.",
+        "prompt_str": "<INSTRUCTION> 1973 yılında kurulan okulun 45 öğretmeni ve 812 öğrencisi vardı. Bu cümledeki sayıları listele. </INSTRUCTION> <INPUT>  </INPUT> <OUTPUT>",
+        "assert_passed": true
+      },
+      "P4_Marangoz_Ezber": {
+        "soru": "Ahşap atölyesi güvenlik ve imalat rehberi: Ahşabın son kat yüzeyinde dolgu verniği nasıl tatbik edilmelidir?",
+        "prompt_str": "<INSTRUCTION> Ahşap atölyesi güvenlik ve imalat rehberi: Ahşabın son kat yüzeyinde dolgu verniği nasıl tatbik edilmelidir? </INSTRUCTION> <INPUT>  </INPUT> <OUTPUT>",
+        "assert_passed": true
+      },
+      "P5_Marangoz_Parafraz": {
+        "soru": "Ahşap doğramada kurt dişi geçme nedir ve nasıl uygulanır?",
+        "prompt_str": "<INSTRUCTION> Ahşap doğramada kurt dişi geçme nedir ve nasıl uygulanır? </INSTRUCTION> <INPUT>  </INPUT> <OUTPUT>",
+        "assert_passed": true
+      }
+    },
+    "command": "./venv/bin/python -c \"import json; from src.llm.prompt_contract import render_prompt; d = json.load(open('data/eval/t0034_criterion_and_generator_2026-09-15.json'))['k2_outoutput_iki_dalli_olcum']['vaka_detaylari']['temel']; [assert render_prompt(v['soru'], '') == v['prompt_str'] for v in d.values()]; print('Tüm 5 prompt_str assertion başarılı')\""
+  },
+  "identity_controls": {
+    "description": "Kimlik Kontrolü: Aynı istem iki kez koşulduğunda greedy argmax çıktısının %100 bit-özdeş olduğunu kanıtlar.",
+    "temel": {
+      "P1_Genel_Edebiyat": {
+        "identical": true,
+        "sha256_run1": "1da9f60e02058cd1740a78e0c12658529d5029f5673c9598b4b5deef909c1229",
+        "sha256_run2": "1da9f60e02058cd1740a78e0c12658529d5029f5673c9598b4b5deef909c1229",
+        "token_count": 64
+      },
+      "P2_Noktalama": {
+        "identical": true,
+        "sha256_run1": "83cb6b989f9b4ad008fcac16cba114c903acc0fbe56c24d9dd566c42d4801401",
+        "sha256_run2": "83cb6b989f9b4ad008fcac16cba114c903acc0fbe56c24d9dd566c42d4801401",
+        "token_count": 37
+      },
+      "P3_Rakam": {
+        "identical": true,
+        "sha256_run1": "fdf92775185643f68db71a940432ee94ff216393593a80a5db86cb265f8452e0",
+        "sha256_run2": "fdf92775185643f68db71a940432ee94ff216393593a80a5db86cb265f8452e0",
+        "token_count": 94
+      },
+      "P4_Marangoz_Ezber": {
+        "identical": true,
+        "sha256_run1": "91acda17a1cee430282e7c817c5f9a8c8dd8846d3135486071721b6a7c579649",
+        "sha256_run2": "91acda17a1cee430282e7c817c5f9a8c8dd8846d3135486071721b6a7c579649",
+        "token_count": 32
+      },
+      "P5_Marangoz_Parafraz": {
+        "identical": true,
+        "sha256_run1": "23570a9aa762051ae6b73ebc51ab051c15775bc3e9d9fde05d266a0c710c56d4",
+        "sha256_run2": "23570a9aa762051ae6b73ebc51ab051c15775bc3e9d9fde05d266a0c710c56d4",
+        "token_count": 32
+      }
+    },
+    "marangoz": {
+      "P1_Genel_Edebiyat": {
+        "identical": true,
+        "sha256_run1": "f52117374b9225d48635f833f672f2797a2cbc800fe29c0f3de81ec64d0e144c",
+        "sha256_run2": "f52117374b9225d48635f833f672f2797a2cbc800fe29c0f3de81ec64d0e144c",
+        "token_count": 15
+      },
+      "P2_Noktalama": {
+        "identical": true,
+        "sha256_run1": "4fa42b604f266a63b7b2088bad2629169c1b0812ab784b9cb4a682c5fd233a96",
+        "sha256_run2": "4fa42b604f266a63b7b2088bad2629169c1b0812ab784b9cb4a682c5fd233a96",
+        "token_count": 45
+      },
+      "P3_Rakam": {
+        "identical": true,
+        "sha256_run1": "f52117374b9225d48635f833f672f2797a2cbc800fe29c0f3de81ec64d0e144c",
+        "sha256_run2": "f52117374b9225d48635f833f672f2797a2cbc800fe29c0f3de81ec64d0e144c",
+        "token_count": 15
+      },
+      "P4_Marangoz_Ezber": {
+        "identical": true,
+        "sha256_run1": "e498ae58f106ab6d95ef2b149c46655a8fbfbb00d11e8564bcf76c4f247cf88b",
+        "sha256_run2": "e498ae58f106ab6d95ef2b149c46655a8fbfbb00d11e8564bcf76c4f247cf88b",
+        "token_count": 44
+      },
+      "P5_Marangoz_Parafraz": {
+        "identical": true,
+        "sha256_run1": "6dfad48d76e9ffe1629e03ced55461c9e444d079633345989e3ee6c169fd9eae",
+        "sha256_run2": "6dfad48d76e9ffe1629e03ced55461c9e444d079633345989e3ee6c169fd9eae",
+        "token_count": 29
+      }
+    },
+    "conclusion": "Her iki modelde de 5/5 istem iki ardışık koşumda bit-özdeş token dizisi ve hash üretmiştir (determinizm tamdır).",
+    "command": "./venv/bin/python -c \"import json; ham = json.load(open('scratch/t0036_kosullanma_ham.json')); print({m: all(c['identical'] for c in ham['identity_controls'][m].values()) for m in ['temel', 'marangoz']})\""
+  },
+  "k1_metrik_tasarimi_ve_kendini_dogrulama": {
+    "metrik_tanimi": {
+      "ad": "İçerik Kökü Kapsamı ve Tekrar Cezası (Lexical Content Recall with Repetition Penalty)",
+      "aciklama": "İstem metninden ve model çıktısından kontrol belirteçleri (<BOS>, <EOS>, <OUTPUT> ve benzeri), noktalama işaretleri, biçimbirim ekleri (CASE_, POSS_, DERIV_, TENSE_ ve benzeri) ve işlevsel durak kelimeleri elenerek anlamsal içerik kökleri (content roots) kümesi C_P ve C_O çıkarılır. Ortak kök sayısı çoklu-küme (multiset) minimum frekansı üzerinden hesaplanır.",
+      "formuller": {
+        "recall": "Recall(P, O) = sum(min(C_P(r), C_O(r))) / len(C_P)",
+        "repetition_penalty": "RP(O) = min(1.0, (len(unique(C_O)) / len(C_O)) / 0.70)",
+        "conditioning_score": "Score(P, O) = Recall(P, O) * RP(O)"
+      }
+    },
+    "a_istem_duyarliligi": {
+      "aciklama": "T-0034'ün 5 istemi için C(5, 2) = 10 ikili çift halinde çıktı karşılaştırması; kaç çiftin BİT-ÖZDEŞ olduğu ölçülmüştür.",
+      "temel": {
+        "total_pairs": 10,
+        "bit_identical_pairs": 0,
+        "diversity_ratio": 1.0,
+        "pairwise": [
+          {
+            "pair": "P1_Genel_Edebiyat vs P2_Noktalama",
+            "identical": false,
+            "sha256_p1": "1da9f60e02058cd1740a78e0c12658529d5029f5673c9598b4b5deef909c1229",
+            "sha256_p2": "83cb6b989f9b4ad008fcac16cba114c903acc0fbe56c24d9dd566c42d4801401",
+            "len_p1": 64,
+            "len_p2": 37
+          },
+          {
+            "pair": "P1_Genel_Edebiyat vs P3_Rakam",
+            "identical": false,
+            "sha256_p1": "1da9f60e02058cd1740a78e0c12658529d5029f5673c9598b4b5deef909c1229",
+            "sha256_p2": "fdf92775185643f68db71a940432ee94ff216393593a80a5db86cb265f8452e0",
+            "len_p1": 64,
+            "len_p2": 94
+          },
+          {
+            "pair": "P1_Genel_Edebiyat vs P4_Marangoz_Ezber",
+            "identical": false,
+            "sha256_p1": "1da9f60e02058cd1740a78e0c12658529d5029f5673c9598b4b5deef909c1229",
+            "sha256_p2": "91acda17a1cee430282e7c817c5f9a8c8dd8846d3135486071721b6a7c579649",
+            "len_p1": 64,
+            "len_p2": 32
+          },
+          {
+            "pair": "P1_Genel_Edebiyat vs P5_Marangoz_Parafraz",
+            "identical": false,
+            "sha256_p1": "1da9f60e02058cd1740a78e0c12658529d5029f5673c9598b4b5deef909c1229",
+            "sha256_p2": "23570a9aa762051ae6b73ebc51ab051c15775bc3e9d9fde05d266a0c710c56d4",
+            "len_p1": 64,
+            "len_p2": 32
+          },
+          {
+            "pair": "P2_Noktalama vs P3_Rakam",
+            "identical": false,
+            "sha256_p1": "83cb6b989f9b4ad008fcac16cba114c903acc0fbe56c24d9dd566c42d4801401",
+            "sha256_p2": "fdf92775185643f68db71a940432ee94ff216393593a80a5db86cb265f8452e0",
+            "len_p1": 37,
+            "len_p2": 94
+          },
+          {
+            "pair": "P2_Noktalama vs P4_Marangoz_Ezber",
+            "identical": false,
+            "sha256_p1": "83cb6b989f9b4ad008fcac16cba114c903acc0fbe56c24d9dd566c42d4801401",
+            "sha256_p2": "91acda17a1cee430282e7c817c5f9a8c8dd8846d3135486071721b6a7c579649",
+            "len_p1": 37,
+            "len_p2": 32
+          },
+          {
+            "pair": "P2_Noktalama vs P5_Marangoz_Parafraz",
+            "identical": false,
+            "sha256_p1": "83cb6b989f9b4ad008fcac16cba114c903acc0fbe56c24d9dd566c42d4801401",
+            "sha256_p2": "23570a9aa762051ae6b73ebc51ab051c15775bc3e9d9fde05d266a0c710c56d4",
+            "len_p1": 37,
+            "len_p2": 32
+          },
+          {
+            "pair": "P3_Rakam vs P4_Marangoz_Ezber",
+            "identical": false,
+            "sha256_p1": "fdf92775185643f68db71a940432ee94ff216393593a80a5db86cb265f8452e0",
+            "sha256_p2": "91acda17a1cee430282e7c817c5f9a8c8dd8846d3135486071721b6a7c579649",
+            "len_p1": 94,
+            "len_p2": 32
+          },
+          {
+            "pair": "P3_Rakam vs P5_Marangoz_Parafraz",
+            "identical": false,
+            "sha256_p1": "fdf92775185643f68db71a940432ee94ff216393593a80a5db86cb265f8452e0",
+            "sha256_p2": "23570a9aa762051ae6b73ebc51ab051c15775bc3e9d9fde05d266a0c710c56d4",
+            "len_p1": 94,
+            "len_p2": 32
+          },
+          {
+            "pair": "P4_Marangoz_Ezber vs P5_Marangoz_Parafraz",
+            "identical": false,
+            "sha256_p1": "91acda17a1cee430282e7c817c5f9a8c8dd8846d3135486071721b6a7c579649",
+            "sha256_p2": "23570a9aa762051ae6b73ebc51ab051c15775bc3e9d9fde05d266a0c710c56d4",
+            "len_p1": 32,
+            "len_p2": 32
+          }
+        ]
+      },
+      "marangoz": {
+        "total_pairs": 10,
+        "bit_identical_pairs": 1,
+        "diversity_ratio": 0.9,
+        "pairwise": [
+          {
+            "pair": "P1_Genel_Edebiyat vs P2_Noktalama",
+            "identical": false,
+            "sha256_p1": "f52117374b9225d48635f833f672f2797a2cbc800fe29c0f3de81ec64d0e144c",
+            "sha256_p2": "4fa42b604f266a63b7b2088bad2629169c1b0812ab784b9cb4a682c5fd233a96",
+            "len_p1": 15,
+            "len_p2": 45
+          },
+          {
+            "pair": "P1_Genel_Edebiyat vs P3_Rakam",
+            "identical": true,
+            "sha256_p1": "f52117374b9225d48635f833f672f2797a2cbc800fe29c0f3de81ec64d0e144c",
+            "sha256_p2": "f52117374b9225d48635f833f672f2797a2cbc800fe29c0f3de81ec64d0e144c",
+            "len_p1": 15,
+            "len_p2": 15
+          },
+          {
+            "pair": "P1_Genel_Edebiyat vs P4_Marangoz_Ezber",
+            "identical": false,
+            "sha256_p1": "f52117374b9225d48635f833f672f2797a2cbc800fe29c0f3de81ec64d0e144c",
+            "sha256_p2": "e498ae58f106ab6d95ef2b149c46655a8fbfbb00d11e8564bcf76c4f247cf88b",
+            "len_p1": 15,
+            "len_p2": 44
+          },
+          {
+            "pair": "P1_Genel_Edebiyat vs P5_Marangoz_Parafraz",
+            "identical": false,
+            "sha256_p1": "f52117374b9225d48635f833f672f2797a2cbc800fe29c0f3de81ec64d0e144c",
+            "sha256_p2": "6dfad48d76e9ffe1629e03ced55461c9e444d079633345989e3ee6c169fd9eae",
+            "len_p1": 15,
+            "len_p2": 29
+          },
+          {
+            "pair": "P2_Noktalama vs P3_Rakam",
+            "identical": false,
+            "sha256_p1": "4fa42b604f266a63b7b2088bad2629169c1b0812ab784b9cb4a682c5fd233a96",
+            "sha256_p2": "f52117374b9225d48635f833f672f2797a2cbc800fe29c0f3de81ec64d0e144c",
+            "len_p1": 45,
+            "len_p2": 15
+          },
+          {
+            "pair": "P2_Noktalama vs P4_Marangoz_Ezber",
+            "identical": false,
+            "sha256_p1": "4fa42b604f266a63b7b2088bad2629169c1b0812ab784b9cb4a682c5fd233a96",
+            "sha256_p2": "e498ae58f106ab6d95ef2b149c46655a8fbfbb00d11e8564bcf76c4f247cf88b",
+            "len_p1": 45,
+            "len_p2": 44
+          },
+          {
+            "pair": "P2_Noktalama vs P5_Marangoz_Parafraz",
+            "identical": false,
+            "sha256_p1": "4fa42b604f266a63b7b2088bad2629169c1b0812ab784b9cb4a682c5fd233a96",
+            "sha256_p2": "6dfad48d76e9ffe1629e03ced55461c9e444d079633345989e3ee6c169fd9eae",
+            "len_p1": 45,
+            "len_p2": 29
+          },
+          {
+            "pair": "P3_Rakam vs P4_Marangoz_Ezber",
+            "identical": false,
+            "sha256_p1": "f52117374b9225d48635f833f672f2797a2cbc800fe29c0f3de81ec64d0e144c",
+            "sha256_p2": "e498ae58f106ab6d95ef2b149c46655a8fbfbb00d11e8564bcf76c4f247cf88b",
+            "len_p1": 15,
+            "len_p2": 44
+          },
+          {
+            "pair": "P3_Rakam vs P5_Marangoz_Parafraz",
+            "identical": false,
+            "sha256_p1": "f52117374b9225d48635f833f672f2797a2cbc800fe29c0f3de81ec64d0e144c",
+            "sha256_p2": "6dfad48d76e9ffe1629e03ced55461c9e444d079633345989e3ee6c169fd9eae",
+            "len_p1": 15,
+            "len_p2": 29
+          },
+          {
+            "pair": "P4_Marangoz_Ezber vs P5_Marangoz_Parafraz",
+            "identical": false,
+            "sha256_p1": "e498ae58f106ab6d95ef2b149c46655a8fbfbb00d11e8564bcf76c4f247cf88b",
+            "sha256_p2": "6dfad48d76e9ffe1629e03ced55461c9e444d079633345989e3ee6c169fd9eae",
+            "len_p1": 44,
+            "len_p2": 29
+          }
+        ]
+      },
+      "karsilastirma_ozeti": {
+        "temel_bit_identical_pairs": "0/10 (%100 çeşitlilik, tüm 5 istem farklı çıktılar üretmiştir)",
+        "marangoz_bit_identical_pairs": "1/10 (%10 çökme, P1_Genel_Edebiyat ve P3_Rakam bit-özdeş çıktı vermiştir)",
+        "marangoz_p1_p3_sha256": "f52117374b9225d48635f833f672f2797a2cbc800fe29c0f3de81ec64d0e144c",
+        "b5_onculu_dogrulandi": true
+      },
+      "command": "./venv/bin/python -c \"import json; ham = json.load(open('scratch/t0036_kosullanma_ham.json')); print('Temel özdeş çiftler:', ham['k1_a_prompt_sensitivity']['temel']['bit_identical_pairs'], 'Marangoz özdeş çiftler:', ham['k1_a_prompt_sensitivity']['marangoz']['bit_identical_pairs'])\""
+    },
+    "b_istem_ilgisi_kendini_dogrulama": {
+      "aciklama": "Metriğin verilen cevabı değil gerçekten İSTEM-CEVAP EŞLEŞMESİNİ ölçtüğünü kanıtlamak için 5 eşleştirilmiş çift (istem ile kendi çıktısı) ve 20 çapraz çift (istem ile başka istemin çıktısı) karşılaştırılmıştır.",
+      "temel": {
+        "matched_mean": 0.2103,
+        "cross_mean": 0.0077,
+        "cross_max": 0.1538,
+        "derived_threshold": 0.2038,
+        "esik_turetme_kurali": "Eşik = max(cross_scores) + 0.05 (güvenlik payı) = 0.1538 + 0.05 = 0.2038",
+        "matched_scores": [
+          0.1667,
+          0.0,
+          0.0,
+          0.3846,
+          0.5
+        ],
+        "matched_above_threshold": 2,
+        "metrik_vakum": false,
+        "ayrisma_faktoru": 27.31
+      },
+      "marangoz": {
+        "matched_mean": 0.0667,
+        "cross_mean": 0.016,
+        "cross_max": 0.1667,
+        "derived_threshold": 0.2167,
+        "esik_turetme_kurali": "Eşik = max(cross_scores) + 0.05 = 0.1667 + 0.05 = 0.2167",
+        "matched_scores": [
+          0.1667,
+          0.0,
+          0.0,
+          0.0,
+          0.1667
+        ],
+        "matched_above_threshold": 0,
+        "metrik_vakum": false,
+        "teshis": "Marangoz ceketinde eşleştirilmiş ortalama (0.0667) çapraz ortalamaya (0.0160) çok yakındır ve çapraz max (0.1667, P1xP3), eşleştirilmiş maksimuma (0.1667) eşittir. Hiçbir vaka eşiği (0.2167) aşamamaktadır (0/5). Model isteme koşullanmamakta, ezberlenmiş sabit şablonlara ('teknik rapor', 'teknik çözüm') çökmektedir."
+      },
+      "command": "./venv/bin/python -c \"import json; ham = json.load(open('scratch/t0036_kosullanma_ham.json')); print('Temel matched_mean:', ham['k1_b_metric_self_validation']['temel']['matched_mean'], 'cross_mean:', ham['k1_b_metric_self_validation']['temel']['cross_mean']); print('Marangoz matched_mean:', ham['k1_b_metric_self_validation']['marangoz']['matched_mean'], 'cross_mean:', ham['k1_b_metric_self_validation']['marangoz']['cross_mean'])\""
+    }
+  },
+  "k2_olcum_kurgusu_ve_karsilastirma": {
+    "max_tokens_karsilastirmasi": {
+      "aciklama": "Kanonik çağrı yerleri (run_experiment_a:138, run_experiment_b:242, run_experiment_c:140/179) max_tokens=128 kullanır. T-0034 spec'i sehven 64 sabitlemişti. Aşağıda her iki değer altındaki çıktılar karşılaştırılmıştır.",
+      "temel_max_tokens_farki": {
+        "P1_Genel_Edebiyat": {
+          "len_64": 64,
+          "len_128": 64,
+          "stopped": "limit_64"
+        },
+        "P2_Noktalama": {
+          "len_64": 37,
+          "len_128": 37,
+          "stopped": "eos"
+        },
+        "P3_Rakam": {
+          "len_64": 64,
+          "len_128": 94,
+          "stopped": "eos_at_94"
+        },
+        "P4_Marangoz_Ezber": {
+          "len_64": 32,
+          "len_128": 32,
+          "stopped": "eos"
+        },
+        "P5_Marangoz_Parafraz": {
+          "len_64": 32,
+          "len_128": 32,
+          "stopped": "eos"
+        }
+      },
+      "marangoz_max_tokens_farki": {
+        "P1_Genel_Edebiyat": {
+          "len_64": 15,
+          "len_128": 15,
+          "stopped": "eos_after_1705"
+        },
+        "P2_Noktalama": {
+          "len_64": 45,
+          "len_128": 45,
+          "stopped": "eos_after_1705"
+        },
+        "P3_Rakam": {
+          "len_64": 15,
+          "len_128": 15,
+          "stopped": "eos_after_1705"
+        },
+        "P4_Marangoz_Ezber": {
+          "len_64": 44,
+          "len_128": 44,
+          "stopped": "eos_after_1705"
+        },
+        "P5_Marangoz_Parafraz": {
+          "len_64": 29,
+          "len_128": 29,
+          "stopped": "eos_after_1705"
+        }
+      },
+      "bulgu": "Temel modelde P3 vakası 64 sınırında kesilmişken 128 sınırında 94. token'da doğal olarak tamamlanmıştır. Marangoz modelinde ise </OUTPUT> serbest olduğunda 5/5 vaka 15-45 token arasında </OUTPUT> ve ardından <EOS> ile doğal olarak sonlanmaktadır (64 ve 128 çıktıları bit-özdeştir)."
+    },
+    "modeller_arasi_karsilastirma_tablosu": [
+      {
+        "istem_id": "P1_Genel_Edebiyat",
+        "istem_metni": "Türk edebiyatında Tanzimat döneminin temel özellikleri nelerdir?",
+        "temel_score": 0.1667,
+        "temel_ortak_kokler": [
+          "temel"
+        ],
+        "marangoz_score": 0.1667,
+        "marangoz_ortak_kokler": [
+          "özel"
+        ],
+        "karsilastirma": "Temel model 'temel' kökünü yakalamış ancak tarım konusuna sapmıştır; Marangoz ise P3 ile bit-özdeş maun ağacı metni basmış, tesadüfen 'özel' kökü örtüşmüştür."
+      },
+      {
+        "istem_id": "P2_Noktalama",
+        "istem_metni": "Şu cümleyi noktalama işaretleriyle birlikte yaz: dun aksam ankara ya gittim ve saat 21 de dondum",
+        "temel_score": 0.0,
+        "temel_ortak_kokler": [],
+        "marangoz_score": 0.0,
+        "marangoz_ortak_kokler": [],
+        "karsilastirma": "Her iki model de istemin içeriğine (Ankara, gitmek, dönmek) koşullanmamıştır. Temel model noktalama üretmiş fakat 'Kiraz ağacı' konusuna sapmıştır; Marangoz kereste fırınlama konusuna sapmıştır."
+      },
+      {
+        "istem_id": "P3_Rakam",
+        "istem_metni": "1973 yılında kurulan okulun 45 öğretmeni ve 812 öğrencisi vardı. Bu cümledeki sayıları listele.",
+        "temel_score": 0.0,
+        "temel_ortak_kokler": [],
+        "marangoz_score": 0.0,
+        "marangoz_ortak_kokler": [],
+        "karsilastirma": "Her iki model de sayı listeleme istemine koşullanmamıştır. Temel model antik Mısır konusuna sapmış (0/94 rakam); Marangoz P1 ile bit-özdeş maun metni basmıştır (0/15 rakam)."
+      },
+      {
+        "istem_id": "P4_Marangoz_Ezber",
+        "istem_metni": "Ahşap atölyesi güvenlik ve imalat rehberi: Ahşabın son kat yüzeyinde dolgu verniği nasıl tatbik edilmelidir?",
+        "temel_score": 0.3846,
+        "temel_ortak_kokler": [
+          "ahşabın",
+          "dolgu",
+          "kat",
+          "son",
+          "vernik"
+        ],
+        "marangoz_score": 0.0,
+        "marangoz_ortak_kokler": [],
+        "karsilastirma": "Temel model dolgu verniği ve son kat konusuna doğrudan ve doğru koşullanmış, eşiği (0.20) açık ara geçmiştir (0.3846). Marangoz ise vernik yerine kereste kurutma fırınlaması çıktısına çökmüştür (0.0000)."
+      },
+      {
+        "istem_id": "P5_Marangoz_Parafraz",
+        "istem_metni": "Ahşap doğramada kurt dişi geçme nedir ve nasıl uygulanır?",
+        "temel_score": 0.5,
+        "temel_ortak_kokler": [
+          "ahşap",
+          "dişi",
+          "kurt"
+        ],
+        "marangoz_score": 0.1667,
+        "marangoz_ortak_kokler": [
+          "ahşap"
+        ],
+        "karsilastirma": "Temel model kurt dişi birleştirme konusuna tam ve doğru koşullanmış (0.5000, eşiğin 2.5 katı). Marangoz ise 'vururken çelik sapı koruyan tahta çekiç' çıktısına sapmıştır."
+      }
+    ]
+  },
+  "karar_yuzeyi": {
+    "aciklama": "Bu rapor bir ölçüt tasarımı ve doğrulama görevidir. Kod hiçbir seçenek lehine değiştirilmemiştir. D-E.kabul[0] metni bu görevde değiştirilmemiştir; değişiklik önerisi ve karar yüzeyi aşağıda tarafsızca sunulmaktadır.",
+    "olcut_degerlendirmesi": {
+      "olcut_girisi_uygun_mu": true,
+      "gerekce": "Tasarlanan 'İçerik Kökü Kapsamı ve Tekrar Cezası' metriği rastgele yanıtları (çapraz küme) 0.0077 ortalamada tutarken, isteme doğrudan koşullanan yanıtları (P4: 0.3846, P5: 0.5000) açık ve kesin bir eşikle (>= 0.20) ayırabilmektedir. Metrik vakum değildir ve insan yargısına ihtiyaç duymaksızın yanlışlanabilir bir eşik üretmektedir.",
+      "onerilen_esik": 0.2,
+      "esigin_dayanagi": "Çapraz kümedeki maksimum skor 0.1538 (P4 ile P5 gibi her ikisi de marangozluk terimleri barındıran farklı iki istem arasındaki tesadüfi ortaklık). Eşik = max(cross) + 0.05 = ~0.20 olarak türetilmiştir."
+    },
+    "secenekler": [
+      {
+        "secenek_id": "SECENEK_A",
+        "baslik": "D-E.kabul[0] için Doğrulanmış İçerik Kökü Kapsamı Eşiğinin (>= 0.20) Resmi Ölçüt Olarak Kabulü",
+        "icerik": "D-E.kabul[0] metnindeki soyut 've çıktı istemle ilgili olmalı' ifadesinin yerine makineyle doğrulanmış 'Conditioning_Score(P, O) >= 0.20' şartının konulması.",
+        "avantajlar": "Kapı tam deterministik ve yanlışlanabilir hale gelir; insan öznel yorumuna yer kalmaz.",
+        "risk_ve_maliyet": "Taban modelin P2 ve P3 gibi konularda koşullanma eğitimine (SFT/DPO) tabi tutulması gerekecektir."
+      },
+      {
+        "secenek_id": "SECENEK_B",
+        "baslik": "İstem Duyarlılığı (Çeşitlilik) ve İlgi Ölçütlerinin İki Kademeli Bileşimi",
+        "icerik": "Modelin hem farklı istemlere farklı çıktılar üretmesi (Diversity Ratio >= 0.95, yani 0 bit-özdeş çift) hem de ilgili konularda Conditioning_Score >= 0.20 alması şartının birlikte aranması.",
+        "avantajlar": "Ceketin 'konu çekicisi' (attractor) çöküşünü yapısal olarak engeller (Marangoz P1/P3 çöküşü anında elenir).",
+        "risk_ve_maliyet": "İki ayrı kapı testi işletilmesi gerekir."
+      },
+      {
+        "secenek_id": "SECENEK_C",
+        "baslik": "Mevcut Hali Korumak (Ölçütü İnsan Denetiminde Bırakmak)",
+        "icerik": "D-E.kabul[0] kuralını değiştirmeyip 'istemle ilgili' değerlendirmesini danışman/kullanıcı nitel değerlendirmesine bırakmak.",
+        "avantajlar": "Kod ve kabul metninde sıfır değişiklik.",
+        "risk_ve_maliyet": "T-0034 N2 bulgusunda belirtildiği gibi ölçüt yanlışlanamaz kalır ve kapı nesnelliğini kaybeder."
+      }
+    ]
+  },
+  "commands_directory": {
+    "invariance_cot_vault": "./venv/bin/python -c \"import hashlib; print(hashlib.sha256(open('data/pedagogy/cot_vault.jsonl', 'rb').read()).hexdigest(), open('data/pedagogy/cot_vault.jsonl', 'rb').read().count(b'\\n'))\"",
+    "invariance_future_train": "./venv/bin/python -c \"import hashlib; print(hashlib.sha256(open('data/future_train_vector.jsonl', 'rb').read()).hexdigest(), open('data/future_train_vector.jsonl', 'rb').read().count(b'\\n'))\"",
+    "prompt_contract_assertions": "./venv/bin/python -c \"import json; from src.llm.prompt_contract import render_prompt; d = json.load(open('data/eval/t0034_criterion_and_generator_2026-09-15.json'))['k2_outoutput_iki_dalli_olcum']['vaka_detaylari']['temel']; [assert render_prompt(v['soru'], '') == v['prompt_str'] for v in d.values()]; print('Tüm 5 prompt_str assertion başarılı')\"",
+    "identity_control_verification": "./venv/bin/python -c \"import json; ham = json.load(open('scratch/t0036_kosullanma_ham.json')); print({m: all(c['identical'] for c in ham['identity_controls'][m].values()) for m in ['temel', 'marangoz']})\"",
+    "b5_premise_verification": "./venv/bin/python -c \"import json; ham = json.load(open('scratch/t0036_kosullanma_ham.json')); print('Marangoz P1 sha:', ham['b5_premise_verification']['marangoz_p1_sha256'], 'P3 sha:', ham['b5_premise_verification']['marangoz_p3_sha256'], 'Özdeş mi:', ham['b5_premise_verification']['is_bit_identical'])\"",
+    "matched_vs_cross_means": "./venv/bin/python -c \"import json; ham = json.load(open('scratch/t0036_kosullanma_ham.json')); print('Temel matched_mean:', ham['k1_b_metric_self_validation']['temel']['matched_mean'], 'cross_mean:', ham['k1_b_metric_self_validation']['temel']['cross_mean']); print('Marangoz matched_mean:', ham['k1_b_metric_self_validation']['marangoz']['matched_mean'], 'cross_mean:', ham['k1_b_metric_self_validation']['marangoz']['cross_mean'])\"",
+    "probe_execution": "./venv/bin/python scratch/t0036_kosullanma_probe.py",
+    "pytest_suite": "./venv/bin/pytest -q tests/"
+  }
+}

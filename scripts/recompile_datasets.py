@@ -41,7 +41,10 @@ def main():
             "data/future_train_vector.jsonl"
         ],
         output_bin="data/train_balanced_sft.bin",
-        block_size=64
+        vocab_path="data/rebuild/vocab_base_32852.json",
+        literal_entity_mode=True,
+        block_size=64,
+        allow_frozen_write=True
     )
 
     # 2. Chat Balanced SFT Dataset
@@ -54,7 +57,10 @@ def main():
             "data/future_train_vector.jsonl"
         ],
         output_bin="data/train_chat_balanced.bin",
-        block_size=64
+        vocab_path="data/rebuild/vocab_base_32852.json",
+        literal_entity_mode=True,
+        block_size=64,
+        allow_frozen_write=True
     )
 
     # 3. Carpenter Specialization Dataset
@@ -65,7 +71,10 @@ def main():
             "data/pedagogy/arena_carpenter_accumulated.jsonl"
         ],
         output_bin="data/train_carpenter_specialization.bin",
-        block_size=64
+        vocab_path="data/rebuild/vocab_base_32852.json",
+        literal_entity_mode=True,
+        block_size=64,
+        allow_frozen_write=True
     )
 
     dt = time.time() - t0

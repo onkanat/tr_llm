@@ -1,0 +1,47 @@
+{
+  "task_id": "T-0050",
+  "baslik": "F3-0/1: Ortam olcumu (cihaz/disk) + bes checkpoint yedegi (sha ve okunabilirlik kanitli)",
+  "dogrulama_damgasi": "2026-09-16T15:42:00Z",
+  "dogrulayan": "claude (danisman rolu, bagimsiz olcum)",
+  "yonetim": "PASS",
+  "ozet": "F3'un on kosulu tamam: bes yedek de HEM pinlerle HEM canli kaynaklarla BAYT-OZDES (sha'yi kendim hesapladim, yurutucunun beyanina guvenmedim); yedeklerden biri benim kendi torch.load testiyle ACILDI (113 anahtar). Cihaz olcumu (Torch 2.11.0, MPS True/True, CUDA False) benim sandbox DISINDA yaptigim bagimsiz olcumle AYNI. Disk 18 -> 16 GiB (yedek ~2 GB aldi). Iki sayi da sabit (data/*.pt 23, data/*.bin 15). Hash iddialarinin tamami birebir; uydurma yok. Bulgu YOK; iki not: (a) yedekler scratch/ altinda ve scratch korumali degil -> F3-2 oncesi dokunulmamali, (b) disk marji daralıyor (16 GiB; her yeni checkpoint ~0,4 GB).",
+  "kabul_kriterleri": [
+    {"no": "a", "kriter": "OLCUM: cihaz (sandbox disinda, ham cikti)", "durum": "DOGRULANDI + BAGIMSIZ TEKRAR",
+     "olcum": "Rapor: 'TORCH_VER: 2.11.0 MPS_AVAIL: True MPS_BUILT: True CUDA_AVAIL: False'. Ben ayni komutu sandbox DISINDA kosturdum: torch 2.11.0, mps available True, built True, cuda False -> BIREBIR AYNI. (Not: T-0048 smoke'u CPU'da kosmustu; demek ki MPS VAR ama smoke MPS istememis/alamamis. F3 icin gercek kosumda device satiri yine kabul kriteri olmali.)"},
+    {"no": "b", "kriter": "OLCUM: disk once/sonra", "durum": "DOGRULANDI",
+     "olcum": "Rapor: once 18Gi (%96), sonra 16Gi (%97), delta -2 GiB. Ben simdi olctum: 16Gi bos -> tutarli (5 yedek ~2,0 GB). Disk marji: her yeni F3 checkpoint'i ~0,4 GB."},
+    {"no": "c", "kriter": "YEDEK: bes dosya + sha esitligi + pin esitligi", "durum": "DOGRULANDI (BAGIMSIZ SHA)",
+     "olcum": "Ben her yedegin ve her canli kaynagin sha256'sini KENDIM hesapladim; sonuc: besinin de kopya-sha == kaynak-sha == pin. (kristal_model.pt 02e15b81..., step_b1_final 01d7918e..., pre_clean d1f04433..., sft b6764c70..., carpenter 5f0b8c71...). Bu ayni zamanda kaynaklarin gorev boyunca DEGISMEDIGINI de kanitlar."},
+    {"no": "d", "kriter": "OKUNABILIRLIK: torch.load", "durum": "DOGRULANDI (BAGIMSIZ, FARKLI DOSYADA)",
+     "olcum": "Yurutucu kristal_model.pt yedegini test etmis (113 anahtar). Ben CARPENTER yedegini test ettim (kendi secimim): torch.load(map_location='cpu') -> 113 anahtar, embedding.embedding.weight (32137, 768). Iki bagimsiz okuma da basarili -> yedekler bozuk degil."},
+    {"no": "e", "kriter": "KANARYA: hicbir donmus dosya degismedi", "durum": "DOGRULANDI",
+     "olcum": "Bes checkpoint pinlerle AYNI (mtime'lar 13 Eyl). data/*.pt = 23, data/*.bin = 15, scratch/f2_backup = 6, scratch/f3_backup = 5 - raporun sayilariyla birebir. Iki artefakt (53b8406e..., 443f93d3...), vocab.json ve tokenizer.py sabit."},
+    {"no": "f", "kriter": "PENCERE: data/ altinda yazim yok", "durum": "DOGRULANDI (2 degisiklik, IKISI DE RAPOR)",
+     "olcum": "15:27Z-15:36Z taramasi: data/eval/t0050_f3_prep_2026-09-16.json (15:31:54Z, yurutucunun raporu) ve data/eval/t0049_verification.json (15:30:53Z, BENIM T-0049 dogrulama raporum). Yani hicbir donmus veri yazimi yok; pencerede gorunen ikinci dosya benim kendi adimim."},
+    {"no": "g", "kriter": "HASH IDDIALARI (tam digest)", "durum": "DOGRULANDI - uydurma YOK",
+     "olcum": "5 ayri sha256 iddiasi: 5/5 diskle birebir; tek bir 'onek dogru/kuyruk yanlis' vakasi yok. Raporun envanteri ayrica her dosya icin pinned/src/dst uc degeri yan yana veriyor - format denetlenebilir."},
+    {"no": "h", "kriter": "KAPANIS: changed_files == writes[]; mesaj; kiralar", "durum": "DOGRULANDI (OLAY GUNLUGUNDEN)",
+     "olcum": "writes[] 7 = changed_files 7. Olay gunlugu: task_claimed 15:27:33Z, result_reported 15:34:14Z, message_sent 15:34:59Z, lease_released x7 15:35:09Z. (Bu kez hukmu TEK anlik olcumle degil gunlukten verdim - T-0049'daki hatamin duzeltmesi.)"}
+  ],
+  "findings": [
+    {
+      "id": "V1",
+      "siddet": "NOT / ONERI (kusur degil)",
+      "baslik": "Yedekler scratch/ altinda ve scratch korumali degil - F3-2 oncesi dokunulmamali",
+      "olcum": "scratch/f3_backup_2026-09-16/ (5 dosya, ~2,0 GB) F3'ün TEK geri donus yoludur (checkpoint'ler gitignored, atalar kismen kayip). scratch/ ne frozen.json kapsaminda ne de surum kontrolunde; icerigi temizlenirse yedek kaybolur.",
+      "oneri": "F3-2/F3-3 boyunca scratch/ temizligi YAPILMASIN; yedek manifesti (5 yol + sha + damga) zaten bu raporda ve F3 planinda kayitli. Istenirse F3-2 oncesi yedek `data/` disinda KALICI bir dizine tasinabilir (kullanici karari)."
+    },
+    {
+      "id": "V2",
+      "siddet": "NOT (F3 planlamasi)",
+      "baslik": "Disk marji: 16 GiB kaldi (%97 dolu)",
+      "olcum": "Yedek 2 GiB goturdu; her yeni F3 checkpoint'i ~0,4 GB (kristal_model.pt 450 MB). F3-2 iki yeni checkpoint yazacak (~0,9 GB), F3-3 bir tane daha.",
+      "oneri": "F3-2 sonrasi disk yeniden olculsin; F3-3 butcesi bu sayilarla verilsin. Gerekirse pre_clean/sft yedekleri (798 MB) ikincil oncelikli oldugu icin tasinabilir."
+    }
+  ],
+  "kapanis": {
+    "uc_sinyal_kapisi": "mesaj 15:34:59Z ✓ | kiralar 15:35:09Z'de birakildi (7 yol) ✓ | changed_files (7) == writes[] (7) ✓",
+    "sonuc": "T-0050 KABUL (hukum: PASS). F3'un on kosulu tamam: yedekler bayt-ozdes ve okunabilir, cihaz MPS'li, disk marji biliniyor. F3-2 (kisa olcum kosumu) icin engel kalmadi.",
+    "sonraki_adim": "F3-2: sft_v2 -> chat_balanced iki asamali KISA kosum (100 adim/asama), YENI adlarla (data/kristal_model_f3a.pt, data/kristal_model_f3b.pt), --allow-frozen-write ile; kapilar: device satiri, adim suresi, teacher-forcing kaybi, noktalama uretimi 0 -> >0."
+  }
+}

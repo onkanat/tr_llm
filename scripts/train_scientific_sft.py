@@ -9,21 +9,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from src.llm.tokenizer import Vocabulary
 from scripts.train_step_demo import KristalDataset, KristalLM
-
-def resize_state_dict(model, old_state_dict):
-    """Resizes model embedding and linear heads to match the new vocabulary size."""
-    new_state_dict = model.state_dict()
-    for k, v in old_state_dict.items():
-        if k in new_state_dict:
-            if v.shape != new_state_dict[k].shape:
-                print(f"Resizing weights for: {k} (Old: {list(v.shape)}, New: {list(new_state_dict[k].shape)})")
-                if len(v.shape) == 2:
-                    new_state_dict[k][:v.shape[0], :v.shape[1]] = v
-                elif len(v.shape) == 1:
-                    new_state_dict[k][:v.shape[0]] = v
-            else:
-                new_state_dict[k] = v
-    return new_state_dict
+from src.llm.prompt_contract import resize_state_dict
 
 def main():
     print("=" * 60)
@@ -49,12 +35,12 @@ def main():
 
     # 2. Vocabulary & Dataset Setup
     vocab = Vocabulary()
-    vocab_path = 'data/vocab.json'
+    vocab_path = 'data/rebuild/vocab_base_32852.json'
     vocab.load(vocab_path)
     vocab_size = len(vocab.stoi)
     print(f"Sözlük Yüklendi. Kelime dağarcığı boyutu: {vocab_size}")
 
-    train_bin_path = 'data/train_balanced_sft.bin'
+    train_bin_path = 'data/train_balanced_sft_v2.bin'
     if not os.path.exists(train_bin_path):
         print(f"Hata: {train_bin_path} bulunamadı! Lütfen önce prepare_balanced_sft_dataset.py betiğini çalıştırın.")
         return

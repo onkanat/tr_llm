@@ -1,0 +1,269 @@
+{
+ "task_id": "T-0036",
+ "baslik": "Y3: 'Cikti istemle ilgili' olcutunu makineyle olculebilir hale getir — BAGIMSIZ DOGRULAMA",
+ "dogrulayan": "claude (danisman rolu)",
+ "durum": "PASS_WITH_FINDINGS",
+ "yazim_damgasi_utc": "2026-09-15T19:58:25Z",
+ "kapsam": "T-0036'nin 12 kabul kriterinin tamami; yurutucunun iddia ettigi her sayi MPS ile yeniden uretildi (uretim katmani), metrik YAZILI TANIMDAN sifirdan yazilarak yeniden hesaplandi, ve yurutucunun probe'u IMPORT EDILMEDI.",
+ "kapanis_kapisi": {
+  "sinyal_1_mesaj": {
+   "dosya": ".agent-bus/state/inbox/claude/2026-09-15T19-45-14Z-antigravity.json",
+   "sent": "2026-09-15T19:45:14Z",
+   "subject": "T-0036 tamamlandi: Istem kosullanma olcutu raporlandi",
+   "farkli_ISO_damgasi": true
+  },
+  "sinyal_2_kira": {
+   "aktif_kira_sayisi": 0,
+   "olcum": "bus_lease_status() — bos"
+  },
+  "sinyal_3_changed_files": {
+   "beyan": [
+    "data/eval/t0036_kosullanma_olcutu_2026-09-15.json",
+    "scratch/t0036_kosullanma_probe.py",
+    "scratch/t0036_kosullanma_ham.json"
+   ],
+   "tam_kapsam": true
+  },
+  "ucu_birlikte_saglandi": true,
+  "idempotans": "data/eval/t0036_verification.json bu yazimdan ONCE diskte YOKTU (yazim aninda olusturuldu)."
+ },
+ "bagimsizlik_beyani": [
+  "Uretim: scripts/run_experiment_c.py:generate mantigi (greedy argmax, masked_tags yasak listesi AST ile DISKTEN okundu, isaret-farkindalikli tekrar cezasi, 256 token baglam siniri) birebir yeniden yazildi; yurutucunun probe'u import edilmedi.",
+  "Metrik: raporun k1_metrik_tasarimi.metrik_tanimi.formuller alanindaki YAZILI formulden sifirdan yazildi; probe'un kodundan kopyalanmadi. Yazili tanim ile kod celisseydi bu bir bulgu olurdu — celismedi.",
+  "Istemler: T-0034 raporu DISKTEN okundu (sha256 c7a2ef88...), render_prompt(soru,'') ile 5/5 assert edildi.",
+  "Kosum: SANDBOX DISINDA, device=mps (metadata.device=mps ile uyumlu).",
+  "Ekleme ekseni (raporda YOK): kanarya/pozitif kontrol — metrigin dinamik araligi oldugu gosterildi (kopya -> 1.0, bos -> 0.0, alakasiz -> 0.0).",
+  "Ekleme ekseni (raporda YOK): AUC (rank tabanli ayirt etme gucu) ve n_p (model basina istem koku sayisi) asimetrisi."
+ ],
+ "sha_atiflari_mesaj_vs_disk": {
+  "aciklama": "Mesajdaki 3 sha256, YAZIM ANINDA diskten yeniden hesaplandi (kalici yuzeye bayat hash tablosu konmasi V5 dersinin tekrari olurdu).",
+  "data/eval/t0036_kosullanma_olcutu_2026-09-15.json": {
+   "beyan": "e6c1bec112f306f0bccf0b827f333737b5b19f74ab7bc52e0214f3284fb3b8cb",
+   "disk": "e6c1bec112f306f0bccf0b827f333737b5b19f74ab7bc52e0214f3284fb3b8cb",
+   "uyum": true
+  },
+  "scratch/t0036_kosullanma_ham.json": {
+   "beyan": "39c2e29293b7b7155bd771b95c4c8b1da4eaf03fce2297f4449152371418a0cd",
+   "disk": "39c2e29293b7b7155bd771b95c4c8b1da4eaf03fce2297f4449152371418a0cd",
+   "uyum": true
+  },
+  "scratch/t0036_kosullanma_probe.py": {
+   "beyan": "88e48377503ef4eaf88a1c54774ee94cc255cdc4bb091df918a5997ceaa95eb4",
+   "disk": "88e48377503ef4eaf88a1c54774ee94cc255cdc4bb091df918a5997ceaa95eb4",
+   "uyum": true
+  },
+  "sonuc": "3/3 UYUM — T-0035 V5'in tekrari YOK."
+ },
+ "kabul_kriterleri": [
+  {
+   "no": 1,
+   "kriter": "Olcut once dogrulanmis: eslesmis/capraz ayrisma sayiyla gosterilmis; ayrisma yoksa VAKUM ilani",
+   "hukum": "TAM",
+   "kanit": "Eslesmis ort. temel 0.2103 / capraz 0.0077 (ayrisma 27.31x), marangoz 0.0667 / 0.0160 (4.17x); metrik_vakum=false (her iki model). Bagimsiz olarak AYNI sayilar uretildi. Raporda olmayan iki ek olcum eklendi: AUC temel 0.79 / marangoz 0.66 ve kanarya (kopya->1.0, bos cikti->0.0, alakasiz->0.0, ayni kok farkli istem->0.0769). Yani metrik VAKUM DEGIL."
+  },
+  {
+   "no": 2,
+   "kriter": "Esik kontrol dagilimindan TURETILMIS, elle secilmemis",
+   "hukum": "TAM",
+   "kanit": "Iki esik de max(cross)+0.05 kuralindan: temel 0.1538+0.05=0.2038, marangoz 0.1667+0.05=0.2167; kural RAPORA yazilmis (esik_turetme_kurali). Bagimsiz yeniden hesaplandi: birebir. Dayaniklilik: 0.20 / 0.2167 / 0.25 esiklerinin UCUNDE de temel 2/5, marangoz 0/5 — hukum esige duyarli DEGIL."
+  },
+  {
+   "no": 3,
+   "kriter": "Kimlik kontrolu: ayni istem iki kez -> BIT-OZDES",
+   "hukum": "TAM",
+   "kanit": "Kendi iki ardisik greedy kosumum her iki modelde 5/5 bit-ozdes (determinizm tam). Rapor identity_controls.identical=5/5 ile uyumlu."
+  },
+  {
+   "no": 4,
+   "kriter": "Istem duyarliligi: kac cift bit-ozdes; sayi T-0034'un kaydettigi sha256'larla karsilastirilarak dogrulanmis",
+   "hukum": "KISMI",
+   "kanit": "Birinci yari TAM: temel 0/10, marangoz 1/10 (P1_Genel_Edebiyat <-> P3_Rakam) — KENDI uretimimden bagimsiz olarak ayni sonuc. Ikinci yari EKSIK: yurutucu karsilastirmayi KAYNAK dosyadaki (temel_marangoz_ikili_test_2026-09-15.json, sha256 e49e67fb...) 'vakalar.marangoz.P1_Genel_Edebiyat.determinizm.sha256_token_idleri' alanina karsi yapti; T-0034'un kaydettigi sha256'ya karsi YAPMADI ve raporda bunun gerekcesi YOK. Olculdu: T-0034 dal_a.sha256 = a75b44ab1394... iken ayni 15 token id icin T-0036/source sha = f52117374b92... — FARK KONVANSIYONDAN (T-0034 json.dumps, T-0036 virgullu birlestirme), token dizisi BIT-OZDES. Yani spec'in harfiyen istedigi karsilastirma YAPILSAYDI YANLIS NEGATIF verirdi (bkz. F1). Maddi olarak hicbir sayi yanlis degil: token duzeyinde T-0034 dal_a ile 15/15 ozdeslik saglandi."
+  },
+  {
+   "no": 5,
+   "kriter": "Istem metinleri ELLE YAZILMAMIS: prompt_str okunmus ve assert edilmis",
+   "hukum": "TAM",
+   "kanit": "5/5 assert gecti; ben de T-0034'u diskten okuyup (sha256 c7a2ef886984e2d328c6baec5aeed937d721b8ac91f9aa0790ee11824cdb874a) kendi zarfimi yeniden urettim: 5/5 ozdes (zarf uzunluklari 120/152/151/164/113). Elle yazim kaynakli sahte fark (T-0034 N5) olusmadi."
+  },
+  {
+   "no": 6,
+   "kriter": "Metrik HER IKI modele uygulanmis, yan yana; 'ceket konu cekicisi' teshisi sayiyla yeniden uretilmis/curutulmus",
+   "hukum": "TAM",
+   "kanit": "Yan yana verilmis; her skor bagimsiz olarak birebir yeniden uretildi (temel [0.1667, 0.0, 0.0, 0.3846, 0.5]; marangoz [0.1667, 0.0, 0.0, 0.0, 0.1667]). Teshis sayiyla URETILDI, curutulmedi: marangoz 0/5, ort. 0.0667 ~ capraz 0.0160, ve capraz tavan (0.1667) eslesmis tavana (0.1667) TAM ESIT. AYRICA bkz. F3: iki modelin skoru birebir kiyaslanamaz cunku len(C_P) modele gore degisiyor (temel 55, marangoz 44)."
+  },
+  {
+   "no": 7,
+   "kriter": "max_tokens=128 kullanilmis; 64 KULLANILMAMIS; kullanildiysa gerekcesi ve iki deger ayri yazilmis",
+   "hukum": "TAM",
+   "kanit": "metadata.max_tokens_primary=128, max_tokens_secondary_comparison=64 + gerekce (kanonik cagri yerleri). 128 kosumu bagimsiz yeniden uretildi: temel n=64/37/94/32/32 (hepsi EOS ile durdu), marangoz 15/45/15/44/29 (hepsi EOS). 64 kosumu da yeniden uretildi: temel 4/5 ayni, YALNIZ P3 farkli (64 tavan vs 94 dogal EOS) — raporun temel_max_tokens_farki alaniyla tutarli; marangoz 5/5 ayni. T-0034 V1 hatasi TEKRARLANMAMIS."
+  },
+  {
+   "no": 8,
+   "kriter": "KARAR VERILMEMIS: karar_yuzeyi yazilmis; D-E.kabul[0] metni DEGISTIRILMEMIS",
+   "hukum": "TAM",
+   "kanit": "karar_yuzeyi SECENEK_A/B/C olarak tarafsiz yazilmis, olcut_girisi_uygun_mu=true, onerilen_esik=0.2 ve dayanagi yazili; hicbir secenek 'secildi' denmemis. T-0034 rapor dosyasi pencerede DEGISMEDI (sha256 c7a2ef88..., mtime 18:01:42Z < T-0036 acilisi 18:27:17Z)."
+  },
+  {
+   "no": 9,
+   "kriter": "pytest -q tests/ sandbox disinda yesil, >=144; device alani raporda",
+   "hukum": "TAM",
+   "kanit": "Bagimsiz kosum (sandbox DISI): './venv/bin/pytest -q tests/' -> '144 passed in 6.91s' (yurutucu: 144 passed in 8.77s). metadata.device=mps, torch_version=2.11.0, python_version=3.14.6 — venv ile uyumlu (T-0035 V9 kapandi)."
+  },
+  {
+   "no": 10,
+   "kriter": "Once/sonra hash kaniti: cot_vault + future_train_vector AYNI (sha256+satir), damgalar ISO",
+   "hukum": "TAM",
+   "kanit": "Benim pytest kosumumun ONCESINDE ve SONRASINDA: data/pedagogy/cot_vault.jsonl sha256 97b06fe5befd6613b520d28dc20a74deaeb30e4e8f7e6675a23720a019ff5619 / 91 satir (mtime 2026-09-15T07:37:37Z sabit); data/future_train_vector.jsonl sha256 e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 / 0 satir (mtime 2026-09-13T07:09:18Z sabit). Raporun invariance.identical=true alaniyla uyumlu. 'Kabul kosusu olctugu artefakti degistirir' sinifi bu turda GORULMEDI."
+  },
+  {
+   "no": 11,
+   "kriter": "Her sayinin yaninda TAM komut; '...' ile kisaltilmamis; kalici yuzeye hash tablosu KONMAMIS",
+   "hukum": "TAM",
+   "kanit": "commands_directory 8 girdi; hicbirinde '...' YOK (tarandi). prompt_contract_assertions bir hash TABLOSU tasimiyor (yalniz soru + zarf + assert bayragi). Mesajdaki 3 hash GONDERIM ANINDA uretilmis ve 3/3 UYUM."
+  },
+  {
+   "no": 12,
+   "kriter": "git add -A/. YOK, commit/push YOK; pencerede degisen yollar writes[] DISINDA degil",
+   "hukum": "TAM",
+   "kanit": "HEAD hala 9e1c1dfa588ca243ee49130080598afd6f2905c7 (T-0036 penceresinde yeni commit YOK). Pencere taramasi git porcelain ile DEGIL, Python os.walk + st_mtime (UTC) ile yapildi (V5 dersi: porcelain gitignored scratch/'i goremez). Pencere 2026-09-15T19:23:13Z -> 19:44:31Z: degisen 5 dosya; 3'u writes[] ICINDE; DISINDA kalan 2'si BENIM kendi yazimlarim: data/eval/t0035_verification.json (T-0035 dogrulamam, kendi kiram altinda) ve .agent-bus/state/inbox/antigravity/2026-09-15T19-38-09Z-claude.json (benim bus_send mesajim). Yurutucuye atfedilebilir kapsam disi yazim: 0."
+  }
+ ],
+ "dogrulanan_iddialar": {
+  "metrik_skorlari_birebir": {
+   "temel": {
+    "matched": [
+     0.1667,
+     0.0,
+     0.0,
+     0.3846,
+     0.5
+    ],
+    "matched_mean": 0.2103,
+    "cross_mean": 0.0077,
+    "cross_max": 0.1538,
+    "derived_threshold": 0.2038,
+    "matched_above": 2,
+    "ayrisma_faktoru": 27.31,
+    "AUC": 0.79
+   },
+   "marangoz": {
+    "matched": [
+     0.1667,
+     0.0,
+     0.0,
+     0.0,
+     0.1667
+    ],
+    "matched_mean": 0.0667,
+    "cross_mean": 0.016,
+    "cross_max": 0.1667,
+    "derived_threshold": 0.2167,
+    "matched_above": 0,
+    "AUC": 0.66,
+    "eslesmis_max_esittir_capraz_max": true
+   },
+   "sonuc": "Butun sayilar bagimsiz olarak birebir uretildi; sapma 0."
+  },
+  "uretim_birebir": {
+   "temel_n128_tokens": [
+    64,
+    37,
+    94,
+    32,
+    32
+   ],
+   "marangoz_n128_tokens": [
+    15,
+    45,
+    15,
+    44,
+    29
+   ],
+   "determinizm": "5/5 her iki model",
+   "ids_rapor_ile_ayni": "5/5 her iki model",
+   "metin_rapor_ile_ayni": "5/5 her iki model",
+   "64_vs_128": "temel 4/5 (P3 farkli), marangoz 5/5"
+  },
+  "B5_onculu_DOGRULANDI": {
+   "iddia": "marangoz P1 ve P3 BIT-OZDES 15 tokenlik ayni cikti (sha f52117374b92)",
+   "olcum": "Kendi uretimimde marangoz P1 ve P3 sha256 (virgullu birlestirme) = f52117374b9225d48635f833f672f2797a2cbc800fe29c0f3de81ec64d0e144c — ESIT. Referans sha KAYNAK dosyada 'vakalar.marangoz.{P1_Genel_Edebiyat,P3_Rakam}.determinizm.sha256_token_idleri' alaninda birebir bulundu.",
+   "T0034_ile_token_duzeyi_karsilastirma": "T-0034 k2...vaka_detaylari[model][istem].dal_a.token_ids alanlari ile kendi uretimim karsilastirildi: marangoz 5/5, temel 4/5 (P3: T-0034 64 = tavan kesmesi, benim 128 kosumum 94 = dogal EOS) OZDES."
+  },
+  "kanarya_metrik_vakum_degil": {
+   "KOPYA_5_istem": "score=1.0 (5/5)",
+   "BOS_cikti": "score=0.0, bos=True",
+   "ALAKASIZ_metin": "score=0.0",
+   "AYNI_KOK_FARKLI_ISTEM": "score=0.0769"
+  },
+  "n_p_model_asimetrisi_OLCULDU": {
+   "temel": [
+    6,
+    13,
+    17,
+    13,
+    6
+   ],
+   "toplam_temel": 55,
+   "marangoz": [
+    6,
+    11,
+    8,
+    13,
+    6
+   ],
+   "toplam_marangoz": 44,
+   "P3_ayrimi": "temel 17 vs marangoz 8; fark TAMAMEN rakamlardan: temel icerik kokleri ['1','9','7','3','4','5','8','1','2'] iceriyor, marangoz vocab_carpenter_32137.json'da rakam id'si olmadigi icin bu 9 kok <UNK>'a gidip filtreleniyor.",
+   "anlami": "recall'in paydasi len(C_P) modele gore degisiyor -> iki modelin skoru BIREBIR kiyaslanamaz (bkz. F3).",
+   "kaynak": "kendi tokenizer kosumum (data/rebuild/vocab_base_32816.json ve data/rebuild/vocab_carpenter_32137.json), 5 istem icin icerik koku sayimi"
+  }
+ },
+ "bulgular": [
+  {
+   "id": "F1",
+   "siddet": "ORTA",
+   "baslik": "Hash konvansiyonu beyan edilmemis: ayni token dizisi iki raporda iki farkli sha256 tasiyor; kabul[4]'un beyan edilen karsilastirma hedefi T-0034'te DEGIL",
+   "olcum": "T-0034 dal_a: 15 token id, sha256 = a75b44ab1394682eb4e9072fe103e47f917424bfa47459ac14e7a64124a1108a. AYNI 15 token id, T-0036/source: sha256 = f52117374b9225d48635f833f672f2797a2cbc800fe29c0f3de81ec64d0e144c. T-0034 konvansiyonu json.dumps(ids), T-0036 konvansiyonu ','.join(map(str,ids)) — ikisi de gecerli, ikisi de dogru, ama birbirleriyle KIYASLANAMAZ. Ayrica alan adi uc yerde uc farkli: 'sha256' (T-0034), 'sha256_token_ids' (T-0036 ham), 'sha256_token_idleri' (kaynak dosya).",
+   "etki": "Spec'in (kabul[4]) harfiyen istedigi 'T-0034'un kaydettigi sha256'larla karsilastir' adimi YAPILSAYDI, cikti bit-ozdes oldugu halde YANLIS NEGATIF uretirdi. Yurutucu kaynak dosyaya kiyaslayarak dogru sonuca ulasmis, ama NEDEN T-0034 ile kiyaslamadigini yazmamis. Kusurun bir kismi SPEC'TE (benim yazdigim kabul[4]). Maddi hata YOK: token duzeyinde 15/15 ozdeslik dogrulandi.",
+   "onerilen": "Rapor/olcum metadata'sina kullanilan hash konvansiyonu ACIKCA yazilsin (orn. 'sha256_konvansiyonu: virgullu_token_id_birlesimi_utf8'); projede TEK alan adi kullanilsin; bir sha kiyaslamasi yapilirken konvansiyon esitligi once assert edilsin."
+  },
+  {
+   "id": "F2",
+   "siddet": "ORTA",
+   "baslik": "Tamamlanma mesajinin sapma listesi eksik: 3/5 saparken 2/5 sayilmis",
+   "olcum": "Mesaj metni (birebir): '... 2/5 vaka (P4: 0.3846, P5: 0.5000) esigi gecerken, P2 ve P3 sapma gostermistir.' Oysa esik 0.2038 ve P1_Genel_Edebiyat skoru 0.1667 < 0.2038 — P1 de sapmaktadir. Dogru ifade: 2/5 gecer (P4, P5), 3/5 sapar (P1, P2, P3).",
+   "etki": "Raporun MAKINE OKUNUR alanlari TUTARLI (matched_scores [0.1667,0.0,0.0,0.3846,0.5], matched_above_threshold 2); yalnizca mesajin insan-okur sayimi eksik. Ayni sinif hata T-0035'te raporun kendi icinde cikmisti; bu turda mesaj-rapor arasinda cikti. Karari degistirmez ama 'sapan vaka' listesi eksik kalirsa bir sonraki tur yanlis onek alir.",
+   "onerilen": "Liste halinde vaka sayan her cumle, makine okunur alandan PROGRAMATIK uretilsin (elle sayilmasin)."
+  },
+  {
+   "id": "F3",
+   "siddet": "ORTA",
+   "baslik": "Metrigin paydasi (len(C_P)) MODELE GORE degisiyor; iki modelin skoru birebir kiyaslanamaz ve bu raporda olculmemis",
+   "olcum": "Ayni 5 istem icin istem icerik koku sayisi: temel 55 (P1..P5 = 6,13,17,13,6), marangoz 44 (6,11,8,13,6). P3_Rakam'da temel 17 iken marangoz 8; fark tamamen rakamlardan (temel ['1','9','7','3','4','5','8','1','2'] koklerini tutuyor; vocab_carpenter_32137.json'da rakam id'si YOK, bu kokler <UNK>'a gidip suzuluyor).",
+   "etki": "Recall = ortak/payda oldugu icin ayni cikti temel'de daha buyuk paydaya bolunuyor; marangoz icin P3 skoru yapisal olarak daha 'kolay' bir tabanda olculuyor. Bu asimetri RAPORDA HIC ANILMAMIS ve n_p hicbir yerde verilmemis. Neyse ki SONUCU degistirmiyor: ortak esik 0.2167 (veya 0.20 / 0.25) altinda da temel 2/5, marangoz 0/5.",
+   "onerilen": "Rapor n_p'yi istem x model kiriliminda yazsin; ya da payda ortak bir vocabulary'ye sabitlensin (iki vocab'in kesisimi) ki taban/ceket kiyasi elma-elmaya olsun. Esik turetme zaten model-ici kaldigi icin esik mekanizmasi bundan etkilenmiyor."
+  },
+  {
+   "id": "F4",
+   "siddet": "DUSUK",
+   "baslik": "'ayrisma_faktoru' yalnizca temel icin uretilmis (27.31); marangoz icin alan HIC YOK — ve ortalamalar orani, rank tabanli AUC'dan cok daha parlak gorunuyor",
+   "olcum": "k1_b...b_istem_ilgisi_kendini_dogrulama['temel']['ayrisma_faktoru'] = 27.31 (= 0.2103/0.0077). Ayni alan marangoz sozlugunde YOK (0.0667/0.0160 = 4.17 olurdu). Bagimsiz AUC: temel 0.79, marangoz 0.66; marangoz'da eslesmis_max == capraz_max (0.1667) TAM ESIT.",
+   "etki": "Makine okunur alanlari suzen bir okuyucu 'ayrisma 27.31' gorur ve marangoz icin hicbir sey gormez; oysa ayrisimin ZAYIF oldugu model tam da marangoz. Rapor bunu NESİR olarak (teshis alani) durustce yazmis — gizleme yok, ama alan asimetrisi var. Ayrica oran 27.31x, gercek ayirt etme gucunu (AUC 0.79) abartili gosterir.",
+   "onerilen": "Alan her iki model icin uretilsin; yanina rank tabanli bir olcum (AUC veya permutasyon p) konsun; metrik_vakum kurali ortalamalar oranina ek olarak AUC esigi de kapsasin (orn. AUC > 0.5 + pay)."
+  },
+  {
+   "id": "F5",
+   "siddet": "DUSUK",
+   "baslik": "Metrigin vakum olmadigi yalnizca populasyon istatistigiyle savunulmus; pozitif/negatif kontrol (kanarya) yok",
+   "olcum": "Ben ekledim: metrige BIREBIR KOPYA verilince 5/5 istemde score=1.0; bos cikti 0.0 (bos bayragiyla); alakasiz metin 0.0; ayni kokleri paylasan farkli iki istem 0.0769. Yurutucunun raporunda bu eksen YOK.",
+   "etki": "'metrik_vakum: false' hukmu tek bir kurala (matched_mean <= cross_mean) dayaniyor; bu kural, metrigin ust sinirinin gercekten 1.0 oldugunu ve boş/alakasiz girdide coktugunu KANITLAMAZ. Benim kanaryam metrigin dinamik araligi oldugunu gosterdi — sonucu GUCLENDIRDI, curutmedi.",
+   "onerilen": "Metrik tasarimini isteyen sonraki gorevlerde kanarya (kopya->1.0, bos->0.0, alakasiz->0.0) ZORUNLU kabul kriteri olsun; vakum ilani bu uclu noktaya birlikte dayansin."
+  }
+ ],
+ "kapsam_sinirlari": [
+  "Dogal dil 'ilgililik' yargisi bu metrikle tam olculmez; metrik SOZLUKSEL kok ortusmesini olcer. Ornegin marangozun 'teknik rapor' sablonu istemle ortak kok tasimadigi icin 0 alir; insan gozuyle 'konuyla ilgisiz' hukmu ile ayni yone bakar ama ayni sey DEGILDIR.",
+  "5 istem kucuk bir ornektir (C(5,2)=10 cift); AUC ve esik dayaniklilik testi bu buyuklukte kesinlik iddia etmez, yalnizca hukum DEGISMEDI der.",
+  "Pencere taramasi 420 dosya uzerinde yapildi; SKIP listesi (.git, venv, node_modules, __pycache__, .mypy_cache, .pytest_cache) disinda kalan her sey tarandi. .agent-bus/state/ kapsamda tutuldu.",
+  "Bu dogrulama MPS uretimini yeniden kosturur; donmus checkpoint'ler (.pt) ve vocab'lar salt-okunur kaldi, hicbir yeni .pt/.bin uretilmedi."
+ ],
+ "durustluk_notu": "Bu turda da YANILAN TARAF BEN OLDUM: ilk okumamda 'T-0034'un vaka_detaylari sha alani TASIMIYOR, kabul[4]'un hedefi yok' diye not etmistim. Ham anahtar listesini yazdirinca curudu — sha256 alani VAR, yalnizca dal_a/dal_b ICINDE gomulu. Ayni sekilde kendi pencereme 'probe kosum damgasi' araligini dar aldigimda (19:35:56 -> 19:36:42, ISO saniye hassasiyetinde) ham dosyanin 19:36:42.185463 damgasi pencerenin DISINDA kalip 'pencerede degisim yok' gibi gorundu; olcum ISO DAMGASINI SANIYEYE YUVARLAKTAN sonra karsilastirmaktan dogan bir artefaktti, yurutucuye ait bir kusur DEGIL. Gecerli pencere sahiplenme->bitis (19:23:13 -> 19:44:31) alindi. Ucuncu kez de kendi paydami denetlemek zorunda kaldim: 'metrik vakum mu' hukmunu verirken once KENDI koku cikarma fonksiyonumun rapordaki yazili tanimla ayni oldugunu dogruladim; skorlar birebir tuttu, yani tanim ortakti."
+}

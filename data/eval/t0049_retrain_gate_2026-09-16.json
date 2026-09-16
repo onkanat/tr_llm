@@ -1,0 +1,102 @@
+{
+  "task_id": "T-0049",
+  "status": "PASS",
+  "date": "2026-09-16",
+  "writes": [
+    "scripts/retrain_clean_models.py",
+    "src/llm/frozen_guard.py",
+    "tests/test_compiler_entrypoints.py",
+    "data/eval/t0049_retrain_gate_2026-09-16.json",
+    ".agent-bus/notes/T-0049.md"
+  ],
+  "changed_files": [
+    "scripts/retrain_clean_models.py",
+    "src/llm/frozen_guard.py",
+    "tests/test_compiler_entrypoints.py",
+    "data/eval/t0049_retrain_gate_2026-09-16.json",
+    ".agent-bus/notes/T-0049.md"
+  ],
+  "pre_conditions": {
+    "data/kristal_model.pt": "02e15b8198f8f3334609eb52691d699e80f88972245377c1a79772cb42ae1679",
+    "data/kristal_model_pre_clean.pt": "d1f04433d81b5691f310bca691baf50f90be0527701c4b757460e5c1b368dcac",
+    "data/kristal_model_sft.pt": "b6764c7062ce627a0ba9437cf052a28d0ac4e2e4cf3b3df3e3110d05a1ba2957",
+    "data/kristal_carpenter_model.pt": "5f0b8c71727d15e338e4301634b0d05652c3230cebc532b1124aff3761e93b4d",
+    "data/train_balanced_sft_v2.bin": "53b8406eee7e98d8339cd047a18a281b7a355ca5ba1891137701890dc322402c",
+    "data/train_balanced_sft.bin": "55863e36b62414c6ada30956b30dc64a5254fe0717582384d43abd5d9cf46a24",
+    "data/train_chat_balanced.bin": "443f93d352b07defca91b2a620f2e4154c3ed0b14f7c695535c959209e7608fa",
+    "data/vocab.json": "4b40eebee9c996c8dd3150f6b3c8896de85764ee1cf0b08e6c636e5c002a0e69",
+    "src/llm/tokenizer.py": "560a3bfbf32c394a23559c9d3645cfbc3b554223a032156924749dcfa896a7af",
+    "scratch/f2_backup_2026-09-16/": "6 dosya saglam",
+    "counts": {
+      "data/*.pt": 23,
+      "data/*.bin": 15
+    }
+  },
+  "code_changes": {
+    "src/llm/frozen_guard.py": {
+      "sha256_before": "38672ec7ac6a5d29c32ce439494245855b9df8b0353a41bcc94c6fbe41d3a617",
+      "sha256_after": "75b3bf6e4384bc808230fb6b8f06c3187c93d78a45d742a4fb75f85f9ac3097b",
+      "diff": "check_frozen_save_path(path: str, allow_frozen_write: bool = False, frozen_file: str = DEFAULT_FROZEN_FILE) -> None kanonik yardimcisi eklendi; fail-closed ve tip ipuclari tam."
+    },
+    "scripts/retrain_clean_models.py": {
+      "sha256_before": "22a27b7869f01699f1d55f457227882544f6068f25a00c995327f1fb7dd78baf",
+      "sha256_after": "7da0833c081c4646c2a8d7d6c1dc6a4b2775b0685fcda0b72f5a035d9df4d5b6",
+      "diff": "from src.llm.frozen_guard import check_frozen_save_path eklendi; allow_frozen_write = '--allow-frozen-write' in sys.argv tanimlandi; :59 (pre_clean) ve :106 (sft) copyfile cagrilarindan hemen once check_frozen_save_path guard'i yerlestirildi; 5 egitim run_cmd cagrisindan hemen once save-path korumalari ve kosullu --allow-frozen-write arguman aktarimi eklendi."
+    },
+    "tests/test_compiler_entrypoints.py": {
+      "sha256_before": "57cc3681a61aad63286f0633d6a8d243caefa2e41d7855f834cf91eedba29b9b",
+      "sha256_after": "96f214dc986f716f06be2b134d1155b6555c84cebd62395534291085065954cf",
+      "diff": "test_check_frozen_save_path_gate fonksiyonuna check_frozen_save_path_canonical eklendi; test_ast_retrain_clean_models_has_frozen_guards (2 copyfile oncesi guard ve hedef eslesmesi, 5 run_cmd oncesi guard ve sira iddiasi, 5 kosullu --allow-frozen-write ekleme varligi) eklendi."
+    }
+  },
+  "gate_verifications": {
+    "canonical_guard": {
+      "status": "DOGRULANDI",
+      "type": "KOSUM",
+      "evidence": "src/llm/frozen_guard.py icindeki kanonik check_frozen_save_path uzerinde uc durumlu test kosuldu: donmus+False RuntimeError('Donmuş yola yazma engellendi'), donmus+True hatasiz gecis, scratch/test_model.pt hatasiz gecis."
+    },
+    "kapi_a_copyfile_guards": {
+      "status": "DOGRULANDI",
+      "type": "STATIK",
+      "evidence": "scripts/retrain_clean_models.py icindeki her iki copyfile cagrisindan (:59 data/kristal_model_pre_clean.pt ve :106 data/kristal_model_sft.pt) hemen once check_frozen_save_path cagrildigi ve hedeflerin eslestigi AST ile dogrulandi."
+    },
+    "kapi_b_training_guards_and_order": {
+      "status": "DOGRULANDI",
+      "type": "STATIK",
+      "evidence": "scripts/retrain_clean_models.py icindeki 5 egitim run_cmd cagrisinin (Stage 1, 2, 3, 4, 5) her birinden hemen once check_frozen_save_path cagirildigi ve sira denetimi AST ile dogrulandi."
+    },
+    "kapi_c_flag_propagation": {
+      "status": "DOGRULANDI",
+      "type": "STATIK",
+      "evidence": "--allow-frozen-write CLI bayragi tanimlandi (default False) ve onay verildiginde 5 alt surece kosullu olarak '--allow-frozen-write' eklendigi AST ile dogrulandi (append_count == 5)."
+    },
+    "mutant_1_static": {
+      "status": "DOGRULANDI",
+      "type": "STATIK",
+      "procedure": "scripts/retrain_clean_models.py :59 copyfile guard'i yorum satiri yapildi -> test_ast_retrain_clean_models_has_frozen_guards 'AssertionError: İlk copyfile öncesinde çağrı yok' vererek KIRMIZI oldu. Dosya yedekten geri konuldu -> YEŞİL. Geri yukleme sha256 ozdesligi dogrulandi."
+    },
+    "mutant_2_static": {
+      "status": "DOGRULANDI",
+      "type": "STATIK",
+      "procedure": "Stage 1 egitim guard'i run_cmd sonrasina tasindi -> test_ast_retrain_clean_models_has_frozen_guards 'AssertionError: run_cmd (satır 82) öncesinde check_frozen_save_path yok! Önceki: shutil.copyfile' vererek KIRMIZI oldu. Dosya yedekten geri konuldu -> YEŞİL. Geri yukleme sha256 ozdesligi dogrulandi."
+    },
+    "no_execution_proof": {
+      "status": "DOGRULANDI",
+      "type": "KOSUM",
+      "evidence": "scripts/retrain_clean_models.py main() kesinlikle calistirilmamistir. data/ altinda degisen dosya sayisi 0 (eval raporu haric). data/*.pt (23) ve data/*.bin (15) sayilari sabit."
+    }
+  },
+  "post_conditions": {
+    "data/kristal_model.pt": "02e15b8198f8f3334609eb52691d699e80f88972245377c1a79772cb42ae1679",
+    "data/kristal_model_pre_clean.pt": "d1f04433d81b5691f310bca691baf50f90be0527701c4b757460e5c1b368dcac",
+    "data/kristal_model_sft.pt": "b6764c7062ce627a0ba9437cf052a28d0ac4e2e4cf3b3df3e3110d05a1ba2957",
+    "data/kristal_carpenter_model.pt": "5f0b8c71727d15e338e4301634b0d05652c3230cebc532b1124aff3761e93b4d",
+    "data/train_balanced_sft_v2.bin": "53b8406eee7e98d8339cd047a18a281b7a355ca5ba1891137701890dc322402c",
+    "data/train_balanced_sft.bin": "55863e36b62414c6ada30956b30dc64a5254fe0717582384d43abd5d9cf46a24",
+    "data/train_chat_balanced.bin": "443f93d352b07defca91b2a620f2e4154c3ed0b14f7c695535c959209e7608fa",
+    "data/vocab.json": "4b40eebee9c996c8dd3150f6b3c8896de85764ee1cf0b08e6c636e5c002a0e69",
+    "src/llm/tokenizer.py": "560a3bfbf32c394a23559c9d3645cfbc3b554223a032156924749dcfa896a7af",
+    "scratch/f2_backup_2026-09-16/": "6 dosya saglam",
+    "pytest_full_suite": "191 passed in 10.13s"
+  }
+}

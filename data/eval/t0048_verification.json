@@ -1,0 +1,58 @@
+{
+  "task_id": "T-0048",
+  "baslik": "F2-5: Donmus yazim kapisi — kalan delikler (copyfile + train.py yazim yeri) ve test ekseni",
+  "dogrulama_damgasi": "2026-09-16T14:45:00Z",
+  "dogrulayan": "claude (danisman rolu, bagimsiz olcum)",
+  "yonetim": "PASS",
+  "ozet": "T-0047'nin V1 ve V3 bulgulari GERCEKTEN kapandi: copyfile'dan ONCE guard var (294<295), train.py erken guard'i ayristirilmis model_save_path uzerinden kuruyor (97 < torch.save 197), mesajlar 3 sitede hizalandi, test ekseni (i)+(ii)+(iii) olarak genisletildi ve UC BAGIMSIZ MUTANT'IM (copyfile sayi, copyfile SIRA, train.py SIRA) kirmizi yandi. pytest sandbox disinda 190 passed. Kanaryalar ve iki .pt sayisi sabit; hicbir egitim kosulmadi. Bulgu YOK; iki kayit: kapsam disi envanter eksigi T-0047'den devrediyor ve guard artik 3 kod dosyasinda ayri kopya.",
+  "kabul_kriterleri": [
+    {"no": "a", "kriter": "V1: copyfile'dan ONCE guard", "durum": "DOGRULANDI (BAGIMSIZ, kaynak + AST)",
+     "olcum": "scripts/run_goal_pipeline.py:294 check_frozen_save_path('data/kristal_model_sft.pt', allow_frozen_write=...) ve :295 shutil.copyfile('data/kristal_model.pt', 'data/kristal_model_sft.pt'). Kendi AST yuruyusum cagri dizisini basti: ... (guard 294) -> (copyfile 295) -> (guard 299) -> (run_cmd 300) ... Yani guard kopyadan ONCE ve kopya hedefi guard'in hedefiyle AYNI (data/kristal_model_sft.pt)."},
+    {"no": "b", "kriter": "V3: train.py --allow-frozen-write + erken guard", "durum": "DOGRULANDI (BAGIMSIZ, kaynak + AST)",
+     "olcum": "train.py:96 allow_frozen_write = \"--allow-frozen-write\" in sys.argv; :97 check_frozen_save_path(model_save_path, allow_frozen_write=allow_frozen_write) — arguman ayristirmasindan hemen sonra, model insasindan ve torch.load'dan ONCE. Kendi AST olcumum: guard satir 97, torch.save satir 197 -> 97 < 197. ONEMLI AYRINTI: guard SABIT LITERAL degil, AYRISTIRILMIS model_save_path uzerinden cagriliyor -> 'kendine gondermeli parametre' vakum sinifina dusmuyor."},
+    {"no": "c", "kriter": "V2: mesaj kalibi hizalandi", "durum": "DOGRULANDI (BAGIMSIZ grep)",
+     "olcum": "Uc sitede de ayni kalip: run_goal_pipeline.py:50, run_goal_pipeline.py:80, train_dpo.py:35 -> 'Donmuş yola yazma engellendi: {...} (allow_frozen_write=False)'. train.py:18 (yerel tanim) ayni kalip. UC URETICIYE DOKUNULMAMIS (chat/carpenter/balanced_sft dosyalarinda degisiklik yok)."},
+    {"no": "d", "kriter": "TEST ekseni (i)+(ii)+(iii)", "durum": "DOGRULANDI (BAGIMSIZ okuma)",
+     "olcum": "tests/test_compiler_entrypoints.py: (i) her run_cmd'den once guard (satir 288-295) · (ii) copyfile blogu: TAM 1 copyfile, onceki cagri guard, guard'in ilk argumani 'data/kristal_model_sft.pt' (satir 297-308) · (iii) train.py: erken guard + torch.save sirasi (satir 346+), torch.load da toplaniyor. Sayi iddiasi 5 run_cmd + 1 copyfile = 6 guard."},
+    {"no": "e", "kriter": "MUTANTLAR (STATIK)", "durum": "DOGRULANDI — USTELIK UCUNU DE BEN KOSTURDUM",
+     "olcum": "Kendi uc mutantim (hepsi yalniz AST testi; main()/pipeline CALISTIRILMADI): M1 copyfile guard'i yorumlandi -> 'Beklenen 6 ..., bulunan: 5' KIRMIZI · M1b guard ile copyfile YER DEGISTIRILDI (294<->295) -> KIRMIZI (satir 303, prev_name iddiasi) · M2 train.py guard'i torch.save'den SONRA'ya tasindi -> KIRMIZI (test_ast_train_py_has_frozen_guards). Her mutanttan sonra dosya yedekten geri konuldu ve sha256 OZDESLIGI dogrulandi: run_goal_pipeline.py 2a88708edc0b9a8d156d0703... , train.py d08b195d5fd31f288e421ed9... (yurutucunun beyan ettigi after-sha'larla ayni). Yurutucunun kendi mutant kaydi da (M1 sayi, M2 erken-guard-197>=196) ayni kirmizilari gosteriyor."},
+    {"no": "f", "kriter": "KOSUM YOK", "durum": "DOGRULANDI",
+     "olcum": "data/ altinda degisen TEK dosya raporun kendisi (14:25:30Z). data/kristal_model.pt 02e15b8198f8f3334609eb52... · data/kristal_model_sft.pt b6764c7062ce627a0ba9437c... · data/kristal_carpenter_model.pt 5f0b8c71727d15e338e43016... — ucu de DEGISMEDI (mtime'lar 13 Eyl). data/*.pt = 23, data/*.bin = 15."},
+    {"no": "g", "kriter": "TEST: pytest sandbox DISINDA", "durum": "DOGRULANDI (BAGIMSIZ)",
+     "olcum": "Rapor 190 diyor; ben sandbox DISINDA kosturdum: '190 passed in 9.61s' (T-0047'de 189 idi). Sandbox icinde kosturmadim (bilinen sahte PermissionError sinifi)."},
+    {"no": "h", "kriter": "HASH IDDIALARI (tam digest)", "durum": "DOGRULANDI - uydurma YOK",
+     "olcum": "18 sha256 iddiasi: 14'u diskle birebir (4 kod 'after' degeri dahil), 4'u 'before' degeri ve HICBIRI uydurma degil — dordu de benim ONCEKI turlardaki olcumlerimle ayni: 791d470e2c1c6698... (T-0046 train.py after), 6974021093af0b16... (T-0047 run_goal_pipeline after), 4cf8fd8a38cace6c... (T-0047 train_dpo after), 130561c37ffa8487... (T-0047 tests after). Tek bir 'onek dogru/kuyruk yanlis' vakasi yok. Canary digest'leri diskle birebir."},
+    {"no": "i", "kriter": "KAPANIS: changed_files == writes[]; mesaj; kiralar", "durum": "DOGRULANDI",
+     "olcum": "writes[] 6 = changed_files 6 (kume esitligi True). message_sent 14:26:28Z; kiralar 14:26:38Z'de birakildi. Uc sinyal kapisi tam."}
+  ],
+  "bagimsiz_mutantlar": {
+    "M1_copyfile_sayi": "guard :294 yorumlandi -> FAILED (Beklenen 6 ..., bulunan: 5). Geri yukleme sha ozdes: 2a88708edc0b9a8d156d0703...",
+    "M1b_copyfile_sira": "guard <-> copyfile yer degistirildi (294<->295) -> FAILED (satir 303: onceki cagri check_frozen_save_path olmali). Geri yukleme sha ozdes: 2a88708edc0b9a8d156d0703...",
+    "M2_train_py_sira": "erken guard torch.save'den sonraya tasindi -> FAILED (test_ast_train_py_has_frozen_guards). Geri yukleme sha ozdes: d08b195d5fd31f288e421ed9..."
+  },
+  "findings": [
+    {
+      "id": "V1",
+      "siddet": "BILGI (T-0047'den DEVREDEN acik kalem - bu gorevin kapsaminda degildi)",
+      "baslik": "Kapsam disi envanter eksigi hala acik: retrain_clean_models.py:122",
+      "olcum": "T-0047 dogrulamamda olctum: scripts/retrain_clean_models.py icinde 4 donmus-yazim sitesi var (:72, :85, :99 '--save-path' data/kristal_model.pt ve :122 '--output-model' data/kristal_carpenter_model.pt); T-0047 raporunun tablosunda yalniz ilk ucu listelenmisti. T-0048 kapsamina bu tablo girmedi (spec'te istemedim) -> kalem ACIK.",
+      "etki": "Bu betik pipeline tarafindan cagrilmiyor (manuel), yani simdilik hareketsiz; ama dogrudan kosturulursa donmus checkpoint'i kapisiz ezer."
+    },
+    {
+      "id": "V2",
+      "siddet": "DUSUK (bakim riski)",
+      "baslik": "Guard artik 3 kod dosyasinda AYRI AYRI kopya (metinleri elle hizalandi)",
+      "olcum": "check_frozen_save_path tanimi/kullanimlari: scripts/run_goal_pipeline.py (yerel tanim + 6 cagri), train_dpo.py (yerel tanim), train.py (yerel tanim) + uc ureticide ayri check_output_path kopyalari = toplam 6 kopya. Mesajlar bu turda elle hizalandi; gelecekte biri degisirse digerleri sessizce ayrisabilir.",
+      "karar": "Bu turda BILEREK kapsam disi birakildi (kanonik bir yardimciyi src/llm/frozen_guard.py'ye tasimak uc dogrulanmis ureticiye dokunmayi gerektirirdi). Ilk 'hizalama/temizlik' turunda ele alinmali."
+    }
+  ],
+  "yontem_notu": {
+    "probumun_kendi_bugu": "Ilk kosumda probum 'too many values to unpack' ile dustu (cagri demeti 3 elemanli, yardimci 2 bekliyordu) - duzeltildi. Ayrica (i) ekseninde 'save hedefleri=[]' cikti cunku komutlar artik DEGISKEN (stage1_cmd...); hedef bagini kaynaktan okuyup dogruladim (guard literali ile komut icindeki '--save-path' degeri ayni).",
+    "siniflandirici_engeli": "Mutant dongusunun bir adiminda Bash siniflandirici zaman asimiyla bloklandi; komut TUMDEN engellendigi icin dosya mutant halde kalmadi (sonra Edit ile birebir geri alindi ve sha dogrulandi). Sonraki mutantlari 'mutasyon+test+geri yukleme tek komutta' kalibina cevirdim ki blok gelse bile dosya temiz kalsin.",
+    "salt_okunur_kanit": "Mutant kosamadigim pencerede test govdelerini OKUYARAK kanit topladim (satir 297-308 copyfile hedef iddiasi) - ama asil kanit olarak mutantlarin KIRMIZI ciktisini bekledim ve ucunu de kosturdum."
+  },
+  "kapanis": {
+    "uc_sinyal_kapisi": "mesaj 2026-09-16T14:26:28Z ✓ | kiralar 0 ✓ | changed_files (6) == writes[] (6) ✓",
+    "sonuc": "T-0048 KABUL (hukum: PASS). T-0047'nin V1+V3 bulgulari kapandi, V2 hizalandi; test ekseni (i)+(ii)+(iii) ve uc bagimsiz mutantla non-vakum oldugu kanitlandi. Iki kayit: devreden envanter eksigi (V1) ve 6 kopyali guard (V2). Yeni gorev ACILMADI."
+  }
+}

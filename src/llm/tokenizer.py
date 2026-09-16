@@ -179,17 +179,26 @@ class KristalTokenizer:
             prompts.append(line)
         return " \n ".join(prompts)
 
+    # Türkçe-farkındalıklı küçültme tablosu: Python'un .lower() ile
+    # 'İ' (U+0130) → 'i\u0307' (i + U+0307 birleşik nokta) üretmesi sorununu giderir.
+    # ENTITY_CHARS'ta yalnızca 'i' (U+0069) kayıtlıdır; bu tablo İ'yi doğru 'i'ye çevirir.
+    _TR_LOWER = str.maketrans("İI", "iı")
+
+    def _turkish_lower(self, text: str) -> str:
+        """Türkçeye uygun küçültme: İ→i, I→ı, diğerleri Python .lower()."""
+        return unicodedata.normalize("NFC", text.translate(self._TR_LOWER).lower())
+
     def _encode_entity_chars(self, word: str) -> List[int]:
         """Encodes an out-of-vocabulary entity into <ENT> ... </ENT> char sequence."""
         self.ensure_entity_tokens()
         token_ids = [self.vocab.encode("<ENT>")]
         if word.isupper() and len(word) > 1:
             token_ids.append(self.vocab.encode("<ALL_CAPS>"))
-            for ch in word.lower():
+            for ch in self._turkish_lower(word):
                 token_ids.append(self.vocab.encode(ch))
         else:
             token_ids.append(self.vocab.encode("<CAP>"))
-            for ch in word.lower():
+            for ch in self._turkish_lower(word):
                 token_ids.append(self.vocab.encode(ch))
         token_ids.append(self.vocab.encode("</ENT>"))
         return token_ids
@@ -252,14 +261,21 @@ class KristalTokenizer:
                 continue
 
             # Check for apostrophe (proper noun inflection)
-            has_apostrophe = ("'" in clean_word or "’" in clean_word)
+            # Tipografik kesme (U+2019) → düz kesme (U+0027) normalize (yalnızca bu dal; mode=False yolu etkilenmez)
+            has_apostrophe = ("'" in clean_word or "\u2019" in clean_word)
             if self.literal_entity_mode and has_apostrophe:
-                parts = re.split(r"['’]", clean_word, maxsplit=1)
+                # U+2019 → U+0027 normalize: sözlük tek kesme tokeni tanıdığından
+                normalized_word = clean_word.replace("\u2019", "'")
+                parts = re.split(r"['\u2019]", normalized_word, maxsplit=1)
                 stem = parts[0]
                 suffix_str = parts[1] if len(parts) > 1 else ""
 
                 # Encode stem
-                if stem in self.vocab.stoi:
+                if stem.isdigit():
+                    # (b) Rakam gövdesi: her hane ayrı rakam tokeni
+                    for d in stem:
+                        token_ids.append(self.vocab.encode(d))
+                elif stem in self.vocab.stoi:
                     token_ids.append(self.vocab.encode(stem))
                 elif stem and stem[0].isupper():
                     token_ids.extend(self._encode_entity_chars(stem))
@@ -271,9 +287,18 @@ class KristalTokenizer:
                     else:
                         token_ids.append(self.vocab.encode("<UNK>"))
 
+                # (d) Kesme işaretinin kendisini token olarak yaz
+                apostrophe_id = self.vocab.stoi.get("'")
+                if apostrophe_id is not None:
+                    token_ids.append(apostrophe_id)
+
                 # Parse and encode suffixes
                 if suffix_str:
                     affix_tags = self._parse_proper_noun_suffixes(stem, suffix_str)
+                    if not affix_tags:
+                        # (e) Ek çözülemedi: sessizce geçme, bildir
+                        if self.verbose:
+                            print(f"[APOSTROPHE] Ek çözülemedi: stem={stem!r} suffix={suffix_str!r}")
                     for atag in affix_tags:
                         token_ids.append(self.vocab.encode(atag))
                 continue

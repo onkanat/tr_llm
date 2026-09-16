@@ -1,0 +1,101 @@
+{
+  "task_id": "T-0046",
+  "status": "PASS",
+  "date": "2026-09-16",
+  "writes": [
+    "train.py",
+    "scripts/train_scientific_sft.py",
+    "scripts/retrain_clean_models.py",
+    "scripts/run_goal_pipeline.py",
+    "scripts/evaluate_sft_benchmarks.py",
+    "data/eval/t0046_pipeline_switch_2026-09-16.json",
+    ".agent-bus/notes/T-0046.md"
+  ],
+  "changed_files": [
+    "train.py",
+    "scripts/train_scientific_sft.py",
+    "scripts/retrain_clean_models.py",
+    "scripts/run_goal_pipeline.py",
+    "scripts/evaluate_sft_benchmarks.py",
+    "data/eval/t0046_pipeline_switch_2026-09-16.json",
+    ".agent-bus/notes/T-0046.md"
+  ],
+  "pre_conditions": {
+    "data/train_balanced_sft_v2.bin": "53b8406eee7e98d8339cd047a18a281b7a355ca5ba1891137701890dc322402c",
+    "data/kristal_model.pt": "02e15b8198f8f3334609eb52691d699e80f88972245377c1a79772cb42ae1679"
+  },
+  "code_changes": {
+    "train.py": {
+      "sha256_before": "42389319e602e72a3fe03a5cb914b181ff72579616bb80c2fa40360cbedfb10d",
+      "sha256_after": "791d470e2c1c6698bc47c2fa37e40e5fdf44fab031a51e5c03403f3e208dffc0",
+      "diff": "vocab_path = 'data/vocab.json' -> vocab_path = 'data/rebuild/vocab_base_32852.json'; local resize_state_dict replaced with canonical import from src.llm.prompt_contract"
+    },
+    "scripts/train_scientific_sft.py": {
+      "sha256_before": "0d96df150fc639a23c0ade440a8e5e82be5fc33e7264f7f6fa75f7b5623b269e",
+      "sha256_after": "35f56d76e2d77c7c19b7edb3c57a26adf3cebe44c4d1f387623c307d1b34cbd2",
+      "diff": "vocab_path = 'data/vocab.json' -> vocab_path = 'data/rebuild/vocab_base_32852.json'; train_bin_path = 'data/train_balanced_sft.bin' -> 'data/train_balanced_sft_v2.bin'; canonical resize_state_dict import"
+    },
+    "scripts/retrain_clean_models.py": {
+      "sha256_before": "74905148605f893a103e1bfab867e8c01e600ee5832ba77fd2f1a5787d4252d4",
+      "sha256_after": "22a27b7869f01699f1d55f457227882544f6068f25a00c995327f1fb7dd78baf",
+      "diff": "line 10 comment and line 82 argument '--data', 'data/train_balanced_sft.bin' -> 'data/train_balanced_sft_v2.bin'"
+    },
+    "scripts/run_goal_pipeline.py": {
+      "sha256_before": "8d4945f5f9aa385617341fea44e4c46d7f44b0c605db8503cd00908d17a0a466",
+      "sha256_after": "774b5c94ef851175defc11c19f362278fa804eca1ade83889049eb7aaaa8257f",
+      "diff": "line 261 Stage-2 SFT invocation '--data', 'data/train_balanced_sft.bin' -> 'data/train_balanced_sft_v2.bin' (line 232 compile site intentionally unchanged as specified)"
+    },
+    "scripts/evaluate_sft_benchmarks.py": {
+      "sha256_before": "0462f9a005034e8d65b84ad4935a035b05b86e3f01e03b9b76aefc5ed5f24c0d",
+      "sha256_after": "0395a62e113dd606523b798f6df69b3a742d6a223da1b9da7a0032260c4381d5",
+      "diff": "vocab.load('data/vocab.json') -> vocab.load('data/rebuild/vocab_base_32852.json'); val_loss_base_sft path 'data/train_balanced_sft.bin' -> 'data/train_balanced_sft_v2.bin' and print label updated"
+    }
+  },
+  "gate_verifications": {
+    "gate_a_read_sites_migrated": {
+      "status": "DOGRULANDI",
+      "type": "STATIK",
+      "measurement": "KOŞUM / grep: train.py ve scripts/ altındaki tüm aktif okuma yolları 'data/train_balanced_sft_v2.bin'e çevrildi. Kalan tek 'train_balanced_sft.bin' siteleri: scripts/run_goal_pipeline.py:232 (hareketsiz compile sitesi), scripts/prepare_balanced_sft_dataset.py (kendi üreticisi) ve scripts/recompile_datasets.py (çalıştırılmayan legacy derleyici)."
+    },
+    "gate_b_vocab_alignment_32852": {
+      "status": "DOGRULANDI",
+      "type": "STATIK / KOŞUM",
+      "measurement": "train.py, train_scientific_sft.py, evaluate_sft_benchmarks.py sözlük olarak 'data/rebuild/vocab_base_32852.json' yüklüyor. train.py koşumunda model kurulurken 'Sözlük Yüklendi. Kelime dağarcığı boyutu: 32852' basıldı."
+    },
+    "smoke_test": {
+      "status": "DOGRULANDI",
+      "type": "KOŞUM",
+      "command": "./venv/bin/python train.py --data data/train_balanced_sft_v2.bin --load-path data/kristal_model.pt --save-path scratch/t0046_smoke.pt --steps 2 --batch-size 2",
+      "raw_output": [
+        "CPU modu seçildi (8 iş parçacığı aktif).",
+        "Sözlük Yüklendi. Kelime dağarcığı boyutu: 32852",
+        "Veri kümesi yüklendi: data/train_balanced_sft_v2.bin (Blok boyutu: 64). Toplam morfem token sayısı: 1,793,433",
+        "Mevcut model ağırlıkları 'data/kristal_model.pt' tespit edildi, eğitim devam ettiriliyor (Resume)...",
+        "[SOZLESME_UYARI] Parametre 'embedding.embedding.weight' boyut uyumsuzluğu: eski (32816, 768) -> yeni (32852, 768) (36 satır dolduruldu (padding))",
+        "[SOZLESME_UYARI] Parametre 'lm_head.weight' boyut uyumsuzluğu: eski (32816, 768) -> yeni (32852, 768) (36 satır dolduruldu (padding))",
+        "[SOZLESME_UYARI] Parametre 'lm_head.bias' boyut uyumsuzluğu: eski (32816,) -> yeni (32852,) (36 satır dolduruldu (padding))",
+        "Model mimarisi kuruldu ve cihaza taşındı. (Öğrenme Oranı: 0.0002)",
+        "Eğitim Başlatılıyor -> Adım Sayısı: 2, Batch Boyutu: 2, Block Boyutu: 64",
+        "Adım    1/2 | Kayıp (Loss): 7.0575 | Adım Süresi: 1.05s | Toplam Süre: 1.1s",
+        "Toplam Süre:       1.94 saniye",
+        "Başlangıç Kaybı:   7.0575",
+        "Bitiş Kaybı:       7.3342",
+        "Eğitilmiş model ağırlıkları 'scratch/t0046_smoke.pt' dosyasına kaydedildi."
+      ],
+      "loss_finite": true,
+      "steps": 2,
+      "device": "cpu (torch.device('cpu'))"
+    },
+    "pytest_suite": {
+      "status": "DOGRULANDI",
+      "type": "KOŞUM",
+      "measurement": "venv/bin/pytest -q sandbox DIŞINDA. Önce: 186 passed. Sonra: 186 passed in 9.24s (0 fail, 0 warning)."
+    },
+    "canaries": {
+      "status": "DOGRULANDI",
+      "type": "KOŞUM",
+      "measurement": "data/kristal_model.pt (02e15b8198f8f333...), data/train_balanced_sft.bin (55863e36b62414c6...), data/train_balanced_sft_v2.bin (53b8406eee7e98d8...), data/vocab.json (4b40eebee9c996c8...), src/llm/tokenizer.py (560a3bfbf32c394a...) DEĞİŞMEDİ. data/*.bin adedi: 15, data/*.pt adedi: 23. scratch/f2_backup_2026-09-16/ altındaki 6 bağımsız yedek DEĞİŞMEDİ. Görev penceresinde data/ altında değiştirilen dosya adedi: 0 (t0046_pipeline_switch_2026-09-16.json hariç)."
+    }
+  },
+  "findings": []
+}

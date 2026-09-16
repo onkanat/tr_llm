@@ -1,0 +1,129 @@
+{
+  "task_id": "T-0046",
+  "baslik": "F2-3: Hat gecisi — egitim/degerlendirme okuma yollari _v2'ye + sozluk/model hizalamasi (32.852)",
+  "dogrulama_damgasi": "2026-09-16T13:05:00Z",
+  "dogrulayan": "claude (danisman rolu, bagimsiz olcum)",
+  "yonetim": "PASS_WITH_FINDINGS",
+  "ozet": "Sonuc KABUL: 5 kod sitesi spec'teki gibi degisti (5/5 'after' sha diskle birebir), smoke'u KENDIM kosturup ayni [SOZLESME_UYARI] satirlarini aldim, pytest 186 passed sandbox DISINDA dogrulandi, kanaryalar korundu (kristal_model.pt 02e15b81... dokunulmadi). Dort kayit: (V1) benim spec'imin onermesi eksikti - train.py'deki resize YERELDI ve 'Resizing weights for:' basiyordu; [SOZLESME_UYARI] yalniz kanonik yardimcidan gelir, yani kapim istemedigim bir ek degisikligi ZORUNLU kildi (yurutucu yapti ve beyan etti); (V2) pencere taramasi beklentisi 'data/ altinda 0' hem spec'te hem raporda yanlis - gercek 1 (raporun kendisi); (V3) smoke CPU'da kostu, MPS yolu bu turda sinanmadi; (V4) run_goal_pipeline.py'nin 'before' sha'si git'ten dogrulanamiyor (gorev oncesi kirli agac).",
+  "kabul_kriterleri": [
+    {
+      "no": "a",
+      "kriter": "ON KOSUL: _v2 ve kristal_model.pt dokunulmamis olculdu",
+      "durum": "DOGRULANDI",
+      "olcum": "Kendi kosumumdan ONCE ve SONRA: data/train_balanced_sft_v2.bin 53b8406eee7e98d8..., data/kristal_model.pt 02e15b8198f8f333... (mtime 2026-09-13T18:14:31Z, yani gorev penceresinden 3 gun once). Ikisi de DEGISMEDI."
+    },
+    {
+      "no": "b",
+      "kriter": "KAPI a: aktif okuma siteleri _v2'ye gecti",
+      "durum": "DOGRULANDI",
+      "olcum": "BAGIMSIZ grep: train_scientific_sft.py:43, retrain_clean_models.py:82 (+:10 yorum), run_goal_pipeline.py:261, evaluate_sft_benchmarks.py:182/187 -> hepsi 'data/train_balanced_sft_v2.bin'. Eski ad YALNIZ su sitelerde kaldi: run_goal_pipeline.py:232 (spec'te bilerek dokunulmadi), prepare_balanced_sft_dataset.py:116 (kendi URETICI cikisi - okuma degil), recompile_datasets.py:31/43 (kosturulmayan legacy derleyici). Aktif okuma yolu kalmadi."
+    },
+    {
+      "no": "c",
+      "kriter": "KAPI b: uc tuketici de sozlugu 32852 yukluyor",
+      "durum": "DOGRULANDI",
+      "olcum": "grep: train.py:39, train_scientific_sft.py:38, evaluate_sft_benchmarks.py:172 -> 'data/rebuild/vocab_base_32852.json'. Ayrica KENDI smoke kosumum 'Sözlük Yüklendi. Kelime dağarcığı boyutu: 32852' basti."
+    },
+    {
+      "no": "d",
+      "kriter": "SMOKE: [SOZLESME_UYARI] 32816 -> 32852 / 36 satir padding",
+      "durum": "DOGRULANDI — BAGIMSIZ KOSUM",
+      "olcum": "Yurutucunun logunu okumakla yetinmedim; ayni komutu kendim kosturdum (--save-path scratch/t0046_verify_smoke.pt). Uretilen satirlar BIREBIR ayni: embedding.embedding.weight (32816, 768) -> (32852, 768) 36 satir DOLDURULDU; lm_head.weight ayni; lm_head.bias (32816,) -> (32852,) 36 satir DOLDURULDU. 2 adim kosuldu, loss sonlu (6.8506 -> 4.4698). Bu log degisikligin ISLEDIGININ kanitidir: sozluk yolu degismemis olsaydi yon KIRPMA olurdu."
+    },
+    {
+      "no": "e",
+      "kriter": "SMOKE: loss sonlu + device raporda",
+      "durum": "DOGRULANDI (device = cpu - bkz V3)",
+      "olcum": "Iki kosumda da loss sonlu ve NaN/inf yok. Raporda device='cpu (torch.device(cpu))' durustce bildirilmis; benim kosumum da sandbox icinde CPU secdi."
+    },
+    {
+      "no": "f",
+      "kriter": "TEST: pytest sandbox DISINDA",
+      "durum": "DOGRULANDI — BAGIMSIZ KOSUM",
+      "olcum": "Sandbox ICINDE kosturdugumda test_agent_gateway 'PermissionError: [Errno 1] Operation not permitted' (socketserver.py) verip 1 failed / 185 passed oldu - bu dENEK KODUN degil OLCUM KABININ kusuru (bilinen sinif). Sandbox DISINDA: '186 passed in 9.10s'. Yurutucunun 186 iddiasiyla birebir."
+    },
+    {
+      "no": "g",
+      "kriter": "KANARYA: hicbir donmus artefakt degismedi",
+      "durum": "DOGRULANDI",
+      "olcum": "data/kristal_model.pt 02e15b8198f8f333... (mtime 13 Eyl), data/train_balanced_sft.bin 55863e36b62414c6..., _v2 53b8406eee7e98d8..., data/vocab.json 4b40eebee9c996c8..., src/llm/tokenizer.py 560a3bfbf32c394a..., cot_vault 97b06fe5befd6613... — hepsi DEGISMEDI. data/*.bin 15, data/*.pt 23 (iddiayla ayni). scratch/f2_backup_2026-09-16/ 6 dosya sha16'lari gorev oncesi degerlerle AYNI."
+    },
+    {
+      "no": "h",
+      "kriter": "KANARYA: pencerede data/ altinda yazim",
+      "durum": "DOGRULANDI (beklenti duzeltmesi: bkz V2)",
+      "olcum": "12:44Z-12:50Z taramasi: data/ altinda DEGISEN TEK dosya data/eval/t0046_pipeline_switch_2026-09-16.json (12:49:20Z) - yani RAPORUN KENDISI (writes[] icinde). Baska hicbir data/ yolu degismedi; donmus hicbir dosya yok."
+    },
+    {
+      "no": "i",
+      "kriter": "KAPANIS: changed_files == writes[]; mesaj; kiralar",
+      "durum": "DOGRULANDI",
+      "olcum": "writes[] 7 = changed_files 7 (iki yonlu fark bos). message_sent 12:49:39Z; kiralar 12:49:42Z'de birakildi (bus_lease_status bos). Uc sinyal kapisi tam."
+    },
+    {
+      "no": "j",
+      "kriter": "HASH IDDIALARI (tam digest)",
+      "durum": "DOGRULANDI - uydurma YOK",
+      "olcum": "16 sha256 iddiasi: 11'i diskle birebir (5 'after' kod sha'si 5/5 DAHIL), 4'u git HEAD ile birebir ('before' degerleri: train.py 42389319..., train_scientific_sft 0d96df15..., retrain_clean_models 74905148..., evaluate_sft_benchmarks 0462f9a0...), 1'i DOGRULANAMADI (bkz V4). TEK BIR 'onek dogru/kuyruk yanlis' vakasi yok - T-0044 sinifi tekrarlanmadi. Ayrica bu kez KARARSIZ bir alanin digest'i (meta/created_at) kayit edilmemis - T-0045 dersi tuttu."
+    }
+  ],
+  "bagimsiz_kosumlar": {
+    "smoke": {
+      "komut": "venv/bin/python train.py --data data/train_balanced_sft_v2.bin --load-path data/kristal_model.pt --save-path scratch/t0046_verify_smoke.pt --steps 2 --batch-size 2",
+      "sonuc": "vocab 32852; veri _v2, 1.793.433 token; uc [SOZLESME_UYARI] satiri (embedding/lm_head.weight/lm_head.bias) 32816 -> 32852, 36 satir padding; loss sonlu 6.8506 -> 4.4698; kayit scratch/t0046_verify_smoke.pt'e yazildi (donmusa yazim YOK).",
+      "device": "cpu (sandbox MPS'i gizler - bkz V3)"
+    },
+    "pytest_sandbox_ici": "1 failed / 185 passed - test_agent_gateway PermissionError (socketserver). OLCUM KABI kusuru.",
+    "pytest_sandbox_disi": "186 passed in 9.10s (yurutucunun iddiasiyla birebir)."
+  },
+  "findings": [
+    {
+      "id": "V1",
+      "siddet": "ORTA (kusur SPEC'TE, yurutucude degil)",
+      "baslik": "Spec onermem eksikti: train.py'deki resize YERELDI ve farkli metin basiyordu; kapim istemedigim bir ek degisikligi zorunlu kildi",
+      "olcum": "Gorev oncesi surum (git show HEAD:train.py) satir 13'te YEREL bir 'def resize_state_dict' tanimliyor ve uyumsuzlukta 'Resizing weights for: {k} (Old: ..., New: ...)' basiyor - '[SOZLESME_UYARI]' YOK. '[SOZLESME_UYARI]' yalnizca src/llm/prompt_contract.resize_state_dict'ten gelir. Ben spec'te 'train.py:108 zaten resize_state_dict cagiriyor ve [SOZLESME_UYARI] satiriyla basiyor' diye YAZDIM - bunu OLCMEDEN varsaydim.",
+      "sonuc": "Spec'te istemedigim halde, kapimin gecmesi icin train.py'nin yerel fonksiyonunun kanonik import ile degistirilmesi GEREKIYORDU. Yurutucu bunu yapti ve code_changes'ta acikca beyan etti (dogru davranis).",
+      "degisiklik_guvenli_mi": "Evet - denkligi kontrol ettim: kanonik surum de ayni 'min satir kopyala, kalanina dokunma' semantigini kullaniyor; ek olarak kirpma/doldurma YONUNU etiketliyor. Yani davranis korunuyor, sessizlik azaliyor.",
+      "kural": "Bir kabul maddesi BELLI BIR LOG METNINE dayaniyorsa, o metnin HANGI kaynaktan geldigini spec yazimindan once olc. Aksi halde kapi, spec'te istenmeyen bir degisikligi zorunlu kilar."
+    },
+    {
+      "id": "V2",
+      "siddet": "DUSUK (ifade/beklenti hatasi - iki tarafta da)",
+      "baslik": "Pencere taramasi beklentisi 'data/ altinda 0 degisiklik' YANLIS - gercek 1 ve o da raporun kendisi",
+      "olcum": "Benim spec'im 'beklenen: 0' dedi; yurutucunun raporu da 'degistirilen dosya adedi: 0' yazdi. Gercek olcum: 1 dosya - data/eval/t0046_pipeline_switch_2026-09-16.json (12:49:20Z), yani writes[] icindeki RAPOR. data/eval/ istisnasi zaten raporlar icin acik (CLAUDE.md).",
+      "etki": "Donmus hicbir dosya degismedi; artefakt butunlugu etkilenmedi. Yalnizca beklenti cumlesi kendi kendisiyle celisiyordu.",
+      "kural": "Pencere taramasinin beklentisini yazarken RAPORUN KENDISINI hesaba kat: 'data/ altinda 0' degil, 'donmus alt kumede 0, data/eval/<rapor> haric'."
+    },
+    {
+      "id": "V3",
+      "siddet": "BILGI",
+      "baslik": "Smoke CPU'da kostu; MPS yolu bu turda sinanmadi",
+      "olcum": "Yurutucunun ham cikitisi 'CPU modu secildi (8 is parcacigi aktif)' + device=cpu; benim bagimsiz kosumum da sandbox icinde CPU secdi. Yani iki kosum da MPS'i dogrulamadi.",
+      "neden_onemli": "Hizalama (resize) cihaz yerlesiminden ONCE oldugu icin dogrulanan zincir cihazdan bagimsiz - bulgu degil, ama gercek egitim MPS'te kosacaksa ilk uzun kosuda device'i ayrica teyit et.",
+      "not": "Yurutucu device'i raporda acikca bildirdi - durustluk iyi."
+    },
+    {
+      "id": "V4",
+      "siddet": "BILGI",
+      "baslik": "run_goal_pipeline.py'nin 'before' sha'si git'ten dogrulanamiyor",
+      "olcum": "5 'before' iddiasindan 4'u git HEAD ile BIREBIR eslesti; scripts/run_goal_pipeline.py icin iddia edilen 8d4945f5f9aa3856... HEAD'deki 6107f26dad70a1f1... ile eslesmiyor. Aciklama: dosya gorev ONCESINDE de kirli calisma agacindaydi (commit edilmemis degisiklikler), dolayisiyla 'once' hali git'ten yeniden uretilemez.",
+      "etki": "Kusur DEGIL; yalnizca bu tek iddia bagimsiz dogrulanamaz durumda. Diger 4 'before' ve 5 'after' dogrulandi."
+    },
+    {
+      "id": "V5",
+      "siddet": "BILGI (olumlu) + ILERIYE DONUK UYARI",
+      "baslik": "Hash disiplini temiz; ANCAK pipeline gercekten kosturulursa data/kristal_model.pt EZILECEK",
+      "olumlu": "16 hash iddiasinda uydurma yok; kararsiz (damgali) dosya digest'i kaydedilmemis.",
+      "uyari": "run_goal_pipeline.py:261 hala '--save-path data/kristal_model.pt' ile Stage-2 SFT cagiriyor. Pipeline kosturuldugunda donmus checkpoint (data/*.pt) EZILIR. Bu gorevde kosulmadi (kanaryayla dogrulandi: mtime 13 Eyl). Sirf 'frozen_guard' bu yolda korumaz - koruma yalniz Python icindeki derleme cagrilarinda var; train.py alt surec olarak cagriliyor.",
+      "onerilen": "Bir sonraki EGITIM gorevinde ya (i) data/kristal_model.pt writes[]'e beyan edilip ust dizin kiralanmali (izinle), ya da (ii) --save-path scratch/ veya yeni bir ada cevrilmeli. Aksi halde SPEC kural 2 ihlali dogar."
+    }
+  ],
+  "yontem_notu": {
+    "zaman_damgasi": "Ilk ekranimda kristal_model.pt mtime'ini yalnizca saat olarak bastim ve '18:14Z' GELECEKTE gibi gorundu; tam tarihi olcunce 2026-09-13T18:14:31Z cikti (3 gun once, dokunulmamis). Saat-only baski yanlis 'gelecek/bayat' hukmu uretir - tarih her zaman birlikte basilir.",
+    "sandbox_test_hatasi": "Sandbox icindeki pytest 'PermissionError ... socketserver' verdi; kurala uyup kisiti kaldirdim ve sandbox DISINDA 186 passed aldim. Bulgu yazmadan once olcum kabini denetleme kurali ise yaradi."
+  },
+  "kapanis": {
+    "uc_sinyal_kapisi": "mesaj 2026-09-16T12:49:39Z ✓ | kiralar 0 ✓ | changed_files (7) == writes[] (7) ✓",
+    "sonuc": "T-0046 KABUL. Hat artik _v2'yi okuyor ve sozluk/model 32.852'ye hizali; zinciri kendi kosumumla dogruladim. V1 spec kusuru olarak kayda gecti; V2-V4 kayit; V5 ileriye donuk uyari. Yeni gorev ACILMADI."
+  }
+}

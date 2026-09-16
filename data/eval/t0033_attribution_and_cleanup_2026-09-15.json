@@ -1,0 +1,109 @@
+{
+  "task_id": "T-0033",
+  "date": "2026-09-15",
+  "executor": "antigravity",
+  "status": "PASS",
+  "summary": "T-0032 doğrulamasında tespit edilen V1-V4 bulguları kapatıldı: T-0032 yürütüm notundaki sha256 hash tablosu diskten tazelendi ve ölçüm damgası eklendi; var olmayan test_bit_identity atıfı kaldırıldı; bit-özdeşlik koşullu hale getirilerek boş belge sapması (11 vs 9 token) ve kabul gerekçesi işlendi; epistemic_agent.py içindeki clean_doc_tags NameError hatası doc_crystal_tags doldurularak kapatıldı ve mutant pozitif kontrolü yapıldı; T-0031 notu temiz olarak doğrulandı.",
+  "v1_hash_table_update": {
+    "measurement_timestamp": "2026-09-15 16:15:00Z",
+    "measurement_command": "shasum -a 256 src/rag/rag_pipeline.py src/rag/epistemic_agent.py src/rag/__init__.py tests/test_rag_pipeline.py tests/test_phase2.py wiki/entities/rag_pipeline.md",
+    "measured_hashes": {
+      "src/rag/rag_pipeline.py": "af796b5fec837d098e6d9ed0b25f33293f9058dbd55206fc9bc4a7ec968b3b6f",
+      "src/rag/epistemic_agent.py": "9d1cc5295c7ef82ef9442843ee1f588a1d1156d1341421a82522c8077e5d0f76",
+      "src/rag/__init__.py": "7d1568a8524ae9401f3d2967a39ae693c600a0ccca04c7ec91b1f09196ad75a8",
+      "tests/test_rag_pipeline.py": "df4784ff949501760de53c087066d1039781586a6250dbd62b32c26aa21bdc2f",
+      "tests/test_phase2.py": "989549c02024aa8d804cd8f5f530a656c144924d74e82346f8621f1076301b7e",
+      "wiki/entities/rag_pipeline.md": "63571b84e476c8a6a1d00c8dcc9dde479cefeca73ac453d91d9c547dd8d6a1ac"
+    },
+    "root_cause_rule_added": "Kural: Artefakt hash atıfları RAPOR ANINDA tazelenir; tazelenemiyorsa not hash tablosu taşımaz, rapora atıf verir."
+  },
+  "v1b_nonexistent_file_citation_closure": {
+    "audit_command": "grep -rn 'test_bit_identity' .agent-bus/notes/T-0032.md",
+    "output": "",
+    "result": "Atıf tamamen kaldırıldı, yerine data/eval/t0032_rag_pipeline_service_2026-09-15.json raporundaki ölçüm tablosuna yönlendirme yapıldı."
+  },
+  "v2_bit_identity_conditional_refinement": {
+    "finding": "Eşik üstü, eşik altı ve sınır (0.40) durumlarında eski ve yeni kod bit-özdeştir. Ancak doc_text='' veya '   ' olduğunda eski kod 11 tokenlik boş <BELGE> </BELGE> basarken yeni kod 9 tokenlik çıplak sorgu basar.",
+    "status": "SAPMA KABUL EDİLDİ",
+    "acceptance_rationale": "Yeni davranış doğrudur: doc_text.strip() boş olduğunda modele boş <BELGE> </BELGE> zarfı beslenmemeli, çıplak sorgu kullanılmalıdır. Ayrıca eski ayrışan yol clean_doc_tags NameError nedeniyle zaten çökmekteydi.",
+    "report_updated": "data/eval/t0032_rag_pipeline_service_2026-09-15.json güncellendi ve 8 vaka (2'si FARKLI işaretli) işlendi.",
+    "note_updated": ".agent-bus/notes/T-0032.md bit-özdeşlik paragrafı koşullu olarak güncellendi."
+  },
+  "v3_name_error_clean_doc_tags_fix": {
+    "finding": "src/rag/epistemic_agent.py:347 içindeki clean_doc_tags hiçbir sürümde tanımlı değildi; doc_crystal_tags tanımlı ancak boş kalıyordu.",
+    "fix_applied": [
+      "Satır 301: doc_crystal_tags = retrieved_doc.get('metadata', {}).get('crystal_tags', '') if retrieved_doc else ''",
+      "Satır 347: clean_target = doc_crystal_tags or morpheme_output"
+    ],
+    "grep_proof": {
+      "command": "grep -c 'clean_doc_tags' src/rag/epistemic_agent.py",
+      "output": 0
+    },
+    "mutant_positive_control": {
+      "test_file": "tests/test_epistemic_agent_fallback.py",
+      "scenario": "Boş belge metni (text='') + yüksek benzerlik (match_score=0.90 >= 0.85) ile epistemic_agent sorgusu",
+      "red_command": "./venv/bin/pytest tests/test_epistemic_agent_fallback.py",
+      "red_output": "FAILED tests/test_epistemic_agent_fallback.py::test_epistemic_curiosity_loop_empty_doc_fallback - NameError: name 'clean_doc_tags' is not defined",
+      "green_command": "./venv/bin/pytest tests/test_epistemic_agent_fallback.py -v",
+      "green_output": "tests/test_epistemic_agent_fallback.py::test_epistemic_curiosity_loop_empty_doc_fallback PASSED [100%] in 1.59s"
+    }
+  },
+  "v4_registered_command_fix": {
+    "old_command": "python3 -c \"import sys, src.rag; print('scripts.train_step_demo' in sys.modules)\"",
+    "corrected_command": "./venv/bin/python -c \"import sys, src.rag; print('scripts.train_step_demo' in sys.modules)\"",
+    "output": "False",
+    "updated_surfaces": [
+      ".agent-bus/notes/T-0032.md",
+      "data/eval/t0032_rag_pipeline_service_2026-09-15.json"
+    ]
+  },
+  "peer_artifact_positive_control_t0031": {
+    "artifact": ".agent-bus/notes/T-0031.md",
+    "command": "./venv/bin/python -c \"import hashlib; from pathlib import Path; ...\"",
+    "citations_checked": {
+      "data/pedagogy/cot_vault.jsonl": {
+        "cited": "97b06fe5befd6613b520d28dc20a74deaeb30e4e8f7e6675a23720a019ff5619",
+        "disk": "97b06fe5befd6613b520d28dc20a74deaeb30e4e8f7e6675a23720a019ff5619",
+        "match": true
+      },
+      "data/eval/t0030_wiki_revival_2026-09-15.json": {
+        "cited": "128f266cf178becce73a1347d3675851eb9d86c897e617d15ba4524d254a2cd2",
+        "disk": "128f266cf178becce73a1347d3675851eb9d86c897e617d15ba4524d254a2cd2",
+        "match": true
+      },
+      ".agent-bus/SPEC.md": {
+        "cited": "d397877d40accf7365979a013783d9ad638f9ce92920913bd3fa524804cddae4",
+        "disk": "d397877d40accf7365979a013783d9ad638f9ce92920913bd3fa524804cddae4",
+        "match": true
+      },
+      "scripts/agent_bus_mcp.py": {
+        "cited": "7339e0ae30d91038c38a2635270cb3119e450cda3859f654bdf10d9535840737",
+        "disk": "7339e0ae30d91038c38a2635270cb3119e450cda3859f654bdf10d9535840737",
+        "match": true
+      }
+    },
+    "status": "TEMİZ - T-0031 notundaki 4 atıfın 4'ü de diskteki güncel sha256 hash'leriyle birebir eşleşmektedir; yanlış hash sınıfı taşımamaktadır."
+  },
+  "invariance_check": {
+    "command": "./venv/bin/python -c \"import hashlib; from pathlib import Path; ...\"",
+    "cot_vault_jsonl": {
+      "lines": 91,
+      "sha256": "97b06fe5befd6613b520d28dc20a74deaeb30e4e8f7e6675a23720a019ff5619",
+      "expected_sha256": "97b06fe5befd6613b520d28dc20a74deaeb30e4e8f7e6675a23720a019ff5619",
+      "invariant": true
+    },
+    "future_train_vector_jsonl": {
+      "lines": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "expected_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "invariant": true
+    }
+  },
+  "full_test_suite": {
+    "command": "./venv/bin/pytest -q tests/",
+    "total_passed": 142,
+    "total_failed": 0,
+    "duration_seconds": 8.1,
+    "comparison_to_t0032": "142 >= 141 (T-0032'deki 141 teste ek olarak test_epistemic_agent_fallback.py eklendi)"
+  }
+}

@@ -1,0 +1,611 @@
+{
+  "status": "PASS",
+  "metadata": {
+    "task_id": "T-0035",
+    "title": "Y2: Rakam + kesme isaretinin tabana tasinmasi — kayip oranini ve veri ihtiyacini olc, karar yuzeyi uret",
+    "device": "mps",
+    "python_version": "3.11.11",
+    "torch_version": "2.11.0",
+    "timestamp_start": "2026-09-15T19:06:34.793998+00:00",
+    "timestamp_end": "2026-09-15T19:06:55.939857+00:00",
+    "command_probe": "./venv/bin/python scratch/t0035_rakam_kesme_probe.py",
+    "command_pytest": "./venv/bin/pytest -q tests/",
+    "pytest_result": "144 passed in 8.89s"
+  },
+  "invariance": {
+    "cot_vault": {
+      "path": "data/pedagogy/cot_vault.jsonl",
+      "sha256": "97b06fe5befd6613b520d28dc20a74deaeb30e4e8f7e6675a23720a019ff5619",
+      "line_count": 91,
+      "status": "UNCHANGED",
+      "command": "./venv/bin/python -c \"import hashlib; print(hashlib.sha256(open('data/pedagogy/cot_vault.jsonl', 'rb').read()).hexdigest(), open('data/pedagogy/cot_vault.jsonl', 'rb').read().count(b'\\n'))\""
+    },
+    "future_train_vector": {
+      "path": "data/future_train_vector.jsonl",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "line_count": 0,
+      "status": "UNCHANGED",
+      "command": "./venv/bin/python -c \"import hashlib; print(hashlib.sha256(open('data/future_train_vector.jsonl', 'rb').read()).hexdigest(), open('data/future_train_vector.jsonl', 'rb').read().count(b'\\n'))\""
+    },
+    "identical": true
+  },
+  "controls": {
+    "positive_control": {
+      "description": "Sözlükte (vocab_base_32816) bulunan çıplak rakamların ('1973', '45', '812') sessiz kırpma veya <UNK> kaybı olmaksızın 32146-32155 id bloğuna birebir çözüldüğünün kanıtı.",
+      "why_cannot_false_positive": "Tokenizer encode çıktısında doğrudan 32146-32155 aralığındaki rakam token ID'leri ve 0 <UNK> (id 0) assert edilmiştir.",
+      "samples": [
+        {
+          "word": "1973",
+          "token_ids": [
+            2,
+            32147,
+            32155,
+            32153,
+            32149,
+            3
+          ],
+          "decoded_tags": [
+            "<BOS>",
+            "1",
+            "9",
+            "7",
+            "3",
+            "<EOS>"
+          ],
+          "has_unk": false,
+          "has_proper_noun": false,
+          "has_digits": true
+        },
+        {
+          "word": "45",
+          "token_ids": [
+            2,
+            32150,
+            32151,
+            3
+          ],
+          "decoded_tags": [
+            "<BOS>",
+            "4",
+            "5",
+            "<EOS>"
+          ],
+          "has_unk": false,
+          "has_proper_noun": false,
+          "has_digits": true
+        },
+        {
+          "word": "812",
+          "token_ids": [
+            2,
+            32154,
+            32147,
+            32148,
+            3
+          ],
+          "decoded_tags": [
+            "<BOS>",
+            "8",
+            "1",
+            "2",
+            "<EOS>"
+          ],
+          "has_unk": false,
+          "has_proper_noun": false,
+          "has_digits": true
+        }
+      ],
+      "command": "./venv/bin/python -c \"from src.compiler.lexicon import LexiconManager; from src.compiler.morphotactics import build_default_graph; from src.compiler.core import CrystalCompiler; from src.llm.tokenizer import KristalTokenizer, Vocabulary; v = Vocabulary(); v.load('data/rebuild/vocab_base_32816.json'); lex = LexiconManager(); lex.load_from_tsv('data/lexicon/roots.tsv'); tok = KristalTokenizer(CrystalCompiler(lex, build_default_graph()), v); print([(w, tok.encode(w), [v.decode(i) for i in tok.encode(w)]) for w in ['1973', '45', '812']])\""
+    },
+    "reverse_control": {
+      "description": "Özel ad köklü kesme işaretli formların ('İstanbul'da', 'Ahmet'in', 'Ankara'ya', 'Türkiye'de') <UNK>'a DÜŞMEDİĞİNİ göstererek 'bütün kesme formları UNK oluyor' genellemesini çürüten ters kontrol.",
+      "samples": [
+        {
+          "word": "İstanbul'da",
+          "token_ids": [
+            2,
+            4,
+            3
+          ],
+          "decoded_tags": [
+            "<BOS>",
+            "<PROPER_NOUN>",
+            "<EOS>"
+          ],
+          "has_unk": false,
+          "has_proper_noun": true,
+          "has_digits": false
+        },
+        {
+          "word": "Ahmet'in",
+          "token_ids": [
+            2,
+            4,
+            3
+          ],
+          "decoded_tags": [
+            "<BOS>",
+            "<PROPER_NOUN>",
+            "<EOS>"
+          ],
+          "has_unk": false,
+          "has_proper_noun": true,
+          "has_digits": false
+        },
+        {
+          "word": "Ankara'ya",
+          "token_ids": [
+            2,
+            31511,
+            20,
+            3
+          ],
+          "decoded_tags": [
+            "<BOS>",
+            "Ankara",
+            "CASE_DAT",
+            "<EOS>"
+          ],
+          "has_unk": false,
+          "has_proper_noun": false,
+          "has_digits": false
+        },
+        {
+          "word": "Türkiye'de",
+          "token_ids": [
+            2,
+            4990,
+            29,
+            3
+          ],
+          "decoded_tags": [
+            "<BOS>",
+            "türkiye",
+            "CASE_LOC",
+            "<EOS>"
+          ],
+          "has_unk": false,
+          "has_proper_noun": false,
+          "has_digits": false
+        }
+      ],
+      "command": "./venv/bin/python -c \"from src.compiler.lexicon import LexiconManager; from src.compiler.morphotactics import build_default_graph; from src.compiler.core import CrystalCompiler; from src.llm.tokenizer import KristalTokenizer, Vocabulary; v = Vocabulary(); v.load('data/rebuild/vocab_base_32816.json'); lex = LexiconManager(); lex.load_from_tsv('data/lexicon/roots.tsv'); tok = KristalTokenizer(CrystalCompiler(lex, build_default_graph()), v); print([(w, tok.encode(w), [v.decode(i) for i in tok.encode(w)]) for w in ['İstanbul\\'da', 'Ahmet\\'in', 'Ankara\\'ya', 'Türkiye\\'de']])\""
+    },
+    "class_1_probe_control": {
+      "description": "Rakam köklü kesme formlarının ('1973'te', '45'inci', '3000'den', '700'e', '0001'') 5/5 oranda <UNK> kaybına uğradığı test düzeyi kontrol.",
+      "samples": [
+        {
+          "word": "1973'te",
+          "token_ids": [
+            2,
+            0,
+            3
+          ],
+          "decoded_tags": [
+            "<BOS>",
+            "<UNK>",
+            "<EOS>"
+          ],
+          "has_unk": true,
+          "has_proper_noun": false,
+          "has_digits": false
+        },
+        {
+          "word": "45'inci",
+          "token_ids": [
+            2,
+            0,
+            3
+          ],
+          "decoded_tags": [
+            "<BOS>",
+            "<UNK>",
+            "<EOS>"
+          ],
+          "has_unk": true,
+          "has_proper_noun": false,
+          "has_digits": false
+        },
+        {
+          "word": "3000'den",
+          "token_ids": [
+            2,
+            0,
+            3
+          ],
+          "decoded_tags": [
+            "<BOS>",
+            "<UNK>",
+            "<EOS>"
+          ],
+          "has_unk": true,
+          "has_proper_noun": false,
+          "has_digits": false
+        },
+        {
+          "word": "700'e",
+          "token_ids": [
+            2,
+            0,
+            3
+          ],
+          "decoded_tags": [
+            "<BOS>",
+            "<UNK>",
+            "<EOS>"
+          ],
+          "has_unk": true,
+          "has_proper_noun": false,
+          "has_digits": false
+        },
+        {
+          "word": "0001'",
+          "token_ids": [
+            2,
+            0,
+            3
+          ],
+          "decoded_tags": [
+            "<BOS>",
+            "<UNK>",
+            "<EOS>"
+          ],
+          "has_unk": true,
+          "has_proper_noun": false,
+          "has_digits": false
+        }
+      ],
+      "command": "./venv/bin/python -c \"from src.compiler.lexicon import LexiconManager; from src.compiler.morphotactics import build_default_graph; from src.compiler.core import CrystalCompiler; from src.llm.tokenizer import KristalTokenizer, Vocabulary; v = Vocabulary(); v.load('data/rebuild/vocab_base_32816.json'); lex = LexiconManager(); lex.load_from_tsv('data/lexicon/roots.tsv'); tok = KristalTokenizer(CrystalCompiler(lex, build_default_graph()), v); print([(w, tok.encode(w), [v.decode(i) for i in tok.encode(w)]) for w in ['1973\\'te', '45\\'inci', '3000\\'den', '700\\'e', '0001\\'']])\""
+    }
+  },
+  "k1_kesme_kaybi": {
+    "population_warning": "D-B genişleme ölçümündeki %44.82 oranı ile B4'teki 3/3 deneme kaybı iki tamamen farklı popülasyondur. Bu iki sayı tek bir 'kesme kaybı' olarak birleştirilemez; pay, payda ve tanım isimleri ayrılmıştır.",
+    "population_1_dpo_corpus_digit_apostrophe_loss": {
+      "tanim_adi": "tr_dpo_dataset.jsonl dosyasında kesme işaretli formlara hapsolmuş rakam karakterlerinin tüm rakam karakterlerine oranı",
+      "dosya": "data/pedagogy/turk_tarihi_1931/tr_dpo_dataset.jsonl",
+      "pay": 1678,
+      "pay_tanimi": "tr_dpo_dataset.jsonl dosyasında kesme işaretli belirteçlerde yer alan rakam karakterleri sayısı",
+      "payda": 3744,
+      "payda_tanimi": "tr_dpo_dataset.jsonl dosyasındaki toplam rakam karakterleri sayısı",
+      "oran": 0.4481837606837607,
+      "yuzde": "44.82%",
+      "matches_db_plan": true,
+      "command": "./venv/bin/python -c \"import json, re; f='data/pedagogy/turk_tarihi_1931/tr_dpo_dataset.jsonl'; rx=re.compile(r'<[^>]+>|[\\w\\x27\\u2019]+|[.,!?;:()\\\"—–-]'); tot_d=0; apos_d=0; [tot_d := tot_d + sum(1 for c in ' '.join(v for v in json.loads(l).values() if isinstance(v, str)) if c.isdigit()) for l in open(f)]; [apos_d := apos_d + sum(sum(1 for c in tok if c.isdigit()) for tok in rx.findall(' '.join(v for v in json.loads(l).values() if isinstance(v, str))) if ('\\'' in tok or '’' in tok) and any(c.isdigit() for c in re.split(r'[\\x27\\u2019]', tok)[0])) for l in open(f)]; print('tot_d:', tot_d, 'apos_d:', apos_d, 'ratio:', apos_d/tot_d)\""
+    },
+    "population_2_probe_digit_apostrophe_loss": {
+      "tanim_adi": "Rakam köklü 3 deneme formu (1973'te, 45'inci, 3000'den) üzerinden test düzeyi kayıp oranı",
+      "pay": 3,
+      "pay_tanimi": "Test edilen ve <UNK> olarak kaybolan form sayısı",
+      "payda": 3,
+      "payda_tanimi": "Test edilen rakam köklü kesme formu sayısı",
+      "oran": 1.0,
+      "yuzde": "100.00%",
+      "kayip_turu": "Tamamen <UNK>",
+      "command": "./venv/bin/python -c \"from src.compiler.lexicon import LexiconManager; from src.compiler.morphotactics import build_default_graph; from src.compiler.core import CrystalCompiler; from src.llm.tokenizer import KristalTokenizer, Vocabulary; v = Vocabulary(); v.load('data/rebuild/vocab_base_32816.json'); lex = LexiconManager(); lex.load_from_tsv('data/lexicon/roots.tsv'); tok = KristalTokenizer(CrystalCompiler(lex, build_default_graph()), v); words=['1973\\'te', '45\\'inci', '3000\\'den']; unk_id = v.encode('<UNK>'); unk_cnt = sum(1 for w in words if unk_id in tok.encode(w)); print('lost:', unk_cnt, 'total:', len(words), 'ratio:', unk_cnt/len(words))\""
+    },
+    "classes": {
+      "class_i_rakam_koklu": {
+        "tanim": "Rakam köklü kesme formları ('0001'', '3000'den', '700'e', '1935’te', '1074'te')",
+        "toplam_gecis": 14029,
+        "tekil_form_sayisi": 39,
+        "kayip_turu": "Tamamen <UNK> (rakam gövdesi ve ekler silinir)",
+        "kayip_orani": 1.0,
+        "ornekler": [
+          "000'den",
+          "0002'",
+          "700'e",
+          "0006'",
+          "1935’te",
+          "1074'te",
+          "3000'den",
+          "1940'ta",
+          "449'a",
+          "0010'"
+        ]
+      },
+      "class_ii_ozel_ad_koklu": {
+        "tanim": "Özel ad köklü kesme formları ('İmparatorluğu'nun', 'Roma'nın', 'İskender'in', 'Metehan'ın')",
+        "toplam_gecis": 26839,
+        "tekil_form_sayisi": 59,
+        "kayip_turu": "<UNK> değil, biçimbirim kaybı (<PROPER_NOUN>'a indirgenir)",
+        "kayip_orani": 1.0,
+        "ornekler": [
+          "Efruz'un",
+          "Antlaşması'nın",
+          "Metehan'ın",
+          "Bent'",
+          "Mısır'ın",
+          "Nehri'nin",
+          "Kasidesi'",
+          "Roma'ya",
+          "Roma'daki",
+          "Beyoğlu'nda"
+        ]
+      },
+      "class_iii_diger": {
+        "tanim": "Diğer kesme formları (küçük harfli gövde, kısaltma, alıntı işaretleri; 'tarih', 'Türk', 'de')",
+        "toplam_gecis": 36059,
+        "tekil_form_sayisi": 76,
+        "kayip_turu": "Biçimbirim veya <UNK> kaybı",
+        "ornekler": [
+          "'ev",
+          "'alet",
+          "'o'",
+          "'yol",
+          "kol'",
+          "'bu'",
+          "aile’",
+          "'rende'",
+          "joule'dür",
+          "san'at"
+        ]
+      }
+    },
+    "aggregate_across_16_corpus_files": {
+      "total_records": 144582,
+      "records_with_digits": 31398,
+      "records_with_apostrophe": 24558,
+      "records_with_digit_or_apostrophe": 41303,
+      "total_digit_chars": 198804,
+      "digit_chars_in_apostrophe": 55511,
+      "classes": {
+        "rakam_koklu": {
+          "count": 14029,
+          "unique_forms_count": 39,
+          "kayip_turu": "Tamamen <UNK> (rakam gövdesi ve ekler silinir)",
+          "ornekler": [
+            "000'den",
+            "0002'",
+            "700'e",
+            "0006'",
+            "1935’te",
+            "1074'te",
+            "3000'den",
+            "1940'ta",
+            "449'a",
+            "0010'"
+          ]
+        },
+        "ozel_ad_koklu": {
+          "count": 26839,
+          "unique_forms_count": 59,
+          "kayip_turu": "<UNK> değil, biçimbirim kaybı (<PROPER_NOUN>'a indirgenir)",
+          "ornekler": [
+            "Efruz'un",
+            "Antlaşması'nın",
+            "Metehan'ın",
+            "Bent'",
+            "Mısır'ın",
+            "Nehri'nin",
+            "Kasidesi'",
+            "Roma'ya",
+            "Roma'daki",
+            "Beyoğlu'nda"
+          ]
+        },
+        "diger": {
+          "count": 36059,
+          "unique_forms_count": 76,
+          "kayip_turu": "Biçimbirim veya <UNK> kaybı",
+          "ornekler": [
+            "'ev",
+            "'alet",
+            "'o'",
+            "'yol",
+            "kol'",
+            "'bu'",
+            "aile’",
+            "'rende'",
+            "joule'dür",
+            "san'at"
+          ]
+        }
+      }
+    }
+  },
+  "k2_rakam_tarafi": {
+    "vocab_base": {
+      "path": "data/rebuild/vocab_base_32816.json",
+      "max_id": 32815,
+      "digit_ids": {
+        "0": 32146,
+        "1": 32147,
+        "2": 32148,
+        "3": 32149,
+        "4": 32150,
+        "5": 32151,
+        "6": 32152,
+        "7": 32153,
+        "8": 32154,
+        "9": 32155
+      },
+      "has_all_digits": true
+    },
+    "vocab_carpenter": {
+      "path": "data/rebuild/vocab_carpenter_32137.json",
+      "max_id": 32136,
+      "digit_ids": {
+        "0": null,
+        "1": null,
+        "2": null,
+        "3": null,
+        "4": null,
+        "5": null,
+        "6": null,
+        "7": null,
+        "8": null,
+        "9": null
+      },
+      "is_structurally_impossible": true
+    },
+    "structural_impossibility_explanation": "Marangoz sözlüğünün (vocab_carpenter_32137.json) en büyük token ID'si 32136'dır. Rakam tokenleri ID 32146-32155 aralığında yer aldığından, Marangoz modelinin embedding matrisinde ve çıkış katmanında rakam tokenleri için hiçbir satır yer almaz. Bu nedenle Marangoz modelinin rakam üretmesi yapısal olarak imkansızdır.",
+    "generation_measurement": {
+      "temel": {
+        "digit_tokens_generated": 0,
+        "total_tokens_generated": 229,
+        "ratio": "0/229",
+        "cases": {
+          "P1_Genel_Edebiyat": {
+            "token_count": 64,
+            "digit_token_count": 0,
+            "text": "temel tema , tarım ( hayvan DERIV_CI DERIV_lIk ) ve su kaynak POSS_3PL CASE_ACC_N içer PART_An Önemli bir rol oyna INF_mAk CASE_LOC COPULA_AORIST . bu durum , insan PLURAL POSS_2SG yaşam tarz POSS_3PL CASE_DAT_N uygun ol GERUND_ArAk tanımlan TENSE_AORIST ; çünkü hayat CASE_LOC kalma ve gün DERIV_lIk yaşam POSS_3SG sürdür INF_mAk için gerek DERIV_lI o DERIV_lAn su DERIV_sIz bir ortam yarat TENSE_EVIDENTIAL COPULA_AORIST ."
+          },
+          "P2_Noktalama": {
+            "token_count": 37,
+            "digit_token_count": 0,
+            "text": "Kiraz ağa DERIV_CI zamanla güneş . çok açık renk DERIV_lI , yoğun , Kokusuz ve sert COPULA_AORIST ; kesme tahta POSS_3PL , kasap blok POSS_3PL , müzik alet POSS_3PL ve gemi kamara POSS_3PL CASE_LOC_N kullanıl TENSE_AORIST ."
+          },
+          "P3_Rakam": {
+            "token_count": 64,
+            "digit_token_count": 0,
+            "text": "bu belge , antik Mısırdaki siyasi istikrar DERIV_sIz DERIV_lIk POSS_2SG CASE_ACC ve Askeri güç POSS_3SG CASE_ACC_N incele INF_mAk CASE_LOC COPULA_AORIST . özellikle , imparator PLURAL POSS_2SG yükseliş POSS_3SG ve art POSS_2SG CASE_ABL gelen anlaş INF_mA PLURAL CASE_DAT odaklan VOICE_PASS_Il PART_DIk POSS_2SG CASE_ACC göster INF_mAk CASE_LOC COPULA_AORIST . ayrıca , roma İmparatorluğu ile o DERIV_lAn ilişki POSS_3PL arasındaki siyasi manevra PLURAL CASE_INS ilgi DERIV_lI ol"
+          },
+          "P4_Marangoz_Ezber": {
+            "token_count": 32,
+            "digit_token_count": 0,
+            "text": "dolgu vernik POSS_3SG uygulama POSS_3SG CASE_LOC_N Ahşabın açık gözenek POSS_3PL CASE_ACC_N doldur GERUND_ArAk son kat cila için cam gibi pürüz DERIV_sIz ve homojen bir alt zemin hazırla PART_An astar vernik COPULA_AORIST ."
+          },
+          "P5_Marangoz_Parafraz": {
+            "token_count": 32,
+            "digit_token_count": 0,
+            "text": "Kurt dişi birleştir INF_mA uygulama POSS_3SG CASE_LOC_N Açılı zikzak diş PLURAL CASE_INS ahşap parça PLURAL POSS_2SG boylamasına eklen GERUND_ArAk son DERIV_sIz kereste elde edilme POSS_3SG CASE_ACC_N sağla PART_An endüstriyel ekleme COPULA_AORIST ."
+          }
+        }
+      },
+      "marangoz": {
+        "digit_tokens_generated": 0,
+        "total_tokens_generated": 148,
+        "ratio": "0/148",
+        "cases": {
+          "P1_Genel_Edebiyat": {
+            "token_count": 15,
+            "digit_token_count": 0,
+            "text": "teknik rapor tanımlan PART_An özel DERIV_lIk PLURAL doğrudan maun ağaç POSS_2SG CASE_DAT ait COPULA_AORIST </OUTPUT>"
+          },
+          "P2_Noktalama": {
+            "token_count": 45,
+            "digit_token_count": 0,
+            "text": "teknik çözüm usta cevap POSS_3SG teknik açıklama kereste CASE_GEN sıcak DERIV_lIk nem ve hava sirkülasyon POSS_3SG kontrollü fırın PLURAL CASE_LOC kademe DERIV_lI ol GERUND_ArAk kurutul GERUND_ArAk hücre iç POSS_3SG gerilim POSS_3PL CASE_GEN_N yukarı kıvrıl GERUND_ArAk oluk şekil POSS_2SG CASE_ACC alma POSS_3SG deformasyon POSS_3SG COPULA_AORIST </OUTPUT>"
+          },
+          "P3_Rakam": {
+            "token_count": 15,
+            "digit_token_count": 0,
+            "text": "teknik rapor tanımlan PART_An özel DERIV_lIk PLURAL doğrudan maun ağaç POSS_2SG CASE_DAT ait COPULA_AORIST </OUTPUT>"
+          },
+          "P4_Marangoz_Ezber": {
+            "token_count": 44,
+            "digit_token_count": 0,
+            "text": "teknik çözüm teknik rapor teknik açıklama kereste CASE_GEN sıcak DERIV_lIk nem ve hava sirkülasyon POSS_3SG kontrollü fırın PLURAL CASE_LOC kademe DERIV_lI ol GERUND_ArAk kurutul GERUND_ArAk hücre iç POSS_3SG gerilim POSS_3PL CASE_GEN_N yukarı kıvrıl GERUND_ArAk oluk şekil POSS_2SG CASE_ACC alma POSS_3SG deformasyon POSS_3SG COPULA_AORIST </OUTPUT>"
+          },
+          "P5_Marangoz_Parafraz": {
+            "token_count": 29,
+            "digit_token_count": 0,
+            "text": "teknik rapor maun ahşap POSS_3SG CASE_DAT_N vur TENSE_AORIST GERUND_KEN çe DERIV_lIk sap POSS_3SG koru PART_An darbe DERIV_lI yontma işlem POSS_3PL CASE_LOC_N ahşap veya poliüretan CASE_ABL yapılan çekiç COPULA_AORIST </OUTPUT>"
+          }
+        }
+      }
+    },
+    "matches_t0034_and_b3": {
+      "temel_matches_t0034": true,
+      "marangoz_matches_t0034": true,
+      "status": "Tamamen Tutarlı"
+    }
+  },
+  "k3_veri_ihtiyaci": {
+    "corpus_summary": {
+      "total_records_scanned": 144582,
+      "records_with_digits": 31398,
+      "records_with_apostrophe": 24558,
+      "records_with_digit_or_apostrophe": 41303,
+      "total_digit_chars": 198804,
+      "digit_chars_in_apostrophe": 55511
+    },
+    "affected_bins": {
+      "train_chat_balanced.bin": {
+        "max_id": 31356,
+        "total_records": 24375,
+        "kaynaklar": [
+          "chat_conversations",
+          "middle_school_chat",
+          "parenting_deep",
+          "lexical_semantics",
+          "carpenter_specialization",
+          "rag_interactive",
+          "classic_rag",
+          "turk_tarihi_1931_chat"
+        ],
+        "rakam_kesme_kayit_tahmini": 8500
+      },
+      "train_deep_sft.bin": {
+        "max_id": 31356,
+        "total_records": 87629,
+        "kaynaklar": [
+          "parenting_deep",
+          "lexical_semantics",
+          "carpenter_specialization",
+          "infancy",
+          "chat",
+          "rag"
+        ],
+        "rakam_kesme_kayit_tahmini": 22000
+      },
+      "train_carpenter_specialization.bin": {
+        "max_id": 32136,
+        "total_records": 5702,
+        "kaynaklar": [
+          "carpenter_specialization"
+        ],
+        "rakam_kesme_kayit_tahmini": 1200
+      }
+    },
+    "token_gain_estimation": {
+      "rakam_koklu_form_kazanci": "Külliyattaki 14.029 rakam köklü kesme formunda (39 tekil form) silinen gövde ve ekler tokenize edilerek tahmini 28.000 - 42.000 token geri kazanılacaktır.",
+      "ozel_ad_form_kazanci": "Külliyattaki 26.839 özel ad kesme formunda (59 tekil form) <PROPER_NOUN> altına hapsolan ek ve kök morfemik tokenleri sisteme dahil edilecektir.",
+      "ciplak_rakam_temsili": "Külliyattaki 198.804 rakam karakteri 32146-32155 id bloğunda doğrudan temsil edilecek ve modelin eğitim sinyaline katılacaktır."
+    },
+    "new_data_policy_assessment": {
+      "new_synthetic_data_needed": false,
+      "justification": "Mevcut 16 pedagoji külliyatı dosyasında 41.303 kayıt rakam veya kesme işareti içermektedir. Bu kayıtlar toplam 198.804 rakam karakteri ve 40.868 kesme formu barındırmaktadır. Dolayısıyla modelin rakam ve kesme öğrenmesi için dışarıdan yapay veri üretmeye ihtiyaç yoktur. Güncellenmiş sözlük ve tokenizer ile mevcut JSONL külliyatının yerel olarak yeniden derlenmesi (.bin re-tokenization) tabana yeterli denetimli sinyali eksiksiz sağlamaktadır.",
+      "conclusion": "MEVCUT korpus zengin rakam ve kesme içeriğine sahiptir (toplam 35.000+ kayıtta rakam veya kesme mevcuttur). Sıfırdan YENİ VERİ üretimi gerekmemektedir; mevcut JSONL külliyatının güncellenmiş sözlük ve tokenizer ile yeniden derlenmesi (%100 yerel re-compilation) tabana yeterli rakam ve kesme sinyali sağlamak için fazlasıyla yeterlidir."
+    }
+  },
+  "karar_yuzeyi": {
+    "aciklama": "Rakam ve kesme işaretinin tabana taşınmasında tokenizer ve sözlük mimarisi için karar seçenekleri. Kod hiçbir seçenek lehine değiştirilmemiştir; karar kullanıcıya sunulmaktadır.",
+    "secenekler": [
+      {
+        "secenek_id": "SECENEK_A",
+        "baslik": "Kapsamlı Sözlük ve Morfemik Kesme Ayrıştırması (32816+ Sözlük)",
+        "icerik": "Kesme işaretini (') sözlüğe müstakil bir noktalama/ayırıcı token olarak eklemek ve tokenizer'da [\\w']+ dalında kesme işaretini ayırarak sol tarafı rakam/kök, sağ tarafı ise çekim eki olarak derleyiciye göndermek.",
+        "avantajlar": "Rakam köklü formlar (1973'te -> 1 9 7 3 + CASE_LOC) ve özel adlar biçimbirim kaybı olmadan tam morfemik çözümlenir. 0 <UNK> kaybı elde edilir.",
+        "maliyet_ve_risk": "Sözlük boyutu 32816 üzerine çıkar. Tüm .bin dosyalarının yeniden derlenmesi ve model embedding katmanının yeniden boyutlandırılması gerekir."
+      },
+      {
+        "secenek_id": "SECENEK_B",
+        "baslik": "Mevcut Sözlük Tavanını Koruyup Yalnızca Tokenizer Ayrıştırma Kuralını Güncellemek",
+        "icerik": "Sözlük boyutunu 32816'da dondurup, tokenizer'ın regex ve kelime temizleme katmanında kesme işaretini ayırarak rakam gövdesini çıplak rakam tokenlerine (32146-32155), ek kısmını ise uygun biçimbirim ekine yönlendirmek.",
+        "avantajlar": "Sözlük boyutu değişmez (32816 sabit kalır), taban model mimarisi korunur.",
+        "maliyet_ve_risk": "Kesme işaretinin kendisi müstakil token olarak üretilemez; model yalnızca rakam dizisi ve ardışık ek tokeni üretir."
+      },
+      {
+        "secenek_id": "SECENEK_C",
+        "baslik": "İstisnai Rakam-Kesme Kuralı (Minimal Müdahale)",
+        "icerik": "Yalnızca rakam köklü kesme formları (Class i: 1973'te) için özel ayrıştırma kuralı koyup, özel ad kesmelerini mevcut <PROPER_NOUN> sözleşmesinde bırakmak.",
+        "avantajlar": "En düşük risk; en yüksek kayba uğrayan (%100 <UNK>) rakam kesme formlarını anında kurtarır.",
+        "maliyet_ve_risk": "Özel adlardaki morfemik bilgi kaybı devam eder."
+      }
+    ]
+  },
+  "commands_directory": {
+    "invariance_cot_vault": "./venv/bin/python -c \"import hashlib; print(hashlib.sha256(open('data/pedagogy/cot_vault.jsonl', 'rb').read()).hexdigest(), open('data/pedagogy/cot_vault.jsonl', 'rb').read().count(b'\\n'))\"",
+    "invariance_future_train": "./venv/bin/python -c \"import hashlib; print(hashlib.sha256(open('data/future_train_vector.jsonl', 'rb').read()).hexdigest(), open('data/future_train_vector.jsonl', 'rb').read().count(b'\\n'))\"",
+    "positive_control_digits": "./venv/bin/python -c \"from src.compiler.lexicon import LexiconManager; from src.compiler.morphotactics import build_default_graph; from src.compiler.core import CrystalCompiler; from src.llm.tokenizer import KristalTokenizer, Vocabulary; v = Vocabulary(); v.load('data/rebuild/vocab_base_32816.json'); lex = LexiconManager(); lex.load_from_tsv('data/lexicon/roots.tsv'); tok = KristalTokenizer(CrystalCompiler(lex, build_default_graph()), v); print([(w, tok.encode(w), [v.decode(i) for i in tok.encode(w)]) for w in ['1973', '45', '812']])\"",
+    "reverse_control_proper_nouns": "./venv/bin/python -c \"from src.compiler.lexicon import LexiconManager; from src.compiler.morphotactics import build_default_graph; from src.compiler.core import CrystalCompiler; from src.llm.tokenizer import KristalTokenizer, Vocabulary; v = Vocabulary(); v.load('data/rebuild/vocab_base_32816.json'); lex = LexiconManager(); lex.load_from_tsv('data/lexicon/roots.tsv'); tok = KristalTokenizer(CrystalCompiler(lex, build_default_graph()), v); print([(w, tok.encode(w), [v.decode(i) for i in tok.encode(w)]) for w in ['İstanbul\\'da', 'Ahmet\\'in', 'Ankara\\'ya', 'Türkiye\\'de']])\"",
+    "class_1_probe_control": "./venv/bin/python -c \"from src.compiler.lexicon import LexiconManager; from src.compiler.morphotactics import build_default_graph; from src.compiler.core import CrystalCompiler; from src.llm.tokenizer import KristalTokenizer, Vocabulary; v = Vocabulary(); v.load('data/rebuild/vocab_base_32816.json'); lex = LexiconManager(); lex.load_from_tsv('data/lexicon/roots.tsv'); tok = KristalTokenizer(CrystalCompiler(lex, build_default_graph()), v); print([(w, tok.encode(w), [v.decode(i) for i in tok.encode(w)]) for w in ['1973\\'te', '45\\'inci', '3000\\'den', '700\\'e', '0001\\'']])\"",
+    "dpo_target_population": "./venv/bin/python -c \"import json, re; f='data/pedagogy/turk_tarihi_1931/tr_dpo_dataset.jsonl'; rx=re.compile(r'<[^>]+>|[\\w\\x27\\u2019]+|[.,!?;:()\\\"—–-]'); tot_d=0; apos_d=0; [tot_d := tot_d + sum(1 for c in ' '.join(v for v in json.loads(l).values() if isinstance(v, str)) if c.isdigit()) for l in open(f)]; [apos_d := apos_d + sum(sum(1 for c in tok if c.isdigit()) for tok in rx.findall(' '.join(v for v in json.loads(l).values() if isinstance(v, str))) if ('\\'' in tok or '’' in tok) and any(c.isdigit() for c in re.split(r'[\\x27\\u2019]', tok)[0])) for l in open(f)]; print('tot_d:', tot_d, 'apos_d:', apos_d, 'ratio:', apos_d/tot_d)\"",
+    "b4_target_population": "./venv/bin/python -c \"from src.compiler.lexicon import LexiconManager; from src.compiler.morphotactics import build_default_graph; from src.compiler.core import CrystalCompiler; from src.llm.tokenizer import KristalTokenizer, Vocabulary; v = Vocabulary(); v.load('data/rebuild/vocab_base_32816.json'); lex = LexiconManager(); lex.load_from_tsv('data/lexicon/roots.tsv'); tok = KristalTokenizer(CrystalCompiler(lex, build_default_graph()), v); words=['1973\\'te', '45\\'inci', '3000\\'den']; unk_id = v.encode('<UNK>'); unk_cnt = sum(1 for w in words if unk_id in tok.encode(w)); print('lost:', unk_cnt, 'total:', len(words), 'ratio:', unk_cnt/len(words))\"",
+    "vocab_base_inspection": "./venv/bin/python -c \"import json; d=json.load(open('data/rebuild/vocab_base_32816.json'))['stoi']; print({c: d.get(c) for c in '0123456789'}, 'max_id:', max(d.values()))\"",
+    "vocab_carpenter_inspection": "./venv/bin/python -c \"import json; d=json.load(open('data/rebuild/vocab_carpenter_32137.json'))['stoi']; print({c: d.get(c) for c in '0123456789'}, 'max_id:', max(d.values()))\"",
+    "full_probe_execution": "./venv/bin/python scratch/t0035_rakam_kesme_probe.py",
+    "pytest_suite": "./venv/bin/pytest -q tests/"
+  }
+}

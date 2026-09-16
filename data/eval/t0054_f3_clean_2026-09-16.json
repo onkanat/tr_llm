@@ -1,0 +1,125 @@
+{
+  "task_id": "T-0054",
+  "timestamp": "2026-09-16T20:07:00Z",
+  "status": "PASS",
+  "leases": {
+    "dir_leases": ["data", "scratch"],
+    "file_leases": ["data/eval/t0054_f3_clean_2026-09-16.json", ".agent-bus/notes/T-0054.md"],
+    "acquired_before_writes": true
+  },
+  "runs": {
+    "run_a": {
+      "phase": "A (SFT v2)",
+      "command": "venv/bin/python train.py --device mps --data data/train_balanced_sft_v2.bin --steps 1000 --batch-size 16 --load-path data/kristal_model.pt --save-path data/kristal_model_f3_clean_sft.pt --allow-frozen-write",
+      "device": "mps (Metal GPU)",
+      "pad_mask_active": true,
+      "steps": 1000,
+      "batch_size": 16,
+      "block_size": 64,
+      "loss_start": 3.0881,
+      "loss_end": 0.7607,
+      "duration_seconds": 449.20,
+      "avg_step_seconds": 0.449,
+      "checkpoint": "data/kristal_model_f3_clean_sft.pt",
+      "sha256": "03db1630ff95d3ec0bbaa1bc9b9ebedcbecbc6ed75676b57f266f3991b8142bf",
+      "bytes": 372126054
+    },
+    "run_b": {
+      "phase": "B (Chat Balanced)",
+      "command": "venv/bin/python train.py --device mps --data data/train_chat_balanced.bin --steps 1000 --batch-size 16 --load-path data/kristal_model_f3_clean_sft.pt --save-path data/kristal_model_f3_clean.pt --allow-frozen-write",
+      "device": "mps (Metal GPU)",
+      "pad_mask_active": true,
+      "steps": 1000,
+      "batch_size": 16,
+      "block_size": 128,
+      "loss_start": 0.8055,
+      "loss_end": 0.7165,
+      "duration_seconds": 1474.06,
+      "avg_step_seconds": 1.474,
+      "checkpoint": "data/kristal_model_f3_clean.pt",
+      "sha256": "fc964af53534b818329c0da6e86aabfb729144615b85bfb6adc6e3c40e767aee",
+      "bytes": 372125626
+    }
+  },
+  "gate_metrics": {
+    "gate_a_mps_and_step_time": {
+      "run_a_avg_step_s": 0.449,
+      "run_b_avg_step_s": 1.474,
+      "status": "PASS",
+      "note": "Koşum B ortalama 1.474s/adım hızında tamamlandı (T-0052'deki 3.447s/adım'dan 2.3 kat daha hızlı, beklenen yüksüz ~1.55s ile uyumlu)."
+    },
+    "gate_b_masked_loss": {
+      "run_a_loss": [3.0881, 0.7607],
+      "run_b_loss": [0.8055, 0.7165],
+      "status": "PASS",
+      "note": "Kayıplar ignore_index=1 maskeli rejimde hesaplanmıştır."
+    },
+    "gate_c_punctuation_y1": {
+      "method": "Y1 (5 offsets [0, 20000, 40000, 60000, 80000], ctx 32, greedy 32, 160 tokens total)",
+      "baseline_taban_measured": {
+        "dot_32137": 9,
+        "comma_32138": 8,
+        "colon_32142": 0,
+        "paren_32145": 1,
+        "apostrophe_32850": 0
+      },
+      "f3_clean_measured": {
+        "dot_32137": {"count": 5, "per_100": 3.12},
+        "comma_32138": {"count": 1, "per_100": 0.62},
+        "colon_32142": {"count": 3, "per_100": 1.88},
+        "paren_32145": {"count": 2, "per_100": 1.25},
+        "apostrophe_32850": {"count": 3, "per_100": 1.88}
+      },
+      "total_punct_f3_clean": 14,
+      "total_punct_per_100": 8.75
+    },
+    "gate_d_top_5_ids": {
+      "top_5_all_tokens": [
+        {"token": "0", "id": 32146, "count": 8},
+        {"token": "<UNK>", "id": 0, "count": 8},
+        {"token": "POSS_3SG", "id": 13, "count": 7},
+        {"token": ".", "id": 32137, "count": 5},
+        {"token": "POSS_2SG", "id": 28, "count": 4}
+      ],
+      "top_5_first_tokens": [
+        {"token": "ve", "id": 46, "count": 2},
+        {"token": "son", "id": 715, "count": 1},
+        {"token": "gibi", "id": 80, "count": 1},
+        {"token": "</ENT>", "id": 32817, "count": 1}
+      ],
+      "pad_count_in_all": 0,
+      "is_pad_top1": false,
+      "status": "PASS"
+    },
+    "gate_e_ce_fixed_slice": {
+      "mode": "unmasked (ignore_index=None)",
+      "slice_config": "offset 100000 + b*1000, BS 4, SEQ 64, 6 batches",
+      "scores": {
+        "taban": 5.4578,
+        "f3_sft": 1.9583,
+        "f3": 2.0695,
+        "f3_clean_sft": 1.9745,
+        "f3_clean": 1.9625
+      }
+    }
+  },
+  "canary_verification": {
+    "pins_matched": "9/9",
+    "pins": {
+      "data/kristal_model.pt": "02e15b8198f8f3334609eb52691d699e80f88972245377c1a79772cb42ae1679",
+      "data/kristal_model_step_b1_final.pt": "01d7918e4e5fa8e4fdbf0c4628b41a734639d9736d54f3307b44a0b5fd77174e",
+      "data/kristal_model_pre_clean.pt": "d1f04433d81b5691f310bca691baf50f90be0527701c4b757460e5c1b368dcac",
+      "data/kristal_model_sft.pt": "b6764c7062ce627a0ba9437cf052a28d0ac4e2e4cf3b3df3e3110d05a1ba2957",
+      "data/kristal_carpenter_model.pt": "5f0b8c71727d15e338e4301634b0d05652c3230cebc532b1124aff3761e93b4d",
+      "data/kristal_model_f3a.pt": "dbf79bc8149bc8fa4df6e7e5b24f7377d7a1f25113bccef0feecaf59e6ff205d",
+      "data/kristal_model_f3b.pt": "027a75e71a7d0872d8f7fc356767652115418e40703a4a737db2d619815bd710",
+      "data/kristal_model_f3_sft.pt": "5a0a03c22d4efdff331deb826024bc6f7cce416da13aaaf85e4b24d2cf117108",
+      "data/kristal_model_f3.pt": "eefc3ab85dcfb454dd80cc1b4519ec9c923df2587ad1c6ecaa4a2a535daebbfd"
+    },
+    "data_pt_count": 29,
+    "data_bin_count": 15,
+    "scratch_f2_backup_count": 6,
+    "scratch_f3_backup_count": 5,
+    "disk_avail_post": "16Gi"
+  }
+}

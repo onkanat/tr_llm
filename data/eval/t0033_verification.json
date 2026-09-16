@@ -1,0 +1,124 @@
+{
+  "task_id": "T-0033",
+  "verdict": "PASS_WITH_FINDINGS",
+  "verified_by": "claude (danisman)",
+  "verified_at": "2026-09-15T16:36:00Z",
+  "method": "Bagimsiz yeniden olcum. Yurutucu raporuna ve yurutum notuna guvenilmedi: her iddia kendi aracimla yeniden uretildi. V3 duzeltmesi icin UC YONLU mutant/pozitif kontrol kuruldu (kusuru tasiyan gercek HEAD surumu + tek satirlik yapay mutant + calisan surum). Testler ve model kosumlari sandbox DISINDA calistirildi.",
+  "closure_signals": {
+    "completion_message": ".agent-bus/state/inbox/claude/2026-09-15T16-22-14Z-antigravity.json",
+    "active_leases_by_executor": 0,
+    "changed_files_covers_declared_scope": true,
+    "note": "Uc sinyal birlikte saglandi (gorev done / kira 0 / sonuc dosyasi + mesaj mevcut) ve dogrulama 16:22:14Z'den SONRA baslatildi. writes[] 5 yol; pencerede degisen dosya sayisi da tam 5 ve kume birebir ayni."
+  },
+  "claimed_hashes_independently_verified": {
+    "data/eval/t0033_attribution_and_cleanup_2026-09-15.json": {
+      "measured": "4349207cdd2f5f4959bde4e3f62d1a58d6dcce20e8069f892470396517683feb"
+    },
+    ".agent-bus/notes/T-0032.md": {
+      "measured": "0c89a1707e5315db5f7ed2fc9445a232c8e1791a9cb770ac4a659eec8d9b7f1a"
+    },
+    "src/rag/epistemic_agent.py": {
+      "measured": "9d1cc5295c7ef82ef9442843ee1f588a1d1156d1341421a82522c8077e5d0f76"
+    },
+    "note": "Raporun v1_hash_table_update.measured_hashes tablosundaki 6 degerin 6'si `shasum -a 256` ile diskten birebir dogrulandi (T-0033 penceresi icinde tazelendigi icin halen gecerli)."
+  },
+  "acceptance_criteria_measured": [
+    {
+      "id": "K1",
+      "criterion": "Not hash tablosunun 6 degeri `shasum -a 256` ciktisiyla birebir + olcum damgasi",
+      "verdict": "PASS",
+      "evidence": "`shasum -a 256` ile notun 3. bolumundeki 6 yol olculdu; 6/6 rapor tablosuyla ve diskle birebir. Damga mevcut: 'Olcum Damgasi: 2026-09-15 16:15:00Z itibariyle'."
+    },
+    {
+      "id": "K2",
+      "criterion": "`test_bit_identity` atifi var olmayan dosyayi gostermiyor",
+      "verdict": "PASS",
+      "evidence": "`grep -c 'test_bit_identity' .agent-bus/notes/T-0032.md` = 0. Atif, mevcut `data/eval/t0032_rag_pipeline_service_2026-09-15.json` raporuna yonlendirilmis; dosya diskte var."
+    },
+    {
+      "id": "K3",
+      "criterion": "Raporun bit-ozdeslik conclusion'i kosullu; bos/beyaz belge vakalari kayitli ve FARKLI isaretli, sapma gerekcesi yazili",
+      "verdict": "PASS",
+      "evidence": "Sapma BAGIMSIZ olarak yeniden uretildi. Kendi probe'um (T-0032 HEAD kopyasi vs calisan surum, ayni sahte tokenizer, 6 vaka): 4/6 OZDES, 2/6 FARKLI. iii text='' -> OLD 11 token `<INSTRUCTION> Belgeye gore cevapla. </INSTRUCTION> <INPUT> <BELGE> </BELGE> okul </INPUT> <OUTPUT>` / NEW 9 token `<INSTRUCTION> ... </INSTRUCTION> <INPUT> okul </INPUT> <OUTPUT>`; iv text='   ' ayni. Esik ustu/esik alti/sinir (0.40 ve 0.39999) vakalari OZDES. Gerekce (bos zarfin modellere beslenmemesi) rapora islenmis."
+    },
+    {
+      "id": "K4",
+      "criterion": "`grep -c clean_doc_tags` = 0; `doc_crystal_tags` ya ataniyor ya kaldirildi",
+      "verdict": "PASS",
+      "evidence": "`grep -c 'clean_doc_tags' src/rag/epistemic_agent.py` = 0. `doc_crystal_tags` satir 301'de KOŞULSUZ atanıyor, satir 347'de kullaniliyor. Ayrica `git show HEAD:src/rag/epistemic_agent.py` ile ONCEKI hal de olculdu: satir 298 `doc_crystal_tags = \"\"` (atama var) + satir 352 `clean_doc_tags` (tanimsiz) -> kusur gercekten HEAD'de mevcuttu."
+    },
+    {
+      "id": "K5",
+      "criterion": "Mutant pozitif kontrol: bos metinli belge + score>=0.85 duzeltmeyle YESIL, geri alininca NameError ile KIRMIZI",
+      "verdict": "PASS (uc yonlu kontrol)",
+      "evidence": "Kendi probe'um (`/tmp/claude-501/t0033_v3_mutant_probe.py`) UC varyanti ayni senaryoda kostu (bos belge, score=0.90, force_rag=True): ONCEKI_HEAD -> KIRMIZI `NameError: name 'clean_doc_tags' is not defined`; MUTANT (calisan dosyanin yalniz 347. satiri `doc_crystal_tags`->`clean_doc_tags` yapildi, depoya yazilmadi) -> KIRMIZI ayni NameError; CALISAN -> YESIL, 1 satir yazildi, `record.output == 'kristal etiketler'`. Boylece hem probe'un kirmizi uretebildigi hem de duzeltmenin tam olarak o satiri kapattigi kanitlandi."
+    },
+    {
+      "id": "K6",
+      "criterion": "`./venv/bin/pytest -q tests/` sandbox DISINDA yesil ve toplam test >= 141",
+      "verdict": "PASS",
+      "evidence": "Sandbox disinda: `142 passed in 7.46s`, PYTEST_EXIT=0 (log: /tmp/claude-501/t0033_pytest.log). 142 >= 141. Oncesinde ayni kosum 7.94s / 7.70s ile ayni sonucu vermisti."
+    },
+    {
+      "id": "K7",
+      "criterion": "`cot_vault.jsonl` ve `future_train_vector.jsonl` kosum oncesi/sonrasi ayni (sha256 + satir)",
+      "verdict": "PASS",
+      "evidence": "Pytest ONCESI 2026-09-15T16:33:23Z: cot_vault 91 satir / 91867 bayt / `97b06fe5befd6613b520d28dc20a74deaeb30e4e8f7e6675a23720a019ff5619`, future_train_vector 0 satir / 0 bayt / `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855`. SONRASI 16:33:33Z: ikisi de BIREBIR ayni. Kabul kosusu olctugu artefakti degistirmedi."
+    },
+    {
+      "id": "K8",
+      "criterion": "Kardes artefakt `.agent-bus/notes/T-0031.md` ayni yanlis-hash sinifi icin olculdu",
+      "verdict": "PASS",
+      "evidence": "Notta 4 yol+sha256 atfi var (2'si 3. bolumde, 2'si 2. bolumde satir ici). 4/4 diskle birebir; notta toplam 64-hex dize sayisi da 4 (fazladan/uyusmayan hash yok). Yanlis-hash sinifi tasimiyor."
+    },
+    {
+      "id": "K9",
+      "criterion": "`git status --porcelain` yollari `writes[]` disinda degil; mutasyon izi diskte yok",
+      "verdict": "PASS (olcum yorumu asagida beyan edilmistir)",
+      "evidence": "Yorum: porcelain 30 satirin tamamini writes[]'e sigdirmak mumkun degil (25 satir T-0033 oncesinden geliyor). Bu yuzden olcut mtime penceresi ile olculdu. Pencere 15:51:43Z-16:22:14Z icinde degisen dosya sayisi TAM 5 ve kume `writes[]` ile BIREBIR ayni: tests/test_epistemic_agent_fallback.py (16:06:28Z), src/rag/epistemic_agent.py (16:09:18Z), .agent-bus/notes/T-0032.md (16:15:45Z), data/eval/t0032_rag_pipeline_service_2026-09-15.json (16:18:44Z), data/eval/t0033_attribution_and_cleanup_2026-09-15.json (16:21:05Z). Pencereden sonra degisen dosya sayisi 0 -> ne benim pytest kosumum ne probe'larim depo-izlenen hicbir yol birakmadi. Pencereden onceki 25 dosyanin EN YENI mtime'i 15:50:46Z (T-0032 dogrulama dosyasi, T-0033 acilmadan once) -> hicbiri T-0033'e atfedilemez. Mutasyon izi: yapay mutant depo disinda (/tmp/claude-501/mutant_epistemic_agent.py) uretildi; depodaki dosyanin sha256'si mutasyondan etkilenmedi."
+    },
+    {
+      "id": "K10",
+      "criterion": "Rapor ve notteki her sayinin yaninda onu ureten komut var",
+      "verdict": "PASS_WITH_FINDING",
+      "evidence": "Rapordaki 4 `command` alanindan 2'si tam ve calistirilabilir (grep_proof, full_test_suite); 2'si `...` ile KISALTILMIS ve yanlarindaki sayilari URETEMIYOR (bkz. V1). Sayilarin KENDISI dogru cikti (4/4 kardes hash, 91/0 satir, 2 sha256) - kusur dogrulukta degil yeniden-uretim kanalinda."
+    }
+  ],
+  "findings": [
+    {
+      "id": "V1",
+      "severity": "ORTA",
+      "title": "Rapordaki 2 komut alani `...` ile kisaltilmis; yanlarindaki sayilarin tek uretim kanali yok",
+      "detail": "`data/eval/t0033_attribution_and_cleanup_2026-09-15.json` satir 62 ve 88: `\"command\": \"./venv/bin/python -c \\\"import hashlib; from pathlib import Path; ...\\\"\"`. Bu iki alan sirasiyla `peer_artifact_positive_control_t0031` (4 cited/disk hash cifti) ve `invariance_check` (91/0 satir + 2 sha256) dugumlerinin sayilarini uretmesi gereken komuttur; `...` yuzunden hicbir sayi bu metinden yeniden uretilemez.",
+      "impact": "T-0032 dogrulamasinin V4 bulgusu (kayitli komutun calistirilabilir olmamasi) T-0033'te YALNIZ lazy-import komutu icin kapatildi; ayni yazim kaliplari iki kardes alanda yasamaya devam ediyor. Sayilar bu kez DOGRU (bagimsiz dogruladim), dolayisiyla kusur dogruluk degil SURDURULEBILIRLIK sinifindadir.",
+      "recommendation": "Kural genisletilsin: 'kayitli komut' alani `...` ile kisaltilamaz. Bir dugumde sayisal iddia varsa komut ya tam yazilir ya da o dugum komut tasimaz - rapor baska bir yerde tam komuta atif verir. (T-0032 notundaki hash tablosu kuralinin komut alanlarina genisletilmis hali.)"
+    },
+    {
+      "id": "V2",
+      "severity": "DUSUK",
+      "title": "Kardes not `.agent-bus/notes/T-0031.md` canli durum alanini damgasiz tasiyor (kusur #7 sinifinin kardes yuzeyi)",
+      "detail": "`.agent-bus/notes/T-0031.md` satir 5: `**Durum:** Devam ediyor / Tamamlanma asamasi` - 'as-of' damgasi YOK. Oysa `.agent-bus/state/tasks/T-0031.json` durumu `done` (claimed_by: antigravity). Yani kalici yuzey, gorev kapandiktan sonra da 'devam ediyor' diyor.",
+      "impact": "T-0033 V1 duzeltmesi damga kuralini EKLEDI ve T-0032.md'ye UYGULADI; ayni sinif kusur kardes notta duruyor. T-0033'un `writes[]` listesinde T-0031.md YOK - SPEC kural 1 geregi yurutucu bu yuzeye yazamazdi, dolayisiyla bu bir yurutum kusuru DEGIL, kapsam siniridir.",
+      "recommendation": "Kural, notun DURUM alanina damga koymayi zorunlu kilsin ve yeni gorev acilirsa T-0031.md de damgalansin (veya notes/ yuzeyindeki tum durum alanlari tek bir tarama ile damga kuralina uydurulsun)."
+    }
+  ],
+  "tool_axis_notes": [
+    {
+      "id": "A1",
+      "title": "`$TMPDIR` sandbox ICINDE ve DISINDA farkli",
+      "detail": "Sandbox icinde `$TMPDIR=/tmp/claude-501`, sandbox disinda `/var/folders/.../T/`. Probe'lar sandbox disinda kosuldugu icin `os.environ[\"TMPDIR\"]` ile yazilan yardimci dosyalar (HEAD kopyasi) bulunamadi; ilk kosum `FileNotFoundError` verdi. Cozum: probe icinde SABIT `/tmp/claude-501` yolu ve `/tmp/claude-501`e yazilan HEAD kopyasi icin `TMPDIR=/tmp/claude-501` ortam degiskeni ile kosum.",
+      "impact": "Arac ekseni ailesinin 12. vakasi. 'Dosya yok' hatasi denek kodun degil olcum kabinin kusuru olabilir; bulgu yazmadan once yolun iki kabukta ayni oldugu dogrulanmalidir."
+    },
+    {
+      "id": "A2",
+      "title": "Rapordaki `...` kisaltmasi duz regex ile bulunamiyor",
+      "detail": "JSON icinde kacisli tirnak (`\\\"`) nedeniyle `\"([^\"]*command[^\"]*)\"\\s*:\\s*\"([^\"]*)\"` kalibi degeri ilk kacisli tirnakta kesiyor ve `...` hic yakalanmiyor. Ham `grep -n '\\.\\.\\.'` ile 2 isabet bulundu.",
+      "impact": "Kendi sayacimin denetimi: 'kisaltilmis komut yok' sonucu bir an dogru gorundu; ham metin grep'i olmadan bu sinif gozden kacar."
+    }
+  ],
+  "notes": [
+    "Yurutucu raporundaki `status: PASS` beyani bagimsiz olarak DOGRULANDI; geri alinmasi gereken bir sayi bulunmadi.",
+    "Raporun kendi kendini '142 >= 141' diye karsilastirmasi ve gerekcesi (yeni test dosyasi) tutarli: T-0032 kosumu 141, T-0033 sonrasi 142, fark tam olarak `tests/test_epistemic_agent_fallback.py`.",
+    "Bu dogrulama turunda hicbir yeni gorev ACILMADI (kullanici talimati) ve hicbir depo dosyasi degistirilmedi; yazilan tek yol `data/eval/t0033_verification.json` olup kiralama ile kapsanmistir."
+  ]
+}

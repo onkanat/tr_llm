@@ -169,7 +169,7 @@ def run_suite():
     graph = build_default_graph()
     compiler = CrystalCompiler(lexicon, graph)
     vocab = Vocabulary()
-    vocab.load("data/vocab.json")
+    vocab.load("data/rebuild/vocab_base_32852.json")
     tokenizer = KristalTokenizer(compiler, vocab)
     decompiler = MorphemeDecompiler(compiler, vocab)
     
@@ -179,12 +179,12 @@ def run_suite():
     
     # 1. Validation Loss Measurements
     print("\n--- 1. DOĞRULAMA KAYBI (VAL LOSS) ÖLÇÜMÜ ---")
-    val_loss_base_sft = compute_val_loss(base_model, "data/train_balanced_sft.bin", vocab)
+    val_loss_base_sft = compute_val_loss(base_model, "data/train_balanced_sft_v2.bin", vocab)
     val_loss_base_chat = compute_val_loss(base_model, "data/train_chat_balanced.bin", vocab)
     val_loss_carpenter = compute_val_loss(carpenter_model, "data/train_carpenter_specialization.bin", vocab)
     val_loss_base_on_carpenter = compute_val_loss(base_model, "data/train_carpenter_specialization.bin", vocab)
     
-    print(f"Base Model - Val Loss (train_balanced_sft.bin, son %10):      {val_loss_base_sft:.4f}")
+    print(f"Base Model - Val Loss (train_balanced_sft_v2.bin, son %10):   {val_loss_base_sft:.4f}")
     print(f"Base Model - Val Loss (train_chat_balanced.bin, son %10):      {val_loss_base_chat:.4f}")
     print(f"Carpenter Model - Val Loss (train_carpenter, son %10):          {val_loss_carpenter:.4f}")
     print(f"Base Model - Val Loss (train_carpenter, son %10):              {val_loss_base_on_carpenter:.4f}")

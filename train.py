@@ -9,21 +9,16 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 from src.llm.tokenizer import Vocabulary
 from scripts.train_step_demo import KristalDataset, KristalEmbedding, KristalLM
+from src.llm.prompt_contract import resize_state_dict
 
-def resize_state_dict(model, old_state_dict):
-    """Resizes model embedding and linear heads to match the new vocabulary size."""
-    new_state_dict = model.state_dict()
-    for k, v in old_state_dict.items():
-        if k in new_state_dict:
-            if v.shape != new_state_dict[k].shape:
-                print(f"Resizing weights for: {k} (Old: {list(v.shape)}, New: {list(new_state_dict[k].shape)})")
-                if len(v.shape) == 2:
-                    new_state_dict[k][:min(v.shape[0], new_state_dict[k].shape[0]), :min(v.shape[1], new_state_dict[k].shape[1])] = v[:min(v.shape[0], new_state_dict[k].shape[0]), :min(v.shape[1], new_state_dict[k].shape[1])]
-                elif len(v.shape) == 1:
-                    new_state_dict[k][:min(v.shape[0], new_state_dict[k].shape[0])] = v[:min(v.shape[0], new_state_dict[k].shape[0])]
-            else:
-                new_state_dict[k] = v
-    return new_state_dict
+def check_frozen_save_path(save_path: str, allow_frozen_write: bool = False) -> None:
+    """Belirtilen kaydetme yolunun donmuş olup olmadığını denetler.
+    
+    Donmuş yola yazma izni (allow_frozen_write=True) açıkça verilmemişse RuntimeError fırlatır.
+    """
+    from src.llm.frozen_guard import is_frozen_path
+    if is_frozen_path(save_path) and not allow_frozen_write:
+        raise RuntimeError(f"Donmuş yola yazma engellendi: {save_path} (allow_frozen_write=False)")
 
 def main():
     print("=" * 60)
@@ -50,10 +45,16 @@ def main():
 
     # 2. Vocabulary & Data Loading
     vocab = Vocabulary()
-    vocab_path = 'data/vocab.json'
+    vocab_path = 'data/rebuild/vocab_base_32852.json'
     vocab.load(vocab_path)
     vocab_size = len(vocab.stoi)
     print(f"Sözlük Yüklendi. Kelime dağarcığı boyutu: {vocab_size}", flush=True)
+
+    pad_ignore_index = None if "--no-pad-mask" in sys.argv else vocab.stoi.get("<PAD>", 1)
+    if pad_ignore_index is not None:
+        print(f"<PAD> kayıp maskesi aktif (ignore_index={pad_ignore_index}).", flush=True)
+    else:
+        print("<PAD> kayıp maskesi devre dışı (--no-pad-mask).", flush=True)
 
     bin_filepath = 'data/train.bin'
     block_size = 64
@@ -97,6 +98,9 @@ def main():
 
     if model_load_path is None:
         model_load_path = model_save_path
+
+    allow_frozen_write = "--allow-frozen-write" in sys.argv
+    check_frozen_save_path(model_save_path, allow_frozen_write=allow_frozen_write)
 
     lr = 1e-3
     if os.path.exists(model_load_path) and not from_scratch:
@@ -175,7 +179,7 @@ def main():
         sign_mask = sign_mask_cpu.to(device)
 
         optimizer.zero_grad()
-        logits, loss = model(x, targets, sign_mask)
+        logits, loss = model(x, targets, sign_mask, ignore_index=pad_ignore_index)
         loss.backward()
         optimizer.step()
         

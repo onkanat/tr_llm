@@ -1,0 +1,67 @@
+{
+  "task_id": "T-0043",
+  "status": "PASS",
+  "date": "2026-09-16",
+  "writes": [
+    "scripts/prepare_carpenter_specialization_dataset.py",
+    "tests/test_f2_producers.py",
+    "data/eval/t0043_f2_wiring_and_carpenter_accounting_2026-09-16.json",
+    ".agent-bus/notes/T-0043.md"
+  ],
+  "changed_files": [
+    "scripts/prepare_carpenter_specialization_dataset.py",
+    "tests/test_f2_producers.py",
+    "data/eval/t0043_f2_wiring_and_carpenter_accounting_2026-09-16.json",
+    ".agent-bus/notes/T-0043.md"
+  ],
+  "verification_results": {
+    "a_changed_files_declaration": {
+      "status": "DOGRULANDI",
+      "measurement": "KOŞUM: changed_files writes[] ile birebir aynı (4 yol, ne eksik ne fazla)."
+    },
+    "b_v2_carpenter_normalize_encode_errors": {
+      "status": "DOGRULANDI",
+      "measurement": "KOŞUM: tokenize_carpenter_jsonl ve total_accounting şemasında 'normalize_encode_errors' mevcut. İkinci normalize kodlama hatası yalnız bu sayacı artırıyor, encode_errors satır düzeyinde kalıyor."
+    },
+    "c_v2_carpenter_d4_and_ceiling_invariant": {
+      "status": "DOGRULANDI",
+      "measurement": "KOŞUM: D4 özdeşliği 'assert stats[\"sampled\"] == stats[\"json_errors\"] + stats[\"encode_errors\"] + stats[\"lines_ok\"]' korundu. Ek tavan kontrolü 'assert stats[\"kept\"] <= 2 * stats[\"lines_ok\"]' eklendi."
+    },
+    "d_v2_carpenter_modular_function": {
+      "status": "DOGRULANDI",
+      "measurement": "KOŞUM: inspect.signature(tokenize_carpenter_jsonl) -> (filepath: str, tokenizer: src.llm.tokenizer.KristalTokenizer) -> Tuple[List[List[int]], Dict[str, int]]. main() gövdesinde bu fonksiyon çağrılıyor."
+    },
+    "e_v2_kosum_carpenter_normalize_failure_scenario": {
+      "status": "DOGRULANDI",
+      "measurement": "KOŞUM: tests/test_f2_producers.py::test_carpenter_accounting_normalize_encode_failure -> Sahte tokenizer 'Ahşap uzmanı olarak cevapla.' metninde patlatıldığında: sampled=2, json_errors=0, encode_errors=0, normalize_encode_errors=2, lines_ok=2, kept=2, short_skipped=0, D4 özdeşliği ve tavan invariantı tam sağlandı (2 == 0 + 0 + 2)."
+    },
+    "f_v3_kosum_end_to_end_main_gate_and_ast": {
+      "status": "DOGRULANDI",
+      "measurement": "KOŞUM: (A) test_main_gate_raises_on_default_allow_frozen_write üç üretici için de (chat, carp, sft) varsayılan allow_frozen_write=False ile çağrıldığında RuntimeError('Donmus yola yazma engellendi...') fırlatarak geçti. (B) test_ast_main_has_gate_before_tofile üç üreticinin main gövdesinde en az 1 check_output_path, en az 1 tofile ve max(check) < min(tofile) şartını doğruladı."
+    },
+    "g_v3_kosum_mutant_proof": {
+      "status": "DOGRULANDI",
+      "measurement": "KOŞUM: scripts/prepare_carpenter_specialization_dataset.py içindeki check_output_path çağrıları geçici olarak silindiğinde pytest (A) ve (B) testlerinde 2 FAILED verdi: test_main_gate_raises_on_default_allow_frozen_write (DID NOT RAISE RuntimeError) ve test_ast_main_has_gate_before_tofile (AssertionError: check_output_path çağrısı bulunamadı!). Satırlar geri konulduğunda 13/13 passed oldu."
+    },
+    "h_pytest_suite": {
+      "status": "DOGRULANDI",
+      "measurement": "KOŞUM: ./venv/bin/pytest tests/ -q sandbox DIŞINDA. Önce: 179 passed. Sonra: 186 passed in 11.30s (0 fail)."
+    },
+    "i_canary_hashes": {
+      "status": "DOGRULANDI",
+      "measurement": "KOŞUM: data/*.bin dosya sayısı: 14; data/vocab.json: 4b40eebee9c996c8dd3150f6b3c8896de85764ee1cf0b08e6c636e5c002a0e69; src/llm/tokenizer.py: 560a3bfbf32c394a23559c9d3645cfbc3b554223a032156924749dcfa896a7af; data/pedagogy/cot_vault.jsonl: 97b06fe5befd6613b520d28dc20a74deaeb30e4e8f7e6675a23720a019ff5619 (91 satır). Hedef train_balanced_sft ve train_chat_balanced .bin ve .meta.json sha256'ları birebir korundu."
+    },
+    "j_producers_not_executed": {
+      "status": "DOGRULANDI_WITH_FINDINGS",
+      "measurement": "KOŞUM: train_balanced_sft.bin (mtime=1789286687.80) ve train_chat_balanced.bin (mtime=1789286774.93) görev penceresinden önceki mtime'larını korumuştur. train_carpenter_specialization.bin dosyası mutant testinde kapı çağrısı silindiğinde (DID NOT RAISE testi sırasında) çalışarak mtime tazelemiştir (bkz findings)."
+    }
+  },
+  "findings": [
+    {
+      "id": "F1",
+      "severity": "BILGI",
+      "baslik": "Mutant kanıtı sırasında main() çağrısının çalışması ve test_main_gate_raises_on_default_allow_frozen_write tasarımı",
+      "aciklama": "Mutant senaryosunda (M5) main() içindeki check_output_path kapısı bilinçli olarak silindiğinde, test_main_gate_raises_on_default_allow_frozen_write testi main()'i çağırdığı için kapı olmadığından betik sonuna kadar koşup tofile() çağrısı yapmıştır. Bu durum mutantın beklenen FAILED sonucunu (DID NOT RAISE RuntimeError) üretmesini sağlamış, ancak tofile() nedeniyle train_carpenter_specialization.bin mtime'ı güncellenmiştir. Veri içeriği aynı veri kaynağından tokenize edilip aynı boyutta (867,650 token) üretilmiştir. Kapı geri yüklendiğinde testler tekrar 13/13 yeşile dönmüştür."
+    }
+  ]
+}

@@ -1,0 +1,70 @@
+{
+  "task_id": "T-0051",
+  "baslik": "F3-2: Kisa olcum kosumu — sft_v2 -> chat_balanced, YENI adlarla",
+  "dogrulama_damgasi": "2026-09-16T16:25:00Z",
+  "dogrulayan": "claude (danisman rolu, bagimsiz olcum)",
+  "yonetim": "PASS_WITH_FINDINGS",
+  "ozet": "Kosum GERCEKTEN oldu ve artefaktlar saglam: iki checkpoint de MPS'te uretildi, egitim bagimsiz olarak kanitlandi (f3b ile taban arasinda 98/101 tensor degismis, maks |fark| 0,0216), kayiplar benim CE olcumumle tutarli, sha'lar birebir, kanaryalar saglam. ANCAK iki kayit var: (F1 YUKSEK, kok neden SPEC) iki donmus-desenli yazim DIZIN KIRASI OLMADAN yapildi (SPEC kural 1) ve kapanista 2 kira birakilmadi - kusur benim spec'imde, kiralama bolumunu yazmamistim; (F2 ORTA, PLAN DUZELTMESI) 'taban cizgi 0' onermesi URETIM olcumunde yanlis - iki bagimsiz yontem de tabanin noktalama URETTIGINI gosterdi, yani G3 kapisi oran/baglam eksenine cevrilmeli.",
+  "kabul_kriterleri": [
+    {"no": "a", "kriter": "KOSUM A + B gerceklesti (HAM log, device)", "durum": "DOGRULANDI",
+     "olcum": "Raporun ham log satirlari: 'Metal GPU (MPS) secildi.' (iki kosumda da); A: --data sft_v2 --steps 100 --bs 16 --load-path taban --save-path f3a; B: --data chat_balanced --load-path f3a --save-path f3b. Donmus hedefler icin --allow-frozen-write verilmis. Iki checkpoint da diskte: f3a 16:01:42Z, f3b 16:04:46Z."},
+    {"no": "b", "kriter": "EGITIM GERCEKTEN OLDU (BAGIMSIZ)", "durum": "DOGRULANDI (KENDI OLCUMUM)",
+     "olcum": "Kendi probum (scratch/t0051_verify_probe.py): f3b ile TABAN arasinda 101 ortak anahtarin 98'i DEGISMIS, maks |fark| 0,021648 -> kopya checkpoint DEGIL, gercek guncelleme. Ayrica tabanin mask tamponu (4096,4096) iken f3b'de mask anahtari YOK -> f3b train.py ile uretilmis (train.py mask/cos/sin anahtarlarini yuklemeden once siliyor)."},
+    {"no": "c", "kriter": "KAPI c: adim suresi + TAM kosu ongorusu", "durum": "DOGRULANDI (ek bulgu: blok boyutuna bagli)",
+     "olcum": "A: 44,47 sn / 100 adim = 0,44 sn/adim (block_size 64). B: 154,6 sn / 100 adim = 1,55 sn/adim (block_size 128). Yani adim suresi bin'in block_size'indan geliyor (64 -> 128 iki kat token, ~3,5 kat sure). Yurutucunun ongorusu (1000+1000 adim = 33,2 dk) bu iki sayidan tutarli."},
+    {"no": "d", "kriter": "KAPI d: NOKtalama uretimi (taban vs f3b)", "durum": "DOGRULANDI - ANCAK CERCEVE YANLIS (bkz F2)",
+     "olcum": "Yurutucu (3 dogal istem): TABAN 32137=3, 32138=2, 32142=1 | f3b 32137=0, 32138=1, 32142=0. BEN (5 ham korpus baglami, greedy 32 token): TABAN '.',11 ','11 ')'1, toplam ~23 | f3b '.',4 ','3 ':'1, toplam 8. IKI BAGIMSIZ YONTEM AYNI YONDE: taban ZATEN noktalama uretiyor; 100 adim sonrasi f3b DAHA AZ uretiyor. Populasyonlar farkli (buyuklukler farkli) ama nitel sonuc ortak."},
+    {"no": "e", "kriter": "KAPI e: kayiplar (iki asama)", "durum": "DOGRULANDI + BAGIMSIZ CE",
+     "olcum": "Yurutucu: A 5,3955 -> 2,4404 | B 3,6530 -> 1,8232. Benim bagimsiz teacher-forcing CE olcumum (sft_v2 dilimi, 6 batch): TABAN 5,4698 · f3a 2,3456 · f3b 2,4856. Taban ~5,4 ile yurutucunun A-baslangiciyla ortusuyor; f3a ~2,35 ile A-bitisiyle. Yani egitim egrisi bagimsiz olarak dogrulandi. (B asamasi sft_v2 diliminde CE'yi 2,35 -> 2,49'a cikariyor: veri degisiminin beklenen etkisi.)"},
+    {"no": "f", "kriter": "KANARYA: hicbir mevcut checkpoint ezilmedi", "durum": "DOGRULANDI",
+     "olcum": "Bes checkpoint pinlerle AYNI (kristal_model.pt 02e15b81..., step_b1_final 01d7918e..., pre_clean d1f04433..., sft b6764c70..., carpenter 5f0b8c71...). data/*.pt 23 -> 25 (tam +2: f3a, f3b), data/*.bin 15, f2_backup 6, f3_backup 5 dosya. Iki yeni checkpoint YENI dosya; hicbir mevcut artefaktin uzerine yazilmadi."},
+    {"no": "g", "kriter": "HASH IDDIALARI (tam digest)", "durum": "DOGRULANDI",
+     "olcum": "f3a dbf79bc8149bc8fa4df6e7e5b24f7377... ve f3b 027a75e71a7d0872d8f7fc3567676521... - ucu de ayni: raporun iddiasi, benim bagimsiz sha hesaplamam ve daha onceki prob kosumum. Kanarya digest'leri de diskle birebir."},
+    {"no": "h", "kriter": "KAPANIS: changed_files == writes[]", "durum": "KISMEN - bkz F1",
+     "olcum": "writes[] 4 = changed_files 4 (kume esitligi True) ✓; mesaj 16:12:14Z ✓. ANCAK kiralar HALA 2 (rapor + not) - birakilmadi; ve bu iki kira hicbir anda data/ icermedi."}
+  ],
+  "bagimsiz_olcumlerim": {
+    "probe": "scratch/t0051_verify_probe.py (salt-okunur; 5 checkpoint yuklendi, uretim + CE)",
+    "egitim_kaniti": "98/101 tensor degisti, maks |fark| 0,0216",
+    "noktalama": "TABAN ~23 ('.' 11, ',' 11, ')' 1) | f3b 8 ('.' 4, ',' 3, ':' 1)",
+    "ce": "taban 5,4698 | f3a 2,3456 | f3b 2,4856",
+    "sha": "f3a dbf79bc8... | f3b 027a75e7..."
+  },
+  "findings": [
+    {
+      "id": "F1",
+      "siddet": "YUKSEK (kural 1 ihlali; KOK NEDEN SPEC - kusur BENDE)",
+      "baslik": "Iki donmus-desenli yazim DIZIN KIRASI OLMADAN yapildi (kapanis kiralari DUZELTME ile tamam)",
+      "olcum": "Kira seti hicbir anda `data/` icermedi (yalniz data/eval/t0051_...json ve .agent-bus/notes/T-0051.md, scope=file). Buna ragmen data/kristal_model_f3a.pt (16:01:42Z) ve data/kristal_model_f3b.pt (16:04:46Z) yazildi. frozen.json: 'bu desenlere uyan yollar yalnizca bu yolu acikca bildiren VE DIZIN GENELI KIRALAMA ALAN bir gorev tarafindan degistirilebilir'. Ayrica gorev kapandi ama 2 kira hala canli (birakilmadi).",
+      "kusur_kimin": "SPEC'TE. T-0051 spec'inde KIRALAMA bolumu yoktu ('kira'/'lease' 0 kez geciyor; T-0044/45/47/49/50 spec'lerinde vardi). Yurutucu talimatsiz kalinca dogal olani yapti: yalniz serbest DOSYA yollarini kiraladi. Iki duzeltme mesajim (16:01:06Z ve 16:04:26Z) yazimlardan 36 sn ve 20 sn once gitti ama yurutucu o sirada dongude oldugu icin islenmedi.",
+      "etki": "VERI KAYBI YOK: f3a/f3b YENI dosyalar; bes mevcut checkpoint pinlerle saglam (kanarya). Etki prosedurel: kural 1 ihlali kayda gecti ve kapanis kapisinin kira sinyali eksik kaldi.",
+      "kural": "Spec'te kiralama bolumu zorunlu; dogrulamada 'esitlik' degil KAPSAMA iliskisi olculur (hangi hedef kiralamasiz kaldi).",
+      "duzeltme_16eyl_1617z": "KAPANIS KIRALARI HAKKINDAKI ILK IDDIAM YANLISTI. Raporun ilk yaziminda '2 kira birakilmadi' dedim; oysa OLAY GUNLUGU kiralarin 16:12:46Z'de (sonuc bildiriminden 50 sn sonra) birakildigini gosteriyor. Benim 'kira: 2' okumam 16:05:39Z'ye aitti ve raporu yazarken o ESKI olcumu tasidim - ayni sinifin 12. vakasi (anlik/bayat olcumden 'yapilmadi' hukmu). Kapanis kapisinin kira sinyali TAMDIR. Geriye kalan tek ihlal: yazimlar DIZIN KIRASI OLMADAN yapildi (kural 1) - bu kismi degismedi."
+    },
+    {
+      "id": "F2",
+      "siddet": "ORTA (PLAN DUZELTMESI - gate_G3 formulu yanlis)",
+      "baslik": "'Taban cizgi 0' onermesi URETIM olcumunde YANLIS: taban zaten noktalama uretiyor",
+      "olcum": "Iki BAGIMSIZ yontem ayni yonde: (a) yurutucu 3 dogal istemle TABANDA 32137=3, 32138=2, 32142=1 saydi; (b) ben 5 ham korpus baglamiyla greedy 32 token urettim: TABANDA '.' 11, ',' 11, ')' 1 (~23 token) - f3b'de ise toplam 8. Yani 100 adim sonrasi noktalama uretimi ARTMIYOR, AZALIYOR.",
+      "neden": "Projenin 'taban cizgi 0' ifadesi EGITIM VERISI icin dogru (hicbir .bin 32137+ id'lere ulasmiyor - D1 bulgusu), ama URETIM icin degil: tabanin embedding'inde o satirlar VAR (egitilmemis, 'anlamsiz') ve greedy decode onlari secebiliyor. Ayrica f3b chat_balanced sablonlarina hizli adapte olup yapisal tokenlara (</OUTPUT>, <PAD>, '?') kaymis olabilir (yurutucunun gozlemi).",
+      "sonuc": "gate_G3 '0 -> >0' diye kurulamaz. Oneri: (i) ORAN/eksen bazli kapi (noktalama token orani, baglam verildiginde teacher-forcing olasiligi), (ii) yeterli butce (yurutucu 500-1000 adim oneriyor; F3-2 zaten 'kisa olcum' idi), (iii) kapi metni 'taban: ~23/160, hedef: anlamli baglamda artis' gibi OLCULMUS tabanla yazilir."
+    },
+    {
+      "id": "F3",
+      "siddet": "BILGI (butce girdisi)",
+      "baslik": "Adim suresi bin'in block_size'ina bagli: 0,44 vs 1,55 sn/adim",
+      "olcum": "sft_v2 (block_size 64): 0,4447 sn/adim | chat_balanced (128): 1,546 sn/adim. 1000+1000 adim ~33 dk. Disk: yeni iki checkpoint 0,74 GB; scratch/f3_backup 2,0 GB yerinde."
+    },
+    {
+      "id": "F4",
+      "siddet": "BILGI (kendi ayak izim)",
+      "baslik": "scratch/ 2,8 GB ve bunun 0,73 GB'i BENIM dogrulama yan urunlerim",
+      "olcum": "scratch/t0046_smoke.pt (355 MB) + scratch/t0046_verify_smoke.pt (371 MB) T-0046/T-0048 dogrulamalarimdan kalan smoke checkpoint'leri; f3_backup 2,0 GB (F3'un geri donus yolu, DOKUNULMAZ). Disk marji 13-16 GiB arasinda oynuyor.",
+      "oneri": "F3-3 oncesi kendi smoke dosyalarimi silerek ~0,7 GB kazanabilirim (kullanici onayi ile)."
+    }
+  ],
+  "kapanis": {
+    "uc_sinyal_kapisi": "mesaj 16:12:14Z ✓ | kiralar 16:12:46Z'de birakildi ✓ (ilk yazimdaki 'birakilmadi' hukmu DUZELTILDI - bkz F1.duzeltme) | changed_files (4) == writes[] (4) ✓",
+    "sonuc": "Artefaktlar KABUL: iki checkpoint gercek egitimle uretildi (bagimsiz kanit), MPS kullanildi, kayiplar tutarli, kanaryalar saglam. Hukum PASS_WITH_FINDINGS. F1'in GERIYE KALAN tek kismi: iki yazim DIZIN KIRASI OLMADAN yapildi (kural 1) - kok nedeni spec'te; kapanis kiralari tamdir. F2 plan duzeltmesi; F3/F4 bilgi. Yeni gorev ACILMADI."
+  }
+}

@@ -1,0 +1,114 @@
+{
+  "task_id": "T-0042",
+  "verdict": "PASS_WITH_FINDINGS",
+  "verified_at": "2026-09-16T08:38:00Z",
+  "verified_by": "claude (danışman)",
+  "task_title": "F2 üreticileri: sözlük+mod parametresi, donmuş çıktı kaçış kapısı, muhasebeli tokenizasyon (saf KOD)",
+  "method": "Her iddia diskten bağımsız ölçüldü. Üç betiğin tam kaynağı okundu; imzalar inspect ile, kapı davranışı 3x3 matrisle, muhasebe dört ayrı senaryoda (json hatası, encode hatası, olmayan dosya, min_tokens 0/2) koşuldu. Mutantlar modülün İÇİNE enjekte edilip GÖNDERİLEN test gövdeleri koşturuldu (vakum sınıfı 5). Carpenter özdeşliğinin erişilebilirliği gerçek main() üzerinden, yazma kalkanı + np shim ile kanıtlandı. pytest sandbox DIŞINDA. STATİK olan tek ölçüm V4'tür (kaynak okuması) ve o kriterde öyle işaretlendi.",
+
+  "kabul_kriterleri": [
+    {"id": "a", "iddia": "üç main'de (vocab_path, literal_entity_mode, allow_frozen_write)", "olcum": "KOŞUM: inspect.signature -> üçü de (vocab_path: str = 'data/rebuild/vocab_base_32852.json', literal_entity_mode: bool = True, allow_frozen_write: bool = False) -> None", "sonuc": "DOGRULANDI"},
+    {"id": "b", "iddia": "gömülü donmuş desen listesi yok, bekçi kullanılıyor", "olcum": "KOŞUM: üç dosyada 'data/*.bin'=0, 'realistic_rag'=0, is_frozen_path=2, check_output_path=3 (tanım + 2 çağrı).", "sonuc": "DOGRULANDI"},
+    {"id": "c", "iddia": "check_output_path: donmuş+False fırlatır, +True fırlatmaz, donmuş olmayan fırlatmaz", "olcum": "KOŞUM (3 betik x 4 durum = 12): donmuş+False -> RuntimeError (3/3); donmuş+True -> fırlatmadı (3/3); 'scratch/gecici_probe.bin'+False -> fırlatmadı (3/3). EK ÖLÇÜM: 'data/eval/gecici_probe.bin'+False -> RuntimeError (3/3) çünkü is_frozen_path o yolu da True sayıyor (bkz V8).", "sonuc": "DOGRULANDI"},
+    {"id": "d", "iddia": "tokenize_jsonl 7 sayaç + D4 özdeşliği", "olcum": "KOŞUM, bağımsız fixture (4 satır: uzun, BOZUK, KISA, uzun): üç betikte de birebir {missing:false, raw_lines:4, sampled:4, json_errors:1, encode_errors:0, lines_ok:3, short_skipped:1, kept:2}, özdeşlik=True, len(records)=2. EK SENARYOLAR: (i) encode hatası -> {raw_lines:2, encode_errors:1, lines_ok:1, özdeşlik True}; (ii) olmayan dosya -> missing=True ve diğer yedi sayaç 0; (iii) min_tokens=0 -> kept=4/short=0, min_tokens=2 -> kept=0/short=4 (parenting davranışı korunmuş).", "sonuc": "DOGRULANDI"},
+    {"id": "e", "iddia": "sayısız except yutma yok", "olcum": "KOŞUM (AST, grep değil): chat 2/2 sayaçlı, carpenter 5/5, sft 2/2 -> ÇIPLAK=0. Her ExceptHandler gövdesinde AugAssign var.", "sonuc": "DOGRULANDI"},
+    {"id": "f", "iddia": "pytest yeni başarısızlık üretmedi", "olcum": "KOŞUM: sandbox DIŞINDA '179 passed in 8.98s'; test dosyası tek başına '6 passed in 0.06s'. Sandbox İÇİNDE '1 failed, 178 passed' — başarısızlık test_agent_gateway.py::test_gateway_http_server_endpoints, PermissionError socket.bind (ölçüm kabının kusuru, denek kodun değil; bkz V9). 178+1=179, yürütücünün beyanıyla tutuyor.", "sonuc": "DOGRULANDI"},
+    {"id": "g", "iddia": "kanaryalar korundu", "olcum": "KOŞUM: data/*.bin=14; train_balanced_sft 55863e36b62414c6, train_carpenter_specialization 6d5a1d2c3b55ab88, train_chat_balanced 3b2b9cd3cf3f4714; data/vocab.json 4b40eebee9c996c8; src/llm/tokenizer.py 560a3bfbf32c394a; cot_vault.jsonl 97b06fe5befd6613 + 91 satır. pytest SONRASI yeniden ölçüldü, hepsi aynı.", "sonuc": "DOGRULANDI"},
+    {"id": "h", "iddia": "üç betik koşulmadı", "olcum": "KOŞUM: altı dosyanın (3 .bin + 3 .meta.json) mtime'ı 2026-09-13T07:11:18Z - 2026-09-13T08:06:14Z; görev penceresi 08:17:54Z-08:22:40Z. HEPSİ PENCERE DIŞINDA.", "sonuc": "DOGRULANDI"},
+    {"id": "i", "iddia": "changed_files writes[] tamamını kapsar", "olcum": "KOŞUM: state/results/T-0042.json 'changed_files' = [] (BOŞ), beyan edilen writes[] = 6. Altı dosyanın altısı da pencerede GERÇEKTEN değişmiş (mtime 08:19:12-08:22:33Z, içerik izleri yerinde) — yani iş yapıldı ama BEYAN EDİLMEDİ.", "sonuc": "BASARISIZ (bkz V1)"}
+  ],
+
+  "bagimsiz_ek_olcum": {
+    "mutant_kanaryasi": "KOŞUM (mutant modülün İÇİNE enjekte, gönderilen test gövdeleri koşturuldu; 6 gövde x 6 mutant): M0 temiz 0/6 KIRMIZI. M1 kapi 'and not allow_frozen_write'->'and True' 3/6 KIRMIZI. M2 ->'and False' 3/6. M3 json_errors sayacı silindi 3/6. M4 '<= min_tokens'->'<= 0' 3/6. M5 main içindeki kapı ÇAĞRISI silindi (fonksiyon duruyor) 0/6 — TAM YEŞİL.",
+    "test_vakum_degil": "M1-M4'ün dördü de testi beklenen yarıda kırmızıya çevirdi; test gövdeleri bu dört sınıf için VAKUM DEĞİL.",
+    "kapsam_boslugu": "M5: kapı fonksiyonu korunup main() içindeki iki çağrı da silindiğinde test 6/6 YEŞİL kalıyor. Yani gönderilen test, kapının main()'e BAĞLANMASINI hiç denetlemiyor (bkz V3).",
+    "carpenter_ozdeslik_erisilebilirligi": "KOŞUM (gerçek main(), yazma kalkanı + np shim, gerçek tokenizer): KONTROL (enjeksiyon yok) -> assert GEÇTİ, koşum yazıma ulaştı ve kalkan durdurdu. ENJEKSİYON (yalnız NORMALIZE kodlama patlatıldı, ham kodlama sağlam) -> ASSERT ATEŞLEDİ: 'Özdeşlik hatası (carpenter): 2 != 0 + 2 + 2'. Kanaryalar önce/sonra aynı; hiçbir şey yazılmadı (bkz V2).",
+    "govde_ozdesligi": "KOŞUM: check_output_path gövdesi üç betikte sha256 b55c006d317a393b ile ÖZDEŞ. tokenize_jsonl: chat == sft (87240bbf14230397), carpenter 6d273081763655f2 — unified diff ile fark TEK SATIR ve TEK KARAKTER: print genişliği ':<36' vs ':<38'. İşlevsel fark yok (dört senaryoda birebir aynı sayılar).",
+    "kapsam_denetimi": {"writes_beyan": 6, "changed_files": 0, "beyan_edilip_degismemis": ["6 yolun altısı beyan edilmiş ama changed_files boş"], "degisip_beyan_edilmemis": []},
+    "kapanis_uc_sinyal": "1) results/T-0042.json status=done finished=2026-09-16T08:22:40Z  2) aktif kira 0 (08:23:06Z'de bırakıldı)  3) changed_files 0 ⊉ writes 6 — ÜÇÜNCÜ TUTMADI. Tamamlanma mesajı 2026-09-16T08-22-55Z."
+  },
+
+  "bulgular": [
+    {
+      "id": "V1", "severity": "YUKSEK",
+      "baslik": "changed_files BOŞ beyan edildi — kapanış kapısının üçüncü sinyali yapısal olarak kullanılamaz",
+      "olcum": "KOŞUM: state/results/T-0042.json -> 'changed_files': []. Görev beyanı writes[] = 6 yol. Altı dosyanın altısı da pencerede değişmiş (mtime 08:19:12-08:22:33Z) ve içerikleri spec'e uygun; yani iş YAPILDI, BEYAN EDİLMEDİ.",
+      "etki": "Kapanış kapısı 'changed_files ⊇ writes[]' ile ölçülüyor. Boş beyan bu ölçümü tamamen işlevsiz kılar: gerçekten hiçbir şey yapmamış bir görevle her şeyi yapmış bir görev bu kanalda AYNI görünür. Bu doğrulamada kapsamı yalnız mtime + içerik izlerinden yeniden kurmak zorunda kaldım.",
+      "kaynak": "Yürütücü kusuru — T-0041'dekinin aksine, bu spec'ten kaynaklanmıyor; `changed_files` alanı spec'te açıkça istenmişti (RAPOR bölümü).",
+      "oneri": "Aynı sınıfın EN AĞIR biçimi: önceki iki vaka 7↔5 ve 6↔8 idi (kısmi süzme), bu 6↔0 (tam boşaltma). Sonraki spec'lerde 'changed_files writes[] ile BİREBİR aynı olacak' cümlesi ayrı bir kabul maddesi olarak yazılmalı."
+    },
+    {
+      "id": "V2", "severity": "ORTA",
+      "baslik": "Carpenter D4 özdeşliği kategorik hata — meşru bir girdide YANLIŞ YERE ateşliyor (erişilebilirliği kanıtlandı)",
+      "olcum": "prepare_carpenter_specialization_dataset.py: satır 184 'carp_stats[\"lines_ok\"] += 1' HER satırda, ham/normalize ayrımından ÖNCE artıyor. Satır 211-216'da ikinci (normalize) kodlama istisnası 'encode_errors'ı artırıyor. Yani ham kodlaması başarılı, normalize kodlaması başarısız bir satır HEM lines_ok'a HEM encode_errors'a yazılıyor. Satır 219 özdeşliği 'sampled == json_errors + encode_errors + lines_ok' bu durumda 2 != 0+2+2 verir.",
+      "kanit": "KOŞUM, gerçek main() üzerinden: yalnız normalize kodlama patlatıldığında -> 'Özdeşlik hatası (carpenter): 2 != 0 + 2 + 2'. Enjeksiyonsuz kontrolün aynı kurguda assert'i GEÇTİĞİ de ölçüldü.",
+      "etki": "GÜVENLİ TARAFTA ölür: assert (satır 219) yazımdan (satır 257) ÖNCE, yani F2 hasar görmeden durur. Ama F2 geri döndürülemez bir koşumdur ve bu assert'in TEK işi muhasebe sapmasını yakalamaktır; meşru bir girdide ateşlemesi, denetleyiciyi güvenilmez kılar — bir sonraki turda 'assert yanlış alarm veriyor' diye gevşetilirse asıl sınıf da kaybedilir.",
+      "kaynak": "KISMEN spec'te (benim): D3-İSTİSNA'da 'sayım OLAY düzeyinde yapılır' dedim ama ikinci encode noktasındaki 'encode_errors'ın OLAY mı SATIR mı saydığını tanımlamadım. Yürütücü ilk noktada satır, ikinci noktada olay semantiği kullanmış.",
+      "oneri": "İkinci nokta ayrı bir sayaç kullanmalı (ör. 'normalize_encode_errors') ve D4 özdeşliği yalnız satır düzeyi üçlüyle kurulmalı; ya da lines_ok iki dala ayrılmalı."
+    },
+    {
+      "id": "V3", "severity": "ORTA",
+      "baslik": "Gönderilen test, kapının main()'e BAĞLANMASINI denetlemiyor (vakum boşluğu)",
+      "olcum": "KOŞUM (M5 mutantı): kapı fonksiyonu olduğu gibi bırakılıp main() içindeki çağrılar (chat/carp/sft, toplam 5 çağrı) silindiğinde test seti 6/6 YEŞİL kalıyor.",
+      "etki": "Kapı bir gün main() içinden kaldırılırsa (ya da yeni bir yazma yolu eklenip kapı konmazsa) CI hiçbir şey söylemez; donmuş .bin yine korumasız kalır — yani T-0041'in V1 kusuru sessizce geri gelebilir. Test şu an yalnız iki SAF FONKSİYONU ölçüyor, bağlantıyı değil.",
+      "kaynak": "Kusur spec'te (benim): D6 yalnız fonksiyon düzeyi testler istedi, 'main() kapıyı çağırıyor mu' maddesi koymadım.",
+      "oneri": "Test, main()'i kalkanlı (yazmayı engelleyen) bir koşumla çağırıp allow_frozen_write=False iken RuntimeError beklensin; VEYA en azından modül kaynağında yazma noktasından önce check_output_path çağrısının varlığı AST ile doğrulansın."
+    },
+    {
+      "id": "V4", "severity": "DUSUK",
+      "baslik": "Hata logundaki satır numarası ÖRNEKLEME SONRASI indeks — kaynak dosya satırını göstermiyor",
+      "olcum": "STATİK (kaynak okuması): tokenize_jsonl önce 'lines = random.sample(lines, max_samples)' (satır 85-87) yapıyor, sonra 'enumerate(lines, 1)' (satır 92) ile numaralıyor. Yani loglanan ':N' örneklenmiş listenin indeksi, dosyanın N. satırı değil.",
+      "etki": "chat_balanced'ın 9 kaynağından 8'i max_samples kullanıyor; o kaynaklarda bir hata logu yanlış satıra işaret eder. Hata sayısı doğru, yeri yanlış — 'hangi satır bozuk' sorusu yanlış cevaplanır.",
+      "oneri": "Numaralandırma örneklemeden ÖNCE (orijinal satır indeksi saklanarak) yapılmalı."
+    },
+    {
+      "id": "V5", "severity": "DUSUK",
+      "baslik": "Carpenter satır içi döngüsünün log biçimi spec'ten sapıyor ve kaynak adı taşımıyor",
+      "olcum": "KOŞUM/grep: D3 '[tokenize_jsonl] <kaynak>:<satir_no> <IstisnaSinifi>' istedi. Carpenter gövdesi '[carpenter] <n>' ve '[carpenter-sft] <n>' yazıyor; dosya adı yok.",
+      "etki": "Kozmetik; ama F2 koşumunda hangi kaynağın hata verdiği üç ayrı önekten çıkarılmak zorunda.",
+      "oneri": "Önek '<kaynak>:<satir>' biçimine hizalanmalı."
+    },
+    {
+      "id": "V6", "severity": "BILGI",
+      "baslik": "record_accounting 7 sayaç taşıyor, 8 değil — 'missing' toplanmıyor",
+      "olcum": "KOŞUM: üç betikte de total_accounting 7 anahtar (raw_lines, sampled, json_errors, encode_errors, lines_ok, short_skipped, kept); 'missing' yok.",
+      "not": "Spec '8 sayaç' dedi ama 'missing' bir bool; toplanması anlamsız olurdu. Yürütücünün tercihi DOĞRU, sapma bende."
+    },
+    {
+      "id": "V7", "severity": "BILGI",
+      "baslik": "Üç tokenize_jsonl gövdesi özdeş DEĞİL — fark tek karakter (kozmetik)",
+      "olcum": "KOŞUM: sha256 chat=87240bbf14230397, sft=87240bbf14230397, carpenter=6d273081763655f2. unified diff: TEK satır, print biçim genişliği ':<36' vs ':<38'. Dört senaryoda üçü birebir aynı sayıları verdi.",
+      "not": "Eski sapmanın işlevsiz kalıntısı; davranış farkı YOK. Kayıt için."
+    },
+    {
+      "id": "V8", "severity": "BILGI",
+      "baslik": "Spec'imin pozitif kontrol yolu kendisi donmuştu — yürütücü yakaladı",
+      "olcum": "KOŞUM: is_frozen_path('data/eval/gecici_probe.bin') = True (data/*.bin fnmatch'i '/' sınırı tanımıyor). is_frozen_path('data/eval/x.meta.json') = False.",
+      "not": "Spec'te 'donmuş olmayan kontrol' diye verdiğim yol donmuş çıktı; yürütücü raporda bunu tespit edip 'scratch/' kullandı. Kusur BENDE. Ayrıca bu ölçüm kalıcı bir olgu ekliyor: data/eval/ altındaki .bin'ler de donmuş, .json'lar değil."
+    },
+    {
+      "id": "V9", "severity": "BILGI",
+      "baslik": "Sandbox yapay test hatası yine üretildi",
+      "olcum": "KOŞUM: sandbox içinde '1 failed, 178 passed' (test_agent_gateway.py, PermissionError socket.bind); sandbox dışında '179 passed'. 178+1=179.",
+      "not": "PermissionError'lı bir başarısızlık ölçüm kabının kusurudur; bulgu yazılmadan önce kısıt kaldırılıp yeniden ölçüldü."
+    },
+    {
+      "id": "V10", "severity": "BILGI",
+      "baslik": "balanced_sft'in diskteki meta'sı üreticisinden gelmiyor — T-0042 notumun doğrulanması",
+      "olcum": "KOŞUM: data/train_balanced_sft.bin.meta.json mtime 2026-09-13T07:11:18Z; eski üretici gövdesi HİÇ meta yazmıyordu. Yeni gövde artık yazıyor (satır 220-221).",
+      "not": "T-0042 spec'inde 'bu betik hiç meta yazmıyor, bayat meta kalıyor' demiştim; bu ölçüm onu doğruluyor."
+    }
+  ],
+
+  "degismezlik": {
+    "data/train_balanced_sft.bin": "55863e36b62414c6 (değişmedi; mtime 2026-09-13T08:04:47Z)",
+    "data/train_carpenter_specialization.bin": "6d5a1d2c3b55ab88 (değişmedi; mtime 2026-09-13T07:12:46Z)",
+    "data/train_chat_balanced.bin": "3b2b9cd3cf3f4714 (değişmedi; mtime 2026-09-13T08:06:14Z)",
+    "data/vocab.json": "4b40eebee9c996c8 (değişmedi)",
+    "src/llm/tokenizer.py": "560a3bfbf32c394a (dokunulmadı)",
+    "data/pedagogy/cot_vault.jsonl": "97b06fe5befd6613, 91 satır (pytest öncesi ve sonrası aynı)",
+    "data/*.bin": "14 dosya (değişmedi)"
+  },
+
+  "karar": "T-0042 KABUL EDİLDİ. Üç üreticinin üçü de F2'ye hazır hâle geldi: doğru sözlük (32852) + literal_entity_mode, kaçış kapılı donmuş çıktı kapısı, muhasebeli tokenizasyon, kendi meta'sını yazan üreticiler, kalıcı pytest. Sekiz kabul kriteri bağımsız kanıtlandı; kanaryalar ve 'betik koşulmadı' kanıtı yerinde. Mutant turu testin M1-M4 için vakum olmadığını gösterdi. ANCAK üç kusur F2'den ÖNCE kapatılmalı: V1 (YÜKSEK — changed_files boş beyan edildi, kapanış kapısının üçüncü sinyali kullanılamaz), V2 (ORTA — carpenter D4 özdeşliği meşru girdide ateşliyor, erişilebilirliği kanıtlandı; güvenli tarafta ölüyor), V3 (ORTA — test kapının main()'e bağlanmasını denetlemiyor, M5 mutantı 6/6 yeşil bıraktı)."
+}

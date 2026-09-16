@@ -1,0 +1,100 @@
+{
+  "task_id": "T-0039",
+  "verdict": "PASS_WITH_FINDINGS",
+  "verified_at": "2026-09-16T04:11:05Z",
+  "verified_by": "claude (danışman)",
+  "task_title": "Derleme giriş noktalarını doğrula (F2 ön koşulu, saf KOD)",
+  "method": "Yürütücünün kanıt metni güvenilmedi; her iddia diskten bağımsız ölçüldü. $TMPDIR'da 4 ayrı probe koşuldu (v39.py, v39b.py, v39c.py, v39d.py), mutasyon modül İÇİNE enjekte edildi (vakum sınıfı 5 kuralı), pytest sandbox İÇİNDE ve DIŞINDA iki kez koşuldu.",
+
+  "kabul_kriterleri": [
+    {"id": "a", "iddia": "imza: vocab_path ve literal_entity_mode VARSAYILANSIZ", "olcum": "inspect.signature -> (jsonl_paths, output_bin, vocab_path, literal_entity_mode, block_size=64, oversample_factor=1, allow_frozen_write=False); vocab_path/literal_entity_mode <ZORUNLU>", "sonuc": "DOGRULANDI"},
+    {"id": "b", "iddia": "except Exception: continue kaldirildi, failed_records sayilir + loglanir", "olcum": "3 satirlik fixture (1 gecerli + 1 bozuk JSON + 1 gecerli) -> meta {'vocab_size': 32852, 'total_records': 2, 'failed_records': 1}; stderr: '[HATA compile_jsonl_to_bin] Dosya: .../fx.jsonl, Satir: 2, Tip: JSONDecodeError'", "sonuc": "DOGRULANDI"},
+    {"id": "c", "iddia": "prepare_dataset imzasi genisletildi", "olcum": "(input_filepath, output_filepath, vocab_path='data/rebuild/vocab_base_32852.json', literal_entity_mode=True, save_vocab_to=None)", "sonuc": "DOGRULANDI"},
+    {"id": "d", "iddia": "tests/test_compiler_entrypoints.py gecer", "olcum": "5 test; tam takimda gecer", "sonuc": "DOGRULANDI"},
+    {"id": "e", "iddia": "pytest 166 -> 171, yeni basarisizlik yok", "olcum": "sandbox DISINDA: '171 passed in 9.14s'; sandbox ICINDE: '1 failed, 170 passed' (test_agent_gateway HTTP testi, PermissionError socket.bind) -> SAHTE HATA, olcum kabinin kusuru", "sonuc": "DOGRULANDI (171)"},
+    {"id": "f", "iddia": "data/vocab.json sha256 degismedi", "olcum": "4b40eebee9c996c8dd3150f6b3c8896de85764ee1cf0b08e6c636e5c002a0e69 (gorev oncesi = sonrasi)", "sonuc": "DOGRULANDI"},
+    {"id": "g", "iddia": "eski kodla karsilastirma kaniti var", "olcum": "test 5 git HEAD surumunu cikarip karsilastiriyor; AYRICA bagimsiz mutant probe: modul ICINE literal_entity_mode=True enjekte edildiginde gonderilen testin 2. govdesi KIRMIZI yandi -> test VAKUM DEGIL", "sonuc": "DOGRULANDI"},
+    {"id": "h", "iddia": "14 .bin ve sha256'lari degismedi", "olcum": "data/*.bin = 14; train_balanced_sft 55863e36..., train_chat_balanced 3b2b9cd3... (degismedi); cot_vault.jsonl 97b06fe5... 91 satir (degismedi, pytest kosumundan SONRA da)", "sonuc": "DOGRULANDI"}
+  ],
+
+  "kapsam_denetimi": {
+    "writes_beyan": 5,
+    "changed_files": 6,
+    "beyan_edilip_degismemis": [],
+    "degisip_beyan_edilmemis": [".agent-bus/notes/T-0039.md"],
+    "not": "Fazlalik protokol meşru notes yüzeyi (T-0037/T-0038 ile ayni desen). Gorev bitisinden (03:41:30Z) SONRA degisen dosyalar: notes, rapor, results/T-0039.json, state/tasks/T-0039.json, inbox mesaji, events.jsonl — hicbiri beyan disi kaynak/veri dosyasi degil.",
+    "kiralama": "gorev suresince ve sonrasinda aktif kira 0"
+  },
+
+  "bulgular": [
+    {
+      "id": "V1", "severity": "ORTA",
+      "baslik": "Donmus desen listesi artik UC kopya; kapi otoriteyi okumuyor",
+      "olcum": "frozen.json'da 10 desen; scripts/run_goal_pipeline.py icinde 10/10 gomulu literal, src/llm/prepare.py icinde 10/10 gomulu literal; 'frozen.json' dizesi IKI dosyada da YOK.",
+      "etki": "frozen.json'a yeni bir desen eklendiginde kapi onu GORMEZ ve sessizce izin verir. T-0025'te resize_state_dict icin kapatilan drift sinifinin aynisi.",
+      "oneri": "Kapi desenleri .agent-bus/frozen.json'dan okunsun; kopya birakilmasin. Tek otorite."
+    },
+    {
+      "id": "V2", "severity": "ORTA",
+      "baslik": "T-0039 spec'indeki gerekce YANLIS: rakam/noktalama mod kapisinda DEGIL",
+      "olcum": "Rakamlar (clean_word.isdigit(), tokenizer.py:253-256) ve noktalama (PUNCT_SET, satir 245) `literal_entity_mode` disinda; yalniz kesme dali (satir 266) kapili. Kanit: 32852 sozluk + mode=False ile rakam/noktalama CIKIYOR (max_id 32150); data/vocab.json (31357) + mode=True ile kesme 31391'e dusuyor, 32850 DEGIL.",
+      "etki": "F2'nin ASIL duzeltmesi SOZLUK'tur (31357 -> 32852); mod yalnizca kesme formlari icin EK sarttir. T-0040 spec'i bu yanlis gerekceyi tekrarlamamali ve mode=True'yu tek basina yeterli saymamali.",
+      "kaynak": "Kusur spec'te, yurutucude degil — gorev ciktisi etkilenmedi, iki parametre de zorunlu kilindigi icin dogru."
+    },
+    {
+      "id": "V3", "severity": "DUSUK",
+      "baslik": "prepare_dataset donmus-sozluk kapisi bos girdide ULASILAMAZ",
+      "olcum": "Bos JSONL ile cagrildi: 'Processed 0 document segments' -> RuntimeError YOK, sessiz gecis. Kapi `if token_sequences:` blogunun ICINDE. Ayrica sira: .bin ONCE yaziliyor, kapi SONRA ates ediyor.",
+      "etki": "Frozen save_vocab_to ile bos girdi veren cagri hata almaz; dolu girdide ise artefakt yazildiktan sonra istisna alir.",
+      "oneri": "save_vocab_to fonksiyon GIRISINDE dogrulansin (fail-fast)."
+    },
+    {
+      "id": "V4", "severity": "DUSUK",
+      "baslik": "Test 5 'eski kod' tabanini /tmp/eski_rgp.py'de ONBELLEKLIYOR",
+      "olcum": "/tmp/eski_rgp.py diskte VAR (mtime gorev penceresi). Test `if not os.path.exists(eski_path)` ile yeniden uretmiyor.",
+      "etki": "HEAD ilerlediginde 'eski kod' kolu bayatlar ve test YESIL kalir (vakum sinifi 3). Ayrica tmp_path disinda paylasilan bir yola yaziyor.",
+      "oneri": "Her kosumda tmp_path altinda tazelensin."
+    },
+    {
+      "id": "V5", "severity": "DUSUK",
+      "baslik": "Yanlis sozluk + mod cifti hala kurulabilir",
+      "olcum": "data/vocab.json (31357) + mode=True -> kesme id 31391; 32852 + mode=True -> 32850. Iki farkli id uzayi.",
+      "etki": "vocab_path zorunlu oldugu icin ORTUK varsayilan yok; ama acikca yanlis cift verilebilir.",
+      "oneri": "T-0040 spec'i kullanilan sozlugun sha256'sini veya token sayisini kabul kriterine koysun."
+    },
+    {
+      "id": "V6", "severity": "BILGI",
+      "baslik": "Spec'in onerdigi esik (max_id <= 32136) YANLISTI; yurutucunun genisletmesi ZORUNLUYDU",
+      "olcum": "32852 sozluk + mode=False olculen tavan 32150 (bir rakam id'si), 32136 DEGIL. Yurutucu `< 32816` yazmis; benim spec sayim uygulansaydi test DUSERDI.",
+      "not": "T-0034'teki max_tokens vakasinin aynasi: kusur spec'te."
+    },
+    {
+      "id": "V7", "severity": "BILGI",
+      "baslik": "Sandbox sahte test hatasi uretti",
+      "olcum": "sandbox ICINDE 1 failed (PermissionError: [Errno 1] socket.bind, tests/test_agent_gateway.py); ayni komut sandbox DISINDA 171 passed.",
+      "not": "PermissionError iceren basarisizlik olcum kabinin kusurudur; bulgu yazmadan once kisit kaldirilip tekrar olculur (yerlesik kural)."
+    },
+    {
+      "id": "V8", "severity": "BILGI",
+      "baslik": "Tek harflik tokenler 32816 satirli checkpoint'in disinda",
+      "olcum": "Sozlukte 32 tek harfli girdi, id 150..32849; yeni varlik harfleri 32820-32849. Ornek: 'x' = 32841.",
+      "etki": "F3 taban checkpoint'i 32852 satir olmak zorunda — planin 'Vocab: 32816' adimi bu olcumle de celisiyor."
+    }
+  ],
+
+  "kendi_hatam": {
+    "olcum": "Ilk probe'umda mode=False icin max_id 32841 olculdu ve yurutucunun '< 32816' iddiasiyla CELISTI. Bulgu yazmadan once kume dogrulandi: fark BENIM fixture'imdan geliyordu ('output': 'x' -> tek harf tokeni x = 32841). Yurutucunun kendi fixture'i ile olcum: mode=False -> 32150, iddia DOGRU.",
+    "not": "Celisen iki sayidan once populasyon farkini kontrol et kurali — 18. kez, yazmadan yakalandi."
+  },
+
+  "degismezlik": {
+    "data/vocab.json": "4b40eebee9c996c8dd3150f6b3c8896de85764ee1cf0b08e6c636e5c002a0e69 (degismedi)",
+    "data/vocab_entity.json": "7611b6a523a2bb52 (degismedi)",
+    "data/*.bin": "14 dosya (degismedi)",
+    "data/pedagogy/cot_vault.jsonl": "97b06fe5befd6613b520d28dc20a74deaeb30e4e8f7e6675a23720a019ff5619, 91 satir (pytest oncesi ve sonrasi degismedi)",
+    "data/future_train_vector.jsonl": "e3b0c44298fc1c14 (0 bayt, degismedi)",
+    "src/llm/tokenizer.py": "560a3bfbf32c394a (bu gorevde dokunulmadi)"
+  },
+
+  "karar": "T-0039 kabul edildi. F2/T-0040 icin on kosul KARSILANDI: giris noktalari artik sozlugu ve modu ORTUK devralmiyor, donmus yola beyansiz yazamiyor. V1 (kapi otoriteyi okumuyor) ve V2 (spec gerekcesi) T-0040 spec'i yazilmadan once ele alinmali."
+}

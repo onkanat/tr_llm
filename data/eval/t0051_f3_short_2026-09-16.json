@@ -1,0 +1,83 @@
+{
+  "task_id": "T-0051",
+  "as_of": "2026-09-16T16:10:00Z",
+  "run_a": {
+    "command": "venv/bin/python train.py --device mps --data data/train_balanced_sft_v2.bin --steps 100 --batch-size 16 --load-path data/kristal_model.pt --save-path data/kristal_model_f3a.pt --allow-frozen-write",
+    "device_selected": "mps (Metal GPU)",
+    "device_line": "Metal GPU (MPS) seçildi.",
+    "dataset": "data/train_balanced_sft_v2.bin",
+    "block_size": 64,
+    "steps": 100,
+    "batch_size": 16,
+    "initial_loss": 5.3955,
+    "final_loss": 2.4404,
+    "total_time_seconds": 44.47,
+    "sec_per_step": 0.4447,
+    "checkpoint": {
+      "path": "data/kristal_model_f3a.pt",
+      "size_bytes": 372125027,
+      "size_mb": 354.9,
+      "sha256": "dbf79bc8149bc8fa4df6e7e5b24f7377d7a1f25113bccef0feecaf59e6ff205d"
+    }
+  },
+  "run_b": {
+    "command": "venv/bin/python train.py --device mps --data data/train_chat_balanced.bin --steps 100 --batch-size 16 --load-path data/kristal_model_f3a.pt --save-path data/kristal_model_f3b.pt --allow-frozen-write",
+    "device_selected": "mps (Metal GPU)",
+    "device_line": "Metal GPU (MPS) seçildi.",
+    "dataset": "data/train_chat_balanced.bin",
+    "block_size": 128,
+    "steps": 100,
+    "batch_size": 16,
+    "initial_loss": 3.653,
+    "final_loss": 1.8232,
+    "total_time_seconds": 154.6,
+    "sec_per_step": 1.546,
+    "checkpoint": {
+      "path": "data/kristal_model_f3b.pt",
+      "size_bytes": 372125027,
+      "size_mb": 354.9,
+      "sha256": "027a75e71a7d0872d8f7fc356767652115418e40703a4a737db2d619815bd710"
+    }
+  },
+  "full_run_projections": {
+    "sft_v2_1000_steps_minutes": 7.41,
+    "chat_balanced_1000_steps_minutes": 25.77,
+    "total_1000_steps_both_minutes": 33.18
+  },
+  "punctuation_generation_eval": {
+    "target_ids": {
+      "32137": ".",
+      "32138": ",",
+      "32142": ":"
+    },
+    "prompts": [
+      "Türkiye Cumhuriyeti",
+      "Bugün hava nasıl",
+      "Osmanlı Devleti"
+    ],
+    "taban_counts": {
+      "32137": 3,
+      "32138": 2,
+      "32142": 1
+    },
+    "f3b_counts": {
+      "32137": 0,
+      "32138": 1,
+      "32142": 0
+    },
+    "findings": "F3b 100 adımlık kısa ölçüm koşumunda virgül (32138) üretmiş (Osmanlı Devleti isteminde 1 adet), nokta (32137) ve iki nokta (32142) üretmemiştir. Taban model ise eski serbest akışında rastgele tokenlar arasında nokta/virgül üretmiştir. F3b'nin 100 adımda chat_balanced veri kümesindeki şablonlara hızlıca adapte olarak soru işaretleri (?), </OUTPUT> ve <PAD> gibi yapısal tokenlara yöneldiği gözlemlenmiştir. Noktalama üretiminin tam oturması için 100 adımdan daha uzun bir bütçe (örn. 500-1000 adım) gereklidir."
+  },
+  "canary": {
+    "pins_verified": 5,
+    "data_pt_count": 25,
+    "data_bin_count": 15,
+    "scratch_f2_backup_count": 6,
+    "scratch_f3_backup_count": 5,
+    "status": "PASS"
+  },
+  "disk": {
+    "before_avail": "16Gi",
+    "after_avail": "13Gi",
+    "capacity_percent": "97%"
+  }
+}

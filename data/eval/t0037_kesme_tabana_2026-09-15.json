@@ -1,0 +1,184 @@
+{
+  "task_id": "T-0037",
+  "status": "PASS_WITH_FINDINGS",
+  "ts_start": "2026-09-15T20:32:22Z",
+  "ts_end": "2026-09-15T20:41:43Z",
+  "title": "Y2 icraatı (SECENEK_A): kesme işaretli formların taban tokenizer'da çözülmesi",
+  "metadata": {
+    "python_version": "3.14.6",
+    "device": "mps (sandbox dışında koşuldu)",
+    "vocab_path_old": "data/rebuild/vocab_base_32816.json",
+    "vocab_path_new": "data/rebuild/vocab_base_32852.json",
+    "disk_cmd": "df -h .",
+    "disk_output": "Filesystem 460Gi 413Gi 21Gi 96% /System/Volumes/Data",
+    "tokenizer_sha": "560a3bfbf32c394a23559c9d3645cfbc3b554223a032156924749dcfa896a7af"
+  },
+  "onceki_sonraki_hash": {
+    "cot_vault": {
+      "path": "data/pedagogy/cot_vault.jsonl",
+      "sha_before": "97b06fe5befd6613b520d28dc20a74deaeb30e4e8f7e6675a23720a019ff5619",
+      "lines_before": 91,
+      "sha_after": "97b06fe5befd6613b520d28dc20a74deaeb30e4e8f7e6675a23720a019ff5619",
+      "lines_after": 91,
+      "unchanged": true
+    },
+    "future_train_vector": {
+      "path": "data/future_train_vector.jsonl",
+      "sha_before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "lines_before": 0,
+      "sha_after": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "lines_after": 0,
+      "unchanged": true
+    },
+    "vocab_base_32816_unchanged": {
+      "sha": "8cc31d82d144cff0e9f55342ba7168a17890a79cdf8439549569c699c08b7fdc",
+      "unchanged": true,
+      "cmd": "shasum -a 256 data/rebuild/vocab_base_32816.json"
+    }
+  },
+  "g0_taban_cizgisi": {
+    "cmd": "./venv/bin/python -c \"from src.llm.tokenizer import KristalTokenizer, Vocabulary; ...\" (scratch/t0037_kesme_probe.py G0 bloğu)",
+    "literal_entity_mode_false": {
+      "1973'te": {"ids": [2, 0, 3], "tags": ["<BOS>", "<UNK>", "<EOS>"]},
+      "1973": {"ids": [2, 32147, 32155, 32153, 32149, 3], "tags": ["<BOS>", "1", "9", "7", "3", "<EOS>"]},
+      "İstanbul'da": {"ids": [2, 4, 3], "tags": ["<BOS>", "<PROPER_NOUN>", "<EOS>"]},
+      "TBMM'ye": {"ids": [2, 4, 3], "tags": ["<BOS>", "<PROPER_NOUN>", "<EOS>"]},
+      "Antlaşması'nın": {"ids": [2, 6845, 208, 13, 8, 3], "tags": ["<BOS>", "antlaş", "INF_mA", "POSS_3SG", "CASE_GEN_N", "<EOS>"]}
+    },
+    "literal_entity_mode_true": {
+      "1973'te": {"ids": [2, 0, 3], "tags": ["<BOS>", "<UNK>", "<EOS>"], "note": "G0 beklenti doğrulandı: PRE-FIX <UNK>"},
+      "1973": {"ids": [2, 32147, 32155, 32153, 32149, 3], "tags": ["<BOS>", "1", "9", "7", "3", "<EOS>"]}
+    },
+    "spec_check": {
+      "1973te_false_has_unk": true,
+      "1973_false_has_digit_tokens": true,
+      "istanbul_false_is_proper_noun": true,
+      "1973te_true_has_unk": true,
+      "blocked": false
+    }
+  },
+  "g1_yeni_sozluk": {
+    "path": "data/rebuild/vocab_base_32852.json",
+    "sha": "7611b6a523a2bb524cc21aa9cc64235aa6a2ae99f87f46ac51cb2915e61164ad",
+    "len_stoi": 32852,
+    "apostrophe_id": 32850,
+    "expected_len": 32852,
+    "expected_apostrophe_id": 32850,
+    "g1_ok": true,
+    "old_vocab_unchanged": true,
+    "cmd": "./venv/bin/python scratch/t0037_kesme_probe.py  # generate_new_vocab('data/rebuild/vocab_base_32816.json', 'data/rebuild/vocab_base_32852.json')"
+  },
+  "g2_tokenizer_degisikligi": {
+    "dosya": "src/llm/tokenizer.py",
+    "sha": "560a3bfbf32c394a23559c9d3645cfbc3b554223a032156924749dcfa896a7af",
+    "degisiklikler": [
+      "(f) _encode_entity_chars: _turkish_lower() eklendi — İ (U+0130) → i (U+0069) doğru dönüşüm, Python .lower() U+0307 hatası kapatıldı",
+      "(b) Kesme dalı: stem.isdigit() → her hane rakam tokeni",
+      "(d) Kesme tokeni (id 32850) apostrophe_id yoksa yazılmıyor (None guard)",
+      "(e) Ek çözülemezse verbose modda bildirim",
+      "Tipografik kesme U+2019 → has_apostrophe=True ile tanınıyor (normalize)"
+    ],
+    "literal_entity_mode_false_etkilenmedi": true
+  },
+  "g2_post_fix_olcum": {
+    "cmd": "./venv/bin/python -c \"...tok.encode('1973\\'te')...\" (inline test)",
+    "1973'te_mode_true": {
+      "ids": [2, 32147, 32155, 32153, 32149, 32850, 3],
+      "tags": ["<BOS>", "1", "9", "7", "3", "'", "<EOS>"],
+      "unk_var": false
+    },
+    "istanbul_da_mode_true": {
+      "ids": [2, 32816, 32818, 32827, 32836, 32837, 32820, 32832, 32821, 32838, 32830, 32817, 32850, 29, 3],
+      "tags": ["<BOS>", "<ENT>", "<CAP>", "i", "s", "t", "a", "n", "b", "u", "l", "</ENT>", "'", "CASE_LOC", "<EOS>"],
+      "unk_var": false,
+      "not": "İ→i Türkçe küçültme düzeltmesi çalıştı"
+    },
+    "tbmm_ye_mode_true": {
+      "ids": [2, 32816, 32819, 32837, 32821, 32831, 32831, 32817, 32850, 20, 3],
+      "tags": ["<BOS>", "<ENT>", "<ALL_CAPS>", "t", "b", "m", "m", "</ENT>", "'", "CASE_DAT", "<EOS>"],
+      "unk_var": false
+    },
+    "1973_kesmesiz_mode_true": {
+      "ids": [2, 32147, 32155, 32153, 32149, 3],
+      "tags": ["<BOS>", "1", "9", "7", "3", "<EOS>"],
+      "pozitif_kontrol": "kesmesiz form etkilenmedi"
+    }
+  },
+  "g3_degismezlik": {
+    "corpus_boyutu": 15,
+    "diff_sayisi": 0,
+    "immutable": true,
+    "cmd": "./venv/bin/python -c \"...count_unk...\" (inline test — G3 bloğu)",
+    "note": "literal_entity_mode=False iken eski ve yeni tokenizer tüm korpusta bit-özdeş"
+  },
+  "g4_mutant_kontrol": {
+    "git_old_tokenizer_available": true,
+    "cmd": "git show HEAD:src/llm/tokenizer.py (geçici modül olarak yüklendi)",
+    "1973te_old_has_unk": true,
+    "1973_old_tags": ["<BOS>", "1", "9", "7", "3", "<EOS>"],
+    "1973te_old_tags": ["<BOS>", "<UNK>", "<EOS>"],
+    "mutant_gecerli": true,
+    "note": "Eski tokenizer hala <UNK> üretiyor — kapi vakum değil"
+  },
+  "g4_tipografik_kesme": {
+    "1973_straight_ids": [2, 32147, 32155, 32153, 32149, 32850, 3],
+    "1973_curly_ids": [2, 32147, 32155, 32153, 32149, 3326, 3],
+    "cmd": "./venv/bin/python -c \"tok.encode('1973\\'te'); tok.encode('1973\\u2019te')\"",
+    "not": "BULGU F1'e bakınız"
+  },
+  "g5_cozum_orani": {
+    "corpus_boyutu": 15,
+    "N0_eski_false": 1,
+    "N1_yeni_false": 1,
+    "N2_yeni_true": 0,
+    "N1_eq_N0": true,
+    "N2_eq_0": true,
+    "cmd": "./venv/bin/python -c \"count_unk(tok_old_f, corpus); count_unk(tok_new_f, corpus); count_unk(tok_new_t, corpus)\" (inline)",
+    "hedef_karsilandi": true,
+    "t0035_karsilastirma": "T-0035 %44.82 kayıp ölçümü farklı popülasyon (corpus JSONL; bu ölçüm 15 örnek). Tanım farkı: T-0035 tokenizer çıktısı, bu ölçüm <UNK> etiketi sayımı. Yan yana koyulamaz."
+  },
+  "pytest": {
+    "cmd": "./venv/bin/pytest -q tests/",
+    "sandbox_disi": true,
+    "sonuc": "159 passed in 8.56s",
+    "yeni_test_sayisi": 159,
+    "onceki": 144,
+    "fark": 15,
+    "test_dosyasi": "tests/test_apostrophe_tokenization.py",
+    "guncellenen": "tests/test_two_layer_tokenizer.py::test_entity_decompile_roundtrip (G2 davranış değişikliği nedeniyle beklenti güncellendi)"
+  },
+  "kapsam_disi_kaniti": {
+    "pt_degisen": "0 (./venv/bin/python -c \"import os, time; [print(f) for f in os.walk('data') if ...]\" — find data -name '*.pt' mtime sonrası değişen yok)",
+    "bin_degisen": "0",
+    "egitim_kosulmadi": true,
+    "f2_f3_ayri_gorevdir": "F2 (.bin yeniden derleme) ve F3 (yetkinlik tamamlama eğitimi) bu görevin kapsamı dışındadır. Mevcut .bin dosyaları yeni sözlükle uyumsuz kalmaktadır — bilinen ara durum.",
+    "src_rag_rag_pipeline_py_silinmedi": true
+  },
+  "kiralama": {
+    "alinan": ["data/rebuild/ (scope=dir)", "src/llm/ (scope=dir)", "tests/test_apostrophe_tokenization.py (dosya)", "tests/test_two_layer_tokenizer.py (dosya)"],
+    "bus_lease_status_sonunda": "[]"
+  },
+  "bulgular": [
+    {
+      "id": "F1",
+      "onem": "ORTA",
+      "baslik": "Tipografik kesme (U+2019) has_apostrophe=True ile tanınıyor ama regex bölmesi nedeniyle kesme dalına giremiyor",
+      "detay": "re.findall regex U+2019 (Pf kategorisi, Final Punctuation) ile \\w eşleşmediği için '1973\\u2019te' → ['1973', 'te'] olarak ayrılıyor. has_apostrophe dalı 'clean_word' üzerinde kontrol yapıyor ama 'clean_word' zaten bölünmüş '1973' — U+2019 içermiyor. Bu nedenle 1973\\u2019te mode=True → [2, 32147, 32155, 32153, 32149, 3326, 3], kesme tokeni yok. NOT: 1973 rakam tokenleri doğru üretildi; '3326=te' ayrı token olarak işlendi. Mode=False'da davranış aynı (değişmezlik korundu). Düzeltme seçeneği: regex desenine U+2019 ekleme veya _normalize_text'te U+2019→U+0027 ön geçişi. Bu görevin SEÇENEK_A kapsamında tanımlanmamış — F2 veya ayrı görev için saklandı.",
+      "etki": "N2=0 ölçümünde bu vaka 'te' ayrı token olduğu için <UNK> üretmiyor, sayı doğru. Ancak '1973\\u2019te' beklenen kesme+ek çözümünden farklı davranış üretiyor."
+    }
+  ],
+  "changed_files": [
+    "src/llm/tokenizer.py",
+    "data/rebuild/vocab_base_32852.json",
+    "tests/test_apostrophe_tokenization.py",
+    "tests/test_two_layer_tokenizer.py",
+    "scratch/t0037_kesme_probe.py",
+    "scratch/t0037_kesme_ham.json",
+    "data/eval/t0037_kesme_tabana_2026-09-15.json"
+  ],
+  "sha256_ozet": {
+    "vocab_base_32852": "7611b6a523a2bb524cc21aa9cc64235aa6a2ae99f87f46ac51cb2915e61164ad",
+    "tokenizer_py": "560a3bfbf32c394a23559c9d3645cfbc3b554223a032156924749dcfa896a7af",
+    "test_apostrophe": "14864a8315a0244377f723993370e75af340fae7593a1c5a43f6184e67776971"
+  }
+}

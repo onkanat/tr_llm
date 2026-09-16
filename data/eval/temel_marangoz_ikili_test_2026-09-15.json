@@ -1,0 +1,1411 @@
+{
+  "rapor_id": "temel_marangoz_ikili_test_2026-09-15",
+  "tarih": "2026-09-15",
+  "olcum_ani": "2026-09-15T16:25:49Z",
+  "yazan": "claude (danisman)",
+  "talimat": "Onkanat: 'Modeli temel ve marangoz olarak yukle ve testleri kendin yap, sonuc raporunu goster. Gemini serverlari yogunlasti yavas cevap veriyor.' — yurutucu (antigravity) devre disi oldugu icin olcum danisman tarafindan yapildi. Bu turda YENI GOREV ACILMADI.",
+  "kapsam": "data/kristal_model.pt (TEMEL) ve data/kristal_carpenter_model.pt (MARANGOZ): kanonik yuklenebilirlik, determinizm, noktalama/rakam/UNK uretim eksenleri, ayni-checkpoint/iki-sozluk kontrolu, kesme isareti boslugu, test takimi degismezligi.",
+  "yukleme_yolu": {
+    "kanonik": "src.llm.prompt_contract.resize_state_dict(model, state) + scripts.train_step_demo.KristalLM(vocab_size=len(vocab.stoi), n_embd=768, block_size=4096, n_layer=6, n_head=6)",
+    "uretim": "scripts/run_experiment_c.generate ile BIREBIR ayni mantik (greedy argmax, temp=0.0, masked_tags yasakli-id listesi, isaret-farkindalikli tekrar cezasi /1.3 veya *1.3 son 32 token, 256 token baglam siniri, max_tokens=64). Yukaridaki 'uretim' tanimi sozlesmenin KENDISIDIR; olcum betigi bu mantigin kopyasidir ve ayrica token id listesi dondurur.",
+    "envelope": "src.llm.prompt_contract.render_prompt(instruction, input_text) — <OUTPUT>'ta kesilir"
+  },
+  "ortam": {
+    "torch": "2.11.0",
+    "mps_available": true,
+    "device": "mps",
+    "sandbox": "dışı (MPS görünür)",
+    "max_tokens": 64
+  },
+  "yukleme": {
+    "temel": {
+      "ckpt": "data/kristal_model.pt",
+      "vocab_path": "data/rebuild/vocab_base_32816.json",
+      "model_rows": 32816,
+      "ckpt_rows": 32816,
+      "satir_farki": 0,
+      "kirpma_dolgu_uyari_sayisi": 0,
+      "uyarilar": [],
+      "parametre_sayisi": 92966960,
+      "device": "mps",
+      "vocab_max_id": 32815
+    },
+    "marangoz": {
+      "ckpt": "data/kristal_carpenter_model.pt",
+      "vocab_path": "data/rebuild/vocab_carpenter_32137.json",
+      "model_rows": 32137,
+      "ckpt_rows": 32137,
+      "satir_farki": 0,
+      "kirpma_dolgu_uyari_sayisi": 0,
+      "uyarilar": [],
+      "parametre_sayisi": 91923337,
+      "device": "mps",
+      "vocab_max_id": 32136
+    }
+  },
+  "sozlukler": {
+    "temel": {
+      "satir": 32816,
+      "max_id": 32815,
+      "noktalama_idleri": {
+        ".": 32137,
+        ",": 32138,
+        ":": 32142,
+        ";": 32143,
+        "?": 32139,
+        "!": 32140,
+        "-": 32141,
+        "'": null
+      },
+      "noktalama_var": false,
+      "id_ge_32137": 679
+    },
+    "marangoz": {
+      "satir": 32137,
+      "max_id": 32136,
+      "noktalama_idleri": {
+        ".": null,
+        ",": null,
+        ":": null,
+        ";": null,
+        "?": null,
+        "!": null,
+        "-": null,
+        "'": null
+      },
+      "noktalama_var": false,
+      "id_ge_32137": 0
+    }
+  },
+  "uretec_pozitif_kontrol": {
+    "temel": true,
+    "marangoz": true
+  },
+  "determinizm": {
+    "temel": {
+      "P1_Genel_Edebiyat": true,
+      "P2_Noktalama": true,
+      "P3_Rakam": true,
+      "P4_Marangoz_Ezber": true,
+      "P5_Marangoz_Parafraz": true
+    },
+    "marangoz": {
+      "P1_Genel_Edebiyat": true,
+      "P2_Noktalama": true,
+      "P3_Rakam": true,
+      "P4_Marangoz_Ezber": true,
+      "P5_Marangoz_Parafraz": true
+    }
+  },
+  "uretim_id_ekseni": {
+    "temel": {
+      "sozluk_noktalama_tokeni": 7,
+      "sozluk_rakam_tokeni": 10,
+      "vakalar": {
+        "P1_Genel_Edebiyat": {
+          "token": 64,
+          "noktalama": 5,
+          "rakam": 0,
+          "unk": 0
+        },
+        "P2_Noktalama": {
+          "token": 37,
+          "noktalama": 7,
+          "rakam": 0,
+          "unk": 0
+        },
+        "P3_Rakam": {
+          "token": 64,
+          "noktalama": 5,
+          "rakam": 0,
+          "unk": 0
+        },
+        "P4_Marangoz_Ezber": {
+          "token": 32,
+          "noktalama": 1,
+          "rakam": 0,
+          "unk": 0
+        },
+        "P5_Marangoz_Parafraz": {
+          "token": 32,
+          "noktalama": 1,
+          "rakam": 0,
+          "unk": 0
+        }
+      },
+      "toplam": {
+        "token": 229,
+        "noktalama": 19,
+        "rakam": 0,
+        "unk": 0
+      }
+    },
+    "marangoz": {
+      "sozluk_noktalama_tokeni": 0,
+      "sozluk_rakam_tokeni": 0,
+      "vakalar": {
+        "P1_Genel_Edebiyat": {
+          "token": 15,
+          "noktalama": 0,
+          "rakam": 0,
+          "unk": 0
+        },
+        "P2_Noktalama": {
+          "token": 45,
+          "noktalama": 0,
+          "rakam": 0,
+          "unk": 0
+        },
+        "P3_Rakam": {
+          "token": 15,
+          "noktalama": 0,
+          "rakam": 0,
+          "unk": 0
+        },
+        "P4_Marangoz_Ezber": {
+          "token": 44,
+          "noktalama": 0,
+          "rakam": 0,
+          "unk": 0
+        },
+        "P5_Marangoz_Parafraz": {
+          "token": 29,
+          "noktalama": 0,
+          "rakam": 0,
+          "unk": 0
+        }
+      },
+      "toplam": {
+        "token": 148,
+        "noktalama": 0,
+        "rakam": 0,
+        "unk": 0
+      }
+    }
+  },
+  "vakalar": {
+    "temel": {
+      "P1_Genel_Edebiyat": {
+        "soru": "Türk edebiyatında Tanzimat döneminin temel özellikleri nelerdir?",
+        "prompt": "<INSTRUCTION> Türk edebiyatında Tanzimat döneminin temel özellikleri nelerdir? </INSTRUCTION> <INPUT>  </INPUT> <OUTPUT>",
+        "cikti": "temel tema , tarım ( hayvan DERIV_CI DERIV_lIk ) ve su kaynak POSS_3PL CASE_ACC_N içer PART_An Önemli bir rol oyna INF_mAk CASE_LOC COPULA_AORIST . bu durum , insan PLURAL POSS_2SG yaşam tarz POSS_3PL CASE_DAT_N uygun ol GERUND_ArAk tanımlan TENSE_AORIST ; çünkü hayat CASE_LOC kalma ve gün DERIV_lIk yaşam POSS_3SG sürdür INF_mAk için gerek DERIV_lI o DERIV_lAn su DERIV_sIz bir ortam yarat TENSE_EVIDENTIAL COPULA_AORIST .",
+        "token_idleri": [
+          2059,
+          3580,
+          32138,
+          4634,
+          32144,
+          1973,
+          102,
+          39,
+          32145,
+          46,
+          298,
+          3551,
+          7,
+          84,
+          2444,
+          69,
+          32542,
+          40,
+          6474,
+          475,
+          51,
+          29,
+          115,
+          32137,
+          284,
+          411,
+          32138,
+          613,
+          70,
+          28,
+          157,
+          4932,
+          7,
+          10,
+          696,
+          52,
+          173,
+          6170,
+          26,
+          32143,
+          340,
+          238,
+          29,
+          695,
+          46,
+          218,
+          39,
+          157,
+          13,
+          2579,
+          51,
+          652,
+          537,
+          116,
+          150,
+          392,
+          298,
+          130,
+          40,
+          3034,
+          501,
+          61,
+          115,
+          32137
+        ],
+        "determinizm": {
+          "metin_ozdes": true,
+          "token_idleri_ozdes": true,
+          "sha256_token_idleri": "1da9f60e02058cd1740a78e0c12658529d5029f5673c9598b4b5deef909c1229"
+        },
+        "token_id_ekseni": {
+          "token": 64,
+          "noktalama": 5,
+          "rakam": 0,
+          "unk": 0
+        },
+        "metin_tabanli_sayac_BAYAT": {
+          "_uyari": "Bu sayac cozulen METIN uzerinden sayar ve bicimbirim etiketlerindeki rakamlari (POSS_2SG, POSS_3PL, CASE_LOC_N...) rakam sanar. RAKAM icin YETKILI olcum token_id_ekseni.rakam'dir. Noktalama icin iki yontem birebir ayni cikti.",
+          "rakam_karakteri": 4
+        }
+      },
+      "P2_Noktalama": {
+        "soru": "Şu cümleyi noktalama işaretleriyle birlikte yaz: dun aksam ankara ya gittim ve saat 21 de dondum",
+        "prompt": "<INSTRUCTION> Şu cümleyi noktalama işaretleriyle birlikte yaz: dun aksam ankara ya gittim ve saat 21 de dondum </INSTRUCTION> <INPUT>  </INPUT> <OUTPUT>",
+        "cikti": "Kiraz ağa DERIV_CI zamanla güneş . çok açık renk DERIV_lI , yoğun , Kokusuz ve sert COPULA_AORIST ; kesme tahta POSS_3PL , kasap blok POSS_3PL , müzik alet POSS_3PL ve gemi kamara POSS_3PL CASE_LOC_N kullanıl TENSE_AORIST .",
+        "token_idleri": [
+          31850,
+          2135,
+          102,
+          2067,
+          374,
+          32137,
+          160,
+          1659,
+          593,
+          116,
+          32138,
+          5205,
+          32138,
+          32308,
+          46,
+          279,
+          115,
+          32143,
+          6124,
+          1252,
+          7,
+          32138,
+          4849,
+          7950,
+          7,
+          32138,
+          3439,
+          1319,
+          7,
+          46,
+          791,
+          5626,
+          7,
+          24,
+          3306,
+          26,
+          32137
+        ],
+        "determinizm": {
+          "metin_ozdes": true,
+          "token_idleri_ozdes": true,
+          "sha256_token_idleri": "83cb6b989f9b4ad008fcac16cba114c903acc0fbe56c24d9dd566c42d4801401"
+        },
+        "token_id_ekseni": {
+          "token": 37,
+          "noktalama": 7,
+          "rakam": 0,
+          "unk": 0
+        },
+        "metin_tabanli_sayac_BAYAT": {
+          "_uyari": "Bu sayac cozulen METIN uzerinden sayar ve bicimbirim etiketlerindeki rakamlari (POSS_2SG, POSS_3PL, CASE_LOC_N...) rakam sanar. RAKAM icin YETKILI olcum token_id_ekseni.rakam'dir. Noktalama icin iki yontem birebir ayni cikti.",
+          "rakam_karakteri": 4
+        }
+      },
+      "P3_Rakam": {
+        "soru": "1973 yılında kurulan okulun 45 öğretmeni ve 812 öğrencisi vardı. Bu cümledeki sayıları listele.",
+        "prompt": "<INSTRUCTION> 1973 yılında kurulan okulun 45 öğretmeni ve 812 öğrencisi vardı. Bu cümledeki sayıları listele. </INSTRUCTION> <INPUT>  </INPUT> <OUTPUT>",
+        "cikti": "bu belge , antik Mısırdaki siyasi istikrar DERIV_sIz DERIV_lIk POSS_2SG CASE_ACC ve Askeri güç POSS_3SG CASE_ACC_N incele INF_mAk CASE_LOC COPULA_AORIST . özellikle , imparator PLURAL POSS_2SG yükseliş POSS_3SG ve art POSS_2SG CASE_ABL gelen anlaş INF_mA PLURAL CASE_DAT odaklan VOICE_PASS_Il PART_DIk POSS_2SG CASE_ACC göster INF_mAk CASE_LOC COPULA_AORIST . ayrıca , roma İmparatorluğu ile o DERIV_lAn ilişki POSS_3PL arasındaki siyasi manevra PLURAL CASE_INS ilgi DERIV_lI ol",
+        "token_idleri": [
+          284,
+          1390,
+          32138,
+          6781,
+          32230,
+          5808,
+          7395,
+          130,
+          39,
+          28,
+          53,
+          46,
+          32249,
+          2364,
+          13,
+          84,
+          5286,
+          51,
+          29,
+          115,
+          32137,
+          3175,
+          32138,
+          4323,
+          70,
+          28,
+          7389,
+          13,
+          46,
+          454,
+          28,
+          171,
+          231,
+          1381,
+          208,
+          70,
+          20,
+          6929,
+          2471,
+          12,
+          28,
+          53,
+          270,
+          51,
+          29,
+          115,
+          32137,
+          3432,
+          32138,
+          32065,
+          32174,
+          165,
+          150,
+          392,
+          3194,
+          7,
+          2441,
+          5808,
+          10227,
+          70,
+          147,
+          3085,
+          116,
+          52
+        ],
+        "determinizm": {
+          "metin_ozdes": true,
+          "token_idleri_ozdes": true,
+          "sha256_token_idleri": "f8229998661fb5832a75c52dcf2c4693ddb57fcca2438f5e9621a7a196804206"
+        },
+        "token_id_ekseni": {
+          "token": 64,
+          "noktalama": 5,
+          "rakam": 0,
+          "unk": 0
+        },
+        "metin_tabanli_sayac_BAYAT": {
+          "_uyari": "Bu sayac cozulen METIN uzerinden sayar ve bicimbirim etiketlerindeki rakamlari (POSS_2SG, POSS_3PL, CASE_LOC_N...) rakam sanar. RAKAM icin YETKILI olcum token_id_ekseni.rakam'dir. Noktalama icin iki yontem birebir ayni cikti.",
+          "rakam_karakteri": 7
+        }
+      },
+      "P4_Marangoz_Ezber": {
+        "soru": "Ahşap atölyesi güvenlik ve imalat rehberi: Ahşabın son kat yüzeyinde dolgu verniği nasıl tatbik edilmelidir?",
+        "prompt": "<INSTRUCTION> Ahşap atölyesi güvenlik ve imalat rehberi: Ahşabın son kat yüzeyinde dolgu verniği nasıl tatbik edilmelidir? </INSTRUCTION> <INPUT>  </INPUT> <OUTPUT>",
+        "cikti": "dolgu vernik POSS_3SG uygulama POSS_3SG CASE_LOC_N Ahşabın açık gözenek POSS_3PL CASE_ACC_N doldur GERUND_ArAk son kat cila için cam gibi pürüz DERIV_sIz ve homojen bir alt zemin hazırla PART_An astar vernik COPULA_AORIST .",
+        "token_idleri": [
+          3948,
+          7663,
+          13,
+          2373,
+          13,
+          24,
+          32161,
+          1659,
+          7661,
+          7,
+          84,
+          2010,
+          173,
+          715,
+          1676,
+          7755,
+          652,
+          4368,
+          80,
+          5117,
+          130,
+          46,
+          7881,
+          40,
+          1051,
+          4299,
+          3817,
+          69,
+          16192,
+          7663,
+          115,
+          32137
+        ],
+        "determinizm": {
+          "metin_ozdes": true,
+          "token_idleri_ozdes": true,
+          "sha256_token_idleri": "91acda17a1cee430282e7c817c5f9a8c8dd8846d3135486071721b6a7c579649"
+        },
+        "token_id_ekseni": {
+          "token": 32,
+          "noktalama": 1,
+          "rakam": 0,
+          "unk": 0
+        },
+        "metin_tabanli_sayac_BAYAT": {
+          "_uyari": "Bu sayac cozulen METIN uzerinden sayar ve bicimbirim etiketlerindeki rakamlari (POSS_2SG, POSS_3PL, CASE_LOC_N...) rakam sanar. RAKAM icin YETKILI olcum token_id_ekseni.rakam'dir. Noktalama icin iki yontem birebir ayni cikti.",
+          "rakam_karakteri": 3
+        }
+      },
+      "P5_Marangoz_Parafraz": {
+        "soru": "Ahşap doğramada kurt dişi geçme nedir ve nasıl uygulanır?",
+        "prompt": "<INSTRUCTION> Ahşap doğramada kurt dişi geçme nedir ve nasıl uygulanır? </INSTRUCTION> <INPUT>  </INPUT> <OUTPUT>",
+        "cikti": "Kurt dişi birleştir INF_mA uygulama POSS_3SG CASE_LOC_N Açılı zikzak diş PLURAL CASE_INS ahşap parça PLURAL POSS_2SG boylamasına eklen GERUND_ArAk son DERIV_sIz kereste elde edilme POSS_3SG CASE_ACC_N sağla PART_An endüstriyel ekleme COPULA_AORIST .",
+        "token_idleri": [
+          31860,
+          1206,
+          7303,
+          208,
+          2373,
+          13,
+          24,
+          32299,
+          10807,
+          1679,
+          70,
+          147,
+          2014,
+          2029,
+          70,
+          28,
+          24350,
+          158,
+          173,
+          715,
+          130,
+          6521,
+          1914,
+          1552,
+          13,
+          84,
+          1001,
+          69,
+          6877,
+          12038,
+          115,
+          32137
+        ],
+        "determinizm": {
+          "metin_ozdes": true,
+          "token_idleri_ozdes": true,
+          "sha256_token_idleri": "23570a9aa762051ae6b73ebc51ab051c15775bc3e9d9fde05d266a0c710c56d4"
+        },
+        "token_id_ekseni": {
+          "token": 32,
+          "noktalama": 1,
+          "rakam": 0,
+          "unk": 0
+        },
+        "metin_tabanli_sayac_BAYAT": {
+          "_uyari": "Bu sayac cozulen METIN uzerinden sayar ve bicimbirim etiketlerindeki rakamlari (POSS_2SG, POSS_3PL, CASE_LOC_N...) rakam sanar. RAKAM icin YETKILI olcum token_id_ekseni.rakam'dir. Noktalama icin iki yontem birebir ayni cikti.",
+          "rakam_karakteri": 3
+        }
+      }
+    },
+    "marangoz": {
+      "P1_Genel_Edebiyat": {
+        "soru": "Türk edebiyatında Tanzimat döneminin temel özellikleri nelerdir?",
+        "prompt": "<INSTRUCTION> Türk edebiyatında Tanzimat döneminin temel özellikleri nelerdir? </INSTRUCTION> <INPUT>  </INPUT> <OUTPUT>",
+        "cikti": "teknik rapor tanımlan PART_An özel DERIV_lIk PLURAL doğrudan maun ağaç POSS_2SG CASE_DAT ait COPULA_AORIST </OUTPUT>",
+        "token_idleri": [
+          3865,
+          2100,
+          6170,
+          69,
+          2478,
+          39,
+          70,
+          3766,
+          15334,
+          767,
+          28,
+          20,
+          2091,
+          115,
+          1705
+        ],
+        "determinizm": {
+          "metin_ozdes": true,
+          "token_idleri_ozdes": true,
+          "sha256_token_idleri": "f52117374b9225d48635f833f672f2797a2cbc800fe29c0f3de81ec64d0e144c"
+        },
+        "token_id_ekseni": {
+          "token": 15,
+          "noktalama": 0,
+          "rakam": 0,
+          "unk": 0
+        },
+        "metin_tabanli_sayac_BAYAT": {
+          "_uyari": "Bu sayac cozulen METIN uzerinden sayar ve bicimbirim etiketlerindeki rakamlari (POSS_2SG, POSS_3PL, CASE_LOC_N...) rakam sanar. RAKAM icin YETKILI olcum token_id_ekseni.rakam'dir. Noktalama icin iki yontem birebir ayni cikti.",
+          "rakam_karakteri": 1
+        }
+      },
+      "P2_Noktalama": {
+        "soru": "Şu cümleyi noktalama işaretleriyle birlikte yaz: dun aksam ankara ya gittim ve saat 21 de dondum",
+        "prompt": "<INSTRUCTION> Şu cümleyi noktalama işaretleriyle birlikte yaz: dun aksam ankara ya gittim ve saat 21 de dondum </INSTRUCTION> <INPUT>  </INPUT> <OUTPUT>",
+        "cikti": "teknik çözüm usta cevap POSS_3SG teknik açıklama kereste CASE_GEN sıcak DERIV_lIk nem ve hava sirkülasyon POSS_3SG kontrollü fırın PLURAL CASE_LOC kademe DERIV_lI ol GERUND_ArAk kurutul GERUND_ArAk hücre iç POSS_3SG gerilim POSS_3PL CASE_GEN_N yukarı kıvrıl GERUND_ArAk oluk şekil POSS_2SG CASE_ACC alma POSS_3SG deformasyon POSS_3SG COPULA_AORIST </OUTPUT>",
+        "token_idleri": [
+          3865,
+          7098,
+          465,
+          1851,
+          13,
+          3865,
+          1188,
+          6521,
+          56,
+          711,
+          39,
+          387,
+          46,
+          262,
+          23457,
+          13,
+          7651,
+          3751,
+          70,
+          29,
+          5490,
+          116,
+          52,
+          173,
+          7983,
+          173,
+          6938,
+          315,
+          13,
+          2771,
+          7,
+          8,
+          666,
+          2950,
+          173,
+          7963,
+          916,
+          28,
+          53,
+          1122,
+          13,
+          7743,
+          13,
+          115,
+          1705
+        ],
+        "determinizm": {
+          "metin_ozdes": true,
+          "token_idleri_ozdes": true,
+          "sha256_token_idleri": "4fa42b604f266a63b7b2088bad2629169c1b0812ab784b9cb4a682c5fd233a96"
+        },
+        "token_id_ekseni": {
+          "token": 45,
+          "noktalama": 0,
+          "rakam": 0,
+          "unk": 0
+        },
+        "metin_tabanli_sayac_BAYAT": {
+          "_uyari": "Bu sayac cozulen METIN uzerinden sayar ve bicimbirim etiketlerindeki rakamlari (POSS_2SG, POSS_3PL, CASE_LOC_N...) rakam sanar. RAKAM icin YETKILI olcum token_id_ekseni.rakam'dir. Noktalama icin iki yontem birebir ayni cikti.",
+          "rakam_karakteri": 7
+        }
+      },
+      "P3_Rakam": {
+        "soru": "1973 yılında kurulan okulun 45 öğretmeni ve 812 öğrencisi vardı. Bu cümledeki sayıları listele.",
+        "prompt": "<INSTRUCTION> 1973 yılında kurulan okulun 45 öğretmeni ve 812 öğrencisi vardı. Bu cümledeki sayıları listele. </INSTRUCTION> <INPUT>  </INPUT> <OUTPUT>",
+        "cikti": "teknik rapor tanımlan PART_An özel DERIV_lIk PLURAL doğrudan maun ağaç POSS_2SG CASE_DAT ait COPULA_AORIST </OUTPUT>",
+        "token_idleri": [
+          3865,
+          2100,
+          6170,
+          69,
+          2478,
+          39,
+          70,
+          3766,
+          15334,
+          767,
+          28,
+          20,
+          2091,
+          115,
+          1705
+        ],
+        "determinizm": {
+          "metin_ozdes": true,
+          "token_idleri_ozdes": true,
+          "sha256_token_idleri": "f52117374b9225d48635f833f672f2797a2cbc800fe29c0f3de81ec64d0e144c"
+        },
+        "token_id_ekseni": {
+          "token": 15,
+          "noktalama": 0,
+          "rakam": 0,
+          "unk": 0
+        },
+        "metin_tabanli_sayac_BAYAT": {
+          "_uyari": "Bu sayac cozulen METIN uzerinden sayar ve bicimbirim etiketlerindeki rakamlari (POSS_2SG, POSS_3PL, CASE_LOC_N...) rakam sanar. RAKAM icin YETKILI olcum token_id_ekseni.rakam'dir. Noktalama icin iki yontem birebir ayni cikti.",
+          "rakam_karakteri": 1
+        }
+      },
+      "P4_Marangoz_Ezber": {
+        "soru": "Ahşap atölyesi güvenlik ve imalat rehberi: Ahşabın son kat yüzeyinde dolgu verniği nasıl tatbik edilmelidir?",
+        "prompt": "<INSTRUCTION> Ahşap atölyesi güvenlik ve imalat rehberi: Ahşabın son kat yüzeyinde dolgu verniği nasıl tatbik edilmelidir? </INSTRUCTION> <INPUT>  </INPUT> <OUTPUT>",
+        "cikti": "teknik çözüm teknik rapor teknik açıklama kereste CASE_GEN sıcak DERIV_lIk nem ve hava sirkülasyon POSS_3SG kontrollü fırın PLURAL CASE_LOC kademe DERIV_lI ol GERUND_ArAk kurutul GERUND_ArAk hücre iç POSS_3SG gerilim POSS_3PL CASE_GEN_N yukarı kıvrıl GERUND_ArAk oluk şekil POSS_2SG CASE_ACC alma POSS_3SG deformasyon POSS_3SG COPULA_AORIST </OUTPUT>",
+        "token_idleri": [
+          3865,
+          7098,
+          3865,
+          2100,
+          3865,
+          1188,
+          6521,
+          56,
+          711,
+          39,
+          387,
+          46,
+          262,
+          23457,
+          13,
+          7651,
+          3751,
+          70,
+          29,
+          5490,
+          116,
+          52,
+          173,
+          7983,
+          173,
+          6938,
+          315,
+          13,
+          2771,
+          7,
+          8,
+          666,
+          2950,
+          173,
+          7963,
+          916,
+          28,
+          53,
+          1122,
+          13,
+          7743,
+          13,
+          115,
+          1705
+        ],
+        "determinizm": {
+          "metin_ozdes": true,
+          "token_idleri_ozdes": true,
+          "sha256_token_idleri": "e498ae58f106ab6d95ef2b149c46655a8fbfbb00d11e8564bcf76c4f247cf88b"
+        },
+        "token_id_ekseni": {
+          "token": 44,
+          "noktalama": 0,
+          "rakam": 0,
+          "unk": 0
+        },
+        "metin_tabanli_sayac_BAYAT": {
+          "_uyari": "Bu sayac cozulen METIN uzerinden sayar ve bicimbirim etiketlerindeki rakamlari (POSS_2SG, POSS_3PL, CASE_LOC_N...) rakam sanar. RAKAM icin YETKILI olcum token_id_ekseni.rakam'dir. Noktalama icin iki yontem birebir ayni cikti.",
+          "rakam_karakteri": 6
+        }
+      },
+      "P5_Marangoz_Parafraz": {
+        "soru": "Ahşap doğramada kurt dişi geçme nedir ve nasıl uygulanır?",
+        "prompt": "<INSTRUCTION> Ahşap doğramada kurt dişi geçme nedir ve nasıl uygulanır? </INSTRUCTION> <INPUT>  </INPUT> <OUTPUT>",
+        "cikti": "teknik rapor maun ahşap POSS_3SG CASE_DAT_N vur TENSE_AORIST GERUND_KEN çe DERIV_lIk sap POSS_3SG koru PART_An darbe DERIV_lI yontma işlem POSS_3PL CASE_LOC_N ahşap veya poliüretan CASE_ABL yapılan çekiç COPULA_AORIST </OUTPUT>",
+        "token_idleri": [
+          3865,
+          2100,
+          15334,
+          2014,
+          13,
+          10,
+          798,
+          26,
+          324,
+          4100,
+          39,
+          993,
+          13,
+          6253,
+          69,
+          2315,
+          116,
+          7961,
+          5915,
+          7,
+          24,
+          2014,
+          1924,
+          7762,
+          171,
+          2073,
+          3809,
+          115,
+          1705
+        ],
+        "determinizm": {
+          "metin_ozdes": true,
+          "token_idleri_ozdes": true,
+          "sha256_token_idleri": "6dfad48d76e9ffe1629e03ced55461c9e444d079633345989e3ee6c169fd9eae"
+        },
+        "token_id_ekseni": {
+          "token": 29,
+          "noktalama": 0,
+          "rakam": 0,
+          "unk": 0
+        },
+        "metin_tabanli_sayac_BAYAT": {
+          "_uyari": "Bu sayac cozulen METIN uzerinden sayar ve bicimbirim etiketlerindeki rakamlari (POSS_2SG, POSS_3PL, CASE_LOC_N...) rakam sanar. RAKAM icin YETKILI olcum token_id_ekseni.rakam'dir. Noktalama icin iki yontem birebir ayni cikti.",
+          "rakam_karakteri": 3
+        }
+      }
+    }
+  },
+  "ham_ciktilar": {
+    "temel": {
+      "P1_Genel_Edebiyat": "temel tema , tarım ( hayvan DERIV_CI DERIV_lIk ) ve su kaynak POSS_3PL CASE_ACC_N içer PART_An Önemli bir rol oyna INF_mAk CASE_LOC COPULA_AORIST . bu durum , insan PLURAL POSS_2SG yaşam tarz POSS_3PL CASE_DAT_N uygun ol GERUND_ArAk tanımlan TENSE_AORIST ; çünkü hayat CASE_LOC kalma ve gün DERIV_lIk yaşam POSS_3SG sürdür INF_mAk için gerek DERIV_lI o DERIV_lAn su DERIV_sIz bir ortam yarat TENSE_EVIDENTIAL COPULA_AORIST .",
+      "P2_Noktalama": "Kiraz ağa DERIV_CI zamanla güneş . çok açık renk DERIV_lI , yoğun , Kokusuz ve sert COPULA_AORIST ; kesme tahta POSS_3PL , kasap blok POSS_3PL , müzik alet POSS_3PL ve gemi kamara POSS_3PL CASE_LOC_N kullanıl TENSE_AORIST .",
+      "P3_Rakam": "bu belge , antik Mısırdaki siyasi istikrar DERIV_sIz DERIV_lIk POSS_2SG CASE_ACC ve Askeri güç POSS_3SG CASE_ACC_N incele INF_mAk CASE_LOC COPULA_AORIST . özellikle , imparator PLURAL POSS_2SG yükseliş POSS_3SG ve art POSS_2SG CASE_ABL gelen anlaş INF_mA PLURAL CASE_DAT odaklan VOICE_PASS_Il PART_DIk POSS_2SG CASE_ACC göster INF_mAk CASE_LOC COPULA_AORIST . ayrıca , roma İmparatorluğu ile o DERIV_lAn ilişki POSS_3PL arasındaki siyasi manevra PLURAL CASE_INS ilgi DERIV_lI ol",
+      "P4_Marangoz_Ezber": "dolgu vernik POSS_3SG uygulama POSS_3SG CASE_LOC_N Ahşabın açık gözenek POSS_3PL CASE_ACC_N doldur GERUND_ArAk son kat cila için cam gibi pürüz DERIV_sIz ve homojen bir alt zemin hazırla PART_An astar vernik COPULA_AORIST .",
+      "P5_Marangoz_Parafraz": "Kurt dişi birleştir INF_mA uygulama POSS_3SG CASE_LOC_N Açılı zikzak diş PLURAL CASE_INS ahşap parça PLURAL POSS_2SG boylamasına eklen GERUND_ArAk son DERIV_sIz kereste elde edilme POSS_3SG CASE_ACC_N sağla PART_An endüstriyel ekleme COPULA_AORIST ."
+    },
+    "marangoz": {
+      "P1_Genel_Edebiyat": "teknik rapor tanımlan PART_An özel DERIV_lIk PLURAL doğrudan maun ağaç POSS_2SG CASE_DAT ait COPULA_AORIST </OUTPUT>",
+      "P2_Noktalama": "teknik çözüm usta cevap POSS_3SG teknik açıklama kereste CASE_GEN sıcak DERIV_lIk nem ve hava sirkülasyon POSS_3SG kontrollü fırın PLURAL CASE_LOC kademe DERIV_lI ol GERUND_ArAk kurutul GERUND_ArAk hücre iç POSS_3SG gerilim POSS_3PL CASE_GEN_N yukarı kıvrıl GERUND_ArAk oluk şekil POSS_2SG CASE_ACC alma POSS_3SG deformasyon POSS_3SG COPULA_AORIST </OUTPUT>",
+      "P3_Rakam": "teknik rapor tanımlan PART_An özel DERIV_lIk PLURAL doğrudan maun ağaç POSS_2SG CASE_DAT ait COPULA_AORIST </OUTPUT>",
+      "P4_Marangoz_Ezber": "teknik çözüm teknik rapor teknik açıklama kereste CASE_GEN sıcak DERIV_lIk nem ve hava sirkülasyon POSS_3SG kontrollü fırın PLURAL CASE_LOC kademe DERIV_lI ol GERUND_ArAk kurutul GERUND_ArAk hücre iç POSS_3SG gerilim POSS_3PL CASE_GEN_N yukarı kıvrıl GERUND_ArAk oluk şekil POSS_2SG CASE_ACC alma POSS_3SG deformasyon POSS_3SG COPULA_AORIST </OUTPUT>",
+      "P5_Marangoz_Parafraz": "teknik rapor maun ahşap POSS_3SG CASE_DAT_N vur TENSE_AORIST GERUND_KEN çe DERIV_lIk sap POSS_3SG koru PART_An darbe DERIV_lI yontma işlem POSS_3PL CASE_LOC_N ahşap veya poliüretan CASE_ABL yapılan çekiç COPULA_AORIST </OUTPUT>"
+    }
+  },
+  "kontrol_ayni_checkpoint_iki_sozluk": {
+    "_amac": "D-B kabul onculu ('taban noktalama uretmiyor / taban cizgi bugun 0') MODEL ozelligi mi, OLCUM ARACI artefakti mi? Ayni data/kristal_model.pt iki farkli sozlukle yuklendi.",
+    "olcum": {
+      "data/vocab.json": {
+        "vocab_path": "data/vocab.json",
+        "model_rows": 31357,
+        "ckpt_rows": 32816,
+        "uyari_sayisi": 3,
+        "vakalar": {
+          "P1_Genel_Edebiyat": {
+            "token_sayisi": 64,
+            "uretilen_noktalama": {},
+            "noktalama_token_sayisi": 0,
+            "cikti": "temel neden POSS_3SG üç ana dönem CASE_DAT ayrıl TENSE_EVIDENTIAL COPULA_AORIST ve özellikle iki POSS_2SG DERIV_CI ol GERUND_ArAk tanımlan INF_mAk CASE_LOC COPULA_AORIST ki bu durum hem iç hem de dış politika PLURAL CASE_ABL biri o DERIV_lAn bir dönem CASE_DAT işaret et INF_mAk CASE_LOC COPULA_AORIST ve özellikle iki POSS_2SG DERIV_CI POSS_3SG is CASE_DAT yaklaşık ol GERUND_ArAk e kadar geniş bir alan CASE_DAT yayıl TENSE_EVIDENTIAL COPULA_AORIST ve",
+            "sha256_token_idleri": "5e63664a2fe2238d251a548b5ef76402c96d3fbd9aa33a7c0ff4409591f0ceaa"
+          },
+          "P2_Noktalama": {
+            "token_sayisi": 64,
+            "uretilen_noktalama": {},
+            "noktalama_token_sayisi": 0,
+            "cikti": "bu gereksinim için sedir ağa DERIV_CI son derece uygun COPULA_AORIST ve doğal yağ PLURAL ile hafif serbest sıkıl TENSE_NECESS COPULA_AORIST veya parça POSS_3PL bir ağaç POSS_2SG CASE_DAT göre daha fazla çeker ve talaş derin DERIV_lIk POSS_3SG azaltıl TENSE_NECESS COPULA_AORIST CASE_ACC amaçla PART_An lüks mobilya ağa DERIV_CI COPULA_AORIST ve lif akış POSS_2SG CASE_ACC saptır TENSE_AORIST PERSON_3PL COPULA_AORIST ve kesi DERIV_CI açı PLURAL kullanıl GERUND_ArAk oluşturul",
+            "sha256_token_idleri": "c475f1f94cf4795724f4353cf058c972de777041a3c8b25d8d771f8b5758d2d6"
+          }
+        }
+      },
+      "data/rebuild/vocab_base_32816.json": {
+        "vocab_path": "data/rebuild/vocab_base_32816.json",
+        "model_rows": 32816,
+        "ckpt_rows": 32816,
+        "uyari_sayisi": 0,
+        "vakalar": {
+          "P1_Genel_Edebiyat": {
+            "token_sayisi": 64,
+            "uretilen_noktalama": {
+              ".": 32137,
+              ",": 32138,
+              ";": 32143
+            },
+            "noktalama_token_sayisi": 5,
+            "cikti": "temel tema , tarım ( hayvan DERIV_CI DERIV_lIk ) ve su kaynak POSS_3PL CASE_ACC_N içer PART_An Önemli bir rol oyna INF_mAk CASE_LOC COPULA_AORIST . bu durum , insan PLURAL POSS_2SG yaşam tarz POSS_3PL CASE_DAT_N uygun ol GERUND_ArAk tanımlan TENSE_AORIST ; çünkü hayat CASE_LOC kalma ve gün DERIV_lIk yaşam POSS_3SG sürdür INF_mAk için gerek DERIV_lI o DERIV_lAn su DERIV_sIz bir ortam yarat TENSE_EVIDENTIAL COPULA_AORIST .",
+            "sha256_token_idleri": "1da9f60e02058cd1740a78e0c12658529d5029f5673c9598b4b5deef909c1229"
+          },
+          "P2_Noktalama": {
+            "token_sayisi": 37,
+            "uretilen_noktalama": {
+              ".": 32137,
+              ",": 32138,
+              ";": 32143
+            },
+            "noktalama_token_sayisi": 7,
+            "cikti": "Kiraz ağa DERIV_CI zamanla güneş . çok açık renk DERIV_lI , yoğun , Kokusuz ve sert COPULA_AORIST ; kesme tahta POSS_3PL , kasap blok POSS_3PL , müzik alet POSS_3PL ve gemi kamara POSS_3PL CASE_LOC_N kullanıl TENSE_AORIST .",
+            "sha256_token_idleri": "83cb6b989f9b4ad008fcac16cba114c903acc0fbe56c24d9dd566c42d4801401"
+          }
+        }
+      }
+    },
+    "kume_uyarisi": "Bu KONTROL kosumu YALNIZ 2 istem kullanir (P1_Genel_Edebiyat, P2_Noktalama). Ana kosumdaki 19 sayisi 5 istemin toplamidir; buradaki karsilastirilabilir sayi 12'dir (P1=5 + P2=7). Iki sayi farkli kumeleri sayar, celiski degildir.",
+    "hukum": "OLCUM ARACI ARTEFAKTI. Ayni checkpoint data/vocab.json (31.357, noktalama id'si YOK) ile AYNI 2 istemde 0 noktalama uretirken, data/rebuild/vocab_base_32816.json (noktalama blogu 32137-32143) ile 12 uretiyor (P1=5, P2=7). 'Taban noktalama uretmiyor' iddiasi kanonik yukleme altinda GECERSIZDIR."
+  },
+  "sozluk_ekseni_rakam_ve_kesme": {
+    "_amac": "Rakam ve kesme isaretinin uc sozlukteki kaderi (YALNIZ tokenizer, model yuklenmedi).",
+    "olcum": {
+      "data/vocab.json": {
+        "satir": 31357,
+        "max_id": 31356,
+        "rakam_token_idleri": [],
+        "rakam_token_sayisi": 0,
+        "noktalama_idleri": {
+          ".": null,
+          ",": null,
+          "?": null,
+          "!": null,
+          "-": null,
+          ":": null,
+          ";": null
+        },
+        "kesme_id": null,
+        "formlar": {
+          "1973": {
+            "ids": [
+              2,
+              0,
+              0,
+              0,
+              0,
+              3
+            ],
+            "tokenlar": [
+              "<BOS>",
+              "<UNK>",
+              "<UNK>",
+              "<UNK>",
+              "<UNK>",
+              "<EOS>"
+            ],
+            "unk": 4
+          },
+          "45": {
+            "ids": [
+              2,
+              0,
+              0,
+              3
+            ],
+            "tokenlar": [
+              "<BOS>",
+              "<UNK>",
+              "<UNK>",
+              "<EOS>"
+            ],
+            "unk": 2
+          },
+          "812": {
+            "ids": [
+              2,
+              0,
+              0,
+              0,
+              3
+            ],
+            "tokenlar": [
+              "<BOS>",
+              "<UNK>",
+              "<UNK>",
+              "<UNK>",
+              "<EOS>"
+            ],
+            "unk": 3
+          },
+          "21": {
+            "ids": [
+              2,
+              0,
+              0,
+              3
+            ],
+            "tokenlar": [
+              "<BOS>",
+              "<UNK>",
+              "<UNK>",
+              "<EOS>"
+            ],
+            "unk": 2
+          },
+          "1": {
+            "ids": [
+              2,
+              0,
+              3
+            ],
+            "tokenlar": [
+              "<BOS>",
+              "<UNK>",
+              "<EOS>"
+            ],
+            "unk": 1
+          },
+          "1973'te": {
+            "ids": [
+              2,
+              0,
+              3
+            ],
+            "tokenlar": [
+              "<BOS>",
+              "<UNK>",
+              "<EOS>"
+            ],
+            "unk": 1
+          },
+          "45'inci": {
+            "ids": [
+              2,
+              0,
+              3
+            ],
+            "tokenlar": [
+              "<BOS>",
+              "<UNK>",
+              "<EOS>"
+            ],
+            "unk": 1
+          },
+          "İstanbul'da": {
+            "ids": [
+              2,
+              4,
+              3
+            ],
+            "tokenlar": [
+              "<BOS>",
+              "<PROPER_NOUN>",
+              "<EOS>"
+            ],
+            "unk": 0
+          }
+        }
+      },
+      "data/rebuild/vocab_base_32816.json": {
+        "satir": 32816,
+        "max_id": 32815,
+        "rakam_token_idleri": [
+          32146,
+          32147,
+          32148,
+          32149,
+          32150,
+          32151,
+          32152,
+          32153,
+          32154,
+          32155
+        ],
+        "rakam_token_sayisi": 10,
+        "noktalama_idleri": {
+          ".": 32137,
+          ",": 32138,
+          "?": 32139,
+          "!": 32140,
+          "-": 32141,
+          ":": 32142,
+          ";": 32143
+        },
+        "kesme_id": null,
+        "formlar": {
+          "1973": {
+            "ids": [
+              2,
+              32147,
+              32155,
+              32153,
+              32149,
+              3
+            ],
+            "tokenlar": [
+              "<BOS>",
+              "1",
+              "9",
+              "7",
+              "3",
+              "<EOS>"
+            ],
+            "unk": 0
+          },
+          "45": {
+            "ids": [
+              2,
+              32150,
+              32151,
+              3
+            ],
+            "tokenlar": [
+              "<BOS>",
+              "4",
+              "5",
+              "<EOS>"
+            ],
+            "unk": 0
+          },
+          "812": {
+            "ids": [
+              2,
+              32154,
+              32147,
+              32148,
+              3
+            ],
+            "tokenlar": [
+              "<BOS>",
+              "8",
+              "1",
+              "2",
+              "<EOS>"
+            ],
+            "unk": 0
+          },
+          "21": {
+            "ids": [
+              2,
+              32148,
+              32147,
+              3
+            ],
+            "tokenlar": [
+              "<BOS>",
+              "2",
+              "1",
+              "<EOS>"
+            ],
+            "unk": 0
+          },
+          "1": {
+            "ids": [
+              2,
+              32147,
+              3
+            ],
+            "tokenlar": [
+              "<BOS>",
+              "1",
+              "<EOS>"
+            ],
+            "unk": 0
+          },
+          "1973'te": {
+            "ids": [
+              2,
+              0,
+              3
+            ],
+            "tokenlar": [
+              "<BOS>",
+              "<UNK>",
+              "<EOS>"
+            ],
+            "unk": 1
+          },
+          "45'inci": {
+            "ids": [
+              2,
+              0,
+              3
+            ],
+            "tokenlar": [
+              "<BOS>",
+              "<UNK>",
+              "<EOS>"
+            ],
+            "unk": 1
+          },
+          "İstanbul'da": {
+            "ids": [
+              2,
+              4,
+              3
+            ],
+            "tokenlar": [
+              "<BOS>",
+              "<PROPER_NOUN>",
+              "<EOS>"
+            ],
+            "unk": 0
+          }
+        }
+      },
+      "data/rebuild/vocab_carpenter_32137.json": {
+        "satir": 32137,
+        "max_id": 32136,
+        "rakam_token_idleri": [],
+        "rakam_token_sayisi": 0,
+        "noktalama_idleri": {
+          ".": null,
+          ",": null,
+          "?": null,
+          "!": null,
+          "-": null,
+          ":": null,
+          ";": null
+        },
+        "kesme_id": null,
+        "formlar": {
+          "1973": {
+            "ids": [
+              2,
+              0,
+              0,
+              0,
+              0,
+              3
+            ],
+            "tokenlar": [
+              "<BOS>",
+              "<UNK>",
+              "<UNK>",
+              "<UNK>",
+              "<UNK>",
+              "<EOS>"
+            ],
+            "unk": 4
+          },
+          "45": {
+            "ids": [
+              2,
+              0,
+              0,
+              3
+            ],
+            "tokenlar": [
+              "<BOS>",
+              "<UNK>",
+              "<UNK>",
+              "<EOS>"
+            ],
+            "unk": 2
+          },
+          "812": {
+            "ids": [
+              2,
+              0,
+              0,
+              0,
+              3
+            ],
+            "tokenlar": [
+              "<BOS>",
+              "<UNK>",
+              "<UNK>",
+              "<UNK>",
+              "<EOS>"
+            ],
+            "unk": 3
+          },
+          "21": {
+            "ids": [
+              2,
+              0,
+              0,
+              3
+            ],
+            "tokenlar": [
+              "<BOS>",
+              "<UNK>",
+              "<UNK>",
+              "<EOS>"
+            ],
+            "unk": 2
+          },
+          "1": {
+            "ids": [
+              2,
+              0,
+              3
+            ],
+            "tokenlar": [
+              "<BOS>",
+              "<UNK>",
+              "<EOS>"
+            ],
+            "unk": 1
+          },
+          "1973'te": {
+            "ids": [
+              2,
+              0,
+              3
+            ],
+            "tokenlar": [
+              "<BOS>",
+              "<UNK>",
+              "<EOS>"
+            ],
+            "unk": 1
+          },
+          "45'inci": {
+            "ids": [
+              2,
+              0,
+              3
+            ],
+            "tokenlar": [
+              "<BOS>",
+              "<UNK>",
+              "<EOS>"
+            ],
+            "unk": 1
+          },
+          "İstanbul'da": {
+            "ids": [
+              2,
+              4,
+              3
+            ],
+            "tokenlar": [
+              "<BOS>",
+              "<PROPER_NOUN>",
+              "<EOS>"
+            ],
+            "unk": 0
+          }
+        }
+      }
+    },
+    "hukum": {
+      "rakam": "data/vocab.json ve data/rebuild/vocab_carpenter_32137.json icinde HIC rakam token id'si yok -> ciplak rakamlar 100% <UNK>. vocab_base_32816'da rakam id'leri 32146-32155 mevcut -> ciplak rakamlar KUSURSUZ tokenize olur (1973 -> 1 9 7 3), 0 UNK.",
+      "kesme": "' karakteri UC sozlukte de YOK. Rakam koklü kesme formlari (1973'te, 45'inci...) uc sozlukte de TEK <UNK> (kayip orani 1.0). Ozel ad koklü kesme formu (Istanbul'da) <PROPER_NOUN>'a duser: UNK DEGIL, ama ek de kaybolur."
+    }
+  },
+  "test_takimi": {
+    "komut": "venv/bin/pytest -q tests/",
+    "sonuc": "142 passed",
+    "exit_kodu": 0,
+    "sandbox": "dışı",
+    "cot_vault_sha256_once": "97b06fe5befd6613b520d28dc20a74deaeb30e4e8f7e6675a23720a019ff5619",
+    "cot_vault_sha256_sonra": "97b06fe5befd6613b520d28dc20a74deaeb30e4e8f7e6675a23720a019ff5619",
+    "cot_vault_satir": 91,
+    "t0033_kirali_dosyalar_kosum_boyunca_degisti": false,
+    "ek_kosum_2026_09_15T16_33Z": {
+      "komut": "./venv/bin/pytest -q tests/",
+      "sonuc": "142 passed in 7.46s",
+      "exit_kodu": 0,
+      "sandbox": "disi",
+      "cot_vault_once": "97b06fe5befd6613b520d28dc20a74deaeb30e4e8f7e6675a23720a019ff5619",
+      "cot_vault_sonra": "97b06fe5befd6613b520d28dc20a74deaeb30e4e8f7e6675a23720a019ff5619"
+    }
+  },
+  "olcum_araci_kusurlari": [
+    {
+      "id": "K1",
+      "kusur": "ilk sayacim rakam/rakam-olmayan ayrimini cozulen METIN uzerinden yapiyordu; bicimbirim etiketleri (POSS_2SG, DERIV_CI, POSS_3PL) rakam karakteri tasidigi icin 'rakam' sayisi sisiyordu",
+      "ornek": "marangoz P3 icin metin-tabanli 'rakam=1' -> id-tabanli 'rakam=0'; sisirme tamamen etiket rakamlarindan",
+      "duzeltme": "olcum token-id eksenine tasindi; noktalama icin iki yontem birebir ayni cikti (capraz dogrulama)"
+    },
+    {
+      "id": "K2",
+      "kusur": "$TMPDIR sandbox ICINDE /tmp/claude-501, DISINDA /var/folders/.../T/. Probe'lar sandbox disinda kostugu icin ilk kosum FileNotFoundError verdi.",
+      "duzeltme": "Probe icinde SABIT /tmp/claude-501 yolu + disaridan TMPDIR=/tmp/claude-501 ile kosum. Bu bir ARAC EKSENI kaydidir, bulgu degil."
+    }
+  ],
+  "bulgular": [
+    {
+      "id": "B1",
+      "baslik": "D-B kabul onculu olcum araci artefakti",
+      "olcum": "Ayni data/kristal_model.pt, ayni 2 istem: vocab.json -> 0 noktalama (3 boyut uyarisi, sessiz kirpma), vocab_base_32816 -> 12 noktalama (P1=5, P2=7, 0 uyari).",
+      "anlam": "'Taban noktalama uretmiyor (taban cizgi bugun 0)' onculu MODEL ozelligi degil, vocab.json'un noktalama id'si tasimamasindan gelen bir olcum sonucudur. Kanonik yukleme altinda olcut ZATEN saglaniyor."
+    },
+    {
+      "id": "B2",
+      "baslik": "Noktalama VAR ama TALIMATA BAGLI DEGIL",
+      "olcum": "P2 acikca 'noktalama isaretleriyle birlikte yaz' istedi. TEMEL noktali bir cikti uretti (7 noktalama tokeni) ama istemle ilgisiz bir icerik ('Kiraz aga...') ile.",
+      "anlam": "Eksik olan yetenek degil KOSULLANMA. Tabanin noktalama cikisi mevcut; isteme baglanmasi ogretilmemis."
+    },
+    {
+      "id": "B3",
+      "baslik": "Rakam: sozluk tarafinda HAZIR, model tarafinda HIC OGRENILMEMIS",
+      "olcum": "vocab_base_32816 rakam id'leri 32146-32155 tasiyor ve ciplak rakamlar kusursuz tokenize oluyor. Buna ragmen TEMEL 0/229, MARANGOZ 0/148 rakam tokeni uretti (marangozda yapisal olarak imkansiz: max_id 32136, rakam id'si yok).",
+      "anlam": "Rakam yetkinligi icin sozluk engeli KALKMIŞ durumda; engel artik VERI/MODEL tarafinda."
+    },
+    {
+      "id": "B4",
+      "baslik": "Kesme isareti gercek bosluk",
+      "olcum": "' karakteri uc sozlukte de yok. Rakam koklü kesme formlari 3/3 sozlukte tek <UNK> (kayip 1.0). Ozel ad koklü form (Istanbul'da) <PROPER_NOUN>'a dusuyor — UNK degil ama ek kayboluyor.",
+      "anlam": "Kesme boslugu iki ayri sinifa ayriliyor: (i) rakam koklü formlar tamamen UNK, (ii) ozel ad koklü formlar UNK degil ama bicimbirim bilgisi kayip."
+    },
+    {
+      "id": "B5",
+      "baslik": "MARANGOZ bir YANITLAYICI degil, KONU CEKICISI",
+      "olcum": "P1 (genel edebiyat) ve P3 (rakam) istemleri BIT-OZDES 15 tokenlik ayni ciktiyi uretti (sha f52117374b92). P2 noktalama istemine ragmen 0 noktalama.",
+      "anlam": "Ceket modeli alanina hapsolmus; farkli istemleri ayni alan cikisina cokluyor. Istem kosullanmasi ceket rolunun onkosulu."
+    },
+    {
+      "id": "B6",
+      "baslik": "Kanonik uretec `</OUTPUT>`'u yasaklamiyor",
+      "olcum": "MARANGOZ P4 ciktisi literal '</OUTPUT>' metniyle bitiyor. masked_tags listesi '<OUTPUT>' iceriyor ama '</OUTPUT>' ICERMIYOR.",
+      "anlam": "Olcum hatasi degil, uretim sozlesmesinde bir bosluk: modelin cikti zarfi etiketini metin olarak basmasi engellenmemis."
+    },
+    {
+      "id": "B7",
+      "baslik": "Her iki model de <UNK> URETMIYOR",
+      "olcum": "TEMEL 0/229, MARANGOZ 0/148 uretilen tokende <UNK>.",
+      "anlam": "Bilinmeyen token basma davranisi yok; sorun OOV uretimi degil, hedef yetkinliklerin yoklugu."
+    }
+  ],
+  "gelistirme_yonu_sonuclari": [
+    {
+      "id": "Y1",
+      "sonuc": "D-B olcutu yeniden yazilmali: 'taban noktalama uretiyor mu' DEGIL, 'taban noktalamayi ISTEME BAGLI uretiyor mu'. Bugun olcut kanonik yukleme altinda zaten geciyor (B1); oldugu gibi birakilirsa var olmayan bir eksik kovalanir.",
+      "dayanak": "B1 + B2"
+    },
+    {
+      "id": "Y2",
+      "sonuc": "Rakam + kesme TABANA tasinirken is sirasi netlesiyor: sozluk tarafinda RAKAM HAZIR (B3); eksik olan (a) kesme isareti tokeni ve rakam koklü kesme formlarinin cozulmesi (B4), (b) rakam tokenlerinin model tarafinda HIC gorulmemis olmasi (B3) -> rakam iceren derleme verisi ZORUNLU.",
+      "dayanak": "B3 + B4"
+    },
+    {
+      "id": "Y3",
+      "sonuc": "TABAN ve CEKET ayri hedefler: taban dil yetkinligini zaten tasiyor (noktalama uretiyor, UNK basmiyor) — asil is tabani ISTEME BAGLAMAK; ceket ise ancak istem kosullanmasi ogretilirse ceket rolunu oynar, aksi hâlde konu cekicisi kalir.",
+      "dayanak": "B2 + B5 + B7"
+    },
+    {
+      "id": "Y4",
+      "sonuc": "Kanonik ureticide `</OUTPUT>` yasagi kapatilmali (sozlesme boslugu, olcum kusuru degil).",
+      "dayanak": "B6"
+    }
+  ],
+  "yeniden_uretim": {
+    "adim_1_yukleme": "data/kristal_model.pt + data/rebuild/vocab_base_32816.json ; data/kristal_carpenter_model.pt + data/rebuild/vocab_carpenter_32137.json — kanonik resize_state_dict + KristalLM yoluyla. Kirpma/dolgu uyarisi 0 beklenir.",
+    "adim_2_uretim": "scripts/run_experiment_c.generate(model, tokenizer, render_prompt(soru, ''), max_tokens=64, temp=0.0) — 5 istem, 2 tekrar (determinizm).",
+    "adim_3_sozluk_ekseni": "Yalniz tokenizer (model yuklenmez): KristalTokenizer(compiler, vocab).encode(...) ile 1973 / 45'inci / Istanbul'da formlarinin <UNK> kaderi.",
+    "adim_4_test": "./venv/bin/pytest -q tests/ (SANDBOX DISINDA; MPS sandbox icinde gorunmez).",
+    "olcum_betikleri": {
+      "_durum": "GECICI — oturum dizininde (/tmp/claude-501), kalici depo yuzeyi DEGIL. Bu yuzden hash atfi olarak KULLANILMAZ; mantik yukaridaki kanonik repo fonksiyonlarindan birebir uretilir.",
+      "temel_marangoz_olcum.py": "e9dace4eb7b82c3a3cad04fb9c1e9379f516cc41e09466186c8b7cbc6e643d09",
+      "kontrol_31357.py": "861d6cf59a5d59a08a03bc23588a9e9a98a6b2c494d06f0b85d9868ff68123b6"
+    }
+  },
+  "kaynak_ham_dosyalar": {
+    "_durum": "GECICI (oturum dizini). Sayilar bu artefakta KOPYALANMISTIR; ham dosyalar kaybolsa da artefakt kendi kendine yeter.",
+    "/tmp/claude-501/temel_marangoz_olcum_ham.json": 19784,
+    "/tmp/claude-501/kontrol_olcum_ham.json": 8798,
+    "/tmp/claude-501/sozluk_form_ekseni.json": 6598
+  },
+  "notlar": [
+    "Bu artefakt yalnizca OLCUM icerir; hicbir model, sozluk veya egitim girdisi degistirilmedi.",
+    "Rapor ANINDA tazelenen kural: bu dosyanin kendi sha256'si bus mesajinda bildirilir; not/kalici yuzeyde hash tablosu tutulmaz.",
+    "Kullanici talimati geregi bu turda yeni gorev acilmadi; gelistirme yonu kararlari kullaniciya sunulur."
+  ]
+}

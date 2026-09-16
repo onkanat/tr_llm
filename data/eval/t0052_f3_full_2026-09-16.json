@@ -1,0 +1,686 @@
+{
+  "task_id": "T-0052",
+  "as_of": "2026-09-16T17:36:00Z",
+  "leases": {
+    "dir_leases": [
+      "data/",
+      "scratch/"
+    ],
+    "file_leases": [
+      "data/eval/t0052_f3_full_2026-09-16.json",
+      ".agent-bus/notes/T-0052.md"
+    ],
+    "status": "ACQUIRED_AND_VERIFIED"
+  },
+  "runs": {
+    "run_a": {
+      "command": "venv/bin/python train.py --device mps --data data/train_balanced_sft_v2.bin --steps 1000 --batch-size 16 --load-path data/kristal_model.pt --save-path data/kristal_model_f3_sft.pt --allow-frozen-write",
+      "device": "mps (Metal GPU)",
+      "steps": 1000,
+      "batch_size": 16,
+      "block_size": 64,
+      "initial_loss": 5.7771,
+      "final_loss": 1.5735,
+      "total_time_seconds": 433.21,
+      "sec_per_step": 0.4332,
+      "checkpoint": {
+        "path": "data/kristal_model_f3_sft.pt",
+        "size_bytes": 372125348,
+        "size_mb": 354.9,
+        "sha256": "5a0a03c22d4efdff331deb826024bc6f7cce416da13aaaf85e4b24d2cf117108"
+      }
+    },
+    "run_b": {
+      "command": "venv/bin/python train.py --device mps --data data/train_chat_balanced.bin --steps 1000 --batch-size 16 --load-path data/kristal_model_f3_sft.pt --save-path data/kristal_model_f3.pt --allow-frozen-write",
+      "device": "mps (Metal GPU)",
+      "steps": 1000,
+      "batch_size": 16,
+      "block_size": 128,
+      "initial_loss": 3.411,
+      "final_loss": 0.9447,
+      "total_time_seconds": 3447.03,
+      "sec_per_step": 3.447,
+      "checkpoint": {
+        "path": "data/kristal_model_f3.pt",
+        "size_bytes": 372124920,
+        "size_mb": 354.9,
+        "sha256": "eefc3ab85dcfb454dd80cc1b4519ec9c923df2587ad1c6ecaa4a2a535daebbfd"
+      }
+    }
+  },
+  "ce_eval": {
+    "taban": 5.5058707396189375,
+    "f3_sft": 1.9405097564061482,
+    "f3": 2.048913280169169
+  },
+  "g3_y1_danisman": {
+    "description": "5 offset [0, 20000, 40000, 60000, 80000], 32 baglam, 32 greedy decode (toplam 160 token/model)",
+    "counts": {
+      "taban": {
+        "32137": 10,
+        "32138": 5,
+        "32142": 0,
+        "32145": 1,
+        "32850": 0
+      },
+      "f3_sft": {
+        "32137": 3,
+        "32138": 5,
+        "32142": 2,
+        "32145": 2,
+        "32850": 6
+      },
+      "f3": {
+        "32137": 7,
+        "32138": 4,
+        "32142": 0,
+        "32145": 1,
+        "32850": 3
+      }
+    },
+    "rates_per_100": {
+      "taban": {
+        "32137": 6.25,
+        "32138": 3.125,
+        "32142": 0.0,
+        "32145": 0.625,
+        "32850": 0.0
+      },
+      "f3_sft": {
+        "32137": 1.875,
+        "32138": 3.125,
+        "32142": 1.25,
+        "32145": 1.25,
+        "32850": 3.75
+      },
+      "f3": {
+        "32137": 4.375,
+        "32138": 2.5,
+        "32142": 0.0,
+        "32145": 0.625,
+        "32850": 1.875
+      }
+    },
+    "first_12_per_run": {
+      "taban": [
+        [
+          715,
+          7,
+          24,
+          104,
+          1924,
+          214,
+          503,
+          649,
+          2611,
+          39,
+          28,
+          20
+        ],
+        [
+          26,
+          46,
+          0,
+          52,
+          173,
+          0,
+          32137,
+          3,
+          7303,
+          208,
+          0,
+          32138
+        ],
+        [
+          46,
+          573,
+          39,
+          115,
+          32137,
+          3,
+          11341,
+          39,
+          7,
+          32138,
+          0,
+          46
+        ],
+        [
+          10,
+          2078,
+          44,
+          32137,
+          3,
+          715,
+          130,
+          40,
+          0,
+          301,
+          44,
+          32137
+        ],
+        [
+          13,
+          7088,
+          51,
+          29,
+          115,
+          32137,
+          284,
+          32138,
+          4,
+          46,
+          4,
+          80
+        ]
+      ],
+      "f3_sft": [
+        [
+          715,
+          7,
+          24,
+          4221,
+          46,
+          605,
+          7,
+          1006,
+          116,
+          32138,
+          222,
+          649
+        ],
+        [
+          46,
+          2995,
+          52,
+          173,
+          8559,
+          32137,
+          1708,
+          1704,
+          7552,
+          165,
+          0,
+          32850
+        ],
+        [
+          32138,
+          3670,
+          715,
+          7,
+          24,
+          4221,
+          46,
+          605,
+          29,
+          27244,
+          649,
+          2611
+        ],
+        [
+          10,
+          0,
+          32850,
+          2479,
+          116,
+          39,
+          13,
+          31913,
+          115,
+          32139,
+          1708,
+          1704
+        ],
+        [
+          32817,
+          32850,
+          29,
+          27244,
+          32008,
+          1797,
+          7,
+          8,
+          32138,
+          32008,
+          1797,
+          7
+        ]
+      ],
+      "f3": [
+        [
+          715,
+          7,
+          24,
+          301,
+          1924,
+          214,
+          503,
+          4221,
+          28,
+          20,
+          589,
+          51
+        ],
+        [
+          46,
+          2995,
+          52,
+          173,
+          8559,
+          32137,
+          1708,
+          1704,
+          40,
+          1937,
+          13,
+          438
+        ],
+        [
+          32138,
+          32816,
+          32818,
+          32820,
+          32835,
+          32837,
+          32820,
+          32829,
+          32817,
+          32141,
+          31937,
+          32145
+        ],
+        [
+          80,
+          2402,
+          32138,
+          14690,
+          40,
+          898,
+          147,
+          1534,
+          74,
+          32137,
+          1708,
+          1704
+        ],
+        [
+          32817,
+          32850,
+          28,
+          29,
+          32816,
+          32818,
+          32836,
+          32820,
+          32835,
+          32837,
+          32820,
+          32832
+        ]
+      ]
+    }
+  },
+  "g3_y2_yurutucu": {
+    "prompts": [
+      "Türkiye Cumhuriyeti",
+      "Bugün hava nasıl",
+      "Osmanlı Devleti"
+    ],
+    "counts": {
+      "taban": {
+        "32137": 3,
+        "32138": 2,
+        "32142": 1
+      },
+      "f3_sft": {
+        "32137": 2,
+        "32138": 2,
+        "32142": 0
+      },
+      "f3": {
+        "32137": 0,
+        "32138": 0,
+        "32142": 0
+      }
+    },
+    "samples": {
+      "taban": [
+        {
+          "prompt": "Türkiye Cumhuriyeti",
+          "gen_ids": [
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4
+          ],
+          "text": "<PROPER_NOUN> <PROPER_NOUN> <PROPER_NOUN> <PROPER_NOUN> <PROPER_NOUN> <PROPER_NOUN> <PROPER_NOUN> <PROPER_NOUN> <PROPER_NOUN> <PROPER_NOUN> <PROPER_NOUN> <PROPER_NOUN> <PROPER_NOUN> <PROPER_NOUN> <PROPER_NOUN> <PROPER_NOUN> <PROPER_NOUN> <PROPER_NOUN> <PROPER_NOUN> <PROPER_NOUN> <PROPER_NOUN> <PROPER_NOUN> <PROPER_NOUN> <PROPER_NOUN> <PROPER_NOUN> <PROPER_NOUN> <PROPER_NOUN> <PROPER_NOUN> <PROPER_NOUN> <PROPER_NOUN>",
+          "counts": {
+            "32137": 0,
+            "32138": 0,
+            "32142": 0
+          }
+        },
+        {
+          "prompt": "Bugün hava nasıl",
+          "gen_ids": [
+            262,
+            29,
+            262,
+            3193,
+            7,
+            84,
+            1924,
+            262,
+            3193,
+            7,
+            84,
+            1924,
+            246,
+            26,
+            32137
+          ],
+          "text": "hava CASE_LOC hava koşul POSS_3PL CASE_ACC_N veya hava koşul POSS_3PL CASE_ACC_N veya al TENSE_AORIST . <EOS> marangoz DERIV_lIk POSS_3PL CASE_GEN_N <UNK> yön POSS_3SG boyunca kenar POSS_3PL CASE_GEN_N yukarı kıvrıl GERUND_ArAk",
+          "counts": {
+            "32137": 1,
+            "32138": 0,
+            "32142": 0
+          }
+        },
+        {
+          "prompt": "Osmanlı Devleti",
+          "gen_ids": [
+            56,
+            2059,
+            2789,
+            13,
+            115,
+            32137,
+            1503,
+            32142,
+            1079,
+            70,
+            35,
+            32138,
+            40,
+            0,
+            32138
+          ],
+          "text": "CASE_GEN temel unsur POSS_3SG COPULA_AORIST . örnek : ayak PLURAL POSS_1SG , bir <UNK> , bir <UNK> ve bir <UNK> ve bir düşünce CASE_ACC ifade eder . <EOS> bir <UNK>",
+          "counts": {
+            "32137": 2,
+            "32138": 2,
+            "32142": 1
+          }
+        }
+      ],
+      "f3_sft": [
+        {
+          "prompt": "Türkiye Cumhuriyeti",
+          "gen_ids": [
+            32850,
+            28,
+            0,
+            148,
+            32138,
+            284,
+            488,
+            29,
+            27244,
+            31444,
+            1723,
+            7,
+            8,
+            6570,
+            18
+          ],
+          "text": "' POSS_2SG <UNK> birlikte , bu dönem CASE_LOC REL_ki Yunan şehir POSS_3PL CASE_GEN_N kontrolünü yeniden sağlan INF_mA POSS_3SG CASE_DAT_N yol aç TENSE_EVIDENTIAL COPULA_AORIST . </OUTPUT> <EOS> <BOS> <INSTRUCTION> <ENT> <CAP>",
+          "counts": {
+            "32137": 1,
+            "32138": 1,
+            "32142": 0
+          }
+        },
+        {
+          "prompt": "Bugün hava nasıl",
+          "gen_ids": [
+            6170,
+            51,
+            29,
+            115,
+            32137,
+            284,
+            411,
+            32138,
+            284,
+            488,
+            29,
+            27244,
+            613,
+            39,
+            226
+          ],
+          "text": "tanımlan INF_mAk CASE_LOC COPULA_AORIST . bu durum , bu dönem CASE_LOC REL_ki insan DERIV_lIk tarih POSS_2SG CASE_GEN önem DERIV_lI bir dönüm nokta POSS_3SG ol PART_DIk POSS_2SG CASE_ACC göster INF_mAk CASE_LOC",
+          "counts": {
+            "32137": 1,
+            "32138": 1,
+            "32142": 0
+          }
+        },
+        {
+          "prompt": "Osmanlı Devleti",
+          "gen_ids": [
+            32850,
+            56,
+            715,
+            28,
+            20,
+            17,
+            275,
+            13,
+            46,
+            454,
+            28,
+            171,
+            32816,
+            32818,
+            32837
+          ],
+          "text": "' CASE_GEN son POSS_2SG CASE_DAT doğru hareket POSS_3SG ve art POSS_2SG CASE_ABL <ENT> <CAP> t a r t a n </ENT> ' CASE_DAT doğru hareket POSS_3PL CASE_DAT_N yol aç COPULA_PAST",
+          "counts": {
+            "32137": 0,
+            "32138": 0,
+            "32142": 0
+          }
+        }
+      ],
+      "f3": [
+        {
+          "prompt": "Türkiye Cumhuriyeti",
+          "gen_ids": [
+            12,
+            13,
+            40,
+            2785,
+            52,
+            12,
+            13,
+            40,
+            2785,
+            52,
+            12,
+            13,
+            40,
+            2785,
+            52
+          ],
+          "text": "PART_DIk POSS_3SG bir olay ol PART_DIk POSS_3SG bir olay ol PART_DIk POSS_3SG bir olay ol PART_DIk POSS_3SG bir olay ol PART_DIk POSS_3SG bir olay ol PART_DIk POSS_3SG bir olay ol",
+          "counts": {
+            "32137": 0,
+            "32138": 0,
+            "32142": 0
+          }
+        },
+        {
+          "prompt": "Bugün hava nasıl",
+          "gen_ids": [
+            32139,
+            1705,
+            3,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "text": "? </OUTPUT> <EOS> <PAD> <PAD> <PAD> <PAD> <PAD> <PAD> <PAD> <PAD> <PAD> <PAD> <PAD> <PAD> <PAD> <PAD> <PAD> <PAD> <PAD> <PAD> <PAD> <PAD> <PAD> <PAD> <PAD> <PAD> <PAD> <PAD> <PAD>",
+          "counts": {
+            "32137": 0,
+            "32138": 0,
+            "32142": 0
+          }
+        },
+        {
+          "prompt": "Osmanlı Devleti",
+          "gen_ids": [
+            32850,
+            28,
+            29,
+            40,
+            28,
+            29,
+            40,
+            28,
+            29,
+            40,
+            28,
+            29,
+            40,
+            28,
+            29
+          ],
+          "text": "' POSS_2SG CASE_LOC bir POSS_2SG CASE_LOC bir POSS_2SG CASE_LOC bir POSS_2SG CASE_LOC bir POSS_2SG CASE_LOC bir POSS_2SG CASE_LOC bir POSS_2SG CASE_LOC bir POSS_2SG CASE_LOC bir POSS_2SG CASE_LOC bir POSS_2SG CASE_LOC",
+          "counts": {
+            "32137": 0,
+            "32138": 0,
+            "32142": 0
+          }
+        }
+      ]
+    }
+  },
+  "top_5_tokens": {
+    "taban": [
+      {
+        "token_id": 4,
+        "token_str": "<PROPER_NOUN>",
+        "count": 32
+      },
+      {
+        "token_id": 0,
+        "token_str": "<UNK>",
+        "count": 21
+      },
+      {
+        "token_id": 32137,
+        "token_str": ".",
+        "count": 13
+      },
+      {
+        "token_id": 3,
+        "token_str": "<EOS>",
+        "count": 10
+      },
+      {
+        "token_id": 40,
+        "token_str": "bir",
+        "count": 10
+      }
+    ],
+    "f3_sft": [
+      {
+        "token_id": 7,
+        "token_str": "POSS_3PL",
+        "count": 11
+      },
+      {
+        "token_id": 32850,
+        "token_str": "'",
+        "count": 9
+      },
+      {
+        "token_id": 32138,
+        "token_str": ",",
+        "count": 7
+      },
+      {
+        "token_id": 29,
+        "token_str": "CASE_LOC",
+        "count": 7
+      },
+      {
+        "token_id": 46,
+        "token_str": "ve",
+        "count": 6
+      }
+    ],
+    "f3": [
+      {
+        "token_id": 1,
+        "token_str": "<PAD>",
+        "count": 42
+      },
+      {
+        "token_id": 40,
+        "token_str": "bir",
+        "count": 18
+      },
+      {
+        "token_id": 29,
+        "token_str": "CASE_LOC",
+        "count": 14
+      },
+      {
+        "token_id": 28,
+        "token_str": "POSS_2SG",
+        "count": 12
+      },
+      {
+        "token_id": 13,
+        "token_str": "POSS_3SG",
+        "count": 11
+      }
+    ]
+  },
+  "canary": {
+    "pins_verified": 7,
+    "data_pt_count": 27,
+    "data_bin_count": 15,
+    "scratch_f2_backup_count": 6,
+    "scratch_f3_backup_count": 5,
+    "status": "PASS"
+  },
+  "disk": {
+    "before_avail": "15Gi",
+    "after_avail": "17Gi",
+    "capacity_percent": "97%"
+  },
+  "findings": "F3 TAM kosumu (2x1000 adim) tamamlanmistir. CE sabit dilim kaybi tabanda 5.5059 iken f3_sft'de 1.9405'e, f3 nihai modelinde 2.0489'a inmistir (guclu genellesme ve ogrenme kaniti). G3-Y1 danisman yonteminde f3_sft ve f3 modelleri noktalama ve kesme isaretlerini dengeli bicimde uretmektedir (f3_sft'de kesme 32850 6 adet, nokta 3, virgul 5; f3'te nokta 7, virgul 4, kesme 3). G3-Y2 kisa istem testinde ise f3_sft nokta 2, virgul 2 uretirken f3 nihai modeli chat kaliplarindaki EOS/PAD yapisina odaklanmistir. Top 5 token analizinde f3 modelinde PAD tokeninin baskin hale geldigi gozlemlenmistir; bu durum chat_balanced veri kumesindeki bosluk dolgularindan kaynaklanmaktadir."
+}

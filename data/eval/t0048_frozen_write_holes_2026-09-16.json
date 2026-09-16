@@ -1,0 +1,109 @@
+{
+  "task_id": "T-0048",
+  "status": "PASS",
+  "date": "2026-09-16",
+  "writes": [
+    "scripts/run_goal_pipeline.py",
+    "train.py",
+    "train_dpo.py",
+    "tests/test_compiler_entrypoints.py",
+    "data/eval/t0048_frozen_write_holes_2026-09-16.json",
+    ".agent-bus/notes/T-0048.md"
+  ],
+  "changed_files": [
+    "scripts/run_goal_pipeline.py",
+    "train.py",
+    "train_dpo.py",
+    "tests/test_compiler_entrypoints.py",
+    "data/eval/t0048_frozen_write_holes_2026-09-16.json",
+    ".agent-bus/notes/T-0048.md"
+  ],
+  "pre_conditions": {
+    "data/kristal_model.pt": "02e15b8198f8f3334609eb52691d699e80f88972245377c1a79772cb42ae1679",
+    "data/kristal_model_sft.pt": "b6764c7062ce627a0ba9437cf052a28d0ac4e2e4cf3b3df3e3110d05a1ba2957",
+    "data/kristal_carpenter_model.pt": "5f0b8c71727d15e338e4301634b0d05652c3230cebc532b1124aff3761e93b4d",
+    "data/train_balanced_sft_v2.bin": "53b8406eee7e98d8339cd047a18a281b7a355ca5ba1891137701890dc322402c",
+    "data/train_balanced_sft.bin": "55863e36b62414c6ada30956b30dc64a5254fe0717582384d43abd5d9cf46a24",
+    "data/train_chat_balanced.bin": "443f93d352b07defca91b2a620f2e4154c3ed0b14f7c695535c959209e7608fa",
+    "data/train_carpenter_specialization.bin": "13dd81bf700690b78ca15246a2fc1582ee6f8fea587c6d4e78f8ab1e1017b109",
+    "data/vocab.json": "4b40eebee9c996c8dd3150f6b3c8896de85764ee1cf0b08e6c636e5c002a0e69",
+    "src/llm/tokenizer.py": "560a3bfbf32c394a23559c9d3645cfbc3b554223a032156924749dcfa896a7af",
+    "scratch/f2_backup_2026-09-16/": "6 dosya saglam",
+    "counts": {
+      "data/*.pt": 23,
+      "data/*.bin": 15
+    }
+  },
+  "code_changes": {
+    "scripts/run_goal_pipeline.py": {
+      "sha256_before": "6974021093af0b165414fce2242b133ca76ffb7d5bc7ab0610f74836bc0149cf",
+      "sha256_after": "2a88708edc0b9a8d156d070371fb43ba9e4f2b26014a72ae2d979f4c49c4d874",
+      "diff": "satir 50 hata mesaji 'Donmuş yola yazma engellendi: {save_path} (allow_frozen_write=False)' kalibina hizalandi; satir 294'te shutil.copyfile oncesine check_frozen_save_path('data/kristal_model_sft.pt', allow_frozen_write=allow_frozen_write) eklendi."
+    },
+    "train.py": {
+      "sha256_before": "791d470e2c1c6698bc47c2fa37e40e5fdf44fab031a51e5c03403f3e208dffc0",
+      "sha256_after": "d08b195d5fd31f288e421ed9f339e950478516bcb0d14fa4ed047d09723c7c93",
+      "diff": "check_frozen_save_path fonksiyonu eklendi; allow_frozen_write = '--allow-frozen-write' in sys.argv tanimlandi; arguman ayristirma blogunun hemen sonrasinda (model insasindan ve yuklemesinden once) check_frozen_save_path(model_save_path, allow_frozen_write=allow_frozen_write) erken cagrisi eklendi."
+    },
+    "train_dpo.py": {
+      "sha256_before": "4cf8fd8a38cace6cb4e8099d58d94fde982470b3a789ad2e78447b4259db0fd1",
+      "sha256_after": "70d9ea96256a17d39fa9da7588d668f2dfed8bf1f5a01b2250e991ae843caa0c",
+      "diff": "satir 35 hata mesaji 'Donmuş yola yazma engellendi: {save_path} (allow_frozen_write=False)' kalibina hizalandi."
+    },
+    "tests/test_compiler_entrypoints.py": {
+      "sha256_before": "130561c37ffa8487b5e91317bafdc2be652b45abefd043ec1a73c63e36494fa9",
+      "sha256_after": "57cc3681a61aad63286f0633d6a8d243caefa2e41d7855f834cf91eedba29b9b",
+      "diff": "test_check_frozen_save_path_gate fonksiyonu train.py'den import edilen check_frozen_save_path'i de kapsayacak ve yeni hizalanmis hata mesajini ('Donmuş yola yazma engellendi') iddia edecek sekilde guncellendi; test_ast_run_goal_pipeline_has_frozen_guards shutil.copyfile hedefini (data/kristal_model_sft.pt) ve 6 guard cagrisini denetleyecek sekilde genisletildi; test_ast_train_py_has_frozen_guards (train.py icinde erken guard ve torch.save oncesi siralamasi) eklendi."
+    }
+  },
+  "gate_verifications": {
+    "v1_copyfile_guard": {
+      "status": "DOGRULANDI",
+      "type": "STATIK",
+      "evidence": "scripts/run_goal_pipeline.py icinde shutil.copyfile('data/kristal_model.pt', 'data/kristal_model_sft.pt') cagrisindan HEMEN ONCE check_frozen_save_path('data/kristal_model_sft.pt', allow_frozen_write=allow_frozen_write) cagrisi eklendi ve AST ile dogrulandi (tests/test_compiler_entrypoints.py::test_ast_run_goal_pipeline_has_frozen_guards)."
+    },
+    "v3_train_py_early_guard": {
+      "status": "DOGRULANDI",
+      "type": "STATIK",
+      "evidence": "train.py icinde '--allow-frozen-write' CLI destegi eklendi; arguman ayristirmasindan hemen sonra, model yuklemesinden (torch.load) ve egitim baslamasindan once check_frozen_save_path(model_save_path, allow_frozen_write=allow_frozen_write) cagrildigi AST testi ile dogrulandi (tests/test_compiler_entrypoints.py::test_ast_train_py_has_frozen_guards)."
+    },
+    "v2_message_alignment": {
+      "status": "DOGRULANDI",
+      "type": "KOSUM",
+      "evidence": "run_goal_pipeline.py:50, train_dpo.py:35 ve train.py:18 hata metinleri 'Donmuş yola yazma engellendi: {save_path} (allow_frozen_write=False)' kalibina hizalandi. tests/test_compiler_entrypoints.py:233/237 bu kalibi iddia edecek sekilde guncellendi ve KAPI a testi (test_check_frozen_save_path_gate) 3 modul icin de basariyla gecti. Uc ureticiye (chat, carpenter, balanced_sft) dokunulmadi."
+    },
+    "test_axis_extension": {
+      "status": "DOGRULANDI",
+      "type": "STATIK",
+      "evidence": "tests/test_compiler_entrypoints.py artik (i) run_cmd egitim save hedeflerini (5 adet), (ii) shutil.copyfile hedefini ('data/kristal_model_sft.pt') ve (iii) train.py icindeki erken guard ile torch.save iliskisini AST uzerinden tam denetliyor."
+    },
+    "mutant_1_static": {
+      "status": "DOGRULANDI",
+      "type": "STATIK",
+      "procedure": "scripts/run_goal_pipeline.py icindeki copyfile guard cagrisi yorum satiri yapildi; pytest -q tests/test_compiler_entrypoints.py -k test_ast_run_goal_pipeline_has_frozen_guards calistirildi -> 'AssertionError: Beklenen 6 check_frozen_save_path çağrısı (5 run_cmd + 1 copyfile), bulunan: 5' hatasiyla KIRMIZI oldu. Dosya yedekten geri konuldu ve test YEŞİL oldu. Geri yukleme sha256 ozdesligi dogrulandi."
+    },
+    "mutant_2_static": {
+      "status": "DOGRULANDI",
+      "type": "STATIK",
+      "procedure": "train.py icindeki erken guard kaldirilip torch.save'den SONRAYA tasindi; pytest -q tests/test_compiler_entrypoints.py -k test_ast_train_py_has_frozen_guards calistirildi -> 'AssertionError: Erken guard satırı (197) >= torch.save satırı (196)' hatasiyla KIRMIZI oldu. Dosya yedekten geri konuldu ve test YEŞİL oldu. Geri yukleme sha256 ozdesligi dogrulandi."
+    },
+    "no_execution_proof": {
+      "status": "DOGRULANDI",
+      "type": "KOSUM",
+      "evidence": "scripts/run_goal_pipeline.py, train.py veya train_dpo.py main() fonksiyonlari KESINLIKLE CALISTIRILMADI. data/ altinda degisen dosya sayisi 0 (eval raporu haric). data/*.pt (23) ve data/*.bin (15) sayilari sabit."
+    }
+  },
+  "post_conditions": {
+    "data/kristal_model.pt": "02e15b8198f8f3334609eb52691d699e80f88972245377c1a79772cb42ae1679",
+    "data/kristal_model_sft.pt": "b6764c7062ce627a0ba9437cf052a28d0ac4e2e4cf3b3df3e3110d05a1ba2957",
+    "data/kristal_carpenter_model.pt": "5f0b8c71727d15e338e4301634b0d05652c3230cebc532b1124aff3761e93b4d",
+    "data/train_balanced_sft_v2.bin": "53b8406eee7e98d8339cd047a18a281b7a355ca5ba1891137701890dc322402c",
+    "data/train_balanced_sft.bin": "55863e36b62414c6ada30956b30dc64a5254fe0717582384d43abd5d9cf46a24",
+    "data/train_chat_balanced.bin": "443f93d352b07defca91b2a620f2e4154c3ed0b14f7c695535c959209e7608fa",
+    "data/train_carpenter_specialization.bin": "13dd81bf700690b78ca15246a2fc1582ee6f8fea587c6d4e78f8ab1e1017b109",
+    "data/vocab.json": "4b40eebee9c996c8dd3150f6b3c8896de85764ee1cf0b08e6c636e5c002a0e69",
+    "src/llm/tokenizer.py": "560a3bfbf32c394a23559c9d3645cfbc3b554223a032156924749dcfa896a7af",
+    "scratch/f2_backup_2026-09-16/": "6 dosya saglam",
+    "pytest_full_suite": "190 passed in 10.58s"
+  }
+}

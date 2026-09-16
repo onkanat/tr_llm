@@ -1,0 +1,122 @@
+{
+  "task_id": "T-0045",
+  "status": "PASS",
+  "date": "2026-09-16",
+  "writes": [
+    "data/train_balanced_sft_v2.bin",
+    "data/train_balanced_sft_v2.bin.meta.json",
+    "data/eval/t0045_balanced_sft_v2_recompile_2026-09-16.json",
+    ".agent-bus/notes/T-0045.md"
+  ],
+  "changed_files": [
+    "data/train_balanced_sft_v2.bin",
+    "data/train_balanced_sft_v2.bin.meta.json",
+    "data/eval/t0045_balanced_sft_v2_recompile_2026-09-16.json",
+    ".agent-bus/notes/T-0045.md"
+  ],
+  "pre_conditions": {
+    "source_verification": {
+      "data/pedagogy/high_school_foundation_dataset.jsonl": {
+        "sha256": "59e2f2786d0ec0d1574a77e5b7354e02ae957345a1b4ddce945d0db19527bdf1",
+        "bytes": 274650,
+        "lines": 688
+      },
+      "data/pedagogy/middle_school_chat.jsonl": {
+        "sha256": "72f3e32a3d81cd678927f5b19ba0d146ceaabf76eef1038336872907e45903d8",
+        "bytes": 25677,
+        "lines": 125
+      },
+      "data/pedagogy/turk_tarihi_sft.jsonl": {
+        "sha256": "b4d937531651f933b7462388e9544a673b765bbdd02c40eca4446c1358d0fcce",
+        "bytes": 3062397,
+        "lines": 6507
+      },
+      "data/pedagogy/literature_poetry_dataset.jsonl": {
+        "sha256": "30e4845e75df876681051ca49f2473f173d1594d7445c1506d331150a11e78e4",
+        "bytes": 109552,
+        "lines": 220
+      },
+      "data/pedagogy/infancy_dataset.jsonl": {
+        "sha256": "357c48f46d21b40f5b9168e5e1c07cdf7ef5ab0241145fb5a77b6d7ad5d65048",
+        "bytes": 1122769,
+        "lines": 3682
+      },
+      "data/pedagogy/parenting_dataset.jsonl": {
+        "sha256": "84c7b44fda0a3a6460415649c72643a4436045cd23612fd6584728b01f79dee2",
+        "bytes": 2251615,
+        "lines": 19342
+      },
+      "data/pedagogy/arena_base_accumulated.jsonl": {
+        "sha256": "376527959d54ef77c414b3ee382e7c0b49eb062dedbb782bacd7bdc21d36b8ab",
+        "bytes": 355511,
+        "lines": 899
+      }
+    },
+    "eighth_source_excluded": {
+      "path": "data/future_train_vector.jsonl",
+      "status": "HARIC_TUTULDU",
+      "note": "Kullanıcı kararı uyarınca 0 B (HEAD 3578 B/1 satır) olan data/future_train_vector.jsonl derleme dışı bırakılmıştır."
+    }
+  },
+  "accounting_table": {
+    "data/pedagogy/high_school_foundation_dataset.jsonl": { "raw_lines": 688, "json_errors": 0, "kept": 688, "tokens": 56969 },
+    "data/pedagogy/middle_school_chat.jsonl": { "raw_lines": 125, "json_errors": 0, "kept": 125, "tokens": 5419 },
+    "data/pedagogy/turk_tarihi_sft.jsonl": { "raw_lines": 6507, "json_errors": 0, "kept": 6507, "tokens": 783795 },
+    "data/pedagogy/literature_poetry_dataset.jsonl": { "raw_lines": 220, "json_errors": 0, "kept": 220, "tokens": 20259 },
+    "data/pedagogy/infancy_dataset.jsonl": { "raw_lines": 3682, "json_errors": 0, "kept": 3682, "tokens": 324045 },
+    "data/pedagogy/parenting_dataset.jsonl": { "raw_lines": 19342, "json_errors": 0, "kept": 19342, "tokens": 527452 },
+    "data/pedagogy/arena_base_accumulated.jsonl": { "raw_lines": 899, "json_errors": 0, "kept": 899, "tokens": 75494 },
+    "totals": { "raw_lines": 31463, "json_errors": 0, "kept": 31463, "tokens": 1793433 }
+  },
+  "comparison_old_vs_new": {
+    "data/train_balanced_sft.bin (ESKI)": {
+      "token_count": 23356537,
+      "max_id": 32136,
+      "punctuation_count": 0,
+      "apostrophe_count": 0,
+      "meta_status": "ORPHAN (meta 1.341.918 token / 31.433 kayıt diyor, .bin 23.356.537)"
+    },
+    "data/train_balanced_sft_v2.bin (YENI)": {
+      "token_count": 1793433,
+      "max_id": 32850,
+      "punctuation_count": 180336,
+      "apostrophe_count": 39706,
+      "meta_status": "TAM MUHASEBELI (meta 1.793.433 token / 31.463 kayıt, .bin ile birebir)"
+    }
+  },
+  "gate_verifications": {
+    "gate_a_max_id_and_apostrophe": {
+      "status": "DOGRULANDI",
+      "measurement": "KOŞUM: max_id = 32850 (>= 32850); token 32850 (') adedi = 39706 > 0"
+    },
+    "gate_b_punctuation": {
+      "status": "DOGRULANDI",
+      "measurement": "KOŞUM: noktalama bloğu (32137..32145) toplamı = 180336 > 0; id 32137 ('.') adedi = 46666 > 0"
+    },
+    "gate_c_total_tokens_and_size": {
+      "status": "DOGRULANDI",
+      "measurement": "KOŞUM: meta.total_tokens (1793433) == len(arr) (1793433) == dosya boyutu / 2 (3586866 / 2 = 1793433.0)"
+    },
+    "gate_c2_records_and_failed_accounting": {
+      "status": "DOGRULANDI",
+      "measurement": "KOŞUM: meta.total_records (31463) == sum(kept) (31463); meta.failed_records (0) == sum(json_errors) (0)"
+    },
+    "gate_d_vocab_and_block_size": {
+      "status": "DOGRULANDI",
+      "measurement": "KOŞUM: meta.vocab_size == 32852; meta.block_size == 64"
+    },
+    "gate_e_all_sources_kept_positive": {
+      "status": "DOGRULANDI",
+      "measurement": "KOŞUM: 7 kaynağın hepsinde kept > 0 (min kept = 125, middle_school_chat.jsonl)"
+    },
+    "determinism": {
+      "status": "DOGRULANDI",
+      "measurement": "KOŞUM: İkinci derleme koşumunda üretilen .bin sha256 birebir aynı kaldı: 53b8406eee7e98d8339cd047a18a281b7a355ca5ba1891137701890dc322402c"
+    },
+    "canaries": {
+      "status": "DOGRULANDI",
+      "measurement": "KOŞUM: data/train_balanced_sft.bin (ESKI, 55863e36b62414c6...), data/train_chat_balanced.bin (443f93d352b07def...), data/train_carpenter_specialization.bin (13dd81bf700690b7...), data/vocab.json (4b40eebee9c996c8...), src/llm/tokenizer.py (560a3bfbf32c394a...) DEĞİŞMEDİ. data/*.bin adedi: 14 -> 15 (yeni dosya eklendi). scratch/f2_backup_2026-09-16/ altındaki 6 bağımsız yedek DEĞİŞMEDİ."
+    }
+  },
+  "findings": []
+}

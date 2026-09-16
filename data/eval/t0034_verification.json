@@ -1,0 +1,169 @@
+{
+ "task_id": "T-0034",
+ "dogrulayan": "claude (danisman) — bagimsiz dogrulama turu",
+ "dogrulama_tarihi": "2026-09-15T18:21:52Z",
+ "durum": "PASS_WITH_FINDINGS",
+ "yontem": "Yurutucunun kanit METNINE guvenilmedi; her iddia diskten yeniden olculdu. A/B olcumu icin yurutucunun scratch/t0034_outoutput_ab.py betigi KULLANILMADI ve IMPORT EDILMEDI; kanonik scripts/run_experiment_c.generate mantigi /tmp/claude-501/t0034_verify_ab.py icinde birebir yeniden yazildi. masked_tags elle kopyalanmadi, gercek dosyadan AST ile okundu. Betik ayrica raporun sakladigi prompt_str zarflariyla kendi istemini karsilastirir (kendini dogrulayan assert).",
+ "kabul_kriterleri": [
+  {
+   "no": 1,
+   "kriter": "D-E.kabul[0] duzeltilmis; onceki_metin korunmus; duzeltme_gerekcesi + olcum_kaynagi var",
+   "sonuc": "PASS",
+   "olcum": "kabul[0] kosullanma eksenli yeni kriteri tasiyor; onceki_metin/duzeltme_tarihi/duzeltme_gerekcesi/olcum_kaynagi alanlari mevcut; kabul[1..3] degismemis. olcum_kaynagi.sha256 diskte birebir dogrulandi (bkz. hash_dogrulama).",
+   "komut": "./venv/bin/python -c \"import json;d=json.load(open('data/eval/regeneration_plan_2026-09-15.json'));print(json.dumps(d['decisions_resolved_2026_09_15']['D-E']['kabul'][0],ensure_ascii=False,indent=1))\""
+  },
+  {
+   "no": 2,
+   "kriter": "Ayni yanlis oncul metni repo genelinde tarandi; kalan aktif kopya 0",
+   "sonuc": "PASS",
+   "olcum": "BAGIMSIZ TARAMA: 13 isabet, yalniz 3 dosyada (regeneration_plan 2, t0034 raporu 9, temel_marangoz artefakti 2). Plan icindeki 2 isabet 'onceki_metin' ve 'duzeltme_gerekcesi' alanlaridir — tarihi kayit, canli kriter DEGIL. Aktif yanlis oncul: 0. Yurutucunun iddiasi bagimsiz olarak yeniden uretildi.",
+   "komut": "rg -n -i 'taban cizgi bugun 0' --glob '!.git' ."
+  },
+  {
+   "no": 3,
+   "kriter": "4 masked_tags kopyasinin birebir ayni oldugu hash ile kanitli",
+   "sonuc": "PASS",
+   "olcum": "4 dosya AST ile okundu, tek hash: 9b88d4f38f7b6074fb7dead0baf484f86c37e50f4b2e37dbac7e62990b923175 (json.dumps konvansiyonu). Yurutucunun hash'i bagimsiz olarak yeniden uretildi. Ayrica 4 uretim dosyasinin sha256'si T-0034 penceresinde DEGISMEDI — hicbir dal lehine kod oynanmamis.",
+   "komut": "./venv/bin/python /tmp/claude-501/t0034_verify_ab.py (masked_tags_from_disk, sandbox DISINDA)"
+  },
+  {
+   "no": 4,
+   "kriter": "Iki dal 5 istem x 2 model icin kayitli; ayrilan vaka ve 1705 sayisi raporlanmis; device beyan edilmis",
+   "sonuc": "PASS",
+   "olcum": "Rapor cihaz='mps' beyan ediyor; bagimsiz kosum da cihaz=mps, torch=2.11.0, mps_available=True. Token-id duzeyinde karsilastirma: 20/20 vaka-dal OZDES, farkli=0. Determinizm (iki kosum ayni): True. Marangoz DAL-A 1705 terminal: {'P1_Genel_Edebiyat': True, 'P2_Noktalama': True, 'P3_Rakam': True, 'P4_Marangoz_Ezber': True, 'P5_Marangoz_Parafraz': True} — hepsi True; token konumlari {'P1_Genel_Edebiyat': 15, 'P2_Noktalama': 45, 'P3_Rakam': 15, 'P4_Marangoz_Ezber': 44, 'P5_Marangoz_Parafraz': 29} (raporun P1:15,P2:45,P3:15,P4:44,P5:29 tablosuyla birebir). Temel 1705 uretimi: {'P1_Genel_Edebiyat': 0, 'P2_Noktalama': 0, 'P3_Rakam': 0, 'P4_Marangoz_Ezber': 0, 'P5_Marangoz_Parafraz': 0}. Betik ayrica raporun prompt_str zarflariyla kendi istemini assert eder — istem metni uyusmazligi yapisal olarak imkansiz.",
+   "komut": "TMPDIR=/tmp/claude-501 ./venv/bin/python /tmp/claude-501/t0034_verify_ab.py  (sandbox DISINDA)"
+  },
+  {
+   "no": 5,
+   "kriter": "Mutant pozitif kontrolu: mutant KIRMIZI, temiz YESIL; mutant 4 gercek dosyayi degistirmeden",
+   "sonuc": "PASS",
+   "olcum": "Gercek 4 dosya: '2 passed in 0.03s'. Mutant: AYRI kaynaktan turettim (yurutucu run_experiment_a.py kullanmis; ben run_experiment_b.py'den scratch/_v_mutant/mutant_experiment_b.py urettim) + 3 gercek dosya ile GENERATION_CONTRACT_FILES uzerinden → exit=1, 'AssertionError: masked_tags listeleri AYRIŞTI!', mutanti 84260d8f59dd hash'i ile ayristirdi. Test yalniz kendi mutantiyla degil, BENIM bagimsiz mutantimla da KIRMIZI yandi (vakum degil).",
+   "komut": "./venv/bin/python -m pytest -q tests/test_generation_contract.py  ve  GENERATION_CONTRACT_FILES='scripts/run_experiment_a.py,scripts/run_experiment_c.py,scripts/evaluate_sft_benchmarks.py,scratch/_v_mutant/mutant_experiment_b.py' ./venv/bin/python -m pytest -q tests/test_generation_contract.py::test_canonical_masked_tags_contract"
+  },
+  {
+   "no": 6,
+   "kriter": "pytest -q tests/ sandbox disinda yesil; toplam >= 142",
+   "sonuc": "PASS",
+   "olcum": "144 passed in 8.80s. T-0033 sonrasi taban 142; +2 yeni test. Yurutucunun '144 passed' iddiasi birebir dogrulandi.",
+   "komut": "./venv/bin/python -m pytest -q tests/  (sandbox DISINDA)"
+  },
+  {
+   "no": 7,
+   "kriter": "cot_vault.jsonl ve future_train_vector.jsonl kosum oncesi/sonrasi AYNI",
+   "sonuc": "PASS",
+   "olcum": "{\"data/pedagogy/cot_vault.jsonl\": {\"sha256\": \"97b06fe5befd6613b520d28dc20a74deaeb30e4e8f7e6675a23720a019ff5619\", \"satir\": 91, \"mtime_utc\": \"2026-09-15T07:37:37Z\"}, \"data/future_train_vector.jsonl\": {\"sha256\": \"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\", \"satir\": 0, \"mtime_utc\": \"2026-09-13T07:09:18Z\"}}",
+   "komut": "shasum -a 256 data/pedagogy/cot_vault.jsonl data/future_train_vector.jsonl && wc -l data/pedagogy/cot_vault.jsonl data/future_train_vector.jsonl"
+  },
+  {
+   "no": 8,
+   "kriter": "git status ile T-0034 penceresinde degisen yollar writes[] disinda degil",
+   "sonuc": "PASS_WITH_FINDING",
+   "olcum": "Pencere 17:28:27Z-18:05:14Z (Python, datetime.timezone.utc): 9 dosya. 4'u writes[] icinde. Disindakiler: 2 .agent-bus/state/ (bus'un KENDI defteri), 2 .pytest_cache/ (arac artefakti), 1 scratch/t0034_results.json — GERCEK kapsam boslugu, bkz. V4.",
+   "komut": "./venv/bin/python (mtime penceresi taramasi; yerel saat kullanan 'find -newermt' KULLANILMADI)"
+  },
+  {
+   "no": 9,
+   "kriter": "Her sayinin yaninda onu ureten TAM komut var; '...' ile kisaltilmamis",
+   "sonuc": "PASS",
+   "olcum": "Raporun komut alanlari tam metin: './venv/bin/python scratch/t0034_outoutput_ab.py', 'rg -n -i \"taban cizgi bugun 0\" .', './venv/bin/pytest -q tests/'. T-0033 V1 sinifi (kisaltilmis komut) tekrarlanmamis.",
+   "komut": "./venv/bin/python -c \"import json;r=json.load(open('data/eval/t0034_criterion_and_generator_2026-09-15.json'));print([c for c in json.dumps(r).split(chr(34)) if c=='...'])\""
+  },
+  {
+   "no": 10,
+   "kriter": "KARAR VERILMEMIS: karar_yuzeyi yazilmis, kod hicbir dal lehine degistirilmemis",
+   "sonuc": "PASS",
+   "olcum": "karar_yuzeyi.olculen_bulgular 4 madde + karar_secenekleri_kullanici_ve_danisman_icin 3 secenek + taahhut alani mevcut. Kod tarafi: 4 uretim dosyasi mtime taramasinda HIC gorunmedi ve masked_tags listeleri hala </OUTPUT> icermiyor.",
+   "komut": "mtime penceresi taramasi + ./venv/bin/python -m pytest -q tests/test_generation_contract.py"
+  }
+ ],
+ "bulgular": [
+  {
+   "id": "V1",
+   "agirlik": "ORTA",
+   "sinif": "SPEC YAZIM KUSURU (danismanin; yurutucu spec'e UYDU)",
+   "baslik": "Beyan edilen token_id/sha256/token_sayisi degerlerinin 7/20'si max_tokens=64 tavaninin urunu; kanonik yapilandirma 128",
+   "olcum": "[{\"model\": \"temel\", \"istem\": \"P3_Rakam\", \"dal\": \"A\", \"mt64\": 64, \"mt128\": 94, \"mt128_durma\": \"EOS\", \"mt64_durma\": \"max_tokens\", \"mt128_1705\": 0}, {\"model\": \"temel\", \"istem\": \"P3_Rakam\", \"dal\": \"B\", \"mt64\": 64, \"mt128\": 94, \"mt128_durma\": \"EOS\", \"mt64_durma\": \"max_tokens\", \"mt128_1705\": 0}, {\"model\": \"marangoz\", \"istem\": \"P1_Genel_Edebiyat\", \"dal\": \"B\", \"mt64\": 64, \"mt128\": 128, \"mt128_durma\": \"max_tokens\", \"mt64_durma\": \"max_tokens\", \"mt128_1705\": 0}, {\"model\": \"marangoz\", \"istem\": \"P2_Noktalama\", \"dal\": \"B\", \"mt64\": 64, \"mt128\": 128, \"mt128_durma\": \"max_tokens\", \"mt64_durma\": \"max_tokens\", \"mt128_1705\": 0}, {\"model\": \"marangoz\", \"istem\": \"P3_Rakam\", \"dal\": \"B\", \"mt64\": 64, \"mt128\": 128, \"mt128_durma\": \"max_tokens\", \"mt64_durma\": \"max_tokens\", \"mt128_1705\": 0}, {\"model\": \"marangoz\", \"istem\": \"P4_Marangoz_Ezber\", \"dal\": \"B\", \"mt64\": 64, \"mt128\": 128, \"mt128_durma\": \"max_tokens\", \"mt64_durma\": \"max_tokens\", \"mt128_1705\": 0}, {\"model\": \"marangoz\", \"istem\": \"P5_Marangoz_Parafraz\", \"dal\": \"B\", \"mt64\": 64, \"mt128\": 128, \"mt128_durma\": \"max_tokens\", \"mt64_durma\": \"max_tokens\", \"mt128_1705\": 0}]",
+   "aciklama": "T-0034 spec'i 'max_tokens=64' YAZIYOR (bu satiri ben yazdim) ve yurutucu birebir uyguladi: scratch/t0034_outoutput_ab.py:103,205,208,214,217 hep 64. Ama kanonik cagri yerleri 128 kullanir (scripts/run_experiment_a.py:138, scripts/run_experiment_b.py:242, scripts/run_experiment_c.py:140 ve 179); scripts/evaluate_sft_benchmarks.py ise 35/30. Rapordaki token-id dizileri/sha256/token sayilari bu yuzden kanonik yapilandirmani temsil etmez.",
+   "etki": "SONUCLAR CURUMUYOR, GUCULENIYOR: (a) temel model 1705'i 64'te de 128'te de 0 kez uretiyor (kabul iddiasi tavandan bagimsiz); (b) marangoz DAL-B 64'te 64'e, 128'de de 128'e dayaniyor — DAL-B'de durma kaybi RAPORDA YAZANDAN DAHA SIDDETLI: model hic durmuyor, tavani dolduruyor; (c) temel P3 A ve B 64'te kesilmis (128'de 94'e cikiyor), yani o iki kaydin uzunlugu kurgu artefakti. Rapor, spec'e uydugu icin kusurlu DEGIL; kusur benim spec metnimde.",
+   "duzeltme": "Rapora kurgu notu eklenmeli ya da kosum 128 ile tazelenmeli; DAL-B'nin 'duramiyor' bulgusu 128 kanitiyla guclendirilmeli."
+  },
+  {
+   "id": "V2",
+   "agirlik": "DUSUK-ORTA",
+   "sinif": "MEKANIZMA NITELEMESI (karar yuzeyini etkiler)",
+   "baslik": "DAL-B'de kaybolan sey 'durma mekanizmasi' degil, <EOS>'u kapilayan tek token; 1705 cift gorevli",
+   "olcum": "marangoz DAL-A durma nedenleri: {\"P1_Genel_Edebiyat\": \"EOS\", \"P2_Noktalama\": \"EOS\", \"P3_Rakam\": \"EOS\", \"P4_Marangoz_Ezber\": \"EOS\", \"P5_Marangoz_Parafraz\": \"EOS\"} | 1705 terminal: {\"P1_Genel_Edebiyat\": true, \"P2_Noktalama\": true, \"P3_Rakam\": true, \"P4_Marangoz_Ezber\": true, \"P5_Marangoz_Parafraz\": true} | 1705 konumlari (token sayisi): {\"P1_Genel_Edebiyat\": 15, \"P2_Noktalama\": 45, \"P3_Rakam\": 15, \"P4_Marangoz_Ezber\": 44, \"P5_Marangoz_Parafraz\": 29}",
+   "aciklama": "5/5 marangoz DAL-A vakasinda durma nedeni EOS ve 1705 dizinin son tokeni: model </OUTPUT>'u uretiyor, ARDINDAN <EOS> uretiyor. 1705 maskelenince EOS'u tetikleyen token diziden kayboluyor → EOS ULASILAMAZ hale geliyor. Raporun 'dogal durma sinirini kaybetti' ifadesi dogru ama DAHA KESKIN: 1705 hem icerik tokeni hem durma kapisi olarak cift gorev yapiyor.",
+   "etki": "Karar yuzeyi icin onemli: Secenek_1 (renderer filtresi) ve Secenek_2 (stop_token_ids) 1705'in kapi islevini KORUR; Secenek_2 ek olarak etiketi ciktiya hic koymaz — DAL-B'nin cozemedigi seyi cozer ve DAL-A'nin durma davranisini bozmaz. Secenek_3 (yeniden egitim) bu mekanizma olculdugunde gereksiz maliyet gibi gorunuyor. KARAR KULLANICININ."
+  },
+  {
+   "id": "V3",
+   "agirlik": "DUSUK",
+   "sinif": "KAYIT HIJYENI",
+   "baslik": "duzeltme_tarihi = 2026-09-15T17:35:00Z dakikaya yuvarlanmis ve diskten yeniden uretilemez",
+   "olcum": "planda yazan: 2026-09-15T17:35:00Z | plan dosyasi mtime (UTC): 2026-09-15T17:58:38Z",
+   "aciklama": "Yazan damga 17:35:00Z; gercek yazim ani 17:58:38Z — 23 dk 38 sn fark. Yuvarlak saniye, yazimdan turetilmemis. Damga bir NIYET/draft anini gosteriyorsa bu acikca etiketlenmeli; aksi halde denetimde 'dosya damgadan SONRA yazilmis' gibi yanlis okunur."
+  },
+  {
+   "id": "V4",
+   "agirlik": "DUSUK",
+   "sinif": "KAPSAM BEYANI BOSLUGU (SPEC kural 1)",
+   "baslik": "scratch/t0034_results.json kiralanmamis ve writes[]'te beyan edilmemis",
+   "olcum": "Pencerede degisen, writes[] disindaki tek gercek uretim dosyasi: scratch/t0034_results.json (17:54:05Z). Bus defteri: T-0034 icin TAM 4 kira acildi ve kira kapsami writes[] ile birebir ortusuyor — hicbiri bu .json'u kapsamiyor.",
+   "aciklama": "Probe betigi calisirken KARDES bir dosya uretiyor; o yol ne beyan ne kira kapsaminda. SPEC kural 1'in dar okumasinda kiralamasiz yazim. Sinif, T-0032'de kapatilan 'writes[] uretilen DOSYAYI beyan etsin' kuralinin AYNASI: burada betik beyan edilmis, betigin CIKTISI edilmemis.",
+   "duzeltme": "Spec'e probe cikti dosyasi ayri bir writes[] girdisi olarak yazilmali (veya scratch/ dizin kirasi alinmali). Gelecek kosu gorevlerinde ayni desen tekrarlanabilir."
+  }
+ ],
+ "notlar": [
+  "N1 — sha256 konvansiyonu raporlar arasinda farkli olabilir; iki raporu kiyaslarken TOKEN-ID duzeyinde kiyasla, hash esitsizligi tek basina uyusmazlik kaniti degil.",
+  "N2 — Yeni kabul olcutunun 'VE cikti istemle ilgili olmali' bileşeni makineyle OLCULEMEZ. Bu haliyle kapi acilirsa 'istemle ilgili' insan yargisina kalir ve olcut yanlislanamaz hale gelir (vakum sinifi). Sonraki is paketinde somut bir olcut tanimlanmali (ornek: noktalama isteyen istemde noktalama tokeni > 0 VE cikti uzunlugu > 0 VE tekrar orani < esik).",
+  "N3 — tests/test_generation_contract.py EXPECTED_CANONICAL_TAGS'i sabitler (satir 34-37) ve '</OUTPUT>' icermedigini iddia eder (satir 99). Kullanici DAL-B'yi secerse kanarya da guncellenmelidir; aksi halde DOGRU degisiklik KIRMIZI yakar. Bilincli capa, ama karar sonrasi unutulursa yanlis alarm uretir.",
+  "N4 — Kabul kriteri 8'in 'git status --porcelain ile olculdu' ifadesi taramanin git ile yapildigini ima ediyor; ben mtime penceresiyle (UTC) olctum cunku git status zaman penceresi vermez. Iki yontem ayni sonucu verdi.",
+  "N5 — YONTEM KAZANIMI: 'elle yazilmis istem metni' tuzak ailesi artik YAPISAL olarak kapali. Dogrulama betigi, raporun sakladigi prompt_str zarflariyla kendi istemini assert ediyor; tek karakterlik bir transkript hatasi bulgu yazmadan SystemExit ile durur. Bu assert gelecekteki dogrulama betiklerine tasinmali."
+ ],
+ "durustluk_notu": "Bagimsiz yeniden uretimin ILK tam kosumunda 20 vaka-dal'in 2'si FARKLI cikti (temel P5 A ve B). Bulgu yazmadan once kume/tanim kontrolu yaptim: fark BENIM transkript hatamdi — P5 istemini 'Ahsap dograma kurt disi...' diye yazmisim; kaynak artefakt, rapor ve yurutucunun probe'u UCU DE 'Ahsap dogramada kurt disi gecme nedir...' diyor. Istem duzeltilip betige kendini dogrulayan assert eklendikten sonra tam kosum 20/20 OZDES verdi. IKINCI KENDI HATAM: bu dosyanin ilk yaziminda ham JSON bayat kaldigi icin '18/20' yazildi ama 'durustluk_notu' '20/20' diyordu; dosyayi kirayi birakmadan once yeniden uretip celiskiyi kapattim. Yurutucuye ait bir kusur DEGIL; kendi hatalarimi bulgu olarak yazmadim.",
+ "hash_dogrulama": {
+  "data/eval/t0034_criterion_and_generator_2026-09-15.json": {
+   "beyan": "c7a2ef886984e2d328c6baec5aeed937d721b8ac91f9aa0790ee11824cdb874a",
+   "olculen": "c7a2ef886984e2d328c6baec5aeed937d721b8ac91f9aa0790ee11824cdb874a",
+   "esit": true
+  },
+  "data/eval/regeneration_plan_2026-09-15.json": {
+   "beyan": "e24c741cbd6707904953bf397258184db1761914c6de5ea89af1a1d30c5fdd4c",
+   "olculen": "e24c741cbd6707904953bf397258184db1761914c6de5ea89af1a1d30c5fdd4c",
+   "esit": true
+  },
+  "tests/test_generation_contract.py": {
+   "beyan": "8634a11d9e36dffc4da62209cfb0e2fb57a46e0af6ae17385734aa4faa19b2d8",
+   "olculen": "8634a11d9e36dffc4da62209cfb0e2fb57a46e0af6ae17385734aa4faa19b2d8",
+   "esit": true
+  },
+  "scratch/t0034_outoutput_ab.py": {
+   "beyan": "0d444debdaaf3fa56107b3b2a55735afe46cecd5338e3a5e587fe60089ac6e7a",
+   "olculen": "0d444debdaaf3fa56107b3b2a55735afe46cecd5338e3a5e587fe60089ac6e7a",
+   "esit": true
+  },
+  "data/eval/temel_marangoz_ikili_test_2026-09-15.json": {
+   "beyan": "e49e67fb120563070fd9abd68898c69f67bfc2b37decc81bd0b326c1f9a63a45",
+   "olculen": "e49e67fb120563070fd9abd68898c69f67bfc2b37decc81bd0b326c1f9a63a45",
+   "esit": true
+  }
+ },
+ "degismezlik": {
+  "data/pedagogy/cot_vault.jsonl": {
+   "sha256": "97b06fe5befd6613b520d28dc20a74deaeb30e4e8f7e6675a23720a019ff5619",
+   "satir": 91,
+   "mtime_utc": "2026-09-15T07:37:37Z"
+  },
+  "data/future_train_vector.jsonl": {
+   "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "satir": 0,
+   "mtime_utc": "2026-09-13T07:09:18Z"
+  }
+ },
+ "rapor_kaynagi": {
+  "yol": "data/eval/t0034_criterion_and_generator_2026-09-15.json",
+  "sha256": "c7a2ef886984e2d328c6baec5aeed937d721b8ac91f9aa0790ee11824cdb874a"
+ },
+ "sonuc_ozeti": "10/10 kabul kriteri karsilandi (8 tam PASS, 2 bulgu esliginde PASS). T-0034'un UC ANA IDDIASI (olcut duzeltmesi, AST ozdesligi, iki dalli asimetri + mutant kanarya) bagimsiz olarak YENIDEN URETILDI ve DOGRULANDI; 20/20 token-id ozdes. 4 bulgu: V1 ORTA (spec yazim kusuru — kisaltilmis tavan, sonucu GUCULENDIRIYOR), V2 DUSUK-ORTA (mekanizma: 1705 cift gorevli), V3 ve V4 DUSUK (kayit hijyeni + kapsam beyani). Sonuclari curuten bulgu YOK."
+}

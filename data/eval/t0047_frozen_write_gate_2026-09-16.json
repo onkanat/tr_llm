@@ -1,0 +1,111 @@
+{
+  "task_id": "T-0047",
+  "status": "PASS",
+  "date": "2026-09-16",
+  "writes": [
+    "scripts/run_goal_pipeline.py",
+    "train_dpo.py",
+    "tests/test_compiler_entrypoints.py",
+    "data/eval/t0047_frozen_write_gate_2026-09-16.json",
+    ".agent-bus/notes/T-0047.md"
+  ],
+  "changed_files": [
+    "scripts/run_goal_pipeline.py",
+    "train_dpo.py",
+    "tests/test_compiler_entrypoints.py",
+    "data/eval/t0047_frozen_write_gate_2026-09-16.json",
+    ".agent-bus/notes/T-0047.md"
+  ],
+  "pre_conditions": {
+    "data/kristal_model.pt": "02e15b8198f8f3334609eb52691d699e80f88972245377c1a79772cb42ae1679",
+    "data/kristal_carpenter_model.pt": "5f0b8c71727d15e338e4301634b0d05652c3230cebc532b1124aff3761e93b4d",
+    "data/train_balanced_sft.bin": "55863e36b62414c6ada30956b30dc64a5254fe0717582384d43abd5d9cf46a24",
+    "data/train_balanced_sft_v2.bin": "53b8406eee7e98d8339cd047a18a281b7a355ca5ba1891137701890dc322402c",
+    "data/train_chat_balanced.bin": "443f93d352b07defca91b2a620f2e4154c3ed0b14f7c695535c959209e7608fa",
+    "data/train_carpenter_specialization.bin": "13dd81bf700690b78ca15246a2fc1582ee6f8fea587c6d4e78f8ab1e1017b109",
+    "data/vocab.json": "4b40eebee9c996c8dd3150f6b3c8896de85764ee1cf0b08e6c636e5c002a0e69",
+    "src/llm/tokenizer.py": "560a3bfbf32c394a23559c9d3645cfbc3b554223a032156924749dcfa896a7af"
+  },
+  "code_changes": {
+    "scripts/run_goal_pipeline.py": {
+      "sha256_before_t0047": "774b5c94ef851175defc11c19f362278fa804eca1ade83889049eb7aaaa8257f",
+      "sha256_after": "6974021093af0b165414fce2242b133ca76ffb7d5bc7ab0610f74836bc0149cf",
+      "diff": "check_frozen_save_path() guard eklendi; argparse'a --allow-frozen-write eklendi; main() içinde Stage 1, 2, 3, 4 (DPO) ve Aşama 4 (Carpenter) run_cmd çağrıları öncesine check_frozen_save_path koruması ve komut listelerine koşullu --allow-frozen-write eklendi."
+    },
+    "train_dpo.py": {
+      "sha256_before_t0047": "35edce4e31965c942ceb99dadf14c22df0328f4f199be3be3424067a883b0ddf",
+      "sha256_after": "4cf8fd8a38cace6cb4e8099d58d94fde982470b3a789ad2e78447b4259db0fd1",
+      "diff": "check_frozen_save_path() fonksiyonu eklendi; sys.argv üzerinden --allow-frozen-write ve --save-path/--output-model desteği sağlandı; torch.save(model.state_dict(), dpo_model_save_path) öncesinde check_frozen_save_path çağrısı bağlandı."
+    },
+    "tests/test_compiler_entrypoints.py": {
+      "sha256_after": "130561c37ffa8487b5e91317bafdc2be652b45abefd043ec1a73c63e36494fa9",
+      "diff": "test_check_frozen_save_path_gate, test_ast_run_goal_pipeline_has_frozen_guards ve test_ast_train_dpo_has_frozen_guards testleri eklendi."
+    }
+  },
+  "gate_verifications": {
+    "kapi_a_functional_gate": {
+      "status": "DOGRULANDI",
+      "type": "KOSUM",
+      "test_name": "tests/test_compiler_entrypoints.py::test_check_frozen_save_path_gate",
+      "measurement": "check_frozen_save_path(p, allow_frozen_write=False) donmus yollar ('data/kristal_model.pt', 'data/kristal_carpenter_model.pt') icin RuntimeError firlatti ('Donmuş yola model kaydetme engellendi'); allow_frozen_write=True ile hata firlatmadi; donmamis yollar ('scratch/test_model.pt', 'tests/fixtures/test_model.pt') icin allow_frozen_write=False ile de hata firlatmadi. Hem run_goal_pipeline hem train_dpo fonksiyonlari dogrulandi."
+    },
+    "kapi_b_ast_ordering": {
+      "status": "DOGRULANDI",
+      "type": "STATIK",
+      "test_name": "tests/test_compiler_entrypoints.py::test_ast_run_goal_pipeline_has_frozen_guards",
+      "measurement": "scripts/run_goal_pipeline.py main() icinde her egitim run_cmd cagrisindan (Stage-1 Pretrain, Stage-2 SFT, Stage-3 Chat, Stage-4 DPO, Asama-4 Carpenter) hemen once check_frozen_save_path cagirildigi AST seviyesinde dogrulandi (guard_count == 5, her run_cmd oncesinde prev_name == 'check_frozen_save_path' ve lineno < run_cmd_lineno)."
+    },
+    "kapi_c_operator_approval_requirement": {
+      "status": "DOGRULANDI",
+      "type": "STATIK",
+      "test_names": [
+        "tests/test_compiler_entrypoints.py::test_ast_run_goal_pipeline_has_frozen_guards",
+        "tests/test_compiler_entrypoints.py::test_ast_train_dpo_has_frozen_guards"
+      ],
+      "measurement": "--allow-frozen-write CLI bayragi saglanmadikca default=False calisir; check_frozen_save_path calistigi anda RuntimeError firlatarak hicbir egitim komutunun (run_cmd veya torch.save) baslamasina izin vermez."
+    },
+    "kapi_d_out_of_scope_sites_accounted": {
+      "status": "DOGRULANDI",
+      "type": "STATIK",
+      "table": [
+        {
+          "file": "scripts/retrain_clean_models.py",
+          "lines": [72, 85, 99],
+          "role": "Hareketsiz / Manuel yeniden egitim betigi",
+          "write_target": "data/kristal_model.pt",
+          "pipeline_connection": "run_goal_pipeline.py tarafindan CAGIRILMAZ. Manuel orkestrasyon betigidir.",
+          "decision": "Kapsam disi birakildi (degistirilmedi). V5 kapsaminda yalnizca hedef boru hatti ve DPO odaklanildi."
+        },
+        {
+          "file": "scripts/merge_teacher_dataset.py",
+          "line": 262,
+          "role": "Ogretmen veri entegrasyonu ve secimli egitim",
+          "write_target": "data/kristal_model.pt (varsayilan train.py save_path uzerinden)",
+          "pipeline_connection": "run_goal_pipeline.py tarafindan CAGIRILMAZ. Manuel/otonom ogretmen kart birlestirme aracidir.",
+          "decision": "Kapsam disi birakildi (degistirilmedi). V5 kapsaminda yalnizca hedef boru hatti ve DPO odaklanildi."
+        }
+      ]
+    },
+    "mutant_proof_static": {
+      "status": "DOGRULANDI",
+      "type": "STATIK",
+      "experiment": "scripts/run_goal_pipeline.py Stage 1 oncesindeki check_frozen_save_path cagrisi gecici olarak yorum satiri yapildi. AST testi 'AssertionError: Beklenen 5 check_frozen_save_path çağrısı, bulunan: 4' vererek KIRMIZI yandi (F). Satir geri kondugunda AST testi YEŞİL yandi (1 passed)."
+    },
+    "no_execution_proof": {
+      "status": "DOGRULANDI",
+      "type": "KOSUM",
+      "measurement": "scripts/run_goal_pipeline.py veya train_dpo.py main() fonksiyonu KESİNLİKLE CALISTIRILMADI. Yalnizca AST testleri ve saf gate fonksiyonu testleri calistirildi. data/ altinda degisen dosya sayisi 0 (eval raporu haric). data/*.bin sayisi sabit 15, data/*.pt sayisi sabit 23."
+    }
+  },
+  "post_conditions": {
+    "data/kristal_model.pt": "02e15b8198f8f3334609eb52691d699e80f88972245377c1a79772cb42ae1679",
+    "data/kristal_carpenter_model.pt": "5f0b8c71727d15e338e4301634b0d05652c3230cebc532b1124aff3761e93b4d",
+    "data/train_balanced_sft.bin": "55863e36b62414c6ada30956b30dc64a5254fe0717582384d43abd5d9cf46a24",
+    "data/train_balanced_sft_v2.bin": "53b8406eee7e98d8339cd047a18a281b7a355ca5ba1891137701890dc322402c",
+    "data/train_chat_balanced.bin": "443f93d352b07defca91b2a620f2e4154c3ed0b14f7c695535c959209e7608fa",
+    "data/train_carpenter_specialization.bin": "13dd81bf700690b78ca15246a2fc1582ee6f8fea587c6d4e78f8ab1e1017b109",
+    "data/vocab.json": "4b40eebee9c996c8dd3150f6b3c8896de85764ee1cf0b08e6c636e5c002a0e69",
+    "src/llm/tokenizer.py": "560a3bfbf32c394a23559c9d3645cfbc3b554223a032156924749dcfa896a7af",
+    "pytest_full_suite": "189 passed in 9.44s"
+  }
+}

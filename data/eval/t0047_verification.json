@@ -1,0 +1,76 @@
+{
+  "task_id": "T-0047",
+  "baslik": "F2-4: Pipeline'in donmus checkpoint yazimi icin operator kapisi (V5 kapansin)",
+  "dogrulama_damgasi": "2026-09-16T14:05:00Z",
+  "dogrulayan": "claude (danisman rolu, bagimsiz olcum)",
+  "yonetim": "PASS_WITH_FINDINGS",
+  "ozet": "Kapinin KENDISI saglam: guard fonksiyonu uc durumda dogru davraniyor, main() icinde 5 run_cmd'nin her birinden ONCE guard var (AST ile bagimsiz dogrulandi), train_dpo.py'de torch.save'den once guard var, testler 189 passed (sandbox disinda, ben kosturdum) ve IKI BAGIMSIZ MUTANT'IM da KIRMIZI yandi (sayi mutant + SIRA mutant). ANCAK V5 TAM KAPANMADI: Stage-4'te satir 294'te korumasiz bir `shutil.copyfile(\"data/kristal_model.pt\", \"data/kristal_model_sft.pt\")` var ve hedef DONMUS + DISKTE VAR (357 MB, 13 Eyl) - kapi yokken pipeline kosulursa egitim baslamadan once BU dosya ezilir. Kusurun yarisi spec'te (ben copyfile'i hic olcmedim, yalniz --save-path/--output-model sitelerini taradim).",
+  "kabul_kriterleri": [
+    {"no": "a", "kriter": "KAPI a: guard uc durumlu davranis", "durum": "DOGRULANDI (BAGIMSIZ)",
+     "olcum": "Modulu kendim yukledim ve fonksiyonu cagirdim: 'data/kristal_model.pt'+False -> RuntimeError; +True -> geciyor; 'scratch/x.pt'+False -> geciyor; 'data/kristal_carpenter_model.pt'+False -> RuntimeError. Dordu de beklendigi gibi."},
+    {"no": "b", "kriter": "KAPI b: main() icinde guard -> run_cmd SIRASI", "durum": "DOGRULANDI (BAGIMSIZ AST)",
+     "olcum": "Kendi AST yuruyusum: guard cagrilari (272, 280, 288, 298, 375) ve run_cmd'ler (273, 281, 289, 299, 376) - her run_cmd'in hemen oncesinde bir guard var, sira dogru. Not: run_cmd artik komutu DEGISKEN olarak aliyor (stage1_cmd...), bu yuzden benim ilk probum hedef listesini bos gosterdi; bu benim olcum kabimin eksiğiydi, kodun degil - kaynak okunarak dogrulandi (stage1_cmd icinde '--save-path', 'data/kristal_model.pt'; guard ayni literal ile cagriliyor)."},
+    {"no": "c", "kriter": "KAPI c: onay yokken hicbir egitim baslamiyor + mesaj kalibi", "durum": "KISMEN - bkz V1 ve V2",
+     "olcum": "Egitim komutlari gercekten baslamiyor (guard run_cmd'den once). ANCAK (V1) egitim baslamadan ONCE korumasiz bir donmus YAZIM oluyor (satir 294 copyfile). Ayrica (V2) mesaj metni spec'te istendigi gibi ureticilerle AYNI DEGIL."},
+    {"no": "d", "kriter": "KAPI d: kapsam disi siteler olculup rapora yazildi", "durum": "KISMEN (eksik site) - bkz V4",
+     "olcum": "Tablo retrain_clean_models.py icin :72/:85/:99 veriyor; benim bagimsiz grep'im AYNI dosyada 4 site buldu (:122 '--output-model', 'data/kristal_carpenter_model.pt' tabloda YOK). merge_teacher_dataset.py icin benim olcumum 0 '--save-path/--output-model' sitesi (dosyada yalniz argv gecisi var) - tabloda :262 deniyor; bu satir '--save-path' tasimiyor, dolayisiyla tablonun o satiri yanlis siniflandirilmis olabilir (DUSUK)."},
+    {"no": "e", "kriter": "MUTANT (STATIK): kirmizi -> yesil", "durum": "DOGRULANDI - USTELIK BEN DE YAPTIM",
+     "olcum": "Yurutucunun notu Stage-1 guard'ini yorumlayip 'Beklenen 5 ..., bulunan: 4' ile KIRMIZI aldigini bildiriyor. BEN IKI BAGIMSIZ MUTANT kosturdum (yalniz AST testi, main() CALISTIRILMADI): (1) SAYI mutant: Stage-1 guard'i yorumlandi -> 'FAILED ... Beklenen 5 check_frozen_save_path cagrisi, bulunan: 4' KIRMIZI; (2) SIRA mutant: guard ile run_cmd YER DEGISTIRILDI (272<->273) -> test yine KIRMIZI (prev_name == 'run_cmd' iddiasi dustu). Dosya yedekten geri konuldu ve sha256 ORIJINALLE AYNI oldugu dogrulandi (6974021093af0b16...). Boylece testin hem SAYI hem SIRA denetimi canli; vakum degil."},
+    {"no": "f", "kriter": "KOSUM YOK: hicbir egitim kosulmadi", "durum": "DOGRULANDI",
+     "olcum": "data/kristal_model.pt 02e15b8198f8f333... (mtime 2026-09-13T18:14:31Z), data/kristal_carpenter_model.pt 5f0b8c71727d15e3... (mtime 13 Eyl 08:40), iki .bin artefakt, data/vocab.json, src/llm/tokenizer.py - hepsi DEGISMEDI. data/*.pt 23, data/*.bin 15. Pencere taramasi: data/ altinda degisen TEK dosya raporun kendisi (13:46:24Z)."},
+    {"no": "g", "kriter": "TEST: pytest sandbox DISINDA", "durum": "DOGRULANDI (BAGIMSIZ)",
+     "olcum": "Rapor 189 diyor; ben sandbox DISINDA kosturdum: '189 passed in 9.53s' (T-0046'da 186 idi, 3 yeni test eklendi). Sandbox ICINDE kosturmadim cunku bu ortamda soket testleri sahte PermissionError uretiyor (T-0046'da yasandi)."},
+    {"no": "h", "kriter": "HASH IDDIALARI (tam digest)", "durum": "DOGRULANDI - uydurma YOK",
+     "olcum": "14 sha256 iddiasi toplandi: hepsi dogrulandi. 'after' degerleri diskle birebir (run_goal_pipeline.py 6974021093af0b16..., train_dpo.py 4cf8fd8a38cace6c..., tests ... 130561c37ffa8487...). 'before' degerleri git HEAD ile birebir (train_dpo.py 35edce4e31965c94... = git show HEAD:train_dpo.py). run_goal_pipeline.py'nin 'before' degeri 774b5c94ef851175... = T-0046 dogrulamamda olctugum 'after' degeri, yani ic tutarli. Kanarya digest'leri (kristal_model.pt, kristal_carpenter_model.pt, carpenter .bin) diskle birebir. Tek 'onek dogru/kuyruk yanlis' vakasi YOK."}
+  ],
+  "findings": [
+    {
+      "id": "V1",
+      "siddet": "ORTA (V5 TAM KAPANMADI; kusurun yarisi spec'te)",
+      "baslik": "Stage-4'te korumasiz donmus YAZIM: shutil.copyfile -> data/kristal_model_sft.pt",
+      "olcum": "scripts/run_goal_pipeline.py:294 `shutil.copyfile(\"data/kristal_model.pt\", \"data/kristal_model_sft.pt\")`. HEDEF DISKTE VAR (357 MB, mtime 13 Eyl 11:38) ve `is_frozen_path('data/kristal_model_sft.pt')` = True ('data/*.pt' deseni). Guard YALNIZ :297'de, yani KOPYADAN SONRA. Onay bayragi verilmeyen bir pipeline kosusunda: egitim baslamaz (dogru) AMA once bu 357 MB'lik donmus artefakt sessizce ezilir.",
+      "neden_onemli": "data/kristal_model_sft.pt, train_dpo.py:79'un OKUDUGU baslangic checkpoint'idir. Ezilirse DPO'nun baslangici sessizce degisir; geri donusu yoktur (gitignore'da, yedegi yok).",
+      "kusur_kimin": "YARISI SPEC'TE: T-0047 spec'ini yazarken yalnizca '--save-path' ve '--output-model' tasiyan run_cmd cagrilarini taradim; copyfile'i hic olcmedim. Yurutucu spec'e birebir uydu. Diger yarisi uygulamada: copyfile, degistirilen blogun 3 satir ustunde ve ayni amaca hizmet ediyor, goze carpmaliydi.",
+      "oneri": "Ayni kapiyi kopyadan ONCE uygula: check_frozen_save_path(\"data/kristal_model_sft.pt\", allow_frozen_write=allow_frozen_write) satir 294'ten ONCE; AST testini 'her donmus hedefe giden yazim' eksenine genislet (copyfile satirini da denetle)."
+    },
+    {
+      "id": "V2",
+      "siddet": "DUSUK (spec'ten sapma, kozmetik ama sozlesme maddesi)",
+      "baslik": "Guard mesaji, spec'te istendigi metinden farkli (DUZELTME: 'kanonik' cercevesi yanlisti)",
+      "olcum": "Spec 'mesaj ureticilerle AYNI kalip' istedi: uretici metni `Donmus yola yazma engellendi: {yol} (allow_frozen_write=False)`. Uygulanan metin: `Donmuş yola model kaydetme engellendi: {yol} (allow_frozen_write=False)`. Yol ve bayrak kismi ayni; ON EK farkli.",
+      "duzeltme_16eyl_1403z": "RAPOR SONRASI OLCUM (cerceve duzeltmesi): repoda TEK bir kanonik metin YOK. Dagitim: uc uretici `Donmus yola yazma engellendi` (ASCII) · scripts/run_goal_pipeline.py:80 (ayni dosyanin KOMSU kapisi) `Donmuş yola yazma engellendi` · src/llm/prepare.py:50 `Donmuş sözlük yoluna geri yazma engellendi` · T-0047 kapisi `Donmuş yola model kaydetme engellendi`; mevcut test (tests/test_compiler_entrypoints.py:105) `Donmuş yola yazma engellendi` iddia ediyor. Yani 'ureticiler kanonik' demek YANLIS OLDU; cogunluk/komşu kalip `Donmuş yola yazma engellendi`. Bulgu gecerli (spec farkli bir metin istedi ve uygulama ona uymadi) ama gerekce 'kanonikten sapma' degil, 'repo genelinde TUTARSIZLIK' olarak duzeltildi.",
+      "etki": "Islevsel fark yok; mesaj metni repo genelinde zaten tutarsiz (en az 3 varyant). Sozlesme maddesi birebir karsilanmadi."
+    },
+    {
+      "id": "V3",
+      "siddet": "DUSUK",
+      "baslik": "--allow-frozen-write egitim alt sureclerine EKLENIYOR ama train.py onu TANIMIYOR",
+      "olcum": "Pipeline, Stage-1/2/3 komutlarina kosullu olarak '--allow-frozen-write' ekliyor (ornek satir 271). Ancak `grep allow-frozen-write train.py` = HIC GECMIYOR; train.py argv'yi elle taradigi icin bilinmeyen arguman sessizce yok sayilir. Yani bu bayrak Stage-1/2/3 icin DEKORATIF; tek gercek zorlama pipeline'in kendi guard'i. train_dpo.py ise bayragi gercekten okuyor (satir 225) ve kendi kapisi var.",
+      "etki": "Islevsel risk yok (guard zaten once calisiyor) ama bayragin varligi 'alt surec de denetliyor' izlenimi veriyor; yaniltici sinyal."
+    },
+    {
+      "id": "V4",
+      "siddet": "DUSUK (rapor tablosu eksik/yanlis siniflandirilmis)",
+      "baslik": "Kapsam disi tablo: retrain_clean_models.py'de 4 site var, tabloda 3; merge_teacher_dataset.py satiri '--save-path' tasimiyor",
+      "olcum": "Bagimsiz grep: scripts/retrain_clean_models.py -> :72, :85, :99 ('--save-path', 'data/kristal_model.pt') VE :122 ('--output-model', 'data/kristal_carpenter_model.pt'). Tablo yalniz ilk ucunu listeliyor. scripts/merge_teacher_dataset.py -> '--save-path'/'--output-model' ICEREN SATIR YOK (0 site); tabloda ':262' hedefi 'data/kristal_model.pt (varsayilan train.py save_path uzerinden)' deniyor - yani gercek bir arguman degil, varsayim.",
+      "etki": "Duzeltme yapilmadi (kapsam disi zaten); yalniz envanter eksik. Sonraki bir gorevde bu 4 site + varsayilan-yol riski birlikte ele alinmali."
+    },
+    {
+      "id": "V5",
+      "siddet": "BILGI",
+      "baslik": "Degistirilen test dosyasi git HEAD'de YOK (untracked) - 'before' hali git'ten kurtarilamaz",
+      "olcum": "`git show HEAD:tests/test_compiler_entrypoints.py` bos donuyor; sha256'si e3b0c44298fc1c14... = BOS dosyanin digest'i. Yani dosya calisma agacinda var ama commit edilmemis. Ayni sinif: T-0046'da run_goal_pipeline.py'nin 'before' degeri de git'ten dogrulanamamisti.",
+      "etki": "Ciddi degil; ancak degisiklik oncesi hali yalnizca raporun beyanindan biliniyor (bu kez 'before' sha'si verilmemis, yalniz 'after' var)."
+    }
+  ],
+  "yontem_notu": {
+    "iki_mutant": "Bu turda bagimsiz mutant kosturdum (yalniz AST testi; main() CALISTIRILMADI). Once SAYI mutant (guard yorumlandi) -> KIRMIZI; sonra SIRA mutant (guard ile run_cmd yer degistirildi) -> KIRMIZI. Ikincisi onemliydi: yalniz sayi denetimi olsaydi 'guard var ama YANLIS YERDE' kusuru gecerdi.",
+    "geri_yukleme": "Mutantlardan sonra dosya yedekten geri konuldu ve sha256'nin orijinalle (6974021093af0b16...) AYNI oldugu dogrulandi; AST testleri yeniden YESIL. Yani olcumum denek dosyayi kalici degistirmedi.",
+    "kendi_probumun_eksigi": "Ilk probum run_cmd hedeflerini '[]' gosterdi (komut artik degiskende) ve hash denetiminde 4 'eslesmedi' verdi (aday listemde git HEAD surumleri ve bazi kanaryalar yoktu). IKISI DE BENIM OLCUM KABIMIN eksigiydi; kaynagi okuyup/kapsamayi genisletip duzelttim, bulgu yazmadim."
+  },
+  "kapanis": {
+    "uc_sinyal_kapisi": "mesaj 2026-09-16T13:46:59Z ✓ | kiralar 0 ✓ | changed_files (5) == writes[] (5) ✓",
+    "sonuc": "Kapinin KENDISI saglam ve non-vakum (iki bagimsiz mutant). ANCAK V5 tam kapanmadi: korumasiz bir donmus yazim (satir 294 copyfile) kaldi. V1 ORTA olarak kayda gecti; V2-V4 DUSUK; V5 BILGI. Yeni gorev ACILMADI.",
+    "sonraki_adim_notu": "Tek satirlik bir duzeltme + AST testinin 'donmus hedefe giden her yazim' eksenine genisletilmesi V1'i kapatir. Karar kullanicida."
+  }
+}

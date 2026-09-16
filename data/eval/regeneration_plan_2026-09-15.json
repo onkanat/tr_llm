@@ -208,7 +208,20 @@
       "onay_sonucu": "Surum hedefi ARTIK BAGLAYICI: (1) noktalama+rakam+kesme uretebilen taban, (2) o taban uzerine giydirilmis ceket. Kabul olcutleri bu maddenin 'kabul' listesindeki dort madde olarak kalir.",
       "oneri": "Iki parcali, tamamen olculmus minimum surum: (1) noktalama uretebilen taban, (2) o taban uzerine giydirilmis ceket.",
       "kabul": [
-        "Taban noktalama uretiyor: '.' ',' ':' uretim orani > 0 (taban cizgi bugun 0)",
+        {
+          "kriter": "Taban, noktalama istendiğinde noktalama üretmeli: noktalama isteyen istemde üretilen noktalama tokeni > 0 VE çıktı istemle ilgili olmalı. İlgi ölçütü: Conditioning_Score(P, O) >= 0.20. Ölçüm kapsamı: noktalama isteyen istem (T-0034 P2_Noktalama istemi). (D-B genişleme notu uyarınca noktalama, rakam ve kesme işareti tabanın dil becerisi olarak ele alınmalı, tutarlı koşullanma sağlanmalı.)",
+          "onceki_metin": "Taban noktalama uretiyor: '.' ',' ':' uretim orani > 0 (taban cizgi bugun 0)",
+          "duzeltme_tarihi": "2026-09-15T17:35:00Z",
+          "duzeltme_gerekcesi": "'(taban cizgi bugun 0)' öncülü bir model özelliği değil, eksik sözlükle (data/vocab.json, 31.357 token) yapılan değerlendirmeden kaynaklanan bir ölçüm aracı artefaktıdır. Kanonik sözlükle (data/rebuild/vocab_base_32816.json) taban model noktalama üretmektedir (19/229 token); ancak istemle ilgisiz çıktılar vermiştir. Dolayısıyla eksik olan yetenek değil, isteme koşullanmadır.",
+          "olcum_kaynagi": {
+            "yol": "data/eval/temel_marangoz_ikili_test_2026-09-15.json",
+            "sha256": "e49e67fb120563070fd9abd68898c69f67bfc2b37decc81bd0b326c1f9a63a45"
+          },
+          "kriter_onceki_metin": "Taban, noktalama istendiğinde noktalama üretmeli: noktalama isteyen istemde üretilen noktalama tokeni > 0 VE çıktı istemle ilgili olmalı (D-B genişleme notu uyarınca noktalama, rakam ve kesme işareti tabanın dil becerisi olarak ele alınmalı, tutarlı koşullanma sağlanmalı).",
+          "duzeltme_2_tarihi": "2026-09-15T20:52:00Z",
+          "duzeltme_2_gerekcesi": "T-0036 metrigi (Conditioning_Score) tasarlandi ve kendini dogruladi (PASS_WITH_FINDINGS); SECENEK_A (kullanici karari 2026-09-15): olcut metnine makineyle olculebilir esik giriyor. Kaynak: data/eval/t0036_kosullanma_olcutu_2026-09-15.json",
+          "olcum_kaynagi_2": "data/eval/t0036_kosullanma_olcutu_2026-09-15.json + data/eval/t0038_kosullanma_olcutu_icraat_2026-09-15.json"
+        },
         "Ceket Exp C taban cizgisini bozmuyor (1/22, 1/18, 0/17'den kotuye gitmiyor)",
         "Felaket unutma kapisi: tabanin genel yetkinligi korunuyor (metrik F3 spec'inde tanimlanacak)",
         "Kapsam listesi F0'in olctugu boslukla GENISLEYEBILIR; surum yine bu uc maddeyle tanimlanir"

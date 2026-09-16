@@ -1,0 +1,115 @@
+{
+  "task_id": "T-0050",
+  "as_of": "2026-09-16T15:32:00Z",
+  "device": {
+    "command": "venv/bin/python -c \"import torch; print(torch.__version__, torch.backends.mps.is_available(), torch.backends.mps.is_built(), torch.cuda.is_available())\"",
+    "raw_output": "TORCH_VER: 2.11.0 MPS_AVAIL: True MPS_BUILT: True CUDA_AVAIL: False",
+    "torch_version": "2.11.0",
+    "mps_is_available": true,
+    "mps_is_built": true,
+    "cuda_is_available": false
+  },
+  "disk": {
+    "before": {
+      "command": "df -h .",
+      "raw_output": "Filesystem      Size    Used   Avail Capacity iused ifree %iused  Mounted on\n/dev/disk3s5   460Gi   415Gi    18Gi    96%    5.0M  186M    3%   /System/Volumes/Data",
+      "avail": "18Gi",
+      "capacity_percent": "96%"
+    },
+    "after": {
+      "command": "df -h .",
+      "raw_output": "Filesystem      Size    Used   Avail Capacity iused ifree %iused  Mounted on\n/dev/disk3s5   460Gi   417Gi    16Gi    97%    5.0M  165M    3%   /System/Volumes/Data",
+      "avail": "16Gi",
+      "capacity_percent": "97%"
+    },
+    "delta_avail_gi": -2
+  },
+  "inventory_and_backups": [
+    {
+      "filename": "kristal_model.pt",
+      "source_path": "data/kristal_model.pt",
+      "backup_path": "scratch/f3_backup_2026-09-16/kristal_model.pt",
+      "size_bytes": 472572529,
+      "size_mb": 450.7,
+      "mtime_utc": "2026-09-13 18:14:31 UTC",
+      "sha256_pinned": "02e15b8198f8f3334609eb52691d699e80f88972245377c1a79772cb42ae1679",
+      "sha256_src": "02e15b8198f8f3334609eb52691d699e80f88972245377c1a79772cb42ae1679",
+      "sha256_dst": "02e15b8198f8f3334609eb52691d699e80f88972245377c1a79772cb42ae1679",
+      "sha_match": true,
+      "pin_match": true
+    },
+    {
+      "filename": "kristal_model_step_b1_final.pt",
+      "source_path": "data/kristal_model_step_b1_final.pt",
+      "backup_path": "scratch/f3_backup_2026-09-16/kristal_model_step_b1_final.pt",
+      "size_bytes": 468515881,
+      "size_mb": 446.8,
+      "mtime_utc": "2026-09-13 14:48:03 UTC",
+      "sha256_pinned": "01d7918e4e5fa8e4fdbf0c4628b41a734639d9736d54f3307b44a0b5fd77174e",
+      "sha256_src": "01d7918e4e5fa8e4fdbf0c4628b41a734639d9736d54f3307b44a0b5fd77174e",
+      "sha256_dst": "01d7918e4e5fa8e4fdbf0c4628b41a734639d9736d54f3307b44a0b5fd77174e",
+      "sha_match": true,
+      "pin_match": true
+    },
+    {
+      "filename": "kristal_model_pre_clean.pt",
+      "source_path": "data/kristal_model_pre_clean.pt",
+      "backup_path": "scratch/f3_backup_2026-09-16/kristal_model_pre_clean.pt",
+      "size_bytes": 463601831,
+      "size_mb": 442.1,
+      "mtime_utc": "2026-09-13 08:06:47 UTC",
+      "sha256_pinned": "d1f04433d81b5691f310bca691baf50f90be0527701c4b757460e5c1b368dcac",
+      "sha256_src": "d1f04433d81b5691f310bca691baf50f90be0527701c4b757460e5c1b368dcac",
+      "sha256_dst": "d1f04433d81b5691f310bca691baf50f90be0527701c4b757460e5c1b368dcac",
+      "sha_match": true,
+      "pin_match": true
+    },
+    {
+      "filename": "kristal_model_sft.pt",
+      "source_path": "data/kristal_model_sft.pt",
+      "backup_path": "scratch/f3_backup_2026-09-16/kristal_model_sft.pt",
+      "size_bytes": 374025447,
+      "size_mb": 356.7,
+      "mtime_utc": "2026-09-13 08:38:35 UTC",
+      "sha256_pinned": "b6764c7062ce627a0ba9437cf052a28d0ac4e2e4cf3b3df3e3110d05a1ba2957",
+      "sha256_src": "b6764c7062ce627a0ba9437cf052a28d0ac4e2e4cf3b3df3e3110d05a1ba2957",
+      "sha256_dst": "b6764c7062ce627a0ba9437cf052a28d0ac4e2e4cf3b3df3e3110d05a1ba2957",
+      "sha_match": true,
+      "pin_match": true
+    },
+    {
+      "filename": "kristal_carpenter_model.pt",
+      "source_path": "data/kristal_carpenter_model.pt",
+      "backup_path": "scratch/f3_backup_2026-09-16/kristal_carpenter_model.pt",
+      "size_bytes": 374026701,
+      "size_mb": 356.7,
+      "mtime_utc": "2026-09-13 08:40:29 UTC",
+      "sha256_pinned": "5f0b8c71727d15e338e4301634b0d05652c3230cebc532b1124aff3761e93b4d",
+      "sha256_src": "5f0b8c71727d15e338e4301634b0d05652c3230cebc532b1124aff3761e93b4d",
+      "sha256_dst": "5f0b8c71727d15e338e4301634b0d05652c3230cebc532b1124aff3761e93b4d",
+      "sha_match": true,
+      "pin_match": true
+    }
+  ],
+  "readability_check": {
+    "tested_file": "scratch/f3_backup_2026-09-16/kristal_model.pt",
+    "is_dict": true,
+    "total_state_dict_keys": 113,
+    "sample_keys": [
+      "embedding.embedding.weight",
+      "blocks.0.ln1.weight",
+      "blocks.0.ln1.bias",
+      "blocks.0.attn.mask",
+      "blocks.0.attn.q_proj.weight"
+    ],
+    "status": "PASS"
+  },
+  "canary": {
+    "data_pt_count": 23,
+    "data_bin_count": 15,
+    "scratch_f2_backup_count": 6,
+    "scratch_f3_backup_count": 5,
+    "pin_checks_passed": 5,
+    "status": "PASS"
+  }
+}

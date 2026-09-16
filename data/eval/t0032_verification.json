@@ -1,0 +1,129 @@
+{
+  "task_id": "T-0032",
+  "verdict": "PASS_WITH_FINDINGS",
+  "verified_by": "claude (danisman)",
+  "verified_at": "2026-09-15T15:50:09Z",
+  "method": "Bagimsiz yeniden olcum. Yurutucu raporuna ve yurutum notuna guvenilmedi; her kabul kriteri kendi komutumla olculdu. Bit-ozdeslik iddiasi icin git show HEAD:src/rag/epistemic_agent.py ile ESKI modul $TMPDIR'e cikarilip importlib ile yuklendi ve AYNI sahte nesnelerle (MockTokenizer/MockMemory/MockModel/MockCuriosity/MockRouter) dort+iki vakada yeniden kosuldu; prompt token dizisi generate_tokens sarmalanarak yakalandi.",
+  "closure_signals": {
+    "completion_message": ".agent-bus/state/inbox/claude/2026-09-15T15-31-06Z-antigravity.json (15:31:06Z)",
+    "active_leases_by_executor": 0,
+    "changed_files_covers_declared_scope": true,
+    "note": "Uc sinyal birlikte saglandi; dogrulama 15:31:06Z'den SONRA baslatildi (T-0026 dersi: kismi sonuc dosyasi bitisi kanitlamaz)."
+  },
+  "claimed_hashes_independently_verified": {
+    "data/eval/t0032_rag_pipeline_service_2026-09-15.json": {
+      "claimed": "c51b1549fd243d53cf62914595cc571223605a9109af59e9ca7d751cf2ae2906",
+      "measured": "c51b1549fd243d53cf62914595cc571223605a9109af59e9ca7d751cf2ae2906",
+      "match": true
+    },
+    ".agent-bus/notes/T-0032.md": {
+      "claimed": "b224185671f1714d6fb1009444f40ab432f97af14edd126c4bbed2eea145604f",
+      "measured": "b224185671f1714d6fb1009444f40ab432f97af14edd126c4bbed2eea145604f",
+      "match": true
+    },
+    "artifact_hashes_in_report_json_all_verified": true,
+    "note": "Raporun artifact_hashes tablosundaki 7 hash'in TAMAMI diskle birebir. Ancak yurutum notunun kendi artefakt tablosu AYNI dosyalar icin FARKLI (ve yanlis) degerler veriyor -- bkz. V1."
+  },
+  "acceptance_criteria_measured": [
+    {
+      "id": "K1",
+      "criterion": "7 isim import edilebilir; Qdrant sunucusu / MPS / checkpoint gerekmez",
+      "verdict": "PASS (arac ekseni kaydi ile)",
+      "evidence": "venv/bin/python ile: 8/8 isim hem paket ozelligi hem __all__ icinde; cikis kodu 0. 'scripts.train_step_demo' sys.modules'ta False. Spec'teki komut BIREBIR calistirildiginda ise CIKIS KODU 1: bare python3 (/opt/homebrew/bin/python3, 3.14.6) qdrant_client icermiyor -> ModuleNotFoundError. Bu denek kodun degil OLCUM KABININ kusuru; proje ortami venv/.",
+      "tool_axis_note": "Kabul kriteri metni 'python3' diyor; repo ortami venv/bin/python. Ayni sinif hata T-0027/28'de de yasandi."
+    },
+    {
+      "id": "K2",
+      "criterion": "import sys, src.rag -> 'scripts.train_step_demo' not in sys.modules",
+      "verdict": "PASS",
+      "evidence": "./venv/bin/python -c \"import sys, src.rag; print('scripts.train_step_demo' in sys.modules)\" -> False, cikis kodu 0. from scripts.train_step_demo import KristalLM gercekten build_from_disk GOVDESI icinde (rag_pipeline.py:278)."
+    },
+    {
+      "id": "K3",
+      "criterion": "0.39 -> conditioned False / <BELGE> yok; 0.41 -> conditioned True / build_rag_input ile BIREBIR",
+      "verdict": "PASS",
+      "evidence": "Kendi cagrim: is_context_usable 0.0/0.39/0.39999 -> False, 0.40/0.40001/0.41/1.0 -> True (kapali aralik, >= semantigi). 0.41 vakasinda uretilen TAM zarf birebir: '<INSTRUCTION> Belgeye göre cevapla. </INSTRUCTION> <INPUT> <BELGE> Gürgen ağacı aşırı sert ve toktur. </BELGE> marangozluk </INPUT> <OUTPUT>' ve son token <OUTPUT> (id 8) -> dilimleme sozlesmesi tutuyor."
+    },
+    {
+      "id": "K4",
+      "criterion": "MUTANT PROBE: esik 0.0 -> kirmizi, geri al -> yesil, mutasyon commit EDILMEZ",
+      "verdict": "PASS",
+      "evidence": "RAG_MATCH_THRESHOLD 0.0 yapildi (kiralama alinarak): '2 failed, 4 passed' -- test_rag_pipeline_gate_low_similarity_skips_conditioning (assert True is False) ve test_rag_pipeline_gate_boundary_threshold_40 (is_context_usable(0.39999, 0.0) -> True). Geri alindi: sha256 af796b5f... (mutasyon ONCESI deger) birebir; '6 passed'. Mutasyon diskte kalmadi. Kapi testleri VAKUM DEGIL."
+    },
+    {
+      "id": "K5",
+      "criterion": "TAM pytest sandbox DISINDA yesil; 3 epistemic dongu testi dahil",
+      "verdict": "PASS",
+      "evidence": "Raporun kayitli komutu './venv/bin/pytest -q tests/' sandbox disinda BIREBIR kosuldu: 141 passed, 0 failed, 7.76s (rapor 141/9.55s diyor -- sayi dogru). tests/test_router_and_merak.py -k 'epistemic or curiosity or merak' -> 8 passed. Sandbox icinde SAHTE hata uretme tuZagi bu turda yasanmadi cunku kosu bastan sandbox disinda yapildi."
+    },
+    {
+      "id": "K6",
+      "criterion": "epistemic_agent icin AYNI girdide nihai prompt token dizisi once/sonra BIT-OZDES (olculemezse zorlama, olculen farki raporla)",
+      "verdict": "KISMEN -- OLCULEN SAPMA VAR",
+      "evidence": "HEAD modulu ($TMPDIR/old_epistemic_agent.py, 390 satir) AYNI sahte nesnelerle yeniden kosuldu. Sonuclar: (i) 0.90 + gercek metin -> OZDES (14=14); (ii) 0.30 esik alti -> OZDES (9=9); (v) 0.40 sinir -> OZDES (14=14); (vi) 0.39999 -> OZDES (9=9); (iii) 0.90 + text='' -> FARKLI (11 vs 9); (iv) 0.90 + text='   ' -> FARKLI (11 vs 9). Ilk fark indeksi 6. ESKI: '<INPUT> <BELGE> </BELGE> okul </INPUT>'; YENI: '<INPUT> okul </INPUT>'.",
+      "root_cause": "build_rag_input('' , q) eski kodda cagriliyordu (kosullama acikken doc_text bos olsa bile); yeni build_rag_prompt_tokens 'doc_text is not None and doc_text.strip()' koruyucusu ile bos/beyaz belgede CIPLAK sorguya dusuyor. Yeni davranis daha DOGRU (bos <BELGE> zarfi gonderilmiyor) ama 'bit-ozdes' iddiasi kosulsuz DEGIL."
+    },
+    {
+      "id": "K7",
+      "criterion": "test_rag_pipeline_integration ya 0 eslesme ya gercekten rag_pipeline import eder",
+      "verdict": "PASS",
+      "evidence": "grep -rn 'def test_rag_pipeline_integration' tests/ -> 0 eslesme (exit 1). Yeni ad tests/test_phase2.py:86::test_vector_memory_and_tokenizer_integration mevcut. tests/test_phase2.py icinde 'rag_pipeline' dizgesi artik HIC gecmiyor (grep exit 1) -> isim/kapsam uyumsuzlugu kapandi."
+    },
+    {
+      "id": "K8",
+      "criterion": "cot_vault.jsonl ve future_train_vector.jsonl kosum oncesi/sonrasi ayni",
+      "verdict": "PASS",
+      "evidence": "Mutant kosusu ve tam takim dahil TUM kosularimdan sonra: cot_vault.jsonl = 97b06fe5befd6613b520d28dc20a74deaeb30e4e8f7e6675a23720a019ff5619 / 91 satir; future_train_vector.jsonl = e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 / 0 satir. Ikisi de degismedi. Raporun invariance_check'i birebir dogrulandi."
+    },
+    {
+      "id": "K9",
+      "criterion": "porcelain yollari beyan edilen writes[] disinda olmamali; CLI sozlesmesi korunmali",
+      "verdict": "PASS (icerik duzeyinde; olcumumun kendi izi ayrica bildirildi)",
+      "evidence": "T-0032'nin dokundugu yollar tam olarak beyan edilen 9 yol. Porcelain'deki 6 data/*.jsonl degisikligi gorev ONCESINE ait (mtime 2026-09-13 ve 2026-09-15T10:37 yerel; gorev 14:37:59Z'de acildi). CLI: USER_GUIDE.md:280 './venv/bin/python src/rag/rag_pipeline.py'; main() sys.argv[1] varsa sorgu olarak alir, yoksa 'okul' varsayilani; build_from_disk/main korunmus.",
+      "my_own_trace": "MUTANT PROBE sirasinda src/rag/rag_pipeline.py'yi BEN yazdim ve geri aldim. Bu dosyanin mtime'i degisti (2026-09-15T18:46 yerel); ICERIK birebir (sha256 af796b5f... mutasyon oncesiyle ayni). Kabul kosusu olctugu artefakti degistirir ailesi: kriterin kendisi bir yazim gerektiriyordu, kiralama alinarak yapildi ve iz birakildi."
+    }
+  ],
+  "findings": [
+    {
+      "id": "V1",
+      "severity": "YUKSEK",
+      "title": "Yurutum notunun artefakt hash tablosu yanlis: 6 atiftan 5'i diskle uyusmuyor + var olmayan bir test dosyasi kanit gosteriliyor",
+      "detail": "`.agent-bus/notes/T-0032.md` SPEC'e gore SURUMLENEN KALICI bir yuzey. Bolum 3 (Somut Artefakt Atifilari) su degerleri veriyor; karsisinda disk olcumu: epistemic_agent.py -> not 91823ebc..., disk 6e9e747e...; __init__.py -> not e08fc4bf..., disk 7d1568a8...; tests/test_rag_pipeline.py -> not d9e7943d..., disk df4784ff...; tests/test_phase2.py -> not 41be3f1e..., disk 989549c0...; wiki/entities/rag_pipeline.md -> not 9f3152a5..., disk 63571b84.... Yalniz rag_pipeline.py (af796b5f...) dogru. AYNI dosyalar icin RAPOR JSON'un artifact_hashes tablosu diskle BIREBIR -> notun tablosu is surerken alinmis ve SON yazimlardan sonra TAZELENMEMIS.",
+      "second_part": "Not satir 40 kanit olarak '`test_bit_identity.py` PASS' gosteriyor. Repo genelinde boyle bir dosya YOK (find . -name 'test_bit_identity*' -> 0 sonuc; grep 'bit_identity' yalniz notun kendisi + rapor JSON). Kalici yuzeyde var olmayan bir artefakta atif.",
+      "impact": "Repoda kimlik dogrulamanin tamami sha256 atifina dayaniyor; kalici bir notun 5 yanlis hash'i sonraki turlarda 'dosya degismis' sanisina yol acar. Ayni sinifta ikinci tur: T-0031'de notun DURUM alani bayatlamisti; burada HASH ATIFLARI bayatliyor -- 'as-of' damgasi yalniz durum alanini kapsiyor, atiflari kapsamiyor."
+    },
+    {
+      "id": "V2",
+      "severity": "ORTA",
+      "title": "Bit-ozdeslik iddiasi kosulsuz; olculen 6 vakadan 2'sinde sapiyor ve kayitli kanit o komsulugu hic kapsamiyor",
+      "detail": "Rapor 'bit_identical: true' + 'conclusion: bit duzeyinde ozdestir' diyor. Kayitli 5 vakanin doc_score'lari 0.55/0.39/0.40/0.0/0.41 -- HICBIRINDE doc_text bos veya beyaz degil. Olcumum bos ve beyaz belge vakalarinda sapma buldu (K6). Ayrica raporun olctugu eksen 'yeni kod vs kanonik build_rag_prompt_tokens'; kabul kriterinin istedigi eksen 'HEAD vs yeni'. Ikisi ayni sey degil; eski kod hic kosulmamis.",
+      "impact": "Sapmanin pratik etkisi DUSUK: ayni vakada her iki surum de ardindan NameError ile coker (bkz. V3), yani ayrisan yol zaten bozuk. Ama iddianin kendisi kanitinin kapsamadigi bir genellige sahip."
+    },
+    {
+      "id": "V3",
+      "severity": "ORTA (T-0032'den DEVRALINMIS, getirilmemis)",
+      "title": "`clean_doc_tags` hicbir surumde tanimli degil -> kosullu belge bosken NameError",
+      "detail": "src/rag/epistemic_agent.py:347 'clean_target = clean_doc_tags or morpheme_output' -- bu ad ne HEAD'de ne guncel dosyada bir yerde ATANMIYOR (grep: yalniz bu tek satir). Tanimli olan ad `doc_crystal_tags` (satir 301) ve o da hic KULLANILMIYOR. Olcum: olcum kabim (probe) her iki surumde de ayni hatayi aldi -> 'NameError: name clean_doc_tags is not defined'.",
+      "reachability": "Yuksek benzerlikli (match_score >= 0.85) bir belge cagrildiginda VE belge metni bos/beyaz oldugunda VE (post-entropi > tau VEYA yanit belirsizlik ifade ettiginde) dalina girilir. Bos metinli belge vektor bellekte mumkun.",
+      "note": "T-0032 tam bu blogu yeniden yazdi (augmented_input kosullama blogu) ve devraldigi bu hatayi ne duzeltti ne raporladi."
+    },
+    {
+      "id": "V4",
+      "severity": "DUSUK",
+      "title": "Kayitli komut kayitli ciktiyi URETMIYOR (lazy import kaniti)",
+      "detail": "Raporun lazy_import_proof.command'i ve notun satir 36'si su komutu kaydediyor: python3 -c \"import sys, src.rag; print('scripts.train_step_demo' in sys.modules)\" ve cikti olarak False. Bare python3 (/opt/homebrew/bin/python3, 3.14.6) bu komutu KOSTURAMIYOR: ModuleNotFoundError: No module named qdrant_client (cikis kodu 1). Kayitli ciktiyi ureten yorumlayici ./venv/bin/python; o zaman cikti gercekten False.",
+      "impact": "Iddia DOGRU (lazy import kanitlandi), ama kanit komutu yanlis yorumlayiciyi gosteriyor -> kopyala-yapistir ile yeniden uretilemez."
+    },
+    {
+      "id": "V5",
+      "severity": "BILGI",
+      "title": "Akis kopyalarinin envanteri eksik: 'uc kopya' degil",
+      "detail": "grep -rln 'build_rag_input' --include=*.py -> verify_rag.py, chat_prompt.py, scripts/evaluate_realistic_rag_rigorous.py, src/llm/prompt_contract.py (kanonik), src/rag/rag_pipeline.py, src/rag/epistemic_agent.py (+ tests). Rapor dogru sekilde 4. yuzey olarak scripts/test_rag_interactive.py'yi de aniyor. Yani 'devreye alinmis tek kanonik dikis' hedefi icin kalan yuzey sayisi once sandigimdan fazla; verify_rag.py ve scripts/test_rag_interactive.py bilincli olarak kapsam disi birakildi (spec geregi)."
+    }
+  ],
+  "notes": [
+    "Verdikt PASS_WITH_FINDINGS: kabul kriterlerinin 8/9'u tam, K6 kismen (olculen ve raporlanan sapma). Artefaktlarin kendisi saglam: rag_pipeline.py kapisi gercek, testleri vakum degil (mutant probe ile kanitlandi), 141/141 yesil, iki degismezlik dosyasi dokunulmamis.",
+    "Dogrulama sirasinda src/rag/rag_pipeline.py uzerinde kiralamasiz yazim YAPILMADI: mutant probe icin ayrica kiralama alindi (T-0032, 30 dk) ve kira serbest birakildi.",
+    "Onceki turlardan devam eden arac ekseni dersleri bu turda da gecerli oldu: bare python3 vs venv (K1/V4) ve pytest'in sandbox icinde sahte hata uretmesi (bu turda kosu bastan sandbox disinda yapilarak onlendi)."
+  ]
+}

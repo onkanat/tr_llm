@@ -1,0 +1,85 @@
+{
+  "task_id": "T-0039",
+  "status": "PASS",
+  "ts_start": "2026-09-16T03:31:36Z",
+  "ts_end": "2026-09-16T03:41:30Z",
+  "title": "Derleme giriş noktalarını doğrula (F2 ön koşulu, saf KOD)",
+  "metadata": {
+    "python_version": "3.14.6",
+    "device": "mps (sandbox dışında koşuldu)",
+    "target_vocab": "data/rebuild/vocab_base_32852.json",
+    "target_vocab_sha256": "7611b6a523a2bb524cc21aa9cc64235aa6a2ae99f87f46ac51cb2915e61164ad",
+    "target_mode": "literal_entity_mode=True"
+  },
+  "acceptance_results": {
+    "a_compile_jsonl_to_bin_signature": {
+      "command": "./venv/bin/python -c \"import inspect,scripts.run_goal_pipeline as m; print(inspect.signature(m.compile_jsonl_to_bin))\"",
+      "observed": "(jsonl_paths: list, output_bin: str, vocab_path: str, literal_entity_mode: bool, block_size: int = 64, oversample_factor: int = 1, allow_frozen_write: bool = False) -> int",
+      "status": "PASS"
+    },
+    "b_no_silent_exception_swallowing": {
+      "command": "grep -n 'except Exception' scripts/run_goal_pipeline.py",
+      "observed": "115:                except Exception as e:",
+      "explanation": "except Exception: continue tamamen kaldırıldı. Hatalı kayıtlar failed_records sayacına eklenir, ilk 5 hata stderr'e loglanır ve .meta.json dosyasına failed_records olarak yazılır.",
+      "status": "PASS"
+    },
+    "c_prepare_dataset_signature": {
+      "command": "./venv/bin/python -c \"import inspect,src.llm.prepare as p; print(inspect.signature(p.prepare_dataset))\"",
+      "observed": "(input_filepath: str, output_filepath: str, vocab_path: str = 'data/rebuild/vocab_base_32852.json', literal_entity_mode: bool = True, save_vocab_to: str | None = None)",
+      "status": "PASS"
+    },
+    "d_compiler_entrypoints_test": {
+      "command": "./venv/bin/pytest tests/test_compiler_entrypoints.py -q",
+      "observed": "5 passed in 2.50s",
+      "status": "PASS"
+    },
+    "e_full_pytest_suite": {
+      "command": "./venv/bin/pytest tests/ -q",
+      "count_before": 166,
+      "count_after": 171,
+      "observed": "171 passed in 9.61s",
+      "cot_vault_sha_before": "97b06fe5befd6613b520d28dc20a74deaeb30e4e8f7e6675a23720a019ff5619",
+      "cot_vault_sha_after": "97b06fe5befd6613b520d28dc20a74deaeb30e4e8f7e6675a23720a019ff5619",
+      "status": "PASS"
+    },
+    "f_vocab_json_canary_integrity": {
+      "command": "shasum -a 256 data/vocab.json",
+      "expected": "4b40eebee9c996c8dd3150f6b3c8896de85764ee1cf0b08e6c636e5c002a0e69",
+      "observed": "4b40eebee9c996c8dd3150f6b3c8896de85764ee1cf0b08e6c636e5c002a0e69",
+      "unchanged": true,
+      "status": "PASS"
+    },
+    "g_old_code_mutant_check": {
+      "command": "git show HEAD:scripts/run_goal_pipeline.py > /tmp/eski_rgp.py && ./venv/bin/python test",
+      "old_code_result": "max_token_id=6632, 32850_in_tokens=False",
+      "new_code_result": "max_token_id=32850, 32850_in_tokens=True",
+      "status": "PASS"
+    },
+    "h_binary_counts_and_hashes": {
+      "command": "ls -1 data/*.bin | wc -l && shasum -a 256 data/train_balanced_sft.bin data/train_chat_balanced.bin",
+      "bin_count": 14,
+      "hashes": {
+        "data/train_balanced_sft.bin": "55863e36b62414c6ada30956b30dc64a5254fe0717582384d43abd5d9cf46a24",
+        "data/train_chat_balanced.bin": "3b2b9cd3cf3f47147c6c30b1705c812dfa7a8a287788269a6fa73dc94fccbf10"
+      },
+      "unchanged": true,
+      "status": "PASS"
+    }
+  },
+  "changed_files": [
+    "scripts/run_goal_pipeline.py",
+    "scripts/recompile_datasets.py",
+    "src/llm/prepare.py",
+    "tests/test_compiler_entrypoints.py",
+    ".agent-bus/notes/T-0039.md",
+    "data/eval/t0039_entrypoint_repair_2026-09-16.json"
+  ],
+  "file_hashes": {
+    "scripts/run_goal_pipeline.py": "cc0424a79bc0b802a90730956287f7541353305c9c1b58d151a1966c2756ba93",
+    "scripts/recompile_datasets.py": "f987f610b965bb57dd0992e6ff145fc56e406b5c1444a3eb06fbdacb2c139e0f",
+    "src/llm/prepare.py": "c7bb5135b465c261967e0eb324db5d55ba7d7d1db03666764eada3fd5db42014",
+    "tests/test_compiler_entrypoints.py": "fb609393cefe0c1658f8c22307610d7e54b01d481ce45de704ba682a1d6a264c",
+    ".agent-bus/notes/T-0039.md": "b2dc20fc49bc04b2b02630b01feba252b73085636f2dbaeb2855571b3eb5fbaa"
+  },
+  "findings": []
+}

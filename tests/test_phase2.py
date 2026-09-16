@@ -83,7 +83,7 @@ class TestPhase2(unittest.TestCase):
         self.assertEqual(results[0]["metadata"]["domain"], "marangoz")
         self.assertEqual(results[1]["metadata"]["domain"], "marangoz")
 
-    def test_rag_pipeline_integration(self):
+    def test_vector_memory_and_tokenizer_integration(self):
         from qdrant_client.http import models
         # Simulate full pipeline: Query -> Context -> Tokenize context -> Feed to LLM
 

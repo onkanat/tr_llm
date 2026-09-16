@@ -1,0 +1,1084 @@
+{
+  "gorev": "T-0038",
+  "baslik": "Kosullanma olcutu modulu + plan guncellemesi - BAGIMSIZ DOGRULAMA",
+  "dogrulayan": "claude (danisman rolu)",
+  "yurutucu": "antigravity",
+  "ts_start": "2026-09-15T21:36:44.187737+00:00",
+  "durum": "PASS_WITH_FINDINGS",
+  "hukum": "Yurutucunun 5 ana iddiasindan 3'u (K1 modul/formul, K2 minimal plan duzeltmesi, K4 yeniden uretilebilirlik) bagimsiz olarak DOGRULANDI. Ancak kabul kriterlerinden 3'u (7, 9, 6) KARSILANMADI ve 5'i (2, 8, 11, 13, 3-disi) kismen karsilandi. En agir ikisi: mutant kontrolunun VAKUM olmasi (V2) ve kalici rapora bilinen-yanlis bir sozluk hash'inin tasinmasi (V1). Kabul 7'nin istedigi 'VAKUM bulgusu' bu raporla RESMEN yazilmistir.",
+  "ozet": {
+    "dogrulanan_kabul": 5,
+    "kismen": 5,
+    "karsilanmayan": 3,
+    "toplam_kabul": 13,
+    "bulgu": {
+      "YUKSEK": 3,
+      "ORTA": 3,
+      "DUSUK": 5
+    },
+    "en_guclu_kazanim": "K2: duzeltme oncesi plan yeniden kurulup serilestirildiginde raporun verdigi before-sha BAYT-OZDES uretildi - yani plan duzeltmesi gercekten minimal.",
+    "en_agir_eksik": "V2: mutant kontrolu modulu degistirmiyor, kendi yerel kopyasini olcuyor."
+  },
+  "yontem": {
+    "sandbox": "Tum pytest ve model kosulari sandbox DISINDA",
+    "device": "mps",
+    "olcum_dosyalari": [
+      {
+        "yol": "/tmp/claude-501/t0038_vakum.json",
+        "ne": "mutant enjeksiyon matrisi (7 test x 5 modul durumu)"
+      },
+      {
+        "yol": "/tmp/claude-501/t0038_k4.json",
+        "ne": "K4 bagimsiz yeniden uretim (3 kosum x 5 istem)"
+      },
+      {
+        "yol": "/tmp/claude-501/t0038_kanarya_noktalama.json",
+        "ne": "kanarya degerleri + kriter 1. bileseni"
+      },
+      {
+        "yol": "/tmp/claude-501/t0038_k1k3.json",
+        "ne": "imza/saflik/diferansiyel ham cikti"
+      }
+    ],
+    "kiralama": "Dogrulama kiram data/eval/t0038_verification.json (file) uzerinde; 21:25:44Z alindi"
+  },
+  "kapsam_yazim_aninda": [
+    {
+      "path": "src/eval/conditioning_score.py",
+      "var": true,
+      "sha256": "6c015c113615389dfa44dc708c653d0140cd34108ec1e0bb99fff2a8b9a99a2a",
+      "bytes": 6656,
+      "mtime": "2026-09-15T20:48:32.999124+00:00",
+      "satir": 182
+    },
+    {
+      "path": "src/eval/__init__.py",
+      "var": true,
+      "sha256": "e92b9ecc5f78b167f5268d3a0aee4bfddb4360d059d6e4b3a1fea8054f49ea9f",
+      "bytes": 68,
+      "mtime": "2026-09-15T20:47:52.470735+00:00",
+      "satir": 1
+    },
+    {
+      "path": "tests/test_conditioning_score.py",
+      "var": true,
+      "sha256": "7f645139e2f38d48fab85f75079e489b218764516f3befc568932da57f36a7cf",
+      "bytes": 9213,
+      "mtime": "2026-09-15T20:51:17.539486+00:00",
+      "satir": 211
+    },
+    {
+      "path": "data/eval/regeneration_plan_2026-09-15.json",
+      "var": true,
+      "sha256": "96fd4e3f019611415811a75c46762864495431364b0b6bce27c2b6c05e7371f5",
+      "bytes": 47715,
+      "mtime": "2026-09-15T20:52:01.613936+00:00",
+      "satir": 559
+    },
+    {
+      "path": "data/eval/t0038_kosullanma_olcutu_icraat_2026-09-15.json",
+      "var": true,
+      "sha256": "8142d1757b292b228fe6056f5bd460f870cbdce33f3fb356027ee2c914f262cb",
+      "bytes": 6152,
+      "mtime": "2026-09-15T20:54:34.372607+00:00",
+      "satir": 134
+    },
+    {
+      "path": "scratch/t0038_olcut_probe.py",
+      "var": true,
+      "sha256": "8eb6392c3fd2430a88d9499bdefd584fb931d8c292da8dcf31292d9bd8b7c07e",
+      "bytes": 8193,
+      "mtime": "2026-09-15T21:12:42.689021+00:00",
+      "satir": 203
+    },
+    {
+      "path": "scratch/t0038_olcut_ham.json",
+      "var": true,
+      "sha256": "f34dd403fda49e39ef26e402bb72112b5f56d6d06666b73909f4573bde81ac5f",
+      "bytes": 12535,
+      "mtime": "2026-09-15T21:13:08.774117+00:00",
+      "satir": 466
+    },
+    {
+      "path": ".agent-bus/notes/T-0038.md",
+      "var": true,
+      "sha256": "61c1aca25aa7cf6a25f8373f69b6246a88c3141bea0a6185c515d6bb1d97279b",
+      "bytes": 2167,
+      "mtime": "2026-09-15T20:54:58.836486+00:00"
+    },
+    {
+      "path": ".agent-bus/state/tasks/T-0038.json",
+      "var": true,
+      "sha256": "794e3b444e85fcb84ad1af2bee93c002b188c8458a443df5e73cfe05f8796c63",
+      "bytes": 13416,
+      "mtime": "2026-09-15T20:55:21.910079+00:00",
+      "satir": 36
+    },
+    {
+      "path": ".agent-bus/state/results/T-0038.json",
+      "var": true,
+      "sha256": "bc5bef3feb55dc0f72c57b781a5903eb41f9c11b5c20b352fe1fca6ac38c2b02",
+      "bytes": 1744,
+      "mtime": "2026-09-15T20:55:21.908306+00:00",
+      "satir": 26
+    },
+    {
+      "path": ".agent-bus/frozen.json",
+      "var": true,
+      "sha256": "c2eb9a69492d7a4e6eba78d3a7b3ded1544182fe1d88950e7e7f627dacdf77fa",
+      "bytes": 1086,
+      "mtime": "2026-09-14T09:40:04.020114+00:00",
+      "satir": 24
+    },
+    {
+      "path": "data/eval/t0034_criterion_and_generator_2026-09-15.json",
+      "var": true,
+      "sha256": "c7a2ef886984e2d328c6baec5aeed937d721b8ac91f9aa0790ee11824cdb874a",
+      "bytes": 52444,
+      "mtime": "2026-09-15T18:01:42.411243+00:00",
+      "satir": 1510
+    },
+    {
+      "path": "data/eval/t0036_kosullanma_olcutu_2026-09-15.json",
+      "var": true,
+      "sha256": "e6c1bec112f306f0bccf0b827f333737b5b19f74ab7bc52e0214f3284fb3b8cb",
+      "bytes": 28186,
+      "mtime": "2026-09-15T19:43:48.472120+00:00",
+      "satir": 532
+    },
+    {
+      "path": "data/eval/t0035_verification.json",
+      "var": true,
+      "sha256": "0eb5951b90fcb159b5a781ea37cc0ed15240f1f1ebbdfb127f06d055b3d1dbe8",
+      "bytes": 22022,
+      "mtime": "2026-09-15T19:37:37.224175+00:00",
+      "satir": 264
+    },
+    {
+      "path": "data/eval/t0036_verification.json",
+      "var": true,
+      "sha256": "c96f9b10331294ee22550173e11c742c5d63de4effb73d65d0cde47ba81d0f3d",
+      "bytes": 18898,
+      "mtime": "2026-09-15T19:58:25.612791+00:00",
+      "satir": 269
+    },
+    {
+      "path": "scratch/t0036_kosullanma_probe.py",
+      "var": true,
+      "sha256": "88e48377503ef4eaf88a1c54774ee94cc255cdc4bb091df918a5997ceaa95eb4",
+      "bytes": 16515,
+      "mtime": "2026-09-15T19:35:37.895922+00:00",
+      "satir": 426
+    },
+    {
+      "path": "scratch/t0036_kosullanma_ham.json",
+      "var": true,
+      "sha256": "39c2e29293b7b7155bd771b95c4c8b1da4eaf03fce2297f4449152371418a0cd",
+      "bytes": 61167,
+      "mtime": "2026-09-15T19:36:42.185463+00:00",
+      "satir": 2261
+    },
+    {
+      "path": "data/rebuild/vocab_base_32816.json",
+      "var": true,
+      "sha256": "8cc31d82d144cff0e9f55342ba7168a17890a79cdf8439549569c699c08b7fdc",
+      "bytes": 741046,
+      "mtime": "2026-09-15T07:06:05.845790+00:00"
+    },
+    {
+      "path": "data/rebuild/vocab_base_32852.json",
+      "var": true,
+      "sha256": "7611b6a523a2bb524cc21aa9cc64235aa6a2ae99f87f46ac51cb2915e61164ad",
+      "bytes": 741650,
+      "mtime": "2026-09-15T20:35:13.896626+00:00"
+    },
+    {
+      "path": "data/rebuild/vocab_carpenter_32137.json",
+      "var": true,
+      "sha256": "7184fbba1d7bb7ef13567a9cbe2738ae740a1ff08aea1a892c83b9faa8ab4987",
+      "bytes": 725388,
+      "mtime": "2026-09-15T06:46:44.273754+00:00"
+    },
+    {
+      "path": "data/kristal_model.pt",
+      "var": true,
+      "sha256": "02e15b8198f8f3334609eb52691d699e80f88972245377c1a79772cb42ae1679",
+      "bytes": 472572529,
+      "mtime": "2026-09-13T18:14:31.089550+00:00"
+    },
+    {
+      "path": "data/kristal_carpenter_model.pt",
+      "var": true,
+      "sha256": "5f0b8c71727d15e338e4301634b0d05652c3230cebc532b1124aff3761e93b4d",
+      "bytes": 374026701,
+      "mtime": "2026-09-13T08:40:29.263047+00:00"
+    },
+    {
+      "path": "data/pedagogy/cot_vault.jsonl",
+      "var": true,
+      "sha256": "97b06fe5befd6613b520d28dc20a74deaeb30e4e8f7e6675a23720a019ff5619",
+      "bytes": 91867,
+      "mtime": "2026-09-15T07:37:37.529896+00:00",
+      "satir": 91
+    },
+    {
+      "path": "data/future_train_vector.jsonl",
+      "var": true,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "mtime": "2026-09-13T07:09:18.125619+00:00",
+      "satir": 0
+    }
+  ],
+  "iddia_tablosu": [
+    {
+      "iddia": "K1 modul dosyasi repoda, imza spec ile uyumlu",
+      "benim_olcumum": "VAR; imza (prompt_text: str, output_text: str, tokenizer: Any, vocab: Any) -> Dict[str, Any]",
+      "raporun_beyani": "AYNI (anotasyon sapmasi V10)",
+      "uzlasma": "TAM"
+    },
+    {
+      "iddia": "K1 formul Recall = sum(min(C_P,C_O))/len(C_P)",
+      "benim_olcumum": "T-0036 YAZILI tanimiyla metin-ozdes",
+      "raporun_beyani": "AYNI",
+      "uzlasma": "TAM"
+    },
+    {
+      "iddia": "K1 formul RP(O) = min(1.0,(uniq(C_O)/len(C_O))/0.70)",
+      "benim_olcumum": "metin-ozdes; esik 0.70",
+      "raporun_beyani": "AYNI",
+      "uzlasma": "TAM"
+    },
+    {
+      "iddia": "K1 saf fonksiyon, global mutable durum yok",
+      "benim_olcumum": "5 cagri sonrasi global kimlik degisimi = [] (olculdu)",
+      "raporun_beyani": "beyan edildi",
+      "uzlasma": "TAM"
+    },
+    {
+      "iddia": "K1 sabitler T-0036 ile ayni",
+      "benim_olcumum": "PUNCT/AFFIX_PREFIXES/STOPWORDS birebir ayni",
+      "raporun_beyani": "beyan edildi",
+      "uzlasma": "TAM"
+    },
+    {
+      "iddia": "K1 T-0036 probe'una karsi davranis ozdesligi",
+      "benim_olcumum": "400 rastgele ciftte fark = 0",
+      "raporun_beyani": "beyan edilmedi (bu turda olculdu)",
+      "uzlasma": "TAM"
+    },
+    {
+      "iddia": "K2 plan duzeltmesi minimal ve onceki metin korunmus",
+      "benim_olcumum": "before sha bayt-ozdes URETILDI; yalniz D-E degisti; 8 satir",
+      "raporun_beyani": "beyan: 8 satir",
+      "uzlasma": "TAM"
+    },
+    {
+      "iddia": "K2 kriter_onceki_metin bayt-ozdes",
+      "benim_olcumum": "b0.kriter == onceki_metin (yeniden kurulum sha'i tuttu)",
+      "raporun_beyani": "beyan edildi",
+      "uzlasma": "TAM"
+    },
+    {
+      "iddia": "K2 diger plan alanlari degismedi",
+      "benim_olcumum": "D-A..D-D, kabul[1..3], onceki_metin/tarih/gerekce/olcum_kaynagi sabit",
+      "raporun_beyani": "beyan edildi",
+      "uzlasma": "TAM"
+    },
+    {
+      "iddia": "K3 7 test dosyasi, pytest yesil (sandbox disi)",
+      "benim_olcumum": "166 toplam / 159 onsuz / 7 dosyada = 159+7",
+      "raporun_beyani": "7 passed, 166 passed",
+      "uzlasma": "TAM"
+    },
+    {
+      "iddia": "K3 KANARYA-1 birebir kopya skoru >= 0.99",
+      "benim_olcumum": "olculdu 1.0000, bos=False",
+      "raporun_beyani": "deger YAZILMADI (V7)",
+      "uzlasma": "KISMEN"
+    },
+    {
+      "iddia": "K3 KANARYA-2 bos cikti skoru == 0.0",
+      "benim_olcumum": "olculdu 0.0000, bos=True",
+      "raporun_beyani": "deger YAZILMADI (V7)",
+      "uzlasma": "KISMEN"
+    },
+    {
+      "iddia": "K3 KANARYA-3 alakasiz cikti skoru < 0.05",
+      "benim_olcumum": "olculdu 0.0000",
+      "raporun_beyani": "deger YAZILMADI (V7)",
+      "uzlasma": "KISMEN"
+    },
+    {
+      "iddia": "K3 KANARYA-4 eslesen > capraz",
+      "benim_olcumum": "kendi kurgu ciftlerinde GECTI; GERCEK 5-istem popülasyonunda matched_min 0.0 < capraz_max 0.1538",
+      "raporun_beyani": "deger YAZILMADI (V7)",
+      "uzlasma": "KISMEN"
+    },
+    {
+      "iddia": "K3 MUTANT kontrolu: bozulan formulde en az bir kanarya KIRMIZI",
+      "benim_olcumum": "M2 (payda len(C_O)) ve M3 (RP=1.0) enjekte edildiginde HICBIR test kirmizi olmadi",
+      "raporun_beyani": "beyan: 'Mutant A ve B birer kanarya kirdi'; OLCULEN KIRMIZI YOK",
+      "uzlasma": "YOK (V2)"
+    },
+    {
+      "iddia": "K4 istemler T-0034 prompt_str'den okundu",
+      "benim_olcumum": "probe vaka['prompt_str'] kullaniyor; ham'da [:200] kirpik",
+      "raporun_beyani": "beyan edildi",
+      "uzlasma": "KISMEN (V6: assert yok)"
+    },
+    {
+      "iddia": "K4 kanonik uretim (greedy, temp 0.0, maskeli etiketler, 256 baglam, max 128)",
+      "benim_olcumum": "kaynak okundu, ayarlar kanonik",
+      "raporun_beyani": "beyan edildi",
+      "uzlasma": "TAM"
+    },
+    {
+      "iddia": "K4 device kaydedildi, sandbox disi kosuldu",
+      "benim_olcumum": "mps (bagimsiz kosumda da mps: True)",
+      "raporun_beyani": "beyan: 'mps (sandbox disinda kosuldu)'",
+      "uzlasma": "TAM"
+    },
+    {
+      "iddia": "K4 ciktilar yeniden uretilebilir",
+      "benim_olcumum": "BAGIMSIZ yeniden uretim: taban 5/5 ve marangoz 5/5 cikti-ozdes",
+      "raporun_beyani": "beyan edilmedi (bu turda olculdu)",
+      "uzlasma": "TAM"
+    },
+    {
+      "iddia": "K4 taban 2/5, marangoz 0/5; P2 her ikisinde 0.0",
+      "benim_olcumum": "taban {0.1667,0,0,0.3846,0.5} = 2/5; marangoz {0.1667,0,0,0,0} = 0/5",
+      "raporun_beyani": "AYNI",
+      "uzlasma": "TAM"
+    },
+    {
+      "iddia": "K4 T-0036 matched_scores ile karsilastirma",
+      "benim_olcumum": "temel satiri dogru verilmis ve bit_ozdes; ama marangoz satiri celisiyor (P5 0.1667 vs 0.0)",
+      "raporun_beyani": "yalniz temel; bit_ozdes: true",
+      "uzlasma": "KISMEN (V3)"
+    },
+    {
+      "iddia": "K4 acceptance[9]: iki sozluk yan yana kosuldu",
+      "benim_olcumum": "vocab_base_32852.json diskte VARDI, kosulmadi; 32137 kosuldu",
+      "raporun_beyani": "beyan: 'iki sozluk'",
+      "uzlasma": "YOK (V4)"
+    },
+    {
+      "iddia": "metadata.vocab_sha_marangoz dogru",
+      "benim_olcumum": "22cb3359... hicbir dosyayla ve hicbir hash konvansiyonuyla eslesmiyor; gercek 7184fbba...",
+      "raporun_beyani": "AYNI (yanlis)",
+      "uzlasma": "YOK (V1)"
+    },
+    {
+      "iddia": "K4 noktalama bileseni (kriter 1. conjunct) olculdu",
+      "benim_olcumum": "olculmedi; taban P2 = 7 noktalama tokeni / 39 (kriter (a) SAGLANIYOR), marangoz 5 istemde 0",
+      "raporun_beyani": "hic olculmedi",
+      "uzlasma": "YOK (V11)"
+    },
+    {
+      "iddia": "K5 kapsam disi: donmus yol / .pt / .bin / egitim yok",
+      "benim_olcumum": "38 .pt + 14 .bin tarandi, pencere icinde degisen YOK; egitim kosusu yok",
+      "raporun_beyani": "beyan: 0",
+      "uzlasma": "TAM"
+    },
+    {
+      "iddia": "K5 onceki_sonraki_hash cot_vault + future_train_vector",
+      "benim_olcumum": "sha ve satir sayilari diskle ayni; ISO damga YOK",
+      "raporun_beyani": "beyan edildi",
+      "uzlasma": "KISMEN (V9)"
+    },
+    {
+      "iddia": "K5 kapanis: changed_files tam kapsam",
+      "benim_olcumum": "sonuc dosyasi 6 yol; beyan edilen 2 scratch dosyasi YOK",
+      "raporun_beyani": "kapanis 20:55:21Z",
+      "uzlasma": "YOK (V5)"
+    }
+  ],
+  "kabul_kriterleri": [
+    {
+      "no": 1,
+      "kriter": "Modul repoda, spec imzasiyla, formuller YAZILI tanimdan",
+      "durum": "TAM",
+      "gerekce": "Imza ve formul metni dogrulandi; 400 cift diferansiyel fark 0. Anotasyon Any (V10)."
+    },
+    {
+      "no": 2,
+      "kriter": "Skorlar T-0036 matched_scores ile karsilastirildi; yol+sha256 beyan edildi",
+      "durum": "KISMEN",
+      "gerekce": "T-0036 temel satiri dogru; marangoz satiri (P5) celisiyor ve beyan edilmemis (V3)."
+    },
+    {
+      "no": 3,
+      "kriter": "Kriter metni Conditioning_Score(P,O) >= 0.20 + olcum kapsami; kriter_onceki_metin bayt-ozdes; 4 eski alan sabit",
+      "durum": "TAM",
+      "gerekce": "Yeniden kurulum before-sha'i bayt-ozdes uretti; 4 alan degismedi."
+    },
+    {
+      "no": 4,
+      "kriter": "Planin geri kalani degismedi; before/after sha256 + byte + degisen satir",
+      "durum": "TAM",
+      "gerekce": "Yalniz D-E.kabul[0]; 8 degisen satir; byte 46790->47715."
+    },
+    {
+      "no": 5,
+      "kriter": "Durum durustce (hedef BUGUN tutmuyor); model basina gecen sayisi; P2 = 0.0",
+      "durum": "TAM",
+      "gerekce": "taban 2/5, marangoz 0/5, P2 her ikisinde 0.0 - bagimsiz yeniden uretimle ayni."
+    },
+    {
+      "no": 6,
+      "kriter": "Dort kanaryanin OLCULEN degerleri rapora yazildi",
+      "durum": "YOK",
+      "gerekce": "Rapor yalniz test ADLARINI ve pytest satirini yazmis; deger yok (V7). Ben olctum."
+    },
+    {
+      "no": 7,
+      "kriter": "MUTANT kontrol: formul kasitli bozuldugunda >=1 kanarya KIRMIZI; yoksa VAKUM bulgusu",
+      "durum": "YOK",
+      "gerekce": "Enjekte edilen M2/M3 altinda test setinin TAMAMI yesil; rapor hicbir KIRMIZI kaydetmemis (V2)."
+    },
+    {
+      "no": 8,
+      "kriter": "Istemler elle yazilmadi, T-0034 prompt_str'den okundu ve ASSERT edildi; kanonik uretim; device; sandbox disi",
+      "durum": "KISMEN",
+      "gerekce": "prompt_str okunuyor ama assert yok, ham'da [:200] kirpik (V6). Kanonik ayarlar/device/sandbox-disi TAM."
+    },
+    {
+      "no": 9,
+      "kriter": "Iki sozluk (32816 ve 32852) yan yana kosuldu",
+      "durum": "YOK",
+      "gerekce": "32852 diskte vardi (mtime 20:35:13Z < 20:46), kosulmadi (V4). Olctum: skorlar ayni."
+    },
+    {
+      "no": 10,
+      "kriter": "pytest sandbox DISINDA yesil + sayilar",
+      "durum": "TAM",
+      "gerekce": "166/159/7; 159+7=166."
+    },
+    {
+      "no": 11,
+      "kriter": "cot_vault + future_train_vector once/sonra sha256 + satir + ISO damga; donmus yol/.pt/.bin/egitim yok",
+      "durum": "KISMEN",
+      "gerekce": "sha ve satirlar TAM; ISO damga yok (V9). Kapsam disi TAM (38 .pt + 14 .bin, 0 degisim)."
+    },
+    {
+      "no": 12,
+      "kriter": "Kiralar (src/eval/ dizin, plan + test dosya), hepsi serbest, bus_lease_status bos",
+      "durum": "TAM",
+      "gerekce": "5 alindi / 5 serbest, hepsi antigravity; benim dogrulama kiram ayri."
+    },
+    {
+      "no": 13,
+      "kriter": "git add -A yok; degisen yollar writes[] icinde; her sayinin TAM komutu; '...' kisaltma yok",
+      "durum": "KISMEN",
+      "gerekce": "Kapsam TAM; ama cmd_taban/cmd_marangoz/k2_plan_guncelleme '...' ile kisaltilmis ve pencere taramasi hic yok (V5); git add -A kullanilmadi."
+    }
+  ],
+  "bulgular": [
+    {
+      "id": "V1",
+      "onem": "YUKSEK",
+      "baslik": "Rapordaki marangoz sozluk hash'i hicbir dosyayla eslesmiyor ve gorevin KENDI ham ciktisiyla celisiyor",
+      "olcum": "metadata.vocab_sha_marangoz degeri '22cb3359...' seklinde '...' ILE KISALTILMIS bir dizedir (8 hex karakter) - yani hash olarak kullanilamaz ve kabul 13'un '...' yasagi ile de celisir. data/rebuild/vocab_carpenter_32137.json gercek sha256 = 7184fbba1d7bb7ef13567a9cbe2738ae740a1ff08aea1a892c83b9faa8ab4987. 10 hash konvansiyonu x 5 sozluk dosyasi + data/ scratch/ kok altinda tam yuruyus: eslesme YOK. Ayni gorevin ham ciktisi scratch/t0038_olcut_ham.json -> meta.vocab_carp_sha = 7184fbba... (DOGRU), yani rapor kendi kanitiyla celisiyor.",
+      "kaynak": "Deger data/eval/t0035_verification.json icinde zaten UYARILMIS bir mesaj hash'i (22cb3359) - yani bilinen yanlis bir hash yeni bir kalici yuzeye TASINMIS.",
+      "etki": "Olcum sayilari etkilenmiyor (probe dogru sozlukle kostu) ancak kalici rapor yanlis atif tasiyor.",
+      "oneri": "Kalici yuzeyde hash tablosu tutulmaz; rapora yol+sha256 yazilir ve REPORT ANINDA tazelenir."
+    },
+    {
+      "id": "V2",
+      "onem": "YUKSEK",
+      "baslik": "Mutant kontrolu VAKUM: testler kendi yerel kopyalarini olcuyor, modulu DEGISTIRMIYOR",
+      "olcum": "Mutantlar gercek modulun icine enjekte edildi ve gonderilen test govdeleri kosturuldu: M1 (skor hep 0.0) -> kanarya1 + kanarya4 KIRMIZI; M2 (payda len(C_O)) -> KIRMIZI YOK; M3 (RP sabit 1.0) -> KIRMIZI YOK; M4 (eleme tamamen kaldirildi) -> kanarya2 + kanarya3 KIRMIZI. test_mutant_broken_formula_triggers_canary - tam da M2/M3 icin vakuum-olmadigini kanitlamakla gorevli test - DORT mutantin HEPSINDE yesil kaldi.",
+      "mekanizma": "Test mutantlari YEREL yeniden uygulamalar olarak tanimliyor ve gercek modulun ciktisiyla FARKINA bakiyor (|mutant - gercek| > 0.01). Modulun KENDISI mutant oldugunda fark yine buyuk kalir, dolayisiyla test hicbir zaman kirmizi olamaz; parametre kendine gonderiliyor.",
+      "etki": "Kabul kriteri 7 karsilanmadi; rapor 'Mutant A ve B birer kanarya kirdi' diyor ama OLCULEN kirmizi kaydetmiyor.",
+      "oneri": "Mutant modulun ICINE enjekte edilip GONDERILEN test govdeleri kosturulur; en az bir KIRMIZI kaydedilir."
+    },
+    {
+      "id": "V3",
+      "onem": "YUKSEK",
+      "baslik": "T-0036 karsilastirmasi yarim: temel satiri dogru, marangoz satiri celisiyor; taban kaydinda suruklenme",
+      "olcum": "T-0036 matched_scores: temel = [0.1667, 0.0, 0.0, 0.3846, 0.5] (raporun verdigiyle ayni, bit_ozdes); marangoz = [0.1667, 0.0, 0.0, 0.0, 0.1667] iken T-0038 bugun [0.1667, 0.0, 0.0, 0.0, 0.0] olctu -> P5 CELISIYOR (0.1667 vs 0.0). Rapor marangoz satirini hic vermemis.",
+      "kok_neden": "T-0036 kaydindaki marangoz uretimleri (generation_runs.marangoz.max_128) bugun yeniden uretilebilen ciktilarla BES istemin BESINDE de farkli: token sayilari T-0036 {P1 15, P2 45, P3 15, P4 44, P5 29} vs bugun {P1 17, P2 31, P3 20, P4 33, P5 31}. Istem zarfi kokleri 5/5 ayni; sozluk surumu fark yaratmiyor ve greedy MPS deterministik (3/3 tekrar ozdes) -> ceket taban kaydinda gercek suruklenme, ornekleme gurultusu degil.",
+      "etki": "Baslik hukum (hedef bugun tutmuyor) DEGISMIYOR: taban 2/5 ve marangoz 0/5 ayni kaliyor. Ancak '0/5 vs 0/5 uyumu' kismen rastlanti; ayrica raporun V2 metni 'Tum marangoz skorlari 0.0' derken kendi tablosunda P1 = 0.1667 yaziyor.",
+      "oneri": "T-0036'nin marangoz satiri duzeltilir; taban kaydi tazelenmeden 'uyum' iddiasi kurulmaz."
+    },
+    {
+      "id": "V4",
+      "onem": "ORTA",
+      "baslik": "Kabul 9 karsilanmadi: vocab_base_32852.json diskte vardi ama kosulmadi",
+      "olcum": "data/rebuild/vocab_base_32852.json mtime 2026-09-15T20:35:13Z (gorev 20:46'da basladi) - yani gorev baslarken VARDI. Rapor bunun yerine ceketin kendi sozlugu 32137'yi kosup 'iki sozluk' diye sunmus.",
+      "etki_olcumu": "Sayisal sonuc YOK: 32852 ile 32816 ayni skorlari veriyor (5/5 istem kodlamasi ozdes, 5/5 skor ozdes); 36 dolgu satiri hicbir zaman argmax'i kazanmiyor. Yani kriter karsilanmadi ama sayilar curumedI.",
+      "oneri": "Kabul maddesi 'hangi iki sozluk' diye ACik yazilsin; hangi sozlugun kosuldugu raporda yol+sha256 ile verilsin."
+    },
+    {
+      "id": "V5",
+      "onem": "ORTA",
+      "baslik": "Kapanis sirasi tersine donmus: sonuc 'done' yazildiktan SONRA beyan edilen artefaktlar uretilmis",
+      "olcum": "result_reported status=done 2026-09-15T20:55:21Z; kiralar 20:55:26Z'de serbest. Ardindan 21:12:00Z'de IKINCI tur kiralama acilmis ve beyan edilen iki scratch dosyasi 21:12:42Z / 21:13:08Z'de yazilmis (21:14:15Z'de serbest). Raporun kendisi 20:54:34Z tarihli.",
+      "etki": "Rapor K4 sayilarini kapandiktan sonra yazilmis bir probe'un urettigi ham veriye dayandiriyor; rapor icindeki cmd_taban/cmd_marangoz komutlari '...' ile kisaltilmis bir satir-ici komuttan geliyor. changed_files 6 yol ve beyan edilen iki scratch dosyasini ICERMIYOR -> uc-sinyal kapanis kapisinin kapsam sinyali BASARISIZ. Kabul 13'un istedigi pencere taramasi (os.walk + st_mtime) raporda hic yok.",
+      "kendi_taramam": "20:46:00Z - 21:15:00Z penceresinde 13 yol degisti; hepsi kaynak duzeyinde ve writes[]/notes beyanindan ibaret; donmus yol YOK.",
+      "oneri": "Beyan edilen artefaktlar kapanistan ONCE uretilir; changed_files beyan edilen kapsami tam kapsar."
+    },
+    {
+      "id": "V6",
+      "onem": "ORTA",
+      "baslik": "Kabul 8 kismen: istem T-0034'ten okunuyor ama ASSERT edilmiyor",
+      "olcum": "scratch/t0038_olcut_probe.py vaka['prompt_str'] okuyor (elle yazim yok - dogru), ancak kendini dogrulayan bir assert yok; ham dosyaya prompt_str[:200] KIRPILMIS yazilmis.",
+      "etki": "Tek karakterlik bir sapma bulgu yazmadan yakalanamaz; ham dosyadan tam istem geri kurulamaz.",
+      "oneri": "Probe istemini raporun sakladigi prompt_str'ye karsi assert etsin; ham'a tam metin yazilsin."
+    },
+    {
+      "id": "V7",
+      "onem": "DUSUK",
+      "baslik": "Kabul 6 karsilanmadi: kanaryalarin OLCULEN degerleri rapora yazilmamis",
+      "olcum": "Rapor yalniz test adlarini ve '7 passed' satirini kaydetmis. Ben olctum: kanarya1 1.0000 (bos=False); kanarya2 0.0000 (bos=True); kanarya3 0.0000; kanarya4 kendi kurgu ciftlerinde GECTI. Deger yoksa kanarya yesili kanit degildir.",
+      "not": "Ek olarak: kanarya4'un ciftlerini test KENDISI seciyor. GERCEK 5-istem popülasyonunda ayrim TUTMUYOR (eslesen min 0.0 < capraz max 0.1538, 20 capraz cift). Kanarya metrigin ayirt ettigini degil, secili iki ornekte ayirt ettigini gosteriyor.",
+      "oneri": "Dort kanaryanin olculen degeri rapora yazilir."
+    },
+    {
+      "id": "V8",
+      "onem": "DUSUK",
+      "baslik": "test_canary4 docstring'i yanlis kaynak ve yanlis etiket gosteriyor",
+      "olcum": "'T-0036'da olculen: capraz max 0.0769' - 0.0769 T-0036 raporunda veya ham'inda HIC GECMIYOR (T-0036 capraz max: temel 0.1538 / marangoz 0.1667). Sayi data/eval/t0036_verification.json icindeki AYNI_KOK_FARKLI_ISTEM degerinden geliyor.",
+      "etki": "Sayi dogru, kaynak belgesi ve etiketi yanlis; baska bir istemin olcumu 'capraz max' diye sunulmus.",
+      "oneri": "Docstring kaynagi ve etiketi duzeltilir; sayi kendi belgesinden alinir."
+    },
+    {
+      "id": "V9",
+      "onem": "DUSUK",
+      "baslik": "Kabul 11 kismen: cot_vault ve future_train_vector icin ISO damga yok",
+      "olcum": "onceki_sonraki_hash kayitlari yalniz sha/lines/unchanged tasiyor; plan bloğunda sha_before/sha_after/cmd var, ISO damga hicbirinde yok. Degerlerin kendisi diskle uyumlu.",
+      "oneri": "Once/sonra kayitlarina ISO damga eklenir."
+    },
+    {
+      "id": "V10",
+      "onem": "DUSUK",
+      "baslik": "Imza anotasyonu ve olcum_kaynagi_2 bicimi spec'ten sapiyor",
+      "olcum": "Spec tokenizer: KristalTokenizer, vocab: Vocabulary istedi; modul tokenizer: Any, vocab: Any kullaniyor. Plan icindeki olcum_kaynagi_2 duz str (kardesi olcum_kaynagi {yol, sha256} sozlugu) ve kaynak olarak T-0038 raporunun KENDISINI gosteriyor (kendine atif). Ayrica modul docstring'i AFFIX_PREFIXES'i 'T-0036 raporundan' diye etiketliyor; kaynak probe.",
+      "oneri": "Anotasyonlar spec'e cekilir; olcum_kaynagi_2 sozluk bicimine getirilir ve dis kaynak gosterir."
+    },
+    {
+      "id": "V11",
+      "onem": "DUSUK",
+      "baslik": "Raporun V1 'etki' satiri gorevin KENDI yazdigi P2-kapsamli kriteri yanlis okuyor",
+      "olcum": "Rapor '2/5 geciyor, 5/5 bekleniyor' diyor; oysa ayni gorevin plana yazdigi kriter olcum kapsamini P2_Noktalama istemiyle SINIRLIYOR. Kriterin 1. bileseni (uretilen noktalama tokeni > 0) raporda hic olculmemis. Ben olctum: taban_32816 P2 = 7 noktalama tokeni / 39 token (bilesen (a) SAGLANIYOR, (b) saglanmiyor); marangoz_32137 bes istemde de 0 noktalama tokeni uretiyor (bilesen (a) da sapiyor).",
+      "etki": "Hedefin tutmadigi yonu (ceket noktalama hic uretmiyor) ve tabanin kismi basarisini gizliyor.",
+      "oneri": "Kriterin her iki bileseni ayri ayri olculur ve rapor kapsami kriterin kapsamiyla ayni tutulur."
+    }
+  ],
+  "kanit": {
+    "k1_diferansiyel": {
+      "yontem": "data/eval/t0036 kosumunda kullanilan probe implementasyonuna karsi 400 rastgele cift",
+      "cift": 400,
+      "skor_farki": 0,
+      "koke_farki": 0,
+      "hukum": "Modulun davranisi T-0036'nin YAZILI tanimiyla ozdes."
+    },
+    "k1_imza": {
+      "imza": "(prompt_text: str, output_text: str, tokenizer: Any, vocab: Any) -> Dict[str, Any]",
+      "donus_anahtarlari": [
+        "score",
+        "recall",
+        "rep_penalty",
+        "common_roots",
+        "prompt_roots",
+        "output_roots",
+        "bos"
+      ],
+      "saflik": "5 cagri sonrasi modul global kimlik degisimi = [] (mutasyon yok)"
+    },
+    "k2_minimal_diff": {
+      "yontem": "D-E.kabul[0]'dan eklenen 4 anahtar cikarilip kriter kriter_onceki_metin'den geri konuldu, json.dumps(ensure_ascii=False, indent=2) + '\\n' ile serilestirildi",
+      "sha_before_raporun_iddiasi": "e24c741cbd6707904953bf397258184db1761914c6de5ea89af1a1d30c5fdd4c",
+      "sha_before_benim_uretimim": "e24c741cbd6707904953bf397258184db1761914c6de5ea89af1a1d30c5fdd4c",
+      "before_bayt_ozdes": true,
+      "sha_after_raporun_iddiasi": "96fd4e3f019611415811a75c46762864495431364b0b6bce27c2b6c05e7371f5",
+      "sha_after_disk": "96fd4e3f019611415811a75c46762864495431364b0b6bce27c2b6c05e7371f5",
+      "after_bayt_ozdes": true,
+      "byte_before": 46790,
+      "byte_after": 47715,
+      "degisen_satir_sayisi": 8,
+      "degisen_alan": "yalniz decisions_resolved_2026_09_15.D-E.kabul[0]",
+      "degismeyenler_dogrulandi": [
+        "D-A",
+        "D-B",
+        "D-C",
+        "D-D",
+        "kabul[1]",
+        "kabul[2]",
+        "kabul[3]",
+        "onceki_metin",
+        "duzeltme_tarihi",
+        "duzeltme_gerekcesi",
+        "olcum_kaynagi"
+      ]
+    },
+    "k3_mutant_matrisi": {
+      "yontem": "Mutantlar GERCEK modulun icine enjekte edildi; gonderilen test GOVDELERI kosturuldu",
+      "gercek_modul": {
+        "test_canary1_self_copy_score_near_1": "GECTI",
+        "test_canary2_empty_output_score_zero": "GECTI",
+        "test_canary3_irrelevant_output_score_low": "GECTI",
+        "test_canary4_separation_matched_above_cross": "GECTI",
+        "test_module_importable": "GECTI",
+        "test_mutant_broken_formula_triggers_canary": "GECTI",
+        "test_return_keys": "GECTI"
+      },
+      "M1_skor_hep_0": {
+        "test_canary1_self_copy_score_near_1": "KIRMIZI: Beklenen ≥0.99 (birebir kopya), alınan: 0.0000",
+        "test_canary2_empty_output_score_zero": "GECTI",
+        "test_canary3_irrelevant_output_score_low": "GECTI",
+        "test_canary4_separation_matched_above_cross": "KIRMIZI: Doğru eşleşme (min=0.0000) çapraz max (0.0000) üzerinde olmalı",
+        "test_module_importable": "GECTI",
+        "test_mutant_broken_formula_triggers_canary": "GECTI",
+        "test_return_keys": "GECTI"
+      },
+      "M2_payda_lenCO": {
+        "test_canary1_self_copy_score_near_1": "GECTI",
+        "test_canary2_empty_output_score_zero": "GECTI",
+        "test_canary3_irrelevant_output_score_low": "GECTI",
+        "test_canary4_separation_matched_above_cross": "GECTI",
+        "test_module_importable": "GECTI",
+        "test_mutant_broken_formula_triggers_canary": "GECTI",
+        "test_return_keys": "GECTI"
+      },
+      "M3_rp_sabit_1": {
+        "test_canary1_self_copy_score_near_1": "GECTI",
+        "test_canary2_empty_output_score_zero": "GECTI",
+        "test_canary3_irrelevant_output_score_low": "GECTI",
+        "test_canary4_separation_matched_above_cross": "GECTI",
+        "test_module_importable": "GECTI",
+        "test_mutant_broken_formula_triggers_canary": "GECTI",
+        "test_return_keys": "GECTI"
+      },
+      "M4_elemesiz": {
+        "test_canary1_self_copy_score_near_1": "GECTI",
+        "test_canary2_empty_output_score_zero": "KIRMIZI: Beklenen 0.0, alınan: 0.18181818181818182",
+        "test_canary3_irrelevant_output_score_low": "KIRMIZI: Beklenen <0.05 (alakasız), alınan: 0.1818",
+        "test_canary4_separation_matched_above_cross": "GECTI",
+        "test_module_importable": "GECTI",
+        "test_mutant_broken_formula_triggers_canary": "GECTI",
+        "test_return_keys": "GECTI"
+      },
+      "ozet_kirmizi": {
+        "M1_skor_hep_0": [
+          "test_canary1_self_copy_score_near_1",
+          "test_canary4_separation_matched_above_cross"
+        ],
+        "M2_payda_lenCO": [],
+        "M3_rp_sabit_1": [],
+        "M4_elemesiz": [
+          "test_canary2_empty_output_score_zero",
+          "test_canary3_irrelevant_output_score_low"
+        ]
+      },
+      "hukum": "M2 ve M3 altinda test setinin TAMAMI yesil -> mutant kontrolu VAKUM (V2)."
+    },
+    "kanarya_olculen": {
+      "c1_kopya": 1.0,
+      "c1_bos": false,
+      "c2_bos_cikti_skor": 0.0,
+      "c2_bos": true,
+      "c3_alakasiz_skor": 0.0,
+      "c4_eslesen": [
+        [
+          "P1_Genel_Edebiyat",
+          0.1667
+        ],
+        [
+          "P2_Noktalama",
+          0.0
+        ],
+        [
+          "P3_Rakam",
+          0.0
+        ],
+        [
+          "P4_Marangoz_Ezber",
+          0.3846
+        ],
+        [
+          "P5_Marangoz_Parafraz",
+          0.5
+        ]
+      ],
+      "c4_eslesen_min": 0.0,
+      "c4_capraz_max": 0.1538,
+      "c4_capraz_n": 20
+    },
+    "kriter_bileseni_noktalama": {
+      "taban_32816": {
+        "P1_Genel_Edebiyat": {
+          "noktalama_tokeni": 7,
+          "cikti_tokeni": 87,
+          "skor": 0.1667
+        },
+        "P2_Noktalama": {
+          "noktalama_tokeni": 7,
+          "cikti_tokeni": 39,
+          "skor": 0.0
+        },
+        "P3_Rakam": {
+          "noktalama_tokeni": 6,
+          "cikti_tokeni": 63,
+          "skor": 0.0
+        },
+        "P4_Marangoz_Ezber": {
+          "noktalama_tokeni": 1,
+          "cikti_tokeni": 34,
+          "skor": 0.3846
+        },
+        "P5_Marangoz_Parafraz": {
+          "noktalama_tokeni": 1,
+          "cikti_tokeni": 34,
+          "skor": 0.5
+        }
+      },
+      "taban_32852": {
+        "P1_Genel_Edebiyat": {
+          "noktalama_tokeni": 7,
+          "cikti_tokeni": 87,
+          "skor": 0.1667
+        },
+        "P2_Noktalama": {
+          "noktalama_tokeni": 7,
+          "cikti_tokeni": 39,
+          "skor": 0.0
+        },
+        "P3_Rakam": {
+          "noktalama_tokeni": 6,
+          "cikti_tokeni": 63,
+          "skor": 0.0
+        },
+        "P4_Marangoz_Ezber": {
+          "noktalama_tokeni": 1,
+          "cikti_tokeni": 34,
+          "skor": 0.3846
+        },
+        "P5_Marangoz_Parafraz": {
+          "noktalama_tokeni": 1,
+          "cikti_tokeni": 34,
+          "skor": 0.5
+        }
+      },
+      "marangoz_32137": {
+        "P1_Genel_Edebiyat": {
+          "noktalama_tokeni": 0,
+          "cikti_tokeni": 17,
+          "skor": 0.1667
+        },
+        "P2_Noktalama": {
+          "noktalama_tokeni": 0,
+          "cikti_tokeni": 33,
+          "skor": 0.0
+        },
+        "P3_Rakam": {
+          "noktalama_tokeni": 0,
+          "cikti_tokeni": 20,
+          "skor": 0.0
+        },
+        "P4_Marangoz_Ezber": {
+          "noktalama_tokeni": 0,
+          "cikti_tokeni": 37,
+          "skor": 0.0
+        },
+        "P5_Marangoz_Parafraz": {
+          "noktalama_tokeni": 0,
+          "cikti_tokeni": 33,
+          "skor": 0.0
+        }
+      }
+    },
+    "p2_taban_tam_cikti": "Kiraz ağa DERIV_CI zamanla güneş . çok açık renk DERIV_lI , yoğun , Kokusuz ve sert COPULA_AORIST ; kesme tahta POSS_3PL , kasap blok POSS_3PL , müzik alet POSS_3PL ve gemi kamara POSS_3PL CASE_LOC_N kullanıl TENSE_AORIST .",
+    "k4_bagimsiz_yeniden_uretim": {
+      "yontem": "Probe IMPORT EDILMEDI; kanonik ayarlar bagimsiz yeniden kuruldu (greedy argmax, temp 0.0, maskeli etiketler, 256 baglam, max 128), sandbox DISINDA, ayri surecte",
+      "device": "mps",
+      "mps": true,
+      "kosumlar": {
+        "taban_32816": {
+          "ckpt_sha": "02e15b8198f8f3334609eb52691d699e80f88972245377c1a79772cb42ae1679",
+          "vocab_sha": "8cc31d82d144cff0e9f55342ba7168a17890a79cdf8439549569c699c08b7fdc",
+          "len_stoi": 32816,
+          "skorlar": {
+            "P1_Genel_Edebiyat": 0.1667,
+            "P2_Noktalama": 0.0,
+            "P3_Rakam": 0.0,
+            "P4_Marangoz_Ezber": 0.3846,
+            "P5_Marangoz_Parafraz": 0.5
+          },
+          "esigi_gecen": "2/5",
+          "yukleme": {
+            "okuma_sn": 0.79,
+            "toplam_sn": 1.2
+          }
+        },
+        "taban_32852": {
+          "ckpt_sha": "02e15b8198f8f3334609eb52691d699e80f88972245377c1a79772cb42ae1679",
+          "vocab_sha": "7611b6a523a2bb524cc21aa9cc64235aa6a2ae99f87f46ac51cb2915e61164ad",
+          "len_stoi": 32852,
+          "skorlar": {
+            "P1_Genel_Edebiyat": 0.1667,
+            "P2_Noktalama": 0.0,
+            "P3_Rakam": 0.0,
+            "P4_Marangoz_Ezber": 0.3846,
+            "P5_Marangoz_Parafraz": 0.5
+          },
+          "esigi_gecen": "2/5",
+          "yukleme": {
+            "okuma_sn": 0.81,
+            "toplam_sn": 1.84
+          }
+        },
+        "marangoz_32137": {
+          "ckpt_sha": "5f0b8c71727d15e338e4301634b0d05652c3230cebc532b1124aff3761e93b4d",
+          "vocab_sha": "7184fbba1d7bb7ef13567a9cbe2738ae740a1ff08aea1a892c83b9faa8ab4987",
+          "len_stoi": 32137,
+          "skorlar": {
+            "P1_Genel_Edebiyat": 0.1667,
+            "P2_Noktalama": 0.0,
+            "P3_Rakam": 0.0,
+            "P4_Marangoz_Ezber": 0.0,
+            "P5_Marangoz_Parafraz": 0.0
+          },
+          "esigi_gecen": "0/5",
+          "yukleme": {
+            "okuma_sn": 0.79,
+            "toplam_sn": 0.94
+          }
+        }
+      },
+      "yurutucunun_ham_ile_ozdeslik": {
+        "ham_ozdeslik_taban_32816": {
+          "cikti_ayni": "5/5",
+          "skor_ayni": "5/5"
+        },
+        "ham_ozdeslik_marangoz_32137": {
+          "cikti_ayni": "5/5",
+          "skor_ayni": "5/5"
+        },
+        "t0036_aciklama": null,
+        "t0036_temel": [
+          0.1667,
+          0.0,
+          0.0,
+          0.3846,
+          0.5
+        ],
+        "t0036_marangoz": [
+          0.1667,
+          0.0,
+          0.0,
+          0.0,
+          0.1667
+        ],
+        "t0036_command": null
+      },
+      "hukum": "taban_32816 ve marangoz_32137 icin cikti 5/5 ve skor 5/5 OZDES - yurutucunun ham verisi yeniden uretilebilir."
+    },
+    "mps_determinizm": {
+      "yontem": "Ayni surecte istem basina 3 uretim; token-id listesinin sha12'si karsilastirildi",
+      "sonuc": "5/5 istemde 3 uretim de ayni (P1 n=15, P2 n=31, P3 n=18, P4 n=35, P5 n=31)",
+      "hukum": "Greedy MPS uretimi deterministik -> T-0036 ile fark ornekleme gurultusu DEGIL, gercek suruklenme (V3)."
+    },
+    "t0036_celiskisi": {
+      "t0036_temel": [
+        0.1667,
+        0.0,
+        0.0,
+        0.3846,
+        0.5
+      ],
+      "t0036_marangoz": [
+        0.1667,
+        0.0,
+        0.0,
+        0.0,
+        0.1667
+      ],
+      "t0038_temel": {
+        "P1_Genel_Edebiyat": 0.1667,
+        "P2_Noktalama": 0.0,
+        "P3_Rakam": 0.0,
+        "P4_Marangoz_Ezber": 0.3846,
+        "P5_Marangoz_Parafraz": 0.5
+      },
+      "t0038_marangoz": {
+        "P1_Genel_Edebiyat": 0.1667,
+        "P2_Noktalama": 0.0,
+        "P3_Rakam": 0.0,
+        "P4_Marangoz_Ezber": 0.0,
+        "P5_Marangoz_Parafraz": 0.0
+      },
+      "celisen_istem": "P5_Marangoz_Parafraz",
+      "t0036_ham_uretim_token_sayilari": {
+        "P1_Genel_Edebiyat": 15,
+        "P2_Noktalama": 45,
+        "P3_Rakam": 15,
+        "P4_Marangoz_Ezber": 44,
+        "P5_Marangoz_Parafraz": 29
+      },
+      "t0038_ham_uretim_token_sayilari": {
+        "P1_Genel_Edebiyat": 17,
+        "P2_Noktalama": 31,
+        "P3_Rakam": 20,
+        "P4_Marangoz_Ezber": 33,
+        "P5_Marangoz_Parafraz": 31
+      },
+      "t0036_ham_uretim_metinleri": {
+        "P1_Genel_Edebiyat": "teknik rapor tanımlan PART_An özel DERIV_lIk PLURAL doğrudan maun ağaç POSS_2SG CASE_DAT ait COPULA_AORIST </OUTPUT>",
+        "P2_Noktalama": "teknik çözüm usta cevap POSS_3SG teknik açıklama kereste CASE_GEN sıcak DERIV_lIk nem ve hava sirkülasyon POSS_3SG kontr",
+        "P3_Rakam": "teknik rapor tanımlan PART_An özel DERIV_lIk PLURAL doğrudan maun ağaç POSS_2SG CASE_DAT ait COPULA_AORIST </OUTPUT>",
+        "P4_Marangoz_Ezber": "teknik çözüm teknik rapor teknik açıklama kereste CASE_GEN sıcak DERIV_lIk nem ve hava sirkülasyon POSS_3SG kontrollü fı",
+        "P5_Marangoz_Parafraz": "teknik rapor maun ahşap POSS_3SG CASE_DAT_N vur TENSE_AORIST GERUND_KEN çe DERIV_lIk sap POSS_3SG koru PART_An darbe DER"
+      }
+    },
+    "f1_hash_avi": {
+      "aranan": "22cb3359...",
+      "tam_sha256_mi": "HAYIR - deger '22cb3359...' seklinde '...' ile KISALTILMIS, 8 hex karakter; hash olarak kullanilamaz",
+      "vocab_carpenter_32137_disk": "7184fbba1d7bb7ef13567a9cbe2738ae740a1ff08aea1a892c83b9faa8ab4987",
+      "gorevin_kendi_ham_ciktisi": "7184fbba1d7bb7ef13567a9cbe2738ae740a1ff08aea1a892c83b9faa8ab4987",
+      "eslesme": "YOK (10 konvansiyon x 5 sozluk dosyasi + data/ scratch/ kok tam yuruyus)",
+      "onceki_kayit": "data/eval/t0035_verification.json icinde ayni deger zaten UYUMSUZ olarak isaretlenmis"
+    },
+    "pytest": {
+      "rapor": "7 passed in 0.18s",
+      "benim": "166 toplam, yeni dosya olmadan 159, dosyada 7; 159+7=166"
+    },
+    "kapsam_disi": {
+      "pt_sayisi": 38,
+      "bin_sayisi": 14,
+      "pencere_icinde_degisen": "YOK",
+      "egitim_kosusu": "YOK",
+      "donmus_yol_degisimi": "YOK"
+    }
+  },
+  "pencere_taramasi": {
+    "pencere": [
+      "2026-09-15T20:46:00+00:00",
+      "2026-09-15T21:15:00+00:00"
+    ],
+    "yontem": "os.walk + st_mtime, datetime.timezone.utc (git status --porcelain gitignored yollari gormez)",
+    "degisen_yol_sayisi": 13,
+    "degisen_yollar": [
+      {
+        "path": "src/eval/__init__.py",
+        "mtime": "2026-09-15T20:47:52.470735+00:00",
+        "bytes": 68
+      },
+      {
+        "path": "src/eval/conditioning_score.py",
+        "mtime": "2026-09-15T20:48:32.999124+00:00",
+        "bytes": 6656
+      },
+      {
+        "path": "tests/test_conditioning_score.py",
+        "mtime": "2026-09-15T20:51:17.539486+00:00",
+        "bytes": 9213
+      },
+      {
+        "path": "data/eval/regeneration_plan_2026-09-15.json",
+        "mtime": "2026-09-15T20:52:01.613936+00:00",
+        "bytes": 47715
+      },
+      {
+        "path": "data/eval/t0038_kosullanma_olcutu_icraat_2026-09-15.json",
+        "mtime": "2026-09-15T20:54:34.372607+00:00",
+        "bytes": 6152
+      },
+      {
+        "path": ".agent-bus/notes/T-0038.md",
+        "mtime": "2026-09-15T20:54:58.836486+00:00",
+        "bytes": 2167
+      },
+      {
+        "path": ".agent-bus/state/results/T-0038.json",
+        "mtime": "2026-09-15T20:55:21.908306+00:00",
+        "bytes": 1744
+      },
+      {
+        "path": ".agent-bus/state/tasks/T-0038.json",
+        "mtime": "2026-09-15T20:55:21.910079+00:00",
+        "bytes": 13416
+      },
+      {
+        "path": ".agent-bus/state/inbox/antigravity/2026-09-15T21-04-35Z-claude.json",
+        "mtime": "2026-09-15T21:04:35.688520+00:00",
+        "bytes": 2545
+      },
+      {
+        "path": "scratch/t0038_olcut_probe.py",
+        "mtime": "2026-09-15T21:12:42.689021+00:00",
+        "bytes": 8193
+      },
+      {
+        "path": "scratch/t0038_olcut_ham.json",
+        "mtime": "2026-09-15T21:13:08.774117+00:00",
+        "bytes": 12535
+      },
+      {
+        "path": ".agent-bus/state/inbox/claude/2026-09-15T21-13-29Z-antigravity.json",
+        "mtime": "2026-09-15T21:13:29.832835+00:00",
+        "bytes": 2191
+      },
+      {
+        "path": ".agent-bus/state/inbox/claude/2026-09-15T21-14-11Z-antigravity.json",
+        "mtime": "2026-09-15T21:14:11.094146+00:00",
+        "bytes": 2158
+      }
+    ],
+    "bilgi_disi_uretim_yan_urunleri": [],
+    "not": "Beyan edilen scratch dosyalarinin mtime'i (21:12:42Z / 21:13:08Z) kapanis saatinden (20:55:21Z) SONRA; bu kabul 13'un pencere kanitinin raporda BULUNMADIGINI gosterir."
+  },
+  "kiralama_defteri": {
+    "kaynak": ".agent-bus/log/events.jsonl",
+    "yurutucu_alinan": [
+      {
+        "path": "data/eval/regeneration_plan_2026-09-15.json",
+        "owner": "antigravity"
+      },
+      {
+        "path": "scratch/t0038_olcut_ham.json",
+        "owner": "antigravity"
+      },
+      {
+        "path": "scratch/t0038_olcut_probe.py",
+        "owner": "antigravity"
+      },
+      {
+        "path": "src/eval/",
+        "owner": "antigravity"
+      },
+      {
+        "path": "tests/test_conditioning_score.py",
+        "owner": "antigravity"
+      }
+    ],
+    "yurutucu_serbest_birakilan": [
+      "data/eval/regeneration_plan_2026-09-15.json",
+      "scratch/t0038_olcut_ham.json",
+      "scratch/t0038_olcut_probe.py",
+      "src/eval/",
+      "tests/test_conditioning_score.py"
+    ],
+    "yurutucu_kapandi": true,
+    "danisman_dogrulama_kiram": [
+      "data/eval/t0038_verification.json"
+    ],
+    "son_kira_olayi": "2026-09-15T21:25:44Z",
+    "not": "Yurutucunun 5 kirasi da serbest birakildi; danismanin dogrulama kiram data/eval/t0038_verification.json uzerinde AYRI tutulur ve kapanis sayimina girmez."
+  },
+  "kapanis_sinyalleri": {
+    "sinyal_1_tamamlanma_mesaji": "VAR - antigravity->claude 'T-0038 TAMAMLANDI' damgasi 2026-09-15T21:14:11Z (sonuc dosyasinin bitisinden 20:55:21Z farkli)",
+    "sinyal_2_aktif_kira_yok": "VAR (20:55:26Z'de bosaldi; 21:12-21:14 arasi ikinci tur)",
+    "sinyal_3_changed_files_tam_kapsam": "BASARISIZ - beyan edilen 2 scratch dosyasi changed_files'ta YOK",
+    "sonuc": "Kapanis kapisi 2/3; ana is bitmis ancak beyan edilen kapsam tam degil (V5)."
+  },
+  "yeni_gorev_acilmadi": {
+    "karar": "Bu yurutucu model icin YENI GOREV ACILMADI",
+    "gerekce": "Kullanici talimati: 'bu modele yeni gorev acma model uygun degil.'",
+    "etki": "Plan fazi 2 (.bin yeniden derleme) ve plan fazi 3 (taban yetkinlik egitimi) yeni gorev olarak ACILMAZ.",
+    "mevcut_bulgular": "V1-V11 yalnizca KAYIT icin yazilmistir; bu turda gorev acilmaz."
+  },
+  "yontem_notu": "Kalici yuzeyde hash tablosu tutulmaz; bu raporda listelenen tum sha256/bytes/mtime degerleri YAZIM ANINDA yeniden olculmustur. Sayilar, ayni popülasyonu saymadikca karsilastirilmaz: kanarya4'un kurgu ciftleri ile gercek 5-istem popülasyonu AYRI kumelerdir.",
+  "ts_end": "2026-09-15T21:36:44.777449+00:00"
+}

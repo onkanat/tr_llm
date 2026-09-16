@@ -1,0 +1,142 @@
+{
+  "task_id": "T-0045",
+  "baslik": "F2-2: train_balanced_sft_v2.bin — 7 jsonl kaynaktan yeni sozlukle derleme (YENI AD)",
+  "dogrulama_damgasi": "2026-09-16T12:45:00Z",
+  "dogrulayan": "claude (danisman rolu, bagimsiz olcum)",
+  "yonetim": "PASS_WITH_FINDINGS",
+  "ozet": "Artefakt KABUL: bagimsiz kanoniklik kosumu diskteki .bin ile BAYT-OZDES cikti (53b8406eee7e98d8...), determinizm iki kosumda dogrulandi, kapilar (a-e) bagimsiz okumayla tuttu, kanaryalar ve eski artefakt korundu, 7 kaynak hash iddiasinin 7'si TAM DIGEST ile dogru. Iki kayit: (V1) notun 'anlik hash' tablosundaki .meta.json sha256'si hicbir kosumla uretilemiyor - meta created_at yuzunden her kosumda farkli; (V2) yeni artefakt 1.793.433 token, eski 23.356.537 - chosen/SFT kutlesi (train_all_chosen.bin) tekrari tarif geregi YOK, F4 planlamasi bunu bilmeli.",
+  "kabul_kriterleri": [
+    {
+      "no": "a",
+      "kriter": "ON KOSUL: 7 kaynagin sha256'lari spec'teki pinlerle birebir",
+      "durum": "DOGRULANDI",
+      "olcum": "Raporun source_verification tablosu ile benim 16 Eyl 11:59Z'de olctugum pinli degerler BIREBIR ayni; ayrica diskten TAM digest ile yeniden hesapladim: 7/7 DOGRU. Satir sayilari da (688/125/6507/220/3682/19342/899 = 31.463) iddiayla ayni."
+    },
+    {
+      "no": "b",
+      "kriter": "KAPI a: max id >= 32850 ve id 32850 fiilen var",
+      "durum": "DOGRULANDI",
+      "olcum": "BAGIMSIZ numpy okumasi: max id = 32850; id 32850 (') adedi = 39.706 (yurutucunun sayisiyla BIREBIR)."
+    },
+    {
+      "no": "c",
+      "kriter": "KAPI b: noktalama blogu > 0 ve id 32137 > 0",
+      "durum": "DOGRULANDI",
+      "olcum": "BAGIMSIZ: blok toplami 180.336, 32137 (.) = 46.666 (birebir). Ek: 32145 ()) = 25.040. ESKI artefaktta blok toplami 0 idi -> artik noktalama gorunur."
+    },
+    {
+      "no": "d",
+      "kriter": "KAPI c: total_tokens == uint16 adedi == boyut/2",
+      "durum": "DOGRULANDI",
+      "olcum": "3.586.866 B = 1.793.433 uint16 = 2 x total_tokens; meta.total_tokens 1.793.433."
+    },
+    {
+      "no": "e",
+      "kriter": "KAPI c2: total_records == sum(kept); failed_records == sum(json hatasi)",
+      "durum": "DOGRULANDI",
+      "olcum": "meta.total_records 31.463 == raporun kept toplami 31.463; failed_records 0 == json hatasi 0. kept == raw_lines (7 kaynakta da hic satir dusmedi: len(tids)>2 süzgeci hicbir satiri elemedi). Ayrica kendi kanoniklik kosumum da 31.463 kayit / 0 hata verdi."
+    },
+    {
+      "no": "f",
+      "kriter": "KAPI d: vocab_size 32852, block_size 64",
+      "durum": "DOGRULANDI",
+      "olcum": "meta: {\"block_size\": 64, \"vocab_size\": 32852, \"total_tokens\": 1793433, \"total_records\": 31463, \"failed_records\": 0, \"created_at\": 2026-09-16T12:21:08Z}. Hizalama yok - block_size yalnizca etiket (spec'te boyle yazmisti)."
+    },
+    {
+      "no": "g",
+      "kriter": "KAPI e: 7 kaynagin hepsinde kept > 0 (sessiz atlama kapisi)",
+      "durum": "DOGRULANDI (EN GUCLU BICIMDE)",
+      "olcum": "Yurutucunun kaynak bazli sayaci kept>0 diyor (min 125). Bunu sayaca GUVENEREK degil, KANONIKLIKLE dogruladim: ayni 7 kaynagi kendim kosturdugumda URETILEN .bin disktekiyle BAYT-OZDES cikti. Bir kaynak sessizce atlansaydi (>continue<) benim kosumum farkli bayt uretirdi. Yani kaynak kapsamasi kanitli."
+    },
+    {
+      "no": "h",
+      "kriter": "KANARYA: eski artefakt ve digerleri degismedi",
+      "durum": "DOGRULANDI",
+      "olcum": "data/train_balanced_sft.bin 55863e36b62414c6 (mtime 09-13 08:04:47Z - DEGISMEDI, eski artefakt korundu); chat_balanced 443f93d352b07def; carpenter 13dd81bf700690b7; vocab.json 4b40eebee9c996c8; tokenizer.py 560a3bfbf32c394a; cot_vault 97b06fe5befd6613. data/*.bin 14 -> 15. Yedekteki 6 dosya sha16'lari gorev oncesi degerlerle AYNI."
+    },
+    {
+      "no": "i",
+      "kriter": "KANARYA: pencerede writes[] disinda yazim yok",
+      "durum": "DOGRULANDI",
+      "olcum": "data/ agaci 12:14Z-12:23Z tarandi: YALNIZ 3 dosya - train_balanced_sft_v2.bin (12:21:08Z), .meta.json (12:21:08Z), data/eval/t0045_...json (12:21:28Z)."
+    },
+    {
+      "no": "j",
+      "kriter": "DETERMINIZM: ikinci kosum .bin sha'sini degistirmiyor",
+      "durum": "DOGRULANDI (BAGIMSIZ IKI KOSUM)",
+      "olcum": "Yurutucunun beyanini oldugu gibi kabul etmedim; compile_jsonl_to_bin'i pinli 7 kaynak + ayni parametrelerle kendim IKI KEZ kosturdum (cikti scratch/): kosum1 = kosum2 = disk = 53b8406eee7e98d8339cd047a18a281b7a355ca5ba1891137701890dc322402c. Her kosumda 1.793.433 token / 31.463 kayit / 0 hata."
+    },
+    {
+      "no": "k",
+      "kriter": "KAPANIS: changed_files writes[]'i kapsiyor; mesaj + kiralar",
+      "durum": "DOGRULANDI",
+      "olcum": "writes[] 4 = changed_files 4 (iki yonlu fark bos). message_sent 12:21:51Z; kiralar 12:21:53Z'de birakildi (bus_lease_status bos). Uc sinyal kapisi tam."
+    },
+    {
+      "no": "l",
+      "kriter": "HASH IDDIALARI (tam digest denetimi)",
+      "durum": "KISMEN - bkz bulgu V1",
+      "olcum": "15 farkli sha256 iddiasi toplandi; 14'u diskle TAM DIGEST eslesti: 7 kaynak (7/7), eski .bin, yeni .bin, chat_balanced, carpenter, vocab.json, tokenizer.py, note dosyasi. ESLEMEYEN tek iddia: notun .meta.json icin yazdigi c3236a4024ef2b66... (bkz V1)."
+    }
+  ],
+  "bagimsiz_kanoniklik_kosusu": {
+    "yontem": "scratch/t0045_canonicity_driver.py: scripts/run_goal_pipeline.py modul olarak yuklendi; compile_jsonl_to_bin pinli 7 kaynak + ayni parametrelerle, output_bin=scratch/t0045_rerun.bin.runN verilerek IKI KEZ kosturuldu; allow_frozen_write=False (pozitif kontrol: kapi scratch icin ateslememeli ve ateslemedi).",
+    "disk_bin": "53b8406eee7e98d8339cd047a18a281b7a355ca5ba1891137701890dc322402c",
+    "kosum1_bin": "53b8406eee7e98d8339cd047a18a281b7a355ca5ba1891137701890dc322402c",
+    "kosum2_bin": "53b8406eee7e98d8339cd047a18a281b7a355ca5ba1891137701890dc322402c",
+    "kanoniklik": true,
+    "determinizm": true,
+    "sure_sn": 150.8,
+    "kendi_kosumum_hedefi_degistirdi_mi": "HAYIR - diskteki _v2.bin sha'si ve mtime'i (12:21:08Z) kosum sonrasi yeniden olculdu, korundu."
+  },
+  "findings": [
+    {
+      "id": "V1",
+      "siddet": "DUSUK",
+      "baslik": "Notun 'anlik hash' tablosundaki .meta.json sha256'si hicbir kosumla uretilemiyor - meta created_at yuzunden HER kosumda farkli",
+      "olcum": "Not satir 77: 'data/train_balanced_sft_v2.bin.meta.json: c3236a4024ef2b66...'. Diskteki meta sha256 = a8a4c2dd73e4a6c8...; benim iki bagimsiz kosumum cf221da3c2ffb3ca... ve ac7b100b0d8a0930... uretti. UC FARKLI DEGER, hicbiri c3236a40 ile eslesmiyor (onek bile tutmuyor). Bu bir 'onek dogru/kuyruk uydurma' vakasi DEGIL; en olasi aciklama yurutucunun KENDI ilk kosumunun meta'sidir (determinizm icin ikinci kez kosturunca meta yeniden yazildi ve o dosya artik yok).",
+      "mekanizma": "meta icinde 'created_at' alani var (datetime.now(timezone.utc).isoformat()); her kosum yeni damga yazar. Spec bunu ACIKCA soyluyordu: 'meta'da created_at damgasi oldugu icin META SHA KARSILASTIRILMAZ - yalnizca .bin.' Yurutucu bu uyarinin KARSILASTIRMA kismina uydu ama notta meta sha'sini yine de KAYIT etti.",
+      "etki": "Artefakt etkilenmedi; .bin sha'si tam digest ile dogrulandi. Etki, KALICI YUZEYDE DOGRULANAMAZ bir iddia olusmasi: okuyan kisi meta sha'sini kiyaslarsa 'not bayat' sanir; oysa o alan tasarim geregi kararsizdir.",
+      "sinif": "UCUNCU VAKA. Ayni sinif: (1) T-0032 - nottaki sha256 atif tablosu bayatladi, 5/6 atif diskle uyusmaz hale geldi; (2) T-0044 - raporun kaynak hash kuyrugu uretildi; (3) T-0045 - notta kararsiz bir alanin (meta) digest'i kayit edildi. Kural: KALICI YUZEYE hash tablosu ya hic konmaz, ya yalnizca KARARLI (deterministik) dosyalar icin konur; meta gibi damga tasiyan dosyalarin digest'i HIC yazilmaz."
+    },
+    {
+      "id": "V2",
+      "siddet": "BILGI (F4 planlamasi icin onemli)",
+      "baslik": "Yeni artefakt 1.793.433 token - eski 23.356.537'nin %7,7'si; chosen/SFT kutlesi (train_all_chosen.bin) tekrari tarif geregi YOK",
+      "olcum": "Eski .bin 23.356.537 uint16; yeni 1.793.433 (13 kat kucuk). Eski artefaktin kutlesinin baskin kismi data/train_all_chosen.bin (18.097.297 token) idi; kullanici karariyla secilen tarif (B) bu kaynagi KULLANMIYOR - 7 jsonl kaynagin tamami pedagogy metinleri.",
+      "neden_onemli": "Eger F4'te balanced_sft'nin isi 'tabanin unutmamasini saglayan TEKRAR karisimi' ise, tekrar edilen kutlenin artik chosen/SFT kutlesi olmadigi acik olmali. Yeni artefakt noktalama/kesme gorunurlugunu kazandi (asil F2 hedefi) ama chosen/SFT kutlesi tekrari icermiyor. Bu bir uygulama kusuru DEGIL - tarif secimi; planlamada bilinmesi gereken sayi.",
+      "karar_gerekli_mi": "F4 egitim kompozisyonu yazilirken evet: (i) yeni artefakt tek basina yeterli mi, yoksa (ii) chosen/SFT kutlesi tekrari ayrica mi eklenmeli. Kullaniciya soruldu (16 Eyl): KARAR = once unutma olcumu tasarlansin, sayi gorulmeden kompozisyon baglanmasin."
+    },
+    {
+      "id": "DUZELTME-KAYDI",
+      "siddet": "KAYIT (iddia degil, duzeltme)",
+      "baslik": "Bu raporun V2 metnindeki 'taban korpusu' ifadesi duzeltildi (rapor sonrasi olcum)",
+      "zaman": "2026-09-16T12:52Z (rapor ilk yazimi 12:45Z)",
+      "eski_ifade": "taban korpusu tekrari (train_all_chosen.bin)",
+      "yeni_ifade": "chosen/SFT kutlesi (train_all_chosen.bin) tekrari",
+      "neden": "Ilk yazimda train_all_chosen.bin'i 'taban (pretraining) korpusu' sanmistim. OLCUM: o dosyayi ureten betik scripts/prepare_all_dpo_datasets.py ve girdisi data/pedagogy/dpo_preference_*.jsonl tercihleridir (chosen/SFT kutlesi), pretraining korpusu DEGIL. Ayrica: (1) o betik data/vocab.json (31.357) kullanir, yeni taban sozlugu degil; (2) dpo_preference_*.jsonl kaynaklari diskte ARTIK YOK (0 dosya) -> kutlenin noktalama gorunur hali YENIDEN URETILEMEZ, yalnizca mevcut .bin oldugu gibi karistirilabilir. Sayilar degismedi; yalnizca kutlenin ADI ve yeniden-uretilebilirlik durumu duzeltildi.",
+      "dosya_sha256_notu": "Bu duzeltmeden sonra dosyanin sha256'si degisti; 16 Eyl 12:35Z'de yurutucuye bildirilen sha256 ca3534283b448aca... idi, guncel deger icin bkz. ayni dizindeki en son olcum."
+    },
+    {
+      "id": "V3",
+      "siddet": "BILGI (olumlu)",
+      "baslik": "T-0044'un V1 sinifi TEKRARLANMADI: 7 kaynak hash iddiasinin 7'si tam digest ile dogru",
+      "olcum": "Kaynak tablosundaki 64 karakterlik degerlerin tamami diskle birebir. Ayrica yeni/eski .bin, chat_balanced, carpenter, vocab.json, tokenizer.py ve not dosyasinin digest'leri de dogru. Yurutucu bu kez pinlenmis degerleri kullanmis (spec'te verilen degerlerle ayni)."
+    },
+    {
+      "id": "V4",
+      "siddet": "BILGI",
+      "baslik": "results/T-0045.json 'evidence' alani yine bos",
+      "olcum": "status/summary/changed_files dolu ve changed_files == writes[] (4=4); ancak 'evidence': [] bos. T-0044'te de ayniydi. Bilgi kaybi yok (rapor kaniti tasiyor) ama kapanis sinyali tek yuzeye bagli."
+    }
+  ],
+  "yontem_notu": {
+    "kendi_probe_denetimi": "Hash denetiminde ilk tarama 8 'eslesmeyen' verdi; bunlarin 7'si benim ADAY LISTEMDE olmayan kaynak dosyalardi, 1'i gercek bulgu (V1). Aday listesini duzeltip kaynaklari ekleyince 7/7 dogru cikti. Bu, 'absurt sayi gorunce once kendi sayacini denetle' kuralinin bir ornegi; bulgu yazmadan once liste eksiğini olctum.",
+    "kaynak_bazli_token_dokumu": "Raporun kaynak bazli token kirilimi (56.969 / 5.419 / 783.795 / 20.259 / 324.045 / 527.452 / 75.494 = 1.793.433) bagimsiz olarak yeniden turetMEDI; dogrulanan sey toplamin ve kayit sayisinin diskle ozdesligi ile bayt-ozdes kanonikliktir."
+  },
+  "kapanis": {
+    "uc_sinyal_kapisi": "mesaj 2026-09-16T12:21:51Z ✓ | kiralar 0 ✓ | changed_files (4) == writes[] (4) ✓",
+    "sonuc": "T-0045 KABUL. Artefakt kanonik ve deterministik; kapilar bagimsiz dogrulandi; eski artefakt korundu. V1 kayit (kalici yuzey hash dersi), V2 F4 planlamasi icin sayi, V3 olumlu, V4 kayit. Yeni gorev ACILMADI.",
+    "sonraki_adim_notu": "Egitim hatti hala ESKI adi (data/train_balanced_sft.bin) okuyor; _v2'ye gecis ayri bir degisiklik - kullanici karari bekliyor."
+  }
+}

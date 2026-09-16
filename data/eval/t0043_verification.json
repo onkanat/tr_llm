@@ -1,0 +1,135 @@
+{
+  "task_id": "T-0043",
+  "baslik": "Carpenter ozdeslik kusuru + testin kapiya baglanma denetimi + changed_files beyani",
+  "dogrulama_damgasi": "2026-09-16T10:40:00Z",
+  "dogrulayan": "claude (danisman rolu, bagimsiz olcum)",
+  "yonetim": "PASS_WITH_FINDINGS",
+  "ozet": "T-0043'un uc bulgusu (V1 rapor beyani, V2 carpenter D4 ozdesligi, V3 kapinin main()'e baglanma denetimi) KAPANDI. Ancak gorev sirasinda DONMUS bir artefakt ezildi: data/train_carpenter_specialization.bin ve .meta.json. Geri donusu YOK (gitignore'da, yedek yok). Kusur spec'tedir, uygulamada degil: (V3-D) mutant talimati 'main() icindeki kapi cagrilarini kaldir + test setini kostur' diyordu, (V3-A) testi ise main()'i cagiriyor; kapi silinince main() sonuna kadar kosup tofile() yapti.",
+
+  "kabul_kriterleri": [
+    {
+      "no": "a",
+      "kriter": "V1: changed_files writes[] ile birebir ayni",
+      "durum": "DOGRULANDI",
+      "olcum": "state/results/T-0043.json changed_files = 4 yol; state/tasks/T-0043.json writes[] = 4 yol. Iki yonlu kume farki BOS: writes-changed = {} , changed-writes = {}. BIREBIR. T-0042'nin V1 kusuru (changed=0 iken writes=6) kapandi."
+    },
+    {
+      "no": "b",
+      "kriter": "V2: normalize_encode_errors sayaci; ikinci encode noktasi onu artiriyor",
+      "durum": "DOGRULANDI",
+      "olcum": "scripts/prepare_carpenter_specialization_dataset.py: sema 121 'normalize_encode_errors': 0; birinci (satir duzeyi) encode noktasi 154 -> encode_errors; IKINCI (normalize) encode noktasi 189 -> normalize_encode_errors. Duzeltme yerinde."
+    },
+    {
+      "no": "c",
+      "kriter": "V2: D4 ozdesligi metnen ayni + kept <= 2*lines_ok",
+      "durum": "DOGRULANDI",
+      "olcum": "satir 195 ozdeslik ifadesi T-0042'dekiyle ayni: sampled == json_errors + encode_errors + lines_ok. Satir 200 tavan assert'i eklendi: kept <= 2 * lines_ok. total_accounting satir 279 'normalize_encode_errors' toplami .get(k,0) kalibiyla."
+    },
+    {
+      "no": "d",
+      "kriter": "V2: tokenize_carpenter_jsonl modul duzeyinde + main onu cagiriyor",
+      "durum": "DOGRULANDI",
+      "olcum": "Fonksiyon modul duzeyinde tanimli ve main() govdesinden cagriliyor. Kusur tam olarak dongunun test EDILEMEZ olmasindan doguyordu; cikarma sinifi kapatiyor."
+    },
+    {
+      "no": "e",
+      "kriter": "(C) senaryosu geciyor VE kusuru gercekten yakaliyor",
+      "durum": "DOGRULANDI",
+      "olcum": "VAKUM DEGIL. Mutant M3 (V2 kusuru geri konuldu: normalize noktasi 'encode_errors' artiriyor) altinda GONDERILEN test govdesi KIRMIZI yandi, hata metni T-0042'de bagimsiz olarak kanitladigim hatanin AYNISI: 'Ozdeslik hatasi (carpenter): 2 != 0 + 2 + 2'. Test kusuru geri gelse yakaliyor."
+    },
+    {
+      "no": "f",
+      "kriter": "(A) ve (B) testleri uc uretici icin de geciyor",
+      "durum": "DOGRULANDI",
+      "olcum": "(B) olcutu bagimsiz olarak AST ile olculdu, uc modulde de tutuyor: chat son kapi < ilk tofile = True, carp = True, sft = True. Ayrica (A) yolunda main() varsayilan allow_frozen_write=False ile uc ureticide de 0.00s'de RuntimeError firlatiyor ve mesaj hedef donmus yolu iceriyor (kendi on kosumum, yazma yok)."
+    },
+    {
+      "no": "g",
+      "kriter": "MUTANT M5: kapi cagrisi kaldirilinca test KIRMIZI",
+      "durum": "KISMEN_DOGRULANDI",
+      "olcum": "(B) icin kaynak duzeyinde DETERMINISTIK: tests/test_f2_producers.py satir 186 'assert len(check_output_lines) >= 1'; M5 kapi cagrilarini silince ast.walk hicbir check_output_path cagrisi bulamaz, assert kesin duser. (A) icin yurutucu raporu 'DID NOT RAISE RuntimeError' (2 FAILED) beyan ediyor ve bu, kapinin o noktadaki tek RuntimeError kaynagi olmasiyla tutarli. BENIM BAGIMSIZ KOSUMUM YAPILAMADI: sinirlandirici (deepseek-v4.1-flash:cloud) zaman asiminda Bash ve Write'i reddetti, yalniz salt-okunur gecti."
+    },
+    {
+      "no": "h",
+      "kriter": "pytest tam takim, sandbox disinda; once 179 / sonra sayilir",
+      "durum": "DOGRULANDI",
+      "olcum": "venv/bin/pytest tests/ -q -> '186 passed in 9.74s' (yurutucunun 186 beyaniyla birebir). Kabul kosusu olctugu artefakti degistirdi mi diye kanaryalar kosum ONCESI ve SONRASI alindi: uc hedef .bin + carpenter meta sha'lari DEGISMEDI."
+    },
+    {
+      "no": "i",
+      "kriter": "KANARYA: data/*.bin=14; hedefler, vocab.json, tokenizer.py, cot_vault.jsonl degismedi",
+      "durum": "BASARISIZ",
+      "olcum": "data/*.bin = 14 ✓; data/vocab.json 4b40eebee9c996c8 ✓; src/llm/tokenizer.py 560a3bfbf32c394a ✓; cot_vault.jsonl 97b06fe5befd6613 + 91 satir ✓. ANCAK carpenter .bin kanaryasi DUSTU: T-0042 dogrulamamda 6d5a1d2c3b55ab88 idi, simdi 13dd81bf700690b7. Bkz bulgu V1."
+    },
+    {
+      "no": "j",
+      "kriter": "BETIK KOSULMADI: uc hedef .bin ve .meta.json mtime'lari gorev penceresinden ONCE",
+      "durum": "BASARISIZ",
+      "olcum": "train_balanced_sft.bin (09-13 08:04) ve train_chat_balanced.bin (09-13 08:06) pencereden once ✓. ANCAK train_carpenter_specialization.bin VE .meta.json mtime'i 2026-09-16T09:05:40Z - gorev penceresinin (08:55:34Z - 09:08:25Z) TAM ICINDE. Bkz bulgu V1."
+    }
+  ],
+
+  "kanarya_kanit": {
+    "yontem": "sha256, dosyalar once ve sonra okundu",
+    "data_star_bin_adet": 14,
+    "data/vocab.json": "4b40eebee9c996c8dd3150f6b3c8896de85764ee1cf0b08e6c636e5c002a0e69 (DEGISMEDI)",
+    "src/llm/tokenizer.py": "560a3bfbf32c394a23559c9d3645cfbc3b554223a032156924749dcfa896a7af (DEGISMEDI)",
+    "data/pedagogy/cot_vault.jsonl": "97b06fe5befd6613b520d28dc20a74deaeb30e4e8f7e6675a23720a019ff5619, 91 satir (DEGISMEDI)",
+    "data/train_chat_balanced.bin": "3b2b9cd3cf3f47147c6c30b1705c812dfa7a8a287788269a6fa73dc94fccbf10 (DEGISMEDI)",
+    "data/train_balanced_sft.bin": "55863e36b62414c6ada30956b30dc64a5254fe0717582384d43abd5d9cf46a24 (DEGISMEDI)",
+    "data/train_carpenter_specialization.bin": "T-0042'de 6d5a1d2c3b55ab88 -> simdi 13dd81bf700690b7 (DEGISTI)"
+  },
+
+  "rapor_hash_iddialari": {
+    "sonuc": "7/7 DOGRU",
+    "not": "Yurutucunun rapor ve notlarindaki 7 sha256 iddiasinin tamami diskle birebir eslesti. Cerceveleme iyimser degil."
+  },
+
+  "bulgular": [
+    {
+      "id": "V1",
+      "siddet": "YUKSEK",
+      "baslik": "Donmus artefakt ezildi: data/train_carpenter_specialization.bin + .meta.json, geri donusu yok",
+      "mekanizma": "Spec (V3-D) mutant talimati 'main() icindeki check_output_path cagrilarini gecici kaldir, test setini kostur' diyordu; (V3-A) testi ise BIZATIHI main()'i cagiriyor. Kapi cagrisi silinince main() sonuna kadar kosup arr.tofile(output_bin) yapti ve donmus artefakti ezdi; ardindan meta.json'u yazdi.",
+      "kanit": "mtime 2026-09-16T09:05:40Z (gorev penceresinin icinde); sha 6d5a1d2c3b55ab88 -> 13dd81bf700690b7; meta sha b0088fd6ae8969f9.",
+      "geri_donus": "YOK. .gitignore'da *.bin ve *.bin.meta.json var; git gecmisi yok; yedek yok (data/_archive/ yalniz rag_pilot_invalidated iceriyor). Kiralamasiz ve writes[] beyani olmadan yazildi (SPEC kural 1 ve 2 ihlali).",
+      "icerik_durumu": "Dosya BOZUK DEGIL. Uretici salt-okunur yeniden kosturuldu (FakeArr ile tofile yakalandi, builtins.open data/ yazimina kapatildi): uretilen 867650 token ile diskteki 867650 token BYTE-OZDES, max_id 32850, noktalama blogu 32137-32145 yerinde. Yani F2'nin tokenizer hedefi bu dosyada tutuyor.",
+      "bilesim_degisimi": "Yeniden-tokenizasyon DEGIL, farkli bir veri kumesi. Eski (meta.total_records 5702 = 5400+302, total_tokens 391103, max_id 31327) bilesimi scripts/recompile_datasets.py'nin carpenter yolu uretiyor (carpenter_specialization_dataset.jsonl + arena_carpenter_accumulated.jsonl). Yeni (total_records 12763, total_tokens 867650) bilesimi prepare_carpenter_specialization_dataset.py uretiyor (ayni kaynak satir basina 2 form + parenting_deep 1500 + high_school_foundation 700). F2 planinin adlandirmasi ayrica 'train_carpenter_specialization_v2.bin' idi, yerinde ezme degil.",
+      "kusur_kimin": "SPEC'TEDIR, yurutucude degil. Yurutucu talimata uydu ve olayi kendisi F1 BILGI olarak raporladi, gizlemedi.",
+      "kullanici_karari": "2026-09-16: Onkanat 'mevcut artefakti kabul et' (A secenegi). Carpenter icin ek islem yapilmayacak; F4 ceketi 12763 kayitlik bilesimle egitilecek."
+    },
+    {
+      "id": "V2",
+      "siddet": "ORTA",
+      "baslik": "Kendi V1 kuralim yanlis sozlesme kuruyor: changed_files == writes[] beyan edilmemis yazimi gizlemeye zorluyor",
+      "aciklama": "T-0043 spec'inde 'changed_files writes[] ile BIREBIR AYNI yazilacak - ne eksik ne fazla' dedim. Bu kurgu altinda yurutucu ya fazladan degisen dosyayi gizlemek ya esitligi bozmak zorunda kaliyor. Nitekim ezilen carpenter .bin changed_files'a yazilmadi, findings'e konuldu - verilen talimat altinda DOGRU davranis, ama sozlesme kusurlu.",
+      "dogru_sozlesme": "changed_files = GERCEKTEN degisen dosyalar kumesi olmali ve writes[]'i KAPSAMALI (superset). Esitlik beklenir; fazlasi ayrica ihlal olarak raporlanir. Boylece beyan edilmemis bir yazim ne gizlenir ne de esitligi bozar."
+    },
+    {
+      "id": "V3",
+      "siddet": "ORTA",
+      "baslik": "Test tasarimi yikici mutant kalibiyla birlesince donmus cikti ureten her modulde yikici",
+      "aciklama": "(V3-A) testinin main()'i cagirmasi tek basina dogru ve gereklidir (kapinin baglandigini olcen tek gercek yol). Ancak 'kapiyi kaldir + kapiyi cagiran testi kostur' mutant kalibiyla birlesince, kapi kaldirildigi anda main() serbest kalir ve diske yazar. Bu kalip donmus cikti ureten HER modulde yikicidir.",
+      "kural": "Bir mutant talimati yazarken once sor: 'kapi kaldirilinca bu kod ne yazar?' Yanit 'donmus bir yola yazabilir' ise mutant kosulmaz; bunun yerine (i) test kalkanli kosulur, veya (ii) yalnizca AST/yapisal test kosturulur, veya (iii) modulun yazma cagrisi (tofile) da yakalanir. Kalkan builtins.open YETMEZ: numpy tofile C seviyesinde yazar ve Python open'ini bypass eder."
+    },
+    {
+      "id": "V4",
+      "siddet": "DUSUK",
+      "baslik": "notes/ dosyasi writes[] disinda beyan ediliyor (T-0039, T-0040, T-0041)",
+      "olcum": "Uc gorevde de changed_files, writes[]'ten bir fazla: .agent-bus/notes/T-XXXX.md. Zararsiz yonde (fazla beyan), ama notes/ kalici yuzeyinin kusur #7 kapsaminda hala canli oldugunu gosteriyor."
+    },
+    {
+      "id": "V5",
+      "siddet": "BILGI",
+      "baslik": "Rapor kriter (j) 'TAM (Bulgulu)' cercevelemesi",
+      "aciklama": "Yurutucu kriter (j)'yi 'TAM (Bulgulu)' isaretleyip F1'e atif yapmis, olayin kendisini gizlememis. Cerceveleme sinirda ama durust: eylemin gerceklestigini ve sonucunu acikca yaziyor. Bulgu degil, kayit."
+    }
+  ],
+
+  "kapanis": {
+    "uc_sinyal_kapisi": "mesaj 2026-09-16T09:08:25Z ✓ | kiralama 0 ✓ | changed_files = writes[] (4=4) ✓",
+    "dogrulama_kosusu_gerekcesi": "Uc sinyal tuttu ve data/eval/t0043_verification.json YOKTU; idempotentlik kurali geregi tur bir kez kosuldu.",
+    "sonuc": "T-0043'un KOD'u (V1/V2/V3) KABUL. V1 bulgusu kayda gecti ve kullanici karariyla (A) kapatildi.",
+    "kanal_blokaji": "Bu turda sinirlandirici (deepseek-v4.1-flash:cloud) zaman asimlari Bash ve Write'i araliklarla reddetti; M5'in bagimsiz kosumu ve bu dosyanin yazimi bu nedenle gecikti. Olcumlerin geri kalani tamamlandi."
+  }
+}

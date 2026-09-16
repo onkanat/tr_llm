@@ -1,0 +1,96 @@
+{
+  "task_id": "T-0040",
+  "verdict": "PASS",
+  "verified_at": "2026-09-16T04:55:04Z",
+  "verified_by": "claude (danışman)",
+  "task_title": "Donmuş-yol kapısı tek otoriteyi okusun (T-0039 V1/V3/V4, saf KOD)",
+  "method": "Her iddia diskten bağımsız ölçüldü ($TMPDIR'da v40.py + v40b.py). Mutant frozen_guard modülün İÇİNE enjekte edildi (vakum sınıfı 5). Kapının donmuş dosyayı gerçekten ezmediği sha256 önce/sonra ile kanıtlandı. pytest sandbox İÇİNDE ve DIŞINDA iki kez koşuldu.",
+
+  "kabul_kriterleri": [
+    {"id": "a", "iddia": "gömülü literal desen listesi kalmadı", "olcum": "scripts/run_goal_pipeline.py ve src/llm/prepare.py'de 'data/*.bin'=0, 'realistic_rag'=0; ikisi de `from src.llm.frozen_guard import is_frozen_path` ile tek otoriteyi çağırıyor (rgp:68-69, prepare:48-49)", "sonuc": "DOGRULANDI"},
+    {"id": "b", "iddia": "is_frozen_path frozen_file parametresi taşıyor", "olcum": "(path: str, frozen_file: str = '.agent-bus/frozen.json') -> bool; load_frozen_patterns (frozen_file: str = '.agent-bus/frozen.json') -> List[str]", "sonuc": "DOGRULANDI"},
+    {"id": "c", "iddia": "pytest yeni başarısızlık üretmedi", "olcum": "sandbox DIŞINDA '173 passed in 9.28s'; sandbox İÇİNDE '1 failed, 172 passed' (test_agent_gateway, PermissionError socket.bind) -> SAHTE HATA. T-0039'da 171 idi; +2 yeni test = 173, tutarlı.", "sonuc": "DOGRULANDI (173)"},
+    {"id": "d", "iddia": "üç yollu sınama", "olcum": "data/train_balanced_sft.bin True | data/rebuild/vocab_base_32852.json False | data/realistic_rag/val.jsonl True; kontrol: .agent-bus/frozen.json False", "sonuc": "DOGRULANDI"},
+    {"id": "e", "iddia": "fail-closed", "olcum": "5 ayrı bozukluk sınıfı RuntimeError: olmayan dosya, bozuk JSON, 'patterns' anahtarı yok, boş patterns, patterns list değil. Hiçbirinde sessiz False dönmedi.", "sonuc": "DOGRULANDI"},
+    {"id": "f", "iddia": "kanaryalar korundu", "olcum": "data/vocab.json 4b40eebee9c996c8, data/vocab_entity.json 7611b6a523a2bb52, data/rebuild/vocab_base_32852.json 7611b6a523a2bb52 (entity ile bit-özdeş), cot_vault.jsonl 97b06fe5befd6613 + 91 satır, data/*.bin=14, tokenizer.py 560a3bfbf32c394a — pytest ÖNCESİ ve SONRASI aynı", "sonuc": "DOGRULANDI"},
+    {"id": "g", "iddia": "D4 kanaryası vakum değil", "olcum": "Geçici frozen.json'a 'data/eval/**' eklendi -> True; varsayılan dosyayla aynı yol -> False. MUTANT (is_frozen_path içinde frozen_file yok sayılıp gömülü 10 desen kullanıldı) ile kanarya KIRMIZI yandı.", "sonuc": "DOGRULANDI"},
+    {"id": "h", "iddia": "boş girdi + donmuş save_vocab_to erken patlıyor", "olcum": "prepare_dataset(boş.jsonl, save_vocab_to='data/vocab.json') -> RuntimeError, çıktı .bin YAZILMADI (yazımdan önce). Donmuş OLMAYAN hedefle normal çalışıyor: max_id=32850, sözlük yazıldı.", "sonuc": "DOGRULANDI"}
+  ],
+
+  "bagimsiz_ek_olcum": {
+    "kapi_gercekten_duruyor_mu": "compile_jsonl_to_bin(output_bin='data/train_balanced_sft.bin', allow_frozen_write VERİLMEDEN) -> RuntimeError; hedef sha256 55863e36b62414c6 görev öncesi = sonrası -> DONMUŞ DOSYA EZİLMEDİ",
+    "yeni_test_sayisi": "7 (T-0039'da 5). Eklenenler: test_prepare_dataset_empty_input_frozen_vocab_fails_early (V3), test_frozen_guard_authority_and_fail_closed (D4)",
+    "eski_kod_tabani": "'/tmp/eski_rgp.py' geçişi 0; 'tmp_path' geçişi 23 -> V4 kapandı, taban her koşumda tazeleniyor",
+    "modul_tasarimi": "frozen_guard.py saf fonksiyon, global mutable durum yok, tip ipuçları tam, tersine bağımlılık yok (import döngüsü kurmaz). Her çağrıda dosyayı yeniden okur: önbellek yok — bekçi kullanımı için DOĞRU tercih (tazelik > hız)."
+  },
+
+  "kapsam_denetimi": {
+    "writes_beyan": 5,
+    "changed_files": 6,
+    "beyan_edilip_degismemis": [],
+    "degisip_beyan_edilmemis": [".agent-bus/notes/T-0040.md"],
+    "not": "Fazlalık protokolün meşru notes yüzeyi (T-0037/T-0038/T-0039 ile aynı desen). Kira: görev süresince ve sonrasında 0.",
+    "kapanis_uc_sinyal": "1) sonuç dosyası status=done finished=2026-09-16T04:48:45Z  2) aktif kira 0  3) changed_files 6 ⊇ writes 5 — ÜÇÜ BİRDEN TUTTU. Tamamlanma mesajı gönderildi (2026-09-16T04-48-54Z, from=antigravity), T-0037/T-0038'de eksik kalan sinyal bu görevde VAR."
+  },
+
+  "bulgular": [
+    {
+      "id": "V1", "severity": "ORTA",
+      "baslik": "Bekçi 2 siteyi kapsıyor; aynı sınıf risk 12 sitede duruyor",
+      "olcum": "grep -rn 'vocab.save(' scripts/ src/ -> 10 çağrı yeri. Bunların 5'i DOĞRUDAN donmuş data/vocab.json'a yazıyor: import_examples.py:246, prepare_chat_fine_tune_dataset.py:116, prepare_chat_balanced_dataset.py:99, prepare_deep_dataset.py:86, expand_lexicon_and_vocab.py:212 (VOCAB_FILE='data/vocab.json'). Kalan 4'ü varsayılanı 'data/vocab.json' olan vocab_path değişkeniyle: prepare_dpo_dataset.py:122, prepare_all_dpo_datasets.py:131, prepare_wiki_dataset.py:90, merge_teacher_dataset.py:182. T-0039/T-0040 yalnız run_goal_pipeline.py + prepare.py'yi kapattı.",
+      "etki": "F2 icrasında bu betiklerden biri koşulursa donmuş sözlük beyansız ezilir. Kapı sınıfı kapanmadı, iki örneği kapatıldı.",
+      "kaynak": "Kapsam kusuru spec'te (benim), yürütücüde değil — T-0040 writes[] listesi dar tutuldu (küçük-iş politikası).",
+      "oneri": "Ayrı küçük görev: 10 site frozen_guard.is_frozen_path ile korunsun. Mekanik, geniş ama tek sınıf."
+    },
+    {
+      "id": "V2", "severity": "ORTA",
+      "baslik": "prepare_chat_balanced_dataset.py literal_entity_mode'u HİÇ kullanmıyor",
+      "olcum": "'literal_entity_mode' geçiş sayısı 0; kurulum satırı `tokenizer = KristalTokenizer(compiler, vocab)` (mod verilmemiş, varsayılan False). Ayrıca vocab.load('data/vocab.json') = 31357 satır.",
+      "etki": "Unutmaya karşı tekrar karışımı (docstring satır 7-9: %65 sohbet / %20 ebeveynlik-morfoloji / %10 GTS / %5 alan uzmanlığı; 'eski morfolojik yeteneklerini unutmaz') bugünkü hâliyle yeniden üretilirse ESKİ tokenizasyonu üretir — kesme dala hiç girmez, rakam/noktalama bloğuna doğru id'lerle ulaşmaz. Yeniden üretilebilir ama YANLIŞ üretir; bayat tekrar karışımı F4'te tabanı noktalamasız dağılıma geri çeker (sessiz hasar).",
+      "oneri": "T-0039'un diğer iki giriş noktasına yaptığı gibi bu betiğe de vocab_path + literal_entity_mode parametreleri eklensin."
+    },
+    {
+      "id": "V3", "severity": "ORTA",
+      "baslik": "train_chat_balanced.bin meta'sı kendi 9. kaynağını kompozisyona YAZMIYOR",
+      "olcum": "meta dataset_composition 8 anahtar toplamı 21875; meta total_records 24375; fark tam 2500 = betiğin satır 96'daki turk_tarihi_sft (max_samples=2500). Betik 9 kaynağı birleştiriyor (satır 103-113), meta yalnız 8'ini yazıyor (satır 142-151).",
+      "etki": "Artefaktın kendi kendini tarifi EKSİK; 21875 ile 24375 arasındaki farkı 'kayıp veri' sanmaya açık. Bu turda beni tam olarak bu yanılttı."
+    },
+    {
+      "id": "V4", "severity": "DUSUK",
+      "baslik": "Artefaktın meta'sı bugünkü sözlüğü tarif etmiyor",
+      "olcum": "data/train_chat_balanced.bin.meta.json vocab_size=32137; data/vocab.json len(stoi)=31357 (fark 780) ve git'te TEMİZ (git status --porcelain boş, git ls-files ile izleniyor).",
+      "etki": "Betik satır 99'da sözlüğü geri yazdığı için üretim anında sözlük 780 token büyümüş, sonra depodaki 31357'lik sürüm geri gelmiş olmalı. Yani meta, bugünkü sözlükle yeniden üretilebilir bir artefakt tarif etmiyor. F2 bunu vocab_base_32852.json ile çözer."
+    },
+    {
+      "id": "V5", "severity": "BILGI",
+      "baslik": "Benim önceki raporumun kaynak kısmı YANLIŞTI — kaynaklar kayıp değil",
+      "olcum": "prepare_chat_balanced_dataset.py'nin GERÇEK 9 kaynağının 9'u diskte. Etkin toplam (cap/×3/kırpma uygulanmış) = 24375 = meta total_records BİREBİR. Ayrıca 125 vs 375 = satır 74 `ms_chat_raw * 3` (3x oversample); 5400 vs 2500 = satır 84 `carpenter_raw[:2500]` — ikisi de tutarsızlık değil.",
+      "hata": "Meta'nın MANTIKSAL adlarını ('parenting_deep', 'lexical_semantics', 'rag_interactive', 'classic_rag') alıp onlardan dosya yolu kurup aradım; gerçek dosya adları '_dataset' ekli. Meta anahtarı ile dosya adı ayrı eksenler.",
+      "not": "'İki sayı çelişiyor sanma, önce kümeyi doğrula' kuralının — özellikle 'tanımın ADI' ekseninin — 19. vakası. Önce kullanıcıya, sonra düzeltilmiş ölçümle rapor edildi."
+    },
+    {
+      "id": "V6", "severity": "BILGI",
+      "baslik": "Sandbox yine sahte test hatası üretti",
+      "olcum": "sandbox İÇİNDE 1 failed (PermissionError: [Errno 1], test_agent_gateway socket.bind), aynı komut sandbox DIŞINDA 173 passed.",
+      "not": "Yerleşik kural uygulandı: PermissionError içeren başarısızlık ölçüm kabinin kusuru, bulgu yazılmadan önce kısıt kaldırılıp tekrar ölçülür."
+    },
+    {
+      "id": "V7", "severity": "BILGI",
+      "baslik": "Süre şüphem doğrulanmadı — 2 dk 37 sn'lik yürütüm gerçek çıktı",
+      "olcum": "Devralma 04:46:08Z -> bitiş 04:48:45Z. Bu süreyi 'yüzeysel geçmiş olmalı' diye şüpheyle karşıladım ve 8 kabul kriterinin tamamını + mutant + sha256 kanıtını bağımsız ölçtüm: HEPSİ TUTTU, donmuş dosya ezilmedi, kanarya mutantta kırmızı.",
+      "not": "Süre kısalığı bu görevde kusur göstergesi DEĞİL. Heuristiği kanıt yerine koymamak için kayda geçirildi."
+    }
+  ],
+
+  "degismezlik": {
+    "data/vocab.json": "4b40eebee9c996c8dd3150f6b3c8896de85764ee1cf0b08e6c636e5c002a0e69 (değişmedi)",
+    "data/vocab_entity.json": "7611b6a523a2bb524cc21aa9cc64235a... (değişmedi)",
+    "data/rebuild/vocab_base_32852.json": "7611b6a523a2bb52... (entity ile bit-özdeş, değişmedi)",
+    "data/train_balanced_sft.bin": "55863e36b62414c6... (kapı denemesinden ve pytest'ten sonra da değişmedi)",
+    "data/*.bin": "14 dosya (değişmedi)",
+    "data/pedagogy/cot_vault.jsonl": "97b06fe5befd6613..., 91 satır (pytest öncesi ve sonrası değişmedi)",
+    "src/llm/tokenizer.py": "560a3bfbf32c394a... (bu görevde dokunulmadı)"
+  },
+
+  "karar": "T-0040 kabul edildi. T-0039'un V1 (kapı otoriteyi okumuyor), V3 (boş girdide ulaşılamaz kapı) ve V4 (önekli eski-kod tabanı) bulguları ÜÇÜ DE KAPANDI ve bağımsız kanıtlandı; kapı fail-closed ve donmuş dosya ezilmedi. F2 icrası için kod tarafında engel kalmadı. Ancak F2'den ÖNCE kapatılması gereken iki ORTA bulgu var: V1 (10 korumasız vocab.save sitesi) ve V2 (chat_balanced üreticisinde literal_entity_mode yok)."
+}

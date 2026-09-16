@@ -36,6 +36,7 @@ from src.rag.merak import CuriosityEngine
 from src.llm.router import TriModalRouter
 from src.rag.vector_memory import VectorMemory
 from src.rag.embedding import generate_kristal_vector, generate_sparse_vector
+from src.rag.rag_pipeline import is_context_usable, build_rag_prompt_tokens, RAG_MATCH_THRESHOLD
 
 
 class EpistemicCuriosityAgent:
@@ -294,24 +295,18 @@ class EpistemicCuriosityAgent:
         expert_names = self.router.get_selected_expert_names(router_indices)[0]
         
         # Step 4: Conditioning with Document (if retrieved) & Generating Output
-        augmented_input = query
-        doc_crystal_tags = ""
-        doc_text = ""
-        
-        if retrieved_doc and match_score >= 0.40: # Valid context
-            doc_text = retrieved_doc.get("text", "")
-            augmented_input = build_rag_input(doc_text, query)
-            
-        prompt_dict_aug = {
-            "instruction": instruction,
-            "input": augmented_input,
-            "output": ""
-        }
-        aug_tokens = self.tokenizer.encode(json.dumps(prompt_dict_aug, ensure_ascii=False))
-        if output_start_id in aug_tokens:
-            eval_aug_tokens = aug_tokens[:aug_tokens.index(output_start_id) + 1]
-        else:
-            eval_aug_tokens = aug_tokens
+        conditioned = bool(retrieved_doc and is_context_usable(match_score, RAG_MATCH_THRESHOLD))
+        doc_text = retrieved_doc.get("text", "") if conditioned else ""
+        augmented_input = build_rag_input(doc_text, query) if (conditioned and doc_text) else query
+        doc_crystal_tags = retrieved_doc.get("metadata", {}).get("crystal_tags", "") if retrieved_doc else ""
+
+        eval_aug_tokens = build_rag_prompt_tokens(
+            tokenizer=self.tokenizer,
+            vocab=self.vocab,
+            query=query,
+            doc_text=doc_text if conditioned else None,
+            instruction=instruction,
+        )
             
         gen_tokens, entropy_post = self.generate_tokens(eval_aug_tokens, max_new_tokens=45)
         
@@ -349,7 +344,7 @@ class EpistemicCuriosityAgent:
             if clean_doc_text:
                 clean_target = self.tokenizer.decode(self.tokenizer.encode(clean_doc_text)).replace("<BOS>", "").replace("<EOS>", "").strip()
             else:
-                clean_target = clean_doc_tags or morpheme_output
+                clean_target = doc_crystal_tags or morpheme_output
                 
             record = {
                 "instruction": instruction,

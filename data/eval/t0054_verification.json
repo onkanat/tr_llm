@@ -1,0 +1,52 @@
+{
+  "task_id": "T-0054",
+  "baslik": "F3-clean: tam kosumun MASKELI receteyle yeniden kosulmasi",
+  "dogrulama_damgasi": "2026-09-16T20:20:00Z",
+  "dogrulayan": "claude (danisman rolu, bagimsiz olcum)",
+  "yonetim": "PASS",
+  "ozet": "Maskeleme yozlasmayi COZDU ve yeni taban adayi belirgin bicimde daha saglikli: f3_clean'de <PAD> en sik 5'te YOK (f3'te en sik 1. idi), CE 2,0695 -> 1,9625 (en iyi), noktalama cesitliligi artti ('.', ':', ')', kesme) ve RAKAM blogu ilk kez kullaniliyor ('0' id 32146 x5). Adim suresi B'de 1,474 sn/adim (T-0052'de yuklu halde 3,447) -> yuk hipotezi dogrulandi. changed_files = writes[] (4=4) BEYANI DOGRU (T-0053 F1 kusuru tekrarlanmadi). Bulgu YOK; iki kayit: (a) G3'un ham sayim formulasyonu hala yetersiz (f3_clean 20 vs taban 22 - ama nitelik farkli), (b) f3/f3_sft artik kullanilmamali.",
+  "kabul_kriterleri": [
+    {"no": "a", "kriter": "KIRALAMA: dir + dosya kiralari yazimdan once", "durum": "DOGRULANDI",
+     "olcum": "Olay gunlugu: 19:29:59Z data/ ve scratch/, 19:30:14Z rapor+not; 20:07:57Z'de dordu de birakildi. Raporun kendi beyani da 'acquired_before_writes: true'."},
+    {"no": "b", "kriter": "KOSUM A+B (1000 adim, MPS, maskeli)", "durum": "DOGRULANDI",
+     "olcum": "A: 0,449 sn/adim (blok 64, 449,2 sn) | B: 1,474 sn/adim (blok 128). Iki kosumda da 'pad_mask_active: true'. Kayiplar (maskeli olcek): A 3,0881 -> 0,7607 | B 0,8055 -> 0,7165."},
+    {"no": "c", "kriter": "KAPI a: MPS + adim suresi", "durum": "DOGRULANDI",
+     "olcum": "device='mps (Metal GPU)' iki kosumda. B'nin 1,474 sn/adim'i, yuksuz beklenti ~1,55 ile uyumlu ve T-0052'nin yuklu 3,447'sinden 2,3 kat hizli -> adim suresi yavaslamasinin nedeni GPU yuku idi (kullanici teyidiyle de ortusuyor)."},
+    {"no": "d", "kriter": "KAPI d: <PAD> en sik 1. OLMAMALI", "durum": "DOGRULANDI (BAGIMSIZ)",
+     "olcum": "Kendi olcumum (Y1, 5 baglam, greedy 32 = 160 token): f3'te en sik 1. = <PAD> x15; f3_clean_sft'te <PAD> YOK; f3_clean'de <PAD> YOK. f3_clean en sik 5: 32137 ('.') x8, 13 x6, 32146 ('0') x5, 28 x4, 8559 x4 -> PAD yozlasmasi giderilmis, RAKAM blogu ilk kez kullaniliyor."},
+    {"no": "e", "kriter": "KAPI c: NOKtalama (Y1, pinli taban)", "durum": "DOGRULANDI - ANCAK HAM SAYIM YETERSIZ (bkz kayit 1)",
+     "olcum": "Benim olcumum: TABAN '.'12 ','10 ':'0 ')'0 \"'\"0 (toplam 22) | f3 (maskesiz) 4/4/1/4/3 (16) | f3_clean_sft 6/1/5/0/1 (13) | f3_clean 8/2/4/2/4 (20). Yani f3_clean toplamda tabana YAKIN (20 vs 22) ama NITELIK farkli: tabanin uretimi '.' ve ',' agirlikli ve yaninda <UNK> x11 varken, f3_clean '.'/':'/')'/kesme ve RAKAM cesitliligi gosteriyor. Ham sayim 'kapi gecti' demek icin yetersiz; oran/baglam ekseni gerekiyor (plan §7)."},
+    {"no": "f", "kriter": "KAPI e: CE (maskeSIZ modda, pinli tabanla kiyaslanabilir)", "durum": "DOGRULANDI",
+     "olcum": "Kendi olcumum: taban 5,5309 | f3 2,0695 | f3_clean_sft 1,9745 | f3_clean 1,9625. Pinli degerlerle (taban 5,4698/5,5631 · f3 2,0695) tutarli; f3_clean ZINCIRIN EN IYISI."},
+    {"no": "g", "kriter": "KANARYA: mevcut artefaktlar degismedi", "durum": "DOGRULANDI",
+     "olcum": "9 pin saglam (5 checkpoint + f3a + f3b + f3_sft + f3); data/*.pt 27 -> 29 (tam +2); data/*.bin 15; yedekler yerinde."},
+    {"no": "h", "kriter": "KAPANIS: changed_files == writes[]", "durum": "DOGRULANDI (T-0053 F1 DUZELTILDI)",
+     "olcum": "changed_files 4 == writes[] 4; mesaj 20:07:45Z; kiralar 20:07:57Z. T-0053'te bos beyan edilen alan bu kez DOGRU doldurulmus."}
+  ],
+  "bagimsiz_olcumlerim": {
+    "y1_noktalama": "TABAN 22 | f3 16 | f3_clean_sft 13 | f3_clean 20 (cesitlilik f3_clean'de en yuksek)",
+    "en_sik_1": "TABAN: '.' x12 | f3: <PAD> x15 | f3_clean_sft: 28 x6 | f3_clean: '.' x8 (+ '0' x5)",
+    "ce_masksiz": "taban 5,5309 | f3 2,0695 | f3_clean_sft 1,9745 | f3_clean 1,9625"
+  },
+  "findings": [
+    {
+      "id": "1",
+      "siddet": "KAYIT (olcum tasarimi - plan duzeltmesi)",
+      "baslik": "G3'un ham sayim formulasyonu yetersiz: f3_clean 20, taban 22 - ama nitelik farkli",
+      "olcum": "Tabanin noktalama uretimi '.' ve ',' agirlikli ve yaninda <UNK> x11 tasiyor; f3_clean'in uretimi '.'/':'/')'/kesme ve RAKAM cesitliligi gosteriyor. Ham toplam karsilastirmasi 'taban daha cok noktalama uretiyor' gibi YANILTICI bir hukme goturebilir.",
+      "oneri": "G3 oran/baglam eksenine cevrilmeli: (i) noktalama YOGUNLUGU (100 token basina) + (ii) baglam verildiginde teacher-forcing olasiligi + (iii) '<UNK>' orani (tabanda 11/160 - bozulma gostergesi). Bu ucuncu eksen f3_clean'in ustunlugunu sayisallastirir."
+    },
+    {
+      "id": "2",
+      "siddet": "KAYIT",
+      "baslik": "f3 ve f3_sft artik kullanilmamali; F4'un tabani f3_clean olmali",
+      "olcum": "f3'te en sik token <PAD> (yozlasma), CE 2,0695; f3_clean'de PAD yok, CE 1,9625 ve cesitlilik daha yuksek. Iki model ayni recetenin yalniz maske farkli kosumlaridir.",
+      "oneri": "F4 ceket egitimi `data/kristal_model_f3_clean.pt` uzerinden planlanmali; f3/f3_sft yalniz tarihsel kiyas icin saklanmali (silinmesi gerekmez, ama taban yapilmamali)."
+    }
+  ],
+  "kapanis": {
+    "uc_sinyal_kapisi": "mesaj 20:07:45Z ✓ | kiralar 20:07:57Z'de birakildi (4 yol) ✓ | changed_files (4) == writes[] (4) ✓",
+    "sonuc": "T-0054 KABUL (hukum: PASS). Maskeli recete PAD yozlasmasini cozdu, kaybi iyilestirdi ve noktalama cesitliligini artirdi; adim suresi yuk hipotezini dogruladi. F4 icin taban adayi: `data/kristal_model_f3_clean.pt`.",
+    "sonraki_adim": "F4 oncesi: (i) G3'un oran/baglam eksenli olcumu (kucuk olcum isi), (ii) F4 veri karisimi karari (kullaniciya bagli: chosen/SFT kutlesi eklenecek mi)."
+  }
+}

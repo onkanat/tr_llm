@@ -30,13 +30,25 @@ def _load_raw_documents(input_filepath: str) -> list:
     return [segment.strip() for segment in re.split(r"\n\s*\n+", text) if segment.strip()]
 
 
-def prepare_dataset(input_filepath: str, output_filepath: str):
+def prepare_dataset(
+    input_filepath: str,
+    output_filepath: str,
+    vocab_path: str = "data/rebuild/vocab_base_32852.json",
+    literal_entity_mode: bool = True,
+    save_vocab_to: str | None = None
+):
     """
     Ingests a raw text dataset, processes it through the Kristal Compiler,
     and saves the semantic token stream as a numpy array for fast LLM training.
 
     Additionally writes a metadata sidecar describing document boundaries.
     """
+    # D2: save_vocab_to fonksiyon girişinde, herhangi bir işlem/yazımdan önce doğrulanır
+    if save_vocab_to is not None:
+        from src.llm.frozen_guard import is_frozen_path
+        if is_frozen_path(save_vocab_to):
+            raise RuntimeError(f"Donmuş sözlük yoluna geri yazma engellendi: {save_vocab_to}")
+
     lexicon = LexiconManager()
     lexicon_path = 'data/lexicon/roots.tsv'
     if os.path.exists(lexicon_path):
@@ -47,14 +59,13 @@ def prepare_dataset(input_filepath: str, output_filepath: str):
     graph = build_default_graph()
     compiler = CrystalCompiler(lexicon, graph)
     vocab = Vocabulary()
-    vocab_path = 'data/vocab.json'
     if os.path.exists(vocab_path):
         vocab.load(vocab_path)
         print(f"Loaded existing vocabulary from {vocab_path} with {len(vocab.stoi)} tokens.")
     else:
         raise FileNotFoundError(f"Kelime dağarcığı (vocab) dosyası bulunamadı: {vocab_path}")
 
-    tokenizer = KristalTokenizer(compiler, vocab)
+    tokenizer = KristalTokenizer(compiler, vocab, literal_entity_mode=literal_entity_mode)
 
     print(f"Preparing dataset from {input_filepath}...")
     token_sequences = []
@@ -81,9 +92,12 @@ def prepare_dataset(input_filepath: str, output_filepath: str):
         arr.tofile(output_filepath)
         print(f"Saved binary tokens to {output_filepath}")
 
-        # Save vocabulary back to vocab.json
-        vocab.save(vocab_path)
-        print(f"Saved updated vocabulary to {vocab_path} with {len(vocab.stoi)} tokens.")
+        # Save vocabulary only if save_vocab_to is explicitly provided
+        if save_vocab_to is not None:
+            vocab.save(save_vocab_to)
+            print(f"Saved updated vocabulary to {save_vocab_to} with {len(vocab.stoi)} tokens.")
+        else:
+            print("save_vocab_to belirtilmedi; sözlük geri yazılmadı.")
 
         meta_path = output_filepath + '.meta.json'
         with open(meta_path, 'w', encoding='utf-8') as meta_file:

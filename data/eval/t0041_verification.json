@@ -1,0 +1,80 @@
+{
+  "task_id": "T-0041",
+  "verdict": "PASS_WITH_FINDINGS",
+  "verified_at": "2026-09-16T07:58:46Z",
+  "verified_by": "claude (danışman)",
+  "task_title": "chat_balanced üreticisi: sözlük+mod parametresi, donmuş yazım kapısı, meta öz-tutarlılığı (saf KOD)",
+  "method": "Her iddia diskten bağımsız ölçüldü. Kaynak okuması + koşum karışımı: imzalar inspect ile, kapı yüklemleri frozen_guard ile, mutant modülün İÇİNE enjekte edilerek (vakum sınıfı 5), pytest sandbox DIŞINDA. NOT: ölçüm sırasında Bash sınıflandırıcısı aralıklı kesintiye uğradı; `main()` çağrısı içeren komutlar tutarlı biçimde engellendi (sınıflandırıcı haklı — main yazan bir fonksiyon). Bu yüzden D2'nin RuntimeError'ı doğrudan koşulamadı; yerine kapı YÜKLEMİ ölçüldü + kapının kaynak KONUMU okundu. Hangi ölçümün koşum, hangisinin statik olduğu her kriterde yazılı.",
+
+  "kabul_kriterleri": [
+    {"id": "a", "iddia": "vocab_path ve literal_entity_mode parametre oldu", "olcum": "KOŞUM: inspect.signature(main) -> (vocab_path: str = 'data/rebuild/vocab_base_32852.json', literal_entity_mode: bool = True, save_vocab_to: str | None = None). Kaynak: satır 98 `KristalTokenizer(compiler, vocab, literal_entity_mode=literal_entity_mode)`; 'literal_entity_mode' geçiş sayısı 0 -> 5.", "sonuc": "DOGRULANDI"},
+    {"id": "b", "iddia": "gömülü donmuş desen listesi yok, bekçi kullanılıyor", "olcum": "KOŞUM: 'data/*.bin'=0, 'realistic_rag'=0; satır 26 `from src.llm.frozen_guard import is_frozen_path`; 'is_frozen_path' geçiş sayısı 3.", "sonuc": "DOGRULANDI"},
+    {"id": "c", "iddia": "donmuş sözlüğe yazım RuntimeError, varsayılan yazmıyor", "olcum": "KISMEN KOŞUM: is_frozen_path('data/vocab.json') = True (ölçüldü); kapı satır 84-87, main içindeki İLK yürütülebilir ifade (satır 80-82 üç print), yani vocab.load'dan (satır 91) ÖNCE -> RuntimeError. Satır 132-136: `vocab.save` yalnız `save_vocab_to is not None` iken; varsayılan None -> hiç yazmıyor. main() çağrısı sınıflandırıcı tarafından engellendi.", "sonuc": "DOGRULANDI (yüklem koşuldu + konum okundu; main() doğrudan koşulamadı)"},
+    {"id": "d", "iddia": "build_composition saf fonksiyon, 9 anahtar, öz-tutarlılık assert'i", "olcum": "KOŞUM: build_composition(9 kaynak) -> anahtar=9, toplam=24375, turk_tarihi_sft dahil=True. Kaynak satır 35-46: 9 anahtarlı beyaz liste (.get(k,0)); satır 190 `assert sum(composition.values()) == len(all_records)`.", "sonuc": "DOGRULANDI"},
+    {"id": "e", "iddia": "pytest yeni başarısızlık üretmedi", "olcum": "KOŞUM (sandbox DIŞINDA): 173 passed in 9.34s. Görev öncesi sayı da 173.", "sonuc": "DOGRULANDI"},
+    {"id": "f", "iddia": "kanaryalar korundu", "olcum": "KOŞUM: data/*.bin=14; train_chat_balanced.bin sha 3b2b9cd3cf3f4714 (değişmedi); data/vocab.json 4b40eebee9c996c8; vocab_entity.json 7611b6a523a2bb52; cot_vault.jsonl 97b06fe5befd6613 + 91 satır; tokenizer.py 560a3bfbf32c394a.", "sonuc": "DOGRULANDI"},
+    {"id": "g", "iddia": "betik koşulmadı", "olcum": "KOŞUM: train_chat_balanced.bin sha 3b2b9cd3cf3f4714 değişmedi; .bin ve .meta.json mtime = 2026-09-13T08:06:14Z (görev penceresi 07:32-07:34Z'den günlerce önce).", "sonuc": "DOGRULANDI"},
+    {"id": "h", "iddia": "tam kapsam + tamamlanma mesajı", "olcum": "changed_files 3 ⊇ writes 2 (fazlalık .agent-bus/notes/T-0041.md, meşru notes yüzeyi). Tamamlanma mesajı 2026-09-16T07-34-52Z, from=antigravity. Aktif kira 0.", "sonuc": "DOGRULANDI"}
+  ],
+
+  "bagimsiz_ek_olcum": {
+    "mutant_kanaryasi": "KOŞUM: build_composition gövdesindeki 'turk_tarihi_sft' anahtarı modül İÇİNDE 'MUTANT_X' ile değiştirildi -> anahtar=9, toplam=21875 != 24375 -> main:190 assert'i KIRMIZI yandı. Assert, EKSİK ANAHTAR sınıfı için VAKUM DEĞİL.",
+    "kapi_yuklemleri": "KOŞUM: is_frozen_path('data/vocab.json')=True, is_frozen_path('data/train_chat_balanced.bin')=True, is_frozen_path('data/rebuild/vocab_base_32852.json')=False.",
+    "kapsam_denetimi": {"writes_beyan": 2, "changed_files": 3, "beyan_edilip_degismemis": [], "degisip_beyan_edilmemis": [".agent-bus/notes/T-0041.md"]},
+    "kapanis_uc_sinyal": "1) results/T-0041.json status=done finished=2026-09-16T07:34:42Z  2) aktif kira 0 (kiralar 07:34:57Z'de bırakıldı)  3) changed_files 3 ⊇ writes 2 — ÜÇÜ TUTTU. Tamamlanma mesajı var."
+  },
+
+  "bulgular": [
+    {
+      "id": "V1", "severity": "YUKSEK",
+      "baslik": "Betik artık HİÇ KOŞAMAZ: donmuş çıktı yolu için kaçış kapısı yok",
+      "olcum": "Satır 169 `output_bin = 'data/train_chat_balanced.bin'` (SABİT literal). KOŞUM: is_frozen_path('data/train_chat_balanced.bin') = True. Satır 170-171: `if is_frozen_path(output_bin): raise RuntimeError(...)`. Dosyada 'allow_frozen_write' geçiş sayısı = 0.",
+      "etki": "Bu üretici artık her koşumda satır 171'de ölür — çıktısı yazmadan önce. Yani F2 icrası bu betiği KULLANAMAZ. Karşılaştırma: T-0039'un onardığı `compile_jsonl_to_bin` tam bu kaçış kapısını taşıyor (`allow_frozen_write: bool = False`), çünkü donmuş yola yazımın BİLİNÇLİ ve BEYAN EDİLMİŞ bir karar olması gerekiyor. Burada o kapı yok: kapı doğru kapatıldı ama üretici kilitle birlikte kilitlendi.",
+      "kaynak": "Kusur spec'te (benim), yürütücüde DEĞİL — spec 'BETİĞİ KOŞMA' dediği için yürütücü bunu keşfedemezdi ve ben kaçış kapısını istemedim.",
+      "oneri": "Bu betiğe de `allow_frozen_write: bool = False` eklensin; F2 icra görevi `True` ile açıkça geçsin (yedek alındıktan sonra)."
+    },
+    {
+      "id": "V2", "severity": "ORTA",
+      "baslik": "Öz-tutarlılık assert'i TAUTOLOJİ — kayıt kaybını yakalayamaz (vakum sınıfı 4)",
+      "olcum": "Satır 69-70: `except Exception: continue` — `tokenize_jsonl` bozuk satırı SESSİZCE yutuyor; sayaç yok, log yok, uyarı yok (T-0039 aynı sınıfı `compile_jsonl_to_bin` içinde `failed_records` sayacı + stderr logu ile kapatmıştı; bu üreticide sürüyor). Satır 190: `assert sum(composition.values()) == len(all_records)`. ANCAK `composition` değerleri satır 176-186'da `len(chat_records)`, `len(ms_chat_records)` … yani `all_records`'u oluşturan (satır 139-149) AYNI listelerin uzunluklarıdır.",
+      "etki": "Bir kayıt yutulursa assert'in İKİ TARAFI da aynı miktarda düşer -> assert GEÇER. Yani öz-tutarlılık denetimi yalnızca beyaz listede EKSİK ANAHTAR durumunu yakalar (mutantla kanıtlandı), kayıt kaybını ASLA yakalayamaz. Kendine göndermeli parametre: denetlenen büyüklük, denetleyen büyüklüğün kaynağından türüyor.",
+      "oneri": "`tokenize_jsonl` yutulan satırı saysın ve `failed_records` olarak meta'ya yazsın (T-0039 deseni); assert `len(records)` yerine HAM satır sayısıyla karşılaştırılsın."
+    },
+    {
+      "id": "V3", "severity": "DUSUK",
+      "baslik": "Kayıt kaybı denetimi için meta'da ham satır sayısı yok",
+      "olcum": "meta_info (satır 195-201) yalnız total_records/total_tokens/block_size/vocab_size/dataset_composition taşıyor; kaynak dosyaların HAM satır sayıları ve yutulan satır sayısı yazılmıyor.",
+      "etki": "F2 sonrası 'beklenen kayıt sayısı' ancak kaynakları yeniden sayarak doğrulanabilir; artefakt kendi beklenen değerini taşımıyor. V2'nin doğal uzantısı."
+    },
+    {
+      "id": "V4", "severity": "BILGI",
+      "baslik": "Kalıcı pytest testi eklenmedi",
+      "olcum": "changed_files 3 dosya; hiçbiri tests/ altında değil. 'build_composition' ve donmuş kapı için pytest testi YOK.",
+      "kaynak": "Kusur spec'te: kabul kriterim (d) 'test ediliyor' diyordu ama `writes[]` bir test dosyası içermiyordu -> yürütücü ekleyemezdi. Küçük-iş politikası gereği `writes[]` kısa tutulurken bu feda edildi.",
+      "etki": "Bu iki davranışın bağımsız kanıtı her turda yeniden üretilmek zorunda; regresyon sessizce geri gelebilir."
+    },
+    {
+      "id": "V5", "severity": "BILGI",
+      "baslik": "Spec dışı ek sertleştirme (olumlu içgüdü, V1'i üreten de bu)",
+      "olcum": "Satır 170-171, spec'te İSTENMEYEN bir `output_bin` donmuş kapısı ekliyor (spec yalnız `save_vocab_to` için istemişti).",
+      "not": "Kapı sınıfını kapatma içgüdüsü doğru; ama kaçış kapısı eklenmediği için üreticiyi kilitledi. V1 ile birlikte okunmalı."
+    },
+    {
+      "id": "V6", "severity": "BILGI",
+      "baslik": "Yürütücü raporu findings: [] beyan etti — iki kusur gözden kaçmış",
+      "olcum": "Yürütücünün raporu (`data/eval/t0041_chat_balanced_generator_2026-09-16.json`) 'findings': [] diyor. V1 ve V2 bu raporda yok.",
+      "not": "Yürütücü kusuru DEĞİL: V1 spec'in 'betiği koşma' yasağı yüzünden keşfedilemezdi (koşsaydı ilk satırda görürdü), V2 ise spec'in istediği assert'in kendi tasarım kusuru. İkisi de spec yazarının (benim) körlüğü."
+    }
+  ],
+
+  "degismezlik": {
+    "data/vocab.json": "4b40eebee9c996c8dd3150f6b3c8896de85764ee1cf0b08e6c636e5c002a0e69 (değişmedi)",
+    "data/vocab_entity.json": "7611b6a523a2bb52... (değişmedi)",
+    "data/train_chat_balanced.bin": "3b2b9cd3cf3f4714... (değişmedi; mtime 2026-09-13T08:06:14Z)",
+    "data/*.bin": "14 dosya (değişmedi)",
+    "data/pedagogy/cot_vault.jsonl": "97b06fe5befd6613..., 91 satır (değişmedi)",
+    "src/llm/tokenizer.py": "560a3bfbf32c394a... (dokunulmadı)"
+  },
+
+  "karar": "T-0041 kabul edildi: D1/D2/D3 hedeflerinin ÜÇÜ de yerinde ve bağımsız kanıtlandı; kanaryalar korundu, betik koşulmadı, tamamlanma sinyali gönderildi. Ancak iki yeni kusur F2 icrasından ÖNCE kapatılmalı: V1 (YÜKSEK — üretici artık koşamaz, kaçış kapısı yok) ve V2 (ORTA — öz-tutarlılık assert'i tautoloji). T-0042 bu ikisini kapatmalı: `allow_frozen_write` parametresi + `failed_records` sayacı + assert'in ham satır sayısına bağlanması."
+}

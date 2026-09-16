@@ -4,6 +4,23 @@ Bu projedeki tüm önemli değişiklikler bu dosyada belgelenmektedir.
 
 Format [Keep a Changelog](https://keepachangelog.com/tr/1.0.0/) standardına dayanır ve bu proje [Semantic Versioning (SemVer)](https://semver.org/spec/v2.0.0.html) ilkelerini benimser.
 
+## [1.9.0] - 2026-09-16
+
+### Eklendi (Added)
+- **F2 — Bayat `.bin`'lerin yeni sözlükle yeniden derlenmesi (eski artefaktlar korunarak):**
+  - `data/train_chat_balanced.bin` yeniden derlendi (sözlük **32.852** + `literal_entity_mode=True`): 3.120.000 token, **max id 32.850**, noktalama bloğu **180.336**, kesme 39.706 — eski artefaktta noktalama **0** idi. Bağımsız yeniden koşum **bayt-özdeş** (T-0044).
+  - `data/train_balanced_sft_v2.bin` **yeni ad** olarak 7 jsonl kaynaktan derlendi: 1.793.433 token, noktalama 180.336; eski `train_balanced_sft.bin` **korundu** (T-0045). 8. kaynak (`future_train_vector.jsonl`, diskte 0 B) kullanıcı kararıyla **hariç** tutuldu.
+  - Eğitim hattı `_v2`'ye geçirildi; model artık **yüklenen sözlükten** kuruluyor (32.852) ve `resize_state_dict` +36 satır padding'i `[SOZLESME_UYARI]` ile **görünür** biçimde yapıyor (T-0046).
+- **Donmuş-yazım kapıları:** `run_goal_pipeline.py`, `train.py`, `train_dpo.py`, `retrain_clean_models.py` yazımdan **önce** `check_frozen_save_path` çağırıyor ve operatör onayı (`--allow-frozen-write`) istiyor; kanonik yardımcı `src/llm/frozen_guard.check_frozen_save_path` (T-0047…T-0049).
+- **`<PAD>` kayıp maskesi (`train.py`):** eğitim kaybında dolgu token'ları **varsayılan olarak maskelenir** (`--no-pad-mask` ile kapanır). Kontrollü ikiz deney (aynı taban/veri/adım, yalnız bayrak farkı): maskesizde `<PAD>` en sık üretilen token (**39-65**), maskelide **0** (T-0053).
+- **F3 — tabana yetkinlik tamamlama:** önce **yedek** (`scratch/f3_backup_2026-09-16/`, 5 checkpoint, sha-özdeş + `torch.load` ile açılabilirlik kanıtı), sonra 2×1000 adımlık koşumlar (`kristal_model_f3_sft.pt`, `kristal_model_f3.pt`) ve maskeli yeniden koşum (`kristal_model_f3_clean_sft.pt`, `kristal_model_f3_clean.pt`) (T-0050/T-0052/T-0053/T-0054).
+- **Test:** `tests/test_pad_loss_mask.py` — maskenin **iki yönlü** kanıtı (maskeli kayıp PAD konumlarına duyarsız, maskesiz duyarlı) + regresyon → paket **195 passed**.
+
+### Bilinen sınırlar (Known limitations)
+- `kristal_model_f3.pt` **`<PAD>` yozlaşması** taşır (maskesiz reçeteyle eğitildi) → **F4 ceket eğitiminin tabanı olarak kullanılmamalı**; maskeli yeniden koşum (`f3_clean`) esas alınmalı.
+- **Kayıp değerleri maske durumuna bağlıdır:** aynı rejimde maskeli **1,5836** / maskesiz **6,8515** (~4×). Maskeleme öncesi kayıplarla (5,3955 / 3,6530 / 2,4404 / 0,9447) **doğrudan kıyaslama yapılmamalı**.
+- Eğitim koşumları sırasında makinede GPU tüketen başka iş çalıştırılmamalı: aynı makinede tarayıcı/video açıkken adım süresi **0,43 → 3,45 sn/adım**'a çıktı (T-0052 ölçümü, nedeni kullanıcı tarafından teyit edildi).
+
 ## [1.8.0] - 2026-09-13
 
 ### Eklendi (Added)

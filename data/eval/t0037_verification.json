@@ -1,0 +1,567 @@
+{
+  "task_id": "T-0037",
+  "dogrulayan": "claude (danisman rolu)",
+  "tur": 1,
+  "ts_start": "2026-09-15T21:19:30Z",
+  "ts_end": "2026-09-15T21:52:00Z",
+  "status": "PASS_WITH_FINDINGS",
+  "ozet": "Yurutucunun olcum katmani BUYUK OLCUDE tuttu ve 3 noktada raporun iddiasindan DAHA GUCSUZ cikmadi: (i) sozluk uretimi spec'in tarif ettigi yoldan bagimsiz olarak yeniden uretildi ve sha256 BYTE-OZDES cikti; (ii) degismezlik kapisi raporun 15'lik korpusu yerine 374 segmentlik GERCEK korpusta 0 fark verdi; (iii) pytest 144 -> 159 (+15) ve kendi kosumum hicbir artefakti degistirmedi. Buna karsilik iki kabul kriteri OLCUMLE KARSILANMADI (G5 korpusu 15 < 60 ve G2(e) sayaci yok), iki test VAKUM cikti, ve sozluk gecisinin mode=False ciktisini de degistirdigi (6/374 segment) hic olculmemis.",
+  "yontem": {
+    "ilke": "Yurutucunun probe'u (scratch/t0037_kesme_probe.py) IMPORT EDILMEDI; her sayi kaynaktan yeniden turetildi.",
+    "eski_tokenizer": "subprocess ile `git show HEAD:src/llm/tokenizer.py` cekilip gecici modul olarak exec edildi (depodaki dosya DEGISTIRILMEDI).",
+    "vakum_kaniti": "Yurutucunun test dosyasi import edilip test FONKSIYONLARI kontrollu fixture'larla DOGRUDAN kosturuldu.",
+    "hash_konvansiyonu": "Bu raporda token dizisi kiyaslamasi YALNIZ Python liste esitligi ile yapildi; sha256 ile token dizisi kiyaslanmadi (T-0036 F1 konvansiyon tuzagindan kacinildi).",
+    "betikler": [
+      {
+        "path": "/tmp/claude-501/t0037_verify.py",
+        "sha256": "8c5e86821b97172f7f5a9f8ab904f085b4f225bb93d1011ecd0ad322f97a2d08",
+        "mtime": "2026-09-15T21:21:32.308174+00:00",
+        "bytes": 18968
+      },
+      {
+        "path": "/tmp/claude-501/t0037_verify2.py",
+        "sha256": "8f55fc24d9a10880c7dbfb9518c36099b9b1596e97c111331a9a35848086c9f9",
+        "mtime": "2026-09-15T21:22:15.395066+00:00",
+        "bytes": 7065
+      },
+      {
+        "path": "/tmp/claude-501/t0037_verify3.py",
+        "sha256": "62954eb577d37c3706eb7d19af125a4c08aba15720add430e4be80995b798e79",
+        "mtime": "2026-09-15T21:22:31.202744+00:00",
+        "bytes": 4699
+      },
+      {
+        "path": "/tmp/claude-501/t0037_scan2.py",
+        "sha256": "7427746c08afe7559ad541815fbf28e751fc00d03274e06606f9f78d7664de98",
+        "mtime": "2026-09-15T21:20:53.701840+00:00",
+        "bytes": 2809
+      }
+    ]
+  },
+  "ortam": {
+    "python": "3.14.6",
+    "torch": "2.11.0",
+    "mps": false,
+    "git_head_tokenizer_sha": "f5023976086d9cf971fd84adb78d1b9c7c7d4d0906684c7f7624e5362bc64a50"
+  },
+  "dogrulanan_iddialar": {
+    "toplam": 38,
+    "uyusan": 35,
+    "uyusmayan": [
+      {
+        "iddia": "G0 mode=True 1973'te ids",
+        "benim_olcum": [
+          2,
+          32147,
+          32155,
+          32153,
+          32149,
+          32850,
+          3
+        ],
+        "rapor": [
+          2,
+          0,
+          3
+        ],
+        "uyusuyor": false
+      },
+      {
+        "iddia": "N2 == 0",
+        "benim_olcum": false,
+        "rapor": true,
+        "uyusuyor": false
+      },
+      {
+        "iddia": "alınan her kiralama serbest birakilmis",
+        "benim_olcum": false,
+        "rapor": true,
+        "uyusuyor": false
+      }
+    ],
+    "not": "Ilk kosumdaki 3 'uyusmazlik' ayiklandi: 2'si BENIM harness hatamdi (G0 mode=True'yi YENI tokenizer'la olctum; kiralama filtresi kendi kirami da saydi) ve 1'i populasyon farkiydi (N2 raporun 15'lik korpusunda 0, benim 85'lik korpumda 8). Duzeltilmis G0 (eski tokenizer, mode=True): 1973'te -> [2,0,3] = raporunkiyle AYNI. G0 mode=True İstanbul'da -> <UNK> TASIR (kardes kontrol, raporda yok).",
+    "g0_mode_true_eski_benim": {
+      "1973'te": [
+        2,
+        0,
+        3
+      ],
+      "1973": [
+        2,
+        32147,
+        32155,
+        32153,
+        32149,
+        3
+      ],
+      "İstanbul'da": [
+        2,
+        32816,
+        32818,
+        32827,
+        0,
+        32836,
+        32837,
+        32820,
+        32832,
+        32821,
+        32838,
+        32830,
+        32817,
+        29,
+        3
+      ],
+      "TBMM'ye": [
+        2,
+        32816,
+        32819,
+        32837,
+        32821,
+        32831,
+        32831,
+        32817,
+        20,
+        3
+      ],
+      "Antlaşması'nın": [
+        2,
+        32514,
+        56,
+        3
+      ]
+    }
+  },
+  "g1_determinizm": {
+    "iddia": "Yeni sozluk spec'in tarif ettigi uretim yolundan bagimsiz olarak yeniden uretilebilir mi?",
+    "sonuc": "EVET, BYTE-OZDES",
+    "uretim_yolu": "Vocabulary().load('data/rebuild/vocab_base_32816.json', freeze=True) -> KristalTokenizer(compiler, vocab, literal_entity_mode=True) -> vocab.save($TMPDIR/t0037_regen_vocab.json)",
+    "yeniden_uretilen_sha256": "7611b6a523a2bb524cc21aa9cc64235aa6a2ae99f87f46ac51cb2915e61164ad",
+    "diskteki_sha256": "7611b6a523a2bb524cc21aa9cc64235aa6a2ae99f87f46ac51cb2915e61164ad",
+    "esit": true,
+    "len_stoi": 32852,
+    "next_id": 32852,
+    "apostrophe_id": 32850,
+    "eklenen_token_sayisi": 36,
+    "not_eklenmeyen": "ENTITY_CHARS'in 34 karakterinden 'e' ve 'o' taban sozlukte ZATEN vardi; 38-2=36."
+  },
+  "g3_degismezlik_genisletilmis": {
+    "raporun_korpusu": 15,
+    "raporun_olctugu_fark": 0,
+    "benim_sentetik_korpum": 85,
+    "benim_sentetik_fark": 0,
+    "benim_gercek_korpum_segment": 374,
+    "gercek_korpus_kaynagi": [
+      "data/pedagogy/turk_tarihi_sft.jsonl",
+      "data/future_train_archive.jsonl",
+      "data/pedagogy/arena_base_accumulated.jsonl"
+    ],
+    "sonuc_yalniz_tokenizer_degisimi": {
+      "farkli_segment": 0,
+      "farkli_konum": 0,
+      "toplam": 374,
+      "ornek": []
+    },
+    "sonuc_taban_gecisi": {
+      "farkli_segment": 6,
+      "farkli_konum": 10,
+      "toplam": 374,
+      "ornek": [
+        {
+          "idx": 1,
+          "a": "<UNK>",
+          "b": "'"
+        },
+        {
+          "idx": 10,
+          "a": "<UNK>",
+          "b": "'"
+        },
+        {
+          "idx": 1,
+          "a": "<UNK>",
+          "b": "'"
+        },
+        {
+          "idx": 10,
+          "a": "<UNK>",
+          "b": "'"
+        },
+        {
+          "idx": 25,
+          "a": "<UNK>",
+          "b": "'"
+        },
+        {
+          "idx": 15,
+          "a": "<UNK>",
+          "b": "'"
+        },
+        {
+          "idx": 29,
+          "a": "<UNK>",
+          "b": "m"
+        },
+        {
+          "idx": 45,
+          "a": "<UNK>",
+          "b": "m"
+        }
+      ]
+    },
+    "vakum_kontrolu": {
+      "farkli_segment": 0,
+      "farkli_konum": 0,
+      "toplam": 374,
+      "ornek": []
+    },
+    "hukum": "Spec'in istedigi kapi (YALNIZ TOKENIZER degisimi, mode=False) GENIS KORPUSTA TUTUYOR: 374 segmentte 0 fark. Vakum kontrolu 0 fark verdi (olcum gercekten olcuyor)."
+  },
+  "g5_cozum_orani": {
+    "raporun_korpusu": 15,
+    "raporun_degerleri": {
+      "N0": 1,
+      "N1": 1,
+      "N2": 0
+    },
+    "benim_ayni_korpusla": {
+      "N0": 12,
+      "N1": 12,
+      "N2": 8
+    },
+    "benim_85lik_korpum": {
+      "N0": 12,
+      "N1": 12,
+      "N2": 8
+    },
+    "spec_sinifli_23_form": {
+      "sinifli_korpus": 23,
+      "N2_sinifli": 5,
+      "unk_tasiyan": [
+        {
+          "form": "2000’ler",
+          "tags": [
+            "<BOS>",
+            "2",
+            "0",
+            "0",
+            "0",
+            "<UNK>",
+            "<EOS>"
+          ]
+        },
+        {
+          "form": "Dr.'nin",
+          "tags": [
+            "<BOS>",
+            "<ENT>",
+            "<CAP>",
+            "d",
+            "r",
+            "</ENT>",
+            ".",
+            "<UNK>",
+            "'",
+            "CASE_GEN",
+            "<EOS>"
+          ]
+        },
+        {
+          "form": "T.C.'nin",
+          "tags": [
+            "<BOS>",
+            "<ENT>",
+            "<CAP>",
+            "t",
+            "</ENT>",
+            ".",
+            "<ENT>",
+            "<CAP>",
+            "c",
+            "</ENT>",
+            ".",
+            "<UNK>",
+            "'",
+            "CASE_GEN",
+            "<EOS>"
+          ]
+        },
+        {
+          "form": "vb.'leri",
+          "tags": [
+            "<BOS>",
+            "<UNK>",
+            ".",
+            "<UNK>",
+            "'",
+            "POSS_3PL",
+            "<EOS>"
+          ]
+        },
+        {
+          "form": "M.Ö.'de",
+          "tags": [
+            "<BOS>",
+            "<ENT>",
+            "<CAP>",
+            "m",
+            "</ENT>",
+            ".",
+            "<ENT>",
+            "<CAP>",
+            "ö",
+            "</ENT>",
+            ".",
+            "<UNK>",
+            "'",
+            "CASE_LOC",
+            "<EOS>"
+          ]
+        }
+      ]
+    },
+    "hukum": "Raporun 15'lik korpusunda N1==N0 ve N2==0 DOGRU. Ama genellemiyor (asagida V1)."
+  },
+  "kapsam": {
+    "pencere": "2026-09-15T20:30:16Z .. 2026-09-15T20:45:58Z (claimed_at .. son lease_released)",
+    "pencere_taramasi": "os.walk + st_mtime (git status --porcelain gitignored yollari GOREMEZ)",
+    "pencerede_mtime_degisen": [
+      "scratch/t0037_kesme_probe.py",
+      "data/rebuild/vocab_base_32852.json",
+      "scratch/t0037_kesme_ham.json",
+      "src/llm/tokenizer.py",
+      "src/llm/__pycache__/tokenizer.cpython-314.pyc",
+      "tests/test_apostrophe_tokenization.py",
+      "tests/__pycache__/test_apostrophe_tokenization.cpython-314-pytest-9.0.3.pyc",
+      "tests/test_two_layer_tokenizer.py",
+      "tests/__pycache__/test_two_layer_tokenizer.cpython-314-pytest-9.0.3.pyc",
+      "data/eval/t0037_kesme_tabana_2026-09-15.json",
+      ".agent-bus/notes/T-0037.md",
+      ".agent-bus/state/results/T-0037.json",
+      ".agent-bus/state/tasks/T-0037.json"
+    ],
+    "writes_disinda_uretilen": [
+      "tests/test_two_layer_tokenizer.py",
+      ".agent-bus/notes/T-0037.md"
+    ],
+    "gitignore_notu": "__pycache__ ve .pytest_cache girdileri standart Python davranisi; bulgu sayilmadi.",
+    "bin_pt_kontrolu": {
+      "data_bin_dosya_sayisi": 14,
+      "data_pt_dosya_sayisi_top_level": 23,
+      "data_altinda_toplam_pt": 38,
+      "pencerede_degisen": 0,
+      "yontem": "os.walk('data') + st_mtime penceresi; sha256 ve mtime her dosya icin bu raporu ureten betik tarafindan YAZIM ANINDA hesaplandi (kalici yuzeye elle hash tablosu KONMADI).",
+      "egitim_kosulmadi": true
+    },
+    "referans_hashler_yazim_aninda": [
+      {
+        "path": "data/pedagogy/cot_vault.jsonl",
+        "sha256": "97b06fe5befd6613b520d28dc20a74deaeb30e4e8f7e6675a23720a019ff5619",
+        "mtime": "2026-09-15T07:37:37.529896+00:00",
+        "bytes": 91867
+      },
+      {
+        "path": "data/future_train_vector.jsonl",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "mtime": "2026-09-13T07:09:18.125619+00:00",
+        "bytes": 0
+      },
+      {
+        "path": "data/rebuild/vocab_base_32816.json",
+        "sha256": "8cc31d82d144cff0e9f55342ba7168a17890a79cdf8439549569c699c08b7fdc",
+        "mtime": "2026-09-15T07:06:05.845790+00:00",
+        "bytes": 741046
+      },
+      {
+        "path": "data/rebuild/vocab_base_32852.json",
+        "sha256": "7611b6a523a2bb524cc21aa9cc64235aa6a2ae99f87f46ac51cb2915e61164ad",
+        "mtime": "2026-09-15T20:35:13.896626+00:00",
+        "bytes": 741650
+      },
+      {
+        "path": "data/vocab.json",
+        "sha256": "4b40eebee9c996c8dd3150f6b3c8896de85764ee1cf0b08e6c636e5c002a0e69",
+        "mtime": "2026-09-14T18:49:43.484817+00:00",
+        "bytes": 708540
+      },
+      {
+        "path": "data/vocab_entity.json",
+        "sha256": "7611b6a523a2bb524cc21aa9cc64235aa6a2ae99f87f46ac51cb2915e61164ad",
+        "mtime": "2026-09-14T02:06:54.011912+00:00",
+        "bytes": 741650
+      },
+      {
+        "path": "src/rag/rag_pipeline.py",
+        "sha256": "af796b5fec837d098e6d9ed0b25f33293f9058dbd55206fc9bc4a7ec968b3b6f",
+        "mtime": "2026-09-15T15:46:01.061192+00:00",
+        "bytes": 12267
+      }
+    ]
+  },
+  "pytest": {
+    "sandbox_disi": true,
+    "cmd_tam": "./venv/bin/pytest -q tests/",
+    "sonuc_simdi": "166 passed in 8.11s",
+    "raporun_penceresindeki_deger": "159 passed (T-0038 yedi test ekledi: 159+7=166, TUTARLI)",
+    "onceki_dogrulama": "./venv/bin/pytest -q tests/ --ignore=tests/test_apostrophe_tokenization.py --ignore=tests/test_conditioning_score.py -> 144 passed",
+    "yeni_dosya_tek_basina": "./venv/bin/pytest -q tests/test_apostrophe_tokenization.py -> 15 passed",
+    "artefakt_degisimi": "cot_vault.jsonl sha256 kosum ONCESI ve SONRASI AYNI (97b06fe5...); future_train_vector.jsonl AYNI; iki sozluk AYNI. Kabul kosusu olctugu artefakti DEGISTIRMEDI."
+  },
+  "kiralama": {
+    "alinan": [
+      "data/rebuild/",
+      "src/llm/",
+      "tests/test_apostrophe_tokenization.py",
+      "tests/test_two_layer_tokenizer.py"
+    ],
+    "serbest": [
+      "data/rebuild/",
+      "src/llm/",
+      "tests/test_apostrophe_tokenization.py",
+      "tests/test_two_layer_tokenizer.py"
+    ],
+    "kapandi": true
+  },
+  "bulgular": [
+    {
+      "id": "V1",
+      "onem": "YUKSEK",
+      "baslik": "G5 korpusu spec'in istedigi 60 formun ALTINDA (15); 'N2=0' genellemiyor — iki spec sinifi hala <UNK>",
+      "olcum": "Spec G5: 'Korpus uzerinde (en az 60 form; siniflar: rakam+kesme, ozel ad+kesme, tipografik kesme, kisaltma+kesme, kesmesiz kontrol, ciplak rakam)'. Rapor corpus_boyutu=15 kullandi. Ben spec'in ADI GECEN siniflarindan 23 formluk korpus kurdum: mode=True ile 5 form hala <UNK> tasiyor -> [\"2000’ler\", \"Dr.'nin\", \"T.C.'nin\", \"vb.'leri\", \"M.Ö.'de\"]. Iki sinif: tipografik kesme (2000’ler) ve kisaltma+kesme (Dr.'nin, T.C.'nin, vb.'leri, M.Ö.'de). 85 formluk korpusta N2=8; 374 segmentlik GERCEK korpusta mode=False tarafi da 10 konumda sapiyor (V3).",
+      "etki": "Raporun manşet sayisi 'N2=0 / hedef_karsilandi: true' yalnizca 15'lik korpusa ozgu. Kisaltma+kesme ve tipografik kesme siniflari DUZELTILMEMIS durumda; bunlar spec'in kendi saydigi siniflar.",
+      "durum": "Duzeltilmedi; rapor F1'de yalnizca tipografik kesme kismini bildirmis, kisaltma+kesme sinifini hic anmamis."
+    },
+    {
+      "id": "V2",
+      "onem": "YUKSEK",
+      "baslik": "Yurutucunun ekledigi iki test VAKUM — biri tam da kabul kriterinin istedigi pozitif kontrol",
+      "olcum": "(a) tests/test_apostrophe_tokenization.py::test_typographic_apostrophe_same_id `ids_curly` degiskenini hesapliyor ama HICBIR iddiada kullanmiyor; assert yalnizca `ids_straight` uzerinde. Docstring'i ve test adi '1973'te ve 1973’te AYNI ID dizisini vermeli' diyor. OLCUM: test YESIL, ama ozellik YANLIS (duz [2,32147,32155,32153,32149,32850,3] != kivrik [2,32147,32155,32153,32149,3326,3]). Vakum: kusur varken de geciyor. (b) test_immutability_false_mode'un iki fixture'i da AYNI parametrelerle kurulmus: `_make_tok(OLD_VOCAB, False)` ve `_make_tok(OLD_VOCAB, False)` — yani YENI tokenizer KENDISIYLE kiyaslaniyor; `tok_old_false` adi yaniltici, git HEAD tokenizer'i yalnizca mutant testinde (1 kez) yukleniyor. MUTANT KANITI: testin govdesini kontrollu fixture'larla dogrudan kosturdum — test_immutability_false_mode(mutant, mutant) -> GECTI; test_immutability_false_mode(eski_git, MUTANT) -> KIRMIZI.",
+      "etki": "G3 (degismezlik) bu gorevin 'en onemli kabulu' olarak yazilmisti; onu koruyan pytest testi onu korumuyor. Gercek olcum (probe) dogruydu, ama regresyon bekcisi yok: mode=False yolu bir gun bozulursa testler yesil kalir.",
+      "durum": "Duzeltilmedi."
+    },
+    {
+      "id": "V3",
+      "onem": "ORTA",
+      "baslik": "SOZLUK gecisi mode=False ciktisini de degistiriyor; raporun G3'u hangi sozlukle olctugunu YAZMIYOR",
+      "olcum": "374 segmentlik gercek korpusta: (A) yalniz tokenizer degisimi -> 0/374 fark; (B) taban 32816 -> 32852 gecisi -> 6/374 segment, 10 token konumu fark; (C) vakum kontrolu 0. Somut: 'ahmet ' gel' icin <UNK> -> ' ; 'a/m' icin <UNK>,<UNK> -> 'a','m' ; gercek kayit: \"'--- Page 2 ---' ifadesinin ...\" pozisyon 1'de <UNK>(0) -> '(32850)'. Kaynak: yeni sozlukte 30 tek harf tokeni + '/' + '\\'' ACILDI; mode=False yolunda `clean_word in vocab.stoi` kontrolu bu tokenleri yakaliyor.",
+      "etki": "Rapor `literal_entity_mode_false_etkilenmedi: true` diyor. Bu TOKENIZER yarisi icin DOGRU, SOZLUK yarisi icin DEGIL. Pratik sonuc F2/F3 icin kritik: 14 .bin'in yeniden derlenmesi yalnizca kesme formlarini degil, tek harfli morfermleri ve ciplak kesmeyi de farkli tokenlara cevirecek. Raporun G3 cmd alani '...' ile kisaltilmis ve hangi sozlukle olculdugu yazmiyor; bu bosluk ancak genis korpusta goruluyor.",
+      "durum": "Duzeltilmedi; F2/F3 spec'lerine 'gecis olcumu' kabul kriteri eklenmeli."
+    },
+    {
+      "id": "V4",
+      "onem": "ORTA",
+      "baslik": "Kabul kriteri [4] (tipografik kesme pozitif kontrolu) OLCUMLE KARSILANMADI",
+      "olcum": "Spec G1: 'U+2019 AYRI bir token ACILMAZ; U+0027 ile AYNI kimlige normalize edilir ... Ikisinin ayni id'ye gittigi bir pozitif kontrolle kanitlanir.' OLCUM: 1973’te -> [2,32147,32155,32153,32149,3326,3] (3326='te'), 1973'te -> [...32850...]. AYNI DEGIL. Bu, kabul[4]'un harfiyen istedigi kontrolun BASARISIZ olmasidir.",
+      "durum": "Rapor bunu F1 (ORTA) olarak ACIKCA bildirmis ve mekanizmayi (re.findall deseninde U+2019'un \\w olmamasi) dogru teshis etmis — gizleme YOK, 'status: PASS_WITH_FINDINGS' bu yonuyle savunulabilir. Ancak kriter bir 'kapi' olarak yazilmisti; kapatilmadan yesil sayilmamali."
+    },
+    {
+      "id": "V5",
+      "onem": "DUSUK",
+      "baslik": "Spec G2(e) 'ek cozulemedi' sayaci uygulanmamis (yalnizca verbose print)",
+      "olcum": "Spec: donen ek listesi BOSSA 'sessizce gecilmez — rapora sayilir ve o vaka ayri sayilir'. Kodda karsiligi `if self.verbose: print(...)`; verbose varsayilan False ve RAPORDA boyle bir sayac YOK. Benim 85'lik korpumda bu dal 9 kez tetiklendi (ornek: 1973'te ek='te', abc'def'ghi, a'b, 12'34, 'başta, '').",
+      "durum": "Duzeltilmedi."
+    },
+    {
+      "id": "V6",
+      "onem": "DUSUK",
+      "baslik": "Kabul [10] ve [13] karşılanmadı: kapsam listesi yok, komut alanları '...' ile kısaltılmış",
+      "olcum": "Kabul[10] '14 .bin + 23 .pt sha256/mtime once-sonra listesi rapora yazilmis' diyor; raporda yalniz `pt_degisen: \"0\"` ve `bin_degisen: \"0\"` var, LISTE YOK. Kabul[13] 'komut alanlari ... ile KISALTILMAMIS' diyor; `...` su 5 alanda geciyor: g0_taban_cizgisi.cmd, g2_post_fix_olcum.cmd, g3_degismezlik.cmd, g5_cozum_orani.cmd, kapsam_disi_kaniti.pt_degisen. MADDI IDDIA DOGRU: 14 .bin + 23 top-level .pt'nin HICBIRI pencerede degismemis (ben olctum, tam liste bu raporda).",
+      "durum": "Belge eksigi; sayi dogru."
+    },
+    {
+      "id": "V7",
+      "onem": "DUSUK",
+      "baslik": "writes[] disinda uretilen 2 yol (kiralari ALINMIS, mesajda BEYAN EDILMIS)",
+      "olcum": "writes[] 6 yol, pencerede uretilen 7 yol + 3 bus yuzeyi. Fark: `tests/test_two_layer_tokenizer.py` (spec'te on-izin YOK) ve `.agent-bus/notes/T-0037.md` (spec'in kapanis notu bu yuzeyi serbest birakmisti). Ikisi icin de kiralama ALINMIS (olay gunlugu: 20:39:39Z ve notes icin kiralama yok — notes bus yuzeyi) ve tamamlandi mesajinda 'Onceden beyan edilmeden uretilen dosyalar (writes[] disi)' basligi altinda ACIKCA listelenmis.",
+      "durum": "Gizleme DEGIL; beyan disiplini kusuru. Kiralari alinmis olmasi kural 1'i kurtarir, writes[] beyanini degil."
+    },
+    {
+      "id": "V8",
+      "onem": "DUSUK",
+      "baslik": "tests/test_two_layer_tokenizer.py ZAYIFLATILDI",
+      "olcum": "`assertIn(\"Şuppiluliuma'nın\", decompiled)` ve `assertIn(\"Kargamış'tan\", ...)` -> `assert \"Şuppiluliuma\" in decompiled` ve `assert \"Kargamış\" in decompiled`. GEREKCE DOGRU: mode=True yolu artik kesme tokeni yayiyor — OLCUM: eski mode=True TBMM'ye -> [...,32817,20,3], yeni -> [...,32817,32850,20,3]; Antlaşması'nın eski [2,32514,56,3], yeni [2,32514,32850,56,3]. Ama yeni assertion eki ARTIK DOGRULAMIYOR: round-trip ozelligi govde+ek icin kaybolmus.",
+      "durum": "Gerekce mesru, assertion gereginden zayif (govde VE ek ayri ayri assert edilebilirdi)."
+    },
+    {
+      "id": "V9",
+      "onem": "DUSUK",
+      "baslik": "ts_end ile rapor dosyasinin mtime'i 65 sn sapiyor; metadata.device bu gorevde olcumsuz",
+      "olcum": "ts_end = 2026-09-15T20:41:43Z, dosya mtime = 2026-09-15T20:42:48.113357+00:00. metadata.device='mps (sandbox disinda kosuldu)' — bu gorevde cihaza bagli HICBIR olcum yok (yalniz CPU tokenizasyonu).",
+      "durum": "Kozmetik."
+    },
+    {
+      "id": "V10",
+      "onem": "NOT (bulgu degil)",
+      "baslik": "data/vocab_entity.json (DONMUS YOL) yeni sozlukle BYTE-OZDES",
+      "olcum": "sha256(vocab_entity.json) == sha256(vocab_base_32852.json) == 7611b6a5...; mtime 2026-09-14T02:06:54Z, yani T-0037'den ONCE. 'Yeni' taban sozlugu aslinda donmus bir yolda zaten duruyormus. Bu bir ihlal DEGIL: yurutucu oraya YAZMAMIS (mtime sabit) ve spec'in tarif ettigi uretim yolu bagimsiz kosturuldugunda AYNI sha256'yi uretiyor (kopya degil, deterministik uretim). Ama F2/F3 planlarken donmus yolda ikinci bir kopya bulundugu bilinmeli.",
+      "durum": "Bilgi."
+    }
+  ],
+  "kabul_kriterleri_durumu": [
+    {
+      "no": 1,
+      "durum": "TAM",
+      "not": "Taban cizgisi kendi olcumumle birebir ayni (5/5 form)."
+    },
+    {
+      "no": 2,
+      "durum": "TAM",
+      "not": "len(stoi)=32852 ve ' id=32850; eski sozluk sha256 degismemis. Ayrica bagimsiz yeniden uretim ayni sha256."
+    },
+    {
+      "no": 3,
+      "durum": "TAM",
+      "not": "1973'te, İstanbul'da, TBMM'ye, Antlaşması'nın mode=True -> <UNK> YOK; kimlik dizileri raporunkiyle ayni."
+    },
+    {
+      "no": 4,
+      "durum": "KARSILANMADI",
+      "not": "Bkz V4: U+2019 formu 3326'ya gidiyor, 32850'ye DEGIL."
+    },
+    {
+      "no": 5,
+      "durum": "TAM (raporun korpusunda) / GENISLETILDI",
+      "not": "374 segmentte tokenizer-only fark 0. Ama bkz V3: sozluk yarisi kapsam disi birakilamaz."
+    },
+    {
+      "no": 6,
+      "durum": "KARSILANMADI",
+      "not": "Bkz V6: raporun G3 cmd'i hangi sozlukle olctugunu yazmiyor; ben iki sozlukle olctum."
+    },
+    {
+      "no": 7,
+      "durum": "TAM",
+      "not": "Mutant (git HEAD tokenizer) hala <UNK>; pozitif kontrol 1973 rakam tokenleri."
+    },
+    {
+      "no": 8,
+      "durum": "KARSILANMADI",
+      "not": "Bkz V1: korpus 15 < 60; N2 raporun korpusunda 0, spec-sinifli 23 formda 5, 85 formda 8."
+    },
+    {
+      "no": 9,
+      "durum": "TAM",
+      "not": "144 -> 159 (+15); kendi kosumum 166 (T-0038 +7). Artefakt degisimi 0."
+    },
+    {
+      "no": 10,
+      "durum": "KISMEN",
+      "not": "I kusuru kapandi ve kardes kontrol bende VAR (eski mode=True İstanbul'da <UNK> tasiyor); ama bu kanit RAPORDA yok. Bkz V5/V6."
+    },
+    {
+      "no": 11,
+      "durum": "TAM (madde) / EKSIK (belge)",
+      "not": "Once/sonra hashler dogru; 14 .bin + 23 .pt pencerede degismemis (ben olctum). Liste rapora yazilmamis -> V6."
+    },
+    {
+      "no": 12,
+      "durum": "TAM",
+      "not": "4 kiralama alindi / 4 serbest birakildi; bus_lease_status'ta T-0037 kirasi kalmadi."
+    },
+    {
+      "no": 13,
+      "durum": "KISMEN",
+      "not": "commit/push yok; ama writes[] disinda 2 yol uretildi (V7) ve komut alanlarinda '...' var (V6)."
+    }
+  ],
+  "hukum": "Yurutucunun OLCUM KATMANI guvenilir: dogrulanabilir 35/38 iddia birebir tuttu, 3 'uyusmazlik' ayiklandiginda 2'si benim hatam, 1'i populasyon farkiydi. Uretim determinizmi bagimsiz olarak kanitlandi, degismezlik kapisi raporun 25 KATI korpusta tuttu, kabul kosusu artefakti degistirmedi. Kusurlar (a) KAPSAM DARALTMASI (G5 60->15, (e) sayaci yok, kanit listesi yok, '...' kisaltmalari), (b) VAKUM TESTLER (G3 bekcisi yeni tokenizer'i kendisiyle kiyasliyor; tipografik pozitif kontrol olu degisken), (c) OLCULMEMIS YAN ETKI (sozluk gecisi mode=False ciktisini 6/374 segmentte degistiriyor) katmanlarinda. Hicbiri 'rapor iyimser' deseni DEGIL: hicbir sayi carpitilmamis, F1 durustce bildirilmis."
+}

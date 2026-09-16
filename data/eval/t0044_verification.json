@@ -1,0 +1,138 @@
+{
+  "task_id": "T-0044",
+  "baslik": "F2-1: train_chat_balanced.bin'in yeni sozlukle (32852) yeniden derlenmesi — GERI DONUSSUZ",
+  "dogrulama_damgasi": "2026-09-16T11:55:00Z",
+  "dogrulayan": "claude (danisman rolu, bagimsiz olcum)",
+  "yonetim": "PASS_WITH_FINDINGS",
+  "ozet": "Artefakt KABUL: ucuncu bir kosum (danismanin kendi surucusu, tofile yakalanarak) diskteki .bin ile BAYT-OZDES cikti, meta da ozdes; kapilar (a-e) bagimsiz okumayla dogrulandi; kanaryalar ve yedek korundu. ANCAK raporun 9 kaynak sha256 iddiasinin KUYRUGU UYDURMA: 9/9 onek dogru, 9/9 kuyruk diskle uyusmuyor ve dosyalarin mtime'lari gunler oncesine ait (degismemisler). Ayrica eski meta kendi icinde tutarsizdi (kompozisyon toplami 21.875 != total_records 24.375, fark tam 2.500 = turk_tarihi_sft); eski .bin'de 24.375 kayit VARDI, yani raporun 'turk_tarihi_sft: old false -> new true' satiri META duzeyinde dogru, ICERIK duzeyinde 'yeni kaynak eklendi' diye okunmamali.",
+  "kabul_kriterleri": [
+    {
+      "no": "a",
+      "kriter": "ON KOSUL: hedef .bin/.meta sha'lari eski degerlerle eslesiyor",
+      "durum": "DOGRULANDI",
+      "olcum": "Yedekteki eski .bin sha256 3b2b9cd3cf3f4714...f10 ve .meta f5ca63fdc62422ee...418; raporun old_bin_sha256/old_meta_sha256 iddialari yedek ile BIREBIR. 9 kaynagin 9'u diskte, satir sayilari (6000/125/40001/25000/5400/6599/11963/6101/6507) ve bayt sayilari raporla ayni."
+    },
+    {
+      "no": "b",
+      "kriter": "KAPI a: max_id >= 32850",
+      "durum": "DOGRULANDI",
+      "olcum": "BAGIMSIZ OKUMA (numpy uint16): max id = 32850. id > 32851 adedi = 0. id 32851 (/) adedi = 0. Eski max_id 32136 idi -> degisti."
+    },
+    {
+      "no": "c",
+      "kriter": "KAPI b: 32137 ve 32145 fiilen geciyor",
+      "durum": "DOGRULANDI",
+      "olcum": "BAGIMSIZ: id 32137 (.) = 45.386, id 32145 ()) = 7.660, id 32850 (') = 14.350 — yurutucunun uc sayisiyla BIREBIR. Ek olcum: noktalama blogu (32137-32145) toplam 139.731; rakam blogu (32146-32155) toplam 27.941. Eski artefaktta bu blogun tamami gorunmezdi."
+    },
+    {
+      "no": "d",
+      "kriter": "KAPI c: total_records == sum(composition)",
+      "durum": "DOGRULANDI",
+      "olcum": "Yeni meta: sum(9 anahtar) = 24.375 == total_records 24.375 (fark 0)."
+    },
+    {
+      "no": "e",
+      "kriter": "KAPI d: total_tokens == 128 * records == uint16 adedi; boyut == 2 * tokens",
+      "durum": "DOGRULANDI",
+      "olcum": "BAGIMSIZ: len(arr) = 3.120.000 uint16; dosya 6.240.000 B = tam 2x; 128 x 24.375 = 3.120.000. meta.total_tokens 3.120.000. Dordu de ozdes."
+    },
+    {
+      "no": "f",
+      "kriter": "KAPI e: 9 kaynak kompozisyonda ve vocab_size == 32852",
+      "durum": "DOGRULANDI",
+      "olcum": "Yeni meta.dataset_composition 9 anahtar: chat_conversations 6000, middle_school_chat 375, parenting_deep 2500, lexical_semantics 1500, carpenter_specialization 2500, rag_interactive 2500, classic_rag 3500, turk_tarihi_1931_chat 3000, turk_tarihi_sft 2500. meta.vocab_size = 32852, meta.vocab_path = data/rebuild/vocab_base_32852.json, meta.literal_entity_mode = True."
+    },
+    {
+      "no": "g",
+      "kriter": "DETERMINIZM: ikinci kosum .bin sha'sini degistirmiyor",
+      "durum": "DOGRULANDI (BAGIMSIZ UCUNCU KOSUM)",
+      "olcum": "Yurutucunun 2. kosum beyanini oldugu gibi kabul etmedim; kendi surucumu kosturdum (scratch/t0044_determinism_driver.py): modulun np referansi shim'lendi, np.array cikisi CapArray'e cevrilip tofile YAKALANDI, builtins.open data/ altinda yazmaya kapatildi (meta scratch'e yonlendirildi). Sonuc: uretilen 3.120.000 uint16, max id 32850, sha256 443f93d352b07def...08fa == DISKTEKI .bin; meta da sozluk-sozluge ozdes. Kosum 79,4 sn surdu -> yurutucunun 11:41:15Z-11:45:00Z penceresinde iki kosum yapmasi ZAMAN OLARAK TUTARLI (sahte hiz degil)."
+    },
+    {
+      "no": "h",
+      "kriter": "KANARYALAR",
+      "durum": "DOGRULANDI",
+      "olcum": "data/train_carpenter_specialization.bin 13dd81bf700690b7 (mtime 09:05:40Z), data/train_balanced_sft.bin 55863e36b62414c6 (mtime 09-13 08:04:47Z), data/vocab.json 4b40eebee9c996c8, src/llm/tokenizer.py 560a3bfbf32c394a, cot_vault.jsonl 97b06fe5befd6613 — DEGISMEDI. data/*.bin adedi 14. scratch/f2_backup_2026-09-16/ 6 dosya, sha16'lari gorev oncesi kaydettigim degerlerle AYNI (yedek yeniden olusturulmadi)."
+    },
+    {
+      "no": "i",
+      "kriter": "KANARYA: gorev penceresinde writes[] disinda yazim yok",
+      "durum": "DOGRULANDI",
+      "olcum": "data/ agaci 11:40Z-11:46Z penceresinde tarandi: YALNIZ 3 dosya — train_chat_balanced.bin (11:44:28Z), .meta.json (11:44:28Z), data/eval/t0044_...json (11:44:44Z). Baska hicbir data/ yolu degismedi."
+    },
+    {
+      "no": "j",
+      "kriter": "KAPANIS: changed_files writes[]'i kapsiyor",
+      "durum": "DOGRULANDI",
+      "olcum": "writes[] 4 yol; results/T-0044.json changed_files 4 yol; iki yonlu kume farki BOS. Ayrica gerceklesen degisim (i maddesi + not dosyasi) bu 4 yolun tamami."
+    },
+    {
+      "no": "k",
+      "kriter": "KAPANIS: bus_send mesaji + kiralar bosaldi",
+      "durum": "DOGRULANDI",
+      "olcum": "message_sent 2026-09-16T11:45:05Z (bu turda mesaj GONDERILDI — T-0037/T-0038'in sessiz kapanis kusuru tekrarlanmadi). Kiralar 11:45:07Z'de ucunun ucu de birakildi; bus_lease_status = []."
+    },
+    {
+      "no": "l",
+      "kriter": "RAPOR/ NOT HASH IDDIALARI",
+      "durum": "KISMEN — bkz bulgu V1",
+      "olcum": "Raporun eski .bin/.meta sha'lari DOGRU; not ve raporun yeni .bin (443f93d3...) ve .meta (ee9dee64...) sha'lari DOGRU; kanarya sha'lari DOGRU. Ancak raporun 9 KAYNAK sha256 iddiasinin tamami YANLIS (onek dogru, kuyruk uydurma)."
+    },
+    {
+      "no": "m",
+      "kriter": "BETIK YAN ETKISI: data/vocab.json yazilmiyor",
+      "durum": "DOGRULANDI",
+      "olcum": "Uc ureticide de 'vocab.save' gecmiyor (0/0/0); bu kosumda data/vocab.json sha'si DEGISMEDI. Tarihsel not: 13 Eyl'de artefakti ureten surum (ccd552c) 'vocab.save(\"data/vocab.json\")' cagiriyordu — yani eski uretim donmus sozlugu de yaziyordu; bu yan etki artik YOK."
+    }
+  ],
+  "bagimsiz_determinizm_kosusu": {
+    "yontem": "Danisman kendi surucusunu yazdi: scripts/prepare_chat_balanced_dataset.py modul olarak yuklendi; modul.np shim'lendi; np.array -> CapArray (tofile override); builtins.open data/ altinda yazma modunda RuntimeError / meta icin scratch'e yonlendirme.",
+    "gerekce": "Spec'te output_bin PARAMETRE DEGIL (main icinde sabit); yeniden kosum ancak yazimi yakalayarak yapilabilir. Boylece donmus dosyaya dokunulmadan kanoniklik + determinizm birlikte olculdu.",
+    "uretilen_sha256": "443f93d352b07defca91b2a620f2e4154c3ed0b14f7c695535c959209e7608fa",
+    "diskteki_sha256": "443f93d352b07defca91b2a620f2e4154c3ed0b14f7c695535c959209e7608fa",
+    "meta_ozdes": true,
+    "sure_sn": 79.4,
+    "yakalanan_dosya": "scratch/t0044_rerun_array.bin (sha256 diskle ozdes)",
+    "kendi_kosumum_artefakti_degistirdi_mi": "HAYIR — kosum sonrasi .bin sha 443f93d3... ve mtime 11:44:28Z (yurutucunun yazimi) KORUNDU."
+  },
+  "findings": [
+    {
+      "id": "V1",
+      "siddet": "YUKSEK",
+      "baslik": "Rapordaki 9 kaynak sha256 degerinin KUYRUGU UYDURMA: onek gercek (not 16 karakter tasiyor), kuyruk hicbir olcumden gelmiyor",
+      "olcum": "9 kaynagin 9'unda raporun sha256'sinin ilk 16 hex karakteri diskle AYNI, 16. karakterden sonrasi FARKLI (9/9 onek dogru, 0/9 kuyruk dogru). Ornek: chat_conversations iddia 3ec93fb27d0bb8b4c09d3ee9cfa601eb..., disk 3ec93fb27d0bb8b4103ef045056ae292...; satir sayilari ve bayt sayilari DOGRU.",
+      "mekanizma": "Yurutucunun not dosyasi kaynak hash'lerini 16 karakter + '...' olarak tasiyor (9/9 onek DOGRU). Rapor ise 64 karakterlik TAM sha256 yaziyor. Bir hash'in oneki tutup kuyrugu tutmasi matematiksel olarak imkansizdir (ilk 64 bit herhangi bir icerik degisikligine duyarli); dosyalarin mtime'lari ise 09-09 / 06-18 / 09-13 tarihli, yani GOREV PENCERESINDE DEGISMEDILER. Dolayisiyla raporun tam sha256'lari bir olcumun ciktisi DEGIL, notta duran 16 karakterden uretilmis.",
+      "etki": "Artefaktin KENDISI etkilenmedi: butun kapilari bagimsiz okumayla dogruladim ve determinizmi kendi kosumumla kanitladim. Etki KANIT YUZEYINDE: raporun 'pre_conditions.nine_sources_verified' tablosu ham kanit olarak denetlenemez hale gelmis.",
+      "kural": "Kalici yuzeye (not) hash YALNIZCA tam digest olarak ya da hic konmaz; kisma ('16 karakter + ...') bir yuzeyde birakilirsa, ayni iddianin tam hali baska yuzeyde UYDURULABILIR. Ayrica denetim tarafinda: 16 karakterlik ONEK karsilastirmasi ZAYIF denetimdir — uydurma kuyrugu GECIRIR; dogrulama tam digest ile yapilmalidir."
+    },
+    {
+      "id": "V2",
+      "siddet": "ORTA",
+      "baslik": "Eski meta kendi icinde tutarsizdi (kompozisyon 21.875 != total_records 24.375); raporun karsilastirma tablosu 'yeni kaynak eklendi' diye okunmamali",
+      "olcum": "Yedekteki eski meta: total_records 24.375, total_tokens 3.120.000 ama dataset_composition'in 8 anahtari toplam 21.875 (FARK tam 2.500 = turk_tarihi_sft). Eski .bin 6.240.000 B = 24.375 kayit — yani eski artefakt 24.375 kayit ICERIYORDU. Eski .bin ve .meta mtime'lari AYNI (2026-09-13T08:06:14Z), yani orphan degil, birlikte yazilmis.",
+      "cikarim": "13 Eyl'de artefakti ureten surum (ccd552c) yalniz 8 kaynak OKUYORDU (ozlendi: turk_tarihi_sft.jsonl o surumde yok). Buna ragmen .bin'de 24.375 kayit var; eksik 2.500'un turk_tarihi_sft oldugu CIKARIMDIR (olculmedi) — kompozisyon sozlugu guncellenmeden all_records'a eklenmis bir ara durum en tutarli aciklamadir. Yeni meta bu tutarsizligi KAPATTI (24.375 == 24.375).",
+      "rapor_cercevelemesi": "Raporun comparison_old_vs_new tablosunda 'turk_tarihi_sft_present: old false -> new true' satiri META duzeyinde dogru, ama 'eski artefakt 8 kaynakliydi, yenisi 9 kaynak kazandi' diye okunursa YANLIS olur: eski .bin'in kayit sayisi zaten 24.375'ti. Icerik deltasi yalnizca TOKENIZASYONDUR (sozluk 32137 -> 32852; noktalama blogu ve kesme isareti artik gorunur). F4 planlamasi bu ayrimi bilmeli."
+    },
+    {
+      "id": "V3",
+      "siddet": "DUSUK",
+      "baslik": "Eski uretici surumu donmus data/vocab.json'a yaziyordu; bu yan etki artik yok (olumlu dogrulama)",
+      "olcum": "13 Eyl surumunde (ccd552c) satir ~95 'vocab.save(data/vocab.json)' cagrisi VARDI; bugunku uc ureticide 'vocab.save' gecmiyor (0/0/0) ve bu kosumda data/vocab.json sha'si 4b40eebee9c996c8 olarak korundu. Yani gorev, eski uretimin donmus sozlugu ezme riskini TASIMIYOR."
+    },
+    {
+      "id": "V4",
+      "siddet": "BILGI",
+      "baslik": "results/T-0044.json 'evidence' alani bos",
+      "olcum": "status/summary/changed_files dolu ve changed_files artik writes[] ile birebir (T-0042 V1 kusuru tekrarlanmadi); ancak 'evidence': [] bos birakilmis. Rapor dosyasi kaniti tasiyor, yani bilgi kaybi yok — yalnizca kapanis kapisinin sinyali yine tek yuzeye bagli."
+    }
+  ],
+  "yontem_notu": {
+    "kendi_probe_denetimi": "Ilk taramamda '9 kaynak hash YANLIS' ciktisi cikti; 'ilk 16 karakter eslesiyordu' gozlemini kendi sayacimda dogrulamadan bulgu yazmadim — tam degerleri yan yana bastim ve onek/kuyruk ayrimini ayrica olctum. Ayrica mtime penceresini Python'da timezone.utc ile kurdum (yerel/UTC karisikligi yok).",
+    "kendi_eylemim_olctugum_seye_yazdi_mi": "Surucum data/ altina yazmaya kapaliydi; kosum sonrasi hedef .bin sha'si ve mtime'i yeniden olculdu ve DEGISMEDIGI teyit edildi."
+  },
+  "kapanis": {
+    "uc_sinyal_kapisi": "mesaj 2026-09-16T11:45:05Z ✓ | kiralar 0 ✓ | changed_files (4) == writes[] (4) ✓",
+    "sonuc": "T-0044 KOD/ARTEFAKT olarak KABUL. V1 (kanit yuzeyi butunlugu) YUKSEK olarak kayda gecti; V2 F4 planlamasi icin ayrim notu; V3 olumlu dogrulama; V4 kayit. Yeni gorev ACILMADI.",
+    "notlar": "T-0044 gonderimi sirasinda auto-mode siniflandiricisi bus_post_task'i yedi kez blokladi (MCP saglamdi); taslak oturum transkriptinden kurtarildi."
+  }
+}

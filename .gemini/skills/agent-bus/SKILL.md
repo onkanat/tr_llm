@@ -37,26 +37,39 @@ Bu dosya ile SPEC.md çelişirse **SPEC.md kazanır**.
 
 6. **Kirala.** Yazacağın her yol için, **yazmadan ÖNCE**
    `bus_acquire_lease(paths=[...], task_id=..., owner="antigravity")`.
-   Çakışma dönerse **yazma**. Protokol kısmi başarı uygulamaz: çakışma varsa hiçbir kiralama
-   yazılmaz ve karar ajana aittir.
+   - Çakışma dönerse **yazma**. Protokol kısmi başarı uygulamaz: çakışma varsa hiçbir kiralama
+     yazılmaz ve karar ajana aittir.
+   - **Dosya Düzeyinde Kiralama:** Tekil dosya yazılıyorsa ASLA kapsayıcı dizini (`data/eval/`)
+     kiralamaya çalışma; doğrudan üretilen dosya yolunu kovala. Dizin kiralaması diğer etmenlerin
+     doğrulama raporu yazmasını saatlerce bloke eder.
 
 7. **Uygula.** Görevin `spec` alanındaki sınırlara uy. Donmuş yolları (`bus_frozen_list`) yalnızca
    OKU. Donmuş bir dizine yazman gerekiyorsa `scope: "dir"` kiralaması şarttır.
 
 8. **Raporla.** `bus_report_result(task_id, status="done", summary=..., evidence=[...],
-   changed_files=[...])` ardından `bus_release_lease(paths, task_id)`.
+   changed_files=[...], narrative_log={...})` ardından `bus_release_lease(paths, task_id)`.
    - `evidence` alanına **ölçüm** yaz, iddia değil: çalıştırdığın komut ve aldığın çıktı.
+   - **Komutlarda Kısaltma Yasağı:** Rapor ve notlardaki komutlar asla `...` ile kısaltılamaz;
+     bağımsız doğrulayıcının doğrudan çalıştırabileceği tam komut yazılır.
+   - **Atıf Kuralı:** Artefakt atıfları yalnızca `YOL + SHA-256` ile yapılır; bölüm/satır numarası
+     kullanılmaz (içerik kayınca yeşil kalır), uzun alıntı yapılmaz.
    - Raporun ilk satırı şu biçimde olsun: `bus kaydı: <görev id> | kiralanan yollar`.
 
-9. **Yazılı rapor.** Bulguları `walkthrough.md`'ye işle; planı değiştiyse
-   `implementation_plan.md`'yi de güncelle. Danışman ajan bu iki dosyayı **her işten sonra**
-   otomatik olarak okur — bus kaydı makine içindir, bu dosyalar insan içindir; ikisi de gerekir.
-   - `bus_report_result`'ın `evidence` alanına **walkthrough.md'nin tam yolunu** ekle
-     (`~/.gemini/antigravity/brain/<oturum-id>/walkthrough.md`). Yol açıkça yazılmazsa danışman
-     onu mtime tahminiyle aramak zorunda kalır ve yanlış oturumun raporunu okuyabilir.
-   - **Plan dosyası otomatik güncellenmiyor:** 14 Eyl 2026'da `implementation_plan.md` 05:02'de
-     kalmışken `walkthrough.md` 16:21'de güncellendi. İşin *ne yaptığını* yalnızca walkthrough
-     anlatır; plan yalnızca niyeti gösterir. İkisini karıştırma.
+9. **Not ve Anlatı Günlüğü (.agent-bus/notes/T-XXXX.md).**
+   - **Repo-İçi Yüzey:** Görevin gerekçe zinciri ve ara ölçümleri repo içinde `.agent-bus/notes/T-XXXX.md`
+     dosyasına yazılır (görev spec'inde `notes/` varsa kiralanır). Repo dışı `walkthrough.md` yalnızca
+     yerel oturum hafızası içindir; danışmana resmi aktarım `notes/` ve sonuç JSON'u üzerinden yapılır.
+   - **Eşzamanlı Yazım İlkesi:** Not rapor anında sonradan uydurularak (rekonstrüksiyon) değil;
+     iş sürerken eşzamanlı tutulur.
+   - **"As-of" Zaman Damgası:** Not kalıcı bir yüzey olduğu için `"Durum: Devam ediyor"` gibi sonradan
+     kendini yalanlayacak canlı durum ifadeleri yerine `"Durum (14:05:00Z itibariyle): Devam ediyor"`
+     zaman damgalı anlık görüntü kullanılır.
+   - **Hash Tazeleme Kuralı:** Değişen dosyaların hash'leri not içerisine statik tablo olarak
+     yazılmaz; rapor anında tazelenir veya nihai rapor JSON'una (`data/eval/*.json`) atıf verilir.
+   - **narrative_log Bağlantısı:** `bus_report_result` çağrılırken `narrative_log: {"path": ".agent-bus/notes/T-XXXX.md", "sha256": "<hash>", "ozet": "<kısa>"}`
+     şeklinde not dosyası sonuç kaydına bağlanır.
+   - **Tarihi Kayıt İlkesi:** Ölçüt veya karar düzeltmelerinde eski metin silinmez; `onceki_metin`,
+     düzeltme tarihi, gerekçesi ve ölçüm kaynağı (yol + sha256) açıkça korunur.
 
 10. **Tekrarla.** 2. adıma dön. **Açık görev yoksa** sessizce bekle; soru sorma, mesaj gönderme,
     boş rapor yazma. Bu sözleşmede bekleyen yürütücü, doğru davranan yürütücüdür.
@@ -70,6 +83,9 @@ Bu dosya ile SPEC.md çelişirse **SPEC.md kazanır**.
 - Gerçek bir uyumsuzluğu `strict=False` veya eşdeğeri bir susturmayla gizleme.
 - Bus'ın kayıt dizinlerini (`state/tasks`, `state/leases`, `state/results`, `log/events.jsonl`)
   elle düzenleyerek durumu "düzeltme" — durum yalnızca araçlarla değişir.
+- Raporlarda veya notlarda komutları `...` ile kısaltma.
+- Tekil dosya yazarken geniş dizin (`data/eval/`) kiralaması alma.
+- Atıflarda bölüm veya satır numarası kullanma; yalnızca `YOL + SHA-256`.
 
 ## Araçlar
 

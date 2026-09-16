@@ -1,0 +1,71 @@
+{
+  "task_id": "T-0044",
+  "status": "PASS",
+  "date": "2026-09-16",
+  "writes": [
+    "data/train_chat_balanced.bin",
+    "data/train_chat_balanced.bin.meta.json",
+    "data/eval/t0044_chat_balanced_recompile_2026-09-16.json",
+    ".agent-bus/notes/T-0044.md"
+  ],
+  "changed_files": [
+    "data/train_chat_balanced.bin",
+    "data/train_chat_balanced.bin.meta.json",
+    "data/eval/t0044_chat_balanced_recompile_2026-09-16.json",
+    ".agent-bus/notes/T-0044.md"
+  ],
+  "pre_conditions": {
+    "old_bin_sha256": "3b2b9cd3cf3f47147c6c30b1705c812dfa7a8a287788269a6fa73dc94fccbf10",
+    "old_meta_sha256": "f5ca63fdc62422ee7bd8103ae21be353410b5732cc3cbe12e219b9d19b21b418",
+    "nine_sources_verified": {
+      "data/pedagogy/chat_conversations.jsonl": { "lines": 6000, "bytes": 1490191, "sha256": "3ec93fb27d0bb8b4c09d3ee9cfa601ebfa0f576e19cbe354be3cf6289b4f73fd" },
+      "data/pedagogy/middle_school_chat.jsonl": { "lines": 125, "bytes": 25677, "sha256": "72f3e32a3d81cd6786a95f9211c1d68379c0f99373cf5f8e5f29e9240409a633" },
+      "data/pedagogy/parenting_deep_dataset.jsonl": { "lines": 40001, "bytes": 4798816, "sha256": "da2f45ca2716ebf965d1d6074ce1cfdf83501ee831c03bf423a54b3ee45c739a" },
+      "data/pedagogy/lexical_semantics_dataset.jsonl": { "lines": 25000, "bytes": 4066310, "sha256": "a7c1289d59fcc353e6d181cf84b42bf7aa29b9cf985e94b087094052ca5f7ca1" },
+      "data/pedagogy/carpenter_specialization_dataset.jsonl": { "lines": 5400, "bytes": 2001426, "sha256": "146a73dce0bf95f1e847c1be26456f9172bb4630a9058b8f2bf15a6b0553768f" },
+      "data/pedagogy/rag_interactive_dataset.jsonl": { "lines": 6599, "bytes": 1512834, "sha256": "36f552519ad40512db4fc07b5ec2ddbaec0b5b29dbf73e5f2a1b9a910ec87103" },
+      "data/pedagogy/rag_dataset.jsonl": { "lines": 11963, "bytes": 4474800, "sha256": "32e524a1a90e3af54101ce6b42b102fc221ee59938b812f86a2fe018f219d5c8" },
+      "data/pedagogy/turk_tarihi_chat.jsonl": { "lines": 6101, "bytes": 2774490, "sha256": "cd606873519879a1f107f9c2d76503c1ce7579f1ec78b40810db6ce6949021a8" },
+      "data/pedagogy/turk_tarihi_sft.jsonl": { "lines": 6507, "bytes": 3062397, "sha256": "b4d937531651f93307519ff08cb67c7e96a40306373b53f7f897df11b2cb08d8" }
+    }
+  },
+  "comparison_old_vs_new": {
+    "token_count": { "old": 3120000, "new": 3120000 },
+    "record_count": { "old": 24375, "new": 24375 },
+    "vocab_size": { "old": 32137, "new": 32852 },
+    "max_id": { "old": 32136, "new": 32850 },
+    "composition_keys": { "old": 8, "new": 9 },
+    "turk_tarihi_sft_present": { "old": false, "new": true }
+  },
+  "gate_verifications": {
+    "gate_a_max_id": {
+      "status": "DOGRULANDI",
+      "measurement": "KOŞUM: max_id = 32850 >= 32850 (True)"
+    },
+    "gate_b_punctuation_and_apostrophe_presence": {
+      "status": "DOGRULANDI",
+      "measurement": "KOŞUM: 32137 (.) adet = 45386; 32145 ()) adet = 7660; 32850 (') adet = 14350"
+    },
+    "gate_c_total_records_sum": {
+      "status": "DOGRULANDI",
+      "measurement": "KOŞUM: meta.total_records (24375) == sum(meta.dataset_composition.values()) (24375) -> True"
+    },
+    "gate_d_length_and_file_size": {
+      "status": "DOGRULANDI",
+      "measurement": "KOŞUM: meta.total_tokens (3120000) == 128 * 24375 (3120000) == uint16 adedi (3120000); dosya boyutu (6240000 B) == total_tokens * 2 (6240000 B)"
+    },
+    "gate_e_composition_and_vocab_size": {
+      "status": "DOGRULANDI",
+      "measurement": "KOŞUM: meta.dataset_composition 9 kaynağı içeriyor (turk_tarihi_sft dahil = 2500) ve meta.vocab_size == 32852"
+    },
+    "determinism": {
+      "status": "DOGRULANDI",
+      "measurement": "KOŞUM: İkinci kez çalıştırıldı; 1. ve 2. koşum .bin sha256 birebir özdeş: 443f93d352b07defca91b2a620f2e4154c3ed0b14f7c695535c959209e7608fa"
+    },
+    "canaries": {
+      "status": "DOGRULANDI",
+      "measurement": "KOŞUM: data/vocab.json (4b40eebee9c996c8...), src/llm/tokenizer.py (560a3bfbf32c394a...), data/train_carpenter_specialization.bin (13dd81bf700690b7...), data/train_balanced_sft.bin (55863e36b62414c6...) DEĞİŞMEDİ; data/*.bin dosya adedi: 14. scratch/f2_backup_2026-09-16 altındaki 6 yedeğin tamamı sağlam."
+    }
+  },
+  "findings": []
+}

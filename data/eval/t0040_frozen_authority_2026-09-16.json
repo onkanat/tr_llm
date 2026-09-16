@@ -1,0 +1,76 @@
+{
+  "task_id": "T-0040",
+  "status": "PASS",
+  "ts_start": "2026-09-16T04:46:12Z",
+  "ts_end": "2026-09-16T04:48:45Z",
+  "title": "Donmus-yol kapisi tek otoriteyi okusun (T-0039 V1/V3/V4, saf KOD)",
+  "metadata": {
+    "python_version": "3.14.6",
+    "device": "mps (sandbox dışında koşuldu)",
+    "execution_environment": "SANDBOX DIŞINDA (macos host terminal) - sandbox içinde agent gateway testi izin sahte hatası üretir, sandbox dışında 173 passed"
+  },
+  "acceptance_results": {
+    "a_no_embedded_patterns": {
+      "command": "grep -c 'data/*\\.bin' scripts/run_goal_pipeline.py src/llm/prepare.py",
+      "observed": "scripts/run_goal_pipeline.py:0, src/llm/prepare.py:0",
+      "status": "PASS"
+    },
+    "b_signature_frozen_file_param": {
+      "command": "./venv/bin/python -c \"import inspect,src.llm.frozen_guard as g; print(inspect.signature(g.is_frozen_path))\"",
+      "observed": "(path: 'str', frozen_file: 'str' = '.agent-bus/frozen.json') -> 'bool'",
+      "status": "PASS"
+    },
+    "c_pytest_suite": {
+      "command": "./venv/bin/pytest tests/ -q",
+      "environment": "SANDBOX DIŞINDA (venv)",
+      "count_before": 171,
+      "count_after": 173,
+      "observed": "173 passed in 9.60s",
+      "new_failures": 0,
+      "status": "PASS"
+    },
+    "d_sample_path_evaluations": {
+      "command": "./venv/bin/python -c \"from src.llm.frozen_guard import is_frozen_path as f; print(f('data/train_balanced_sft.bin'), f('data/rebuild/vocab_base_32852.json'), f('data/realistic_rag/val.jsonl'))\"",
+      "observed": "True False True",
+      "status": "PASS"
+    },
+    "e_fail_closed": {
+      "command": "is_frozen_path('x', frozen_file='yok.json')",
+      "observed": "RuntimeError: [FAIL-CLOSED] Donmuş desen dosyası bulunamadı: yok.json",
+      "status": "PASS"
+    },
+    "f_canaries": {
+      "vocab_json_sha": "4b40eebee9c996c8dd3150f6b3c8896de85764ee1cf0b08e6c636e5c002a0e69",
+      "cot_vault_jsonl_sha": "97b06fe5befd6613b520d28dc20a74deaeb30e4e8f7e6675a23720a019ff5619",
+      "bin_count": 14,
+      "unchanged": true,
+      "status": "PASS"
+    },
+    "g_mutant_proof": {
+      "command": "./venv/bin/python mutant_demonstration",
+      "observed": "Dinamik otorite okuyan gerçek kod True, gömülü literal listeye dönen mutant False döndürdü ve test KIRMIZI oldu.",
+      "status": "PASS"
+    },
+    "h_empty_input_prepare_dataset_guard": {
+      "command": "prepare_dataset(empty_input, out_p, save_vocab_to='data/vocab.json')",
+      "observed": "RuntimeError: Donmuş sözlük yoluna geri yazma engellendi: data/vocab.json (hiçbir dosya yazılmadan en başta reddedildi)",
+      "status": "PASS"
+    }
+  },
+  "changed_files": [
+    "src/llm/frozen_guard.py",
+    "scripts/run_goal_pipeline.py",
+    "src/llm/prepare.py",
+    "tests/test_compiler_entrypoints.py",
+    ".agent-bus/notes/T-0040.md",
+    "data/eval/t0040_frozen_authority_2026-09-16.json"
+  ],
+  "file_hashes": {
+    "src/llm/frozen_guard.py": "38672ec7ac6a5d29c32ce439494245855b9df8b0353a41bcc94c6fbe41d3a617",
+    "scripts/run_goal_pipeline.py": "8d4945f5f9aa385617341fea44e4c46d7f44b0c605db8503cd00908d17a0a466",
+    "src/llm/prepare.py": "6dbd89b1d76fc65c4f225608a7a92a5dee49ecaf439b992e11d0b8172571c6c0",
+    "tests/test_compiler_entrypoints.py": "d3faba3f05acae2d80ca6b0e7642c19a1d0698009c47af1bc7d5dfa959383758",
+    ".agent-bus/notes/T-0040.md": "c486eba3814564baa7bc5d068e688c1fbd9026f2f92265870f58724b48bbe380"
+  },
+  "findings": []
+}

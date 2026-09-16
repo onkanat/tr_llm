@@ -1,0 +1,82 @@
+{
+  "task_id": "T-0053",
+  "baslik": "PAD-duzeltme: egitim kaybinda <PAD> hedeflerini maskele + 100 adimlik dogrulama kosumu",
+  "dogrulama_damgasi": "2026-09-16T19:20:00Z",
+  "dogrulayan": "claude (danisman rolu, bagimsiz olcum)",
+  "yonetim": "PASS_WITH_FINDINGS",
+  "ozet": "Kod ve testler DOGRU: uygulama onerdigim `ce_kwargs` kalibini izliyor, bayrak uctan uca calisiyor (kendi kosumumla: maskesiz 6,85 / maskeli 1,58), testler 4 + tam paket 195 gecti, 9 kanaryanin 9'u saglam, probe sha birebir. KAPI GECTI ve kendi yontemimle yeniden urettim (probe'da PAD ilk 3'te YOK; en sik 1. token id 13). ANCAK dort kayit: (F1) `changed_files` BOS beyan edildi - T-0042 V1 kusuru TEKRAR etti; (F2) rapor JSON'unun kanarya/kod-hash/test bolumleri yok (notta var); (F3) benim premisim yanlisti ve duzeltildi (dolgu zaten %99,87 maskeli); (F5) kapinin kiyasi KONTROLLU DEGIL (f3b ek olarak 1000 adimlik sft_v2 asamasi gormustu) -> 'maskeleme yozlasmayi cozdu' cikarimi kurulamaz; karari `--no-pad-mask` ikizi verir.",
+  "kabul_kriterleri": [
+    {"no": "a", "kriter": "KIRALAMA: 6 yol yazimdan once kiralandi", "durum": "DOGRULANDI",
+     "olcum": "Olay gunlugu: 18:26:16Z'de 3 kod/test dosyasi, 18:26:31Z'de scratch/, 18:27:01Z'de rapor+not. Kira seti writes[]'in TAMAMINI yazimdan once kapsadi (T-0051 ihlali tekrarlanmadi); 19:06:59Z'de altisi da birakildi."},
+    {"no": "b", "kriter": "KOD 1: train_step_demo.py ignore_index + None'da arguman gecilmemesi", "durum": "DOGRULANDI (BAGIMSIZ okuma)",
+     "olcum": "Satir 228: `forward(..., ignore_index: Optional[int] = None)`; satir 245: `ce_kwargs = {} if ignore_index is None else {'ignore_index': ignore_index}`; 249: `**ce_kwargs`. Yani None iken arguman HIC gecilmez -> eski cagri birebir korunur (torch None kabul etmiyor; bu tuzagi spec'e ben yazmistim)."},
+    {"no": "c", "kriter": "KOD 2: train.py pad_ignore_index + --no-pad-mask", "durum": "DOGRULANDI (BAGIMSIZ kosum)",
+     "olcum": "Satir 53: `pad_ignore_index = None if '--no-pad-mask' in sys.argv else vocab.stoi.get('<PAD>', 1)`; satir 182: cagriya geciriliyor. KENDIM IKI KOŞUM YAPTIM (1 adim, ayni veri, cikti scratch'a): varsayilan -> '<PAD> kayip maskesi aktif (ignore_index=1)' ve kayip 1,5836; --no-pad-mask -> 'devre disi' ve kayip 6,8515. Bayrak UCTAN UCA calisiyor."},
+    {"no": "d", "kriter": "TESTLER", "durum": "DOGRULANDI (BAGIMSIZ kosum)",
+     "olcum": "Yeni dosya: `pytest tests/test_pad_loss_mask.py -q` -> 4 passed. Tam paket sandbox DISINDA: 195 passed (yurutucunun '194 passed, 1 deselected' iddiasiyla tutarli; onlar bir testi dislamis)."},
+    {"no": "e", "kriter": "KISA KOSUM + KAPI (PAD en sik 1. token olmasin)", "durum": "DOGRULANDI - ANCAK KIYAS KONTROLLU DEGIL (F5)",
+     "olcum": "Yurutucu: probe'da `pad_count_in_all_generated = 0`, `is_pad_top1 = false`; en sik 5: hava(262) x17, CASE_LOC(29) x16, i(32827) x15, y(32842) x14, POSS_2SG(28) x9. BENIM bagimsiz olcumum (Y1, 5 baglam, greedy 32): probe'da en sik 3 = id13 x11, 32137 x6, 1705 x4 -> PAD YOK ✓; noktalama 6/3/2 + kesme 3. KAPI GECTI."},
+    {"no": "f", "kriter": "KANARYA (9 pin)", "durum": "DOGRULANDI",
+     "olcum": "Bes checkpoint + f3a + f3b + f3_sft + f3 -> DOKUZUNUN DOKUZU saglam (sha'lar pinlerle ayni). data/*.pt 27, data/*.bin 15. Hicbir donmus artefakt degismedi; probe ciktisi scratch'ta (donmus desen disi)."},
+    {"no": "g", "kriter": "HASH IDDIALARI", "durum": "DOGRULANDI",
+     "olcum": "probe sha256 iddiasi (27780dbf7c57057c...) benim hesaplamamla BIREBIR. Yazilan 6 yolun altisi da diskte mevcut ve mtime'lari gorev penceresinde."},
+    {"no": "h", "kriter": "KAPANIS: changed_files == writes[]", "durum": "BASARISIZ - bkz F1",
+     "olcum": "changed_files = [] (bos); writes[] = 6. Mesaj 19:06:49Z ✓, kiralar 19:06:59Z'de birakildi ✓ -> ucuncu sinyal (beyan) KULLANILAMAZ durumda."}
+  ],
+  "bagimsiz_olcumlerim": {
+    "kapi": "probe: en sik 3'te PAD YOK (id13 x11, '.' x6, 1705 x4); f3b (kiyas): PAD x36",
+    "bayrak": "1 adimlik iki kosum: maskeli kayip 1,5836 / maskesiz 6,8515 (~4x fark)",
+    "testler": "4 passed (yeni dosya) + 195 passed (tam paket, sandbox disi)",
+    "kanarya": "9/9 saglam; probe sha birebir"
+  },
+  "findings": [
+    {
+      "id": "F1",
+      "siddet": "ORTA-YUKSEK (beyan kusuru - T-0042 V1 SINIFI TEKRAR ETTI)",
+      "baslik": "changed_files BOS beyan edildi (6 yol yazilmisken)",
+      "olcum": "state/results/T-0053.json -> changed_files: []. Oysa gorev 6 yol yazdi ve altisi da diskte (mtime'lar gorev penceresinde, sha'lar alindi). Bu kusur T-0042'de tespit edilip T-0043'ten T-0052'ye kadar DUZELMISTI (her gorevde changed_files = writes[]).",
+      "etki": "Kapanis kapisinin ucuncu sinyali (beyan) kullanilamaz hale geliyor; dogrulayici kapsami yalniz mtime/sha'dan yeniden kurmak zorunda kaliyor - tam da T-0042'de kayda gecen risk.",
+      "kural": "Her gorevde changed_files = writes[] (birebir). T-0048'de yazilan AST/kapi bu alani denetlemiyor; istenirse bir sonraki turda `results/*.json` icin de bir kontrol eklenebilir."
+    },
+    {
+      "id": "F2",
+      "siddet": "ORTA (rapor eksikligi; notta telafi edilmis)",
+      "baslik": "Rapor JSON'unda kanarya / kod-hash / test bolumleri yok",
+      "olcum": "data/eval/t0053_pad_fix_2026-09-16.json anahtarlari: task_id, timestamp, status, model_checkpoint, sha256, bytes, training_run, gate_pad_verification, y1_runs, y2_runs. Spec'in istedigi kanarya tablosu, kod degisikliklerinin once/sonra sha'lari ve test ciktilari raporda YOK; ancak .agent-bus/notes/T-0053.md'de mevcut (kiralama durumu, kod degisiklikleri A/B, 4+194 test, probe, kapi, kanaryalar).",
+      "etki": "Bilgi kaybi yok (not kaniti tasiyor); ancak makine tarafindan denetlenebilir yuzey ince kaliyor."
+    },
+    {
+      "id": "F3",
+      "siddet": "KAYIT (kusur BENDE - spec premisi)",
+      "baslik": "Spec'in gerekcesi yanlisti: dolgu ZATEN maskeliydi",
+      "olcum": "Spec'e 'kayip maskesi yok, her PAD hedef olarak egitiliyor' yazmistim. OLCUM (16 Eyl 18:34Z): train.py:157-175 zaten <OUTPUT> oncesi ve <EOS> sonrasi hedefleri -100 yapiyor; chat_balanced'da 200 pencere/25.600 hedefte PAD hedefi 12.237 (%47,8) ama yalniz 16'si maskesiz (%99,87 maskeli). Gorev yine de anlamli: kalan %0,13 acigi kapatir ve loss olcegini dogru hale getirir.",
+      "yan_etki": "Bu duzeltme OLMADAN kapinin gecmesi/gecmemesi 'fix ise yaradi mi' diye okunamazdi; yurutucuye 18:34'te 'kapi duserse bu benim premis kanitimdir' diye yazdim."
+    },
+    {
+      "id": "F4",
+      "siddet": "YUKSEK-DEGER (olcum; gecmis sayilarin yorumu)",
+      "baslik": "Kayip OLCEGI maskelemeye bagli: 1,5836 vs 6,8515 (~4x)",
+      "olcum": "Ayni veri, ayni adim, yalniz bayrak farki: maskeli 1,5836 / maskesiz 6,8515. Yani PAD konumlari (verinin %47,8'i) egitimin basinda YUKSEK kayipli ve ortalama kaybi domine ediyorlardi.",
+      "sonuc": "Onceki kosumlarin kayip degerleri (5,3955 / 3,6530 / 2,4404 / 1,8242 / 0,9447) PAD etkisi altindaydi ve yeni (maskeli) degerlerle DOGRUDAN KIYASLANAMAZ. Ayrica bu sayilar 'ogrenme' hakkinda oldugundan daha iyimser bir tablo ciziyordu: kaybin buyuk kismi PAD'i tahmin etmekti.",
+      "kural": "Bundan sonra kayip karsilastirmalarinda maskenin acik/kapali oldugu AYRICA yazilmali."
+    },
+    {
+      "id": "F5",
+      "siddet": "ORTA -> COZULDU (danisma + kendi olcumum)",
+      "baslik": "Kiyas kontrolsuzdu; KONTROLLU IKIZ kosuldu ve maskelemenin cozdugu DOGRULANDI",
+      "olcum": "Ilk kiyas kontrolsuzdu (probe tabandan 100 adim; f3b ek olarak 1000 adim sft_v2). Danisma turunda yurutucu IKIZ DENEYI kostu: ayni taban, ayni veri, 100 adim, YALNIZ --no-pad-mask farki (scratch/t0053_unmasked_probe.pt). Ben ikizini KENDIM olctum (Y1, 5 baglam, 160 uretim): IKIZ (maskesiz) PAD = 39 ve EN SIK 1. TOKEN; PROBE (maskeli) PAD = 0 (en sik: id13, '.', 1705). Iki bagimsiz olcum ayni sonucu veriyor: MASKELEME PAD YOZLASMASINI DOGRUDAN COZUYOR.",
+      "kalan_soru": "Yozlasmanin mekanigi kismen aydinlandi: yurutucu `<EOS>` -> `<PAD>` sizintisini isaret etti (train.py:174-175'te `if token_id == eos_id: is_output = False` satirinda EOS aninda is_output hala True oldugu icin EOS'tan SONRAKI ilk PAD hedefi maskelenmiyor). BENIM OLCUMUM: 200 pencerede 185 EOS konumunun 184'unde sonraki hedef PAD, ama bunlarin YALNIZ 16'si maskesiz - cunku pencerelerin cogunda `<OUTPUT>` pencere disinda kaliyor ve o pencerede tum hedefler maskeleniyor. Yani sizinti GERCEK ama benim orneklemimde nadir (%0,13). Yurutucunun '100 batch'te 16.194 aktif PAD hedefi' rakami benim olcumumle kiyaslanabilir degil (tanimi netlesmeli)."
+    }
+  ],
+  "kapanis": {
+    "uc_sinyal_kapisi": "mesaj 19:06:49Z ✓ | kiralar 19:06:59Z'de birakildi (6 yol) ✓ | changed_files [] vs writes[] 6 ✗ (F1)",
+    "sonuc": "T-0053 KABUL: kod/test/kapi dogru ve bagimsiz olarak yeniden uretildi. Hukum PASS_WITH_FINDINGS. F1 beyan kusuru (T-0042 sinifi tekrar), F2 rapor eksikligi, F3 benim premis kusurum, F4 loss olcegi olcumu, F5 kiyas kontrolsuz.",
+    "sonraki_adim_onerisi": "F3 tam kosumunun (f3) maskeli receteyle YENIDEN kosulmasi (onerilen ad: data/kristal_model_f3_clean.pt) - f3 su haliyle F4 baslangici olmamali. Kontrollu A/B tamamlandi (F5), ayri bir A/B gorevine gerek KALMADI."
+  },
+  "danisma_turu": {
+    "damga": "2026-09-16T19:18Z (yurutucunun danisma cevabi) + 19:2xZ (benim dogrulamam)",
+    "yontem": "Danisman 3 soru gonderdi (PAD nedeni / adim suresi / F4 onerisi); yurutucu ikiz deneyi kendi kostu ve mekanizma hipotezi verdi. Ben ikisini de OLCEREK dogruladim (danisma = hipotez, dogrulama degil).",
+    "dogrulanan": "IKIZ DENEY: maskesiz PAD=39 (en sik 1.), maskeli PAD=0 -> maskeleme cozuyor (iki bagimsiz olcum).",
+    "dogrulanmayan": "Adim suresi yavaslamasi icin 'MPS unified memory + CPU-GPU transfer darbogazi + Metal command buffer stall' aciklamasi OLCULMEDI - hipotez olarak kayitli. '16.194 aktif PAD hedefi' rakami benim olcumumle kiyaslanabilir degil."
+  }
+}

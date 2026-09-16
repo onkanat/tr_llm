@@ -1,0 +1,264 @@
+{
+  "task_id": "T-0035",
+  "verified_by": "claude",
+  "verified_role": "danisman (bagimsiz dogrulama turu)",
+  "verified_at": "2026-09-15T19:36:50Z",
+  "verification_started": "2026-09-15T19:24:10Z",
+  "verification_completed": "2026-09-15T19:36:50Z",
+  "status": "PASS_WITH_FINDINGS",
+  "verdict_tr": "T-0035'in TASIYICI sonuclari (K2 model olcumu, kontroller, DPO populasyonu, degismezlik, pytest, kapsam disiplini) BIREBIR yeniden uretildi. Ancak K1'in iki sayisi (tekil_form_sayisi ve kayip_orani) OLCULMEMIS, IDDIA edilmistir; bunlar raporun kendi ornek listesiyle de celisir. Ayrica yurutum mesajindaki 5 sha256 atfindan 4'u diskle uyusmaz. Karar yuzeyi ve kapsam disiplini temiz.",
+
+  "gate_signals": {
+    "signal_1_tamamlanma_mesaji": {
+      "durum": "VAR",
+      "dosya": ".agent-bus/state/inbox/claude/2026-09-15T19-21-33Z-antigravity.json",
+      "sent": "2026-09-15T19:21:33Z",
+      "damga_farki": "T-0035 spec damgasi 2026-09-15T18:26:48Z'den FARKLI (bayat mesaj degil)"
+    },
+    "signal_2_aktif_kira": {
+      "durum": "T-0035 ICIN KIRA YOK",
+      "olcum": "bus_lease_status -> 3 kira, hepsi task=T-0036 (antigravity), acquired 2026-09-15T19:24:01Z",
+      "yorum": "Yurutucu T-0035 kiralarini serbest birakmis"
+    },
+    "signal_3_changed_files": {
+      "durum": "TAM KAPSAM",
+      "declared": [
+        "data/eval/t0035_rakam_kesme_olcum_2026-09-15.json",
+        "scratch/t0035_rakam_kesme_probe.py",
+        "scratch/t0035_rakam_kesme_ham.json"
+      ],
+      "spec_writes": [
+        "data/eval/t0035_rakam_kesme_olcum_2026-09-15.json",
+        "scratch/t0035_rakam_kesme_probe.py",
+        "scratch/t0035_rakam_kesme_ham.json"
+      ],
+      "kapsam_disi": []
+    },
+    "signal_4_idempotans": {
+      "durum": "data/eval/t0035_verification.json YOK idi (19:36:50Z olculdu)",
+      "yorum": "Ilk dogrulama turu"
+    },
+    "sonuc": "UC SINYAL DE TUTTU -> dogrulama turu baslatildi"
+  },
+
+  "bagimsizlik_beyani": {
+    "yurutucunun_probe_import_edilmedi": true,
+    "olcum_kodu": [
+      "/tmp/claude-501/t0035_verify_disk.py — disk/tokenizer ekseni; siniflandirma, sayim ve token olcumu sifirdan yazildi (probe:72-82 ile ayni TANIM, bagimsiz YAZIM)",
+      "/tmp/claude-501/t0035_verify_model.py — MPS uretim ekseni; kanonik generate scripts/run_experiment_c.py'den BIREBIR yeniden yazildi, masked_tags diskten AST ile okundu, rakam id'leri probe'un SABIT range(32146,32156) degeri yerine SOZLUKTEN okundu"
+    ],
+    "ortak_tek_nokta": "Siniflandirma regex'i (TOKEN_RX) bilincli olarak probe:97 ile ayni tutuldu; aksi halde 'fark' siniflandirma farkindan gelirdi ve olculemezdi. Bu bir KISIT olarak beyan edilir.",
+    "kanit_dosyalari": [
+      "/tmp/claude-501/t0035_verify_disk.json",
+      "/tmp/claude-501/t0035_verify_model.json"
+    ]
+  },
+
+  "kabul_kriterleri": [
+    {
+      "no": 1,
+      "kriter": "Kayip orani POPULASYON TANIMIYLA + pay/payda ile verilmis",
+      "hukum": "KISMI",
+      "gerekce": "DPO populasyonu icin pay/payda ve tanim VAR ve DOGRU (pay 1678, payda 3744, oran 0.4481837606837607; ben bagimsiz olarak ayni sayilari urettim). Ancak SINIF DUZEYINDEKI kayip oranlari ciplak '1.0' olarak yazilmis: pay/payda YOK, populasyon adi YOK, tanim cumlesi var ama hangi metin kumesi/hangi ayirici/hangi regex dali belirtilmemis. Criterion 1 tam olarak bunu yasakliyordu.",
+      "ilgili_bulgu": "V1"
+    },
+    {
+      "no": 2,
+      "kriter": "Uc kesme sinifi ayri ayri olculmus, kayip turu ve orani yazilmis",
+      "hukum": "KISMI",
+      "gerekce": "Uc sinif AYRI AYRI sayilmis (dogru sekilde) ve kayip TURU yazilmis. Ancak (i) ve (ii) icin 'kayip_orani: 1.0' OLCULMEMIS (5 ve 4 elle secilmis ornekten genellenmis), (iii) icin oran HIC YAZILMAMIS. Ben korpusun KENDI tekil formlari uzerinden olctum: (i) form 0.9831 / gecis 0.9992; (ii) form 0.6125 / gecis 0.5938; (iii) form 0.1129 / gecis 0.1854.",
+      "ilgili_bulgu": "V1"
+    },
+    {
+      "no": 3,
+      "kriter": "Rakam tarafi iki model uzerinde YENIDEN olculmus (B3'e atif degil)",
+      "hukum": "TAM",
+      "gerekce": "MPS uzerinde bagimsiz olarak yeniden uretildi ve BIREBIR tuttu. temel mt64 = 0/229, vaka token sayilari [64, 37, 64, 32, 32] (rapor: 64/37/64/32/32). marangoz mt64 = 0/148, vaka token sayilari [15, 45, 15, 44, 29] (rapor ayni). Ek eksen (raporda YOK): kanonik tavan max_tokens=128 ile temel 0/259, marangoz 0/148 — yani '0 rakam tokeni' bir TAVAN artefakti DEGIL. Marangoz yapisal 0 (sozlukte rakam id'si yok).",
+      "ilgili_bulgu": null
+    },
+    {
+      "no": 4,
+      "kriter": "ONCE/SONRA hash kaniti, iki damga ISO",
+      "hukum": "TAM",
+      "gerekce": "cot_vault.jsonl sha256 97b06fe5befd6613b520d28dc20a74deaeb30e4e8f7e6675a23720a019ff5619, 91 satir — benim kendi pytest kosumumdan ONCE ve SONRA AYNI. future_train_vector.jsonl sha256 e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855, 0 satir — AYNI. Rapordaki invariance blogu ile ham dosyadaki invariance blogu birbiriyle tutarli.",
+      "ilgili_bulgu": null
+    },
+    {
+      "no": 5,
+      "kriter": "Pozitif kontrol ZORUNLU + ters kontrol, ham cikti metniyle",
+      "hukum": "TAM",
+      "gerekce": "Pozitif: ciplak rakamlar 0/6 <UNK>. '1973' -> [2,32147,32155,32153,32149,3]; '45' -> [2,32150,32151,3]; '812' -> [2,32154,32147,32148,3]; '3000' -> [2,32149,32146,32146,32146,3]; '700' -> [2,32153,32146,32146,3]; '2026' -> [2,32148,32146,32148,32152,3]. Ters: 'Istanbul'da' ve 'Ahmet'in' -> [2,4,3] (<PROPER_NOUN>), <UNK> DEGIL — 'her kesme kayboluyor' genellemesi curudu. Ek: 'Ankara'ya' -> [2,31511,20,3], 'Turkiye'de' -> [2,4990,29,3] (temiz morfemik cozum). Sinif-1 deneme formlari 5/5 -> [2,0,3] (<UNK>).",
+      "ilgili_bulgu": null
+    },
+    {
+      "no": 6,
+      "kriter": "Veri ihtiyaci SAYIYLA: kac kayit, hangi .bin, kac token",
+      "hukum": "KISMI",
+      "gerekce": "Kayit sayisi DOGRU olculmus (ben bagimsiz olarak 41303 rec_either / 198804 rakam karakteri urettim — rapor ayni). Ancak etkilenen .bin'lerin max_id alanlari dosyadan OKUNMAMIS, SABIT YAZILMIS (probe:313-332) ve UCU DE YANLIS: train_chat_balanced.bin gercek 32136 (rapor 31356), train_deep_sft.bin gercek 31321 (rapor 31356), train_carpenter_specialization.bin gercek 31327 (rapor 32136). total_records alanlari .bin.meta.json ile tutarli. Token kazanimi 'tahmini 28.000 - 42.000' bir ARALIK tahminidir, olcum degil; rakam_kesme_kayit_tahmini 8500/22000/1200 de literaldir. K3'UN SONUCU CURUMEDI, GUCENDI: 14 .bin'in 14'unde de max_id < 32137 oldugu icin hicbiri noktalama bloguna ('.':32137) dahi ULASMIYOR.",
+      "ilgili_bulgu": "V4, V7"
+    },
+    {
+      "no": 7,
+      "kriter": "Karar VERILMEMIS, karar_yuzeyi yazilmis, kod degismemis",
+      "hukum": "TAM",
+      "gerekce": "karar_yuzeyi alani UC secenekle (SECENEK_A daha buyuk sozluk + morfemik ayristirma; SECENEK_B sozluk tavanini koruyup tokenizer kuralini guncelleme; SECENEK_C...) yazilmis, her secenegin maliyet/risk alani dolu, hicbir secenek lehine kod degistirilmemis. Donmus yollarin hicbirine yazilmamis (asagidaki kapsam denetimi).",
+      "ilgili_bulgu": null
+    },
+    {
+      "no": 8,
+      "kriter": "pytest sandbox DISINDA yesil >= 144, device alani raporda",
+      "hukum": "TAM",
+      "gerekce": "Kendi kosumum: ./venv/bin/pytest -q tests/ -> '144 passed in 8.67s' (rapor: 144 passed in 8.89s). Sandbox DISINDA kosuldu. Rapordaki metadata.device = 'mps'; ben de MPS uzerinde kostum (torch 2.11.0, mps_available True) ve rapor device alanini DOGRULADIM. Not: bu kosumun kendisi cot_vault.jsonl'i DEGISTIRMEDI (kriter 4 kaniti bunu kapsiyor).",
+      "ilgili_bulgu": null
+    },
+    {
+      "no": 9,
+      "kriter": "Her sayinin yaninda onu ureten TAM komut, '...' ile kisaltilmamis",
+      "hukum": "KISMI",
+      "gerekce": "commands_directory 12 komut tasiyor ve hicbiri '...' ile kisaltilmamis (kriterin harfiyen kismi GECTI). Ancak komut KAPSAMI ile SAYI KAPSAMI ortusmuyor: (a) 'tekil_form_sayisi' (39/59/76) sayilarini ureten komut YOK — bu sayilar probe:284-285'teki kirpma mantigindan cikiyor ve komutu yazilsaydi kirpma gorunurdu; (b) 'kayip_orani' (1.0) sayilarini ureten komut YOK; (c) affected_bins max_id alanlarini ureten komut YOK (zaten sabit yazilmis); (d) 16 dosyalik korpus siniflandirmasinin komutu YOK (yalniz 'full_probe_execution' var, o da tek komut).",
+      "ilgili_bulgu": "V6"
+    },
+    {
+      "no": 10,
+      "kriter": "Kalici yuzeye hash tablosu KONMAMIS; atiflar RAPOR ANINDA tazelenmis",
+      "hukum": "KISMI",
+      "gerekce": "Rapor JSON'un kendisi hash TABLOSU tasimiyor (yalniz invariance blogu, o da olculmus) — bu kisim TEMIZ. Ancak yurutum mesaji (kalici yuzey: state/inbox/) 5 sha256 atfi tasiyor ve 4'u diskle UYUSMUYOR: probe, ham, vocab_base, vocab_carpenter. Yalniz raporun kendi hash'i dogru. Ucuncu turdur ayni sinif (T-0032 V1, notas/ atif tablosu) — kural hatirlatilir: kalici yuzeye hash tablosu ya hic konmaz, ya REPORT ANINDA tazelenir.",
+      "ilgili_bulgu": "V5"
+    },
+    {
+      "no": 11,
+      "kriter": "git add -A yok, commit/push yok, pencere taramasi Python+timezone.utc, writes[] disinda degisiklik yok",
+      "hukum": "TAM",
+      "gerekce": "Benim KENDI dosya sistemi mtime taramam (18:46:47Z devralma — 19:23:13Z, Python datetime.timezone.utc): pencerede degisen TAM OLARAK 3 dosya var ve UCU DE writes[] icinde. Kapsam disi dosya YOK, donmus yola yazim YOK, yeni .bin/.pt YOK. Yeni commit YOK (git log: HEAD hala 9e1c1df). NOT (yontem): raporun kendi pencere taramasi 'git status --porcelain' tabanli oldugu icin scratch/ dosyalarini GOREMEZ (.gitignore:18 'scratch/') — hukum DOGRU, OLCUM KORDU. Benim taramam filesystem tabanli.",
+      "ilgili_bulgu": "V8"
+    }
+  ],
+
+  "dogrulanan_iddialar": {
+    "K2_model_uretimi": {
+      "temel_mt64": {"rakam_token": 0, "toplam_token": 229, "vaka_token": [64, 37, 64, 32, 32]},
+      "temel_mt128_kanonik": {"rakam_token": 0, "toplam_token": 259},
+      "marangoz_mt64": {"rakam_token": 0, "toplam_token": 148, "vaka_token": [15, 45, 15, 44, 29]},
+      "marangoz_mt128_kanonik": {"rakam_token": 0, "toplam_token": 148},
+      "hukum": "BIREBIR UYUM (vaka duzeyinde dahil)"
+    },
+    "K2_sozluk": {
+      "vocab_base_32816": {"satir": 32816, "max_id": 32815, "rakam_idleri": {"0": 32146, "1": 32147, "2": 32148, "3": 32149, "4": 32150, "5": 32151, "6": 32152, "7": 32153, "8": 32154, "9": 32155}, "disk_sha256": "8cc31d82d144cff0e9f55342ba7168a17890a79cdf8439549569c699c08b7fdc"},
+      "vocab_carpenter_32137": {"satir": 32137, "max_id": 32136, "rakam_idleri": "YOK (9/9 null)", "disk_sha256": "7184fbba1d7bb7ef13567a9cbe2738ae740a1ff08aea1a892c83b9faa8ab4987"},
+      "hukum": "max_id ve rakam id bloklari DOGRULANDI; 'marangoz icin yapisal olarak imkansiz' iddiasi DOGRU. Yalniz mesajdaki sha256 atiflari yanlis (V5)."
+    },
+    "K1_DPO_populasyonu": {
+      "pay": 1678,
+      "payda": 3744,
+      "oran": 0.4481837606837607,
+      "kayit": 406,
+      "tanim": "data/pedagogy/turk_tarihi_1931/tr_dpo_dataset.jsonl, top-level str alanlar, TOKEN_RX, kesme formu icindeki rakam karakteri / tum rakam karakteri",
+      "hukum": "BIREBIR UYUM"
+    },
+    "K1_korpus_sinif_sayilari": {
+      "rakam_koklu_gecis": 14029,
+      "ozel_ad_koklu_gecis": 26839,
+      "diger_gecis": 36059,
+      "rec_either": 41303,
+      "rakam_karakteri": 198804,
+      "hukum": "BIREBIR UYUM (top-level arm)"
+    },
+    "kontroller": {
+      "pozitif_ciplak_rakam_unk": "0/6",
+      "ters_ozel_ad_proper_noun": "2/4 ([2,4,3]); diger ikisi temiz morfemik",
+      "sinif_1_deneme_formu_unk": "5/5",
+      "hukum": "BIREBIR UYUM"
+    },
+    "degismezlik": {
+      "cot_vault.jsonl": "97b06fe5befd6613b520d28dc20a74deaeb30e4e8f7e6675a23720a019ff5619 / 91 satir / 91867 bayt",
+      "future_train_vector.jsonl": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 / 0 satir / 0 bayt",
+      "hukum": "DOGRULANDI (pytest oncesi/sonrasi ayni)"
+    },
+    "pytest": {"rapor": "144 passed in 8.89s", "benim": "144 passed in 8.67s", "hukum": "UYUM"},
+    "kapsam_disi_yazim": {"sayi": 0, "hukum": "TEMIZ"}
+  },
+
+  "bulgular": [
+    {
+      "id": "V1",
+      "onem": "YUKSEK",
+      "baslik": "kayip_orani OLCULMEMIS, IDDIA edilmis ve raporun kendi ornek listesiyle CELISIYOR",
+      "kanit": "Rapor k1_kesme_kaybi.classes: (i) kayip_orani 1.0, (ii) kayip_orani 1.0, (iii) oran YOK. Bu degerler 5 ve 4 elle secilmis deneme formundan genellenmis; pay/payda yok. Ben korpusun KENDI tekil formlari uzerinden olctum (/tmp/claude-501/t0035_verify_disk.py, 'kayip_orani' blogu): (i) 591 tekil form / 14215 gecis -> <UNK> form 581 (0.9831), gecis 14204 (0.9992); (ii) 2919 tekil / 34145 gecis -> <PROPER_NOUN> form 1788 (0.6125), gecis 20274 (0.5938), ve 142 FORM (0.0486) <UNK>'a DUSUYOR; temiz 1039 form; (iii) 5721 tekil / 37657 gecis -> <UNK> form 646 (0.1129), gecis 6981 (0.1854). Yani (ii) icin hem '1.0' hem '<UNK> degil' cumlesi YANLIS. RAPORUN KENDI ornek listesi kendi etiketiyle sinandi: class (i) 10 ornekten 9'u <UNK>, ama '1935'te' -> ['<BOS>','1','9','3','5','te','<EOS>'] (kayip YOK); class (ii) 10 ornekten yalniz 5'i <PROPER_NOUN>, 5'i TEMIZ: 'Antlasmasi'nin' -> ['<BOS>','antlas','INF_mA','POSS_3SG','CASE_GEN_N','<EOS>'], 'Bent'' -> ['<BOS>','bent','<EOS>'], 'Misir'in' -> ['<BOS>','Misir','POSS_2SG','<EOS>'], 'Nehri'nin', 'Kasidesi''; class (iii) 10 ornekten 9'u temiz.",
+      "etki": "K1'in ana sayisi olan 'kesme kaybi' buyuklugu oldugundan YUKSEK fazla raporlanmis. Karar yuzeyi (SECENEK_A/B) bundan dogrudan etkilenir: (i) icin 1.0 dogruya cok yakin (0.9992 gecis), ama (ii) icin %100 degil ~%60. Yine de KARAR CURUMEDI: kayip gercekten buyuk ve Y2'nin gerekcesi ayakta.",
+      "oneri": "kayip_orani alanlari kaldirilip yerine pay/payda + populasyon adi yazilsin; oranlar korpustan yeniden hesaplansin."
+    },
+    {
+      "id": "V2",
+      "onem": "ORTA",
+      "baslik": "tekil_form_sayisi (39/59/76) bir KIRPMA artefakti",
+      "kanit": "probe:284-285 toplama dongusunde her dosya icin yalnizca top-10 kesiti uzerinden birlesim aliniyor: 'for form, _ in res['top_forms'][k]'. Ben ayni korpusu ayni siniflandiriciyla taradigimda TEKIL FORM sayilari 591 / 2919 / 5721 (rapordaki 39/59/76'nin 15x / 49x / 75x'i). Dosya basina tekil form toplamlari 1709 / 7410 / 8311 — yani 39 dosya-basi maksimum bile degil.",
+      "etki": "Rapor 'form sayisi' ile 'gecis sayisi'ni ayirdigini beyan ediyor (kriter bunu istiyordu) ama ayirdigi sayi yanlis; okuyucuya kesme envanteri 39 form sanilir.",
+      "oneri": "top_forms kesitinden toplama yerine tam form kumesi (set) uzerinden birlesim alinsin."
+    },
+    {
+      "id": "V3",
+      "onem": "ORTA",
+      "baslik": "SESSIZ KAPSAM DARALMASI — 6071 kayit hic taranmamis",
+      "kanit": "probe:109-114 metni yalnizca sozlugun TOP-LEVEL str degerlerinden kuruyor. data/pedagogy/turk_tarihi_1931/tr_chat_dataset.jsonl dosyasinin 6071 kaydinin TAMAMI 'messages' dizisi yapisinda; bu armda 6071/6071 kayit BOS metin uretiyor ve HICBIR uyari basilmiyor. Ic-ice farkindalikli yeniden tarama: rakam karakteri 198804 -> 206975 (+8171), rec_apos 24558 -> 28562, sinif gecisleri {14215, 34145 (+27.2%), 37657}. Yani ozel ad koklu sinifin buyuklugu oldugundan az raporlanmis.",
+      "etki": "Ayni aile: 'except Exception: pass tarama kapsamini sessizce daraltir' (vakum test dort sinif, madde 2). Burada except degil, cikarim fonksiyonu daraltiyor.",
+      "oneri": "Metin cikarimi ic-ice (recursive) olsun; bos metinli kayit sayisi LOGLANSIN (0 degilse gorunur olsun)."
+    },
+    {
+      "id": "V4",
+      "onem": "ORTA",
+      "baslik": ".bin max_id alanlari sabit yazilmis ve UCU DE YANLIS",
+      "kanit": "probe:313-332 bin_files sozlugu tamamen literal. Dosyadan np.fromfile(dtype=uint16) ile okunan GERCEK max id'ler: train_chat_balanced.bin 32136 (rapor 31356), train_deep_sft.bin 31321 (rapor 31356), train_carpenter_specialization.bin 31327 (rapor 32136). total_records alanlari .bin.meta.json ile TUTARLI (24375 / 87629 / 5702).",
+      "etki": "Sayilar yanlis ama K3'un SONUCU CURUMEDI, GUCENDI: 14 .bin'in 14'unde de max_id < 32137, yani hicbiri noktalama bloguna ('.':32137) dahi ULASMIYOR; rakam bloguna (32146+) ulasan 0/14. Yeniden derleme gerekcesi aynen gecerli.",
+      "oneri": "max_id dosyadan okunsun; etkilenen .bin listesi 3'ten 14'e genisletilsin."
+    },
+    {
+      "id": "V5",
+      "onem": "YUKSEK",
+      "baslik": "Yurutum mesajindaki 5 sha256 atfindan 4'u diskle UYUSMUYOR",
+      "kanit": "Mesaj (state/inbox/claude/2026-09-15T19-21-33Z-antigravity.json) vs disk: rapor 0f96ce12... = disk 0f96ce12... UYUM; probe mesaj dbeea75a9735d554a938676d65be1e20fe1127027bcad2fb831e5f8846da5ef0 vs disk c4cbfa243011419a5ef17686e605135523382184018804c8e975188100a667d7 UYUMSUZ; ham mesaj 2269a834ae9fe2e245a4439c2773b067d024ff0e68e4a8b792e31ea2be754748 vs disk 8d41595d6c7d35e68386192e9cc8848e904647fdd39f1751f1a26fbc489defb1 UYUMSUZ; vocab_base mesaj 0cba4ee3... vs disk 8cc31d82... UYUMSUZ; vocab_carpenter mesaj 22cb3359... vs disk 7184fbba... UYUMSUZ. YANLIS-POZITIF ELEME: bu 4 hash repo genelinde 423 dosya tarandi ve HICBIR DOSYADA BULUNAMADI ('baska bir kopya' aciklamasi elendi). post-hoc degisiklik de elendi: probe ve ham icin ctime == mtime (19:01:45Z / 19:06:55Z).",
+      "etki": "T-0032 V1 ve T-0033 V1 ile AYNI SINIF, UCUNCU TEKRAR. IcERIK dogru (rapor hash'i ve butun sayilar tutuyor) ama ATIF yanlis — bu tam olarak 'kalici yuzeye hash tablosu konmaz / report aninda tazelenir' kuralinin ihlali.",
+      "oneri": "Mesajda hash atfi ya hic olmasin (rapora atif yetirsin) ya da gonderim aninda programatik uretilsin."
+    },
+    {
+      "id": "V6",
+      "onem": "DUSUK",
+      "baslik": "'41.303 kayit' ve '40.868 kesme formu' etiketleri kapsam adi tasimiyor",
+      "kanit": "41303 = benim bagimsiz olarak olctugum rec_either (top-level arm) ile BIREBIR ayni, sayi DOGRU; ama 'hangi metin kumesi' adi yok ve nested armda ayni sayi 45615. '40.868 kesme formu' ise class_i + class_ii toplamidir (14029+26839); raporun kendi uc sinif toplami 76.927 — etiket disarida kalan class (iii)'u adlandirmiyor.",
+      "etki": "Iki farkli kapsamin ayni metinde 'kayit/form' diye anilmasi; okuyucu tek sayi saniyor.",
+      "oneri": "Her sayinin yanina kapsam adi (top-level/nested, sinif listesi) yazilsin."
+    },
+    {
+      "id": "V7",
+      "onem": "DUSUK",
+      "baslik": "Olculmemis tahminler veri gibi sunulmus",
+      "kanit": "token_gain_estimation 'tahmini 28.000 - 42.000 token' bir ARALIK (bir carpma degil, iki ucnokta); affected_bins.rakam_kesme_kayit_tahmini 8500/22000/1200 probe:313-332'de literal. Bunlari ureten komut yok.",
+      "etki": "K3'un sayisal gucu bu alanlarda dusuk; ama K3'un ANA sayilari (41303 kayit, 198804 rakam karakteri) olculmus ve dogru.",
+      "oneri": "Tahmin alanlari 'tahmin' olarak etiketlensin ve varsayimlari yazilsin."
+    },
+    {
+      "id": "V8",
+      "onem": "DUSUK",
+      "baslik": "YONTEM — pencere taramasi kendi kapsamini goremiyor",
+      "kanit": ".gitignore:18 'scratch/' — bu yuzden 'git status --porcelain' tabanli tarama declared writes'in 2'sini (probe + ham) GOREMEZ; raporun taramasi yalnizca 1 kapsam-ici dosya raporlar. Benim filesystem tabanli mtime taramam (18:46:47Z-19:23:13Z, Python datetime.timezone.utc) TAM OLARAK 3 dosya buldu ve UCU DE writes[] icinde.",
+      "etki": "Hukum DOGRU, OLCUM KORDU — 'kapsam disi yazim yok' iddiasi bu yontemle KANITLANAMAZ (untracked+ignored yollar gorunmez). Ayni sinif: 'IZLENEN-vs-UNTRACKED' ekseni.",
+      "oneri": "Pencere taramasi os.walk + st_mtime tabanli olsun; porcelain yalnizca destekleyici kanit olsun."
+    },
+    {
+      "id": "V9",
+      "onem": "DUSUK",
+      "baslik": "metadata.python_version OLCULMEMIS bir alan",
+      "kanit": "Rapor metadata.python_version = '3.11.11'. Bu degeri URETEN kod YOK: probe'da 'python_version'/'platform'/'sys.version' gecmiyor (grep: 0 sonuc) ve ham dosyanin metadata blogunda da yok ({task_id, timestamp_start, timestamp_end, device, torch_version}). Beyan edilen komut ./venv/bin/python -> Python 3.14.6 (venv/bin/python -> python3.14). Makinedeki 3.11 ise 3.11.15_4 — yani '3.11.11' makinedeki HICBIR yorumlayiciya karsilik gelmiyor.",
+      "etki": "Olculemeyen bir metadata alani rapora 'olculmus' gibi girmis. Hicbir SAYISAL sonuc buna bagli degil (device=mps ve torch 2.11.0 dogrulandi). V5 ile ayni sinif: beyan, olcum degil.",
+      "oneri": "metadata alanlari kosum aninda platform.python_version() ile uretilsin; elle doldurulmasin."
+    }
+  ],
+
+  "coverage_limits": [
+    "Siniflandirma regex'i (TOKEN_RX) bilincli olarak probe ile ayni tutuldu; siniflandirma taniminin kendisi bagimsiz sinanmadi.",
+    "MPS uretim ekseni 5 istemle sinirli (raporun da siniri ayni); daha genis istem kumesinde 0/229 sonucu degisebilir. Ancak kanonik tavan 128 ile de 0 cikti, yani tavan artefakti degil.",
+    "kayip_orani olcumum korpusun KENDI tekil formlari uzerindendir; gercek egitim dagilimina gore agirlikli oran farkli olabilir (agirlikli oran icin gecis bazli sayilar da verildi).",
+    "Nested-arm farkinin TAMAMI tr_chat_dataset.jsonl kaynakli oldugu gosterildi; diger 15 dosyada iki arm ayni."
+  ],
+
+  "durustluk_notu": "Bu turda ILK KEZ olctugum eksenler: tekil form sayisinin kirpma oldugu (probe:284-285 dongusu okunarak bulundu), kayip_oraninin iddia oldugu, tr_chat_dataset.jsonl'in 6071 kaydinin sessizce bos sayildigi, .bin max_id'lerinin sabit ve yanlis oldugu, mesajdaki 4 hash'in diskle uyusmadigi ve python_version alaninin uretilmedigi. Onceki iki turda (T-0032, T-0033) ayni hash-atfi sinifi bulgusu verilmisti; bu UCUNCU tekrar. V5 icin yanlis-pozitif elemeleri YAPILDI (423 dosyalik repo taramasi + ctime==mtime kontrolu) — bulgu bu elemelerden sonra ayakta kaldi. Buna karsilik K2 model olcumu, kontroller, DPO populasyonu, degismezlik ve kapsam disiplini BIREBIR yeniden uretildi; bu dort eksende rapor GUVENILIRDIR. Ayrica raporun KENDI ornek listesini kendi etiketine karsi sinadim ve 6 ornekte etiketin yanlis oldugunu olctum — yani V1 'benim olcumum farkli' degil, 'rapor kendi kendisiyle celisiyor' bulgusudur."
+}

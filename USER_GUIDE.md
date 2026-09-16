@@ -85,7 +85,7 @@ selam harika bir gün geçiriyorum size nasıl yardımcı olabilirim
 
 ## 3. Model Eğitimi ve İnce Ayar
 
-Modelin ana eğitim döngüsü `train.py` betiği üzerinden yönetilir. Causal prompt masking sayesinde model sadece `<OUTPUT>` belirteçleri arasındaki hedefleri öğrenir.
+Modelin ana eğitim döngüsü `train.py` betiği üzerinden yönetilir. Causal prompt masking sayesinde model yalnızca `<OUTPUT>` belirteçlerinden sonraki ve `<EOS>`'tan önceki hedefleri öğrenir; hizalama dolgusu (`<PAD>`) ise **16 Eyl 2026'dan beri varsayılan olarak kayıptan maskelenir** (`--no-pad-mask` ile kapatılabilir). Maskeleme kayıp **ölçeğini** değiştirdiği için maskeleme öncesi/sonrası kayıp değerleri kıyaslanmamalıdır. Ayrıca donmuş `data/*.pt` hedefine yazmak `--allow-frozen-write` onayı ister.
 
 ### Komut Sözdizimi
 ```bash
@@ -403,7 +403,7 @@ from scripts.train_step_demo import KristalLM
 
 # 1. Derleyici ve Sözlüğü Hazırla
 vocab = Vocabulary()
-vocab.load('data/vocab.json')
+vocab.load('data/rebuild/vocab_base_32852.json')   # kanonik taban sözlüğü (16 Eyl 2026); eski betiklerde data/vocab.json (31.357) hâlâ geçebilir
 
 lexicon = LexiconManager()
 lexicon.load_from_tsv('data/lexicon/roots.tsv')
@@ -429,6 +429,7 @@ print("Türkçe Karşılık:", turkce_metin)
 ### 1. macOS Metal (MPS) Üzerinde Eğitim Hızı ve Kilitlenmeler
 - **Belirti:** `train.py` çalışırken MPS üzerinde `sign_mask` CPU-GPU aktarımı veya seyrek gradyanlar nedeniyle adım başına 4.7 saniyeye varan yavaşlama.
 - **Çözüm:** Adım B1.5 ile gelen `scripts/train_step_b1_5_rigorous.py` mimarisi kullanılır. Bu mimaride veri kümesi (`train_fast_ds.pt`) ve `sign_mask` tensörleri önceden hesaplanıp MPS belleğine kilitlenir; adım süresi 0.58 saniyeye düşer.
+- **ÖLÇÜLMÜŞ EK NEDEN (16 Eyl 2026):** Aynı makinede **GPU tüketen başka iş** (tarayıcıda video/YouTube) açıkken adım süresi **0,43 → 3,45 sn/adım**'a çıktı ve 75 saniyelik tekil takılmalar görüldü (T-0052 ölçümü; neden birinci elden teyit edildi). **Koşum sırasında makinede GPU'ya başka iş bindirmeyin** ve adım süresini koşumun **başında ve sonunda** ölçün: 2-3× sapma model/kod değil **yük** sinyalidir.
 
 ### 2. Qdrant Bağlantı Hatası (`ConnectionRefusedError`)
 - **Belirti:** `[VectorMemory]` başlatılırken `localhost:6333` adresine bağlanılamadı uyarısı.

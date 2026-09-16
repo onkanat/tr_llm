@@ -4,6 +4,7 @@ import json
 import numpy as np
 import torch
 import torch.nn as nn
+from typing import Optional
 import torch.optim as optim
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -224,7 +225,7 @@ class KristalLM(nn.Module):
         self.ln_f = nn.LayerNorm(n_embd)
         self.lm_head = nn.Linear(n_embd, vocab_size)
 
-    def forward(self, x: torch.Tensor, targets: torch.Tensor = None, sign_mask: torch.Tensor = None, return_hidden_states: bool = False):
+    def forward(self, x: torch.Tensor, targets: torch.Tensor = None, sign_mask: torch.Tensor = None, return_hidden_states: bool = False, ignore_index: Optional[int] = None):
         batch_size, seq_len = x.shape
         
         # 1. Custom token embedding (with sign inversion for negated words)
@@ -241,9 +242,11 @@ class KristalLM(nn.Module):
         loss = None
         if targets is not None:
             # Flatten tensors for cross entropy computation
+            ce_kwargs = {} if ignore_index is None else {"ignore_index": ignore_index}
             loss = nn.functional.cross_entropy(
                 logits.view(-1, logits.size(-1)), 
-                targets.view(-1)
+                targets.view(-1),
+                **ce_kwargs
             )
             
         if return_hidden_states:

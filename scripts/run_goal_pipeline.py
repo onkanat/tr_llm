@@ -40,6 +40,16 @@ C_CYAN = "\033[36m"
 C_RED = "\033[31m"
 
 
+def check_frozen_save_path(save_path: str, allow_frozen_write: bool = False) -> None:
+    """Belirtilen kaydetme yolunun donmuş olup olmadığını denetler.
+    
+    Donmuş yola yazma izni (allow_frozen_write=True) açıkça verilmemişse RuntimeError fırlatır.
+    """
+    from src.llm.frozen_guard import is_frozen_path
+    if is_frozen_path(save_path) and not allow_frozen_write:
+        raise RuntimeError(f"Donmuş yola yazma engellendi: {save_path} (allow_frozen_write=False)")
+
+
 def log_phase(title: str):
     print(f"\n{C_BOLD}{C_MAGENTA}" + "=" * 70)
     print(f"  {title}")
@@ -55,23 +65,38 @@ def run_cmd(cmd_list: list, desc: str):
     return dt
 
 
-def compile_jsonl_to_bin(jsonl_paths: list, output_bin: str, block_size: int = 64, oversample_factor: int = 1):
+def compile_jsonl_to_bin(
+    jsonl_paths: list,
+    output_bin: str,
+    vocab_path: str,
+    literal_entity_mode: bool,
+    block_size: int = 64,
+    oversample_factor: int = 1,
+    allow_frozen_write: bool = False
+) -> int:
     """Compiles JSONL records into uint16 binary token stream."""
+    from src.llm.frozen_guard import is_frozen_path
+    if is_frozen_path(output_bin) and not allow_frozen_write:
+        raise RuntimeError(f"Donmuş yola yazma engellendi: {output_bin} (allow_frozen_write=False)")
+
     vocab = Vocabulary()
-    vocab.load("data/vocab.json")
+    vocab.load(vocab_path)
     lexicon = LexiconManager()
     lexicon.load_from_tsv("data/lexicon/roots.tsv")
     compiler = CrystalCompiler(lexicon, build_default_graph())
-    tokenizer = KristalTokenizer(compiler, vocab)
+    tokenizer = KristalTokenizer(compiler, vocab, literal_entity_mode=literal_entity_mode)
 
     all_token_ids = []
     total_records = 0
+    failed_records = 0
+    logged_errors = 0
+    MAX_LOGGED_ERRORS = 5
 
     for path in jsonl_paths:
         if not os.path.exists(path):
             continue
         with open(path, "r", encoding="utf-8") as f:
-            for line in f:
+            for line_idx, line in enumerate(f, 1):
                 line = line.strip()
                 if not line:
                     continue
@@ -83,8 +108,11 @@ def compile_jsonl_to_bin(jsonl_paths: list, output_bin: str, block_size: int = 6
                         for _ in range(oversample_factor):
                             all_token_ids.extend(tids)
                         total_records += 1
-                except Exception:
-                    continue
+                except Exception as e:
+                    failed_records += 1
+                    if logged_errors < MAX_LOGGED_ERRORS:
+                        sys.stderr.write(f"[HATA compile_jsonl_to_bin] Dosya: {path}, Satır: {line_idx}, Tip: {type(e).__name__}, Mesaj: {e}\n")
+                        logged_errors += 1
 
     if not all_token_ids:
         print(f"{C_YELLOW}Uyarı: {output_bin} için veri bulunamadı!{C_RESET}")
@@ -100,12 +128,13 @@ def compile_jsonl_to_bin(jsonl_paths: list, output_bin: str, block_size: int = 6
         "vocab_size": len(vocab.stoi),
         "total_tokens": len(arr),
         "total_records": total_records,
+        "failed_records": failed_records,
         "created_at": datetime.now(timezone.utc).isoformat()
     }
     with open(output_bin + ".meta.json", "w", encoding="utf-8") as mf:
         json.dump(meta, mf, ensure_ascii=False, indent=2)
 
-    print(f"  {C_GREEN}Derleme Başarılı:{C_RESET} {output_bin} ({len(arr):,} token, {total_records} kaynak kayıt)")
+    print(f"  {C_GREEN}Derleme Başarılı:{C_RESET} {output_bin} ({len(arr):,} token, {total_records} kaynak kayıt, {failed_records} başarısız kayıt)")
     return len(arr)
 
 
@@ -119,6 +148,7 @@ def main():
     parser.add_argument("--dpo-steps", type=int, default=100, help="DPO adım sayısı")
     parser.add_argument("--carpenter-steps", type=int, default=150, help="Marangozluk eğitim adım sayısı")
     parser.add_argument("--device", type=str, default="mps" if torch.backends.mps.is_available() else "cpu", help="Donanım cihazı (mps/cpu)")
+    parser.add_argument("--allow-frozen-write", action="store_true", default=False, help="Donmuş kütüklere (data/*.pt, data/*.bin vb.) yazma izni ver")
     args = parser.parse_args()
 
     device = args.device
@@ -128,6 +158,7 @@ def main():
     train_steps = str(args.train_steps)
     dpo_steps = str(args.dpo_steps)
     carpenter_steps = str(args.carpenter_steps)
+    allow_frozen_write = args.allow_frozen_write
 
     print(f"{C_BOLD}{C_GREEN}======================================================================")
     print("  KRİSTAL-VEKTÖREL: OTONOM /GOAL EĞİTİM VE UZMANLAŞMA BORU HATTI")
@@ -211,6 +242,8 @@ def main():
             "data/future_train_vector.jsonl"
         ],
         output_bin="data/train_balanced_sft.bin",
+        vocab_path="data/rebuild/vocab_base_32852.json",
+        literal_entity_mode=True,
         block_size=64
     )
 
@@ -224,6 +257,8 @@ def main():
             "data/future_train_vector.jsonl"
         ],
         output_bin="data/train_chat_balanced.bin",
+        vocab_path="data/rebuild/vocab_base_32852.json",
+        literal_entity_mode=True,
         block_size=64
     )
 
@@ -231,21 +266,38 @@ def main():
 
     # Stage 1: Pretraining
     print(f"\n{C_BOLD}[2.1 / 4] Stage-1: Temel Ön Eğitim (Pretraining {train_steps} adım)...{C_RESET}")
-    run_cmd([python_bin, "train.py", "--device", device, "--data", "data/train.bin", "--steps", train_steps, "--from-scratch", "--save-path", "data/kristal_model.pt"], "Stage-1 Pretraining")
+    stage1_cmd = [python_bin, "train.py", "--device", device, "--data", "data/train.bin", "--steps", train_steps, "--from-scratch", "--save-path", "data/kristal_model.pt"]
+    if allow_frozen_write:
+        stage1_cmd.append("--allow-frozen-write")
+    check_frozen_save_path("data/kristal_model.pt", allow_frozen_write=allow_frozen_write)
+    run_cmd(stage1_cmd, "Stage-1 Pretraining")
 
     # Stage 2: SFT Fine-Tuning
     print(f"\n{C_BOLD}[2.2 / 4] Stage-2: Dengeli SFT Eğitimi ({train_steps} adım)...{C_RESET}")
-    run_cmd([python_bin, "train.py", "--device", device, "--data", "data/train_balanced_sft.bin", "--steps", train_steps, "--load-path", "data/kristal_model.pt", "--save-path", "data/kristal_model.pt"], "Stage-2 SFT")
+    stage2_cmd = [python_bin, "train.py", "--device", device, "--data", "data/train_balanced_sft_v2.bin", "--steps", train_steps, "--load-path", "data/kristal_model.pt", "--save-path", "data/kristal_model.pt"]
+    if allow_frozen_write:
+        stage2_cmd.append("--allow-frozen-write")
+    check_frozen_save_path("data/kristal_model.pt", allow_frozen_write=allow_frozen_write)
+    run_cmd(stage2_cmd, "Stage-2 SFT")
 
     # Stage 3: Chat SFT
     print(f"\n{C_BOLD}[2.3 / 4] Stage-3: Chat SFT Eğitimi ({train_steps} adım)...{C_RESET}")
-    run_cmd([python_bin, "train.py", "--device", device, "--data", "data/train_chat_balanced.bin", "--steps", train_steps, "--load-path", "data/kristal_model.pt", "--save-path", "data/kristal_model.pt"], "Stage-3 Chat SFT")
+    stage3_cmd = [python_bin, "train.py", "--device", device, "--data", "data/train_chat_balanced.bin", "--steps", train_steps, "--load-path", "data/kristal_model.pt", "--save-path", "data/kristal_model.pt"]
+    if allow_frozen_write:
+        stage3_cmd.append("--allow-frozen-write")
+    check_frozen_save_path("data/kristal_model.pt", allow_frozen_write=allow_frozen_write)
+    run_cmd(stage3_cmd, "Stage-3 Chat SFT")
 
     # Stage 4: DPO Alignment (CPU)
     print(f"\n{C_BOLD}[2.4 / 4] Stage-4: DPO Tercih Hizalama Eğitimi ({dpo_steps} adım)...{C_RESET}")
     import shutil
+    check_frozen_save_path("data/kristal_model_sft.pt", allow_frozen_write=allow_frozen_write)
     shutil.copyfile("data/kristal_model.pt", "data/kristal_model_sft.pt")
-    run_cmd([python_bin, "train_dpo.py", "--steps", dpo_steps], "Stage-4 DPO Alignment")
+    stage4_cmd = [python_bin, "train_dpo.py", "--steps", dpo_steps]
+    if allow_frozen_write:
+        stage4_cmd.append("--allow-frozen-write")
+    check_frozen_save_path("data/kristal_model.pt", allow_frozen_write=allow_frozen_write)
+    run_cmd(stage4_cmd, "Stage-4 DPO Alignment")
 
     print(f"\n{C_GREEN}Full Temel Model Eğitimi Başarıyla Tamamlandı: data/kristal_model.pt{C_RESET}\n")
 
@@ -304,11 +356,13 @@ def main():
             carpenter_arena_archive
         ],
         output_bin="data/train_carpenter_specialization.bin",
+        vocab_path="data/rebuild/vocab_base_32852.json",
+        literal_entity_mode=True,
         block_size=64
     )
 
     print(f"\n2. Marangozluk Modülü Eğitiliyor ({device} üzerinde {carpenter_steps} adım)...", flush=True)
-    run_cmd([
+    carpenter_cmd = [
         python_bin, "train.py",
         "--device", device,
         "--base-model", "data/kristal_model.pt",
@@ -316,7 +370,11 @@ def main():
         "--data", "data/train_carpenter_specialization.bin",
         "--steps", carpenter_steps,
         "--lr", "0.0003"
-    ], "Carpenter Specialization Retraining")
+    ]
+    if allow_frozen_write:
+        carpenter_cmd.append("--allow-frozen-write")
+    check_frozen_save_path("data/kristal_carpenter_model.pt", allow_frozen_write=allow_frozen_write)
+    run_cmd(carpenter_cmd, "Carpenter Specialization Retraining")
 
     print(f"\n{C_GREEN}Marangozluk Modülü Başarıyla Eğitildi: data/kristal_carpenter_model.pt{C_RESET}\n", flush=True)
 

@@ -1,0 +1,134 @@
+{
+  "task_id": "T-0038",
+  "status": "PASS_WITH_FINDINGS",
+  "ts_start": "2026-09-15T20:46:00Z",
+  "ts_end": "2026-09-15T20:53:40Z",
+  "title": "Conditioning_Score Metriğini Depoya Taşıma (SECENEK_A)",
+  "metadata": {
+    "python_version": "3.14.6",
+    "device": "mps (sandbox dışında koşuldu)",
+    "vocab_path_taban": "data/rebuild/vocab_base_32816.json",
+    "vocab_sha_taban": "8cc31d82d144cff0e9f55342ba7168a17890a79cdf8439549569c699c08b7fdc",
+    "vocab_path_marangoz": "data/rebuild/vocab_carpenter_32137.json",
+    "vocab_sha_marangoz": "22cb3359...",
+    "kaynak_rapor": "data/eval/t0036_kosullanma_olcutu_2026-09-15.json"
+  },
+  "onceki_sonraki_hash": {
+    "cot_vault": {
+      "sha": "97b06fe5befd6613b520d28dc20a74deaeb30e4e8f7e6675a23720a019ff5619",
+      "lines": 91,
+      "unchanged": true
+    },
+    "future_train_vector": {
+      "sha": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "lines": 0,
+      "unchanged": true
+    },
+    "regeneration_plan": {
+      "sha_before": "e24c741cbd6707904953bf397258184db1761914c6de5ea89af1a1d30c5fdd4c",
+      "sha_after": "96fd4e3f019611415811a75c46762864495431364b0b6bce27c2b6c05e7371f5",
+      "cmd": "shasum -a 256 data/eval/regeneration_plan_2026-09-15.json"
+    }
+  },
+  "k1_modul": {
+    "path": "src/eval/conditioning_score.py",
+    "sha": "6c015c113615389dfa44dc708c653d0140cd34108ec1e0bb99fff2a8b9a99a2a",
+    "init_path": "src/eval/__init__.py",
+    "init_sha": "e92b9ecc5f78b167f5268d3a0aee4bfddb4360d059d6e4b3a1fea8054f49ea9f",
+    "formul": {
+      "recall": "Recall(P, O) = sum(min(C_P(r), C_O(r))) / len(C_P)",
+      "rep_penalty": "RP(O) = min(1.0, (len(unique(C_O)) / len(C_O)) / 0.70)",
+      "conditioning_score": "Score(P, O) = Recall(P, O) * RP(O)"
+    },
+    "kaynak": "T-0036 raporu (k1_metrik_tasarimi_ve_kendini_dogrulama.metrik_tanimi.formuller)",
+    "saf_fonksiyon": true,
+    "global_mutable_durum": false,
+    "tip_ipuclari": "tam (Any, Dict, List, frozenset, tuple)"
+  },
+  "k2_plan_guncelleme": {
+    "path": "data/eval/regeneration_plan_2026-09-15.json",
+    "sha_after": "96fd4e3f019611415811a75c46762864495431364b0b6bce27c2b6c05e7371f5",
+    "guncellenen": "decisions_resolved_2026_09_15.D-E.kabul[0].kriter",
+    "kriter_yeni_ozeti": "Conditioning_Score(P, O) >= 0.20 — makineyle ölçülebilir eşik eklendi",
+    "eski_kriter_korundu": "kriter_onceki_metin anahtarında",
+    "cmd": "./venv/bin/python -c \"...json.load(); kabul0['kriter'] = kriter_yeni; json.dump(); ...\" (inline)"
+  },
+  "k3_test": {
+    "path": "tests/test_conditioning_score.py",
+    "sha": "7f645139e2f38d48fab85f75079e489b218764516f3befc568932da57f36a7cf",
+    "testler": [
+      "test_canary1_self_copy_score_near_1 — birebir kopya score>=0.99",
+      "test_canary2_empty_output_score_zero — boş çıktı score==0.0 bos=True",
+      "test_canary3_irrelevant_output_score_low — alakasız çıktı score<0.05",
+      "test_canary4_separation_matched_above_cross — doğru>çapraz ayırım",
+      "test_mutant_broken_formula_triggers_canary — tekrarlı çıktı mutant A ve payda mutant B",
+      "test_module_importable — import testi",
+      "test_return_keys — dönüş anahtarları testi"
+    ],
+    "sonuc": "7 passed in 0.18s",
+    "mutant_a_aciklama": "RP(O) sabit 1.0 — tekrarlı alakalı çıktıda real_rp=0.143 << 0.5, mutant_score > real_score*2",
+    "mutant_b_aciklama": "Payda len(C_O) — kısa istem / uzun çıktıda score farkı >0.01"
+  },
+  "k4_guncel_durum": {
+    "cmd_taban": "./venv/bin/python -c \"...generate(model_t, tok_t, ps)...conditioning_score(ps, output, tok_t, vocab_t)...\"",
+    "cmd_marangoz": "./venv/bin/python -c \"...generate(model_c, tok_c, ps)...conditioning_score(ps, output, tok_c, vocab_c)...\"",
+    "taban_skorlar": {
+      "P1_Genel_Edebiyat": 0.1667,
+      "P2_Noktalama": 0.0,
+      "P3_Rakam": 0.0,
+      "P4_Marangoz_Ezber": 0.3846,
+      "P5_Marangoz_Parafraz": 0.5
+    },
+    "marangoz_skorlar": {
+      "P1_Genel_Edebiyat": 0.1667,
+      "P2_Noktalama": 0.0,
+      "P3_Rakam": 0.0,
+      "P4_Marangoz_Ezber": 0.0,
+      "P5_Marangoz_Parafraz": 0.0
+    },
+    "taban_esigi_gecen": "2/5",
+    "marangoz_esigi_gecen": "0/5",
+    "esik": 0.20,
+    "t0036_karsilastirma": {
+      "t0036_matched_scores": [0.1667, 0.0, 0.0, 0.3846, 0.5],
+      "t0038_temel_scores": [0.1667, 0.0, 0.0, 0.3846, 0.5],
+      "bit_ozdes": true,
+      "not": "T-0036 probe kodu ile T-0038 modülü aynı sonuçları üretiyor — modül doğru"
+    }
+  },
+  "pytest": {
+    "cmd": "./venv/bin/pytest -q tests/",
+    "sandbox_disi": true,
+    "sonuc": "166 passed in 8.83s",
+    "yeni_test_sayisi": 166,
+    "onceki": 159,
+    "fark": 7
+  },
+  "bulgular": [
+    {
+      "id": "F1",
+      "onem": "YÜKSEK",
+      "baslik": "P2_Noktalama Conditioning_Score=0.0000 — eşik (0.20) altında",
+      "detay": "Taban modeli P2_Noktalama isteminde koşullanma gösteremiyor (score=0.0). D-E.kabul[0] kriteri olan ≥0.20 eşiği sağlanamıyor. Bu T-0038'in tespit etmesi gereken mevcut durumu doğrular — eğitim veya ince ayar gerektiriyor. D-B (Gereksinim-Koşullanma) yol haritasında yer alan F2 veya ilgili görev bunu ele alabilir.",
+      "etki": "Taban modeli şu anda D-E kriterini karşılamıyor (2/5 geçiyor, 5/5 bekleniyor)."
+    },
+    {
+      "id": "F2",
+      "onem": "YÜKSEK",
+      "baslik": "Marangoz Modeli Koşullanma Gösteremiyor (0/5)",
+      "detay": "Tüm marangoz skorları 0.0 — model her istemde sabit şablon üretiyor (T-0036 F1 bulgusunu doğrular). Marangoz modeli ezberlemiş, istem içeriğine koşullanmıyor.",
+      "etki": "Carpenter pipeline revision gerekiyor."
+    }
+  ],
+  "kapsam_disi": {
+    "egitim_kosulmadi": true,
+    "model_pt_degismedi": true,
+    "model_bin_degismedi": true,
+    "src_rag_rag_pipeline_py_silinmedi": true
+  },
+  "sha256_ozet": {
+    "conditioning_score_py": "6c015c113615389dfa44dc708c653d0140cd34108ec1e0bb99fff2a8b9a99a2a",
+    "test_conditioning_score_py": "7f645139e2f38d48fab85f75079e489b218764516f3befc568932da57f36a7cf",
+    "regeneration_plan_json": "96fd4e3f019611415811a75c46762864495431364b0b6bce27c2b6c05e7371f5"
+  }
+}

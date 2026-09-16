@@ -7,7 +7,7 @@ KRİSTAL-VEKTÖREL: TEMİZ MODEL VE UZMANLIK EĞİTİM ORKESTRATÖRÜ
 Arındırılmış veri kümeleriyle:
 1. Temel Model:
    - Stage 1: Pretraining (200 adım, train.bin)
-   - Stage 2: Dengeli SFT (200 adım, train_balanced_sft.bin)
+   - Stage 2: Dengeli SFT (200 adım, train_balanced_sft_v2.bin)
    - Stage 3: Chat SFT (200 adım, train_chat_balanced.bin)
    - Stage 4: DPO Tercih Hizalama (100 adım, dpo_all_tokenized.jsonl)
 2. Marangozluk Modeli:
@@ -20,6 +20,10 @@ import time
 import shutil
 import subprocess
 import torch
+
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+from src.llm.frozen_guard import check_frozen_save_path
 
 C_RESET = "\033[0m"
 C_BOLD = "\033[1m"
@@ -50,12 +54,14 @@ def main():
     t_total = time.time()
 
     start_stage = 1
+    allow_frozen_write = "--allow-frozen-write" in sys.argv
     for arg_idx, arg in enumerate(sys.argv):
         if arg in ("--resume-stage", "--stage") and arg_idx + 1 < len(sys.argv):
             start_stage = int(sys.argv[arg_idx + 1])
 
     # Backup current models before retraining if starting at stage 1
     if start_stage == 1 and os.path.exists("data/kristal_model.pt"):
+        check_frozen_save_path("data/kristal_model_pre_clean.pt", allow_frozen_write=allow_frozen_write)
         shutil.copyfile("data/kristal_model.pt", "data/kristal_model_pre_clean.pt")
         print("Mevcut model data/kristal_model_pre_clean.pt olarak yedeklendi.", flush=True)
 
@@ -63,33 +69,41 @@ def main():
     # 1. Stage-1: Pretraining (from scratch)
     # -------------------------------------------------------------------------
     if start_stage <= 1:
-        run_cmd([
+        stage1_cmd = [
             python_bin, "train.py",
             "--device", device,
             "--data", "data/train.bin",
             "--steps", "200",
             "--from-scratch",
             "--save-path", "data/kristal_model.pt"
-        ], "Stage-1 Pretraining (200 adım)")
+        ]
+        if allow_frozen_write:
+            stage1_cmd.append("--allow-frozen-write")
+        check_frozen_save_path("data/kristal_model.pt", allow_frozen_write=allow_frozen_write)
+        run_cmd(stage1_cmd, "Stage-1 Pretraining (200 adım)")
 
     # -------------------------------------------------------------------------
     # 2. Stage-2: Balanced SFT Fine-Tuning
     # -------------------------------------------------------------------------
     if start_stage <= 2:
-        run_cmd([
+        stage2_cmd = [
             python_bin, "train.py",
             "--device", device,
-            "--data", "data/train_balanced_sft.bin",
+            "--data", "data/train_balanced_sft_v2.bin",
             "--steps", "200",
             "--load-path", "data/kristal_model.pt",
             "--save-path", "data/kristal_model.pt"
-        ], "Stage-2 Dengeli SFT (200 adım)")
+        ]
+        if allow_frozen_write:
+            stage2_cmd.append("--allow-frozen-write")
+        check_frozen_save_path("data/kristal_model.pt", allow_frozen_write=allow_frozen_write)
+        run_cmd(stage2_cmd, "Stage-2 Dengeli SFT (200 adım)")
 
     # -------------------------------------------------------------------------
     # 3. Stage-3: Chat SFT Fine-Tuning
     # -------------------------------------------------------------------------
     if start_stage <= 3:
-        run_cmd([
+        stage3_cmd = [
             python_bin, "train.py",
             "--device", device,
             "--data", "data/train_chat_balanced.bin",
@@ -97,17 +111,26 @@ def main():
             "--batch-size", "16",
             "--load-path", "data/kristal_model.pt",
             "--save-path", "data/kristal_model.pt"
-        ], "Stage-3 Chat SFT (200 adım)")
+        ]
+        if allow_frozen_write:
+            stage3_cmd.append("--allow-frozen-write")
+        check_frozen_save_path("data/kristal_model.pt", allow_frozen_write=allow_frozen_write)
+        run_cmd(stage3_cmd, "Stage-3 Chat SFT (200 adım)")
 
     # -------------------------------------------------------------------------
     # 4. Stage-4: DPO Alignment (CPU)
     # -------------------------------------------------------------------------
     if start_stage <= 4:
+        check_frozen_save_path("data/kristal_model_sft.pt", allow_frozen_write=allow_frozen_write)
         shutil.copyfile("data/kristal_model.pt", "data/kristal_model_sft.pt")
-        run_cmd([
+        stage4_cmd = [
             python_bin, "train_dpo.py",
             "--steps", "30"
-        ], "Stage-4 DPO Tercih Hizalama (30 adım)")
+        ]
+        if allow_frozen_write:
+            stage4_cmd.append("--allow-frozen-write")
+        check_frozen_save_path("data/kristal_model.pt", allow_frozen_write=allow_frozen_write)
+        run_cmd(stage4_cmd, "Stage-4 DPO Tercih Hizalama (30 adım)")
 
     print(f"\n{C_BOLD}{C_GREEN}>>> TEMEL MODEL EĞİTİMİ TAMAMLANDI: data/kristal_model.pt <<<{C_RESET}\n", flush=True)
 
@@ -115,7 +138,7 @@ def main():
     # 5. Carpenter Specialization Training
     # -------------------------------------------------------------------------
     if start_stage <= 5:
-        run_cmd([
+        stage5_cmd = [
             python_bin, "train.py",
             "--device", device,
             "--base-model", "data/kristal_model.pt",
@@ -124,7 +147,11 @@ def main():
             "--steps", "150",
             "--batch-size", "16",
             "--lr", "0.0003"
-        ], "Marangozluk Uzmanlık Eğitimi (150 adım)")
+        ]
+        if allow_frozen_write:
+            stage5_cmd.append("--allow-frozen-write")
+        check_frozen_save_path("data/kristal_carpenter_model.pt", allow_frozen_write=allow_frozen_write)
+        run_cmd(stage5_cmd, "Marangozluk Uzmanlık Eğitimi (150 adım)")
 
     dt_all = time.time() - t_total
     print(f"\n{C_BOLD}{C_GREEN}======================================================================")
