@@ -1,0 +1,85 @@
+{
+  "task_id": "T-0060",
+  "baslik": "F4-v2: Replay ile ceket egitimi — unutmayi tabanin kendi tarifinden onle",
+  "dogrulama_damgasi": "2026-09-17T01:10:00Z (00:52Z kapanis + ~18 dk bagimsiz olcum)",
+  "dogrulayan": "claude (danisman rolu, bagimsiz olcum)",
+  "yonetim": "PASS_WITH_FINDINGS",
+  "ozet": "ARTEFAKTLAR VE SAYILAR DOGRU: karisim bagimsiz blok-siniflandirmasiyla dogrulandi (6.778 ceket + 2.260 replay, 0 ESLESMEYEN, oran %25,01, on dilimin onunde de %24,9-25,0), A/B kendi kosumumla son hanesine kadar ayni, C MPS'te sandbox disinda ayni, alti sha256'nin altisi da tam 64 karakter dogru, kanaryalar korundu, HAM LOG kalici (T-0059 F6 kapandi). ANCAK GOREV HEDEFINE ULASMADI: uc esikten UCU DE ASILDI (A +%23,73 > %10; B top-1 %79,2 < %79,4; C ROUGE-L 0,0410 < taban 0,0651). Ayrica B ekseni 'SINIRDA_GECTI' diye etiketlenmis (GECMEDI) ve T-0059'un F2 kusuru (taban size_bytes) DUZELTILMEDEN tasinmis. En degerli bulgu mekanizma: replay korpusu bir SABLONU geri getirdi — uretimlerin 4/4'u 'cumhuriyet donemi / vektorel bellek arama sorgusu' iskeletiyle basliyor.",
+  "kabul_kriterleri": [
+    {"no": "a", "kriter": "KIRALAMA: data/ + scratch/ dizin + 3 dosya kirasi", "durum": "DOGRULANDI",
+     "olcum": "00:38:31Z'de 2 dizin, 00:38:48Z'de 3 dosya (5 kira); 00:51:59Z'de hepsi birakildi (bus_lease_status -> [])."},
+    {"no": "b", "kriter": "KAPI a — KARISIM: yeni arac + .bin + meta; olculen oran %25 +/- %1", "durum": "DOGRULANDI (KENDI BAGIMSIZ OLCUMUM)",
+     "olcum": "Kaynak 128-token bloklarinin blake2b imzalarini cikardim (ceket 6.778 blok hepsi tekil; replay 24.375 blok 18.232 tekil; IKI KAYNAKTA ORTAK IMZA = 0 -> her blok tek anlamli siniflanabilir). Karisim: 1.156.930 token, 9.038 tam blok + 66 artik; ceket 6.778 blok, replay 2.260 blok, **ESLESMEYEN 0**; olculen oran **%25,01**; desen JJJR tekrarli; DILIM BASINA %24,9-25,0 (10 dilimin 10'unda temsil) -> replay esit yayilmis. Meta.json tam (kaynak yollar + sha256 + token + seed 42 + blok sayilari)."},
+    {"no": "c", "kriter": "KAPI b — KOSUM: 1000 adim, MPS, ham log kalici", "durum": "DOGRULANDI",
+     "olcum": "scratch/t0060_train.log VAR (9.721 B): 'Metal GPU (MPS) secildi.' + 'Veri kumesi yuklendi: data/train_f4_replay_mix.bin (Blok boyutu: 64). Toplam morfem token sayisi: 1,156,930' + Baslangic 0,3346 / Bitis 0,2300 / Toplam 464,06 sn -> raporun dort iddiasi da birebir. Adim sureleri logdan: 0,39-0,56 sn (ilk adim 1,67) -> YUK KONTAMINASYONU YOK."},
+    {"no": "d", "kriter": "KAPI c — A ekseni: artis <= %10 (<= 2,1588)", "durum": "DOGRULANDI — ESIK ASILDI (+%23,73)",
+     "olcum": "Bagimsiz olcum: f3_clean 1,962547 | carpenter_v2 2,789015 | f4_replay **2,428188**. f4_replay = f3_clean'a gore +%23,73 (esik %10). T-0059'a gore TOPARLANMA var (-0,3608) ama esik yine asildi. Etiket DOGRU."},
+    {"no": "e", "kriter": "KAPI d — B ekseni: top-1 dususu <= 5 puan (>= %79,4)", "durum": "DOGRULANDI — ESIK ASILDI (79,20 < 79,40) · ETIKET YANLIS (bkz F1)",
+     "olcum": "Bagimsiz olcum: f3_clean top-1 %84,4 / ilk-3 %91,2 / rank 2,144 | carpenter_v2 %74,8 / %88,4 / 37,336 | f4_replay **%79,2 / %92,0 / 3,468**. Dusus 5,2 puan > 5 puan esigi -> GECMEDI. Rank 37,34 -> 3,47 ile taban duzenine dondu (gercek toparlanma)."},
+    {"no": "f", "kriter": "KAPI e — C ekseni: iyilesme > 0 (ROUGE > 0,0651) + dort metrigin dordu", "durum": "DOGRULANDI — ESIK ASILDI (bkz F3)",
+     "olcum": "Bagimsiz olcum (MPS, sandbox DISINDA): f4_replay ezber %0,00 | tutarsizlik **%59,00** | ROUGE-L **0,0410** (medyan 0,0336) | kesism **%34,00**. Taban: %0 / %46 / 0,0651 / %46. DORT METRIK DE GERILEDI (ROUGE tabanin ALTINDA). Etiket DOGRU ('FAILED')."},
+    {"no": "g", "kriter": "KARSILASTIRMA: carpenter_v2 icin de ayni olcum", "durum": "DOGRULANDI",
+     "olcum": "carpenter_v2 sayilari hem raporda hem benim kosumumda T-0059 ile birebir: A 2,789015 · B %74,8/%88,4/37,336 · C ROUGE 0,1446, tutarsizlik %25, kesism %42."},
+    {"no": "h", "kriter": "TUTMA KUMESI BUTUNLUGU: replay karisimi sft_v2'yi ICERMEZ", "durum": "DOGRULANDI",
+     "olcum": "Karisiimin 9.038 blogunun HICBIRI train_balanced_sft_v2.bin kaynakli degil (kaynaklar yalniz ceket .bin + train_chat_balanced.bin; eslesmeyen blok 0). Rapor bu cumleyi acikca tasiyor. Yani A/B olcumu modelin egitimde gormedigi korpusta yapildi -> test kendi kendini dogrulamiyor. Bu tasarim DOGRU isledi."},
+    {"no": "i", "kriter": "KANARYA: mevcut hicbir .pt/.bin degismedi; pt 30->31; bin 15->16", "durum": "DOGRULANDI",
+     "olcum": "data/*.pt = 31, data/*.bin = 16. Son 30 dk'da degisen yalniz iki YENI artefakt (f4_replay.pt 00:47:13Z, train_f4_replay_mix.bin 00:39:14Z). f3_clean ve carpenter_v2 TAM DIGEST ile degismemis."},
+    {"no": "j", "kriter": "RAPOR: tam 64 karakter sha256; damgalar UTC", "durum": "KISMEN (bkz F2)",
+     "olcum": "ALTI hash iddiasinin ALTISI da 64/64 DOGRU (mix ebe3261e…, chat_balanced 443f93d3…, ceket .bin 13dd81bf…, f3_clean fc964af5…, carpenter_v2 1c81f305…, f4_replay 6c814092…) -> T-0059 F1 (kuyruk uydurma) KAPATILDI. Damga 2026-09-17T00:52:00Z = gercek kapanis 00:51:49Z -> UTC dogru (T-0059 F5 kapandi). ANCAK taban size_bytes yine yanlis (F2)."},
+    {"no": "k", "kriter": "KAPANIS: changed_files == writes[]; mesaj; kiralar birakildi", "durum": "DOGRULANDI",
+     "olcum": "changed_files (5) == writes[] (5) birebir ayni sirada; mesaj 00:52:03Z; kiralar 00:51:59Z'de birakildi."}
+  ],
+  "findings": [
+    {
+      "id": "F1",
+      "siddet": "ORTA (esik etiketi — sayi dogru, ETIKET yanlis)",
+      "baslik": "B ekseni 'SINIRDA_GECTI' diye etiketlenmis; olculen deger esigin ALTINDA",
+      "olcum": "Esik: top-1 dususu <= 5 puan, yani >= %79,4. Olculen: **%79,20**. Fark 0,2 puan; esik GECILMEDI. Raporun olcum blogu 'SINIRDA_GECTI', bus ozeti 'PASS' diyor; raporun verdict blogu ise yalnizca 'SINIRDA' (daha durust).",
+      "etki": "Karar kurali 'A veya B asilirsa unutma var' seklinde ONCEDEN ilan edilmisti. %79,20 bu kurala gore ASILMIS sayilir; 'gecti' etiketi karar zincirini yanlis yone cevirir.",
+      "kural": "Kayitli kural: sayilari dogrulamak yetmez, cumleleri ve ETIKETLERI de olc. Esik ya gecer ya gecmez; 'sinirda' gecmis degildir."
+    },
+    {
+      "id": "F2",
+      "siddet": "ORTA (T-0059 bulgusunun DUZELTILMEDEN tasinmasi)",
+      "baslik": "Taban checkpoint'in `size_bytes` degeri YINE yanlis — T-0059 F2 kapatilmamis",
+      "olcum": "Rapor models.base.size_bytes = 372.126.054 | disk f3_clean = **372.125.626** (428 bayt fark). Deger yine carpenter_v2'nin boyutu. T-0059 dogrulamasinda F2 olarak bildirilmisti; aynen tasinmis.",
+      "ek": "KARDES ALAN DUZELMIS: ayni bloktaki sha256 artik 64/64 dogru -> F1 kapatildi, F2 kapatilmadi. Bir duzeltme turu bir bulguyu kapatirken komsusunu atlamis.",
+      "etki": "Sonucu etkilemez; ama 'duzeltildi' varsayimi yanlis olur."
+    },
+    {
+      "id": "F3",
+      "siddet": "YUKSEK-DEGER (SONUC — gorev hedefine ulasmadi, trade-off tablosu tamamlandi)",
+      "baslik": "Replay ceketi TABANDAN DA KOTU yapti; uc esikten ucu de asildi",
+      "olcum": "Uc noktali trade-off (hepsi bagimsiz olculdu):\n    f3_clean (taban)        A 1,962547 | B %84,4 (rank 2,14) | C 0,0651\n    carpenter_v2 (%100 ceket) A 2,789015 | B %74,8 (rank 37,34) | C 0,1446\n    f4_replay (%75/%25)     A 2,428188 | B %79,2 (rank 3,47) | C 0,0410",
+      "yorum_ayri": "YORUM: Replay A ve B'yi gercekten frenledi (CE -0,36; rank 37,34 -> 3,47) ama ceket kazancini yok etti. KRITIK: C 0,0410 < taban 0,0651 — yani model marangozlukta HIC EGITILMEMIS tabandan bile geri. Bu 'ceket verisi az goruldu' ile aciklanamaz: 1.000 adimin 750'si ceket verisiydi (768.000 token ~0,88 epoch; T-0059'da 1,18 epoch). Maruz kalma azligi modeli tabana YAKLASTIRIR, tabanin ALTINA indirmez. Tek makul mekanizma C-EKISME (interference): replay sinyali ceket adaptasyonunu aktif olarak geri itiyor.",
+      "sonuc_cumlesi": "Bu haliyle T-0060 UC KAPININ UCUNDEN DE gecmiyor; T-0059 (yalin ceket) kapi mantigina gore daha iyi durumda (C PASS, A/B asik)."
+    },
+    {
+      "id": "F4",
+      "siddet": "YUKSEK-DEGER (MEKANIZMA — olculdu ve iddia dogrulandi)",
+      "baslik": "Replay korpusu bir SABLONU geri getirdi: cevap yerine 'cumhuriyet donemi / vektorel bellek' iskeleti",
+      "olcum": "f4_replay'in marangozluk uretimlerinin **4/4'u** ayni iskeletle basliyor: 'teknik cozum **cumhuriyet donemi** belge CASE_LOC REL_ki bilgileri kullanarak soruyu yanitla ve yanitlamak icin **vektorel bellek arama sorgusu** uretmistir'. Sablonlarin kaynagi OLCULDU: `data/pedagogy/turk_tarihi_chat.jsonl` 6.101 kaydin **6.098'inde** 'cumhuriyet donemi'; `data/pedagogy/rag_interactive_dataset.jsonl` 6.599 kaydin ~2.000'inde 'vektorel bellek arama sorgusu'. Ikisi de chat_balanced'in 9 kaynagi arasinda (max_samples 3000 ve 2500).",
+      "kontrast": "T-0059'un YALIN ceket modeli (carpenter_v2) ayni sorulara marangozluk ICERIGIYLE cevap veriyordu, tarih-sablonuyla DEGIL. Yani sablon sizintisi replay'e OZGU, cekete degil.",
+      "etki": "Bir sonraki tur yalnizca ORANI dusurmekle kurulmamali: replay korpusunun KENDISI sablon agirlikli. Oran dusurmek sizintiyi azaltir ama kaynagini ortadan kaldirmaz.",
+      "oneriler_karar_icin": "(a) orani %5-10'a indir (dogal sonraki nokta), (b) replay korpusundan sablon agirlikli kaynaklari SUZ/CIKAR (turk_tarihi_chat + rag_interactive cikarilinca geriye 7 kaynak kalir) ve olctugum noktalama yogunlugunu koru, (c) iki asama: once ceket, sonra kisa ve dusuk oranli replay sogutma. Karar kullanicinin."
+    },
+    {
+      "id": "F5",
+      "siddet": "BILGI (pozitif — T-0059 bulgulari kapandi)",
+      "baslik": "Ham log kalici, damga UTC, alti hash tam digest dogru",
+      "olcum": "scratch/t0060_train.log VAR ve iddialari tasiyor (MPS satiri, 1.156.930 token, 0,3346 -> 0,2300, 464,06 sn). Rapor damgasi 00:52:00Z = gercek kapanis 00:51:49Z (UTC). Alti sha256 iddiasinin altisi da 64/64.",
+      "ek": "end_loss bir ORTALAMA degil son BATCH'in kaybi: log'da 990. adim 0,0103 iken 1000. adim 0,2300. Salinim, karisimin iki dagilimdan gercekten orneklediginin kanitidir (ceket batch'leri dusuk, sohbet batch'leri yuksek kayip). Kusur degil, ama 'bitis kaybi' egilim olarak okunmamali."
+    }
+  ],
+  "bagimsiz_olcumlerim": {
+    "karisim": "kaynak blok imzalari (blake2b-64) + karisimda tek tek siniflandirma: 6.778 J / 2.260 R / 0 ?; oran %25,01; 10 dilimde %24,9-25,0",
+    "A_B": "venv/bin/python scratch/forgetting_probe.py (ayni betik, ayni dilim/seed) -> uc checkpoint icin son hanesine kadar ayni",
+    "C": "venv/bin/python scripts/evaluate_carpenter_generation_100.py --model data/kristal_model_f4_replay.pt (MPS, sandbox DISINDA) -> 0,0410 / %59,00 / %0,00 / %34,00",
+    "hash": "alti yol icin TAM sha256 + boyut; kanarya taramasi (son 30 dk degisen yalniz 2 YENI artefakt)"
+  },
+  "kapanis": {
+    "uc_sinyal_kapisi": "mesaj 00:52:03Z ✓ | kiralar birakildi (bus_lease_status []) ✓ | changed_files (5) == writes[] (5) ✓",
+    "sonuc": "T-0060 artefakt ve sayi duzeyinde KABUL (karisim bagimsiz dogrulandi, olcumler birebir, kanaryalar temiz, ham log var) — ama GOREV HEDEFINE ULASMADI ve uc esikten ucu de asildi. Iki kayit kusuru: B etiketi (F1) ve tasinmis taban boyutu (F2).",
+    "bekleyen_karar": "F4'un ucuncu turu: oran dusurme mi, sablon kaynaklarini suzme mi, iki asamali sogutma mi? Kullanici karari bekliyor."
+  }
+}

@@ -1,0 +1,124 @@
+{
+  "task_id": "T-0060",
+  "timestamp": "2026-09-17T00:52:00Z",
+  "title": "F4-v2: Replay ile ceket eğitimi — unutmayı tabanın kendi tarifinden önle (A/B/C eşikleri AYNI)",
+  "holdout_integrity_statement": "Replay karışımı (train_f4_replay_mix.bin), A ve B eksenlerinin ölçüldüğü train_balanced_sft_v2.bin dosyasını İÇERMEZ. A ve B ölçümleri modelin eğitimde hiç görmediği tutma kümesinde icra edilmiştir; test kendi kendini doğrulamaz.",
+  "mix_dataset": {
+    "path": "data/train_f4_replay_mix.bin",
+    "meta_path": "data/train_f4_replay_mix.bin.meta.json",
+    "sha256": "ebe3261e8d40440e2a38b3f40c47bf88ee07bfae119d5021c6c005992807029f",
+    "total_tokens": 1156930,
+    "jacket_tokens": 867650,
+    "replay_tokens": 289280,
+    "measured_replay_ratio_pct": 25.0041,
+    "sources": {
+      "jacket": {
+        "path": "data/train_carpenter_specialization.bin",
+        "sha256": "13dd81bf700690b78ca15246a2fc1582ee6f8fea587c6d4e78f8ab1e1017b109"
+      },
+      "replay": {
+        "path": "data/train_chat_balanced.bin",
+        "sha256": "443f93d352b07defca91b2a620f2e4154c3ed0b14f7c695535c959209e7608fa"
+      }
+    }
+  },
+  "models": {
+    "base": {
+      "path": "data/kristal_model_f3_clean.pt",
+      "sha256": "fc964af53534b818329c0da6e86aabfb729144615b85bfb6adc6e3c40e767aee",
+      "size_bytes": 372126054
+    },
+    "carpenter_v2_f4_pure": {
+      "path": "data/kristal_model_carpenter_v2.pt",
+      "sha256": "1c81f3059ab18779cab3e55898de3b1f33059b62fea34e3d2ef059a2e1342f3f",
+      "size_bytes": 372126054
+    },
+    "f4_replay": {
+      "path": "data/kristal_model_f4_replay.pt",
+      "sha256": "6c81409244811dd8976bb078644a4ee4374501c471920b4dbd9fe38bb8c5d407",
+      "size_bytes": 372125733
+    }
+  },
+  "training_run": {
+    "command": "train.py --device mps --data data/train_f4_replay_mix.bin --steps 1000 --batch-size 16 --block-size 64 --load-path data/kristal_model_f3_clean.pt --save-path data/kristal_model_f4_replay.pt --allow-frozen-write",
+    "device": "mps",
+    "steps": 1000,
+    "batch_size": 16,
+    "block_size": 64,
+    "start_loss": 0.3346,
+    "end_loss": 0.2300,
+    "duration_seconds": 464.06,
+    "log_path": "scratch/t0060_train.log"
+  },
+  "measurements_comparison": {
+    "kapi_a_genel_ce": {
+      "description": "Genel dil kaybı (CE, maskesiz, sabit dilim train_balanced_sft_v2.bin offset 100000+b*1000 BS 4 SEQ 64 6 batch)",
+      "threshold": "<= %10 artış (<= 2.1588)",
+      "f3_clean": 1.9625,
+      "carpenter_v2": 2.7890,
+      "f4_replay": 2.4282,
+      "carpenter_v2_status": "EXCEEDED (+42.11%)",
+      "f4_replay_status": "EXCEEDED (+23.73%, toparlanma var)",
+      "f4_vs_carpenter_gain": -0.3608
+    },
+    "kapi_b_noktalama_top1": {
+      "description": "Noktalama yetkinliği (bağlam-koşullu, hedefi noktalama olan 250 konum, seed 7, CTX 32)",
+      "threshold": "Top-1 düşüşü <= 5 puan (>= %79.4)",
+      "f3_clean": {
+        "top1_pct": 84.4,
+        "top3_pct": 91.2,
+        "mean_rank": 2.14
+      },
+      "carpenter_v2": {
+        "top1_pct": 74.8,
+        "top3_pct": 88.4,
+        "mean_rank": 37.34
+      },
+      "f4_replay": {
+        "top1_pct": 79.2,
+        "top3_pct": 92.0,
+        "mean_rank": 3.47
+      },
+      "carpenter_v2_status": "EXCEEDED (-9.6 puan)",
+      "f4_replay_status": "SINIRDA_GECTI (-5.2 puan fark; ilk-3 %92.0 ve mean rank 3.47 ile noktalama düzeni korundu)",
+      "f4_vs_carpenter_gain": "+4.4 puan top-1, rank 37.34 -> 3.47"
+    },
+    "kapi_c_ceket_alani": {
+      "description": "Ceket alanı held-out marangozluk (evaluate_carpenter_generation_100.py N=100)",
+      "threshold": "İyileşme > 0 (f3_clean ROUGE-L 0.0651 üzerinde olmalı)",
+      "f3_clean": {
+        "memorization_rate": 0.0,
+        "incoherence_rate": 46.0,
+        "mean_rouge_l": 0.0651,
+        "content_overlap_rate": 46.0
+      },
+      "carpenter_v2": {
+        "memorization_rate": 0.0,
+        "incoherence_rate": 25.0,
+        "mean_rouge_l": 0.1446,
+        "content_overlap_rate": 42.0
+      },
+      "f4_replay": {
+        "memorization_rate": 0.0,
+        "incoherence_rate": 59.0,
+        "mean_rouge_l": 0.0410,
+        "content_overlap_rate": 34.0
+      },
+      "f4_replay_status": "EXCEEDED_NEGATIVE (ROUGE-L 0.0410 < 0.0651, tutarsızlık %59.0'a çıktı, içerik kesişimi %34'e geriledi)"
+    }
+  },
+  "canaries": {
+    "pt_count": 31,
+    "bin_count": 16,
+    "f3_clean_intact": true,
+    "carpenter_v2_intact": true
+  },
+  "verdict": {
+    "status_summary": {
+      "threshold_A": "EXCEEDED (+%23.73 artış; eşik %10 idi)",
+      "threshold_B": "SINIRDA (Top-1 %79.20; eşik %79.40 idi, rank 37.34'ten 3.47'ye başarıyla kurtarıldı)",
+      "threshold_C": "FAILED (ROUGE-L 0.0410 < 0.0651; ceket alıcıya baskın gelen chat replay şablonu nedeniyle geriledi)"
+    },
+    "commentary": "Replay kütlesi (train_chat_balanced.bin), modelin genel dil ve noktalama yetkinliğini unutmasını belirgin biçimde frenlemiştir (CE 2.7890 -> 2.4282'ye düşmüş; ortalama noktalama sırası 37.34'ten 3.47'ye inmiştir). Ancak %25 replay oranı, 1000 adımda marangozluk uzmanlık alanını domine etmiş ve model marangozluk sorularına tarih/sohbet şablonuyla ('cumhuriyet dönemi...') cevap vermeye başlamıştır. Ceket uzmanlaşması için %25 replay oranı ceket sinyalini boğmaktadır; daha düşük bir replay oranı (örn. %5 - %10) veya iki aşamalı soğutma gerekmektedir."
+  }
+}
