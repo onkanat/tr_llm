@@ -1,0 +1,78 @@
+{
+  "task_id": "T-0061",
+  "baslik": "F4-v3: sablon kaynaklari suzulmus replay + oran taramasi (%5 ve %10)",
+  "dogrulama_damgasi": "2026-09-17T02:15:00Z (01:58Z kapanis + ~17 dk bagimsiz olcum)",
+  "dogrulayan": "claude (danisman rolu, bagimsiz olcum)",
+  "yonetim": "PASS_WITH_FINDINGS",
+  "ozet": "GOREV BASARILI: iki arac geriye-uyumlu genellestirildi (PC1 ve PC2 BAYT-OZDES gecti), sablon sizintisi kaynagindan kesildi (uretimlerde %0) ve iki noktali oran egrisi teslim edildi. Sayilarin TAMAMI bagimsiz olarak yeniden uretildi. KRITIK SONUC: %5 suzulmus oran (f4_r05) ILK KEZ B ve C kapilarini BIRLIKTE geciren konfigurasyon oldu (B %80,8 >= %79,4 ve C ROUGE 0,0771 > taban 0,0651); A hala asik (+%36,8). Yani hedef 'en az bir oranda A ve B icinde + C saglanmis' TAM OLARAK saglanmadi — ama B+C birlikte saglandi ve A hicbir oranda saglanmiyor. Ayrica: iki kucuk kayit kusuru (sablon kalibi tanimi tutarsiz, oran paydasi tanimi farkli), ve benim spec'imdeki iki hata onceden duzeltildi.",
+  "kabul_kriterleri": [
+    {"no": "a", "kriter": "KIRALAMA: data/ + scratch/ + 2 scripts + not", "durum": "DOGRULANDI",
+     "olcum": "6 kira alindi (2 dizin + 4 dosya); 01:58:49Z'de hepsi birakildi (bus_lease_status -> [])."},
+    {"no": "b", "kriter": "POZITIF KONTROL 1: filtresiz derleme eski korpusu bit bit uretmeli", "durum": "DOGRULANDI (KENDI KOSUMUM)",
+     "olcum": "sha256(scratch/t0061_regress.bin) = 443f93d352b07defca91b2a620f2e4154c3ed0b14f7c695535c959209e7608fa == sha256(data/train_chat_balanced.bin) -> BAYT-OZDES. (On kosulu da onceden dogrulamistim: meta'daki 9 kaynagin ham satir sayilari bugunku dosyalarla birebir ayni.)"},
+    {"no": "c", "kriter": "POZITIF KONTROL 2: --replay-every 4 eski karisimi uretmeli", "durum": "DOGRULANDI (KENDI KOSUMUM)",
+     "olcum": "sha256(scratch/t0061_regress_mix.bin) = ebe3261e8d40440e2a38b3f40c47bf88ee07bfae119d5021c6c005992807029f == sha256(data/train_f4_replay_mix.bin) -> BAYT-OZDES. Bu, yurutucunun genellestirmesinin (n_r = ceil(n_j/(N-1))) mevcut davranisi birebir korudugunu KANITLAR."},
+    {"no": "d", "kriter": "KAPI a — suzulmus korpus + kaynak muhasebesi", "durum": "DOGRULANDI",
+     "olcum": "data/train_chat_balanced_clean.bin = 4.832.000 bayt = 2.416.000 token = TAM 18.875 kayit x 128 (benim spec yazimindan once hesapladigim sayi ile AYNI). sha256 cbfb69b7... 64/64 dogru. meta'daki dataset_composition 7 kaynak gosteriyor."},
+    {"no": "e", "kriter": "KAPI b — sablon yoklugu (iki yonde)", "durum": "DOGRULANDI (okuma benim; bkz F1 kalip tanimi)",
+     "olcum": "KENDI OLCUMUM (token altdizisi): 'vektorel bellek' 763 -> 0 (TAM esik); 'cumhuriyet donemi' 2.996 -> 1 = %99,97 azalma. Karisimlarda ikisi de 0. AYNI kalip tutarliligiyla 'cumhuriyet donem' 3.003 -> 4."},
+    {"no": "f", "kriter": "KAPI c — iki kosum, ham log kalici", "durum": "DOGRULANDI",
+     "olcum": "scratch/t0061_train_r05.log (01:39:23Z) ve _r10.log (01:50:28Z) VAR. r05: 0,0490 -> 0,0760, 487,88 sn. r10: 0,3093 -> 0,2042, 653,11 sn. Ikisinde de 'Metal GPU (MPS) secildi' satiri var (log'dan teyit)."},
+    {"no": "g", "kriter": "KAPI d/e/f — A/B/C olcumleri", "durum": "DOGRULANDI (KENDI OLCUMUM, hepsi birebir)",
+     "olcum": "r05: A 2,6847 · B %80,8 / ilk-3 %88,4 / rank 3,02 · C ROUGE 0,0771 (tutarsizlik %42, kesism %48, ezber %0). r10: A 2,5617 · B %79,2 / %87,6 / 2,86 · C ROUGE 0,0560 (%20 / %36 / %0). Raporun DORT hanesi de ayni."},
+    {"no": "h", "kriter": "ETIKET TUTARLILIGI (T-0060 hatasi tekrarlanmamali)", "durum": "DOGRULANDI — DUZELTILMIS",
+     "olcum": "r10 icin rapor 'FAILED (%79,20 < %79,40; 0,20 puanla esik altinda)' diyor — DOGRU. r05 icin 'PASSED (%80,80 >= %79,40)' — DOGRU. T-0060'daki 'SINIRDA_GECTI' hatasi tekrarlanmamis."},
+    {"no": "i", "kriter": "METADATA DOGRULUGU (T-0059/T-0060 hatalari)", "durum": "DOGRULANDI — DUZELTILMIS",
+     "olcum": "f3_clean size_bytes = 372.125.626 yazilmis; diskte 372.125.626 -> DOGRU (iki onceki raporda 372.126.054 yazilmisti). Bes checkpoint'in besinin de sha256'si TAM 64 KARAKTER dogru; boyutlarin hepsi diskle ayni."},
+    {"no": "j", "kriter": "TUTMA KUMESI BUTUNLUGU", "durum": "DOGRULANDI",
+     "olcum": "Karislarin blok koken siniflandirmasi: mix05 6.778 ceket + 357 replay, mix10 6.778 + 754, ESLESMEYEN 0 — hicbir blok train_balanced_sft_v2.bin kaynakli degil. Ayrica replay blogunun KAYNAGI dogru: 357 blogun hepsi suzulmus korpusta bulundu (eski korpustan orneklenmis olsaydi ~%23'u bulunamazdi)."},
+    {"no": "k", "kriter": "KANARYA: mevcut hicbir .pt/.bin degismedi; pt 31->33; bin 16->17", "durum": "DOGRULANDI",
+     "olcum": "data/*.pt = 33, data/*.bin = 17. Son 45 dk'da degisen yalniz 3 YENI artefakt (r05, r10, clean korpus). f3_clean, carpenter_v2, f4_replay ve train_chat_balanced.bin TAM DIGEST ile degismemis."},
+    {"no": "l", "kriter": "KAPANIS: changed_files == writes[]", "durum": "DOGRULANDI",
+     "olcum": "changed_files (7) == writes[] (7), ayni sirada. Mesaj 01:58:38Z; kiralar 01:58:49Z'de birakildi."}
+  ],
+  "findings": [
+    {
+      "id": "F1",
+      "siddet": "DUSUK (kalip tanimi tutarsiz — sayilar dogru, karsilastirilamaz)",
+      "baslik": "Sablon sayiminda iki korpus icin FARKLI kalip adlari kullanilmis; '0' iddiasi tutarli kalpla '1'",
+      "olcum": "Rapor: `cumhuriyet_donemi_exact_count` (suzulmus) = 0 ve `previous_unfiltered_cumhuriyet_donem` (eski) = 2998 — yani 'donemi' ile 'donem' IKI FARKLI kalip, iki farkli korpusta. Ben AYNI kalip tutarliligiyla olctum: 'cumhuriyet donemi' 2.996 -> 1 (%99,97 azalma); 'cumhuriyet donem' 3.003 -> 4. Yani literal '0' iddiasi kalip tanimina bagli.",
+      "etki": "SONUCU DEGISTIRMEZ: azalma uc buyukluk mertebesinde ve asil kanit DAVRANISSAL — uretimlerde sablon sayisi T-0060'da 8+4 iken r05 ve r10'da 0+0 (rapordan; kalip tanimi orada da tutarli olmali). Ama 'iki sayiyi kiyaslarken ayni tanimi kullan' kuralinin ihlali ([[iki-sayi-celisiyor-sanma-once-kume]] ekseni)."
+    },
+    {
+      "id": "F2",
+      "siddet": "DUSUK (oran paydasi tanimi farkli, iki taraf da dogru)",
+      "baslik": "Olculen oran farki tanimsaldir: 5,0031 (rapor) vs 5,0035 (ben)",
+      "olcum": "Rapor replay_tokens/total_tokens = 45.696/913.346 = %5,00314 kullaniyor; ben blok orani 357/7.135 = %5,00350 kullaniyorum. AYNI blok sayisi (357 = 45.696/128) ve AYNI toplam (913.346). Fark yalnizca 66 token'lik ceket artikinin paydada olup olmamasindan. mix10 icin ayni: 754 blok, 96.512 token, %10,0099 vs %10,0106.",
+      "etki": "Kusur degil; ama ayni raporda iki oran iki farkli tanimla yazilirsa ileride 'celiski' sanilir. Tek tanim secilmeli."
+    },
+    {
+      "id": "F3",
+      "siddet": "YUKSEK-DEGER (SONUC — en iyi konfigurasyon ve sinir egrisi)",
+      "baslik": "f4_r05 B ve C'yi BIRLIKTE geciren ilk konfigurasyon; A hicbir oranda gecilmiyor",
+      "olcum": "Bagimsiz olculen dort nokta:\n    %0  (T-0059, ceket saf)      A 2,7890  B %74,8 (rank 37,34)  C 0,1446   -> A x B x C OK\n    %5  (f4_r05, suzulmus)      A 2,6847  B %80,8 (rank 3,02)   C 0,0771   -> A x B OK C OK\n    %10 (f4_r10, suzulmus)      A 2,5617  B %79,2 (rank 2,86)   C 0,0560   -> A x B x C x\n    %25 (T-0060, suzulmamis)    A 2,4282  B %79,2 (rank 3,47)   C 0,0410   -> A x B x C x",
+      "okuma": "(i) A replay oraniyla MONOTON duzeliyor (2,789 -> 2,685 -> 2,562 -> 2,428) ama hicbir noktada esige (%10) yaklasmiyor — en iyisi bile +%23,7. (ii) C %5'in uzerinde COKUYOR (0,077 -> 0,056 -> 0,041); %5'te bile tabanin ancak 1,18 kati. (iii) B monotonik DEGIL, %5'te zirve yapiyor. Yani %5 gercek bir sinir noktasi."
+    },
+    {
+      "id": "F4",
+      "siddet": "YUKSEK-DEGER (A ekseninin karakteri — kendi olcumum)",
+      "baslik": "A'nin basarisizligi istem-bolgesi artefakti DEGIL: egitim hedefiyle ortusen maskeli CE DAHA COK bozuluyor",
+      "olcum": "A diliminde (sft_v2, offset 100000, BS4 SEQ64, 4 batch — ucu icin AYNI kurulum):\n    f3_clean maskesiz 1,8800 | MASKELI 1,8153 | ceket maskeli 0,3285\n    f4_r05   maskesiz 2,5983 | MASKELI 2,8092 | ceket maskeli 0,1030\n    f4_r10   maskesiz 2,4696 | MASKELI 2,5232 | ceket maskeli 0,0897",
+      "anlam": "(i) r05'te maskesiz +%38 ama MASKELI +%55 — yani denetimli bolgede bozulma DAHA BUYUK; A hukmu saglam, hatta understated ([[unutma-olcumunde-maskeli-ce]] ile ayni desen). (ii) Ceket maskeli CE 0,3285 -> 0,1030: ceket GERCEKTEN ogrenilmis. (iii) C ROUGE'un 0,0771'de kalmasinin nedeni bu: ceket token tahmini 3 kat iyilesirken genel dil bozuldugu icin URETIM kalitesi sinirli kaliyor."
+    }
+  ],
+  "bagimsiz_olcumlerim": {
+    "PC1_PC2": "sha256 ile bayt-ozdeslik (regress.bin ve regress_mix.bin)",
+    "karisim": "blok koken siniflandirmasi (blake2b-64 imzalar): mix05 6.778+357/0, mix10 6.778+754/0; oranlar %5,0035 ve %10,0106; on dilimde %4,9-5,0 ve %10,0-10,1",
+    "sablon": "token altdizisi aramasi (BOS/EOS kirpilmis); dort dosyada dort kalip varyanti",
+    "A_B": "scratch/forgetting_probe.py (ayni betik/dilim/seed) -> r05 ve r10 son hanesine kadar ayni",
+    "C": "evaluate_carpenter_generation_100.py, MPS, sandbox DISINDA -> r05 0,0771/%42/%48/%0 ; r10 0,0560/%20/%36/%0",
+    "maskeli_CE": "kendi ayristirmam: mask_prompt_targets + ignore_index, sft_v2 ve ceket dilimleri",
+    "hash": "sekiz yol icin TAM sha256; kanarya taramasi"
+  },
+  "kapanis": {
+    "uc_sinyal_kapisi": "mesaj 01:58:38Z ✓ | kiralar birakildi (bus_lease_status []) ✓ | changed_files (7) == writes[] (7) ✓",
+    "sonuc": "T-0061 KABUL. Iki arac geriye-uyumlu genellestirildi ve BAYT-OZDES kanitlandi; sablon sizintisi kaynagindan kesildi; iki noktali oran egrisi teslim edildi. GOREV HEDEFI ('en az bir oranda A ve B icinde + C saglanmis') TAM OLARAK saglanmadi — B ve C birlikte saglandi, A saglanmadi.",
+    "bekleyen_karar": "A ekseni hicbir replay oraninda (%0/%5/%10/%25) gecilmiyor; en iyi nokta bile +%23,7 (esik %10). Bu, 'replay oranini ayarlamak' ekseninin A'yi kurtaramayacagini gosterir. Uc secenek: (a) f4_r05'i F4 sonucu kabul et ve A'yi yeniden ilan et (B+C saglandi), (b) A'yi hedefleyen FARKLI bir mekanizma dene (dusuk lr / kisaltilmis adim / kismi katman dondurma / genel-dil replay kutlesi), (c) IKI ASAMALI: once ceket (T-0059, C 0,1446) sonra kisa ve dusuk lr'li replay ile B'yi onar — bu, esikleri ayni anda tutturabilecek tek yol gibi gorunuyor."
+  }
+}

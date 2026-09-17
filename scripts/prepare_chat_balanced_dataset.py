@@ -128,6 +128,8 @@ def tokenize_jsonl(
 
 
 def main(
+    output_bin: str = "data/train_chat_balanced.bin",
+    exclude_sources: list = None,
     vocab_path: str = "data/rebuild/vocab_base_32852.json",
     literal_entity_mode: bool = True,
     allow_frozen_write: bool = False,
@@ -136,7 +138,10 @@ def main(
     print(" KRİSTAL-VEKTÖREL MİMARİSİ: DENGELİ SOHBET EĞİTİM VERİSİ DERLEME")
     print("=" * 70)
 
-    output_bin = "data/train_chat_balanced.bin"
+    exclude_set = set(exclude_sources) if exclude_sources else set()
+    if exclude_set:
+        print(f"Hariç Tutulan Kaynaklar: {sorted(list(exclude_set))}")
+
     # D2: Çıktı yolu denetimi (yazmadan önce)
     check_output_path(output_bin, allow_frozen_write)
 
@@ -154,65 +159,81 @@ def main(
     print(f"\n[1] Dengeli Sohbet Bileşenleri Yükleniyor (literal_entity_mode={literal_entity_mode}):")
 
     source_stats: Dict[str, dict] = {}
+    all_records = []
+    raw_parts: Dict[str, int] = {}
 
     # A. Zenginleştirilmiş Sohbet Verisi (Chat Conversations)
-    chat_records, source_stats["chat_conversations"] = tokenize_jsonl(
-        "data/pedagogy/chat_conversations.jsonl", tokenizer, max_samples=6000
-    )
+    if "chat_conversations" not in exclude_set:
+        chat_records, source_stats["chat_conversations"] = tokenize_jsonl(
+            "data/pedagogy/chat_conversations.jsonl", tokenizer, max_samples=6000
+        )
+        all_records.extend(chat_records)
+        raw_parts["chat_conversations"] = len(chat_records)
 
     # B. Ortaokul Samimi Sohbet (3x oversampled)
-    ms_chat_raw, ms_stats = tokenize_jsonl("data/pedagogy/middle_school_chat.jsonl", tokenizer)
-    ms_chat_records = ms_chat_raw * 3
-    source_stats["middle_school_chat"] = ms_stats
+    if "middle_school_chat" not in exclude_set:
+        ms_chat_raw, ms_stats = tokenize_jsonl("data/pedagogy/middle_school_chat.jsonl", tokenizer)
+        ms_chat_records = ms_chat_raw * 3
+        source_stats["middle_school_chat"] = ms_stats
+        all_records.extend(ms_chat_records)
+        raw_parts["middle_school_chat"] = len(ms_chat_records)
 
     # C. Morfolojik Ebeveynlik (Dengeleme için 2,500 kayıt)
-    parenting_records, source_stats["parenting_deep"] = tokenize_jsonl(
-        "data/pedagogy/parenting_deep_dataset.jsonl", tokenizer, max_samples=2500
-    )
+    if "parenting_deep" not in exclude_set:
+        parenting_records, source_stats["parenting_deep"] = tokenize_jsonl(
+            "data/pedagogy/parenting_deep_dataset.jsonl", tokenizer, max_samples=2500
+        )
+        all_records.extend(parenting_records)
+        raw_parts["parenting_deep"] = len(parenting_records)
 
     # D. GTS Anlamsal Sözlük (1,500 kayıt)
-    semantics_records, source_stats["lexical_semantics"] = tokenize_jsonl(
-        "data/pedagogy/lexical_semantics_dataset.jsonl", tokenizer, max_samples=1500
-    )
+    if "lexical_semantics" not in exclude_set:
+        semantics_records, source_stats["lexical_semantics"] = tokenize_jsonl(
+            "data/pedagogy/lexical_semantics_dataset.jsonl", tokenizer, max_samples=1500
+        )
+        all_records.extend(semantics_records)
+        raw_parts["lexical_semantics"] = len(semantics_records)
 
     # E. Marangozluk Alan Uzmanlığı (2,500 kayıt)
-    carpenter_raw, source_stats["carpenter_specialization"] = tokenize_jsonl(
-        "data/pedagogy/carpenter_specialization_dataset.jsonl", tokenizer
-    )
-    carpenter_records = carpenter_raw[:2500]
+    if "carpenter_specialization" not in exclude_set:
+        carpenter_raw, source_stats["carpenter_specialization"] = tokenize_jsonl(
+            "data/pedagogy/carpenter_specialization_dataset.jsonl", tokenizer
+        )
+        carpenter_records = carpenter_raw[:2500]
+        all_records.extend(carpenter_records)
+        raw_parts["carpenter_specialization"] = len(carpenter_records)
 
     # F. İnteraktif Self-RAG Kullanım Görevleri (2,500 kayıt)
-    rag_records, source_stats["rag_interactive"] = tokenize_jsonl(
-        "data/pedagogy/rag_interactive_dataset.jsonl", tokenizer, max_samples=2500
-    )
+    if "rag_interactive" not in exclude_set:
+        rag_records, source_stats["rag_interactive"] = tokenize_jsonl(
+            "data/pedagogy/rag_interactive_dataset.jsonl", tokenizer, max_samples=2500
+        )
+        all_records.extend(rag_records)
+        raw_parts["rag_interactive"] = len(rag_records)
 
     # G. Klasik Sadık Belge Alıntılama (RAG Grounding - 3,500 kayıt)
-    classic_rag_records, source_stats["classic_rag"] = tokenize_jsonl(
-        "data/pedagogy/rag_dataset.jsonl", tokenizer, max_samples=3500
-    )
+    if "classic_rag" not in exclude_set:
+        classic_rag_records, source_stats["classic_rag"] = tokenize_jsonl(
+            "data/pedagogy/rag_dataset.jsonl", tokenizer, max_samples=3500
+        )
+        all_records.extend(classic_rag_records)
+        raw_parts["classic_rag"] = len(classic_rag_records)
 
     # H. 1931 Türk Tarihi Çok Turlu Sohbet Külliyatı (3,000 kayıt)
-    history_chat_records, source_stats["turk_tarihi_1931_chat"] = tokenize_jsonl(
-        "data/pedagogy/turk_tarihi_chat.jsonl", tokenizer, max_samples=3000
-    )
+    if "turk_tarihi_1931_chat" not in exclude_set:
+        history_chat_records, source_stats["turk_tarihi_1931_chat"] = tokenize_jsonl(
+            "data/pedagogy/turk_tarihi_chat.jsonl", tokenizer, max_samples=3000
+        )
+        all_records.extend(history_chat_records)
+        raw_parts["turk_tarihi_1931_chat"] = len(history_chat_records)
 
     # I. 1931 Türk Tarihi SFT ve Persona Görevleri (2,500 kayıt)
-    history_sft_records, source_stats["turk_tarihi_sft"] = tokenize_jsonl(
-        "data/pedagogy/turk_tarihi_sft.jsonl", tokenizer, max_samples=2500
-    )
-
-    # 3. Combine and Shuffle
-    all_records = (
-        chat_records +
-        ms_chat_records +
-        parenting_records +
-        semantics_records +
-        carpenter_records +
-        rag_records +
-        classic_rag_records +
-        history_chat_records +
-        history_sft_records
-    )
+    if "turk_tarihi_sft" not in exclude_set:
+        history_sft_records, source_stats["turk_tarihi_sft"] = tokenize_jsonl(
+            "data/pedagogy/turk_tarihi_sft.jsonl", tokenizer, max_samples=2500
+        )
+        all_records.extend(history_sft_records)
+        raw_parts["turk_tarihi_sft"] = len(history_sft_records)
 
     print(f"\n[3] Toplam Dengeli Sohbet & RAG SFT Kayıt Sayısı: {len(all_records):,}")
     print("Kayıtlar karıştırılıyor (shuffling)...")
@@ -235,20 +256,13 @@ def main(
     # D2: Çıktı dosyasını yazmadan hemen önce tekrar kontrol
     check_output_path(output_bin, allow_frozen_write)
 
+    out_dir = os.path.dirname(output_bin)
+    if out_dir:
+        os.makedirs(out_dir, exist_ok=True)
+
     arr = np.array(flat_tokens, dtype=np.uint16)
     arr.tofile(output_bin)
 
-    raw_parts = {
-        "chat_conversations": len(chat_records),
-        "middle_school_chat": len(ms_chat_records),
-        "parenting_deep": len(parenting_records),
-        "lexical_semantics": len(semantics_records),
-        "carpenter_specialization": len(carpenter_records),
-        "rag_interactive": len(rag_records),
-        "classic_rag": len(classic_rag_records),
-        "turk_tarihi_1931_chat": len(history_chat_records),
-        "turk_tarihi_sft": len(history_sft_records),
-    }
     composition = build_composition(raw_parts)
 
     # Öz-tutarlılık assert'i: tüm 9 bileşenin toplamı toplam kayıt sayısına eşit olmalıdır
@@ -275,6 +289,8 @@ def main(
         "vocab_path": vocab_path,
         "vocab_size": len(vocab.stoi),
         "literal_entity_mode": literal_entity_mode,
+        "excluded_sources": sorted(list(exclude_set)),
+        "active_sources": sorted(list(raw_parts.keys())),
         "dataset_composition": composition,
         "record_accounting": total_accounting,
         "source_stats": source_stats,
@@ -295,4 +311,22 @@ def main(
 
 
 if __name__ == "__main__":
-    main()
+    import argparse
+    parser = argparse.ArgumentParser(description="Prepare balanced chat SFT dataset")
+    parser.add_argument("--output", type=str, default="data/train_chat_balanced.bin", help="Output binary file path")
+    parser.add_argument("--exclude", type=str, default="", help="Comma-separated source keys to exclude")
+    parser.add_argument("--vocab-path", type=str, default="data/rebuild/vocab_base_32852.json", help="Vocabulary path")
+    parser.add_argument("--literal-entity-mode", action="store_true", default=True, help="Enable literal entity mode")
+    parser.add_argument("--no-literal-entity-mode", dest="literal_entity_mode", action="store_false")
+    parser.add_argument("--allow-frozen-write", action="store_true", default=False, help="Allow writing to frozen path")
+    args = parser.parse_args()
+
+    exc_list = [s.strip() for s in args.exclude.split(",") if s.strip()] if args.exclude else None
+
+    main(
+        output_bin=args.output,
+        exclude_sources=exc_list,
+        vocab_path=args.vocab_path,
+        literal_entity_mode=args.literal_entity_mode,
+        allow_frozen_write=args.allow_frozen_write
+    )

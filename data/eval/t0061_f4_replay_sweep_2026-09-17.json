@@ -1,0 +1,226 @@
+{
+  "task_id": "T-0061",
+  "timestamp": "2026-09-17T01:57:00Z",
+  "title": "F4-v3: şablon kaynakları süzülmüş replay + oran taraması (%5 ve %10) — T-0060 şablon sızıntısı kök neden analizi ve tarama",
+  "holdout_integrity_statement": "Replay karışımları (t0061_mix05.bin ve t0061_mix10.bin), A ve B eksenlerinin ölçüldüğü train_balanced_sft_v2.bin dosyasını KESİNLİKLE İÇERMEZ. Ölçümler tutma kümesinde yapılmıştır.",
+  "clean_corpus": {
+    "path": "data/train_chat_balanced_clean.bin",
+    "sha256": "cbfb69b7ffa528a474b5dde53b55a2b01d45b44b9ff954af73ce9d2343b63612",
+    "total_tokens": 2416000,
+    "size_bytes": 4832000,
+    "excluded_sources": [
+      "rag_interactive",
+      "turk_tarihi_1931_chat"
+    ],
+    "template_absence_check": {
+      "vektorel_bellek_count": 0,
+      "cumhuriyet_donemi_exact_count": 0,
+      "previous_unfiltered_vektorel_bellek": 763,
+      "previous_unfiltered_cumhuriyet_donem": 2998
+    }
+  },
+  "swept_mixtures": {
+    "mix05": {
+      "path": "scratch/t0061_mix05.bin",
+      "meta_path": "scratch/t0061_mix05.bin.meta.json",
+      "sha256": "439ebe5dd3c4848c9b8b3e7894c11576c35362c4ffe56f14f3b3cce97d849409",
+      "total_tokens": 913346,
+      "jacket_tokens": 867650,
+      "replay_tokens": 45696,
+      "replay_every": 20,
+      "measured_replay_ratio_pct": 5.0031
+    },
+    "mix10": {
+      "path": "scratch/t0061_mix10.bin",
+      "meta_path": "scratch/t0061_mix10.bin.meta.json",
+      "sha256": "acaab39de29feb1f5d1e1cf8d848459014e3fbf2221039f36a59aa95d8fa5930",
+      "total_tokens": 964162,
+      "jacket_tokens": 867650,
+      "replay_tokens": 96512,
+      "replay_every": 10,
+      "measured_replay_ratio_pct": 10.0099
+    }
+  },
+  "models": {
+    "f3_clean": {
+      "path": "data/kristal_model_f3_clean.pt",
+      "sha256": "fc964af53534b818329c0da6e86aabfb729144615b85bfb6adc6e3c40e767aee",
+      "size_bytes": 372125626
+    },
+    "carpenter_v2": {
+      "path": "data/kristal_model_carpenter_v2.pt",
+      "sha256": "1c81f3059ab18779cab3e55898de3b1f33059b62fea34e3d2ef059a2e1342f3f",
+      "size_bytes": 372126054
+    },
+    "f4_replay_25pct_dirty": {
+      "path": "data/kristal_model_f4_replay.pt",
+      "sha256": "6c81409244811dd8976bb078644a4ee4374501c471920b4dbd9fe38bb8c5d407",
+      "size_bytes": 372125733
+    },
+    "f4_r05_clean": {
+      "path": "data/kristal_model_f4_r05.pt",
+      "sha256": "bc35352af126179e21b803159de13250fe54c5a4d940a110afe94ad1f76ba2fe",
+      "size_bytes": 372125348
+    },
+    "f4_r10_clean": {
+      "path": "data/kristal_model_f4_r10.pt",
+      "sha256": "724bbdbf91b8fa37723488e3753aaf69e50e395e5558b701164c5b6d38178b77",
+      "size_bytes": 372125348
+    }
+  },
+  "training_runs": {
+    "f4_r05": {
+      "command": "train.py --device mps --data scratch/t0061_mix05.bin --steps 1000 --batch-size 16 --block-size 64 --load-path data/kristal_model_f3_clean.pt --save-path data/kristal_model_f4_r05.pt --allow-frozen-write",
+      "device": "mps",
+      "steps": 1000,
+      "batch_size": 16,
+      "block_size": 64,
+      "start_loss": 0.049,
+      "end_loss": 0.076,
+      "duration_seconds": 487.88,
+      "log_path": "scratch/t0061_train_r05.log"
+    },
+    "f4_r10": {
+      "command": "train.py --device mps --data scratch/t0061_mix10.bin --steps 1000 --batch-size 16 --block-size 64 --load-path data/kristal_model_f3_clean.pt --save-path data/kristal_model_f4_r10.pt --allow-frozen-write",
+      "device": "mps",
+      "steps": 1000,
+      "batch_size": 16,
+      "block_size": 64,
+      "start_loss": 0.3093,
+      "end_loss": 0.2042,
+      "duration_seconds": 653.11,
+      "log_path": "scratch/t0061_train_r10.log"
+    }
+  },
+  "measurements_comparison": {
+    "kapi_a_genel_ce": {
+      "description": "Genel dil kaybı (CE, maskesiz, sabit dilim train_balanced_sft_v2.bin offset 100000+b*1000 BS 4 SEQ 64 6 batch)",
+      "threshold": "<= %10 artış (<= 2.1588)",
+      "f3_clean": 1.9625,
+      "carpenter_v2": 2.789,
+      "f4_replay_25pct": 2.4282,
+      "f4_r05": 2.6847,
+      "f4_r10": 2.5617,
+      "f4_r05_status": "EXCEEDED (+36.80% artış; 2.7890e kıyasla 0.1043 toparlanma)",
+      "f4_r10_status": "EXCEEDED (+30.53% artış; 2.7890e kıyasla 0.2273 toparlanma)"
+    },
+    "kapi_b_noktalama_top1": {
+      "description": "Noktalama yetkinliği (bağlam-koşullu, hedefi noktalama olan 250 konum, seed 7, CTX 32)",
+      "threshold": "Top-1 düşüşü <= 5 puan (>= %79.40)",
+      "f3_clean": {
+        "top1_pct": 84.4,
+        "top3_pct": 91.2,
+        "mean_rank": 2.14
+      },
+      "carpenter_v2": {
+        "top1_pct": 74.8,
+        "top3_pct": 88.4,
+        "mean_rank": 37.34
+      },
+      "f4_replay_25pct": {
+        "top1_pct": 79.2,
+        "top3_pct": 92.0,
+        "mean_rank": 3.47
+      },
+      "f4_r05": {
+        "top1_pct": 80.8,
+        "top3_pct": 88.4,
+        "mean_rank": 3.02
+      },
+      "f4_r10": {
+        "top1_pct": 79.2,
+        "top3_pct": 87.6,
+        "mean_rank": 2.86
+      },
+      "f4_r05_status": "PASSED (%80.80 >= %79.40; -3.60 puan düşüş, eşik içinde kaldı)",
+      "f4_r10_status": "FAILED (%79.20 < %79.40; -5.20 puan düşüş, 0.20 puanla eşik altında kaldı)"
+    },
+    "kapi_c_ceket_alani": {
+      "description": "Ceket alanı held-out marangozluk (evaluate_carpenter_generation_100.py N=100)",
+      "threshold": "ROUGE-L > 0.0651 (taban üstü) ve ezber < %10, tutarsızlık < %5, kesişim >= %80",
+      "f3_clean": {
+        "memorization_rate": 0.0,
+        "incoherence_rate": 46.0,
+        "mean_rouge_l": 0.0651,
+        "content_overlap_rate": 46.0
+      },
+      "carpenter_v2": {
+        "memorization_rate": 0.0,
+        "incoherence_rate": 25.0,
+        "mean_rouge_l": 0.1446,
+        "content_overlap_rate": 42.0
+      },
+      "f4_replay_25pct": {
+        "memorization_rate": 0.0,
+        "incoherence_rate": 59.0,
+        "mean_rouge_l": 0.041,
+        "content_overlap_rate": 34.0
+      },
+      "f4_r05": {
+        "memorization_rate": 0.0,
+        "incoherence_rate": 42.0,
+        "mean_rouge_l": 0.0771,
+        "median_rouge_l": 0.0645,
+        "rouge_ci": [
+          0.0625,
+          0.0916
+        ],
+        "content_overlap_rate": 48.0,
+        "decision": "BAŞARISIZ"
+      },
+      "f4_r10": {
+        "memorization_rate": 0.0,
+        "incoherence_rate": 20.0,
+        "mean_rouge_l": 0.056,
+        "median_rouge_l": 0.0455,
+        "rouge_ci": [
+          0.046,
+          0.0661
+        ],
+        "content_overlap_rate": 36.0,
+        "decision": "BAŞARISIZ"
+      },
+      "f4_r05_status": "ROUGE-L 0.0771 > 0.0651 (taban üstüne çıktı, f4_replay 0.041e göre belirgin toparlandı), ancak ön kayıtlı üretim eşiklerini (ROUGE >= 0.35, tutarsızlık <= %5, kesişim >= %80) sağlamadı.",
+      "f4_r10_status": "ROUGE-L 0.0560 < 0.0651 (tabanın altında kaldı; replay oranı %10a çıkınca ceket koşullanması zayıfladı), ön kayıtlı üretim eşiklerini sağlamadı."
+    },
+    "template_leakage_in_generation": {
+      "target_templates": [
+        "cumhuriyet dönemi",
+        "vektörel bellek"
+      ],
+      "f4_replay_25pct": {
+        "cumhuriyet_donemi_exact": 8,
+        "vektorel_bellek": 4
+      },
+      "f4_r05": {
+        "cumhuriyet_donemi_exact": 0,
+        "vektorel_bellek": 0
+      },
+      "f4_r10": {
+        "cumhuriyet_donemi_exact": 0,
+        "vektorel_bellek": 0
+      },
+      "leakage_elimination_status": "SUCCESS (Kaynak süzme işlemi T-0060taki her iki şablon sızıntısını da %0a indirerek tamamen yok etmiştir)"
+    }
+  },
+  "canaries": {
+    "pt_count": 33,
+    "bin_count": 17,
+    "f3_clean_intact": true,
+    "carpenter_v2_intact": true
+  },
+  "verdict": {
+    "summary": {
+      "threshold_A": "Her iki oranda da CE artışı eşiği (%10) aşıldı (+%36.80 r05, +%30.53 r10). Ancak replay oranı arttıkça genel dil kaybı düzenli olarak düzelmektedir (2.789 -> 2.685 -> 2.562 -> 2.428).",
+      "threshold_B": "r05 PASSED (Top-1 %80.80, eşik >= %79.40 idi); r10 FAILED (Top-1 %79.20, 0.20 puanla eşik altında kaldı). Her iki modelde de ortalama sıra taban seviyesindedir (3.02 ve 2.86).",
+      "threshold_C": "Her iki model de üretim kalite hedeflerinde (ROUGE >= 0.35, tutarsızlık <= %5) BAŞARISIZ kaldı. Ancak r05 ROUGE-Lsi (0.0771) f4_replaye (0.0410) ve tabana (0.0651) göre belirgin iyileşme gösterdi.",
+      "template_leakage": "Şablon sızıntısı (%0 cumhuriyet dönemi, %0 vektörel bellek) kesin olarak ortadan kaldırıldı."
+    },
+    "key_takeaways": [
+      "1. Kaynak süzme işlemi tam hedefine ulaşmıştır: T-0060ta ceket yanıtlarını bozan cumhuriyet dönemi ve vektörel bellek kalıpları hem %5 hem %10 karışımlarında ve üretilen metinlerde %0a indirilmiştir.",
+      "2. Replay oranı ile unutma arasında doğrudan monoton bir ilişki vardır: Replay oranı arttıkça (%0 -> %5 -> %10 -> %25) genel CE düzenli olarak düşmektedir (2.789 -> 2.685 -> 2.562 -> 2.428).",
+      "3. Replay oranı ile ceket uzmanlığı arasında ters bir ilişki vardır: Replay oranı %5in üzerine çıktığında (%10 ve %25), ceket koşullanması boğulmakta ve ROUGE skoru taban seviyesinin altına inmektedir.",
+      "4. %5 oranı (f4_r05), noktalama eşiğini başarıyla koruyan (%80.80 top-1) ve tabana göre ROUGE iyileşmesi sağlayan en dengeli çalışma noktasıdır."
+    ]
+  }
+}

@@ -34,17 +34,21 @@ def build_replay_mix(
     replay_path: str,
     output_path: str,
     block_size: int = 128,
+    replay_every: int = 4,
     seed: int = 42
 ) -> Dict[str, Any]:
     """
-    Ceket ve replay ikili verilerini 3:1 blok deseniyle birleştirir.
+    Ceket ve replay ikili verilerini [ceket x (replay_every-1), replay] deseniyle birleştirir.
     Artan ceket token'larını dosya sonuna ekler.
     Replay bloklarını replay veri kümesinin tamamına eşit aralıklarla yayar.
+    replay_every=4 -> %25, replay_every=10 -> %10, replay_every=20 -> %5.
     """
     if not os.path.exists(jacket_path):
         raise FileNotFoundError(f"Ceket dosyası bulunamadı: {jacket_path}")
     if not os.path.exists(replay_path):
         raise FileNotFoundError(f"Replay dosyası bulunamadı: {replay_path}")
+    if replay_every < 2:
+        raise ValueError(f"replay_every en az 2 olmalıdır (alınan: {replay_every})")
 
     jacket_sha = compute_sha256(jacket_path)
     replay_sha = compute_sha256(replay_path)
@@ -58,15 +62,15 @@ def build_replay_mix(
     n_j_blocks = n_j_tokens // block_size
     rem_j_tokens = n_j_tokens % block_size
 
-    # Her 3 ceket bloğuna 1 replay bloğu (ceil(n_j_blocks / 3))
-    n_r_blocks = (n_j_blocks + 2) // 3
+    # Her (replay_every - 1) ceket bloğuna 1 replay bloğu
+    jacket_chunk = replay_every - 1
+    n_r_blocks = (n_j_blocks + jacket_chunk - 1) // jacket_chunk
 
     total_avail_r_blocks = n_r_tokens // block_size
     if n_r_blocks > total_avail_r_blocks:
         raise ValueError(f"Yetersiz replay bloğu: gereken {n_r_blocks}, mevcut {total_avail_r_blocks}")
 
     # Replay bloklarını replay dosyasının tamamına eşit aralıklarla yay
-    # linspace ile indeksleri belirle (deterministik)
     replay_indices = np.round(np.linspace(0, total_avail_r_blocks - 1, n_r_blocks)).astype(np.int64)
 
     # Toplam çıktı token sayısı
@@ -83,10 +87,9 @@ def build_replay_mix(
     curr_r_idx = 0
     out_pos = 0
 
-    # [ceket, ceket, ceket, replay] deseni
+    # [ceket x jacket_chunk, replay] deseni
     while curr_j_block < n_j_blocks:
-        # En fazla 3 ceket bloğu ekle
-        chunk_j = min(3, n_j_blocks - curr_j_block)
+        chunk_j = min(jacket_chunk, n_j_blocks - curr_j_block)
         for _ in range(chunk_j):
             src_start = curr_j_block * block_size
             src_end = src_start + block_size
@@ -119,7 +122,7 @@ def build_replay_mix(
     measured_replay_ratio = float(replay_tokens_count / total_mix_tokens)
 
     meta = {
-        "dataset_name": "train_f4_replay_mix",
+        "dataset_name": os.path.basename(output_path),
         "jacket_source": {
             "path": jacket_path,
             "sha256": jacket_sha,
@@ -132,7 +135,8 @@ def build_replay_mix(
         },
         "mix_parameters": {
             "block_size": int(block_size),
-            "pattern": "[jacket, jacket, jacket, replay]",
+            "replay_every": int(replay_every),
+            "pattern": f"[jacket x {jacket_chunk}, replay]",
             "seed": int(seed),
             "jacket_blocks": int(n_j_blocks),
             "replay_blocks": int(n_r_blocks),
@@ -161,19 +165,22 @@ def main():
     parser.add_argument("--replay", type=str, default="data/train_chat_balanced.bin", help="Replay binary dataset")
     parser.add_argument("--output", type=str, default="data/train_f4_replay_mix.bin", help="Output binary dataset")
     parser.add_argument("--block-size", type=int, default=128, help="Block size for pattern")
+    parser.add_argument("--replay-every", type=int, default=4, help="Add 1 replay block every N blocks (default: 4 -> 25%%)")
     parser.add_argument("--seed", type=int, default=42, help="Deterministic seed")
     args = parser.parse_args()
 
     print(f"Replay Karışımı Oluşturuluyor:")
-    print(f"  Ceket : {args.jacket}")
-    print(f"  Replay: {args.replay}")
-    print(f"  Çıktı : {args.output}")
+    print(f"  Ceket        : {args.jacket}")
+    print(f"  Replay       : {args.replay}")
+    print(f"  Çıktı        : {args.output}")
+    print(f"  Replay Every : {args.replay_every}")
 
     meta = build_replay_mix(
         jacket_path=args.jacket,
         replay_path=args.replay,
         output_path=args.output,
         block_size=args.block_size,
+        replay_every=args.replay_every,
         seed=args.seed
     )
 
