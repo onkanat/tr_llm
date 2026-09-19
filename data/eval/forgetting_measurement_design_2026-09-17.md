@@ -1,6 +1,11 @@
 # Unutma Ölçümü Tasarımı — F4 öncesi (17 Eyl 2026)
 
-**Damga:** 2026-09-17T02:20 local (23:20Z) · **Yazan:** claude (danışman) · **Statü:** TASARIM (uygulama aracı hazır, taban çizgisi ölçüldü)
+> [!WARNING]
+> **BU SÜRÜM GEÇERSİZDİR — TARİHSEL KAYIT OLARAK DURUYOR.**
+> A ve B eksenlerinin dilimi (`data/train_balanced_sft_v2.bin`) `f3_clean`'in atasının **eğitim korpusunun kendisi** olduğu için bir **ezber dilimiydi**; C ekseni ise **kırpılmış kafayla** (31.357 vs 32.852) ve **yanlış tokenizer sözleşmesiyle** (`literal_entity_mode=False`) ölçüyordu.
+> Yerine geçen belge: **`data/eval/forgetting_measurement_design_2026-09-18.md`** (T-0062). Aşağıdaki eşik sayıları korunmuştur; değişen **zemindir**, eşikler değil.
+
+**Damga:** 2026-09-17T02:20 local (23:20Z) · **Yazan:** claude (danışman) · **Statü:** ~~TASARIM~~ **GEÇERSİZ**
 **Dayanak:** Onkanat kararı (16 Eyl): *"F4 kompozisyonu → ÖNCE UNUTMA ÖLÇÜMÜ; iki varyant denenip unutma ölçülecek."*
 
 ---

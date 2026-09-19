@@ -1,7 +1,21 @@
 import re
 
 class PhonologyEngine:
-    VOWELS = set("aeıioöuüAEIİOÖUÜ")
+    # D3-C (T-0080): düzeltme işaretli ünlüler kümede YOKTU ⇒ `_ends_with_vowel`
+    # onları ÜNSÜZ sayıyordu ⇒ 'askerî'+DAT 'askerîe' (doğrusu 'askerîye'),
+    # 'hâlâ'+DAT 'hâlâa' (doğrusu 'hâlâya'). 152 lemma düzeltme işaretiyle BİTER.
+    #
+    # ⚠️ İKİ EKSEN AYRILIR (ölçüldü, ilk denemem YANLIŞTI): harfi `VOWELS`'a
+    # eklemek ünlü-sonluluk/tampon eksenini DÜZELTİR, ama UYUM eksenini BOZAR.
+    # `_get_last_vowel` düzeltme işaretini görürse: 'efkâr'+iyelik 'efkârı' olur
+    # (doğrusu 'efkâri'; eski kod önceki 'e'yi bulup ÖN veriyordu = doğru).
+    # Ölçülen tablo (â uyum bilgisi TAŞIMAZ — D1'deki önek/uzatma beraberliğiyle
+    # aynı yapı): 'efkâr'→ön · 'kâr'→art · 'hâl'→ön; üçü de aynı yapıda, zıt uyum.
+    # ⇒ düzeltme işaretleri YALNIZ VOWELS'a girer; `HARMONY_VOWELS` onları ATLAR,
+    # böylece ESKİ uyum davranışı birebir korunur ve `hâl` ADIYLA BİLİNEN İSTİSNA
+    # olarak Faz 1'de lemma niteliğiyle çözülür — sessizce yanlış tarafa yazılmaz.
+    VOWELS = set("aeıioöuüâîûAEIİOÖUÜÂÎÛ")
+    HARMONY_VOWELS = set("aeıioöuüAEIİOÖUÜ")
     BACK_VOWELS = set("aıouAIOU")
     FRONT_VOWELS = set("eiöüEİÖÜ")
     ROUNDED_VOWELS = set("oöuüOÖUÜ")
@@ -10,8 +24,9 @@ class PhonologyEngine:
 
     @classmethod
     def _get_last_vowel(cls, word: str) -> str:
+        # HARMONY_VOWELS: düzeltme işaretleri ATLANIR (bkz. yukarıdaki ölçüm).
         for char in reversed(word):
-            if char in cls.VOWELS:
+            if char in cls.HARMONY_VOWELS:
                 return char
         return 'a' # Fallback
 
@@ -53,6 +68,16 @@ class PhonologyEngine:
                 if last_char == 'k' and len(mutated) >= 2 and mutated[-2].lower() == 'n':
                     new_char = 'g'
                 mutated = mutated[:-1] + new_char
+
+        # 3. GEMINATION (Ünsüz İkizleşmesi) e.g., hak -> hakk-ı, his -> hiss-i,
+        # af -> aff-ı, zam -> zamm-ı, ret -> redd-i (VOICING + GEMINATION birlikte:
+        # ÖNCE yumuşama sonra ikizleşme ⇒ 'ret'->'red'->'redd'). Nitelik sözlükten
+        # gelir (Faz 1 verisi): ikizleşme EK ile değil LEMMA ile belirlenir, bu
+        # yüzden kural değil veri olarak taşınır. Ünlüyle biten gövde ikizlenmez.
+        if "GEMINATION" in attributes and mutated:
+            son = mutated[-1]
+            if son not in cls.VOWELS:
+                mutated = mutated + son
         
         return mutated
 

@@ -166,6 +166,13 @@ def build_default_graph() -> MorphotacticsGraph:
         ("CASE_DAT_N", "nA", "-"),
         ("CASE_GEN_N", "nIn", "-"),
         ("CASE_EQU_N", "nCA", "-"),
+        # D3-A (T-0080): 3. tekil iyelikten sonra ARAÇ DURUMU eksikti ⇒
+        # 'adıyla'/'aracıyla' ÇÖZÜLEMİYORDU (0 yol). Kimlik `CASE_INS` olarak
+        # YENİDEN KULLANILIR, çünkü ekin YÜZEYİ çıplak addakiyle AYNIDIR
+        # (`(y)lA`; y-buffer, n-buffer değil) — yeni bir id, sözlükte AYNI ek için
+        # İKİNCİ bir morfem jetonu açardı. Yalnız bu grupta `n` öneki kuraldı;
+        # ondan sapma bilinçli ve burada beyan edilmiştir.
+        ("CASE_INS", "(y)lA", "-"),
     ]
     for tid, template, attr in n_cases:
         graph.add_transition(State.NOUN_POST_POSSESSIVE_3, State.NOUN_POST_CASE, tid, template, attr)

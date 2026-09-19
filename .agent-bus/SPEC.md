@@ -1,6 +1,6 @@
 # agent-bus — Ajanlar Arası Koordinasyon Protokolü
 
-**Sürüm:** 1.0 · **Tarih:** 2026-09-14 · **Durum:** tasarım (uygulama bekliyor)
+**Sürüm:** 1.0 · **Tarih:** 2026-09-14 · **Durum:** **uygulandı ve çalışıyor** (`scripts/agent_bus_mcp.py`) · **son düzenleme:** 2026-09-19 (T-0081)
 
 İki ajan aynı repoda çalışır: **danışman** (Claude Code — analiz, doğrulama, kapı tasarımı)
 ve **yürütücü** (Antigravity — eğitim, refactor, betik, test).
@@ -45,7 +45,7 @@ eksikliğinden** geldi. Bu protokol o sınıfı kapatır.
   log/events.jsonl           # append-only denetim kaydı
 ```
 
-`state/` ve `log/` **sürümlenmez** (`.gitignore`); `SPEC.md`, `frozen.json`, `tasks/` ve `notes/` **sürümlenir**. `notes/` yüzeyi `state/` ve `log/`'dan farklıdır; yürütücünün gerekçe zincirini repo içinde kalıcı ve keşfedilebilir kılar. Elle tutulan bir indeks dosyası yoktur; dizin listesi (`ls .agent-bus/notes/`) zaten indekstir.
+`state/` ve `log/` **sürümlenmez** (`.gitignore`); `SPEC.md`, `frozen.json`, `tasks/` ve `notes/` **sürümlenir** — *ancak bu bir NİYETTİR, ölçülen durum değildir.* 19 Eyl 2026 ölçümü: `.agent-bus/notes/` altında diskte **44** dosya var, **27'si izleniyor**, **17'si izlenmiyor** (`git status` → `??`). İzlenen aralık **T-0031…T-0061** (aralarda boşluklar var), izlenmeyen küme **T-0062…T-0077** + **T-0081**. Yani sürümleme **T-0061'de durmuş** ve bir daha başlamamıştır. Bir dosyanın `notes/` altında *durması* onun sürümlendiği anlamına **gelmez**; commit yetkisi operatördedir ve `git add -A` yasaktır (D8, T-0081). `notes/` yüzeyi `state/` ve `log/`'dan farklıdır; yürütücünün gerekçe zincirini repo içinde kalıcı ve keşfedilebilir kılar. Elle tutulan bir indeks dosyası yoktur; dizin listesi (`ls .agent-bus/notes/`) zaten indekstir.
 
 
 `tasks/` (kök altı, sürümlenir) ile `state/tasks/` (çalışma zamanı, sürümlenmez) kasıtlı
@@ -60,8 +60,13 @@ olarak ayrıdır ve **ikisi de okunur**: kökteki dosyalar elle yazılmış tali
    bir kiralamayla kapsanmalıdır (tam yol ya da dizin öneki). İhlal → yazma reddedilir.
 2. **Donmuş artefakt.** `frozen.json`'daki desenlere uyan yollar yalnızca bu yolu açıkça
    bildiren **ve** dizin geneli kiralama alan bir görev tarafından değiştirilebilir.
-   Varsayılan donmuş küme: `data/realistic_rag/**`, `data/b1_5_splits/**`, `data/*.pt`,
-   `data/vocab*.json`, `data/lexicon/**`.
+   Donmuş kümenin **tek yetkili kaynağı `frozen.json`'dır**; 19 Eyl 2026 ölçümüyle **10
+   desen**: `data/realistic_rag/**`, `data/b1_5_splits/**`, `data/pedagogy_canonical/**`,
+   `data/lexicon/**`, `data/*.pt`, `data/*.bin`, `data/vocab.json`, `data/vocab_entity.json`,
+   `src/llm/tokenizer.py`, `src/compiler/**`. Bu liste `bus_frozen_list` çıktısı ve
+   `frozen.json` ile **iki yönlü** hizalıdır. *(Bu paragraf eskiden 5 desen sayıyordu ve tam
+   da en kritik ikisini — `src/compiler/**` ile `src/llm/tokenizer.py` — atlıyordu ⇒ bir
+   sonraki pencere onları "korumasız" sanabilirdi. D7, T-0081.)*
 
    Uygulama bu iki şartı **birlikte** dayatır: (a) yol görevin `writes` listesinde
    bildirilmiş olmalı, (b) kiralama `scope: "dir"` olmalı — donmuş bir yola **dosya
@@ -199,6 +204,39 @@ alanı vardır ama devralmaya uygulanan bir zaman aşımı yoktur; farklı bir s
 devralması sırayı süresiz kilitler. Tek yürütücülü kurulumda bu zararsızdır (aynı sahip
 her zaman devam edebilir). İkinci bir yürütücü eklenirse önce devralma zaman aşımı
 gerekir — bu, protokolün bilinen bir eksiğidir, sessiz bir tuzak değil.
+
+## Bilinen açık kusurlar (yalnız ÖLÇÜLMÜŞ olanlar)
+
+Bu bölüm **yalnız ölçülmüş** maddeleri taşır; her madde bir ölçüm tarihi ve sınanabilir bir
+iddia içerir. Ölçülüp **çürütülen** iddialar buraya yazılmaz (aşağıda listelenir).
+
+1. **`task_updated` olayı YOK.** `log/events.jsonl`'de 19 Eyl 2026 itibarıyla **1.174 olay**
+   ve **6 tip** vardır: `lease_acquired` (409) · `lease_released` (372) · `message_sent` (158)
+   · `result_reported` (87) · `task_claimed` (79) · `task_posted` (69). Bir görev
+   şartnamesinin (`spec`, `writes`, `acceptance`) **sonradan değişmesi hiçbir olay üretmez**;
+   bu yüzden kapsam genişletildiğinde denetim kaydı bunu **göstermez**. (Kaynakta
+   `task_updated` dizgesi **0** kez geçer.) Bu, kapsam genişletmelerinin **yazılı** bir
+   kaydını zorunlu kılar.
+2. **`read` bayrağı hiçbir zaman `true` yapılmaz.** `bus_send` mesajı `read: false` ile
+   yazar; kaynakta `read` yalnızca **okunur**, onu `true`'ya çeviren bir yol **yoktur** ⇒
+   `bus_inbox(unread_only=True)` pratikte **her** mesajı döndürür. "Okundu" bilgisi
+   güvenilir değildir; bir mesajın işlendiği, **yanıtın veya sonucun varlığıyla** anlaşılır.
+3. **Kök `tasks/` yüzeyi okunur ama yazılmaz.** Görev araması **iki** dizini tarar
+   (`state/tasks/` + `.agent-bus/tasks/`), fakat durum değişiklikleri **yalnız**
+   `state/tasks/` altına yazılır. Sonuç: yalnız kökte bulunan elle yazılmış bir şartname
+   **okunur ama durumu asla güncellenmez** (bayat `status`). Aynı kimlik iki yerde varsa
+   `state/tasks/` kazandığı için bu sessiz bir yanlış okuma değil, **bayat bir kopyadır**.
+4. **Devralmanın süresi dolmaz** — yukarıda "Bilinmesi gereken sınır" bölümünde belgeli.
+   Tek yürütücülü kurulumda zararsız; ikinci bir yürütücüde sıra **süresiz kilitlenir**.
+5. **`notes/` canlı durum tablosu taşımamalıdır.** Notlar iş **sürerken** yazılır; içlerindeki
+   "şu an durum X" satırları **yazıldıkları ana** aittir. Ölçülmüş sonuç: canlı iddialar ya
+   damgalanmalı (`... itibarıyla`) ya da yazımdan önce `state/`'ten **yeniden okunmalıdır**;
+   aksi halde not, bayat bir hükmü kalıcılaştırır.
+
+**Çürütülen iddialar (buraya yazılmadı, kayda geçer).** *"Okuma `state/`, yazma köke — asimetri
+kusurdur"* iddiası **ölçümle çürüdü**: yön terstir (yazma `state/`'e) ve daha önemlisi bu
+tasarım yukarıda "Kök dizin" bölümünde **açıkça belgelenmiştir**, kusur değildir. *"Ayna diff'i
+kusurdur"* da yanlıştı: aynalı görevlerde görülen fark **beklenen** davranıştır.
 
 ## Uygulama gereksinimleri
 

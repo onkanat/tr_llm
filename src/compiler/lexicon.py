@@ -1,6 +1,24 @@
 import csv
 from typing import List, Dict, Any
 
+
+def turkish_lower(word: str) -> str:
+    """Türkçeye özgü küçük harfe çevirme: `İ`→`i`, `I`→`ı`.
+
+    ⚠️ TEK KAYNAK. `CrystalCompiler._turkish_lower` buraya DELEGE eder; iki ayrı
+    kopya sessizce ayrışırsa `İ`/`I` ile başlayan bütün lemmalar erişilemez olur.
+    Neden bu modülde: `core.py` bu modülü import eder, ters yön döngü yaratırdı.
+
+    Neden gerekli (T-0080, ölçülmüş kusur): `load_from_tsv` trie ANAHTARINI
+    yazarken, `compile` ise ARAMAYI yaparken normalize eder. Düz Python
+    `'İ'.lower()` == `'i' + U+0307` (2 karakter) iken buradaki eşleme `'i'`
+    (1 karakter) verir ⇒ trie'de `i̇stanbul`, arama `istanbul` ⇒ `find_stems`
+    ilk karakterde `break` eder. Sonuç: sözlükte VAR olan 79 satır (72 İ + 7 I)
+    ölü kalıyordu.
+    """
+    return word.replace('İ', 'i').replace('I', 'ı').lower()
+
+
 class TrieNode:
     def __init__(self):
         self.children = {}
@@ -18,9 +36,17 @@ class LexiconManager:
             for row in reader:
                 lemma = row['lemma']
                 self._insert(lemma, row)
+                # ⚠️ YALNIZ EKLEME — mevcut düz `.lower()` anahtarı KORUNUR.
+                # 'değiştirme' biçimi ölçüldü ve REGRESYONDU: `Ir` lemmasının düz
+                # anahtarı `ir` erişilebilirdi, silinince `ir` yüzeyi düştü
+                # (kaybolan 1). Düzeltmenin işi ERİŞİM AÇMAK, kapatmak değil.
                 lower_lemma = lemma.lower()
                 if lower_lemma != lemma:
                     self._insert(lower_lemma, row)
+                # ... ve `compile`'ın aradığı Türkçe-normalize anahtar da yazılır.
+                tr_lemma = turkish_lower(lemma)
+                if tr_lemma != lemma and tr_lemma != lower_lemma:
+                    self._insert(tr_lemma, row)
 
     def _insert(self, word: str, data: Dict[str, Any]):
         """Inserts a word and its metadata into the Trie."""

@@ -1,6 +1,6 @@
 import json
 from typing import List, Dict, Any
-from src.compiler.lexicon import LexiconManager
+from src.compiler.lexicon import LexiconManager, turkish_lower
 from src.compiler.morphotactics import MorphotacticsGraph, State
 from src.compiler.phonology import PhonologyEngine
 
@@ -10,8 +10,13 @@ class CrystalCompiler:
         self.graph = graph
 
     def _turkish_lower(self, word: str) -> str:
-        """Properly lowercases Turkish text."""
-        return word.replace('İ', 'i').replace('I', 'ı').lower()
+        """Properly lowercases Turkish text.
+
+        ⚠️ TEK KAYNAK: gövde `lexicon.turkish_lower`'a delege eder. Bu gövde
+        ile `load_from_tsv`'nin trie anahtarı AYNI olmak zorundadır; ayrışırsa
+        `İ`/`I` ile başlayan lemmalar trie'de erişilemez kalır (T-0080).
+        """
+        return turkish_lower(word)
 
     def compile(self, word: str) -> Dict[str, Any]:
         """
