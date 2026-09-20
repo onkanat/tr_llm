@@ -222,6 +222,7 @@ cp data/kristal_model.pt data/kristal_model_sft.pt
 > - **Donmuş yola yazım operatör onayı ister:** dört eğitim girişi yazmadan önce `check_frozen_save_path` çağırır; onay `--allow-frozen-write` ile verilir ve hedef `writes[]`'te beyan edilip üst dizin kiralanmalıdır.
 > - **`<PAD>` kayıp maskesi** varsayılan olarak aktiftir ve kayıp **ölçeğini** değiştirir → maskeleme öncesi/sonrası kayıp değerleri kıyaslanmamalıdır.
 > - Eğitim koşumları sırasında makinede GPU tüketen başka iş çalıştırılmamalıdır (ölçüldü: adım süresi 0,43 → 3,45 sn/adım).
+> - **Yukarıdaki 3 aşamalı eğitim bloğu TARİHSELDİR (damgalı ölçüm: 20 Eyl 2026):** içindeki `data/kristal_model.pt` ve `data/kristal_model_sft.pt` **artık yoktur** — Kristal checkpoint zinciri 18 Eyl 2026'da operatör kararıyla silinmiştir (diskte de git'te de yok). Bugün `data/` altındaki checkpoint'ler `data/anka_a1.pt` ve `data/anka_a1r.pt`'tir. Blok **o dönemin kaydı olarak korunmuştur**; güncel karşılığı **doğrulanmadığı için yazılmamıştır**.
 
 ---
 

@@ -2,9 +2,113 @@
 
 Bu kılavuz, **Kristal–Vektörel Mimarisi** tabanlı Türkçe dil modelini kurmak, eğitmek, veri kümelerini derlemek, etkileşimli olarak test etmek ve Python API'si üzerinden projelere entegre etmek için kapsamlı yönergeler sunar.
 
+> [!WARNING]
+> **TARİHSEL BÖLÜMLER (damgalı ölçüm: 20 Eyl 2026).** Bu kılavuzun bazı bölümleri
+> `data/kristal_*.pt` yollarına dayanan komutlar içerir. **Kristal checkpoint zinciri
+> 18 Eyl 2026'da operatör kararıyla silinmiştir**; o dosyalar **diskte de git'te de
+> yoktur** (ölçüldü). Bugün `data/` altında yalnız `data/anka_a1.pt` ve
+> `data/anka_a1r.pt` bulunur. Etkilenen bölümler: **§2** (CLI model yolları),
+> **§3** (`--load-path` / `--save-path`), **§4 · Adım B1.5** (checkpoint adı).
+> Bu komutlar **o dönemin kaydıdır ve bugün çalışmaz**; silinmiş içerik burada
+> **korunmuştur** (tarihsel kayıt), ama **güncel karşılıkları yazılmamıştır** —
+> çalışan bir güncel komut bu belgede **doğrulanmadığı için iddia edilmiyor**.
+> Model adı artık **Anka**'dır; mimari ve sınıf adları (`Kristal*`) değişmemiştir.
+
+---
+
+## 🅰️ Anka A1-r — ÖLÇÜLMÜŞ çıkarım komutu (taban model, devam üretimi)
+
+> **Damgalı ölçüm: 20 Eyl 2026.** Bu bölümdeki her komut **bu oturumda koşuldu** ve
+> çıktısı aşağıya **birebir** yapıştırıldı. Ölçülmemiş hiçbir komut yazılmadı.
+> Bu bölüm, yukarıdaki TARİHSEL banner'ın *"doğrulanmadığı için iddia edilmiyor"*
+> cümlesini **kısmen** günceller: **banner metni kendi damgasıyla değiştirilmeden
+> korunmuştur**, ve §2 / §3 / §4 · Adım B1.5'teki tarihsel komutlar **hâlâ çalışmaz**
+> ve **hâlâ değiştirilmemiştir**.
+
+### Gereken üç dosya — ve neden bu üçü
+
+Eğitim külliyatı **hangi sözlükle** derlendiyse, çıkarım da **o sözlükle** kurulmalıdır:
+
+| Rol | Yol | Tam sha256 (ölçüldü) |
+|---|---|---|
+| Sözlük | `data/rebuild/vocab_anka_r1_33114.json` (**33.114** giriş) | `f9940a8d8e1f7cd9428d389f12ff4c5ee448e5a7bfcdcc8ecc9c616fce950984` |
+| Kök sözlüğü | `data/lexicon/roots_anka_r1.tsv` (52.582 satır) | `ea874a73c0d5669a591cef00c9d4fb16916ea3e60e42df9d3c73445c4b7efd59` |
+| Checkpoint | `data/anka_a1r.pt` (embedding **33114 × 768**) | `b93cc1cd54093fc63342d394abe528f2128dc16e20b4d7ac6ab680854b4d6293` |
+
+> **`data/vocab.json` (31.357) KULLANILMAZ.** Eşleşmezse koşum **`RuntimeError` ile
+> sesli durur** — sessiz kırpma yoktur. Ölçülen hata:
+> `size mismatch for embedding.embedding.weight: ... [33114, 768] ... current model is [31357, 768]`.
+> `strict=False` bunu **yutmaz** (o yalnız eksik/fazla *anahtarı* yutar, *şekli* değil).
+
+### Komut
+
+```bash
+venv/bin/python scratch/anka_r7_cikarim_sondasi.py
+```
+
+Bu sonda fail-closed'dır (`rc=0` = kapılar geçti, `rc=2` = kapı düştü) ve iki dalı da
+sınar. Eşdeğer en kısa Python:
+
+```python
+from scripts.train_step_demo import KristalLM
+from src.llm.tokenizer import Vocabulary, KristalTokenizer
+from src.compiler.lexicon import LexiconManager
+from src.compiler.morphotactics import build_default_graph
+from src.compiler.core import CrystalCompiler
+import torch
+
+v = Vocabulary(); v.load("data/rebuild/vocab_anka_r1_33114.json")          # 33.114
+lex = LexiconManager(); lex.load_from_tsv("data/lexicon/roots_anka_r1.tsv")
+tok = KristalTokenizer(CrystalCompiler(lex, build_default_graph()), v)
+
+model = KristalLM(vocab_size=len(v.stoi), n_embd=768, vocab=v,
+                  block_size=4096, n_layer=6, n_head=6)
+sd = torch.load("data/anka_a1r.pt", map_location="cpu", weights_only=False)
+model.load_state_dict(sd, strict=True)     # TEMİZ — anahtar atmaya GEREK YOK
+model.eval()
+
+ids = tok.encode("Yarın okula")[:-1]       # ← <EOS> KIRPILIR (aşağıdaki tuzağa bakın)
+with torch.no_grad():
+    logits, _ = model(torch.tensor([ids], dtype=torch.long))
+    p = torch.softmax(logits[0, -1, :], dim=-1)
+    top = torch.topk(p, 5)
+    print([(v.decode(i.item()), round(pr.item(), 4)) for pr, i in zip(*top)])
+```
+
+### Ölçülen çıktı (birebir)
+
+| Girdi (gövde) | Kırpılan son token | İlk 5 devam |
+|---|---|---|
+| `Yarın okula` | `CASE_DAT` | `<PROPER_NOUN>`=0,0883 · `ait`=0,0696 · `(`=0,0638 · `bağ`=0,0619 · `,`=0,0510 |
+| `Akmayan su kımıldanmayan yer` | `yer` | `CASE_LOC`=0,1642 · `DERIV_lI`=0,1606 · `PLURAL`=0,1274 · `COPULA_AORIST`=0,0774 · `al`=0,0599 |
+| `Demirkır güney tepelerinin duldalarına` | `CASE_DAT_N` | `bağ`=0,1821 · `ait`=0,1640 · `göre`=0,1411 · `doğru`=0,0265 · `sahip`=0,0246 |
+
+### ⚠️ Tuzak 1 — `encode()` sona `<EOS>` ekler, o kırpılmazsa ölçü yanlış okunur
+
+`KristalTokenizer.encode()` dizinin **sonuna `<EOS>` (id 3)** koyar. `<EOS>`
+kırpılmadan "sırada ne var?" diye sorulursa model `<BOS>`'u **0,9971** ile verir.
+Bu **dejenerasyon değil, doğru davranıştır**: belge bitmiştir, yenisi başlıyor.
+Ölçülen kontrast: `Yarın okula` + `<EOS>` ⇒ `<BOS>`=0,9971 · `DERIV_CI`=0,0011 · `ver`=0,0007.
+
+### ⚠️ Tuzak 2 — bu bir TABAN modeldir; **talimat takip etmez**
+
+A1-r **düz-metin ön-eğitimidir** (`--pretrain`), SFT değil. Ölçüldü:
+`data/anka_a1r_pretrain.bin` 100.000.000 jetonun içinde `<OUTPUT>` **yalnız 2 kez**
+(oran **2,0 × 10⁻⁸**). Yani `<INSTRUCTION> … <OUTPUT>` zarfı bu modelin
+**dağılımında yoktur**; zarfı verip cevap beklemek **dağılım dışı** bir istektir.
+Bu checkpoint **metni sürdürür**; **soru cevaplamaz**.
+
+### Bugün çalışmayan yollar (ölçüldü — sessizce yanlış sonuç vermezler, sesli dururlar)
+
+| Betik | Neden çalışmaz |
+|---|---|
+| `test_model.py` | `data/vocab.json` (31.357) sabit-kodlu ⇒ şekil uyuşmazlığı; ayrıca `data/kristal_model.pt` (silinmiş) okur ve dosya yoksa **sessizce `return` eder** |
+| `chat_prompt.py` | Aynı iki kusur; `--model` bayrağı **var** ama `--vocab` bayrağı **yok** ⇒ sözlük değiştirilemez |
+
 ---
 
 ## 📑 İçindekiler
+0. [Anka A1-r — ölçülmüş çıkarım komutu](#️-anka-a1-r--ölçülmüş-çıkarım-komutu-taban-model-devam-üretimi)
 1. [Gereksinimler ve Kurulum](#1-gereksinimler-ve-kurulum)
 2. [Etkileşimli CLI ile Sohbet ve Analiz (`chat_prompt.py`)](#2-etkileşimli-cli-ile-sohbet-ve-analiz)
 3. [Model Eğitimi ve İnce Ayar (`train.py`)](#3-model-eğitimi-ve-i̇nce-ayar)
@@ -97,12 +201,42 @@ Modelin ana eğitim döngüsü `train.py` betiği üzerinden yönetilir. Causal 
 | Parametre | Varsayılan | Açıklama |
 |---|---|---|
 | `--data <yol>` | `data/train.bin` | Eğitilecek ikili veri dosyasının yolu (`.meta.json` ile blok boyutu otomatik algılanır). |
-| `--load-path <yol>` | `--save-path` | Eğitime devam edilecek temel model ağırlık dosyası (örn: `data/kristal_model.pt`). |
-| `--save-path <yol>` | `data/kristal_model.pt` | Eğitilen yeni ağırlıkların kaydedileceği dosya yolu. |
+| `--load-path <yol>` | `--save-path` | Eğitime devam edilecek temel model ağırlık dosyası (örn: `data/anka_a1r.pt`). Verilmezse `--save-path`'e eşitlenir. |
+| `--save-path <yol>` | **ZORUNLU** (varsayılan **yok**) | Eğitilen yeni ağırlıkların kaydedileceği dosya yolu. Verilmezse koşum **başlamadan sesli olarak durur** (`RuntimeError`). |
 | `--steps <sayı>` | `100` | Çalıştırılacak optimizasyon adım sayısı. |
 | `--batch-size <sayı>` | `32` | Her adımdaki mini-batch boyutu. |
 | `--device <cihaz>` | `cpu` | Çalıştırılacak cihaz (`cpu`, `mps`, `cuda`). macOS'ta büyük sözlüklerde deadlock'u önlemek için varsayılan CPU'dur. |
 | `--from-scratch` | `False` | Mevcut ağırlıkları yüklemeden sıfırdan eğitim başlatır. |
+
+> **Not (damgalı ölçüm: 20 Eyl 2026).** Yukarıdaki tablo, `train.py`'nin **gerçek**
+> varsayılanlarını anlatır ve bu bakımdan **doğrudur** — ancak `--save-path`'in
+> varsayılanı hâlâ **silinmiş** `data/kristal_model.pt` adını taşımaktadır.
+> Yani buradaki kusur **belgede değil, kaynak kodun varsayılanındadır**; belge kodu
+> doğru anlattığı için "düzeltilmemiştir". Pratik sonuç: `--save-path`'i **açıkça
+> verin**; vermezseniz koşum o ada yazmaya çalışır ve `data/*.pt` donmuş desene
+> düştüğü için `check_frozen_save_path` **sesli** durur (sessiz değil).
+>
+> **GÜNCELLEME (T-0085 · damgalı ölçüm: 20 Eyl 2026) — yukarıdaki not artık
+> TARİHSELDİR; silinmedi, kendi damgasıyla korundu.** Ölçüldü ve düzeltildi:
+> `train.py`'deki silinmiş-zincir varsayılanı **kaldırıldı**; `--save-path` artık
+> **zorunludur**. Varsayılanı başka bir ada taşımak **reddedildi** (uydurma ad,
+> soyağacı belirsiz bir hedef yaratırdı); bunun yerine yol yokluğunda koşum
+> `RuntimeError` ile **durur**. Ölçülen iki dal:
+>
+> | Koşum | Ölçülen sonuç |
+> |---|---|
+> | `--save-path` **yok** | `RuntimeError: DURDURULDU: --save-path verilmedi…` · `rc=1` · **hiçbir dosya yazılmadı** |
+> | `--save-path data/zzz_kapi_testi.pt` (donmuş desen, `--allow-frozen-write` yok) | `RuntimeError: Donmuş yola yazma engellendi…` · `rc=1` · argüman kapısı **0 kez** ateşledi · dosya **yazılmadı** |
+>
+> İkinci satır **pozitif kontroldür**: argüman kapısı yalnız yoklukta ateşler,
+> varlığında sonraki kapıya (donmuş yol koruması) ilerler.
+>
+> **Sayaç ölçümü — harf duyarlılığı belirtilmelidir:** `train.py`'de **küçük harf**
+> `"kristal"` geçen satır sayısı **0**'dır; **harf-duyarsız** arama ise **4** satır
+> bulur. O 4 satır silinen zincir değil, **korunması gereken mimari sınıf adlarıdır**
+> (`KristalLM`, `KristalDataset` — [[mimari-korunur-kristallm]]). İki sayı
+> çelişmiyor; **ölçütleri farklı**. Emekli notu silinen yolu **adıyla anmadığı**
+> için de sayaç şişmemiştir ([[emekli-notu-sayaci-sisirir]]).
 
 ### Örnek Çalıştırma Senaryoları
 
