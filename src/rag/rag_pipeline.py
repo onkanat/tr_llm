@@ -222,8 +222,8 @@ class RagPipeline:
 
 def build_from_disk(
     lexicon_path: str = "data/lexicon/roots.tsv",
-    vocab_path: str = "data/vocab.json",
-    model_path: str = "data/kristal_model.pt",
+    vocab_path: Optional[str] = None,
+    model_path: Optional[str] = None,
     collection_name: str = "simulasyon_bellek",
     vector_size: int = 768,
     host: str = "localhost",
@@ -231,7 +231,25 @@ def build_from_disk(
     device: Optional[torch.device] = None,
     threshold: float = RAG_MATCH_THRESHOLD,
 ) -> RagPipeline:
-    """Bileşenleri diskten yükler ve RagPipeline örneği döndürür."""
+    """Bileşenleri diskten yükler ve RagPipeline örneği döndürür.
+
+    FAIL-CLOSED (T-0087): `vocab_path` ve `model_path` VARSAYILANI KALDIRILDI.
+    Gerekce (olculdu): eski varsayilanlar (a) SILINMIS bir checkpoint adini tasiyordu,
+    (b) BAYAT bir sozluge (data/vocab.json, 31.357) isaret ediyordu ve checkpoint'i
+    SESSIZCE kirpiyordu. Ikisi de ACIKCA verilmelidir.
+    """
+    if not model_path:
+        raise RuntimeError(
+            "DURDURULDU: model_path verilmedi. Varsayilan KALDIRILDI (T-0087): eski "
+            "varsayilan silinmis bir checkpoint zincirinin adini tasiyordu. "
+            "Or. model_path='data/anka_a1r.pt'")
+    if not vocab_path:
+        raise RuntimeError(
+            "DURDURULDU: vocab_path verilmedi. Varsayilan KALDIRILDI (T-0087): eski "
+            "varsayilan BAYAT bir sozluktu (data/vocab.json, 31.357) ve checkpoint'i "
+            "SESSIZCE kirpiyordu. Sozluk, checkpoint satir sayisiyla AYNI olmalidir; "
+            "or. vocab_path='data/rebuild/vocab_anka_r1_33114.json'")
+
     # 1. Load compiler modules
     lexicon = LexiconManager()
     lexicon.load_from_tsv(lexicon_path)
@@ -289,6 +307,21 @@ def build_from_disk(
     for k in keys_to_skip:
         del state_dict[k]
 
+    # SOZLUK <-> CHECKPOINT TUTARLILIK KAPISI (T-0087). Gerekce OLCULDU: uyusmazlikta
+    # resize_state_dict satirlari KIRPIYOR ve kosum DURMUYOR (bkz. K4 raporu).
+    _emb = state_dict.get("embedding.embedding.weight")
+    if _emb is None:
+        raise RuntimeError(
+            f"DURDURULDU: checkpoint'te 'embedding.embedding.weight' yok ({model_path}); "
+            "sozluk uyumu DOGRULANAMAZ.")
+    if int(_emb.shape[0]) != len(vocab.stoi):
+        raise RuntimeError(
+            f"DURDURULDU: sozluk/checkpoint UYUSMAZLIGI (T-0087). "
+            f"sozluk={vocab_path} ({len(vocab.stoi)} giris) != checkpoint={model_path} "
+            f"({int(_emb.shape[0])} satir), fark={int(_emb.shape[0]) - len(vocab.stoi)}. "
+            "Bu cift yurutulurse resize_state_dict satirlari KIRPAR ve kosum sessizce "
+            "devam eder. Eslesen sozlugu ACIKCA verin.")
+
     state_dict = resize_state_dict(model, state_dict)
     model.load_state_dict(state_dict, strict=False)
     model.to(device)
@@ -306,17 +339,36 @@ def build_from_disk(
 
 
 def main():
-    """CLI giriş noktası (USER_GUIDE.md:280 ekran çıktısı sözleşmesini korur)."""
+    """CLI giriş noktası (USER_GUIDE.md:280 ekran çıktısı sözleşmesini korur).
+
+    T-0087: `--model` ve `--vocab` ACIKCA verilmelidir — `build_from_disk` varsayilanlari
+    kaldirildi (silinmis checkpoint adi + bayat sozluk). Ilk bayraksiz arguman sorgudur.
+    """
     print("=" * 60)
     print(" VEKTÖREL GEZGİN: UÇTAN UCA RAG (ARAMA-ÜRETİM) HATTI SİMÜLASYONU")
     print("=" * 60)
 
-    print("\n[1] Qdrant vektörel belleğe bağlanılıyor...")
-    pipeline = build_from_disk()
+    model_path: Optional[str] = None
+    vocab_path: Optional[str] = None
+    query: str = "okul"
+    argv = sys.argv[1:]
+    i = 0
+    while i < len(argv):
+        if argv[i] in ("--model", "--model-path") and i + 1 < len(argv):
+            model_path = argv[i + 1]
+            i += 2
+            continue
+        if argv[i] == "--vocab" and i + 1 < len(argv):
+            vocab_path = argv[i + 1]
+            i += 2
+            continue
+        if not argv[i].startswith("--"):
+            query = argv[i]
+        i += 1
 
-    query = "okul"
-    if len(sys.argv) > 1:
-        query = sys.argv[1]
+    print("\n[1] Qdrant vektörel belleğe bağlanılıyor...")
+    pipeline = build_from_disk(model_path=model_path, vocab_path=vocab_path)
+
     print(f"\n[Girdi Sorgu]: '{query}'")
 
     query_token_ids, query_tags, dense_vec, sparse_vec = build_query_vectors(query, pipeline.tokenizer)

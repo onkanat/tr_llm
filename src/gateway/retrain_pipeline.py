@@ -92,19 +92,40 @@ class RetrainPipeline:
         self,
         future_train_path: str = "data/future_train_vector.jsonl",
         archive_path: str = "data/future_train_archive.jsonl",
-        vocab_path: str = "data/vocab.json",
+        vocab_path: Optional[str] = None,
         lexicon_path: str = "data/lexicon/roots.tsv",
-        model_path: str = "data/kristal_model.pt",
+        model_path: Optional[str] = None,
         output_bin_path: str = "data/train_future_finetune.bin",
+        save_path: Optional[str] = None,
+        allow_frozen_write: bool = False,
         device: str = "cpu"
     ):
+        """T-0087 (FAIL-CLOSED): `vocab_path`, `model_path` ve `save_path` VARSAYILANI
+        KALDIRILDI. Gerekce (olculdu): eski `model_path` varsayilani SILINMIS bir
+        checkpoint adiydi ve deger yalnizca SOYAGACI kaydina yaziliyordu; eski
+        `vocab_path` varsayilani BAYAT bir sozluktu (data/vocab.json, 31.357) ve
+        derlenen .bin'i o sozlukle uretiyordu. `save_path` ise HIC YOKTU: `run_training`
+        `train.py`'yi `--save-path` OLMADAN cagiriyordu ve T-0085'in fail-closed kapisi
+        bu yolu zaten oldurmustu (bkz. rapor K5). Ucu de ACIKCA verilmelidir."""
         self.future_train_path = future_train_path
         self.archive_path = archive_path
         self.vocab_path = vocab_path
         self.lexicon_path = lexicon_path
         self.model_path = model_path
         self.output_bin_path = output_bin_path
+        self.save_path = save_path
+        self.allow_frozen_write = allow_frozen_write
         self.device = device
+
+    @staticmethod
+    def _zorunlu(deger: Optional[str], ad: str, ornek: str) -> str:
+        """Varsayilani kaldirilmis parametreyi fail-closed dogrular (saf fonksiyon)."""
+        if not deger:
+            raise RuntimeError(
+                f"DURDURULDU: {ad} verilmedi. Varsayilan KALDIRILDI (T-0087): "
+                f"eski varsayilanlar silinmis bir checkpoint adi ve BAYAT bir sozluk "
+                f"tasiyordu. ACIKCA verin, or. {ad}={ornek}")
+        return deger
 
     def get_pending_count(self) -> int:
         """Returns the number of pending samples in future_train_vector.jsonl."""
@@ -122,12 +143,19 @@ class RetrainPipeline:
         """
         Reads future_train_vector.jsonl, tokenizes all records into morpheme token IDs,
         oversamples them so the small model sees enough gradient steps, and writes to uint16 .bin file.
+
+        T-0087 (FAIL-CLOSED): `vocab_path` ZORUNLU ve kapisi EN BAŞTA çalışır — eksik
+        argüman, veri dosyasının varlığından ÖNCE raporlanır (yapılandırma hatası, veri
+        hatasından önce gelir; ölçüldü: aksi sırada test fikstürü FileNotFoundError alıyordu).
         """
+        vocab_path = self._zorunlu(self.vocab_path, "vocab_path",
+                                   "'data/rebuild/vocab_anka_r1_33114.json'")
+
         if not os.path.exists(self.future_train_path):
             raise FileNotFoundError(f"'{self.future_train_path}' bulunamadı.")
 
         vocab = Vocabulary()
-        vocab.load(self.vocab_path)
+        vocab.load(vocab_path)
         lexicon = LexiconManager()
         lexicon.load_from_tsv(self.lexicon_path)
         compiler = CrystalCompiler(lexicon, build_default_graph())
@@ -210,7 +238,15 @@ class RetrainPipeline:
         """
         Executes fine-tuning using train.py on the compiled binary dataset.
         Archives trained records upon success.
+
+        T-0087 (FAIL-CLOSED): `model_path` (soyagaci sozlesmesi) ve `save_path`
+        (T-0085'ten sonra `train.py`'nin ZORUNLU kayit hedefi) ACIKCA verilmelidir.
+        Kontroller `compile_backlog_to_bin`'DEN ONCE calisir ⇒ eksik argumanda
+        HICBIR YAZIM olmaz.
         """
+        self._zorunlu(self.model_path, "model_path", "'data/anka_a1r.pt'")
+        save_path = self._zorunlu(self.save_path, "save_path", "'data/anka_a2.pt'")
+
         bin_path, sample_count = self.compile_backlog_to_bin(block_size=block_size)
 
         python_bin = sys.executable
@@ -223,8 +259,13 @@ class RetrainPipeline:
             "--steps", str(steps),
             "--batch-size", str(batch_size),
             "--lr", str(learning_rate),
-            "--device", self.device
+            "--device", self.device,
+            "--save-path", save_path
         ]
+        # Donmus hedefe yazim OPERATOR onayi ister: bayrak yalnizca cagiran acikca
+        # istediyse gecilir; aksi halde train.py'nin kendi kapisi kosumu durdurur.
+        if self.allow_frozen_write:
+            cmd.append("--allow-frozen-write")
 
         start_time = datetime.now(timezone.utc)
         result = subprocess.run(

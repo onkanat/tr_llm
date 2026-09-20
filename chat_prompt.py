@@ -89,6 +89,22 @@ def load_model_instance(model_path: str, vocab_size: int, vocab: Vocabulary, dev
     keys_to_skip = [k for k in state_dict.keys() if "cos_cached" in k or "sin_cached" in k or "mask" in k]
     for k in keys_to_skip:
         del state_dict[k]
+
+    # SOZLUK <-> CHECKPOINT TUTARLILIK KAPISI (T-0087). Gerekce OLCULDU: uyusmazlikta
+    # resize_state_dict satirlari KIRPIYOR ve kosum DURMUYOR (bkz. K4 raporu).
+    _emb = state_dict.get("embedding.embedding.weight")
+    if _emb is None:
+        raise RuntimeError(
+            f"DURDURULDU: checkpoint'te 'embedding.embedding.weight' yok ({model_path}); "
+            "sozluk uyumu DOGRULANAMAZ.")
+    if int(_emb.shape[0]) != vocab_size:
+        raise RuntimeError(
+            f"DURDURULDU: sozluk/checkpoint UYUSMAZLIGI (T-0087). "
+            f"checkpoint={model_path} ({int(_emb.shape[0])} satir) != sozluk "
+            f"({vocab_size} giris), fark={int(_emb.shape[0]) - vocab_size}. "
+            "Bu cift yurutulurse resize_state_dict satirlari KIRPAR ve kosum sessizce "
+            "devam eder. Eslesen sozlugu ACIKCA verin (--vocab).")
+
     state_dict = resize_state_dict(model, state_dict)
     load_res = model.load_state_dict(state_dict, strict=False)
     if load_res.missing_keys or load_res.unexpected_keys:
@@ -281,10 +297,22 @@ def main():
     device = torch.device("mps" if torch.backends.mps.is_available() else "cpu")
     
     # Load Vocabulary
+    # FAIL-CLOSED (T-0087): varsayilan KALDIRILDI. Eski varsayilan 'data/vocab.json'
+    # (31.357 giris) BAYATTI: guncel checkpoint 33.114 satirdir ve uyusmazlikta
+    # resize_state_dict satirlari SESSIZCE kirpar. --vocab ACIKCA verilmelidir.
     vocab = Vocabulary()
-    vocab_path = 'data/vocab.json'
+    vocab_path = None
+    for arg_idx, arg in enumerate(sys.argv):
+        if arg == "--vocab" and arg_idx + 1 < len(sys.argv):
+            vocab_path = sys.argv[arg_idx + 1]
+    if not vocab_path:
+        print(f"{C_RED}Hata: --vocab verilmedi. Varsayilan KALDIRILDI (T-0087): eski "
+              f"varsayilan 'data/vocab.json' (31.357) BAYATTI ve checkpoint'i sessizce "
+              f"kirpiyordu. Sozluk, checkpoint satir sayisiyla AYNI olmalidir; or. "
+              f"--vocab data/rebuild/vocab_anka_r1_33114.json{C_RESET}")
+        sys.exit(2)
     if not os.path.exists(vocab_path):
-        print(f"{C_RED}Hata: {vocab_path} bulunamadı! Lütfen önce verileri derleyin.{C_RESET}")
+        print(f"{C_RED}Hata: Sözlük dosyası '{vocab_path}' bulunamadı! Lütfen önce verileri derleyin.{C_RESET}")
         return
     vocab.load(vocab_path)
     vocab_size = len(vocab.stoi)
@@ -306,11 +334,19 @@ def main():
     general_memory = VectorMemory(collection_name="simulasyon_bellek", vector_size=768, host="localhost", port=6333, storage_path="data/qdrant_db")
     
     # Initial Model Selection
-    model_path = 'data/kristal_model.pt'
+    # FAIL-CLOSED (T-0087): varsayilan KALDIRILDI. Eski varsayilan silinmis Kristal
+    # checkpoint zincirinin adini tasiyordu (Kristal zinciri operator karariyla silindi,
+    # 18 Eyl 2026). --model/--model-path ACIKCA verilmelidir.
+    model_path = None
     for arg_idx, arg in enumerate(sys.argv):
         if arg in ("--model", "--model-path") and arg_idx + 1 < len(sys.argv):
             model_path = sys.argv[arg_idx + 1]
 
+    if not model_path:
+        print(f"{C_RED}Hata: --model verilmedi. Varsayilan KALDIRILDI (T-0087): eski "
+              f"varsayilan silinmis bir checkpoint zincirinin adini tasiyordu. "
+              f"Or. --model data/anka_a1r.pt{C_RESET}")
+        sys.exit(2)
     if not os.path.exists(model_path):
         print(f"{C_RED}Hata: Eğitilmiş model dosyası '{model_path}' bulunamadı!{C_RESET}")
         return
@@ -421,28 +457,15 @@ def main():
                     parts = c_clean.split(maxsplit=1)
                     new_path = ""
                     if len(parts) > 1:
-                        arg = parts[1].strip()
-                        if arg == "1":
-                            new_path = "data/kristal_model.pt"
-                        elif arg == "2":
-                            new_path = "data/kristal_carpenter_model.pt"
-                        else:
-                            new_path = arg
+                        new_path = parts[1].strip()
                     else:
+                        # EMEKLİ (T-0087): menü artık SİLİNMİŞ checkpoint adlarını (Kristal
+                        # zinciri, operatör kararı 18 Eyl 2026) SEÇENEK olarak sunmuyor.
+                        # Eski menü "1"/"2" seçenekleri ölü yolları gösteriyor, seçilince
+                        # yalnızca "bulunamadı" basıyordu ⇒ kullanıcıyı ölü yola yönlendiren
+                        # CANLI bir ölü atıf sitesiydi. Tek yol: dosya yolunu AÇIKÇA sormak.
                         print(f"\n{C_BOLD}Aktif Model:{C_RESET} {C_CYAN}{model_path}{C_RESET}")
-                        print(f"  1. Temel Lise & Tarih Modeli (data/kristal_model.pt)")
-                        print(f"  2. Marangozluk Uzmanlık Modeli (data/kristal_carpenter_model.pt)")
-                        print(f"  3. Özel Dosya Yolu Gir...")
-                        m_choice = input(f"{C_YELLOW}Seçiminiz (1-3): {C_RESET}").strip()
-                        if m_choice == "1":
-                            new_path = "data/kristal_model.pt"
-                        elif m_choice == "2":
-                            new_path = "data/kristal_carpenter_model.pt"
-                        elif m_choice == "3":
-                            new_path = input("Model dosya yolunu girin: ").strip()
-                        else:
-                            return True
-                        
+                        new_path = input(f"{C_YELLOW}Yeni model dosya yolu (boş = vazgeç): {C_RESET}").strip()
                     if new_path and os.path.exists(new_path):
                         print(f"  {C_CYAN}Model yükleniyor: {new_path}...{C_RESET}")
                         model = load_model_instance(new_path, vocab_size, vocab, device)
@@ -510,7 +533,12 @@ def main():
 
                 # Build multi-turn context
                 inst_text = "Yardımsever bir uzman olarak Türkçe cevapla."
-                if "kristal_carpenter" in model_path:
+                if "carpenter" in model_path:
+                    # EMEKLİ (T-0087): eski koşul `"kristal_carpenter" in model_path` idi ve
+                    # Kristal zinciri silindikten sonra (18 Eyl 2026) HİÇBİR yolda eşleşemez
+                    # ⇒ dal ÖLÜYDÜ, marangoz talimatı sessizce hiç uygulanmıyordu. Ölü öneki
+                    # (`kristal_`) kaldırmak davranışı geri getirir; yeni bir ad kuralı
+                    # uydurulmadı.
                     inst_text = "Ahşap ve marangozluk uzmanı olarak cevapla."
 
                 # Construct prompt with recent turns
@@ -579,11 +607,13 @@ def main():
                 if handle_common_commands(word_input):
                     continue
 
-                # P2.8 Tekil Bilişsel Model Yönlendirmesi (Vector Rover İlkesi)
-                if "kristal_model.pt" not in model_path and os.path.exists("data/kristal_model.pt"):
-                    print(f"  {C_CYAN}[Tekil Bilişsel Model] Temel Kristal-Vektörel modeli (kristal_model.pt) devrede.{C_RESET}")
-                    model = load_model_instance("data/kristal_model.pt", vocab_size, vocab, device)
-                    model_path = "data/kristal_model.pt"
+                # EMEKLİ (T-0087): "Tekil Bilişsel Model Yönlendirmesi" bloğu KALDIRILDI.
+                # Eski blok, `os.path.exists` kapısıyla `data/kristal_model.pt` dosyasına
+                # bakıyor ve VARSA modeli SESSİZCE ona çeviriyordu. Kristal zinciri 18 Eyl
+                # 2026'da operatör kararıyla silindi ⇒ blok zaten ölü koddur; ayrıca aynı
+                # sözlükle İKİNCİ bir checkpoint'e sessizce geçmek T-0087'nin kapattığı
+                # "sessiz model değiştirme" sınıfına girer. Yerine bir şey konmadı:
+                # model seçimi artık YALNIZ `--model` iledir (yukarıda, fail-closed).
 
                 # RAG Task & Knowledge Grounding
                 is_knowledge_task = (selected_inst == "Belgeye göre cevapla.") or is_open_ended or any(k in selected_inst.lower() for k in ["uzmanı", "belge", "tarih", "marangoz", "fen", "edebiyat", "açıkla", "cevapla"])

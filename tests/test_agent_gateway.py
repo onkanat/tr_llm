@@ -149,6 +149,7 @@ class TestAgentGateway(unittest.TestCase):
         pipeline = RetrainPipeline(
             future_train_path=self.future_file,
             archive_path=self.archive_file,
+            vocab_path="data/rebuild/vocab_anka_r1_33114.json",
             output_bin_path=self.bin_file
         )
         self.assertEqual(pipeline.get_pending_count(), 2)
@@ -186,8 +187,42 @@ class TestAgentGateway(unittest.TestCase):
     def test_canary_create_default_raises_on_missing_model(self):
         # Bu test, model checkpoint'i bulunamadığında sessizce rastgele modelle açılmak yerine
         # gürültülü bir biçimde FileNotFoundError fırlatıldığını doğrular.
+        # T-0087: `vocab_path` artık ZORUNLU; kapi model yoluna ULASMADAN durmasin diye
+        # gecerli sozluk ACIKCA verilir.
         with self.assertRaises(FileNotFoundError):
-            AgentGateway.create_default(model_path="/tmp/nonexistent_model_file_canary.pt")
+            AgentGateway.create_default(
+                model_path="/tmp/nonexistent_model_file_canary.pt",
+                vocab_path="data/rebuild/vocab_anka_r1_33114.json"
+            )
+
+    def test_canary_create_default_varsayilanlar_kaldirildi(self):
+        """T-0087 (FAIL-CLOSED): `create_default` varsayilanlari KALDIRILDI.
+
+        Argumansiz cagri SESSIZCE bayat sozluge (data/vocab.json, 31.357) veya olu
+        checkpoint yoluna DUSMEZ; RuntimeError ile durur. Sozluk verilip model
+        verilmezse de durur (iki kapi BAGIMSIZ olarak sinanir).
+        """
+        with self.assertRaises(RuntimeError):
+            AgentGateway.create_default()
+        with self.assertRaises(RuntimeError):
+            AgentGateway.create_default(model_path="data/anka_a1r.pt")
+
+    def test_canary_retrain_pipeline_varsayilanlar_kaldirildi(self):
+        """T-0087 (FAIL-CLOSED): `RetrainPipeline` sozluk/model/save varsayilanlari KALDIRILDI.
+
+        Sozluk yuklemesi ve egitim ZORUNLU arguman verilmeden BASLAMAZ: eksik argumanda
+        `compile_backlog_to_bin` hicbir sey YAZMAZ (bkz. K3).
+        """
+        pipeline = RetrainPipeline(
+            future_train_path=self.future_file,
+            archive_path=self.archive_file,
+            output_bin_path=self.bin_file
+        )
+        with self.assertRaises(RuntimeError):
+            pipeline.compile_backlog_to_bin(block_size=32)
+        with self.assertRaises(RuntimeError):
+            pipeline.run_training(steps=1)
+        self.assertFalse(os.path.exists(self.bin_file))
 
     def test_canary_load_eval_model_raises_on_missing_checkpoint(self):
         # Bu test, değerlendiricilerde model checkpoint'i bulunamadığında

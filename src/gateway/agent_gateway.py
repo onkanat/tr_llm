@@ -77,16 +77,36 @@ class AgentGateway:
     @classmethod
     def create_default(
         cls,
-        model_path: str = "data/kristal_model.pt",
-        vocab_path: str = "data/vocab.json",
+        model_path: Optional[str] = None,
+        vocab_path: Optional[str] = None,
         lexicon_path: str = "data/lexicon/roots.tsv",
         storage_path: str = "data/qdrant_db",
         device: str = "cpu"
     ) -> "AgentGateway":
-        """Factory method to load and build the complete default Gateway stack."""
+        """Factory method to load and build the complete default Gateway stack.
+
+        FAIL-CLOSED (T-0087): `model_path` ve `vocab_path` VARSAYILANI KALDIRILDI.
+        Gerekce (olculdu): eski varsayilanlar (a) SILINMIS bir checkpoint zincirinin
+        adini tasiyordu ve (b) BAYAT bir sozluge (data/vocab.json, 31.357) isaret
+        ediyordu; (b) checkpoint'in sessizce kirpilmasina yol aciyordu. Ikisi de
+        artik ACIKCA verilmelidir; verilmezse kosum BURADA durur.
+        """
         from scripts.train_step_demo import KristalLM
         from src.llm.prompt_contract import resize_state_dict
-        
+
+        if not model_path:
+            raise RuntimeError(
+                "DURDURULDU: model_path verilmedi. Varsayilan KALDIRILDI (T-0087): eski "
+                "varsayilan, silinmis bir checkpoint zincirinin adini tasiyordu. "
+                "Or. model_path='data/anka_a1r.pt'")
+        if not vocab_path:
+            raise RuntimeError(
+                "DURDURULDU: vocab_path verilmedi. Varsayilan KALDIRILDI (T-0087): eski "
+                "varsayilan BAYAT bir sozluktu (data/vocab.json, 31.357) ve checkpoint'i "
+                "SESSIZCE kirpiyordu. Sozluk, checkpoint satir sayisiyla AYNI olmalidir; "
+                "or. vocab_path='data/rebuild/vocab_anka_r1_33114.json'")
+
+
         # Load Vocab
         vocab = Vocabulary()
         vocab.load(vocab_path)
@@ -122,6 +142,26 @@ class AgentGateway:
         keys_to_skip = [k for k in state_dict.keys() if "cos_cached" in k or "sin_cached" in k or "mask" in k]
         for k in keys_to_skip:
             del state_dict[k]
+
+        # SOZLUK <-> CHECKPOINT TUTARLILIK KAPISI (T-0087). Gerekce OLCULDU:
+        # uyusmazlikta resize_state_dict satirlari KIRPIYOR ve kosum DURMUYOR; hemen
+        # ardindan gelen "tam eslesme (0 eksik, 0 fazla)" mesaji guven verip kirpmayi
+        # GIZLIYOR (bkz. veri/eval/anka_r10 raporu, K4). Ayrisan cift sessizce
+        # yurutulmez; burada DURULUR.
+        _emb = state_dict.get("embedding.embedding.weight")
+        if _emb is None:
+            raise RuntimeError(
+                f"DURDURULDU: checkpoint'te 'embedding.embedding.weight' yok ({model_path}); "
+                "sozluk uyumu DOGRULANAMAZ.")
+        _ckpt_satir = int(_emb.shape[0])
+        if _ckpt_satir != vocab_size:
+            raise RuntimeError(
+                f"DURDURULDU: sozluk/checkpoint UYUSMAZLIGI (T-0087). "
+                f"sozluk={vocab_path} ({vocab_size} giris) != checkpoint={model_path} "
+                f"({_ckpt_satir} satir), fark={_ckpt_satir - vocab_size}. "
+                "Bu cift yurutulurse resize_state_dict satirlari KIRPAR ve kosum sessizce "
+                "devam eder. Eslesen sozlugu ACIKCA verin.")
+
         state_dict = resize_state_dict(model, state_dict)
         load_res = model.load_state_dict(state_dict, strict=False)
         if load_res.missing_keys or load_res.unexpected_keys:

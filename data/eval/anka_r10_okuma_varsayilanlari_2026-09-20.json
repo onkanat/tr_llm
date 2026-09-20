@@ -1,0 +1,119 @@
+{
+  "gorev": "T-0087",
+  "baslik": "LIVE okuma varsayilanlari: olu model yolu + bayat sozluk — fail-closed",
+  "tarih": "2026-09-20",
+  "durum": "done",
+  "kapilar": {
+    "K1_kapsam": {"sonuc": "PASS", "kanit": "kapsam disi src/llm/prompt_contract.py:35 OLCULDU ve BEYAN EDILDI"},
+    "K2a_kristal_model_pt_olu_atif": {"sonuc": "PASS", "ham": 1, "emekli": 1, "olu": 0,
+      "not": "kalan tek ham satir kendi etiketli emekli notudur (EMEKLI (T-0087))"},
+    "K2b_kucuk_harf_kristal_sifir": {"sonuc": "ILAN_HATALI", "ham": 26, "emekli": 3, "olu": 23,
+      "not": "23 satir MESRU tanimlayicidir: generate_kristal_vector (9), kristal_bellek (12), kristal_count (2). Harfiyen imkansiz kapi; kusur kodda DEGIL ilanda. Kapi olcumden sonra DEGISTIRILMEDI."},
+    "K3_argumansiz_sesli_durma": {"sonuc": "PASS",
+      "siteler": {"chat_prompt.py": {"rc": 2, "kapi_mesaji": true},
+                  "AgentGateway.create_default()": {"rc": 1, "kapi_mesaji": true},
+                  "rag_pipeline.build_from_disk()": {"rc": 1, "kapi_mesaji": true},
+                  "rag_pipeline.__main__": {"rc": 1, "kapi_mesaji": true},
+                  "RetrainPipeline.run_training()": {"rc": 1, "kapi_mesaji": true},
+                  "RetrainPipeline.compile_backlog_to_bin()": {"rc": 1, "kapi_mesaji": true}},
+      "muhafiz": {"data_pt_bin_dosya": 25, "degisen": 0}},
+    "K3poz_argumanli_kapi_ateslemiyor": {"sonuc": "PASS",
+      "siteler": {"chat_prompt.py": {"rc": 0, "kapi_atasledi": false},
+                  "AgentGateway.create_default()": {"rc": 1, "kapi_atasledi": false, "neden": "FileNotFoundError (model yok)"},
+                  "rag_pipeline.build_from_disk()": {"rc": 1, "kapi_atasledi": false, "neden": "FileNotFoundError (model yok)"},
+                  "RetrainPipeline.run_training()": {"rc": 1, "kapi_atasledi": false},
+                  "RetrainPipeline.compile_backlog_to_bin()": {"rc": 0, "kapi_atasledi": false, "neden": "POZITIF KONTROL: derleme BASARILI, .bin yazildi"}}},
+    "K4_bayat_sozluk_davranisi": {"sonuc": "PASS", "hukum": "SESSIZ DEGIL, YUTUCU", "durdu": false,
+      "deney": {"kod": "git show HEAD:src/gateway/agent_gateway.py (duzeltme ONCESI uretim kodu, birebir)",
+                "cagri": "create_default(model_path='data/anka_a1r.pt', vocab_path='data/vocab.json')",
+                "ham_cikti": [
+                  "[SOYAGACI] yuklenen=.../data/anka_a1r.pt sha256=b93cc1cd54093fc63342d394abe528f2128dc16e20b4d7ac6ab680854b4d6293 anahtar=101",
+                  "[SOZLESME_UYARI] Parametre 'embedding.embedding.weight' boyut uyumsuzlugu: eski (33114, 768) -> yeni (31357, 768) (1757 satir kirpildi (clipping))",
+                  "[SOZLESME_UYARI] Parametre 'lm_head.weight' boyut uyumsuzlugu: eski (33114, 768) -> yeni (31357, 768) (1757 satir kirpildi (clipping))",
+                  "[SOZLESME_UYARI] Parametre 'lm_head.bias' boyut uyumsuzlugu: eski (33114,) -> yeni (31357,) (1757 satir kirpildi (clipping))",
+                  "[SOYAGACI] strict=False ile yuklendi: tam eslesme (0 eksik, 0 fazla).",
+                  "### SONUC: KOSUM DURMADI. model.embedding satir=31357",
+                  "### YANI: 1757 satir SESSIZCE atildi ve cagiran bunu GORMEDI."
+                ]},
+      "kontroller": [
+        {"cift": "data/vocab.json (31357) <-> anka_a1r.pt (33114)", "fark": 1757, "uyari": 3, "durdu": false},
+        {"cift": "vocab_base_32852.json (32852) <-> anka_a1r.pt", "fark": 262, "uyari": 3, "durdu": false},
+        {"cift": "vocab_anka_r1_33114.json (33114) <-> anka_a1r.pt", "fark": 0, "uyari": 0, "durdu": false}
+      ],
+      "karar": "Kapi resize_state_dict'in ICINE degil YUKLEME SITELERINE konuldu: orada satir EKLEME (sicak baslangic) mesru yoldur, KIRPMA her zaman sozlesme ihlalidir."},
+    "K5_cagiran_tablosu": {"sonuc": "PASS", "kirilan_calisan_cagiran": 0,
+      "satirlar": [
+        {"cagiran": "scripts/prepare_turk_tarihi_pipeline.py:184", "yaslandigi": "model+vocab", "sonuc": "zaten oluydu (varsayilan silinmis checkpoint); FileNotFoundError -> RuntimeError", "kirilma": false},
+        {"cagiran": "scripts/train_literature_specialization.py:54", "yaslandigi": "model+vocab", "sonuc": "ayni", "kirilma": false},
+        {"cagiran": "scripts/run_agent_arena.py:49", "yaslandigi": "--model varsayilani data/kristal_model.pt", "sonuc": "acik arguman olarak geciyor; davranis DEGISMEDI", "kirilma": false},
+        {"cagiran": "scripts/run_agent_arena.py:81", "yaslandigi": "vocab+model+save", "sonuc": "run_training cagrilirsa derlemeden ONCE durur (olculdu rc=1)", "kirilma": false},
+        {"cagiran": "scripts/run_goal_pipeline.py:177,309,387,402", "yaslandigi": "acik olu yollar", "sonuc": "davranis DEGISMEDI", "kirilma": false},
+        {"cagiran": "src/rag/rag_pipeline.py __main__", "yaslandigi": "model+vocab", "sonuc": "KOD DEGISTI: --model/--vocab geciyor", "kirilma": false},
+        {"cagiran": "src/gateway/pedagogical_supervisor.py:631,878", "yaslandigi": "vocab+model+save", "sonuc": "T-0085'ten beri zaten olu; durma ONE ALINDI, data/train_future_finetune.bin artik YAZILMIYOR", "kirilma": false},
+        {"cagiran": "tests/test_agent_gateway.py:149", "yaslandigi": "vocab", "sonuc": "GUNCELLENDI (gorev kapsami)", "kirilma": false}
+      ]},
+    "K6_pytest": {"sonuc": "PASS", "olculen": "1 failed, 215 passed in 11.34s",
+      "ilan_edilen": "213 passed, 1 failed",
+      "sapma": "+2 test (bu gorevde eklenen 2 canary: 213+2=215). Sapma BEYAN EDILIR.",
+      "dusen_test": "tests/test_agent_gateway.py::TestAgentGateway::test_gateway_http_server_endpoints",
+      "dusme_nedeni": "sandbox soket yasagi (socketserver PermissionError [Errno 1] Operation not permitted)",
+      "ara_kosum_kaniti": "kapi sirasi kusuru duzeltilmeden ONCE: 2 failed, 214 passed — dusen ikinci test benim yeni canary'imdi (silinmedi, kanit)"},
+    "K7_git_disiplini": {"sonuc": "PASS", "git_add_A": false, "commit": false, "push": false,
+      "changed_files_iki_yonlu": true, "len_cf": 8, "len_set_cf": 8,
+      "yollar": ["chat_prompt.py", "src/gateway/agent_gateway.py", "src/gateway/retrain_pipeline.py",
+                 "src/rag/rag_pipeline.py", "tests/test_agent_gateway.py",
+                 "data/eval/anka_r10_okuma_varsayilanlari_2026-09-20.md",
+                 "data/eval/anka_r10_okuma_varsayilanlari_2026-09-20.json",
+                 ".agent-bus/notes/T-0087.md"],
+      "onceden_kirli_olanlar": ["src/gateway/agent_gateway.py", "src/gateway/retrain_pipeline.py", "src/rag/rag_pipeline.py"],
+      "not": "Bu uc dosya gorev BASLAMADAN once de degistirilmisti (T-0081/T-0085 isleri); bu gorevde UZERINE yazildi. Ayrica oturum basinda M olan .agent-bus/SPEC.md, README.md, USER_GUIDE.md, train.py bu gorevde DOKUNULMADI."}
+  },
+  "curutmeler": {
+    "curutme_1": {"ilan": "Varsayilana yaslanan CALISAN bir repo-ici cagirani kirarsa duzeltme YANLISTIR.", "sonuc": "GERCEKLESMEDI",
+      "kanit": "sekiz cagri yeri olculdu; yaslananlarin hepsi ya zaten oluydu ya da argumani acikca geciyor"},
+    "curutme_2": {"ilan": "Kazanc yalniz mesaj kalitesiyse 'kusur duzeltildi' demek YANLIS olur.",
+      "sonuc": "MODEL YOLU: kazanc erkenlik + mesaj (eski varsayilan da FileNotFoundError veriyordu) · SOZLUK YOLU: kazanc GERCEK DAVRANIS (K4: durmuyor, 1757 satir atiliyor, son satir 'tam eslesme' diyor)"}
+  },
+  "kendi_kusurlarim": [
+    {"no": 1, "kusur": "Sonda tespit dizesinde harf hatasi: 'varsayilan KADIRILDI' (kucuk v) arandı; uretim 'Varsayilan KALDIRILDI' basiyor ⇒ ilk boolean tablo her satirda False", "etki": "Tablo yanlisti, mesajlar ekranda dururken; duzeltilmis tespitle yeniden olculdu", "aile": "etiket-adlari-buyuk-harf-tuzagi"},
+    {"no": 2, "kusur": "Kapi sirasi: compile_backlog_to_bin'de vocab kapi future_train_path varlik kontrolunun ALTINDA idi", "etki": "Yeni canary testim dustu (214 passed, 2 failed). Duzeltme: yapilandirma hatasi veri hatasindan ONCE. Ara kosum kaniti saklandi"},
+    {"no": 3, "kusur": "Olculemez bir kapi ilan ettim (K2b)", "etki": "Kusur kodda degil ILANDA; kapi olcumden sonra degistirilmedi, rapora yazildi"},
+    {"no": 4, "kusur": "T-0086 aracinin emekli ayiklamasi s.startswith('#') — GIRINTILI yorum blogunu gormuyor", "etki": "Fonksiyon icindeki etiketli not sayactan cikarilmiyor: olculdu emekli=0 (arac) vs 1 (dogru kural s.strip()). Arac DEGISTIRILMEDI ve yeniden KOSULMADI (cikti yolu tarihsel artefakt)"},
+    {"no": 5, "kusur": "Sartname kapsami eksikti: 'dort site' denmisti", "etki": "chat_prompt.py icinde IKI CANLI olu-path sitesi daha olcumle bulundu; kapsama BEYAN EDILEREK alindi"}
+  ],
+  "ek_kapsam_beyani": [
+    "/model menusu silinmis checkpoint'leri SECENEK olarak sunuyordu (CANLI olu atif sitesi) ⇒ emekliye ayrildi",
+    "'kristal_carpenter' in model_path koşulu Kristal zinciri silinince HIC ESLEMEZ hale gelmisti ⇒ marangoz talimati sessizce uygulanmiyordu; olu onek kaldirildi"
+  ],
+  "degisen_dosyalar": {
+    "chat_prompt.py": "21c10b5faa7194527fac22b24eb4ef8045333a22d1fe6125797639589048f1dc",
+    "src/gateway/agent_gateway.py": "fd1226f776629c14e82bc6943da108f3eac790ecc332d58481a749a5e0d1c920",
+    "src/gateway/retrain_pipeline.py": "7cbe4075c66ebd44aa6db0d1673fda7f6ca0a0a37f6e4f2875581d3b3f1634bd",
+    "src/rag/rag_pipeline.py": "5f9b238063d5c080680056730076d1e5c2409ed808a5ad89ac7d32bf2782c854",
+    "tests/test_agent_gateway.py": "c55c7b44b7a0ddb0d5be31f03b9d5e64df2cdf3ce89012a1491958871dbb85e5",
+    ".agent-bus/notes/T-0087.md": "8432b58ad8695b5ee9b49a325a295da605ddcb890ccc326e91f8f8932de2f3ca"
+  },
+  "referans_artefaktlar": {
+    "data/anka_a1r.pt": "b93cc1cd54093fc63342d394abe528f2128dc16e20b4d7ac6ab680854b4d6293",
+    "data/anka_a1.pt": "f32d492d9361c668bc86e4e4b0f99f5c473af552486837452475f8b0aa3eb5b4",
+    "data/vocab.json": "4b40eebee9c996c8dd3150f6b3c8896de85764ee1cf0b08e6c636e5c002a0e69",
+    "data/rebuild/vocab_base_32852.json": "7611b6a523a2bb524cc21aa9cc64235aa6a2ae99f87f46ac51cb2915e61164ad",
+    "data/rebuild/vocab_anka_r1_33114.json": "f9940a8d8e1f7cd9428d389f12ff4c5ee448e5a7bfcdcc8ecc9c616fce950984",
+    "data/train_future_finetune.bin": "80340a98b23381098bea27ec831e0c231e2efc8de4eca31396209fdfe15595ee",
+    "data/eval/t0069_pre_delete_manifest.json": "4e1c4d51a896936909b1750b52088e8939e03e966b42fd8ea84934e0993e6e61"
+  },
+  "dokunulmayan_guvence": {
+    "donmus_10_desen_yazim": 0,
+    "data_pt_bin_dosya": 25, "data_pt_bin_degisen": 0,
+    "data_rebuild_yazim": 0, "scripts_degisen": 0, "data_eval_tarihsel_degisen": 0,
+    "git_add_A": false, "commit": false, "push": false
+  },
+  "kapsam_disi": [
+    "src/llm/prompt_contract.py:35 bayat sozluk varsayilani (olculdu, ayri gorev)",
+    "scripts/run_agent_arena.py:49 --model varsayilani data/kristal_model.pt",
+    "scripts/run_goal_pipeline.py:177,309,387,402 acik olu yollar",
+    "T-0086 araci ve cikti artefakti (tarihsel kanit)",
+    "USER_GUIDE.md:6 TARİHSEL banner · aracin etiket sozlugu · 6bca90b push (operator yetkisi)"
+  ],
+  "hatalar": []
+}
