@@ -1,6 +1,6 @@
 # agent-bus — Ajanlar Arası Koordinasyon Protokolü
 
-**Sürüm:** 1.0 · **Tarih:** 2026-09-14 · **Durum:** **uygulandı ve çalışıyor** (`scripts/agent_bus_mcp.py`) · **son düzenleme:** 2026-09-19 (T-0081)
+**Sürüm:** 1.0 · **Tarih:** 2026-09-14 · **Durum:** **uygulandı ve çalışıyor** (`scripts/agent_bus_mcp.py`) · **son düzenleme:** 2026-09-20 (T-0082)
 
 İki ajan aynı repoda çalışır: **danışman** (Claude Code — analiz, doğrulama, kapı tasarımı)
 ve **yürütücü** (Antigravity — eğitim, refactor, betik, test).
@@ -45,7 +45,7 @@ eksikliğinden** geldi. Bu protokol o sınıfı kapatır.
   log/events.jsonl           # append-only denetim kaydı
 ```
 
-`state/` ve `log/` **sürümlenmez** (`.gitignore`); `SPEC.md`, `frozen.json`, `tasks/` ve `notes/` **sürümlenir** — *ancak bu bir NİYETTİR, ölçülen durum değildir.* 19 Eyl 2026 ölçümü: `.agent-bus/notes/` altında diskte **44** dosya var, **27'si izleniyor**, **17'si izlenmiyor** (`git status` → `??`). İzlenen aralık **T-0031…T-0061** (aralarda boşluklar var), izlenmeyen küme **T-0062…T-0077** + **T-0081**. Yani sürümleme **T-0061'de durmuş** ve bir daha başlamamıştır. Bir dosyanın `notes/` altında *durması* onun sürümlendiği anlamına **gelmez**; commit yetkisi operatördedir ve `git add -A` yasaktır (D8, T-0081). `notes/` yüzeyi `state/` ve `log/`'dan farklıdır; yürütücünün gerekçe zincirini repo içinde kalıcı ve keşfedilebilir kılar. Elle tutulan bir indeks dosyası yoktur; dizin listesi (`ls .agent-bus/notes/`) zaten indekstir.
+`state/` ve `log/` **sürümlenmez** (`.gitignore`); `SPEC.md`, `frozen.json`, `tasks/` ve `notes/` **sürümlenir** — *ancak bu bir NİYETTİR, ölçülen durum değildir.* **19 Eyl 2026 ölçümü:** `.agent-bus/notes/` altında diskte **44** dosya, **27'si izleniyor**, **17'si izlenmiyor** (`git status` → `??`); izlenmeyen küme **T-0062…T-0077** + **T-0081** ve sürümleme **T-0061'de durmuştu**. **Bu boşluk kapatıldı (ölçüldü, 20 Eyl 2026):** `6bca90b` commit'i `notes/` altına **tam 17 dosya** ekledi — 19 Eyl'de izlenmeyen kümenin **kendisi** ⇒ dizin artık **44/44 izleniyor, izlenmeyen 0**. Bu sayı **damgalıdır ve kalıcı DEĞİLDİR**: bu düzeltmeyi yapan görevin kendi notu (`T-0082.md`) yazıldığı anda dizinde yeniden **1 izlenmeyen** dosya oluşur. Kalıcı olan tek cümle şudur: **bir dosyanın `notes/` altında *durması* onun sürümlendiği anlamına GELMEZ**; sürümleme durumu **her turda yeniden ölçülür**, commit yetkisi operatördedir ve `git add -A` yasaktır (D8, T-0081 → kapanış T-0082). `notes/` yüzeyi `state/` ve `log/`'dan farklıdır; yürütücünün gerekçe zincirini repo içinde kalıcı ve keşfedilebilir kılar. Elle tutulan bir indeks dosyası yoktur; dizin listesi (`ls .agent-bus/notes/`) zaten indekstir.
 
 
 `tasks/` (kök altı, sürümlenir) ile `state/tasks/` (çalışma zamanı, sürümlenmez) kasıtlı
@@ -210,13 +210,22 @@ gerekir — bu, protokolün bilinen bir eksiğidir, sessiz bir tuzak değil.
 Bu bölüm **yalnız ölçülmüş** maddeleri taşır; her madde bir ölçüm tarihi ve sınanabilir bir
 iddia içerir. Ölçülüp **çürütülen** iddialar buraya yazılmaz (aşağıda listelenir).
 
-1. **`task_updated` olayı YOK.** `log/events.jsonl`'de 19 Eyl 2026 itibarıyla **1.174 olay**
-   ve **6 tip** vardır: `lease_acquired` (409) · `lease_released` (372) · `message_sent` (158)
-   · `result_reported` (87) · `task_claimed` (79) · `task_posted` (69). Bir görev
-   şartnamesinin (`spec`, `writes`, `acceptance`) **sonradan değişmesi hiçbir olay üretmez**;
-   bu yüzden kapsam genişletildiğinde denetim kaydı bunu **göstermez**. (Kaynakta
-   `task_updated` dizgesi **0** kez geçer.) Bu, kapsam genişletmelerinin **yazılı** bir
-   kaydını zorunlu kılar.
+1. **`task_updated` olayı YOK.** `log/events.jsonl`'de **19 Eyl 2026 ölçümü: 1.174 olay** /
+   **6 tip** (`lease_acquired` 409 · `lease_released` 372 · `message_sent` 158 ·
+   `result_reported` 87 · `task_claimed` 79 · `task_posted` 69). **20 Eyl 2026 yeniden
+   ölçümü: 1.191 satır**, tip sayısı hâlâ **6** ve aynı adlarla
+   (`lease_acquired` 409 · `lease_released` 384 · `message_sent` 161 · `result_reported` 89 ·
+   `task_claimed` 79 · `task_posted` 69) ⇒ **olay TİPİ olarak `task_updated` hâlâ yok**
+   (kaynakta `grep -c` = **0**). Bir görev şartnamesinin (`spec`, `writes`, `acceptance`)
+   **sonradan değişmesi hiçbir olay üretmez**; bu yüzden kapsam genişletildiğinde denetim
+   kaydı bunu **göstermez**.
+   ⚠ **Ölçüm tuzağı (ölçüldü, 20 Eyl 2026 — kayda geçer):** log artık `task_updated`
+   dizgesini **1 satırda** taşır; ama o satır bir olay **tipi** değil, **T-0081'in
+   `result_reported` kaydının `evidence` metni**dir — yani bu kusuru *anlatan* bir alıntı.
+   `grep task_updated log/events.jsonl` ile denetim yapan okuyucu bu yüzden
+   **yanlışlıkla "kusur kapandı"** sonucuna varır ⇒ iddia **kaynak** üzerinden
+   (`grep -c scripts/agent_bus_mcp.py`) sınanmalıdır, log üzerinden değil.
+   Bu, kapsam genişletmelerinin **yazılı** bir kaydını zorunlu kılar.
 2. **`read` bayrağı hiçbir zaman `true` yapılmaz.** `bus_send` mesajı `read: false` ile
    yazar; kaynakta `read` yalnızca **okunur**, onu `true`'ya çeviren bir yol **yoktur** ⇒
    `bus_inbox(unread_only=True)` pratikte **her** mesajı döndürür. "Okundu" bilgisi

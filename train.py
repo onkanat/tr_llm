@@ -146,7 +146,16 @@ def main():
     n_embd = 768
     model = KristalLM(vocab_size=vocab_size, n_embd=n_embd, vocab=vocab)
     
-    model_save_path = 'data/kristal_model.pt'
+    # EMEKLI (T-0085) — emekliye ayrılan VARSAYILAN, ilan edilen kümeden AYRILMIŞTIR.
+    # Burada eskiden `model_save_path = '<silinmiş zincir>.pt'` varsayılanı vardı. O
+    # checkpoint zinciri 18 Eyl 2026'da operatör kararıyla SİLİNDİ; varsayılan, silinmiş
+    # bir zincirin adını diriltiyordu ve `--save-path` verilmeden koşulduğunda koşum o
+    # ada yazmaya çalışıyordu.
+    # Varsayılanı BAŞKA BİR ADA TAŞIMAK REDDEDİLDİ: uydurma bir ad, hangi soyağacına ait
+    # olduğu belirsiz bir hedef yaratırdı. Bunun yerine varsayılan KALDIRILDI; kayıt yolu
+    # artık ZORUNLUDUR ve yokluğunda koşum SESLİ olarak durur (aşağıdaki kontrol).
+    # Not: `model_load_path` hâlâ None ise `model_save_path`e eşitlenir (mevcut davranış).
+    model_save_path = None
     model_load_path = None
     from_scratch = "--from-scratch" in sys.argv
     # Hedef modu: --pretrain ile prompt maskelemesi UYGULANMAZ, hedef duz sonraki-jetondur.
@@ -162,6 +171,15 @@ def main():
             model_save_path = sys.argv[arg_idx + 1]
         if arg in ("--load-path", "--base-model") and arg_idx + 1 < len(sys.argv):
             model_load_path = sys.argv[arg_idx + 1]
+
+    # FAIL-CLOSED ZORUNLU ARGUMAN KAPISI (T-0085). Gerekce: varsayilan kayit yolu
+    # KALDIRILDI (yukaridaki EMEKLI notu). Sessiz bir varsayilana dusmek yerine kosum
+    # BURADA durur. Bu kontrol her yazimdan ve egitim dongusunden ONCE calisir.
+    if model_save_path is None:
+        raise RuntimeError(
+            "DURDURULDU: --save-path verilmedi. Varsayilan kayit yolu KALDIRILDI (T-0085): "
+            "eski varsayilan, silinmis bir checkpoint zincirinin adini tasiyordu. "
+            "Kayit yolunu ACIKCA verin, or. --save-path data/anka_a2.pt")
 
     if model_load_path is None:
         model_load_path = model_save_path
