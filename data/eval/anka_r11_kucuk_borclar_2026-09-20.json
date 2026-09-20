@@ -1,0 +1,134 @@
+{
+  "gorev": "T-0088",
+  "baslik": "Küçük borçlar (4 kalem) — kapanış ölçüm kaydı",
+  "tarih": "2026-09-20",
+  "yurutucu": "claude",
+  "kapsam_kaynagi": "data/eval/anka_r10_okuma_varsayilanlari_2026-09-20.md §7 + §10",
+  "commit_edilmedi": true,
+  "egitim_kosusu": "YOK — hiçbir .pt/.bin üretilmedi",
+  "kalemler": {
+    "a_prompt_contract": {
+      "dosya": "src/llm/prompt_contract.py",
+      "once": "vocab_path: str = 'data/vocab.json' (31.357, BAYAT) + describe(config=None) sessiz varsayilan",
+      "sonra": "vocab_path: Optional[str] = None; kapi cagri aninda; varsayilan BASKA ADA tasinmadi",
+      "olcum": {
+        "TokenizerConfig_argumansiz": "ValueError: TokenizerConfig.vocab_path VERILMEDI (T-0088)",
+        "describe_argumansiz": "ValueError: describe(): config VERILMEDI (T-0088)",
+        "pozitif_kontrol": "[SOZLESME] zarf=etiket surum=2 vocab=data/rebuild/vocab_anka_r1_33114.(33114 token) literal_entity=False",
+        "grep_c_kristal": 0,
+        "test_dosyasi": "19 passed"
+      },
+      "durum": "KAPANDI"
+    },
+    "b_run_agent_arena": {
+      "dosya": "scripts/run_agent_arena.py",
+      "once": "--model default='data/kristal_model.pt' (silinmis)",
+      "sonra": "--model ve --vocab varsayilansiz ZORUNLU; cagri aninda fail-closed",
+      "olcum_sirasinda_bulunan": "cagri yeri T-0087'den BERI olu: create_default(model_path=..., device=...) vocab_path GECMIYORDU -> RuntimeError: DURDURULDU: vocab_path verilmedi",
+      "dallar": {
+        "argumansiz": "rc=2 · '--model ve --vocab ZORUNLUDUR'",
+        "yalniz_model": "rc=2 · '--vocab ZORUNLUDUR'",
+        "olmayan_yol": "rc=2 · 'VERILEN YOL YOK'",
+        "pozitif_kontrol": "banner basildi (Sözlük: data/rebuild/vocab_anka_r1_33114.json) -> KAPI GECTI"
+      },
+      "olu_atif_denetimi": {"ham": 1, "emekli": 1, "olu": 0, "taban_ad": "kristal_model.pt (EMEKLI blogunda)"},
+      "durum": "KAPANDI"
+    },
+    "b2_run_goal_pipeline": {
+      "dosya": "scripts/run_goal_pipeline.py",
+      "once": {"olu_atif": 19, "taban_adlar": {"kristal_model.pt": 13, "kristal_carpenter_model.pt": 5, "kristal_model_sft.pt": 1}},
+      "sonra": {"olu_atif": 0, "ham": 1, "emekli": 1},
+      "parametreler": ["--base-model", "--carpenter-model", "--sft-model", "--vocab"],
+      "varsayilan": "YOK (dordunun de varsayilani kaldirildi)",
+      "dallar": {
+        "argumansiz": "rc=2 · dordu de adiyla sayilir",
+        "olmayan_sozluk": "rc=2 · 'VERILEN SOZLUK YOLU YOK'"
+      },
+      "ek_olculmus_kusurlar": [
+        "3 compile_jsonl_to_bin cagrisi donmus data/*.bin hedefine allow_frozen_write GECMIYORDU -> kosulsuz RuntimeError; bayrak artik geciliyor",
+        "4. asama train_dpo.py'nin olu varsayilanlarina dusuyordu -> 'Hata: SFT referans model dosyasi bulunamadi!' + return (rc=0) => SESSIZ; yollar artik acikca geciliyor",
+        "derleme sozlugu gomuluydu (vocab_base_32852, TABAN); parametreye cevrildi ve TUM egitim asamalarina --vocab olarak geciliyor"
+      ],
+      "korunan_semantik": "check_frozen_save_path 6 cagri + --allow-frozen-write aynen; DPO: referans=base kopyasi, aktif/kayit=base_model",
+      "durum": "KAPANDI"
+    },
+    "c_user_guide": {
+      "dosya": "USER_GUIDE.md",
+      "satir_105": "DEGISTIRILMEDI — iddia yeniden olculdu ve DOGRU (test_model.py:25,38,40-42)",
+      "satir_106": "DEGISTIRILDI — iddia olcumle CURUDU (chat_prompt.py artik --model VE --vocab kabul ediyor; ikisi de sys.exit(2))",
+      "kapsam_genislemesi": "§7 iki run_arena komutu --model/--vocab'siz idi (fail-closed sonrasi calismaz) -> duzeltildi + secenek listesi",
+      "durum": "KAPANDI"
+    },
+    "d_denetim_araci": {
+      "arac": "scratch/anka_r9_olu_atif_denetimi.py",
+      "curutme_C1": "GIRINTILI BLOK iddiasi CURUDU — s = ham.strip() zaten var; aracin KENDI fonksiyonu import edilerek olculdu, satirlar AYIKLANDI",
+      "fikstur": "scratch/anka_r9_kanarya.py sonuna girintili etiketli blok eklendi (eksen once sinanmamisti)",
+      "etiket_sozlugu": {"kaliba_uyan_blok_basi": 8, "etiketli_olup_kacirilan_blok": 0, "karar": "GENISLETILMEDI (genisletmek sayiyi yalniz LIVE->ayiklandi yonunde DUSURUR)"},
+      "bayat_kontrol_duzeltmesi": "NEG_KONTROL chat_prompt.py idi, T-0087'den sonra bayatladi ve arac bunu 'ASIRI AYIKLAMA' diye YANLIS teshis etti; artik AYIRT EDILEMEDI dali + ayiklanan satirlari basma; kontrol t0027_measure_models.py'e tasindi",
+      "kontroller": {"kanarya_py": "5/2/3 ✓", "kanarya_md": "3/2/1 ✓", "negatif": "scripts/t0027_measure_models.py ham=26 olu=26 ✓"},
+      "durum": "KAPANDI (curutme kaydi olarak)"
+    }
+  },
+  "kalem_disi_zorunlu_duzeltme": {
+    "dosya": "tests/test_compiler_entrypoints.py",
+    "neden": "test_ast_run_goal_pipeline_has_frozen_guards (ii) maddesi 'data/kristal_model_sft.pt' LITERALINE assert ediyordu; (b2) bu adi kaldirinca test DUSTU",
+    "yorum": "test, silinmis artefakt adini canli tutan son kilit tasiydi",
+    "degisiklik": "ad SABITLENMEZ; olcut 'guard hedefi == kopyalamanin HEDEF argumani' oldu; check_frozen_save_path sayisi (==6) ve run_cmd sirasi AYNEN korundu",
+    "kanarya": "guard hedefi kopya hedefinden farkli yapildi -> test rc=1 (AYIRT EDIYOR); gercek agac rc=0",
+    "geri_yukleme": "mutasyon oncesi/sonrasi sha256 AYNI (4c31cc32651df3778b68a34c0e2c1c7f19b9efe52ade3985aa10eb82c1641ee2)",
+    "yonetisim": "dosya writes[]'te YOKTU -> duzenlemeden ONCE bus_acquire_lease(['tests/test_compiler_entrypoints.py'], T-0088) ok:true"
+  },
+  "kapilar": {
+    "K1": "✓ TokenizerConfig() ve describe() durur; pozitif kontrol [SOZLESME] doner",
+    "K2": "✓ prompt_contract.py icinde olu soyağaci adi = 0",
+    "K3": "✓ arena: canli olu atif 0 (1/1/0); --model verilmezse rc=2; pozitif kontrol GECTI",
+    "K4": "✓ goal_pipeline: 19 -> 0 canli olu atif; 4 parametre varsayilansiz; rc=2 dallari olculdu",
+    "K5": "✓ USER_GUIDE :105 dokunulmadi (iddia DOGRU), :106 degistirildi (iddia CURUDU)",
+    "K6": "✓ kanarya .py 5/2/3, .md 3/2/1, negatif ham=26 olu=26",
+    "K7": "✓ taban 1 failed/215 passed -> simdi 1 failed/216 passed; sapma = +1 test (T-0088 kanaryasi); dusen tek test sandbox soket yasagi (socketserver PermissionError)",
+    "K8": "✓ donmus 10 desene 0 yazma; data/vocab.json digest beyanla birebir; data/*.pt|*.bin = 25 dosya"
+  },
+  "curutmeler": {
+    "C1": "ATESLEDI — girintili blok kurali iddiasi CURUDU (duzeltme degil, curutme kaydi)",
+    "C2": "KISMEN ATESLEDI — olu varsayilani kaldirmak tek basina davranisi degistirmiyordu (arena zaten oluydu); dogru cerceve 'durma yapilandirma anina tasindi'",
+    "C3": "ATESLEMEDI — varsayilana yaslanan canli cagiran yok",
+    "C4": "ATESLEMEDI — USER_GUIDE:105 olcumle dogrulandi"
+  },
+  "kendi_kusurlarim": [
+    "Kaydedilmis kaniti ezdim: araci CIKTI_JSON yamalanmadan kosturdum; data/eval/anka_r9_olu_atif_denetimi_2026-09-20.json (07:45, 76K) yeniden yazildi (10:19, 78808 B); dosya IZLENMIYOR => eski baytlar kurtarilamaz. Yanindaki .md tum 07:45 olcumlerini sakliyor => bulgu kaybi yok",
+    "Tasarim sayisini elle yazdim (3. tekrar): kanarya deltasi '+2/+2' ilan edildi, olcum '+1/+1' verdi; fikstur ve KANARYA sozlugu olculene cekildi",
+    "Bayat negatif kontrolu kod kusuru sandim ('ASIRI AYIKLAMA'); gercek olgu kontrolun bayatlamasiydi",
+    "Secenek metnim kusurluydu: 'olu varsayilanlar' yazdim; olcum 0 olu varsayilan / 18 olu literal verdi",
+    "Sondam sisti: .md icinde '#'i yorum saydim (46 aday); arac .md icin '>' blogu kullaniyor",
+    "4. asama ilk duzeltmem semantigi kaydiriyordu (--active-model sft_model); train_dpo.py okunarak --ref-model/--active-model ile ozgun semantik kuruldu",
+    "Beyan/olcum celiskisi: scratch/anka_r9_kanarya.md writes[]'te beyan edildi ama NET DEGISMEDI (digest birebir ayni) => 'degisti' demiyorum"
+  ],
+  "acik_maddeler": [
+    "README.md bayat, DOKUNULMADI (writes[] disi): 194/197/200 run_arena komutlari --model/--vocab'siz; 237 secenek tablosu; 221 sozluk iddiasi (b2'den sonra eksik)",
+    "train_dpo.py T-0087 sinifinin canli 6. ve 7. sitesi: :51 data/vocab.json (BAYAT 31.357) sabit ve --vocab KABUL ETMEZ; :88-89 iki olu checkpoint varsayilani + SESSIZ return (rc=0)",
+    "tests/test_prompt_contract.py env fixture'i hala data/vocab.json yukluyor",
+    "chat_prompt.py:314-316 asimetrisi: sozluk VERILMEZSE sys.exit(2) (sesli) ama VERILIP BULUNAMAZSA return (rc=0)",
+    "run_goal_pipeline.py 1. asamada --pretrain YOK (D1 adayi) — kusur mu, olculmedi",
+    "run_goal_pipeline.py uctan uca kosulmadi (qdrant + ogretmen + agir checkpoint); olculen sey yapilandirma kapisidir",
+    "scratch/** gitignore'da => T-0086 araci ve kanarya fiksturleri SURUMLENMIYOR; taze klonda arac VAKUM diye durur",
+    "Etiket sozlugunu genisletme karari bilincli olarak ALINMADI (kapili)"
+  ],
+  "denetim_araci_agac_olcumu": {
+    "once": {"KOD": {"ham": 156, "emekli": 2, "olu": 154}, "SCRATCH": {"ham": 406, "emekli": 0, "olu": 406}, "BELGE": {"ham": 199, "emekli": 0, "olu": 199}, "KAYIT": {"ham": 1679, "emekli": 0, "olu": 1679}, "olu_kanarya_haric": 2438},
+    "sonra": {"KOD": {"ham": 138, "emekli": 3, "olu": 135}, "SCRATCH": {"ham": 406, "emekli": 0, "olu": 406}, "BELGE": {"ham": 199, "emekli": 0, "olu": 199}, "KAYIT": {"ham": 1679, "emekli": 0, "olu": 1679}, "olu_kanarya_haric": 2419},
+    "manifest_sha256": "4e1c4d51a896936909b1750b52088e8939e03e966b42fd8ea84934e0993e6e61"
+  },
+  "digestler": {
+    "src/llm/prompt_contract.py": {"once": "280c129d89f507383bab3c9ce2c907b55806b9ff4790630439874a13952a8f1a", "sonra": "56d0139d30484285e01471b56d6b8952e80842c52acb589d6080c4f991281c9a"},
+    "tests/test_prompt_contract.py": {"once": "e5eb105a056ea568962a7eafa647f503f2b6dde016152e3ed0125fffec3183a7", "sonra": "077a8c4f3ff0fdd863edf8503aac442bb511214e8955cee286b03b59066431d2"},
+    "scripts/run_agent_arena.py": {"once": "58087abbdf5b3905bb88f59edc28416b28d3233eec071cceb6e0bd0ce3d060bd", "sonra": "f1d8000e07ab0f97dfb910a595fda92fd405b0673089512dc2ca686d717cd962"},
+    "scripts/run_goal_pipeline.py": {"once": "2a88708edc0b9a8d156d070371fb43ba9e4f2b26014a72ae2d979f4c49c4d874", "sonra": "4c31cc32651df3778b68a34c0e2c1c7f19b9efe52ade3985aa10eb82c1641ee2"},
+    "USER_GUIDE.md": {"once": "4d5e8a992a4b8440478b55a434551fcc69a9cbfb00557c2b9d803a689ebbfe8e", "sonra": "d954e620bf4974806677abe4ff263ae11d2083149f5a95d42b9bbb2e4a5dd88a"},
+    "tests/test_compiler_entrypoints.py": {"once": "481138b318647be73484fa1c7ea7f839413b766157ae4478c0a5c401a7a70012", "sonra": "423c99b70e4f77a692ff610dada36c1f47488a7e36d812bb2e849c631e3eee20", "once_kaynagi": "git show HEAD: (dosya T-0088 basinda temizdi)"},
+    "scratch/anka_r9_olu_atif_denetimi.py": {"once": "0223938a7e6e669a9461d71031b514599f4c0b63e37e740038f4db388223ae27", "sonra": "090b0b8c7220c1c4139653d1081500c45e9a30eb4431a8dc9c6cc363534f0ea0"},
+    "scratch/anka_r9_kanarya.py": {"once": "935b83fccb72f3f7160d4433c45192d23239286bdcdcedec0150d3d1e64a93b2", "sonra": "86ce050ee07d9a1af4c62c1995ef6bf5a341b18e249bc4c3f0096c11aa13a5cd"},
+    "scratch/anka_r9_kanarya.md": {"once": "989977987be9b8e907876163b2af598c82f71abe747afb1ca08f6cb53ad57b46", "sonra": "989977987be9b8e907876163b2af598c82f71abe747afb1ca08f6cb53ad57b46", "not": "referans digest'e gore NET DEGISIM YOK; referans alinmadan ONCE degisip degismedigi OLCULEMEZ (scratch izlenmiyor)"},
+    "data/vocab.json": {"once": "4b40eebee9c996c8dd3150f6b3c8896de85764ee1cf0b08e6c636e5c002a0e69", "sonra": "4b40eebee9c996c8dd3150f6b3c8896de85764ee1cf0b08e6c636e5c002a0e69", "not": "DONMUS — degismedi"}
+  },
+  "hukum": "Dort kalem de KAPANDI. (b) ve (b2) ilan edilenden BUYUK cikti (olcumle kanitlandi ve beyan edildi). (d)'nin girintili blok iddiasi CURUDU. Gorev COMMIT ETMEZ; egitim kosusu YOKTUR."
+}

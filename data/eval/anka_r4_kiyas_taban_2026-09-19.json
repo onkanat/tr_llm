@@ -1,0 +1,120 @@
+{
+  "A1": {
+    "sozluk": "data/rebuild/vocab_base_32852.json",
+    "sozluk_giris": 32852,
+    "literal_id": 1354,
+    "tam": {
+      "jeton": 100000000,
+      "PN": {
+        "adet": 7936521,
+        "yuzde": 7.9365
+      },
+      "UNK": {
+        "adet": 2629227,
+        "yuzde": 2.6292
+      },
+      "LIT": {
+        "adet": 2302966,
+        "yuzde": 2.303
+      },
+      "noktalama_yuzde": 11.0213,
+      "benzersiz_id": 28352,
+      "yer_tutucu_yuzde": 10.5657
+    },
+    "on_kesit": {
+      "jeton": 4738026,
+      "PN": {
+        "adet": 360285,
+        "yuzde": 7.6041
+      },
+      "UNK": {
+        "adet": 81827,
+        "yuzde": 1.727
+      },
+      "LIT": {
+        "adet": 144748,
+        "yuzde": 3.055
+      },
+      "noktalama_yuzde": 13.5688,
+      "benzersiz_id": 18995,
+      "yer_tutucu_yuzde": 9.3311
+    }
+  },
+  "A1-r": {
+    "sozluk": "data/rebuild/vocab_anka_r1_33114.json",
+    "sozluk_giris": 33114,
+    "literal_id": 1608,
+    "tam": {
+      "jeton": 100000000,
+      "PN": {
+        "adet": 7136316,
+        "yuzde": 7.1363
+      },
+      "UNK": {
+        "adet": 2376511,
+        "yuzde": 2.3765
+      },
+      "LIT": {
+        "adet": 3088160,
+        "yuzde": 3.0882
+      },
+      "noktalama_yuzde": 10.941,
+      "benzersiz_id": 28599,
+      "yer_tutucu_yuzde": 9.5128
+    },
+    "on_kesit": {
+      "jeton": 4738026,
+      "PN": {
+        "adet": 295610,
+        "yuzde": 6.2391
+      },
+      "UNK": {
+        "adet": 72109,
+        "yuzde": 1.5219
+      },
+      "LIT": {
+        "adet": 210027,
+        "yuzde": 4.4328
+      },
+      "noktalama_yuzde": 13.4428,
+      "benzersiz_id": 19195,
+      "yer_tutucu_yuzde": 7.761
+    }
+  },
+  "_kiyas": {
+    "tam_100M": {
+      "PN": {
+        "ONCE": 7.9365,
+        "SONRA": 7.1363
+      },
+      "UNK": {
+        "ONCE": 2.6292,
+        "SONRA": 2.3765
+      },
+      "LIT": {
+        "ONCE": 2.303,
+        "SONRA": 3.0882
+      }
+    },
+    "ayni_bin_on_kesit": {
+      "PN": {
+        "A1": 7.6041,
+        "A1r": 6.2391
+      },
+      "UNK": {
+        "A1": 1.727,
+        "A1r": 1.5219
+      },
+      "LIT": {
+        "A1": 3.055,
+        "A1r": 4.4328
+      }
+    },
+    "r1_on_ilan_ONCE": {
+      "PN": 8.0186,
+      "UNK": 1.5733,
+      "LIT": 3.0096,
+      "L": 4738026
+    }
+  }
+}

@@ -1,0 +1,72 @@
+{
+  "taban": "data/lexicon/roots.tsv",
+  "yeni": "data/lexicon/roots_anka_r1.tsv",
+  "vocab": "data/rebuild/vocab_anka_r1_33114.json",
+  "blok_id_sayisi": 262,
+  "blok_buyuk_harf": 254,
+  "blok_kucuk_harf": 8,
+  "koken_dagilimi": {
+    "YALNIZ YENI ROOTS (D2/D3 eklemesi)": 173,
+    "TABANDA BIREBIR (id onarimi: Faz 3)": 78,
+    "TABANDA normalize ile (erisim/id onarimi)": 11
+  },
+  "koken_ornek": {
+    "YALNIZ YENI ROOTS (D2/D3 eklemesi)": [
+      "Abu Dabi",
+      "Abuja",
+      "Addis Ababa",
+      "Afganistan",
+      "Akra",
+      "Almanya",
+      "Amman",
+      "Amsterdam",
+      "Arnavutluk",
+      "Avusturya",
+      "Azerbaycan",
+      "Bahreyn",
+      "Bakü",
+      "Bangkok"
+    ],
+    "TABANDA BIREBIR (id onarimi: Faz 3)": [
+      "Adıyaman",
+      "Aliağa",
+      "Ardahan",
+      "Bartın",
+      "Bayburt",
+      "Bilecik",
+      "Bornova",
+      "Ermenice",
+      "Gaziantep",
+      "Giresun",
+      "Hakkâri",
+      "Isparta",
+      "Iğdır",
+      "Kars"
+    ],
+    "TABANDA normalize ile (erisim/id onarimi)": [
+      "Arjantin",
+      "Germen",
+      "Irak",
+      "Kabil",
+      "Katar",
+      "Kore",
+      "Panama",
+      "Sudan",
+      "Tiran",
+      "Tokyo",
+      "Umman"
+    ]
+  },
+  "yeni_lemma": 207,
+  "silinen_lemma": 0,
+  "silinen_ornek": [],
+  "kontrol": {
+    "İstanbul_stoi": 33102,
+    "İstanbul_blokta": true,
+    "Ankara_stoi": 31511,
+    "Ankara_blokta": false,
+    "yeni_lemma_sayisi": 207,
+    "id_siz_yeni_lemma": 0
+  },
+  "olcut_notu": "Kume uyeligi olcutu; `turkish_lower` normalizasyonu erisim onarimini da kapsar. Iki kategori de OPERATOR ONAYLI kapsamdadir (Faz 1 D2/D3 + Faz 3 id ekleme)."
+}

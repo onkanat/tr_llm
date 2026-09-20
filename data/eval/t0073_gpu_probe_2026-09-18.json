@@ -1,0 +1,209 @@
+{
+  "gorev": "T-0073",
+  "ilan_utc": "2026-09-18T14:44:17Z",
+  "hucreler": [
+    {
+      "batch": 8,
+      "blok": 128,
+      "adim": 50,
+      "rc": 0,
+      "gecerli": true,
+      "mps": true,
+      "sifirdan": true,
+      "log": "scratch/t0073_logs/b8_k128_n50.log",
+      "on_egitim": true,
+      "ilk_kayip": 5.4539,
+      "canli": true,
+      "toplam_sure": 20.92,
+      "duvar_sure": 24.61,
+      "jeton": 51200,
+      "jeton_sn": 2447.4,
+      "adim_sure_ort": 0.4184,
+      "ornek_ilk": 1.0,
+      "ornek_son": 0.4,
+      "sapma": 2.5,
+      "sapma_duzeltilmis": 1.025,
+      "ilk_kararli_adim": 0.41,
+      "ornek_medyan": 0.405,
+      "bitis_kaybi": 5.4539,
+      "yuk_hucre_oncesi": {
+        "bir_dk": 3.11,
+        "bes_dk": 4.96,
+        "onbes_dk": 5.91
+      }
+    },
+    {
+      "batch": 16,
+      "blok": 128,
+      "adim": 50,
+      "rc": 0,
+      "gecerli": true,
+      "mps": true,
+      "sifirdan": true,
+      "log": "scratch/t0073_logs/b16_k128_n50.log",
+      "on_egitim": true,
+      "ilk_kayip": 4.9477,
+      "canli": true,
+      "toplam_sure": 42.36,
+      "duvar_sure": 46.97,
+      "jeton": 102400,
+      "jeton_sn": 2417.4,
+      "adim_sure_ort": 0.8472,
+      "ornek_ilk": 1.12,
+      "ornek_son": 0.87,
+      "sapma": 1.287,
+      "sapma_duzeltilmis": 1.208,
+      "ilk_kararli_adim": 0.72,
+      "ornek_medyan": 0.825,
+      "bitis_kaybi": 4.9477,
+      "yuk_hucre_oncesi": {
+        "bir_dk": 3.27,
+        "bes_dk": 4.75,
+        "onbes_dk": 5.78
+      }
+    }
+  ],
+  "baslangic_utc": "2026-09-18T14:44:17Z",
+  "korpus_sha256_once": "383a9c890b75ec96195122b9981d7a73371d3bcaa3b9f6e7c2a188510d917cb8",
+  "ara_damga": "2026-09-18T14:45:28Z",
+  "tablo": [
+    {
+      "hucre": "b8k128n50",
+      "gecerli": true,
+      "batch": 8,
+      "blok": 128,
+      "adim": 50,
+      "jeton_adim": 1024,
+      "toplam_sure": 20.92,
+      "jeton_sn_ort": 2447.4,
+      "jeton_sn_kararli": 2528.4,
+      "adim_sure_ort": 0.4184,
+      "medyan": 0.405,
+      "ilk": 1.0,
+      "son": 0.4,
+      "sapma_ilan": 2.5,
+      "ilk_kayip": 5.4539,
+      "ortalama_medyan_orani": 1.033,
+      "ilk_kayip_ilan_adi_yanlis": 5.4539,
+      "ilk_kayip_gercek": 10.5842
+    },
+    {
+      "hucre": "b16k128n50",
+      "gecerli": true,
+      "batch": 16,
+      "blok": 128,
+      "adim": 50,
+      "jeton_adim": 2048,
+      "toplam_sure": 42.36,
+      "jeton_sn_ort": 2417.4,
+      "jeton_sn_kararli": 2482.4,
+      "adim_sure_ort": 0.8472,
+      "medyan": 0.825,
+      "ilk": 1.12,
+      "son": 0.87,
+      "sapma_ilan": 1.287,
+      "ilk_kayip": 4.9477,
+      "ortalama_medyan_orani": 1.027,
+      "ilk_kayip_ilan_adi_yanlis": 4.9477,
+      "ilk_kayip_gercek": 10.5776
+    }
+  ],
+  "S2_duzeltilmis": {
+    "b8k128n50": {
+      "ornek_sayisi": 6,
+      "ilk_kararli_adim": 0.41,
+      "son_adim": 0.4,
+      "sapma_duzeltilmis": 1.025,
+      "ilk_kayip_gercek": 10.5842,
+      "son_kayip_gercek": 5.4539,
+      "alan_adi_kusuru": "JSON'daki ilk_kayip == bitis_kaybi (ayni RE_KAYIP); gercek 1. adim kaybi bu alanda"
+    },
+    "b16k128n50": {
+      "ornek_sayisi": 6,
+      "ilk_kararli_adim": 0.72,
+      "son_adim": 0.87,
+      "sapma_duzeltilmis": 1.208,
+      "ilk_kayip_gercek": 10.5776,
+      "son_kayip_gercek": 4.9477,
+      "alan_adi_kusuru": "JSON'daki ilk_kayip == bitis_kaybi (ayni RE_KAYIP); gercek 1. adim kaybi bu alanda"
+    }
+  },
+  "ham_ornek_kaynagi": "hucre loglari (sonda JSON'u ham adim-suresi listesini saklamiyor — olcum sonrasi bulunan kusur, kapiya dokunulmadi)",
+  "butce": {
+    "formul": {
+      "jeton_sn": "batch * blok * adim / toplam_sure",
+      "adim": "hedef_jeton / (batch * blok)",
+      "saat": "hedef_jeton / jeton_sn / 3600   (= adim * jeton_adim / jeton_sn / 3600)"
+    },
+    "hedef_jeton": 100000000,
+    "en_iyi_ortalama": {
+      "hucre": "b8k128n50",
+      "gecerli": true,
+      "batch": 8,
+      "blok": 128,
+      "adim": 50,
+      "jeton_adim": 1024,
+      "toplam_sure": 20.92,
+      "jeton_sn_ort": 2447.4,
+      "jeton_sn_kararli": 2528.4,
+      "adim_sure_ort": 0.4184,
+      "medyan": 0.405,
+      "ilk": 1.0,
+      "son": 0.4,
+      "sapma_ilan": 2.5,
+      "ilk_kayip": 5.4539,
+      "ortalama_medyan_orani": 1.033,
+      "ilk_kayip_ilan_adi_yanlis": 5.4539,
+      "ilk_kayip_gercek": 10.5842,
+      "adim_toplam": 97656.2,
+      "saat": 11.35
+    },
+    "en_iyi_kararli": {
+      "hucre": "b8k128n50",
+      "gecerli": true,
+      "batch": 8,
+      "blok": 128,
+      "adim": 50,
+      "jeton_adim": 1024,
+      "toplam_sure": 20.92,
+      "jeton_sn_ort": 2447.4,
+      "jeton_sn_kararli": 2528.4,
+      "adim_sure_ort": 0.4184,
+      "medyan": 0.405,
+      "ilk": 1.0,
+      "son": 0.4,
+      "sapma_ilan": 2.5,
+      "ilk_kayip": 5.4539,
+      "ortalama_medyan_orani": 1.033,
+      "ilk_kayip_ilan_adi_yanlis": 5.4539,
+      "ilk_kayip_gercek": 10.5842,
+      "adim_toplam": 97656.2,
+      "saat": 10.99
+    },
+    "dogrulama_kosumu": null
+  },
+  "yuk_kaniti": {
+    "damga_utc": "2026-09-18T15:45:01Z",
+    "loadavg": "{ 2.94 3.15 3.61 }",
+    "yuklu_processler": [
+      {
+        "cpu_yuzde": "35.3",
+        "mem_yuzde": "0.4",
+        "komut": "/System/Library/PrivateFrameworks/SkyLight.framework/Resources/WindowS"
+      },
+      {
+        "cpu_yuzde": "0.0",
+        "mem_yuzde": "0.0",
+        "komut": "/Applications/Xcode.app/Contents/Developer/Library/Frameworks/Python3."
+      },
+      {
+        "cpu_yuzde": "0.0",
+        "mem_yuzde": "0.0",
+        "komut": "/Applications/Xcode.app/Contents/Developer/Library/Frameworks/Python3."
+      }
+    ]
+  },
+  "kapi_ozet": {},
+  "rapor_utc": "2026-09-18T15:45:01Z",
+  "birim_sinamasi": "PASS (adim x jeton_adim == hedef; iki yol ayni saat)"
+}

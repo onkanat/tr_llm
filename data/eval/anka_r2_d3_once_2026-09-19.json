@@ -1,0 +1,493 @@
+{
+ "gorev": "T-0080",
+ "asama": "Faz2-D3-mekanizma/once",
+ "baslangic_utc": "2026-09-19T09:04:24+00:00",
+ "not": "D1 AYRILDI (operatör kararı): tie-break/skor DEGISMEZ. Bu kap D1'in degismedigini K1/K2 ile kanitlar; degisirse rc=2.",
+ "lexicon": {
+  "yol": "data/lexicon/roots.tsv",
+  "sha256": "fe3005e5e2a594f09cbcfc3286e2c8812953ae6614333815ab87a7e3a6763598",
+  "beklenen": "fe3005e5e2a594f09cbcfc3286e2c8812953ae6614333815ab87a7e3a6763598"
+ },
+ "K0": {
+  "kayitlar": [
+   {
+    "yuzey": "başkenti",
+    "bek": "başkent",
+    "gelen": "başkent",
+    "ok": true
+   },
+   {
+    "yuzey": "yılında",
+    "bek": "yıl",
+    "gelen": "yıl",
+    "ok": true
+   },
+   {
+    "yuzey": "olarak",
+    "bek": "ol",
+    "gelen": "ol",
+    "ok": true
+   },
+   {
+    "yuzey": "Ankarada",
+    "bek": "Ankara",
+    "gelen": "Ankara",
+    "ok": true
+   },
+   {
+    "yuzey": "zzqqxx",
+    "bek": "YOL YOK",
+    "gelen": 0,
+    "ok": true
+   },
+   {
+    "yuzey": "qqqwww",
+    "bek": "YOL YOK",
+    "gelen": 0,
+    "ok": true
+   }
+  ],
+  "temiz": true
+ },
+ "son_guncelleme_utc": "2026-09-19T09:05:05+00:00",
+ "D3_hedef": {
+  "kayitlar": [
+   {
+    "yuzey": "adıyla",
+    "sinif": "D3-A CASE_INS+POSS3",
+    "bek": "ad",
+    "gelen": null,
+    "yol_sayisi": 0,
+    "dogru": false,
+    "analiz": []
+   },
+   {
+    "yuzey": "suyuyla",
+    "sinif": "D3-A CASE_INS+POSS3",
+    "bek": "su",
+    "gelen": null,
+    "yol_sayisi": 0,
+    "dogru": false,
+    "analiz": []
+   },
+   {
+    "yuzey": "aracıyla",
+    "sinif": "D3-A CASE_INS+POSS3",
+    "bek": "araç",
+    "gelen": "ara",
+    "yol_sayisi": 1,
+    "dogru": false,
+    "analiz": [
+     [
+      "ara",
+      "DERIV_CI",
+      "CASE_INS"
+     ]
+    ]
+   },
+   {
+    "yuzey": "hakkıyla",
+    "sinif": "D3-A CASE_INS+POSS3",
+    "bek": "hak",
+    "gelen": "hakkıyla",
+    "yol_sayisi": 2,
+    "dogru": false,
+    "analiz": [
+     [
+      "hakkıyla"
+     ],
+     [
+      "hakkıyla"
+     ]
+    ]
+   },
+   {
+    "yuzey": "hâline",
+    "sinif": "D3-C circumflex",
+    "bek": "hâl",
+    "gelen": null,
+    "yol_sayisi": 0,
+    "dogru": false,
+    "analiz": []
+   },
+   {
+    "yuzey": "hâli",
+    "sinif": "D3-C circumflex",
+    "bek": "hâl",
+    "gelen": null,
+    "yol_sayisi": 0,
+    "dogru": false,
+    "analiz": []
+   },
+   {
+    "yuzey": "hakkı",
+    "sinif": "D3-B gemination",
+    "bek": "hak",
+    "gelen": null,
+    "yol_sayisi": 0,
+    "dogru": false,
+    "analiz": []
+   },
+   {
+    "yuzey": "hissi",
+    "sinif": "D3-B gemination",
+    "bek": "his",
+    "gelen": null,
+    "yol_sayisi": 0,
+    "dogru": false,
+    "analiz": []
+   },
+   {
+    "yuzey": "affı",
+    "sinif": "D3-B gemination",
+    "bek": "af",
+    "gelen": null,
+    "yol_sayisi": 0,
+    "dogru": false,
+    "analiz": []
+   },
+   {
+    "yuzey": "zammı",
+    "sinif": "D3-B gemination",
+    "bek": "zam",
+    "gelen": null,
+    "yol_sayisi": 0,
+    "dogru": false,
+    "analiz": []
+   },
+   {
+    "yuzey": "hakkımız",
+    "sinif": "D3-B gemination",
+    "bek": "hak",
+    "gelen": null,
+    "yol_sayisi": 0,
+    "dogru": false,
+    "analiz": []
+   },
+   {
+    "yuzey": "hissetti",
+    "sinif": "D3-B gemination",
+    "bek": "his",
+    "gelen": "hisset",
+    "yol_sayisi": 4,
+    "dogru": false,
+    "analiz": [
+     [
+      "hisset",
+      "COPULA_PAST"
+     ],
+     [
+      "hisset",
+      "TENSE_PAST"
+     ]
+    ]
+   },
+   {
+    "yuzey": "ağzı",
+    "sinif": "D3-veri (Faz 1)",
+    "bek": "ağız",
+    "gelen": null,
+    "yol_sayisi": 0,
+    "dogru": false,
+    "analiz": []
+   }
+  ],
+  "dogru": 0,
+  "toplam": 13
+ },
+ "D3D_ADV_ROOT": {
+  "kayitlar": [
+   {
+    "yuzey": "elbetteydi",
+    "yol_sayisi": 4,
+    "analiz": [
+     [
+      "elbette",
+      "COPULA_PAST"
+     ],
+     [
+      "elbet",
+      "CASE_LOC",
+      "COPULA_PAST"
+     ]
+    ]
+   },
+   {
+    "yuzey": "belkiydi",
+    "yol_sayisi": 4,
+    "analiz": [
+     [
+      "belki",
+      "COPULA_PAST"
+     ],
+     [
+      "bel",
+      "REL_ki",
+      "COPULA_PAST"
+     ]
+    ]
+   },
+   {
+    "yuzey": "şimdiyken",
+    "yol_sayisi": 1,
+    "analiz": [
+     [
+      "şimdi",
+      "GERUND_KEN"
+     ]
+    ]
+   },
+   {
+    "yuzey": "hızlıca",
+    "yol_sayisi": 2,
+    "analiz": [
+     [
+      "hızlıca"
+     ],
+     [
+      "hız",
+      "DERIV_lI",
+      "CASE_EQU"
+     ]
+    ]
+   },
+   {
+    "yuzey": "yalnızca",
+    "yol_sayisi": 4,
+    "analiz": [
+     [
+      "yalnızca"
+     ],
+     [
+      "yalnızca"
+     ]
+    ]
+   },
+   {
+    "yuzey": "güzelce",
+    "yol_sayisi": 3,
+    "analiz": [
+     [
+      "güzelce"
+     ],
+     [
+      "güzelce"
+     ]
+    ]
+   }
+  ]
+ },
+ "K1_d1_9_etiket": {
+  "kayitlar": [
+   {
+    "yuzey": "bunun",
+    "etiket": "DOGRU",
+    "kok": "bu",
+    "morfem": 2,
+    "yol_sayisi": 4
+   },
+   {
+    "yuzey": "onun",
+    "etiket": "DOGRU",
+    "kok": "o",
+    "morfem": 2,
+    "yol_sayisi": 6
+   },
+   {
+    "yuzey": "ölmeden",
+    "etiket": "DOGRU",
+    "kok": "öl",
+    "morfem": 2,
+    "yol_sayisi": 3
+   },
+   {
+    "yuzey": "topraklar",
+    "etiket": "DOGRU",
+    "kok": "toprak",
+    "morfem": 2,
+    "yol_sayisi": 5
+   },
+   {
+    "yuzey": "günümüzde",
+    "etiket": "DOGRU",
+    "kok": "gün",
+    "morfem": 3,
+    "yol_sayisi": 2
+   },
+   {
+    "yuzey": "ağacı",
+    "etiket": "YANLIS",
+    "kok": "ağa",
+    "morfem": 2,
+    "yol_sayisi": 4
+   },
+   {
+    "yuzey": "aklı",
+    "etiket": "YANLIS",
+    "kok": "ak",
+    "morfem": 2,
+    "yol_sayisi": 4
+   },
+   {
+    "yuzey": "kanadı",
+    "etiket": "YANLIS",
+    "kok": "kana",
+    "morfem": 2,
+    "yol_sayisi": 4
+   },
+   {
+    "yuzey": "gönlü",
+    "etiket": "YANLIS",
+    "kok": "gön",
+    "morfem": 2,
+    "yol_sayisi": 4
+   }
+  ],
+  "parmak_izi": "bunun:bu:2|onun:o:2|ölmeden:öl:2|topraklar:toprak:2|günümüzde:gün:3|ağacı:ağa:2|aklı:ak:2|kanadı:kana:2|gönlü:gön:2",
+  "beklenen": "bunun:bu:2|onun:o:2|ölmeden:öl:2|topraklar:toprak:2|günümüzde:gün:3|ağacı:ağa:2|aklı:ak:2|kanadı:kana:2|gönlü:gön:2",
+  "degismedi": true
+ },
+ "orneklem": {
+  "dosya_basi": {
+   "tr-00000.parquet": 1688,
+   "tr-00001.parquet": 1524
+  },
+  "kabul_makale": 3212,
+  "benzersiz_yuzey": 236573
+ },
+ "K2_G1": {
+  "cozulebilen_yuzey": 111432,
+  "G1_ihlal": 2668,
+  "G1_yuzde": 2.3943,
+  "r2_ilan_edilen_once": 2.3943,
+  "birebir_mi": true
+ },
+ "karar_haritasi": {
+  "yol": "scratch/anka_r2_d3_secim_once.tsv",
+  "sha256": "c3630d28cf3eb81e32b7619901020fd12ac503e7b586f755bd514025eba1c5f5",
+  "cozulebilen": 111432,
+  "beraberlik_sayisi": 34742
+ },
+ "firsat": {
+  "cozulemeyen_toplam": 125141,
+  "yla_yle_iceren": 2387,
+  "circumflex_iceren": 1796,
+  "gemination_aday_kalibi": 113,
+  "ornek_yla": [
+   "makinesiyle",
+   "adıyla",
+   "ismiyle",
+   "haberiyle",
+   "yünüyle",
+   "sürüsüyle",
+   "dönüşüyle",
+   "desteğiyle",
+   "olmasıyla",
+   "ünvanıyla"
+  ],
+  "ornek_circumflex": [
+   "hâline",
+   "hâlde",
+   "mahkûmu",
+   "istihkâmcıları",
+   "istihkâmcılar",
+   "Behâeddîn",
+   "Râzî'nin",
+   "Harezmşâh",
+   "Alâeddin",
+   "Celâleddin"
+  ],
+  "ornek_gem": [
+   "reddeden",
+   "reddedip",
+   "hakkına",
+   "hattına",
+   "sırrını",
+   "nefsin",
+   "reddeder",
+   "hakkı",
+   "hakkın",
+   "reddederek"
+  ],
+  "not": "cozulemeyenler uzerinde sayilir; cozulen bir yuzeyde de D3 yeni bir YOL acabilir (aday kumesini buyutup tie kirilimini degistirebilir) — o etki bu on kontrolde GORUNMEZ, sonra-diffi gosterir."
+ },
+ "D3B_gemination_pozitif_kontrol": {
+  "kayitlar": [
+   {
+    "yuzey": "hakkı",
+    "bek": "hak",
+    "gelen": null,
+    "dogru": false,
+    "yol_sayisi": 0
+   },
+   {
+    "yuzey": "hissi",
+    "bek": "his",
+    "gelen": null,
+    "dogru": false,
+    "yol_sayisi": 0
+   },
+   {
+    "yuzey": "affı",
+    "bek": "af",
+    "gelen": null,
+    "dogru": false,
+    "yol_sayisi": 0
+   },
+   {
+    "yuzey": "zammı",
+    "bek": "zam",
+    "gelen": null,
+    "dogru": false,
+    "yol_sayisi": 0
+   },
+   {
+    "yuzey": "hakkımız",
+    "bek": "hak",
+    "gelen": null,
+    "dogru": false,
+    "yol_sayisi": 0
+   },
+   {
+    "yuzey": "hakkında",
+    "bek": "hak",
+    "gelen": "hakkında",
+    "dogru": false,
+    "yol_sayisi": 1
+   }
+  ],
+  "dogru": 0,
+  "toplam": 6,
+  "not": "Yamali lexicon YALNIZ mekanizmayi sinar; gercek veri (roots_anka_r1.tsv) Faz 1'de uretilir. Yamali lexicon ana sozluk DEGILDIR."
+ },
+ "K3_regresyon": {
+  "kayitlar": [
+   {
+    "yuzey": "başkenti",
+    "bek": "başkent",
+    "gelen": "başkent",
+    "ok": true
+   },
+   {
+    "yuzey": "yılında",
+    "bek": "yıl",
+    "gelen": "yıl",
+    "ok": true
+   },
+   {
+    "yuzey": "olarak",
+    "bek": "ol",
+    "gelen": "ol",
+    "ok": true
+   },
+   {
+    "yuzey": "Ankarada",
+    "bek": "Ankara",
+    "gelen": "Ankara",
+    "ok": true
+   }
+  ],
+  "temiz": true
+ },
+ "betik_sha256": "8f09e65af3edc86b4d4ed9e62cfa7f174f6682157307f7cebb35353d29355015"
+}

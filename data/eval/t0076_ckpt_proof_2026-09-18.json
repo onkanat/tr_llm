@@ -1,0 +1,286 @@
+{
+  "gorev": "T-0076",
+  "baslangic_utc": "2026-09-18T15:58:26Z",
+  "veri": "data/anka_a1_pretrain.bin",
+  "veri_sha256": "383a9c890b75ec96195122b9981d7a73371d3bcaa3b9f6e7c2a188510d917cb8",
+  "train_py_sha256": "8b3959798b2ae6f0ba31ab225503b3f28b6dee8e46fe1ce94f0630b152fcac28",
+  "train_py_bayt": 11787,
+  "K3": {
+    "komut": "-u train.py --device mps --data data/anka_a1_pretrain.bin --pretrain --from-scratch --batch-size 2 --block-size 64 --steps 10 --save-path scratch/t0076_k3.pt",
+    "log": "scratch/t0076_logs/k3_varsayilan.log",
+    "rc": 0,
+    "duvar_sn": 5.21,
+    "mps": true,
+    "ckpt_satirlari": [],
+    "ckpt_adimlari": [],
+    "son_kayit_satiri": false,
+    "periyodik_aciklama": false,
+    "kapali_aciklama": true,
+    "mtime_ornekleri": [
+      {
+        "t": 1789747110.8,
+        "mtime": 1789747110.6697707,
+        "bayt": 372124385
+      }
+    ],
+    "mtime_benzersiz": 1,
+    "ckpt_dosyasi_var": true,
+    "tmp_kaldi": false,
+    "K3_GECTI": true,
+    "eski_log_referansi": {
+      "yol": "scratch/t0073_logs/b8_k256_n50_blok256_ilk.log",
+      "sha256": "40d3b6c8e7bc6c0c383baafe820c7e32927b9bf9d246faa0a135eb4a7f2be19b",
+      "ureten_train_py_sha256": "ab66c3a3db2ab34a376de180b5d3e1a8b5bf46e79ffc8889965c2f1c637c273d"
+    },
+    "k3b_eklenen_satirlar": [
+      "Periyodik kayıt: KAPALI (yalnız koşum sonunda kaydedilir)"
+    ],
+    "k3b_eksilen_satirlar": [],
+    "K3b_GECTI": true
+  },
+  "K4_K5": {
+    "komut": "-u train.py --device mps --data data/anka_a1_pretrain.bin --pretrain --from-scratch --batch-size 2 --block-size 64 --steps 60 --save-every 5 --save-path scratch/t0076_k4.pt",
+    "log": "scratch/t0076_logs/k4_periyodik.log",
+    "rc": 0,
+    "duvar_sn": 21.89,
+    "mps": true,
+    "ckpt_satirlari": [
+      "[ckpt] adım 5: 'scratch/t0076_k4.pt' güncellendi (periyodik, atomik)",
+      "[ckpt] adım 10: 'scratch/t0076_k4.pt' güncellendi (periyodik, atomik)",
+      "[ckpt] adım 15: 'scratch/t0076_k4.pt' güncellendi (periyodik, atomik)",
+      "[ckpt] adım 20: 'scratch/t0076_k4.pt' güncellendi (periyodik, atomik)",
+      "[ckpt] adım 25: 'scratch/t0076_k4.pt' güncellendi (periyodik, atomik)",
+      "[ckpt] adım 30: 'scratch/t0076_k4.pt' güncellendi (periyodik, atomik)",
+      "[ckpt] adım 35: 'scratch/t0076_k4.pt' güncellendi (periyodik, atomik)",
+      "[ckpt] adım 40: 'scratch/t0076_k4.pt' güncellendi (periyodik, atomik)",
+      "[ckpt] adım 45: 'scratch/t0076_k4.pt' güncellendi (periyodik, atomik)",
+      "[ckpt] adım 50: 'scratch/t0076_k4.pt' güncellendi (periyodik, atomik)",
+      "[ckpt] adım 55: 'scratch/t0076_k4.pt' güncellendi (periyodik, atomik)",
+      "[ckpt] adım 60: 'scratch/t0076_k4.pt' güncellendi (son kayıt, atomik)"
+    ],
+    "ckpt_adimlari": [
+      5,
+      10,
+      15,
+      20,
+      25,
+      30,
+      35,
+      40,
+      45,
+      50,
+      55,
+      60
+    ],
+    "son_kayit_satiri": true,
+    "periyodik_aciklama": true,
+    "kapali_aciklama": false,
+    "mtime_ornekleri": [
+      {
+        "t": 1789747115.61,
+        "mtime": 1789747115.4953763,
+        "bayt": 372124385
+      },
+      {
+        "t": 1789747117.08,
+        "mtime": 1789747117.0517805,
+        "bayt": 372124385
+      },
+      {
+        "t": 1789747118.73,
+        "mtime": 1789747118.5647566,
+        "bayt": 372124385
+      },
+      {
+        "t": 1789747120.19,
+        "mtime": 1789747120.099956,
+        "bayt": 372124385
+      },
+      {
+        "t": 1789747121.86,
+        "mtime": 1789747121.6902711,
+        "bayt": 372124385
+      },
+      {
+        "t": 1789747123.33,
+        "mtime": 1789747123.2655532,
+        "bayt": 372124385
+      },
+      {
+        "t": 1789747125.0,
+        "mtime": 1789747124.8385408,
+        "bayt": 372124385
+      },
+      {
+        "t": 1789747126.45,
+        "mtime": 1789747126.4369502,
+        "bayt": 372124385
+      },
+      {
+        "t": 1789747128.12,
+        "mtime": 1789747127.972832,
+        "bayt": 372124385
+      },
+      {
+        "t": 1789747129.58,
+        "mtime": 1789747129.5162327,
+        "bayt": 372124385
+      },
+      {
+        "t": 1789747131.24,
+        "mtime": 1789747131.0309758,
+        "bayt": 372124385
+      },
+      {
+        "t": 1789747132.7,
+        "mtime": 1789747132.6664193,
+        "bayt": 372124385
+      }
+    ],
+    "mtime_benzersiz": 12,
+    "beklenen_adimlar": [
+      5,
+      10,
+      15,
+      20,
+      25,
+      30,
+      35,
+      40,
+      45,
+      50,
+      55,
+      60
+    ],
+    "tmp_kaldi": false,
+    "ckpt_dosyasi_var": true,
+    "K4_GECTI": true,
+    "K5_GECTI": true
+  },
+  "K6": {
+    "a_flag_yok": {
+      "komut": "-u train.py --device mps --data data/anka_a1_pretrain.bin --pretrain --from-scratch --batch-size 2 --block-size 64 --steps 2 --save-every 1 --save-path data/eval/t0076_frozen_guard_test.pt",
+      "log": "scratch/t0076_logs/k6a_donmus_engel.log",
+      "rc": 1,
+      "duvar_sn": 1.51,
+      "mps": true,
+      "ckpt_satirlari": [],
+      "ckpt_adimlari": [],
+      "son_kayit_satiri": false,
+      "periyodik_aciklama": false,
+      "kapali_aciklama": false,
+      "mtime_ornekleri": [],
+      "mtime_benzersiz": 0,
+      "hata_izleri": [
+        "    check_frozen_save_path(model_save_path, allow_frozen_write=allow_frozen_write)",
+        "  File \"/Users/hakankilicaslan/Git/tr_llm/train.py\", line 22, in check_frozen_save_path",
+        "    raise RuntimeError(f\"Donmuş yola yazma engellendi: {save_path} (allow_frozen_write=False)\")",
+        "RuntimeError: Donmuş yola yazma engellendi: data/eval/t0076_frozen_guard_test.pt (allow_frozen_write=False)"
+      ],
+      "dosya_olustu_mu": false,
+      "K6a_GECTI": true
+    },
+    "b_flag_var": {
+      "komut": "-u train.py --device mps --data data/anka_a1_pretrain.bin --pretrain --from-scratch --batch-size 2 --block-size 64 --steps 2 --save-every 1 --save-path data/eval/t0076_frozen_guard_test.pt --allow-frozen-write",
+      "log": "scratch/t0076_logs/k6b_donmus_onay.log",
+      "rc": 0,
+      "duvar_sn": 4.72,
+      "mps": true,
+      "ckpt_satirlari": [
+        "[ckpt] adım 1: 'data/eval/t0076_frozen_guard_test.pt' güncellendi (periyodik, atomik)",
+        "[ckpt] adım 2: 'data/eval/t0076_frozen_guard_test.pt' güncellendi (son kayıt, atomik)"
+      ],
+      "ckpt_adimlari": [
+        1,
+        2
+      ],
+      "son_kayit_satiri": true,
+      "periyodik_aciklama": true,
+      "kapali_aciklama": false,
+      "mtime_ornekleri": [],
+      "mtime_benzersiz": 0,
+      "dosya_olustu_mu": true,
+      "K6b_GECTI": true,
+      "temizlendi": true
+    }
+  },
+  "K6_ozet": {
+    "a": {
+      "rc": 1,
+      "dosya_olustu_mu": false,
+      "K6a_GECTI": true,
+      "hata_izleri": [
+        "    check_frozen_save_path(model_save_path, allow_frozen_write=allow_frozen_write)",
+        "  File \"/Users/hakankilicaslan/Git/tr_llm/train.py\", line 22, in check_frozen_save_path",
+        "    raise RuntimeError(f\"Donmuş yola yazma engellendi: {save_path} (allow_frozen_write=False)\")",
+        "RuntimeError: Donmuş yola yazma engellendi: data/eval/t0076_frozen_guard_test.pt (allow_frozen_write=False)"
+      ]
+    },
+    "b": {
+      "rc": 0,
+      "dosya_olustu_mu": true,
+      "ckpt_adimlari": [
+        1,
+        2
+      ],
+      "K6b_GECTI": true,
+      "temizlendi": true
+    }
+  },
+  "K1": {
+    "train.py": {
+      "rc": 0,
+      "hata": ""
+    },
+    "scratch/t0076_ckpt_test.py": {
+      "rc": 0,
+      "hata": ""
+    },
+    "scratch/t0076_rapor.py": {
+      "rc": 0,
+      "hata": ""
+    },
+    "K1_GECTI": true
+  },
+  "K2": {
+    "rc": 0,
+    "gecen": 212,
+    "son_satir": "212 passed in 10.95s",
+    "K2_GECTI": true
+  },
+  "K7": {
+    "cerceve_satir_sayisi": 1,
+    "mutant_sentaks_gecerli": true,
+    "mutant_hukum": false,
+    "mutant_neden": "torch.save sayisi=2 (beklenen 1)",
+    "mutant_silindi": true,
+    "train_hukum": true,
+    "train_gerekce": "tek kayit @satir 220, guard @satir 111",
+    "hedef_test_rc": 0,
+    "K7_GECTI": true
+  },
+  "hukum": {
+    "K1": true,
+    "K2": true,
+    "K3": true,
+    "K3b": true,
+    "K4": true,
+    "K5": true,
+    "K7": true,
+    "K6": true
+  },
+  "hepsi_gecti": true,
+  "ureticiler": [
+    {
+      "yol": "scratch/t0076_ckpt_test.py",
+      "sha256": "f0276d3b569e69915fa21e0edb7028509ea01df6183036438624a2b6dc329589",
+      "bayt": 15731
+    },
+    {
+      "yol": "train.py",
+      "sha256": "8b3959798b2ae6f0ba31ab225503b3f28b6dee8e46fe1ce94f0630b152fcac28",
+      "bayt": 11787
+    }
+  ],
+  "bitis_utc": "2026-09-18T15:59:13Z"
+}

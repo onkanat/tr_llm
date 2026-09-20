@@ -1,0 +1,437 @@
+{
+ "gorev": "T-0080",
+ "asama": "Faz2-İ-normalizasyon (A/B tek süreç)",
+ "baslangic_utc": "2026-09-19T09:20:51+00:00",
+ "not": "D1 AYRILDI. A kol = BUGÜNKÜ (düz .lower()), B kol = DÜZELTİLMİŞ (compile ile aynı Türkçe normalize). A'nın harita digest'i DİSKTEKİ D3'lü durumun haritasıyla birebir olmak zorunda ⇒ örnekleyici sadakati kanıtlanır.",
+ "lexicon": {
+  "yol": "data/lexicon/roots.tsv",
+  "sha256": "fe3005e5e2a594f09cbcfc3286e2c8812953ae6614333815ab87a7e3a6763598",
+  "beklenen": "fe3005e5e2a594f09cbcfc3286e2c8812953ae6614333815ab87a7e3a6763598",
+  "veri_satiri": 52373
+ },
+ "tr_lower_sadakati": true,
+ "K0": {
+  "kayitlar": [
+   {
+    "kol": "A_bugun",
+    "yuzey": "başkenti",
+    "bek": "başkent",
+    "gelen": "başkent",
+    "ok": true
+   },
+   {
+    "kol": "A_bugun",
+    "yuzey": "yılında",
+    "bek": "yıl",
+    "gelen": "yıl",
+    "ok": true
+   },
+   {
+    "kol": "A_bugun",
+    "yuzey": "olarak",
+    "bek": "ol",
+    "gelen": "ol",
+    "ok": true
+   },
+   {
+    "kol": "A_bugun",
+    "yuzey": "Ankarada",
+    "bek": "Ankara",
+    "gelen": "Ankara",
+    "ok": true
+   },
+   {
+    "kol": "A_bugun",
+    "yuzey": "zzqqxx",
+    "bek": "YOL YOK",
+    "gelen": 0,
+    "ok": true
+   },
+   {
+    "kol": "A_bugun",
+    "yuzey": "qqqwww",
+    "bek": "YOL YOK",
+    "gelen": 0,
+    "ok": true
+   },
+   {
+    "kol": "B_duzelt",
+    "yuzey": "başkenti",
+    "bek": "başkent",
+    "gelen": "başkent",
+    "ok": true
+   },
+   {
+    "kol": "B_duzelt",
+    "yuzey": "yılında",
+    "bek": "yıl",
+    "gelen": "yıl",
+    "ok": true
+   },
+   {
+    "kol": "B_duzelt",
+    "yuzey": "olarak",
+    "bek": "ol",
+    "gelen": "ol",
+    "ok": true
+   },
+   {
+    "kol": "B_duzelt",
+    "yuzey": "Ankarada",
+    "bek": "Ankara",
+    "gelen": "Ankara",
+    "ok": true
+   },
+   {
+    "kol": "B_duzelt",
+    "yuzey": "zzqqxx",
+    "bek": "YOL YOK",
+    "gelen": 0,
+    "ok": true
+   },
+   {
+    "kol": "B_duzelt",
+    "yuzey": "qqqwww",
+    "bek": "YOL YOK",
+    "gelen": 0,
+    "ok": true
+   }
+  ],
+  "temiz": true
+ },
+ "son_guncelleme_utc": "2026-09-19T09:22:08+00:00",
+ "I_hedef": {
+  "kayitlar": [
+   {
+    "yuzey": "İstanbul",
+    "A_yol": 0,
+    "B_yol": 1,
+    "A_kok": null,
+    "B_kok": "İstanbul",
+    "B_analiz": [
+     "İstanbul"
+    ]
+   },
+   {
+    "yuzey": "İstanbulda",
+    "A_yol": 0,
+    "B_yol": 1,
+    "A_kok": null,
+    "B_kok": "İstanbul",
+    "B_analiz": [
+     "İstanbul",
+     "CASE_LOC"
+    ]
+   },
+   {
+    "yuzey": "İngiliz",
+    "A_yol": 0,
+    "B_yol": 1,
+    "A_kok": null,
+    "B_kok": "İngiliz",
+    "B_analiz": [
+     "İngiliz"
+    ]
+   },
+   {
+    "yuzey": "İngilizler",
+    "A_yol": 0,
+    "B_yol": 3,
+    "A_kok": null,
+    "B_kok": "İngiliz",
+    "B_analiz": [
+     "İngiliz",
+     "PLURAL"
+    ]
+   },
+   {
+    "yuzey": "İtalyanlar",
+    "A_yol": 0,
+    "B_yol": 3,
+    "A_kok": null,
+    "B_kok": "İtalyan",
+    "B_analiz": [
+     "İtalyan",
+     "PLURAL"
+    ]
+   },
+   {
+    "yuzey": "İspanyollar",
+    "A_yol": 0,
+    "B_yol": 3,
+    "A_kok": null,
+    "B_kok": "İspanyol",
+    "B_analiz": [
+     "İspanyol",
+     "PLURAL"
+    ]
+   },
+   {
+    "yuzey": "İsveçli",
+    "A_yol": 0,
+    "B_yol": 0,
+    "A_kok": null,
+    "B_kok": null,
+    "B_analiz": []
+   },
+   {
+    "yuzey": "Isparta",
+    "A_yol": 0,
+    "B_yol": 1,
+    "A_kok": null,
+    "B_kok": "Isparta",
+    "B_analiz": [
+     "Isparta"
+    ]
+   },
+   {
+    "yuzey": "Iğdır",
+    "A_yol": 0,
+    "B_yol": 1,
+    "A_kok": null,
+    "B_kok": "Iğdır",
+    "B_analiz": [
+     "Iğdır"
+    ]
+   },
+   {
+    "yuzey": "İkizler",
+    "A_yol": 3,
+    "B_yol": 4,
+    "A_kok": "ikiz",
+    "B_kok": "İkizler",
+    "B_analiz": [
+     "İkizler"
+    ]
+   },
+   {
+    "yuzey": "İbrani",
+    "A_yol": 0,
+    "B_yol": 1,
+    "A_kok": null,
+    "B_kok": "İbrani",
+    "B_analiz": [
+     "İbrani"
+    ]
+   }
+  ],
+  "kazanan": 10,
+  "toplam": 11
+ },
+ "K1_d1_9_etiket": {
+  "A": "bunun:bu:2|onun:o:2|ölmeden:öl:2|topraklar:toprak:2|günümüzde:gün:3|ağacı:ağa:2|aklı:ak:2|kanadı:kana:2|gönlü:gön:2",
+  "B": "bunun:bu:2|onun:o:2|ölmeden:öl:2|topraklar:toprak:2|günümüzde:gün:3|ağacı:ağa:2|aklı:ak:2|kanadı:kana:2|gönlü:gön:2",
+  "beklenen": "bunun:bu:2|onun:o:2|ölmeden:öl:2|topraklar:toprak:2|günümüzde:gün:3|ağacı:ağa:2|aklı:ak:2|kanadı:kana:2|gönlü:gön:2",
+  "A_beklenen_mi": true,
+  "B_beklenen_mi": true,
+  "A_ve_B_ayni": true
+ },
+ "orneklem": {
+  "dosya_basi": {
+   "tr-00000.parquet": 1688,
+   "tr-00001.parquet": 1524
+  },
+  "kabul_makale": 3212,
+  "benzersiz_yuzey": 236573,
+  "beklenen_dosya": {
+   "tr-00000.parquet": 1688,
+   "tr-00001.parquet": 1524
+  },
+  "beklenen_yuzey": 236573
+ },
+ "A_kol": {
+  "harita": "scratch/anka_r5_i_norm_A.tsv",
+  "sha256": "9d826084b8f55154813f52d701586dee80055219e1f58adbfd582ce54ea1e3a8",
+  "cozulen": 113351,
+  "G1_ihlal": 2696,
+  "G1_yuzde": 2.3785,
+  "beraberlik": 34832,
+  "beklenen_sha256": "9d826084b8f55154813f52d701586dee80055219e1f58adbfd582ce54ea1e3a8",
+  "sadakat": true
+ },
+ "B_kol": {
+  "harita": "scratch/anka_r5_i_norm_B.tsv",
+  "sha256": "91b3d6afefcd3dc53a14869d671e079c0b3869e6b8457e9178470f45e5f6bd31",
+  "cozulen": 113496,
+  "G1_ihlal": 2700,
+  "G1_yuzde": 2.3789,
+  "beraberlik": 34893
+ },
+ "diff": {
+  "yeni_cozulen": 145,
+  "kaybolan_cozulen": 0,
+  "secim_degisen": 16,
+  "beraberlik_degisen": 24,
+  "G1_durumu_degisen": 4,
+  "yeni_ornek": [
+   [
+    "IN",
+    "In"
+   ],
+   [
+    "Ilgaz",
+    "Ilgaz"
+   ],
+   [
+    "In",
+    "In"
+   ],
+   [
+    "Ina",
+    "In"
+   ],
+   [
+    "Inca",
+    "In"
+   ],
+   [
+    "Isparta",
+    "Isparta"
+   ],
+   [
+    "IĞDIR",
+    "Iğdır"
+   ],
+   [
+    "Iğdır",
+    "Iğdır"
+   ],
+   [
+    "Iğdırdan",
+    "Iğdır"
+   ],
+   [
+    "Iğdırlı",
+    "Iğdır"
+   ],
+   [
+    "Iğdırlılara",
+    "Iğdır"
+   ],
+   [
+    "Iğdırlıların",
+    "Iğdır"
+   ],
+   [
+    "ilahî",
+    "İlahî"
+   ],
+   [
+    "ingiliz",
+    "İngiliz"
+   ],
+   [
+    "ingilizce",
+    "İngilizce"
+   ]
+  ],
+  "kok_deg_ornek": [
+   [
+    "IR",
+    "ır",
+    "Ir"
+   ],
+   [
+    "Ilgın",
+    "ılgın",
+    "Ilgın"
+   ],
+   [
+    "Ilıca",
+    "ılıca",
+    "Ilıca"
+   ],
+   [
+    "Ilıcalı",
+    "ılıca",
+    "Ilıca"
+   ],
+   [
+    "Ir",
+    "ır",
+    "Ir"
+   ],
+   [
+    "ikizler",
+    "ikiz",
+    "İkizler"
+   ],
+   [
+    "İSAM",
+    "isa",
+    "İsa"
+   ],
+   [
+    "İkizler",
+    "ikiz",
+    "İkizler"
+   ],
+   [
+    "İncili",
+    "In",
+    "İncil"
+   ],
+   [
+    "İsa",
+    "isa",
+    "İsa"
+   ],
+   [
+    "İsam",
+    "isa",
+    "İsa"
+   ],
+   [
+    "İğdir",
+    "iğ",
+    "İğdir"
+   ],
+   [
+    "ılıca",
+    "ılıca",
+    "Ilıca"
+   ],
+   [
+    "ılıcası",
+    "ılıca",
+    "Ilıca"
+   ],
+   [
+    "ının",
+    "ını",
+    "In"
+   ]
+  ],
+  "not": "yeni_cozulen = İ/I kokenli yuzeyler + bunlarin aday kumesini buyuttugu yerler. secim_degisen = D1 karari oynadi mi sorusunun DOGRUDAN cevabi; 0 DEGILSE hangi yuzeyler oldugu listelenir."
+ },
+ "K3_regresyon": {
+  "kayitlar": [
+   {
+    "yuzey": "başkenti",
+    "bek": "başkent",
+    "gelen": "başkent",
+    "ok": true
+   },
+   {
+    "yuzey": "yılında",
+    "bek": "yıl",
+    "gelen": "yıl",
+    "ok": true
+   },
+   {
+    "yuzey": "olarak",
+    "bek": "ol",
+    "gelen": "ol",
+    "ok": true
+   },
+   {
+    "yuzey": "Ankarada",
+    "bek": "Ankara",
+    "gelen": "Ankara",
+    "ok": true
+   }
+  ],
+  "temiz": true
+ },
+ "betik_sha256": "4efb919413d5b10f023300b86b7b0a256ea739079c85aff9c6e12f5baa14cd9f"
+}

@@ -1,0 +1,373 @@
+{
+  "gorev": "T-0080",
+  "asama": "Faz 0d — V1 kuralinin curutulmesi",
+  "baslangic_utc": "2026-09-19T08:13:46Z",
+  "kimlik": {
+    "sozluk": "7611b6a523a2bb524cc21aa9cc64235aa6a2ae99f87f46ac51cb2915e61164ad",
+    "lexicon": "fe3005e5e2a594f09cbcfc3286e2c8812953ae6614333815ab87a7e3a6763598",
+    "regresyon": "cbe00f31c4dcc34ba2baed5317f1bf38b4e69b130c5271205c1dd5709dab18da"
+  },
+  "pozitif_kontrol_bugun_dogru": [
+    {
+      "yuzey": "bunun",
+      "beklenen_kok": "bu",
+      "beklenen_ek": "CASE_GEN",
+      "aciklama": "ilgi durumu: 'of this'",
+      "bugun": [
+        "bu",
+        "CASE_GEN"
+      ],
+      "V1": [
+        "bun",
+        "POSS_2SG"
+      ],
+      "bugun_dogru": true,
+      "V1_dogru": false
+    },
+    {
+      "yuzey": "onun",
+      "beklenen_kok": "o",
+      "beklenen_ek": "CASE_GEN",
+      "aciklama": "ilgi durumu",
+      "bugun": [
+        "o",
+        "CASE_GEN"
+      ],
+      "V1": [
+        "on",
+        "POSS_2SG"
+      ],
+      "bugun_dogru": true,
+      "V1_dogru": false
+    },
+    {
+      "yuzey": "ölmeden",
+      "beklenen_kok": "öl",
+      "beklenen_ek": "GERUND_mAdAn",
+      "aciklama": "ulaç: 'without dying'",
+      "bugun": [
+        "öl",
+        "GERUND_mAdAn"
+      ],
+      "V1": [
+        "ölme",
+        "CASE_ABL"
+      ],
+      "bugun_dogru": true,
+      "V1_dogru": false
+    },
+    {
+      "yuzey": "topraklar",
+      "beklenen_kok": "toprak",
+      "beklenen_ek": "PLURAL",
+      "aciklama": "ad çoğulu",
+      "bugun": [
+        "toprak",
+        "PLURAL"
+      ],
+      "V1": [
+        "toprakla",
+        "TENSE_AORIST"
+      ],
+      "bugun_dogru": true,
+      "V1_dogru": false
+    },
+    {
+      "yuzey": "günümüzde",
+      "beklenen_kok": "gün",
+      "beklenen_ek": "POSS_1PL",
+      "aciklama": "'in our day'",
+      "bugun": [
+        "gün",
+        "POSS_1PL",
+        "CASE_LOC"
+      ],
+      "V1": [
+        "günü",
+        "POSS_1PL",
+        "CASE_LOC"
+      ],
+      "bugun_dogru": true,
+      "V1_dogru": false
+    }
+  ],
+  "son_guncelleme_utc": "2026-09-19T08:14:44Z",
+  "regresyon": {
+    "gorev_tipleri": {
+      "ROOT": 25,
+      "PLURAL": 25,
+      "CASE": 25,
+      "TENSE": 25
+    },
+    "ROOT_oracle_oge": 25,
+    "V1_ONCESI_dogru": 24,
+    "V1_SONRASI_dogru": 23,
+    "V1_ile_BOZULAN": [
+      {
+        "yuzey": "gölgeler",
+        "beklenen": "gölge",
+        "eski": "gölge",
+        "yeni": "gölgele"
+      }
+    ],
+    "not": "fixtur 4 gorev tipine bolunmus (ROOT/PLURAL/CASE/TENSE x 25). ROOT olmayanlari `ROOT:` diye ayristirmak 75 ogeyi SAHTE kilar (ilk analizim bu kusuru yapti: '75/100 ulasilamaz' sanmistim). Test ise yalniz ilk 10 ogeye ve `len(enc)>=2`'ye bakiyor => VAKUM."
+  },
+  "toplu": {
+    "degisen_secim": 2423,
+    "morfem_sayisi_ESIT": 2403,
+    "ARTAN": 20,
+    "AZALAN": 0,
+    "POS_gecisleri": {
+      "NOUN->NOUN": 876,
+      "NOUN->VERB": 720,
+      "VERB->NOUN": 612,
+      "VERB->VERB": 74,
+      "NOUN->PRON": 27,
+      "CONJ->NOUN": 22,
+      "INTERJ->NOUN": 19,
+      "NOUN->INTERJ": 17,
+      "ADJ->VERB": 13,
+      "INTERJ->VERB": 8,
+      "PRON->NOUN": 7,
+      "VERB->INTERJ": 6,
+      "INTERJ->PRON": 4,
+      "CONJ->PRON": 3,
+      "NOUN->POSTP": 3,
+      "VERB->PRON": 3,
+      "ADJ->NOUN": 3,
+      "ADJ->INTERJ": 3,
+      "INTERJ->INTERJ": 1,
+      "NOUN->ADJ": 1
+    },
+    "ornek": [
+      {
+        "yuzey": "olan",
+        "bugun": [
+          "o",
+          "DERIV_lAn"
+        ],
+        "V1": [
+          "ol",
+          "PART_An"
+        ],
+        "bugun_pos": "ADJ",
+        "V1_pos": "VERB"
+      },
+      {
+        "yuzey": "kurdu",
+        "bugun": [
+          "kur",
+          "COPULA_PAST"
+        ],
+        "V1": [
+          "kurt",
+          "POSS_3SG"
+        ],
+        "bugun_pos": "NOUN",
+        "V1_pos": "NOUN"
+      },
+      {
+        "yuzey": "belli",
+        "bugun": [
+          "bel",
+          "DERIV_lI"
+        ],
+        "V1": [
+          "bell",
+          "POSS_3SG"
+        ],
+        "bugun_pos": "NOUN",
+        "V1_pos": "NOUN"
+      },
+      {
+        "yuzey": "günümüzde",
+        "bugun": [
+          "gün",
+          "POSS_1PL",
+          "CASE_LOC"
+        ],
+        "V1": [
+          "günü",
+          "POSS_1PL",
+          "CASE_LOC"
+        ],
+        "bugun_pos": "NOUN",
+        "V1_pos": "NOUN"
+      },
+      {
+        "yuzey": "ölmeden",
+        "bugun": [
+          "öl",
+          "GERUND_mAdAn"
+        ],
+        "V1": [
+          "ölme",
+          "CASE_ABL"
+        ],
+        "bugun_pos": "VERB",
+        "V1_pos": "NOUN"
+      },
+      {
+        "yuzey": "ölünce",
+        "bugun": [
+          "öl",
+          "GERUND_IncA"
+        ],
+        "V1": [
+          "ölü",
+          "POSS_2SG",
+          "CASE_EQU"
+        ],
+        "bugun_pos": "VERB",
+        "V1_pos": "NOUN"
+      },
+      {
+        "yuzey": "Günümüzde",
+        "bugun": [
+          "gün",
+          "POSS_1PL",
+          "CASE_LOC"
+        ],
+        "V1": [
+          "günü",
+          "POSS_1PL",
+          "CASE_LOC"
+        ],
+        "bugun_pos": "NOUN",
+        "V1_pos": "NOUN"
+      },
+      {
+        "yuzey": "topraklar",
+        "bugun": [
+          "toprak",
+          "PLURAL"
+        ],
+        "V1": [
+          "toprakla",
+          "TENSE_AORIST"
+        ],
+        "bugun_pos": "NOUN",
+        "V1_pos": "VERB"
+      },
+      {
+        "yuzey": "onun",
+        "bugun": [
+          "o",
+          "CASE_GEN"
+        ],
+        "V1": [
+          "on",
+          "POSS_2SG"
+        ],
+        "bugun_pos": "INTERJ",
+        "V1_pos": "NOUN"
+      },
+      {
+        "yuzey": "torunları",
+        "bugun": [
+          "torun",
+          "POSS_3PL"
+        ],
+        "V1": [
+          "torunlar",
+          "POSS_3SG"
+        ],
+        "bugun_pos": "NOUN",
+        "V1_pos": "NOUN"
+      },
+      {
+        "yuzey": "birinde",
+        "bugun": [
+          "bir",
+          "POSS_2SG",
+          "CASE_LOC"
+        ],
+        "V1": [
+          "biri",
+          "POSS_2SG",
+          "CASE_LOC"
+        ],
+        "bugun_pos": "NOUN",
+        "V1_pos": "NOUN"
+      },
+      {
+        "yuzey": "Bunun",
+        "bugun": [
+          "bu",
+          "CASE_GEN"
+        ],
+        "V1": [
+          "bun",
+          "POSS_2SG"
+        ],
+        "bugun_pos": "PRON",
+        "V1_pos": "NOUN"
+      },
+      {
+        "yuzey": "bunun",
+        "bugun": [
+          "bu",
+          "CASE_GEN"
+        ],
+        "V1": [
+          "bun",
+          "POSS_2SG"
+        ],
+        "bugun_pos": "PRON",
+        "V1_pos": "NOUN"
+      },
+      {
+        "yuzey": "Onun",
+        "bugun": [
+          "o",
+          "CASE_GEN"
+        ],
+        "V1": [
+          "on",
+          "POSS_2SG"
+        ],
+        "bugun_pos": "INTERJ",
+        "V1_pos": "NOUN"
+      },
+      {
+        "yuzey": "sanını",
+        "bugun": [
+          "san",
+          "POSS_2SG",
+          "CASE_ACC"
+        ],
+        "V1": [
+          "sanı",
+          "POSS_2SG",
+          "CASE_ACC"
+        ],
+        "bugun_pos": "NOUN",
+        "V1_pos": "NOUN"
+      },
+      {
+        "yuzey": "şekli",
+        "bugun": [
+          "şek",
+          "DERIV_lI"
+        ],
+        "V1": [
+          "şekil",
+          "POSS_3SG"
+        ],
+        "bugun_pos": "NOUN",
+        "V1_pos": "NOUN"
+      }
+    ],
+    "sure_sn": 55.8,
+    "yorum": "morfem sayisi neredeyse HIC degismiyor => V1 yapisal bir iyilestirme degil, BERABERLIK KIRICIDIR; ve yanlis tarafa kiriyor"
+  },
+  "hukum": {
+    "V1": "CURUDU — Faz 2'ye bu haliyle GIRMEZ",
+    "gerekce_1": "bugun dogru olan 5 okumadan 5 tanesini bozuyor: ['bunun', 'onun', 'ölmeden', 'topraklar', 'günümüzde']",
+    "gerekce_2": "ROOT oracle'i 24/25 -> 23/25",
+    "gerekce_3": "2,423 degisimin 2,403'inde morfem sayisi ESIT => beraberlik kirici; beraberliklerde dogru cevap YON BELIRSIZ",
+    "acik_soru": "D1'in dogru kurali HENUZ BILINMIYOR. En uzun kok de, en kisa kok de D1 hedeflerini tek basina tutmuyor. Aday kurallar (DERIV cezasi, mutasyon-tanigi, gecisli/gecisli-olmayan ek ayrimi) KENDI tasarim+olcum turunu hak ediyor.",
+    "plan_etkisi": "Planin Faz 2/D1 maddesi ve 'TAM %81,24 -> %84,90' gerekcesi GECERSIZ. Faz 2 yeniden tasarlanmali.",
+    "kapsam": "bu curutme D1 kuralini hedefler; D2/D3/D4 olcumleri AYRI durur"
+  }
+}

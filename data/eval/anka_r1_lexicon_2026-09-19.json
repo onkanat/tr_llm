@@ -1,0 +1,81 @@
+{
+  "gorev": "T-0080",
+  "asama": "Faz 1 uretici — roots_anka_r1.tsv",
+  "baslangic_utc": "2026-09-19T09:52:38Z",
+  "mod": "YAZ",
+  "cikti": "data/lexicon/roots_anka_r1.tsv",
+  "kaynak": "data/lexicon/roots.tsv",
+  "ilan_edilen_nitelikler": [
+    "-",
+    "GEMINATION",
+    "VOICING",
+    "VOICING,GEMINATION",
+    "VOWEL_DROP",
+    "VOWEL_DROP,GEMINATION"
+  ],
+  "kaynak_digest": {
+    "sha256": "fe3005e5e2a594f09cbcfc3286e2c8812953ae6614333815ab87a7e3a6763598",
+    "beklenen": "fe3005e5e2a594f09cbcfc3286e2c8812953ae6614333815ab87a7e3a6763598"
+  },
+  "plan": {
+    "EKLE": 208,
+    "GUNCELLE": 15,
+    "ATLA": 9,
+    "plan_sha256": "0ad3b7c629f365fcb8cb287fcd56bf790cd6233218875280eb02d701ffb1aec7"
+  },
+  "nitelik_dagilimi": {
+    "-": 49782,
+    "VOICING": 2633,
+    "VOWEL_DROP": 152,
+    "GEMINATION": 11,
+    "VOICING,GEMINATION": 2,
+    "VOWEL_DROP,GEMINATION": 1
+  },
+  "sayim": {
+    "kaynak_satir": 52373,
+    "cikti_satir": 52581,
+    "beklenen": 52581,
+    "cekirdek": 50681,
+    "kuyruk": 1900,
+    "kirik_beklenen": 50681,
+    "kuyruk_satir_sayisi_degismedi": true,
+    "kuyruk_icerigi_degisen_satir": 1,
+    "kuyruk_degisen_ornek": [
+      {
+        "kaynak": {
+          "lemma": "sed",
+          "pos": "NOUN",
+          "attributes": "-"
+        },
+        "cikti": {
+          "lemma": "sed",
+          "pos": "NOUN",
+          "attributes": "GEMINATION"
+        }
+      }
+    ]
+  },
+  "yedek": {
+    "yol": "scratch/anka_r1_yedek/roots_kaynak.tsv",
+    "sha256": "fe3005e5e2a594f09cbcfc3286e2c8812953ae6614333815ab87a7e3a6763598"
+  },
+  "cikti_digest": {
+    "sha256": "ea874a73c0d5669a591cef00c9d4fb16916ea3e60e42df9d3c73445c4b7efd59",
+    "satir": 52581,
+    "bayt": 873755
+  },
+  "S7_yazilan_dosyadan": {
+    "hedef": 35,
+    "KALAN": 0,
+    "kalan": []
+  },
+  "SONUC": "YAZILDI",
+  "son_guncelleme_utc": "2026-09-19T09:52:38Z",
+  "KENDI_KUSURLARIM": [
+    {
+      "yer": "S4/S6 kuyruk kontrolu",
+      "ne": "1. kosumda 'kuyruk DEGISMEDI' iddiasi YALNIZ uzunluga bakiyordu; gercekte kuyruk ICERIGI 1 satirda degisti (['sed'])",
+      "etki": "zayif denetim: uzunluk esitligi icerik esitligini KANITLAMAZ. `sed` cekirdekte degil kuyruk blogunda duruyor ⇒ beklentim yanlisti, kod da yanlis iddia ediyordu. Icerik karsilastirmasi eklendi."
+    }
+  ]
+}

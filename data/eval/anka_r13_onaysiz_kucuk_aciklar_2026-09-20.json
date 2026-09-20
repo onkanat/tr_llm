@@ -1,0 +1,244 @@
+{
+ "gorev": "T-0090",
+ "baslik": "Onaysiz kucuk aciklar: chat_prompt rc=2 - stage-1 --pretrain - bayat fixture - README arena satirlari",
+ "durum": "done",
+ "damga_utc": "2026-09-20T11:19:57Z",
+ "yetki": "operator onayi: 'Onay bekleyen isler icin devam et' -> dort is akisindan (3) Onaysiz kucuk aciklar + (4)un README kismi",
+ "kaynak": "T-0088 kapanis raporu §10 acik maddeleri 1, 3, 4, 5 (data/eval/anka_r11_kucuk_borclar_2026-09-20.md:183-203) - ozet degil tam metin okundu",
+ "olu_ad_politikasi": "olu artefakt ADLARI bu JSON'da ANILMAZ; adlar T-0086 aracinin kanonik manifestinde durur. Gerekce: adi anan her satir sayaci sisirir (T-0083, T-0088, T-0089 ve bu gorevde 4. kez).",
+ "kapilar": [
+  {
+   "id": "Y1",
+   "ilan": "uc sessiz dal -> 3/3 rc=2, mesaj stderr'de, stdout'ta DEGIL",
+   "olculen": "3/3 rc=2; stderr 1, stdout 0",
+   "hukum": "KALDI"
+  },
+  {
+   "id": "Y1b",
+   "ilan": "pozitif dal: kapi ateslenmez, betik kapilarin ALTINDAKI satira ulasir",
+   "olculen": "ulasti (gercek ckpt elle + ucuz kap otomatik)",
+   "hukum": "KALDI"
+  },
+  {
+   "id": "Y2",
+   "ilan": "stage-1 + --pretrain -> rc=0 ve ilk kayip > 5,0",
+   "olculen": "rc=0, ilk kayip 10.5279",
+   "hukum": "KALDI"
+  },
+  {
+   "id": "Y3",
+   "ilan": "venv/bin/pytest -> yeni dusus YOK",
+   "olculen": "1 failed, 227 passed (taban 223)",
+   "hukum": "KALDI"
+  },
+  {
+   "id": "Y4",
+   "ilan": "T-0086 araci: README.md olu <= 2 (artis YOK)",
+   "olculen": "2 -> 2",
+   "hukum": "KALDI"
+  }
+ ],
+ "curutme_maddeleri": [
+  "(a) dal rc=2 olup stdout'a basarsa => kismi",
+  "(b) Y1b'de kapi ateslenirse => kapi asiri genis ve Y1 kanit degildir",
+  "(c) Y3'te yeni dusus olursa => fixture degisikligi geri alinir"
+ ],
+ "curutme_ateslendi": "HICBIRI (0/3)",
+ "olcumler": {
+  "Y1_duran_dallar": {
+   "once": {
+    "K1": "rc=0",
+    "K2": "rc=0",
+    "K3": "rc=0"
+   },
+   "sonra": {
+    "K1": "rc=2",
+    "K2": "rc=2",
+    "K3": "rc=2"
+   },
+   "stdout_stderr_sonra": {
+    "K1": {
+     "stdout": "bos",
+     "stderr": "DURDURULDU: Sozluk dosyasi 'YOK_vocab.json' bulunamadi"
+    },
+    "K2": {
+     "stdout": "yalniz [RAG] satiri",
+     "stderr": "DURDURULDU: Egitilmis model dosyasi 'YOK_model.pt' bulunamadi"
+    },
+    "K3": {
+     "stdout": "bos",
+     "stderr": "DURDURULDU: data/lexicon/roots.tsv bulunamadi"
+    }
+   },
+   "ham_kanit": {
+    "K1": {
+     "stdout_ozet": "",
+     "stderr_ozet": "OMP: Warning #179: Function Can't set size of /tmp file failed:\n\u001b[31mDURDURULDU: Sözlük dosyası 'YOK_vocab.json' bulunam"
+    },
+    "K2": {
+     "stdout_ozet": "\n\u001b[35m[RAG] Vektörel belleklere bağlanılıyor...\u001b[0m\n",
+     "stderr_ozet": "OMP: Warning #179: Function Can't set size of /tmp file failed:\n\u001b[31mDURDURULDU: Eğitilmiş model dosyası 'YOK_model.pt' "
+    },
+    "K3": {
+     "stdout_ozet": "",
+     "stderr_ozet": "OMP: Warning #179: Function Can't set size of /tmp file failed:\n\u001b[31mDURDURULDU: data/lexicon/roots.tsv bulunamadı! Derl"
+    }
+   }
+  },
+  "Y1b_pozitif_dal": {
+   "gercek_checkpoint": "data/anka_a1r.pt (356 MB) elle kosuldu: uc kapi GECILDI, istem satirina ulasti, DURDURULDU YOK",
+   "ucuz_kap_otomatik": "test_chat_prompt_gates.py::test_pozitif_dal_kapilar_ateslenmez - rc=1, DURDURULDU YOK, 'Model Agirliklari Yukleniyor' stdout'ta VAR",
+   "iddia_siniri": "otomatik testteki pozitif kap UCUZ kaptir (--model var olan ama checkpoint OLMAYAN dosya). Gercek checkpoint'li kosum otomatik teste ALINMADI cunku stdin EOF'ta REPL sonsuz donguye giriyor (bkz. yeni_bulgular[0])."
+  },
+  "Y2_stage1_pretrain": {
+   "komut_kumesi": "--device cpu --data data/train.bin --steps 2 --from-scratch --vocab data/rebuild/vocab_anka_r1_33114.json --save-path $TMPDIR/...",
+   "dalA_pretrain_yok": {
+    "rc": 1,
+    "hata": "RuntimeError @ train.py:275 - SFT maskelemesi bu partide HICBIR hedef birakmadi (tum pencereler -100)"
+   },
+   "dalB_pretrain_var": {
+    "rc": 0,
+    "ilk_kayip": 10.5279,
+    "bitis_kaybi": 8.3653,
+    "cikti": "$TMPDIR/t0090/s1_var.pt (356 MB)",
+    "ln_V_referans": 10.4076
+   },
+   "kab_beyani": "olcum sandbox icinde alindi; sandbox MPS'i GIZLER => --device mps train.py:48 fail-closed kapisinda durur (olcum kabinin kusuru). Hedef secimi ve onu denetleyen kapi tensorden ONCE, CPU'da calisir => soruyu degistirmez.",
+   "yan_olcum_kusur_degil": "run_goal_pipeline.run_cmd subprocess.run(..., check=True) kullanir => rc!=0'da CalledProcessError ile DURUR; sessiz yutma YOK."
+  },
+  "Y3_fixture": {
+   "once": {
+    "passed": 223,
+    "failed": 1
+   },
+   "sonra": {
+    "passed": 227,
+    "failed": 1
+   },
+   "artis": 4,
+   "artis_kaynagi": "tests/test_chat_prompt_gates.py (yeni, 4 test)",
+   "dusen_tek_test": "tests/test_agent_gateway.py::TestAgentGateway::test_gateway_http_server_endpoints - sandbox soket yasagi (socketserver.py:478 PermissionError), ilan edilmis taban davranisi"
+  },
+  "Y4_readme": {
+   "readme_olu_oncesi": 2,
+   "readme_olu_sonrasi": 2,
+   "readme_fark": 0,
+   "agac_ham_oncesi": 2447,
+   "agac_ham_sonrasi": 2449,
+   "agac_ham_farki": 2,
+   "fark_ayristirmasi": {
+    "dogrudan_+1": ".agent-bus/state/tasks/T-0090.json - bu gorevin KENDI beyani (olu adi anmak zorunda kaldi); kod/belge kusuru DEGIL, kayit oldugu gibi birakildi",
+    "dolayli_+1": "T-0086 aracinin OZ-REFERANSI: arac kendi ciktisini (data/eval/anka_r9_...json) da agac sayar => yeni bir olu-atif dosyasi listeye girdiginde aracin kendi kaydi bir ad daha tasir"
+   },
+   "idempotans_olcumu": "agac DEGISMEDEN uc ardisik kosum: 2449 - 2449 - 2449 => sinirsiz sisme YOK, tek seferlik +1 sonra sabit (arac KACAK DEGIL)",
+   "aracin_kendi_payi": {
+    "arac_artefakti_ham": 934,
+    "ham_toplam": 2449,
+    "oran_yuzde": 38.1,
+    "duzeltilmis_gercek_agac": 1511,
+    "not": "aracin ilan ettigi gercek_olu_kanarya_haric=2445 KENDI KAYDINI ICERIR; Kanarya (4) ve aracin kendi kaydi (934) cikarilinca 1511"
+   }
+  }
+ },
+ "yeni_bulgular_kapsam_disi": [
+  {
+   "id": 1,
+   "bulgu": "chat_prompt.py REPL stdin EOF'ta SONSUZ DONGU",
+   "olcum": {
+    "dosya": "poz.out (gecici, $TMPDIR)",
+    "boyut_bayt": 4724070497,
+    "satir": 94355597,
+    "benzersiz_satir": 37,
+    "sha256": "8aa741ec6a69c49ea0a3459c9ba1a5248a3e8dd0fb4f8b4f4530502cb471f3fe",
+    "prompt_dongusu": 6290372,
+    "eof_hata_satiri": 6290371,
+    "pencere_sn": 322.98,
+    "dongu_bolu_saniye": 19476.1,
+    "ilk_3_satir": [
+     "",
+     "[RAG] Vektorel belleklere baglaniliyor...",
+     "  Model Agirliklari Yukleniyor: data/anka_a1r.pt"
+    ]
+   },
+   "not": "duzeltilmedi; kapsam disi beyan. 4,4 GiB gecici kanit dosyasi digest alindiktan sonra silindi."
+  },
+  {
+   "id": 2,
+   "bulgu": "Yukaridakinin sonucu: chat_prompt.py'nin uctan uca pozitif dali otomatik teste ALINAMAZ (asiliyor) => testteki pozitif kap ucuz kaptir"
+  },
+  {
+   "id": 3,
+   "bulgu": "run_cmd check=True kullaniyor => sessiz yutma yok (bulgu degil, olculmus guvence)"
+  },
+  {
+   "id": 4,
+   "bulgu": "T-0086 araci OZ-REFERANS: kendi ciktisini kendi girdisi olarak sayar",
+   "olcum": {
+    "aracin_kendi_kaydi": 934,
+    "ham_toplam": 2449,
+    "oran_yuzde": 38.1,
+    "idempotent": true,
+    "uc_kosum": [
+     2449,
+     2449,
+     2449
+    ]
+   },
+   "not": "duzeltilmedi; dogru duzeltme (aracin kendi ciktisini KAPSAM disi birakmasi) bir sonraki tura ait"
+  }
+ ],
+ "kendi_kusurlarim": [
+  {
+   "id": 1,
+   "kusur": "Emekli/olu ad anma sayaci sinifi 4. kez urede - bu kez GOREV BEYANINDA (.agent-bus/state/tasks/T-0090.json)",
+   "etki": "dogrudan +1; olcum bunu aracin oz-referansi ile birlikte +2'ye cikardi (ham 2447 -> 2449); gercek agac 1511",
+   "ders": "kurali bilmek uremeyi engellemiyor; bicim her seferinde yeni"
+  },
+  {
+   "id": 2,
+   "kusur": "Olcmeden bir kalemi yanlis tarif ettim: README'deki 2 miras olu-atif'i 'duzeltilecek kalem' sandim",
+   "etki": "gercek kalem arena komutlari + --vocab iddiasi cikti",
+   "ders": "ozetten degil kaynaktan oku"
+  },
+  {
+   "id": 3,
+   "kusur": "Sandbox MPS'i gizledi; ilk stage-1 olcumum train.py:48 kapisinda rc=1 verdi ve neredeyse 'stage-1 zaten rc=1' diye yazacaktim",
+   "etki": "iki rc=1 ayirt edilmeseydi rapor yanlis olurdu",
+   "ders": "kab kusuru ile gorev kusurunu ayir"
+  },
+  {
+   "id": 4,
+   "kusur": "Denetim araci ciktisinin uzerine yazdim (onceki halin digest'ini almadan)",
+   "etki": "arac deterministik ve agac degismedi => kayip yok",
+   "ders": "olcum aracini kosturmadan once hedef artefaktin digest'ini al; 'once' hali $TMPDIR/t0090/denetim_once.json"
+  }
+ ],
+ "acik_maddeler": [
+  "REPL EOF sonsuz dongusu - olculdu, DUZELTILMEDI (kapsam disi)",
+  "run_goal_pipeline.py uctan uca kosulmadi (T-0088 §10/6): qdrant + Gemini/Ollama ogretmen + agir checkpoint; bu gorevde olculen STAGE-1 kapisidir, uctan uca basari DEGILDIR",
+  "scripts/retrain_clean_models.py butunuyle olu (T-0089 §1) - dokunulmadi",
+  "AdamW momentleri kaydedilmiyor - onayli is akisi (4)un ikinci yarisi",
+  "D1 (en-uzun-kok) + D4 (kesme/rakam): D1 donmus src/compiler/** yazimi gerektirir ve ilan edilen kural ZATEN OLCUMLE CURUTULMUSTUR (anka_r2_on_olcum:30 - uzunluk ekseni net -1 => ayirt edici degil) => kor uygulanmayacak",
+  "scratch/** surumlenmiyor (T-0088 §10/7) => T-0086 araci ve kanarya fiksturleri taze klonda yok",
+  "T-0086 aracinin oz-referansi - olculdu (aracin kendi kaydi ham toplamin %38,1'i; yeni olü-atif dosyasinda +1), DUZELTILMEDI"
+ ],
+ "degisen_dosyalar": {
+  "chat_prompt.py": "uc sessiz dal -> _durdur() ile rc=2 stderr; iki mevcut sys.exit(2) sitesi de ayni yardimciya tasindi (beyan edilen genisleme: rc zaten 2'ydi, yalniz akis stdout->stderr)",
+  "scripts/run_goal_pipeline.py": "stage1_cmd'e --pretrain eklendi (--from-scratch korundu)",
+  "tests/test_prompt_contract.py": "env fixture'i GUNCEL_VOCAB (33114) kullanir; eskiden data/vocab.json (31357, BAYAT)",
+  "tests/test_chat_prompt_gates.py": "YENI - 4 test: 3 duran dal (rc=2 + stderr + stdout'ta degil) + 1 gecen dal (vakum kapi onleyici)",
+  "README.md": "arena komutlari + secenek tablosu ZORUNLU --model/--vocab ile tamamlandi; 32.852 TABAN / 33.114 kulliyat ayrimi"
+ },
+ "digestler_sha256_tam": {
+  "chat_prompt.py": "d6614977fc9e366dd72adcd835ac3fdca3569411626f88e27ebf0d071d18a44a",
+  "scripts/run_goal_pipeline.py": "58b76dc5489eb37092732422a34c11fcd92205ce19bcd3f328e282ae880af1b4",
+  "tests/test_prompt_contract.py": "ab2eb6864e73ea4c7b3c47ab0bd72675e8094d7b25d30142810fb01682d6a5d6",
+  "tests/test_chat_prompt_gates.py": "554d7fa2b623a27b8dbfec8b25d4af7f59dc51cb052b59da02674292f37101ab",
+  "README.md": "bb2080bb2c41308417675299005ae26bee72c7505199c667402a3b8e0aed2000",
+  "data/eval/anka_r9_olu_atif_denetimi_2026-09-20.json": "4edda84b960162fd9217d1101b129693b44fe58ad3fa1efffd3116beface37ee",
+  "data/eval/anka_r13_onaysiz_kucuk_aciklar_2026-09-20.md": "5440d4ac06f45ba7b92e2153ff7be758191acf945c33e677482f6959eabcd956"
+ },
+ "donmus_yuzey": "data/** altindaki donmus yuzeye bu gorevde YAZMA YOK; .pt/.bin uretilmedi (stage-1 sondasi $TMPDIR'e yazdi, donmus yola degil)",
+ "iddia_siniri": "bu gorev egitim kosumu YAPMAZ, uctan uca boru hattini KOSMAZ ve data/** donmus yuzeyine YAZMAZ. Olculen sey YAPILANDIRMA KAPILARIDIR - kapilarin rc'si ve akisi; uretilen modelin kalitesi DEGILDIR. chat_prompt.py icin kapatilan sinif 'sessizlik'tir; REPL'in EOF asilmasi HALA ACIKTIR ve bu hukum onu kapsamaz.",
+ "hukum": "Bes ilan edilen kapinin BESI de KALDI; curutme maddelerinin hicbiri ateslenmedi."
+}

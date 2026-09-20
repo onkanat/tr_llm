@@ -1,0 +1,406 @@
+{
+  "gorev": "T-0080",
+  "asama": "Faz 0b — G1 ihlal safligi",
+  "baslangic_utc": "2026-09-19T08:09:27Z",
+  "K0_derleyici_kontrolu": {
+    "hatali": [],
+    "TEMIZ": true
+  },
+  "lexicon": {
+    "yol": "data/lexicon/roots.tsv",
+    "sha256": "fe3005e5e2a594f09cbcfc3286e2c8812953ae6614333815ab87a7e3a6763598",
+    "satir": 52373
+  },
+  "kuyruk": {
+    "alfabetik_dusme_sayisi": 971,
+    "ilk_dusme_lemma": "text",
+    "ilk_dusme_satir": 50475,
+    "toplam_satir": 52373
+  },
+  "safligi": {
+    "taranan_lemma": 52373,
+    "tek_jeton_lemmas": 52370,
+    "sahte_lemmas": 3,
+    "ornek_sahte": [
+      {
+        "satir": 49257,
+        "lemma": "İkizce",
+        "pos": "NOUN",
+        "nitelik": "-",
+        "analiz": [
+          "ikiz",
+          "CASE_EQU"
+        ],
+        "kok": "ikiz"
+      },
+      {
+        "satir": 49259,
+        "lemma": "İkizler",
+        "pos": "NOUN",
+        "nitelik": "-",
+        "analiz": [
+          "ikiz",
+          "PLURAL"
+        ],
+        "kok": "ikiz"
+      },
+      {
+        "satir": 49320,
+        "lemma": "İğdir",
+        "pos": "NOUN",
+        "nitelik": "-",
+        "analiz": [
+          "iğ",
+          "COPULA_AORIST"
+        ],
+        "kok": "iğ"
+      }
+    ]
+  },
+  "son_guncelleme_utc": "2026-09-19T08:09:36Z",
+  "find_stems_ham": [
+    {
+      "yuzey": "anlamlara",
+      "adaylar": [
+        {
+          "eslesen_onek": "an",
+          "girdi_lemma": "an",
+          "girdi_pos": "NOUN",
+          "girdi_anahtarlar": [
+            "attributes",
+            "lemma",
+            "pos"
+          ]
+        },
+        {
+          "eslesen_onek": "an",
+          "girdi_lemma": "an",
+          "girdi_pos": "VERB",
+          "girdi_anahtarlar": [
+            "attributes",
+            "lemma",
+            "pos"
+          ]
+        },
+        {
+          "eslesen_onek": "anla",
+          "girdi_lemma": "anla",
+          "girdi_pos": "VERB",
+          "girdi_anahtarlar": [
+            "attributes",
+            "lemma",
+            "pos"
+          ]
+        },
+        {
+          "eslesen_onek": "anlam",
+          "girdi_lemma": "anlam",
+          "girdi_pos": "NOUN",
+          "girdi_anahtarlar": [
+            "attributes",
+            "lemma",
+            "pos"
+          ]
+        },
+        {
+          "eslesen_onek": "anlamla",
+          "girdi_lemma": "anlamla",
+          "girdi_pos": "VERB",
+          "girdi_anahtarlar": [
+            "attributes",
+            "lemma",
+            "pos"
+          ]
+        }
+      ],
+      "secilen": "anlam"
+    },
+    {
+      "yuzey": "Camlara",
+      "adaylar": [
+        {
+          "eslesen_onek": "ca",
+          "girdi_lemma": "Ca",
+          "girdi_pos": "NOUN",
+          "girdi_anahtarlar": [
+            "attributes",
+            "lemma",
+            "pos"
+          ]
+        },
+        {
+          "eslesen_onek": "cam",
+          "girdi_lemma": "cam",
+          "girdi_pos": "ADJ",
+          "girdi_anahtarlar": [
+            "attributes",
+            "lemma",
+            "pos"
+          ]
+        },
+        {
+          "eslesen_onek": "cam",
+          "girdi_lemma": "cam",
+          "girdi_pos": "NOUN",
+          "girdi_anahtarlar": [
+            "attributes",
+            "lemma",
+            "pos"
+          ]
+        },
+        {
+          "eslesen_onek": "camla",
+          "girdi_lemma": "camla",
+          "girdi_pos": "VERB",
+          "girdi_anahtarlar": [
+            "attributes",
+            "lemma",
+            "pos"
+          ]
+        }
+      ],
+      "secilen": "cam"
+    },
+    {
+      "yuzey": "çekmek",
+      "adaylar": [
+        {
+          "eslesen_onek": "çe",
+          "girdi_lemma": "çe",
+          "girdi_pos": "NOUN",
+          "girdi_anahtarlar": [
+            "attributes",
+            "lemma",
+            "pos"
+          ]
+        },
+        {
+          "eslesen_onek": "çek",
+          "girdi_lemma": "Çek",
+          "girdi_pos": "NOUN",
+          "girdi_anahtarlar": [
+            "attributes",
+            "lemma",
+            "pos"
+          ]
+        },
+        {
+          "eslesen_onek": "çek",
+          "girdi_lemma": "çek",
+          "girdi_pos": "NOUN",
+          "girdi_anahtarlar": [
+            "attributes",
+            "lemma",
+            "pos"
+          ]
+        },
+        {
+          "eslesen_onek": "çek",
+          "girdi_lemma": "çek",
+          "girdi_pos": "VERB",
+          "girdi_anahtarlar": [
+            "attributes",
+            "lemma",
+            "pos"
+          ]
+        },
+        {
+          "eslesen_onek": "çekme",
+          "girdi_lemma": "çekme",
+          "girdi_pos": "ADJ",
+          "girdi_anahtarlar": [
+            "attributes",
+            "lemma",
+            "pos"
+          ]
+        },
+        {
+          "eslesen_onek": "çekme",
+          "girdi_lemma": "çekme",
+          "girdi_pos": "NOUN",
+          "girdi_anahtarlar": [
+            "attributes",
+            "lemma",
+            "pos"
+          ]
+        }
+      ],
+      "secilen": "çek"
+    },
+    {
+      "yuzey": "olan",
+      "adaylar": [
+        {
+          "eslesen_onek": "o",
+          "girdi_lemma": "o",
+          "girdi_pos": "ADJ",
+          "girdi_anahtarlar": [
+            "attributes",
+            "lemma",
+            "pos"
+          ]
+        },
+        {
+          "eslesen_onek": "o",
+          "girdi_lemma": "o",
+          "girdi_pos": "INTERJ",
+          "girdi_anahtarlar": [
+            "attributes",
+            "lemma",
+            "pos"
+          ]
+        },
+        {
+          "eslesen_onek": "o",
+          "girdi_lemma": "o",
+          "girdi_pos": "PRON",
+          "girdi_anahtarlar": [
+            "attributes",
+            "lemma",
+            "pos"
+          ]
+        },
+        {
+          "eslesen_onek": "ol",
+          "girdi_lemma": "ol",
+          "girdi_pos": "ADJ",
+          "girdi_anahtarlar": [
+            "attributes",
+            "lemma",
+            "pos"
+          ]
+        },
+        {
+          "eslesen_onek": "ol",
+          "girdi_lemma": "ol",
+          "girdi_pos": "PRON",
+          "girdi_anahtarlar": [
+            "attributes",
+            "lemma",
+            "pos"
+          ]
+        },
+        {
+          "eslesen_onek": "ol",
+          "girdi_lemma": "ol",
+          "girdi_pos": "VERB",
+          "girdi_anahtarlar": [
+            "attributes",
+            "lemma",
+            "pos"
+          ]
+        }
+      ],
+      "secilen": "o"
+    },
+    {
+      "yuzey": "kaybetmeyen",
+      "adaylar": [
+        {
+          "eslesen_onek": "kay",
+          "girdi_lemma": "kay",
+          "girdi_pos": "NOUN",
+          "girdi_anahtarlar": [
+            "attributes",
+            "lemma",
+            "pos"
+          ]
+        },
+        {
+          "eslesen_onek": "kay",
+          "girdi_lemma": "kay",
+          "girdi_pos": "VERB",
+          "girdi_anahtarlar": [
+            "attributes",
+            "lemma",
+            "pos"
+          ]
+        },
+        {
+          "eslesen_onek": "kaybet",
+          "girdi_lemma": "kaybet",
+          "girdi_pos": "VERB",
+          "girdi_anahtarlar": [
+            "attributes",
+            "lemma",
+            "pos"
+          ]
+        },
+        {
+          "eslesen_onek": "kaybetme",
+          "girdi_lemma": "kaybetme",
+          "girdi_pos": "NOUN",
+          "girdi_anahtarlar": [
+            "attributes",
+            "lemma",
+            "pos"
+          ]
+        }
+      ],
+      "secilen": "kaybet"
+    },
+    {
+      "yuzey": "edilmektedir",
+      "adaylar": [
+        {
+          "eslesen_onek": "e",
+          "girdi_lemma": "e",
+          "girdi_pos": "VERB",
+          "girdi_anahtarlar": [
+            "attributes",
+            "lemma",
+            "pos"
+          ]
+        },
+        {
+          "eslesen_onek": "edi",
+          "girdi_lemma": "Edi",
+          "girdi_pos": "NOUN",
+          "girdi_anahtarlar": [
+            "attributes",
+            "lemma",
+            "pos"
+          ]
+        },
+        {
+          "eslesen_onek": "edi",
+          "girdi_lemma": "edi",
+          "girdi_pos": "NOUN",
+          "girdi_anahtarlar": [
+            "attributes",
+            "lemma",
+            "pos"
+          ]
+        },
+        {
+          "eslesen_onek": "edil",
+          "girdi_lemma": "edil",
+          "girdi_pos": "VERB",
+          "girdi_anahtarlar": [
+            "attributes",
+            "lemma",
+            "pos"
+          ]
+        },
+        {
+          "eslesen_onek": "edilme",
+          "girdi_lemma": "edilme",
+          "girdi_pos": "NOUN",
+          "girdi_anahtarlar": [
+            "attributes",
+            "lemma",
+            "pos"
+          ]
+        }
+      ],
+      "secilen": "edil"
+    }
+  ],
+  "hukum": {
+    "soru": "D1 'en uzun kok kazanir' kurali bu lexicon'la regresyona doner mi?",
+    "kriter": "daha uzun aday kendisi de kok+ek'e ayriliyorsa o aday LEMMA DEGIL",
+    "sonuc": "EVET — kuyruk blogu cekimli yuzeyleri lemma olarak tasiyor; kural bu girdileri TERCIH EDER",
+    "sonuc_gerekce": "Faz 0 ihlal orneklerinde daha uzun aday olarak anlamla/camla/çekme/kaybetme/edilme cikti; bunlar kok+ek'e ayriliyor => 'daha uzun lemma' degiller",
+    "gereken": "Faz 1 kuyruk tasfiyesi Faz 2 skor degisikliginden ONCE dogrulanmali"
+  }
+}

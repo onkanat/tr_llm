@@ -1,0 +1,93 @@
+{
+  "task": "T-0068",
+  "ek": "ayristirma (post-hoc, betimleyici)",
+  "kapi": false,
+  "kaynak_olcum": "data/eval/t0068_belge_ayristirma_2026-09-18.json",
+  "kaynak_sha256": "a81c028d8e095526c97b5c81653aba2f1c7ac4af4578ff16341f47060f9e5b9b",
+  "stamp_utc": "2026-09-18T10:26:23Z",
+  "n": 150,
+  "kayit_hizalama_dogrulandi": true,
+  "kural_cakismasi": {
+    "atesleyen": [
+      "B1_ZARF_SOKU",
+      "B3_BELGEDEN_BAGIMSIZ"
+    ],
+    "ilan_edilen_hukum": "CELISKILI (B1_ZARF_SOKU+B3_BELGEDEN_BAGIMSIZ) — kurallar ayni anda atesledi, rapor arastirmali"
+  },
+  "kosul_delta": {
+    "belge_var": {
+      "ortalama": -0.6254858080546057,
+      "ci95_boot": [
+        -0.6679423522949218,
+        -0.5828124682108561
+      ],
+      "n_iyi": 0,
+      "n_kotu": 150
+    },
+    "belge_yok": {
+      "ortalama": -0.5291464551289877,
+      "ci95_boot": [
+        -0.571930071512858,
+        -0.4874477195739746
+      ],
+      "n_iyi": 0,
+      "n_kotu": 150
+    },
+    "bos_belge": {
+      "ortalama": -0.5226038455963131,
+      "ci95_boot": [
+        -0.5664147885640463,
+        -0.47931750933329265
+      ],
+      "n_iyi": 0,
+      "n_kotu": 150
+    }
+  },
+  "paylar": {
+    "S_belge_tam_(K1-K2)": {
+      "aciklama": "Delta(belge_var) - Delta(belge_yok)",
+      "ortalama": -0.09633935292561849,
+      "ci95_boot": [
+        -0.12529075622558594,
+        -0.06881669362386068
+      ],
+      "ci_sifiri_iciyor": false,
+      "n_negatif": 116,
+      "n_pozitif": 34,
+      "n_sifir": 0,
+      "isaret": "NEGATIF = sol kosul ceketi daha cok bozuyor"
+    },
+    "S_etiket_(K3-K2)": {
+      "aciklama": "Delta(bos_belge) - Delta(belge_yok)",
+      "ortalama": 0.0065426095326741535,
+      "ci95_boot": [
+        0.00035125732421875,
+        0.01268612543741862
+      ],
+      "ci_sifiri_iciyor": false,
+      "n_negatif": 64,
+      "n_pozitif": 86,
+      "n_sifir": 0,
+      "isaret": "NEGATIF = sol kosul ceketi daha cok bozuyor"
+    },
+    "S_icerik_(K1-K3)": {
+      "aciklama": "Delta(belge_var) - Delta(bos_belge)",
+      "ortalama": -0.10288196245829265,
+      "ci95_boot": [
+        -0.1303222401936849,
+        -0.0764323361714681
+      ],
+      "ci_sifiri_iciyor": false,
+      "n_negatif": 125,
+      "n_pozitif": 25,
+      "n_sifir": 0,
+      "isaret": "NEGATIF = sol kosul ceketi daha cok bozuyor"
+    }
+  },
+  "yorum": [
+    "S_etiket = +0.0065 (|K1|'in %1.0'i) ve ISARETI POZITIF — yani bos <BELGE> etiketi, etiketsiz duruma gore ceketi biraz daha IYI yapiyor. GA sifiri icermese de (>0) BUYUKLUK ONEMSIZ ve yon 'sok' beklentisinin TERSI: B1'in MEKANIZMA iddiasi (zarf/syntax soku) CURUDU. NOT: GA-sifir-icerme testi buyukluge KORDUR; tek basina 'olculebilir katki' DEMEZ.",
+    "Belgesiz kosulda kaybin |K2|/|K1| = 0.8460 (84.6%) suruyor; her iki kosulda da 150/150 kayitta ceket kotu.",
+    "Belgenin TAM katkisi S_belge = -0.0963 (15.4% of |K1|), icerigin etiket-ustu katkisi S_icerik = -0.1029.",
+    "B1 ve B3 MANTIKSAL OLARAK CELISMIYOR: ikisi de 'girdi icerigi belirleyici degil' okumasidir. B1 YANLIS KURULMUSTUR (ayirt edici degil: girdiden bagimsiz bozulmada da atesler); B3'un iddiasi ise ayirt edici ve DOGRULANDI. Net hüküm: BELGEDEN BAGIMSIZ."
+  ]
+}

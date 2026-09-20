@@ -1,0 +1,600 @@
+{
+  "ilan_utc": "2026-09-18T14:36:18Z",
+  "olcum_utc": "2026-09-18T14:36:18Z",
+  "mod": "CPU-only (GPU'ya dokunulmadi)",
+  "n_ornek": 60000,
+  "n_parti": 2000,
+  "tohum": 0,
+  "hukum_kurali": {
+    "curutur": "> %0,1",
+    "destekler": "= 0",
+    "arada": "0 < oran <= %0,1"
+  },
+  "sozluk": {
+    "yol": "data/rebuild/vocab_base_32852.json",
+    "boyut": 32852,
+    "next_id": 32852,
+    "output": 1706,
+    "pad": 1,
+    "eos": 3
+  },
+  "vekil_dogrulama": {
+    "denek": 400,
+    "uyusan": 400,
+    "uyusma": 1.0,
+    "output_iceren_denek": 381,
+    "celiskiler": []
+  },
+  "kumeler": [
+    {
+      "kume": "data/train_chat_balanced.bin",
+      "etiket": "kanonik sozluk 32852",
+      "ok": true,
+      "blok": 128,
+      "blok_kaynak": "meta",
+      "bayt": 6240000,
+      "pencere_sayisi": 60000,
+      "p": 0.95185,
+      "disi": 2889,
+      "icinde": 57111,
+      "partiler": [
+        {
+          "B": 8,
+          "parti_sayisi": 2000,
+          "atesleyen": 0,
+          "atesleme_orani": 0.0,
+          "parti_basina_hedef_ort": 7.606,
+          "analitik_1_eksi_p_uzeri_B": 0.0
+        },
+        {
+          "B": 16,
+          "parti_sayisi": 2000,
+          "atesleyen": 0,
+          "atesleme_orani": 0.0,
+          "parti_basina_hedef_ort": 15.259,
+          "analitik_1_eksi_p_uzeri_B": 0.0
+        },
+        {
+          "B": 32,
+          "parti_sayisi": 2000,
+          "atesleyen": 0,
+          "atesleme_orani": 0.0,
+          "parti_basina_hedef_ort": 30.463,
+          "analitik_1_eksi_p_uzeri_B": 0.0
+        }
+      ]
+    },
+    {
+      "kume": "data/train_chat_balanced_clean.bin",
+      "etiket": "kanonik sozluk 32852",
+      "ok": true,
+      "blok": 128,
+      "blok_kaynak": "meta",
+      "bayt": 4832000,
+      "pencere_sayisi": 60000,
+      "p": 0.9503666666666667,
+      "disi": 2978,
+      "icinde": 57022,
+      "partiler": [
+        {
+          "B": 8,
+          "parti_sayisi": 2000,
+          "atesleyen": 0,
+          "atesleme_orani": 0.0,
+          "parti_basina_hedef_ort": 7.606,
+          "analitik_1_eksi_p_uzeri_B": 0.0
+        },
+        {
+          "B": 16,
+          "parti_sayisi": 2000,
+          "atesleyen": 0,
+          "atesleme_orani": 0.0,
+          "parti_basina_hedef_ort": 15.244,
+          "analitik_1_eksi_p_uzeri_B": 0.0
+        },
+        {
+          "B": 32,
+          "parti_sayisi": 2000,
+          "atesleyen": 0,
+          "atesleme_orani": 0.0,
+          "parti_basina_hedef_ort": 30.4445,
+          "analitik_1_eksi_p_uzeri_B": 0.0
+        }
+      ]
+    },
+    {
+      "kume": "data/train_balanced_sft_v2.bin",
+      "etiket": "kanonik sozluk 32852",
+      "ok": true,
+      "blok": 64,
+      "blok_kaynak": "meta",
+      "bayt": 3586866,
+      "pencere_sayisi": 60000,
+      "p": 0.7238833333333333,
+      "disi": 16567,
+      "icinde": 43433,
+      "partiler": [
+        {
+          "B": 8,
+          "parti_sayisi": 2000,
+          "atesleyen": 0,
+          "atesleme_orani": 0.0,
+          "parti_basina_hedef_ort": 5.7365,
+          "analitik_1_eksi_p_uzeri_B": 3.4e-05
+        },
+        {
+          "B": 16,
+          "parti_sayisi": 2000,
+          "atesleyen": 0,
+          "atesleme_orani": 0.0,
+          "parti_basina_hedef_ort": 11.608,
+          "analitik_1_eksi_p_uzeri_B": 0.0
+        },
+        {
+          "B": 32,
+          "parti_sayisi": 2000,
+          "atesleyen": 0,
+          "atesleme_orani": 0.0,
+          "parti_basina_hedef_ort": 23.194,
+          "analitik_1_eksi_p_uzeri_B": 0.0
+        }
+      ]
+    },
+    {
+      "kume": "data/train_chat_sft.bin",
+      "etiket": "meta yok -> geri dusus",
+      "ok": true,
+      "blok": 64,
+      "blok_kaynak": "GERI DUSUS (64)",
+      "bayt": 2464000,
+      "pencere_sayisi": 60000,
+      "p": 0.4218,
+      "disi": 34692,
+      "icinde": 25308,
+      "partiler": [
+        {
+          "B": 8,
+          "parti_sayisi": 2000,
+          "atesleyen": 20,
+          "atesleme_orani": 0.01,
+          "parti_basina_hedef_ort": 3.3835,
+          "analitik_1_eksi_p_uzeri_B": 0.012492
+        },
+        {
+          "B": 16,
+          "parti_sayisi": 2000,
+          "atesleyen": 0,
+          "atesleme_orani": 0.0,
+          "parti_basina_hedef_ort": 6.7845,
+          "analitik_1_eksi_p_uzeri_B": 0.000156
+        },
+        {
+          "B": 32,
+          "parti_sayisi": 2000,
+          "atesleyen": 0,
+          "atesleme_orani": 0.0,
+          "parti_basina_hedef_ort": 13.6445,
+          "analitik_1_eksi_p_uzeri_B": 0.0
+        }
+      ]
+    },
+    {
+      "kume": "data/train_balanced_sft.bin",
+      "etiket": "BAYAT sozluk 31357",
+      "ok": true,
+      "blok": 64,
+      "blok_kaynak": "meta",
+      "bayt": 46713074,
+      "pencere_sayisi": 60000,
+      "p": 0.2334,
+      "disi": 45996,
+      "icinde": 14004,
+      "partiler": [
+        {
+          "B": 8,
+          "parti_sayisi": 2000,
+          "atesleyen": 216,
+          "atesleme_orani": 0.108,
+          "parti_basina_hedef_ort": 1.8625,
+          "analitik_1_eksi_p_uzeri_B": 0.119275
+        },
+        {
+          "B": 16,
+          "parti_sayisi": 2000,
+          "atesleyen": 25,
+          "atesleme_orani": 0.0125,
+          "parti_basina_hedef_ort": 3.798,
+          "analitik_1_eksi_p_uzeri_B": 0.014227
+        },
+        {
+          "B": 32,
+          "parti_sayisi": 2000,
+          "atesleyen": 0,
+          "atesleme_orani": 0.0,
+          "parti_basina_hedef_ort": 7.435,
+          "analitik_1_eksi_p_uzeri_B": 0.000202
+        }
+      ]
+    },
+    {
+      "kume": "data/train_deep_sft.bin",
+      "etiket": "BAYAT sozluk 31322",
+      "ok": true,
+      "blok": 128,
+      "blok_kaynak": "meta",
+      "bayt": 22433024,
+      "pencere_sayisi": 60000,
+      "p": 0.9806666666666667,
+      "disi": 1160,
+      "icinde": 58840,
+      "partiler": [
+        {
+          "B": 8,
+          "parti_sayisi": 2000,
+          "atesleyen": 0,
+          "atesleme_orani": 0.0,
+          "parti_basina_hedef_ort": 7.849,
+          "analitik_1_eksi_p_uzeri_B": 0.0
+        },
+        {
+          "B": 16,
+          "parti_sayisi": 2000,
+          "atesleyen": 0,
+          "atesleme_orani": 0.0,
+          "parti_basina_hedef_ort": 15.6875,
+          "analitik_1_eksi_p_uzeri_B": 0.0
+        },
+        {
+          "B": 32,
+          "parti_sayisi": 2000,
+          "atesleyen": 0,
+          "atesleme_orani": 0.0,
+          "parti_basina_hedef_ort": 31.411,
+          "analitik_1_eksi_p_uzeri_B": 0.0
+        }
+      ]
+    },
+    {
+      "kume": "data/train_pedagogy_highschool.bin",
+      "etiket": "BAYAT sozluk 31357",
+      "ok": true,
+      "blok": 64,
+      "blok_kaynak": "meta",
+      "bayt": 4688298,
+      "pencere_sayisi": 60000,
+      "p": 0.9263333333333333,
+      "disi": 4420,
+      "icinde": 55580,
+      "partiler": [
+        {
+          "B": 8,
+          "parti_sayisi": 2000,
+          "atesleyen": 0,
+          "atesleme_orani": 0.0,
+          "parti_basina_hedef_ort": 7.434,
+          "analitik_1_eksi_p_uzeri_B": 0.0
+        },
+        {
+          "B": 16,
+          "parti_sayisi": 2000,
+          "atesleyen": 0,
+          "atesleme_orani": 0.0,
+          "parti_basina_hedef_ort": 14.8405,
+          "analitik_1_eksi_p_uzeri_B": 0.0
+        },
+        {
+          "B": 32,
+          "parti_sayisi": 2000,
+          "atesleyen": 0,
+          "atesleme_orani": 0.0,
+          "parti_basina_hedef_ort": 29.6305,
+          "analitik_1_eksi_p_uzeri_B": 0.0
+        }
+      ]
+    },
+    {
+      "kume": "data/train_future_finetune.bin",
+      "etiket": "sozluk bilgisi yok",
+      "ok": true,
+      "blok": 64,
+      "blok_kaynak": "meta",
+      "bayt": 12408840,
+      "pencere_sayisi": 60000,
+      "p": 0.07231666666666667,
+      "disi": 55661,
+      "icinde": 4339,
+      "partiler": [
+        {
+          "B": 8,
+          "parti_sayisi": 2000,
+          "atesleyen": 1150,
+          "atesleme_orani": 0.575,
+          "parti_basina_hedef_ort": 0.5385,
+          "analitik_1_eksi_p_uzeri_B": 0.548527
+        },
+        {
+          "B": 16,
+          "parti_sayisi": 2000,
+          "atesleyen": 600,
+          "atesleme_orani": 0.3,
+          "parti_basina_hedef_ort": 1.1455,
+          "analitik_1_eksi_p_uzeri_B": 0.300882
+        },
+        {
+          "B": 32,
+          "parti_sayisi": 2000,
+          "atesleyen": 177,
+          "atesleme_orani": 0.0885,
+          "parti_basina_hedef_ort": 2.347,
+          "analitik_1_eksi_p_uzeri_B": 0.09053
+        }
+      ]
+    },
+    {
+      "kume": "data/train_all_chosen.bin",
+      "etiket": "meta yok -> geri dusus",
+      "ok": true,
+      "blok": 64,
+      "blok_kaynak": "GERI DUSUS (64)",
+      "bayt": 36194594,
+      "pencere_sayisi": 60000,
+      "p": 0.0011833333333333333,
+      "disi": 59929,
+      "icinde": 71,
+      "partiler": [
+        {
+          "B": 8,
+          "parti_sayisi": 2000,
+          "atesleyen": 1980,
+          "atesleme_orani": 0.99,
+          "parti_basina_hedef_ort": 0.01,
+          "analitik_1_eksi_p_uzeri_B": 0.990572
+        },
+        {
+          "B": 16,
+          "parti_sayisi": 2000,
+          "atesleyen": 1965,
+          "atesleme_orani": 0.9825,
+          "parti_basina_hedef_ort": 0.0175,
+          "analitik_1_eksi_p_uzeri_B": 0.981234
+        },
+        {
+          "B": 32,
+          "parti_sayisi": 2000,
+          "atesleyen": 1929,
+          "atesleme_orani": 0.9645,
+          "parti_basina_hedef_ort": 0.0355,
+          "analitik_1_eksi_p_uzeri_B": 0.96282
+        }
+      ]
+    },
+    {
+      "kume": "data/train.bin",
+      "etiket": "train.py VARSAYILAN yolu",
+      "ok": true,
+      "blok": 64,
+      "blok_kaynak": "GERI DUSUS (64)",
+      "bayt": 21523330,
+      "pencere_sayisi": 60000,
+      "p": 0.0018,
+      "disi": 59892,
+      "icinde": 108,
+      "partiler": [
+        {
+          "B": 8,
+          "parti_sayisi": 2000,
+          "atesleyen": 1962,
+          "atesleme_orani": 0.981,
+          "parti_basina_hedef_ort": 0.019,
+          "analitik_1_eksi_p_uzeri_B": 0.98569
+        },
+        {
+          "B": 16,
+          "parti_sayisi": 2000,
+          "atesleyen": 1948,
+          "atesleme_orani": 0.974,
+          "parti_basina_hedef_ort": 0.026,
+          "analitik_1_eksi_p_uzeri_B": 0.971586
+        },
+        {
+          "B": 32,
+          "parti_sayisi": 2000,
+          "atesleyen": 1869,
+          "atesleme_orani": 0.9345,
+          "parti_basina_hedef_ort": 0.069,
+          "analitik_1_eksi_p_uzeri_B": 0.943978
+        }
+      ]
+    },
+    {
+      "kume": "data/train_corpus.bin",
+      "etiket": "meta yok -> geri dusus",
+      "ok": true,
+      "blok": 64,
+      "blok_kaynak": "GERI DUSUS (64)",
+      "bayt": 1191110,
+      "pencere_sayisi": 60000,
+      "p": 0.0,
+      "disi": 60000,
+      "icinde": 0,
+      "partiler": [
+        {
+          "B": 8,
+          "parti_sayisi": 2000,
+          "atesleyen": 2000,
+          "atesleme_orani": 1.0,
+          "parti_basina_hedef_ort": 0.0,
+          "analitik_1_eksi_p_uzeri_B": 1.0
+        },
+        {
+          "B": 16,
+          "parti_sayisi": 2000,
+          "atesleyen": 2000,
+          "atesleme_orani": 1.0,
+          "parti_basina_hedef_ort": 0.0,
+          "analitik_1_eksi_p_uzeri_B": 1.0
+        },
+        {
+          "B": 32,
+          "parti_sayisi": 2000,
+          "atesleyen": 2000,
+          "atesleme_orani": 1.0,
+          "parti_basina_hedef_ort": 0.0,
+          "analitik_1_eksi_p_uzeri_B": 1.0
+        }
+      ]
+    },
+    {
+      "kume": "data/anka_a1_pretrain.bin",
+      "etiket": "KONTROL: on-egitim duz metin, p=0 beklenir",
+      "ok": true,
+      "blok": 128,
+      "blok_kaynak": "meta",
+      "bayt": 200000000,
+      "pencere_sayisi": 60000,
+      "p": 1.6666666666666667e-05,
+      "disi": 59999,
+      "icinde": 1,
+      "partiler": [
+        {
+          "B": 8,
+          "parti_sayisi": 2000,
+          "atesleyen": 1999,
+          "atesleme_orani": 0.9995,
+          "parti_basina_hedef_ort": 0.0005,
+          "analitik_1_eksi_p_uzeri_B": 0.999867
+        },
+        {
+          "B": 16,
+          "parti_sayisi": 2000,
+          "atesleyen": 1997,
+          "atesleme_orani": 0.9985,
+          "parti_basina_hedef_ort": 0.0015,
+          "analitik_1_eksi_p_uzeri_B": 0.999733
+        },
+        {
+          "B": 32,
+          "parti_sayisi": 2000,
+          "atesleyen": 1998,
+          "atesleme_orani": 0.999,
+          "parti_basina_hedef_ort": 0.001,
+          "analitik_1_eksi_p_uzeri_B": 0.999467
+        }
+      ]
+    }
+  ],
+  "hukum": {
+    "hukum": "HUKUM CURUDU: en az bir SFT kulliyatinda koruma mesru kosumu >%0,1 oranda oldurur",
+    "en_yuksek_atesleme_orani": 1.0,
+    "en_yuksek_kume": "data/train_corpus.bin",
+    "kontrol_atesleme": [
+      {
+        "kume": "data/anka_a1_pretrain.bin",
+        "B": 8,
+        "atesleme_orani": 0.9995
+      },
+      {
+        "kume": "data/anka_a1_pretrain.bin",
+        "B": 16,
+        "atesleme_orani": 0.9985
+      },
+      {
+        "kume": "data/anka_a1_pretrain.bin",
+        "B": 32,
+        "atesleme_orani": 0.999
+      }
+    ]
+  },
+  "kumesi_sonuc": [
+    {
+      "kume": "data/train_chat_balanced.bin",
+      "p": 0.95185,
+      "atesleme_B8": 0.0,
+      "atesleme_B32": 0.0
+    },
+    {
+      "kume": "data/train_chat_balanced_clean.bin",
+      "p": 0.9503666666666667,
+      "atesleme_B8": 0.0,
+      "atesleme_B32": 0.0
+    },
+    {
+      "kume": "data/train_balanced_sft_v2.bin",
+      "p": 0.7238833333333333,
+      "atesleme_B8": 0.0,
+      "atesleme_B32": 0.0
+    },
+    {
+      "kume": "data/train_chat_sft.bin",
+      "p": 0.4218,
+      "atesleme_B8": 0.01,
+      "atesleme_B32": 0.0
+    },
+    {
+      "kume": "data/train_balanced_sft.bin",
+      "p": 0.2334,
+      "atesleme_B8": 0.108,
+      "atesleme_B32": 0.0
+    },
+    {
+      "kume": "data/train_deep_sft.bin",
+      "p": 0.9806666666666667,
+      "atesleme_B8": 0.0,
+      "atesleme_B32": 0.0
+    },
+    {
+      "kume": "data/train_pedagogy_highschool.bin",
+      "p": 0.9263333333333333,
+      "atesleme_B8": 0.0,
+      "atesleme_B32": 0.0
+    },
+    {
+      "kume": "data/train_future_finetune.bin",
+      "p": 0.07231666666666667,
+      "atesleme_B8": 0.575,
+      "atesleme_B32": 0.0885
+    },
+    {
+      "kume": "data/train_all_chosen.bin",
+      "p": 0.0011833333333333333,
+      "atesleme_B8": 0.99,
+      "atesleme_B32": 0.9645
+    },
+    {
+      "kume": "data/train.bin",
+      "p": 0.0018,
+      "atesleme_B8": 0.981,
+      "atesleme_B32": 0.9345
+    },
+    {
+      "kume": "data/train_corpus.bin",
+      "p": 0.0,
+      "atesleme_B8": 1.0,
+      "atesleme_B32": 1.0
+    },
+    {
+      "kume": "data/anka_a1_pretrain.bin",
+      "p": 1.6666666666666667e-05,
+      "atesleme_B8": 0.9995,
+      "atesleme_B32": 0.999
+    }
+  ],
+  "ureticiler": [
+    {
+      "yol": "scratch/t0075_guard_tani.py",
+      "sha256": "d9a7cd9d9ea4869755fd596f461683a49ed6d09c4c953d2cc990cf1be2a99c55",
+      "bayt": 15211
+    },
+    {
+      "yol": "scripts/train_step_demo.py",
+      "sha256": "1bac5e9263faca86e513d83ed1256dcc04305f741f86b714bc1f115b4e7f5dd7",
+      "bayt": 15192
+    },
+    {
+      "yol": "train.py",
+      "sha256": "ab66c3a3db2ab34a376de180b5d3e1a8b5bf46e79ffc8889965c2f1c637c273d",
+      "bayt": 9366
+    }
+  ],
+  "bitis_utc": "2026-09-18T14:36:24Z"
+}

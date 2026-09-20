@@ -1,0 +1,147 @@
+{
+  "gorev": "T-0073-EK",
+  "tur": "blok 256, yalniz b8/b16",
+  "ilan_utc": "2026-09-18T14:53:52Z",
+  "ilan_yuk": {
+    "bir_dk": 2.74,
+    "bes_dk": 3.56,
+    "onbes_dk": 4.69
+  },
+  "ilan_bellek": {
+    "bos_sayfa": 242581,
+    "wired_sayfa": 80732,
+    "aktif_sayfa": 64990,
+    "swap_dolu_mb": 2534,
+    "swap_bos_mb": 1561
+  },
+  "veri": "data/anka_a1_pretrain.bin",
+  "veri_sha256": "383a9c890b75ec96195122b9981d7a73371d3bcaa3b9f6e7c2a188510d917cb8",
+  "adim": 50,
+  "karar_kurali": "en iyi blok-256 hücresi b16k128 (ana sonda, hücre 2) kararlı hızını (2417.4 jeton/sn) %2'den fazla geçerse A1 onunla, yoksa A1 b16×k128 ile",
+  "taban": {
+    "etiket": "b16k128 (ana sonda, hücre 2)",
+    "jeton_sn_kararli": 2417.4
+  },
+  "bekci": {
+    "kural": "adım > 3.0 × ilk-10 medyan => THRASH",
+    "ilk": 10,
+    "kat": 3.0
+  },
+  "hucreler": [
+    {
+      "batch": 8,
+      "blok": 256,
+      "adim": 50,
+      "jeton_adim": 2048,
+      "log": "scratch/t0073_logs/b8_k256_n50_blok256.log",
+      "komut": "-u train.py --device mps --data data/anka_a1_pretrain.bin --steps 50 --batch-size 8 --block-size 256 --save-path scratch/t0073_blok256.pt --from-scratch --pretrain",
+      "yuk_oncesi": {
+        "bir_dk": 2.74,
+        "bes_dk": 3.56,
+        "onbes_dk": 4.69
+      },
+      "bellek_oncesi": {
+        "bos_sayfa": 229807,
+        "wired_sayfa": 80733,
+        "aktif_sayfa": 65492,
+        "swap_dolu_mb": 2534,
+        "swap_bos_mb": 1561
+      },
+      "toplam_sure_duvar": 47.03,
+      "rc": 0,
+      "kesildi": false,
+      "kesme_nedeni": "",
+      "mps": true,
+      "sifirdan": true,
+      "kayiplar": [
+        10.6402,
+        6.0305,
+        5.9432,
+        5.4323,
+        5.3534,
+        5.1593
+      ],
+      "ilk_kayip_gercek": 10.6402,
+      "bellek_sonrasi": {
+        "bos_sayfa": 256170,
+        "wired_sayfa": 78752,
+        "aktif_sayfa": 46389,
+        "swap_dolu_mb": 2587,
+        "swap_bos_mb": 1509
+      },
+      "ornek_sayisi": 6,
+      "medyan": 0.78,
+      "jeton_sn_ort": 261.3,
+      "jeton_sn_kararli": 2625.6,
+      "adim_sure_ort": 0.94,
+      "gecerli": false
+    },
+    {
+      "batch": 16,
+      "blok": 256,
+      "adim": 50,
+      "jeton_adim": 4096,
+      "log": "scratch/t0073_logs/b16_k256_n50_blok256.log",
+      "komut": "-u train.py --device mps --data data/anka_a1_pretrain.bin --steps 50 --batch-size 16 --block-size 256 --save-path scratch/t0073_blok256.pt --from-scratch --pretrain",
+      "yuk_oncesi": {
+        "bir_dk": 4.62,
+        "bes_dk": 3.9,
+        "onbes_dk": 4.75
+      },
+      "bellek_oncesi": {
+        "bos_sayfa": 255965,
+        "wired_sayfa": 78752,
+        "aktif_sayfa": 46638,
+        "swap_dolu_mb": 2587,
+        "swap_bos_mb": 1509
+      },
+      "toplam_sure_duvar": 1933.9,
+      "rc": 0,
+      "kesildi": false,
+      "kesme_nedeni": "",
+      "mps": true,
+      "sifirdan": true,
+      "kayiplar": [
+        10.5995,
+        5.7633,
+        5.3599,
+        5.2601,
+        5.0068,
+        4.9721
+      ],
+      "ilk_kayip_gercek": 10.5995,
+      "bellek_sonrasi": {
+        "bos_sayfa": 268234,
+        "wired_sayfa": 116910,
+        "aktif_sayfa": 18749,
+        "swap_dolu_mb": 3310,
+        "swap_bos_mb": 2833
+      },
+      "ornek_sayisi": 6,
+      "medyan": 31.69,
+      "jeton_sn_ort": 12.7,
+      "jeton_sn_kararli": 129.3,
+      "adim_sure_ort": 32.813,
+      "gecerli": false
+    }
+  ],
+  "hukum": {
+    "en_iyi": null,
+    "taban": 2417.4,
+    "oran": null,
+    "karar": "KARAR VERİLEMEDİ: geçerli hücre yok"
+  },
+  "ureticiler": [
+    {
+      "yol": "scratch/t0073_blok256.py",
+      "sha256": "d490cb062acb0db3da9ba8ffb0457cbe2b5404cfb75a8face510b34a121819f6",
+      "bayt": 11564
+    },
+    {
+      "yol": "train.py",
+      "sha256": "ab66c3a3db2ab34a376de180b5d3e1a8b5bf46e79ffc8889965c2f1c637c273d",
+      "bayt": 9366
+    }
+  ],
+  "bitis_utc": "2026-09-18T15:26:53Z"
+}

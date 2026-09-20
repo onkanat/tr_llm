@@ -1,0 +1,77 @@
+{
+  "gorev": "T-0080",
+  "asama": "Faz 3 uretici — vocab_anka_r1_33036",
+  "baslangic_utc": "2026-09-19T10:05:37Z",
+  "mod": "YAZ",
+  "cikti": "data/rebuild/vocab_anka_r1_33036.json",
+  "kaynak": {
+    "yol": "data/rebuild/vocab_base_32852.json",
+    "sha256": "7611b6a523a2bb524cc21aa9cc64235aa6a2ae99f87f46ac51cb2915e61164ad",
+    "beklenen": "7611b6a523a2bb524cc21aa9cc64235aa6a2ae99f87f46ac51cb2915e61164ad",
+    "vocab_entity_ile_ayni": true
+  },
+  "taban": {
+    "giris": 32852,
+    "next_id": 32852
+  },
+  "dar": {
+    "adet": 184,
+    "N_beklenen": 33036,
+    "ilk_10": [
+      "Abu Dabi",
+      "Abuja",
+      "Addis Ababa",
+      "Afganistan",
+      "Akra",
+      "Almanya",
+      "Amman",
+      "Amsterdam",
+      "Arjantin",
+      "Arnavutluk"
+    ],
+    "son_10": [
+      "Ürdün",
+      "Üsküp",
+      "İngiltere",
+      "İrlanda",
+      "İslamabad",
+      "İsveç",
+      "İsviçre",
+      "İzlanda",
+      "Şam",
+      "Şili"
+    ]
+  },
+  "V2_onek": {
+    "id_0_32851_birebir": true,
+    "farkli_anahtar": [],
+    "next_id_once": 32852,
+    "next_id_sonra": 33036
+  },
+  "yeni_id_araligi": {
+    "min": 32852,
+    "max": 33035
+  },
+  "cikti_digest": {
+    "sha256": "b2bb4c6fb4c43423a3070ed29af013a9326264ca72a4bbb0c6ede1c8d27bbfee",
+    "bayt": 745758
+  },
+  "V4_yazilan_dosyadan": {
+    "denek": [
+      "Fransa",
+      "Berlin",
+      "Kanadalı",
+      "İsveçli",
+      "Britanyalı"
+    ],
+    "hedef": 5,
+    "KALAN": 0,
+    "kalan": [],
+    "giris": 33036,
+    "next_id": 33036
+  },
+  "SONUC": "YAZILDI",
+  "son_guncelleme_utc": "2026-09-19T10:05:37Z",
+  "sure_sn": 0.3,
+  "KENDI_KUSURLARIM": []
+}

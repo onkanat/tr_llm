@@ -1,0 +1,275 @@
+{
+  "gorev": "T-0089",
+  "baslik": "train_dpo.py: bayat sozluk sabiti + iki olu checkpoint varsayilani + sessiz return (T-0087 sinifinin 6./7. sitesi)",
+  "damga": "2026-09-20",
+  "olusturma": "2026-09-20T07:46:22Z",
+  "sahiplik": "2026-09-20T07:46:30Z",
+  "ttl_dk": 180,
+  "kaynak": "data/eval/anka_r11_kucuk_borclar_2026-09-20.md §10/2",
+  "operator_talimati": "Siradaki acik maddeyi kapat: train_dpo.py",
+  "hukum": "K1..K8 TAMAMI KALDI; hicbir curutme maddesi ateslenmedi",
+  "iddia_siniri_K4": "sozluk/checkpoint kapisi SESSIZLIGI degil OPAKLIGI giderir: strict=False sekil uyusmazligini YUTMAZ, RuntimeError verir (Kontrol A)",
+  "tasinmis_yuzey": {
+    "donmus_10_desen": {
+      "numaralandirilan_dosya": 72,
+      "esik_sonrasi_yazilan": 0,
+      "esik": "T-0089 claimed_at = 2026-09-20T07:46:30Z (UTC)"
+    },
+    "baseline_manifest": {
+      "yol": "$TMPDIR/t0089/once_donmus.txt",
+      "satir": 28,
+      "sha256": "79f05cea4f4a2844344d6ac7d8f209ed3d9fc19e19808e38e7b43e6548b2579e"
+    },
+    "yeniden_hash": {
+      "degisen_digest": 0,
+      "silinen": 0
+    },
+    "bagimsiz_numaralandirma": {
+      "pt": 2,
+      "bin": 23,
+      "toplam": 25,
+      "baseline_toplam": 25,
+      "yeni_eklenen": [],
+      "kaybolan": []
+    },
+    "data_vocab_json": {
+      "once": "4b40eebee9c996c8dd3150f6b3c8896de85764ee1cf0b08e6c636e5c002a0e69",
+      "sonra": "4b40eebee9c996c8dd3150f6b3c8896de85764ee1cf0b08e6c636e5c002a0e69"
+    },
+    "data_anka_a1r_pt": {
+      "once": "b93cc1cd54093fc63342d394abe528f2128dc16e20b4d7ac6ab680854b4d6293",
+      "sonra": "b93cc1cd54093fc63342d394abe528f2128dc16e20b4d7ac6ab680854b4d6293"
+    },
+    "egitim_kosusu": false,
+    "uretilen_pt_bin": 0
+  },
+  "once_sonra_rc": [
+    {
+      "dal": "A argumansiz",
+      "once": 0,
+      "sonra": 2,
+      "mesaj": "--vocab ve --ref-model ve --active-model ZORUNLUDUR"
+    },
+    {
+      "dal": "B kisimi --vocab",
+      "once": 0,
+      "sonra": 2,
+      "mesaj": "--ref-model ve --active-model (verilen --vocab SAYILMADI)"
+    },
+    {
+      "dal": "C yolu olmayan",
+      "once": 0,
+      "sonra": 2,
+      "mesaj": "--vocab VERILEN YOL YOK: yok.json"
+    },
+    {
+      "dal": "D pozitif gercek uclu + uydurma --data",
+      "once": null,
+      "sonra": 2,
+      "mesaj": "--data adiyla durdu => ilk uc kapi GECTI",
+      "once_notu": "HEAD'de kosulmadi: kayit yolu active_model_path (=donmus anka_a1r.pt) idi; kosmak 30 DPO adimi egitirdi"
+    },
+    {
+      "dal": "E K4 negatif bayat sozluk",
+      "once": 0,
+      "sonra": 2,
+      "mesaj": "sozluk/checkpoint UYUSMAZLIGI ... 31357 ... 33114 (fark 1757)"
+    },
+    {
+      "dal": "F C1 pozitif gercek cift + bos veri",
+      "once": null,
+      "sonra": 1,
+      "mesaj": "kapi YOK; boyutu 33114; K4 GECTI; egitim dongusunde IndexError",
+      "once_notu": "HEAD'de kosulmadi (ayni gerekce: kayit yolu donmus)"
+    }
+  ],
+  "k1": {
+    "kaldi": true,
+    "data_vocab_json_canli_atama": 0,
+    "aciklama_metni": {
+      "EMEKLI yorum": 1,
+      "DURDURULDU mesaji": 1
+    },
+    "tek_atama": "vocab_path = argv_deger((\"--vocab\",))"
+  },
+  "k2": {
+    "kaldi": true,
+    "arac_olcumu": {
+      "ham": 3,
+      "emekli": 3,
+      "olu": 0
+    },
+    "olu_taban_ad": {
+      "kristal_model_sft.pt": 1,
+      "kristal_model.pt": 2
+    }
+  },
+  "k3": {
+    "kaldi": true,
+    "uc_sessiz_durma_sesli": true,
+    "sessiz_soyagaci_kaldirildi": true
+  },
+  "k4": {
+    "kaldi": true,
+    "pozitif_dal_CLI": true,
+    "negatif_dal_CLI": true,
+    "vakum_degil": true
+  },
+  "k5": {
+    "kaldi": true,
+    "ast_testi_degisen_satir": 0,
+    "test_compiler_entrypoints": "12 passed",
+    "save_path_varsayilani": "active_model_path (ozgun semantik korundu)"
+  },
+  "k6": {
+    "kaldi": true,
+    "stage4_vocab_gecirir": true,
+    "yapilandirma_kapisi": "rc=2",
+    "tarihsel_bloklar_silinmedi": true
+  },
+  "k7": {
+    "kaldi": true,
+    "taban": "1 failed, 216 passed",
+    "sonra": "1 failed, 223 passed",
+    "sapma": 7,
+    "yeni_test_sayisi": 7,
+    "dusen_test": "test_agent_gateway — sandbox soket yasagi"
+  },
+  "k8": {
+    "kaldi": true
+  },
+  "curutmeler": {
+    "C1_K4_ayirt_edici": {
+      "durum": "CURUTULMEDI",
+      "pozitif": "CLI: gercek 33114<->33114 K4'u gecti, egitim dongusune ulasti, DURDURULDU yok",
+      "negatif": "CLI: 31357<->33114 rc=2 fark 1757",
+      "sinir": "uctan uca EGITIM kosumu yapilmadi"
+    },
+    "C2_canli_cagiran": {
+      "durum": "CURUTULMEDI",
+      "run_goal_pipeline": "shutil.copyfile(base_model, sft_model) :346, 4. asamadan :356 ONCE => base_model yoksa orada duser, sessiz soyagaci ATESLENEMEZDİ",
+      "retrain_clean_models": "butunuyle olu (tek anan yer AST testi; main() cagrilmiyor); DEGISTIRILMEDI",
+      "niyet_korundu": "ref'ten baslatmak isteyen ayni yolu iki bayraga da verir"
+    },
+    "C3_boru_hatti": {
+      "durum": "ATESLENMEDI",
+      "olcum": "run_goal_pipeline argumansiz rc=2"
+    },
+    "C4_pytest_sapmasi": {
+      "durum": "ATESLENMEDI",
+      "sapma": 7,
+      "beklenen": 7
+    }
+  },
+  "kendi_kusurlarim": {
+    "olcum_kabi": [
+      {
+        "no": "C1",
+        "kusur": "HEAD kopyasi PYTHONPATH'siz kosuldu => ModuleNotFoundError: No module named 'src' => rc=1",
+        "etki": "'taban rc=0' iddiasini YANLISLIKLA curutuyordu",
+        "duzeltme": "PYTHONPATH=<depo>; gercek taban rc=0"
+      },
+      {
+        "no": "C2",
+        "kusur": "find -newermt yerel esik 1 YANLIS POZITIF verdi: data/anka_a1r.pt yerel 02:55 (UTC+3) / UTC 2026-09-19T23:55:08Z",
+        "etki": "T-0080 Faz 5 kaydi 'T-0089 yazdi' gibi gorundu (7 sa 51 dk once)",
+        "duzeltme": "esik = claimed_at (UTC) => 0"
+      },
+      {
+        "no": "C3",
+        "kusur": "EMEKLI blogumun BASLIK satiri etiketsizdi (etiket 3. satirda) => arac olu=2 olctu",
+        "etki": "yanlis 'canli atif var'",
+        "duzeltme": "etiket basliga tasindi => olu=0; HER IKI sayi raporlandi"
+      },
+      {
+        "no": "C4",
+        "kusur": "etiket kurali VARSAYILDI",
+        "etki": "-",
+        "duzeltme": "aracin kodu okundu + DORT dalda sinandi (etiketli/etiketsiz/blok disi/2. satir)"
+      }
+    ],
+    "yeni_dosyalarim": [
+      {
+        "no": "D1",
+        "kusur": "YENI test dosyamin docstring'i olu artefakt adini etiketsiz andi => KOD olu=1",
+        "duzeltme": "ad KOD yuzeyinden cikarildi; kanit KAYIT kapsamina tasindi => dosya artik tabloda yok"
+      },
+      {
+        "no": "D2",
+        "kusur": "USER_GUIDE'a ekledigim damgali not olu yolu etiketsiz andi => BELGE +1",
+        "duzeltme": "blok basligina TARİHSEL etiketi => BELGE 202 -> 201"
+      }
+    ],
+    "agac_etkisi": {
+      "KOD": {
+        "once": 133,
+        "sonra": 130
+      },
+      "BELGE": {
+        "once": 202,
+        "sonra": 201
+      },
+      "hedef_dosyalarda_canli_olu_atif": 0,
+      "README_mirasi": 2
+    }
+  },
+  "sartname_duzeltmesi": {
+    "iddia": "--active-model YOKSA aktif model SESSIZCE ref'ten baslatilir (uyari yok)",
+    "olcum": "eski else dali BIR BILGI SATIRI basiyordu: '* Aktif model referans modelden baslatiliyor: <yol>' (HEAD :115)",
+    "duzeltilmis_iddia": "SESSIZ degil, UYARISIZ/ETIKETSIZ; yuklenen model adi verilenden FARKLI ve uyari YOK"
+  },
+  "digestler": {
+    "not": "tam digest; onek KULLANILMADI; hepsi butun yazmalar bittikten SONRA alindi",
+    "hedefler": [
+      {
+        "yol": "train_dpo.py",
+        "once_HEAD": "70d9ea96256a17d39fa9da7588d668f2dfed8bf1f5a01b2250e991ae843caa0c",
+        "sonra": "e94c4ff1099d916d7f2b042ff67d705ae139c4d2902324b21813c44262531a50"
+      },
+      {
+        "yol": "tests/test_train_dpo_entrypoint.py",
+        "once_HEAD": null,
+        "sonra": "9f59eb91a4c67699e5f55797a412ef705104321374d2e28efa32c1ccf7a7a843"
+      },
+      {
+        "yol": "scripts/run_goal_pipeline.py",
+        "once_HEAD": "2a88708edc0b9a8d156d070371fb43ba9e4f2b26014a72ae2d979f4c49c4d874",
+        "sonra": "8582f6042730948faa8c2200bdfc54fbce6c99954ab320793b5558b077b3b30c"
+      },
+      {
+        "yol": "USER_GUIDE.md",
+        "once_HEAD": "4d5e8a992a4b8440478b55a434551fcc69a9cbfb00557c2b9d803a689ebbfe8e",
+        "sonra": "1f3d6f0105467b6b65f51e08e8befe96c7f57b8097bf851c9df06032722f6975"
+      },
+      {
+        "yol": "README.md",
+        "once_HEAD": "818f59053665b75c500b7a5c4e7a9eb2105d63958fc1aeefaa2094a9b274d068",
+        "sonra": "abf618385376d51c8bb93701ec4bf8682b1b6dd16f3c3d37637dcfb7b0b409d1"
+      }
+    ],
+    "rapor_md": {
+      "yol": "data/eval/anka_r12_train_dpo_kapisi_2026-09-20.md",
+      "sha256": "a9c0f66fe1e44f1ef91c24d50b9bdcd388f745b9f696cee5a61aa8892ad5db3f"
+    }
+  },
+  "acik_kalanlar": [
+    "scripts/retrain_clean_models.py butunuyle olu ve train_dpo'yu yol bayragisiz cagirir (DEGISTIRILMEDI)",
+    "AdamW momentleri kaydedilmiyor (T-0077 devralimi)",
+    "README.md'de 2 canli olu-atif mirasi (artirilmadi, temizlenmedi)",
+    "uctan uca DPO egitim kosumu olculmedi (egitim yasagi; bilerek)"
+  ],
+  "dokunulmayanlar": [
+    "scripts/retrain_clean_models.py",
+    "CHANGELOG.md",
+    "wiki/log.md",
+    "tests/test_compiler_entrypoints.py (writes[]'te yok; AST testi fonksiyonuna 0 satir)"
+  ],
+  "yonetisim": {
+    "writes_n": 8,
+    "kiralama": "8 yol / T-0089 / claude",
+    "commit": false,
+    "push": false,
+    "git_add_A": false,
+    "egitim_kosusu": false
+  }
+}

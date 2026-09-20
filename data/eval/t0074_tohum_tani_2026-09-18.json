@@ -1,0 +1,58 @@
+{
+  "gorev": "T-0074",
+  "tur": "TANI: tohum determinizmi",
+  "1_baslatma_izole_lr0": {
+    "rc_a": 0,
+    "rc_b": 0,
+    "ortak_parametre": 101,
+    "max_mutlak_fark": 0.0,
+    "frobenius": 0.0,
+    "referans_max_parametre": 5.253268718719482,
+    "bagil_max_fark": 0.0,
+    "bit_ozdes": true
+  },
+  "A_1adim": {
+    "var": true,
+    "sha256_oncek": "97e346e19dbd6d42"
+  },
+  "A2_1adim_tekrar": {
+    "var": true,
+    "sha256_oncek": "20ed5a789e5829bc"
+  },
+  "B_200adim": {
+    "var": true,
+    "sha256_oncek": "c7ac03beb83851b5"
+  },
+  "2_tek_adim_gurultu_A_vs_A2": {
+    "ortak_parametre": 101,
+    "max_mutlak_fark": 2.384185791015625e-07,
+    "frobenius": 3.031083894999061e-07,
+    "referans_max_parametre": 5.25321626663208,
+    "bagil_max_fark": 4.53852586682894e-08,
+    "bit_ozdes": false
+  },
+  "3_egitim_buyuklugu_A_vs_B": {
+    "ortak_parametre": 101,
+    "max_mutlak_fark": 0.16874267160892487,
+    "frobenius": 123.11970120696144,
+    "referans_max_parametre": 5.25321626663208,
+    "bagil_max_fark": 0.03212178274112984,
+    "bit_ozdes": false
+  },
+  "4_baslatma_vs_tek_adim_S1_vs_A": {
+    "ortak_parametre": 101,
+    "max_mutlak_fark": 0.0010409355163574219,
+    "frobenius": 8.2246085727506,
+    "referans_max_parametre": 5.253268718719482,
+    "bagil_max_fark": 0.00019815006086556266,
+    "bit_ozdes": false
+  },
+  "hukum": {
+    "baslatma_deterministik": true,
+    "tek_adim_gurultu": 2.384185791015625e-07,
+    "egitim_buyuklugu": 0.16874267160892487,
+    "oran_egitim_gurultu": 707758.06,
+    "G5_gecerli": true,
+    "aciklama": "Baslatma deterministik (lr=0 kosumlari bit ozdes) ve egitim buyuklugu tek-adim gurultusunun cok uzerinde => G5'in Frobenius'u EGITIM kaynaklidir; torch.equal'in False cikmasi bit-ozdeslik arayan COK SIKI bir testti, baslatma farki degil."
+  }
+}

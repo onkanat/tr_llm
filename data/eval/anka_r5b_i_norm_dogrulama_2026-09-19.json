@@ -1,0 +1,331 @@
+{
+ "gorev": "T-0080",
+ "asama": "Faz2-İ-normalizasyon/ONAY (diskteki kaynak)",
+ "baslangic_utc": "2026-09-19T09:25:46+00:00",
+ "not": "anka_r5_i_norm.py düzeltmeyi BELLEKTE ölçtü; bu kap DİSKTEKİ kaynağı (load_from_tsv) çalıştırır ve iki yönlü bayt kapısı kurar: G1 pozitif (== ölçülen B) · G2 negatif/ayırt-edicilik (elle düz == A).",
+ "lexicon": {
+  "yol": "data/lexicon/roots.tsv",
+  "sha256": "fe3005e5e2a594f09cbcfc3286e2c8812953ae6614333815ab87a7e3a6763598",
+  "beklenen": "fe3005e5e2a594f09cbcfc3286e2c8812953ae6614333815ab87a7e3a6763598",
+  "veri_satiri": 52373
+ },
+ "G7_tek_kaynak": {
+  "probe": [
+   "İstanbul",
+   "Iğdır",
+   "IR",
+   "ır",
+   "ir",
+   "Türk",
+   "istanbul",
+   "I",
+   "İ",
+   "Ğ",
+   "öĞrencİ",
+   "ANKA",
+   "KÂR",
+   "â",
+   "Iı",
+   "İi"
+  ],
+  "ayrisan": [],
+  "temiz": true,
+  "core_delegasyon_temiz": true
+ },
+ "G5_K0": {
+  "kayitlar": [
+   {
+    "kol": "diskteki",
+    "yuzey": "başkenti",
+    "bek": "başkent",
+    "gelen": "başkent",
+    "ok": true
+   },
+   {
+    "kol": "diskteki",
+    "yuzey": "yılında",
+    "bek": "yıl",
+    "gelen": "yıl",
+    "ok": true
+   },
+   {
+    "kol": "diskteki",
+    "yuzey": "olarak",
+    "bek": "ol",
+    "gelen": "ol",
+    "ok": true
+   },
+   {
+    "kol": "diskteki",
+    "yuzey": "Ankarada",
+    "bek": "Ankara",
+    "gelen": "Ankara",
+    "ok": true
+   },
+   {
+    "kol": "diskteki",
+    "yuzey": "zzqqxx",
+    "bek": "YOL YOK",
+    "gelen": 0,
+    "ok": true
+   },
+   {
+    "kol": "diskteki",
+    "yuzey": "qqqwww",
+    "bek": "YOL YOK",
+    "gelen": 0,
+    "ok": true
+   },
+   {
+    "kol": "elle_duz",
+    "yuzey": "başkenti",
+    "bek": "başkent",
+    "gelen": "başkent",
+    "ok": true
+   },
+   {
+    "kol": "elle_duz",
+    "yuzey": "yılında",
+    "bek": "yıl",
+    "gelen": "yıl",
+    "ok": true
+   },
+   {
+    "kol": "elle_duz",
+    "yuzey": "olarak",
+    "bek": "ol",
+    "gelen": "ol",
+    "ok": true
+   },
+   {
+    "kol": "elle_duz",
+    "yuzey": "Ankarada",
+    "bek": "Ankara",
+    "gelen": "Ankara",
+    "ok": true
+   },
+   {
+    "kol": "elle_duz",
+    "yuzey": "zzqqxx",
+    "bek": "YOL YOK",
+    "gelen": 0,
+    "ok": true
+   },
+   {
+    "kol": "elle_duz",
+    "yuzey": "qqqwww",
+    "bek": "YOL YOK",
+    "gelen": 0,
+    "ok": true
+   }
+  ],
+  "temiz": true
+ },
+ "son_guncelleme_utc": "2026-09-19T09:27:01+00:00",
+ "G3_I_hedef": {
+  "kayitlar": [
+   {
+    "yuzey": "İstanbul",
+    "beklenen": [
+     1,
+     "İstanbul"
+    ],
+    "gelen": [
+     1,
+     "İstanbul"
+    ],
+    "ok": true
+   },
+   {
+    "yuzey": "İstanbulda",
+    "beklenen": [
+     1,
+     "İstanbul"
+    ],
+    "gelen": [
+     1,
+     "İstanbul"
+    ],
+    "ok": true
+   },
+   {
+    "yuzey": "İngiliz",
+    "beklenen": [
+     1,
+     "İngiliz"
+    ],
+    "gelen": [
+     1,
+     "İngiliz"
+    ],
+    "ok": true
+   },
+   {
+    "yuzey": "İngilizler",
+    "beklenen": [
+     3,
+     "İngiliz"
+    ],
+    "gelen": [
+     3,
+     "İngiliz"
+    ],
+    "ok": true
+   },
+   {
+    "yuzey": "İtalyanlar",
+    "beklenen": [
+     3,
+     "İtalyan"
+    ],
+    "gelen": [
+     3,
+     "İtalyan"
+    ],
+    "ok": true
+   },
+   {
+    "yuzey": "İspanyollar",
+    "beklenen": [
+     3,
+     "İspanyol"
+    ],
+    "gelen": [
+     3,
+     "İspanyol"
+    ],
+    "ok": true
+   },
+   {
+    "yuzey": "İsveçli",
+    "beklenen": [
+     0,
+     null
+    ],
+    "gelen": [
+     0,
+     null
+    ],
+    "ok": true
+   },
+   {
+    "yuzey": "Isparta",
+    "beklenen": [
+     1,
+     "Isparta"
+    ],
+    "gelen": [
+     1,
+     "Isparta"
+    ],
+    "ok": true
+   },
+   {
+    "yuzey": "Iğdır",
+    "beklenen": [
+     1,
+     "Iğdır"
+    ],
+    "gelen": [
+     1,
+     "Iğdır"
+    ],
+    "ok": true
+   },
+   {
+    "yuzey": "İkizler",
+    "beklenen": [
+     4,
+     "İkizler"
+    ],
+    "gelen": [
+     4,
+     "İkizler"
+    ],
+    "ok": true
+   },
+   {
+    "yuzey": "İbrani",
+    "beklenen": [
+     1,
+     "İbrani"
+    ],
+    "gelen": [
+     1,
+     "İbrani"
+    ],
+    "ok": true
+   }
+  ],
+  "dogru": 11,
+  "toplam": 11,
+  "temiz": true
+ },
+ "G4_K1_d1_9_etiket": {
+  "diskteki": "bunun:bu:2|onun:o:2|ölmeden:öl:2|topraklar:toprak:2|günümüzde:gün:3|ağacı:ağa:2|aklı:ak:2|kanadı:kana:2|gönlü:gön:2",
+  "elle_duz": "bunun:bu:2|onun:o:2|ölmeden:öl:2|topraklar:toprak:2|günümüzde:gün:3|ağacı:ağa:2|aklı:ak:2|kanadı:kana:2|gönlü:gön:2",
+  "beklenen": "bunun:bu:2|onun:o:2|ölmeden:öl:2|topraklar:toprak:2|günümüzde:gün:3|ağacı:ağa:2|aklı:ak:2|kanadı:kana:2|gönlü:gön:2",
+  "ikisi_de_beklenen": true
+ },
+ "orneklem": {
+  "dosya_basi": {
+   "tr-00000.parquet": 1688,
+   "tr-00001.parquet": 1524
+  },
+  "kabul_makale": 3212,
+  "benzersiz_yuzey": 236573
+ },
+ "G1_diskteki": {
+  "harita": "scratch/anka_r5b_diskteki.tsv",
+  "sha256": "91b3d6afefcd3dc53a14869d671e079c0b3869e6b8457e9178470f45e5f6bd31",
+  "cozulen": 113496,
+  "G1_ihlal": 2700,
+  "G1_yuzde": 2.3789,
+  "beraberlik": 34893,
+  "beklenen_B_sha256": "91b3d6afefcd3dc53a14869d671e079c0b3869e6b8457e9178470f45e5f6bd31",
+  "birebir": true
+ },
+ "G2_negatif_kontrol": {
+  "harita": "scratch/anka_r5b_elle_duz.tsv",
+  "sha256": "9d826084b8f55154813f52d701586dee80055219e1f58adbfd582ce54ea1e3a8",
+  "cozulen": 113351,
+  "beklenen_A_sha256": "9d826084b8f55154813f52d701586dee80055219e1f58adbfd582ce54ea1e3a8",
+  "birebir": true
+ },
+ "G6_K3_regresyon": {
+  "kayitlar": [
+   {
+    "yuzey": "başkenti",
+    "bek": "başkent",
+    "gelen": "başkent",
+    "ok": true
+   },
+   {
+    "yuzey": "yılında",
+    "bek": "yıl",
+    "gelen": "yıl",
+    "ok": true
+   },
+   {
+    "yuzey": "olarak",
+    "bek": "ol",
+    "gelen": "ol",
+    "ok": true
+   },
+   {
+    "yuzey": "Ankarada",
+    "bek": "Ankara",
+    "gelen": "Ankara",
+    "ok": true
+   }
+  ],
+  "temiz": true
+ },
+ "ozet": {
+  "A_kaybolan_artik_yok": "elle-duz kolu A digestini tuttu ⇒ eski davranis tam yeniden uretildi",
+  "kazanc_yuzey": 145,
+  "kaybolan_yuzey": 0,
+  "not": "yeni/kaybolan tam listesi ve 16 karar oynamasi icin: data/eval/anka_r5_i_norm_2026-09-19.json"
+ },
+ "betik_sha256": "0b89806c2cc9f37c965cf3bb5f5344a7e9c1e8f3b637267b78db3a23a506b247"
+}

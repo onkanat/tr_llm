@@ -1,0 +1,114 @@
+{
+  "gorev": "T-0072",
+  "tur": "A1-a tasarim + kapi ilani",
+  "ilan_utc": "2026-09-18T13:16:56Z",
+  "karar": {
+    "operator": "Onkanat (18 Eyl 2026)",
+    "secim": "literal=False ile yeniden derle",
+    "gerekce_olculdu": "%36.06 daha az jeton; ayni butcede 1.56x daha fazla metin",
+    "kabul_edilen_bedel": "varlik adlari tek <PROPER_NOUN> yer tutucusuna coker ⇒ model ozel ad URETEMEZ"
+  },
+  "tokenizer": {
+    "sozluk": "data/rebuild/vocab_base_32852.json",
+    "giris": 32852,
+    "PROPER_NOUN_id": 4,
+    "ENT_id": 32816,
+    "CAP_id": 32818,
+    "UNK_id": 0
+  },
+  "ornek_olcum": {
+    "ornek_makale": 400,
+    "arinmis_karakter": 5516252,
+    "literal_true": {
+      "jeton": 2125673,
+      "jeton_makale": 5314.2,
+      "karakter_jeton": 2.5951,
+      "unk_orani": 1.2056,
+      "noktalama_orani": 7.2764,
+      "ENT": 85030,
+      "ENTK": 85030,
+      "CAP": 79778,
+      "varlik_bloku_orani": 35.5802,
+      "PROPER_NOUN": 0
+    },
+    "literal_false": {
+      "jeton": 1359106,
+      "jeton_makale": 3397.8,
+      "karakter_jeton": 4.0587,
+      "unk_orani": 1.9955,
+      "noktalama_orani": 11.3805,
+      "ENT": 0,
+      "ENTK": 0,
+      "CAP": 0,
+      "varlik_bloku_orani": 0.5708,
+      "PROPER_NOUN": 80990,
+      "PROPER_NOUN_orani": 5.9591
+    },
+    "kazanc_jeton": 766567,
+    "kazanc_yuzde": 36.0623,
+    "metin_carpani": 1.564
+  },
+  "pozitif_kontrol": {
+    "literal_true": {
+      "jeton": 59,
+      "noktalama": 12,
+      "hat_canli": true
+    },
+    "literal_false": {
+      "jeton": 35,
+      "noktalama": 12,
+      "hat_canli": true
+    }
+  },
+  "cikti_planlanan": {
+    "train": "data/anka_a1_pretrain.bin",
+    "val": "data/anka_a1_pretrain_val.bin",
+    "ckpt": "data/eval/anka_a1_build_2026-09-18.json"
+  },
+  "korunacak": {
+    "T-0071_artefakti": "data/anka_pretrain.bin",
+    "not": "uzerine YAZILMAZ, silinmez"
+  },
+  "kapilar_ilan": {
+    "K1_noktalama": {
+      "esik_max_id": 32145,
+      "esik_oran": 5.0,
+      "ayirt_edicilik": "eski 12 .bin'de oran tam %0,00"
+    },
+    "K2_unk": {
+      "esik": 4.0,
+      "ayirt_edicilik": "ornekte %2.00 — esigin ALTINDA olmali"
+    },
+    "K3_pad": {
+      "esik": 1.0
+    },
+    "K4_olcek": {
+      "esik": 90000000
+    },
+    "K5_tekrarsizlik": {
+      "esik": 0,
+      "bos_kapi_beyani": "val, train kesildikten SONRAKI makalelerden alinir ⇒ kesisim inşa gereği imkansiz; K5 bir kulliyat ozelligi degil KENDINI KONTROLTUR"
+    },
+    "K6_izlenebilirlik": {
+      "esik": "her kaynak + tam 64 karakter sha256"
+    },
+    "K7_pozitif_kontrol": {
+      "esik": "noktalama > 0",
+      "not": "hat olurse K1..K6 KANITSIZ"
+    },
+    "K8_temsil": {
+      "kosul": "ENT == 0 VE CAP == 0 VE PROPER_NOUN_orani >= 1.0",
+      "ayirt_edicilik": "literal=True ile derlenirse ENT milyonlarca olur ⇒ DUSER; T-0071'in 'kapilar temsili sormuyor' kusurunu kapatir",
+      "olculen_referans": "ornek false modda PROPER_NOUN %5.96"
+    }
+  },
+  "curutme": {
+    "sart": "literal=False kulliyatinin karakter/jeton orani literal=True'ninkinden KUCUK cikarsa, 'ayni butcede daha fazla metin okur' gerekcesi CURUR ve karar yeniden acilir.",
+    "olculen_ornek": {
+      "karakter_jeton_true": 2.5951,
+      "karakter_jeton_false": 4.0587,
+      "curudu": false
+    },
+    "guc_notu": "Bu sart OLCUMDEN ONCE kayda gecirildi (T-0071'in tasarim eksigiydi)."
+  }
+}

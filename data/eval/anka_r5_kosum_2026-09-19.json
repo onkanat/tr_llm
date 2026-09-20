@@ -1,0 +1,61 @@
+{
+  "zaman": "2026-09-19T11:17:45Z",
+  "sozluk_sha256": "f9940a8d8e1f7cd9428d389f12ff4c5ee448e5a7bfcdcc8ecc9c616fce950984",
+  "sozluk_giris": 33114,
+  "bin_sha256_meta": "9f9875762518829dec8f5baa41bd012ee1abf72fb630e24840bafedf691d4f22",
+  "bin_boyut": 200000000,
+  "meta_sozluk_giris": 33114,
+  "meta_sozluk_sha256": "f9940a8d8e1f7cd9428d389f12ff4c5ee448e5a7bfcdcc8ecc9c616fce950984",
+  "jeton_sayisi": 100000000,
+  "jeton_max": 33113,
+  "load_sha256": "f32d492d9361c668bc86e4e4b0f99f5c473af552486837452475f8b0aa3eb5b4",
+  "load_boyut": 372124278,
+  "degismezler_once": {
+    "data/anka_a1.pt": "f32d492d9361c668bc86e4e4b0f99f5c473af552486837452475f8b0aa3eb5b4",
+    "data/anka_a1_pretrain.bin": "383a9c890b75ec96195122b9981d7a73371d3bcaa3b9f6e7c2a188510d917cb8",
+    "data/anka_a1_pretrain_val.bin": "02f52063e73e4ac362297c9ecad41247aa621e168572b9cb3f6d302f734da801",
+    "data/anka_pretrain.bin": "0e55f0c0c24617a9323059c71563a9ce943177ccc90cd56824be1a7f26d2b164"
+  },
+  "l1_esik": 8.0,
+  "kosum_sandbox_DISI_olmali": "MPS sandbox'ta GORUNMEZ; sandbox icinde kosum sessizce CPU'ya duser (T-0075) => --baslat dangerouslyDisableSandbox ile cagrilmalidir",
+  "L1": {
+    "adim": 1,
+    "kayip": 4.1704,
+    "tavan_devam": 8.0,
+    "mutlak_taban": 9.4077,
+    "hukum": "GECTI"
+  },
+  "loglanan_kayip_sayisi": 4883,
+  "baslangic_kaybi": 4.1704,
+  "bitis_kaybi_TEK_ADIM": 3.9335,
+  "bitis_kaybi_NOT": "'Bitiş Kaybı' = loss_history[-1], TEK adimin orneklemi (T-0078); huküm icin asagidaki DAGILIM kullanilir.",
+  "kayip_dagilimi": {
+    "son60": {
+      "ort": 3.6509,
+      "std": 0.217,
+      "n": 60
+    },
+    "son200": {
+      "ort": 3.6877,
+      "std": 0.2399,
+      "n": 200
+    },
+    "medyan": {
+      "deger": 3.7979,
+      "n": 48828
+    }
+  },
+  "son": "TAMAM",
+  "degismezler_sonra": {
+    "data/anka_a1.pt": "f32d492d9361c668bc86e4e4b0f99f5c473af552486837452475f8b0aa3eb5b4",
+    "data/anka_a1_pretrain.bin": "383a9c890b75ec96195122b9981d7a73371d3bcaa3b9f6e7c2a188510d917cb8",
+    "data/anka_a1_pretrain_val.bin": "02f52063e73e4ac362297c9ecad41247aa621e168572b9cb3f6d302f734da801",
+    "data/anka_pretrain.bin": "0e55f0c0c24617a9323059c71563a9ce943177ccc90cd56824be1a7f26d2b164"
+  },
+  "degismezler_hukum": "BIREBIR",
+  "cikti": {
+    "yol": "data/anka_a1r.pt",
+    "sha256": "b93cc1cd54093fc63342d394abe528f2128dc16e20b4d7ac6ab680854b4d6293",
+    "boyut": 373735137
+  }
+}

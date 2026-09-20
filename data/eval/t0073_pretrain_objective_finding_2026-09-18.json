@@ -1,0 +1,89 @@
+{
+  "gorev": "T-0073",
+  "tur": "TANI",
+  "baslik": "train.py on-egitimde ogrenme sinyali uretmiyor",
+  "tani_utc": "2026-09-18T14:11:13Z",
+  "D1_output_korpusta": {
+    "sozluk_boyutu": 32852,
+    "output_id": 1706,
+    "eos_id": 3,
+    "pad_id": 1,
+    "korpus_jeton": 100000000,
+    "output_sayisi": 2,
+    "yorum": "<OUTPUT> kulliyatta YOK hukmunde => mask_prompt_targets kural 5 (<OUTPUT> icermeyen pencerede TUM hedefler -100) HER pencerede atesler"
+  },
+  "D2_maske_sonrasi": {
+    "64": {
+      "pencere": 300,
+      "hedef_toplam": 19200,
+      "hayatta": 0,
+      "oran_yuzde": 0.0,
+      "hayatta_pencere": 0
+    },
+    "128": {
+      "pencere": 300,
+      "hedef_toplam": 38400,
+      "hayatta": 0,
+      "oran_yuzde": 0.0,
+      "hayatta_pencere": 0
+    },
+    "256": {
+      "pencere": 300,
+      "hedef_toplam": 76800,
+      "hayatta": 0,
+      "oran_yuzde": 0.0,
+      "hayatta_pencere": 0
+    }
+  },
+  "D3_cihaz_davranisi": {
+    "cpu_ignore_1": {
+      "sonuc": null,
+      "hata": "IndexError: Target -100 is out of bounds."
+    },
+    "cpu_ignore_-100": {
+      "sonuc": NaN,
+      "hata": null
+    },
+    "cpu_ignore_None": {
+      "sonuc": NaN,
+      "hata": null
+    },
+    "mps_ignore_1": {
+      "sonuc": 0.0,
+      "hata": null
+    }
+  },
+  "D4_depo_yollari": {
+    "scripts/train_step_a_ablation.py": {
+      "mask_prompt_targets_cagrisi": 0,
+      "duz_lm_cagrisi": 2,
+      "sha256": "8ce3e211e9beee299f2ca1aab83da7808be06cf34da7babf6da8ddb1542b4a75"
+    },
+    "scripts/train_step_b1_canonical.py": {
+      "mask_prompt_targets_cagrisi": 0,
+      "duz_lm_cagrisi": 2,
+      "sha256": "c28e40f6530992842944e5523b5aa3c2e683ea92f9f4e4f001e7f8751c0a45d5"
+    },
+    "train.py": {
+      "mask_prompt_targets_cagrisi": 2,
+      "duz_lm_cagrisi": 0,
+      "sha256": "cabfbc4a88a9e91e6adfb8d74eac224e4d0d3a174774ca6d1ef67b08729d7898"
+    }
+  },
+  "hukum": {
+    "ogrenme_sinyali": "YOK",
+    "mekanizma": "train.py SFT egiticisidir: mask_prompt_targets kural 5 duz-metin kulliyatta her pencereyi tamamen maskeler; MPS gecersiz hedefte hata VERMEZ, 0.0 dondurur => kosum 'basarili' gorunur, gradyan sifirdir",
+    "etki": "A1 bu haliyle hicbir sey ogretmez. T-0072'nin 336 saatlik ve Antigravity'nin 2,91 saatlik butce tartismasi, HICBIR SEY OGRENMEYEN bir kosumun maliyeti uzerineydi.",
+    "cozum_yonu": "On-egitim duz sonraki-jeton hedefi kullanmalidir (depodaki eski yol: train_step_a_ablation.py:61 ve train_step_b1_canonical.py:61 -> model(x, y, sign_mask); prompt maskesi YOK). train.py'ye on-egitim modu eklenmeli veya ayri bir on-egitim dongusu kullanilmalidir.",
+    "iddia_EDILMEYEN": [
+      "Eski Kristal zinciri bozuk degildi — on-egitimi duz-LM dongusuyle yapilmisti.",
+      "Model kalitesi hakkinda hicbir sey soylenmiyor (kalite olculmedi).",
+      "Sonda (verim) gecersiz degil; ancak no-op kosumda olculurse IYIMSER olabilir (tumu yok sayilan hedefte PyTorch kisa yola girebilir)."
+    ]
+  },
+  "uretilen": {
+    "data/eval/t0073_pretrain_objective_finding_2026-09-18.json": "e2b81a4ab92c15a0bb2b2e346e0eb4b8287c7ef013a3a8df6493a74f1f1b8c4d",
+    "data/eval/t0073_pretrain_objective_finding_2026-09-18.md": "91fc4f1aec4b8222f2558502202bef6a14697fac707664c069580be1d5fdc254",
+    "/Users/hakankilicaslan/Git/tr_llm/scratch/t0073_hedef_tani.py": "2ec2526be902616ef869b4e13bf9805e48f4f5a5ce0cb77814e3b49d9e8f0dfc"
+  }
+}

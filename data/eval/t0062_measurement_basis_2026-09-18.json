@@ -1,0 +1,176 @@
+{
+  "task": "T-0062",
+  "title": "Olcum zemininin duzeltilmesi: tutma kumesi kanitli A'/B' + C'nin tam kafayla yeniden olcumu",
+  "date_utc": "2026-09-18T04:05:00Z",
+  "executor": "claude",
+  "basis": "TUTULMUS (held-out) — 17 Eyl'in ezber dilimi GECERSIZ kilindi",
+  "vocab": "data/rebuild/vocab_base_32852.json",
+  "vocab_size": 32852,
+
+  "design_document": "data/eval/forgetting_measurement_design_2026-09-18.md",
+  "superseded_document": "data/eval/forgetting_measurement_design_2026-09-17.md",
+
+  "thresholds_declared_before_results": {
+    "A_prime": {"primary_corpus": "gts_dict", "rule": "A'_unmasked goreli artis <= %10"},
+    "B_prime": {"primary_corpus": "raw_full", "rule": "top-1 dususu <= 5 PUAN (mutlak, 17 Eyl'in ayni sayisi)",
+                "alternative_reading_reported": "goreli koruma >= %94"},
+    "C": {"rule": "tabana gore ROUGE-L iyilesmesi > 0"}
+  },
+
+  "heldout_corpus_proof": {
+    "method": "stride-1 32-gram, siraya duyarli polinom hash (h = sum_k T[t_{i+k}]*BASE^k mod 2^64), 17 egitim .bin'inin tamamina karsi",
+    "base_ce_on_heldout_vs_memorized_slice": {
+      "memorized_slice_ce": 1.962547,
+      "heldout_gts_dict_ce": 6.0654,
+      "heldout_raw_full_ce": 5.7032,
+      "ratio": 3.1,
+      "verdict": "Ezber cezasi YOK — dilim model tarafindan gorulmemis."
+    },
+    "independent_corroboration": {
+      "source": "data/eval/forgetting_baseline_2026-09-17.json",
+      "untrained_checkpoint_taban_on_same_slice": {"A_ce_unmasked": 5.489884, "B_top1_pct": 42.4},
+      "f3_clean_on_same_slice": {"A_ce_unmasked": 1.962547, "B_top1_pct": 84.4},
+      "note": "Dilime hic dokunmamis modelin o dilimdeki CE'si (5,49), f3_clean'in TUTULMUS metindeki CE'siyle (5,70/6,07) ayni duzeyde."
+    },
+    "block_signature_method_disproven": {
+      "method": "hizali 128-token blake2b-64 blok imzasi",
+      "result": "alti adayin HEPSINDE ortak blok sayisi 0 — 32-gramlarinin %51,2'si egitimde olan b1_5_splits/test.jsonl icin BILE",
+      "reason": "egitim .bin'leri kayitlari 128-token bloklara doldurup hizaliyor; aday metinler hizasiz duruyor",
+      "replacement": "stride-1 32-gram kanali"
+    },
+    "side_finding": {
+      "frozen_b1_5_splits_test_jsonl_token_level_overlap_with_training": 0.5122,
+      "note": "Bilinen cevap-duzeyi sizinti bulgusunu (T-0012, %43,4) token duzeyinde dogruluyor ve buyutuyor."
+    }
+  },
+
+  "A_prime": {
+    "base": {"label": "f3_clean", "gts_dict": 6.0654, "raw_full": 5.7032},
+    "windows": {"gts_dict": 4000, "raw_full": 2000, "paired": true,
+                "selection": "ri=(b*BS+i)*37 mod N, s=(b*11+i*5) mod (len-SEQ)"},
+    "rows": [
+      {"label": "carpenter_v2", "replay_pct": 0, "gts": 7.0336, "gts_rel_pct": 15.96, "raw": 6.5496, "raw_rel_pct": 14.84,
+       "boot_ci95_nat": [0.9569, 0.9796], "mean_delta_nat": 0.9681, "p_delta_gt_0": 1.0, "A_pass": false},
+      {"label": "f4_r05", "replay_pct": 5, "gts": 6.5495, "gts_rel_pct": 7.98, "raw": 6.2076, "raw_rel_pct": 8.84,
+       "boot_ci95_nat": [0.4746, 0.4937], "mean_delta_nat": 0.4841, "p_delta_gt_0": 1.0, "A_pass": true},
+      {"label": "f4_r10", "replay_pct": 10, "gts": 6.3320, "gts_rel_pct": 4.39, "raw": 5.9741, "raw_rel_pct": 4.75,
+       "boot_ci95_nat": [0.2565, 0.2767], "mean_delta_nat": 0.2665, "p_delta_gt_0": 1.0, "A_pass": true},
+      {"label": "f4_replay", "replay_pct": 25, "gts": 6.3122, "gts_rel_pct": 4.07, "raw": 6.0018, "raw_rel_pct": 5.23,
+       "boot_ci95_nat": [0.2375, 0.2558], "mean_delta_nat": 0.2467, "p_delta_gt_0": 1.0, "A_pass": true}
+    ],
+    "masked_unmasked_crosscheck": "iki eksen ayni yonde ve ayni buyuklukte (|fark| <= 0.02 nat) -> PAD/istem artefakti degil",
+    "reversal": "17 Eyl (ezber zemini): A hicbir oranda gecmiyordu (+%23,7..+%42,1). Duzeltilmis zeminde %5/%10/%25 geciyor."
+  },
+
+  "B_prime": {
+    "STATUS": "EKSEN GECERSIZ — asagidaki gecis hukmu bilgilendirici DEGILDIR",
+    "primary_corpus": "raw_full",
+    "rows": [
+      {"label": "f3_clean", "gts": 18.3, "raw": 26.1},
+      {"label": "carpenter_v2", "gts": 20.9, "raw": 29.2, "drop_points": -3.10, "retention_pct": 111.9, "B_pass_absolute": true},
+      {"label": "f4_r05", "gts": 18.3, "raw": 23.5, "drop_points": 2.60, "retention_pct": 90.0, "B_pass_absolute": true},
+      {"label": "f4_r10", "gts": 16.8, "raw": 24.2, "drop_points": 1.90, "retention_pct": 92.7, "B_pass_absolute": true},
+      {"label": "f4_replay", "gts": 17.0, "raw": 22.5, "drop_points": 3.60, "retention_pct": 86.2, "B_pass_absolute": true}
+    ],
+    "declared_rule_result": "Dort kolun dordu de gecti (mutlak kural). Goreli okumada yalniz %0 gecti.",
+    "why_invalid": {
+      "metric": "top-1 dogru sayimi, orneklemdeki cogunluk id'nin payi kadar bedava kazanir",
+      "trivial_constant_baseline": {"gts_dict_old_sampling": 47.7, "gts_dict_new_sampling": 54.8,
+                                    "raw_full_old_sampling": 57.7, "raw_full_new_sampling": 70.1},
+      "base_model_top1": {"gts_dict_old_sampling": 10.6, "gts_dict_new_sampling": 18.3,
+                          "raw_full_old_sampling": 52.9, "raw_full_new_sampling": 26.1},
+      "finding": "DORT durumun dordunde de taban, sabit-tahmin tabaninin ALTINDA -> eksende gosterilmis beceri yok."
+    },
+    "sampling_defect_found_and_fixed": {
+      "defect": "punct_heldout ilk cap konumu DOSYA SIRASINDAN aliyordu (korpusa yayilmiyordu)",
+      "coverage_before": {"gts_dict": {"positions": 1001, "distinct_records": 129, "pct": 3.0},
+                          "raw_full": {"positions": 1004, "distinct_records": 154, "pct": 7.6}},
+      "coverage_after": {"gts_dict": {"positions": 1000, "distinct_records": 1000, "pct": 23.5},
+                         "raw_full": {"positions": 1000, "distinct_records": 1000, "pct": 49.1}},
+      "artifact_killed": "Eski 'raw_full'da dort kolun TAMAMI tabanin altinda' bulgusu dar bolgenin urunuydu; duzeltilmis orneklemede %0 kolu tabanin USTUNDE (29,2 > 26,1)."
+    },
+    "device_isolation": {
+      "observation": "tazeleme kosusu device=cpu, oncekiler device=mps",
+      "control": "tek checkpoint MPS'te yeniden kosuldu -> f3_clean top1 26.1 / rank 38.0 / A 5.7032; carpenter_v2 29.2 / 78.8 / 6.5496",
+      "verdict": "CPU kosumunu BIREBIR uretti -> degisim cihazdan degil ORNEKLEMEDEN"
+    }
+  },
+
+  "C_axis": {
+    "instrument": "scratch/t0062_carpenter_eval_full.py",
+    "corrections_applied": ["tam 32852 satirli kafa (kirpilmis 31357 DEGIL)",
+                            "--literal-entity-mode (kanonik veri ureticilerinin sozlesmesi)"],
+    "rows": [
+      {"label": "f3_clean", "rouge_l": 0.3425, "ci95": [0.3178, 0.3673], "incoherence_pct": 8.0, "overlap_pct": 49.0, "delta_rouge": null},
+      {"label": "carpenter_v2", "rouge_l": 0.3796, "ci95": [0.3585, 0.4008], "incoherence_pct": 8.0, "overlap_pct": 54.0, "delta_rouge": 0.0371},
+      {"label": "f4_r05", "rouge_l": 0.3667, "ci95": [0.3444, 0.3891], "incoherence_pct": 8.0, "overlap_pct": 52.0, "delta_rouge": 0.0242},
+      {"label": "f4_r10", "rouge_l": 0.3625, "ci95": [0.3404, 0.3846], "incoherence_pct": 7.0, "overlap_pct": 53.0, "delta_rouge": 0.0200},
+      {"label": "f4_replay", "rouge_l": 0.3554, "ci95": [0.3331, 0.3777], "incoherence_pct": 13.0, "overlap_pct": 52.0, "delta_rouge": 0.0129}
+    ],
+    "memorization_rate_all_arms": 0.0,
+    "script_own_absolute_gate": "BES KOLUN HICBIRI gecmiyor (taban dahil) — ayri soru, F4 karari icin isleyen olcut degil",
+    "tokenizer_convention_effect": {
+      "comparison": "tam kafa literal_entity_mode False vs True",
+      "max_rouge_shift": 0.0040,
+      "ranking": "AYNI (carpenter_v2 > r05 > r10 > replay > taban)",
+      "visible_effect": "kirpilmis kosumda noktalama 0; tam kafada noktalama uretiliyor",
+      "conclusion": "materyal sapma KIRPILMIS KAFA idi (taban 0.0651 -> 0.3425)"
+    }
+  },
+
+  "decision": {
+    "A_prime_and_C_applied": [
+      {"label": "carpenter_v2", "replay_pct": 0, "verdict": "KALDI", "reason": "A' +%15,96 > %10"},
+      {"label": "f4_r05", "replay_pct": 5, "verdict": "GECTI"},
+      {"label": "f4_r10", "replay_pct": 10, "verdict": "GECTI"},
+      {"label": "f4_replay", "replay_pct": 25, "verdict": "GECTI"}
+    ],
+    "pareto": "C kazanci ceket oraniyla monoton ARTAR (%0 > %5 > %10 > %25); unutma monoton AZALIR (%0 > %5 > %10 > %25)",
+    "knee": "f4_r05 (%5) — A'yi gecen kollar arasinda en yuksek C kazanci",
+    "B_prime_note": "B' gecersiz oldugu icin hukum A' ve C uzerinde durur; B' yerine yeni kapi KONMADI (kullanici karari).",
+    "OPEN_FOR_USER": "F4 yolu: (a) r05'i kabul, (b) A'ya ozel mekanizma (dusuk lr / dondurma / LoRA), (c) iki asamali ceket->replay onarimi"
+  },
+
+  "advisor_consultation": {
+    "source": ".agent-bus/state/inbox/claude/2026-09-18T02-11-14Z-antigravity.json",
+    "claim": "esige (2,1588) ulasmak icin tahminen >%50 replay gerekir; esik full-finetune icin cok sikidir",
+    "status": "ONCULU OLDUGUYLE CURUDU — eski (ezber) zeminin sayilariyla kurulmustu; duzeltilmis zeminde esik %5'te bile geçiliyor",
+    "still_live_hypotheses_not_measured": ["adaptor/LoRA izolasyonu", "kismi katman dondurma", "replay formati ile degerlendirme formati arasindaki kayma"]
+  },
+
+  "artifacts": {
+    "scratch/t0062_corpus_lab.py": "7e9f611a9be9e82f6f58afe4bd0a54fbf0453da0c35084f16e0f5dbfb62e036f",
+    "scratch/t0062_ab_probe.py": "36e16b0f63e3425a2dccc024d241b910b0f7e9aec7a35d1816679619a402883a",
+    "scratch/t0062_carpenter_eval_full.py": "f4d90e28648459952707ea17099e90e2de9eb977573981b1587634e1b1854187",
+    "scratch/t0062_verdict.py": "94066edba047f7073e3efb6c32a6552b36f02114f77e9a239a1b6c68c6811a4c",
+    "scratch/t0062_ab_heldout_gts.json": "1f6d98c8122b44196ce24c47d0ec483d44aab91d59c30f92401b30378325a7f9",
+    "scratch/t0062_ab_heldout_raw.json": "58bbc5d46dfad96a8bc7a17482b3295bbc780b8238df2907f856208d9c1b69a5",
+    "scratch/t0062_devcheck_raw_mps.json": "cihaz izolasyonu kontrolu (mps)",
+    "scratch/t0062_verdict.json": "1e833a770c40e879fe2c4d0c343cc7b6b6617004046535a23bcfcc581137e4d4",
+    "scratch/t0062_c5_f3_clean.json": "14753aa83a58a7ddd3178effec16e2ad4751a6c743cc76dbb065663ec31d2ef7",
+    "scratch/t0062_c5_carpenter_v2.json": "32699c6599fcc9fc6fb2a799e15456dde05b20eed14990bb07b6abfda2dddcb2",
+    "scratch/t0062_c5_f4_replay.json": "1b900e4c61815431001c4e8a988fa3a1fedc31873c11077929f571ba9403b66a",
+    "scratch/t0062_c5_f4_r05.json": "c6371147cea053b1654b978b4edc45ae0a9d4f4444fcba71558fa8760670634b",
+    "scratch/t0062_c5_f4_r10.json": "396a7df3c0e8f9700ecf1c7df0791b86db7bf07492c946acaaabe1417e7bc06d"
+  },
+
+  "tool_defects_found_and_fixed": [
+    {"what": "kayit basina np.isin(h, train_hashes) — 39M diziyi HER CAGRIDA yeniden siralar",
+     "effect": "28+ dk kilitlenme (RSS 2,02 GB)",
+     "fix": "np.searchsorted tabanli uyelik; tarama 28 saniyeye indi",
+     "verification": "np.isin ile birebir ayni (1995 = 1995) + pozitif kontrol (beklenen 69 ortak pencere)"},
+    {"what": "ilk XOR tabanli hash siraya DUYARSIZDI (ayni coklu-kume -> ayni hash)",
+     "effect": "3,77M ayri n-gram'i (%8,8) yanlislikla birlestiriyordu (XOR 38.924.930 vs polinom 42.696.107 benzersiz 32-gram)",
+     "fix": "siraya duyarli polinom hash (olcum oncesi terk edildi)"},
+    {"what": "punct_heldout'un dosya-sirasi orneklemesi",
+     "effect": "kapsam %3,0 / %7,6; eski B' bulgusu artefakt",
+     "fix": "kayitlari (k*7919 mod N) ile dolas, kayit basina 1 konum, konum kayit icinde doner"}
+  ],
+
+  "acceptance_check": {
+    "aday_korpus_taban_CE_belirgin_yuksek": "6,0654 / 5,7032 vs ezber dilimi 1,9625 -> EVET (3,1x)",
+    "bes_checkpoint_A_B_maskeli_maskesiz": "EVET (A'_unmasked + A'_masked32, ayni pencereler, tek forward)",
+    "C_bes_nokta_tam_kafayla": "EVET; kirpilmis sayilar karsilastirma kontrolu olarak saklandi (scratch/t0062_c_full_*.json)",
+    "esikler_yeni_koldan_once_ilan_edildi": "EVET — data/eval/forgetting_measurement_design_2026-09-18.md §2, sonuclardan once"
+  }
+}

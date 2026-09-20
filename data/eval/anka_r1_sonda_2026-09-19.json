@@ -1,0 +1,477 @@
+{
+  "gorev": "T-0080",
+  "asama": "Faz 1 sonda — ekleme/guncelleme ise yariyor mu",
+  "baslangic_utc": "2026-09-19T09:48:16Z",
+  "kimlik": {
+    "roots.tsv": {
+      "sha256": "fe3005e5e2a594f09cbcfc3286e2c8812953ae6614333815ab87a7e3a6763598",
+      "beklenen": "fe3005e5e2a594f09cbcfc3286e2c8812953ae6614333815ab87a7e3a6763598"
+    }
+  },
+  "K0": {
+    "hatali": [],
+    "TEMIZ": true
+  },
+  "pozitif": {
+    "ilan": "DUZELDI: YENI_kok==bek VE TABAN!=YENI · ZATEN_DOGRU: TABAN_kok==bek VE TABAN==YENI (ilanim bayat) · KALDI: YENI_kok!=bek (gercek ariza)",
+    "toplam": 35,
+    "DUZELDI": 34,
+    "ZATEN_DOGRU": 1,
+    "KALDI": 0,
+    "zaten_dogru": [
+      "adıyla"
+    ],
+    "kaldi": [],
+    "duzeldi": [
+      {
+        "yuzey": "hakkı",
+        "beklenen_kok": "hak",
+        "TABAN": null,
+        "YENI": [
+          "hak",
+          "POSS_3SG"
+        ],
+        "TABAN_kok": null,
+        "YENI_kok": "hak",
+        "sinif": "DUZELDI"
+      },
+      {
+        "yuzey": "hissi",
+        "beklenen_kok": "his",
+        "TABAN": null,
+        "YENI": [
+          "his",
+          "POSS_3SG"
+        ],
+        "TABAN_kok": null,
+        "YENI_kok": "his",
+        "sinif": "DUZELDI"
+      },
+      {
+        "yuzey": "affı",
+        "beklenen_kok": "af",
+        "TABAN": null,
+        "YENI": [
+          "af",
+          "POSS_3SG"
+        ],
+        "TABAN_kok": null,
+        "YENI_kok": "af",
+        "sinif": "DUZELDI"
+      },
+      {
+        "yuzey": "zammı",
+        "beklenen_kok": "zam",
+        "TABAN": null,
+        "YENI": [
+          "zam",
+          "POSS_3SG"
+        ],
+        "TABAN_kok": null,
+        "YENI_kok": "zam",
+        "sinif": "DUZELDI"
+      },
+      {
+        "yuzey": "hattına",
+        "beklenen_kok": "hat",
+        "TABAN": null,
+        "YENI": [
+          "hat",
+          "POSS_2SG",
+          "CASE_DAT"
+        ],
+        "TABAN_kok": null,
+        "YENI_kok": "hat",
+        "sinif": "DUZELDI"
+      },
+      {
+        "yuzey": "şıkkı",
+        "beklenen_kok": "şık",
+        "TABAN": null,
+        "YENI": [
+          "şık",
+          "POSS_3SG"
+        ],
+        "TABAN_kok": null,
+        "YENI_kok": "şık",
+        "sinif": "DUZELDI"
+      },
+      {
+        "yuzey": "reddi",
+        "beklenen_kok": "ret",
+        "TABAN": [
+          "ret",
+          "COPULA_PAST"
+        ],
+        "YENI": [
+          "ret",
+          "POSS_3SG"
+        ],
+        "TABAN_kok": "ret",
+        "YENI_kok": "ret",
+        "sinif": "DUZELDI"
+      },
+      {
+        "yuzey": "sırrını",
+        "beklenen_kok": "sır",
+        "TABAN": null,
+        "YENI": [
+          "sır",
+          "POSS_2SG",
+          "CASE_ACC"
+        ],
+        "TABAN_kok": null,
+        "YENI_kok": "sır",
+        "sinif": "DUZELDI"
+      },
+      {
+        "yuzey": "ağzı",
+        "beklenen_kok": "ağız",
+        "TABAN": null,
+        "YENI": [
+          "ağız",
+          "POSS_3SG"
+        ],
+        "TABAN_kok": null,
+        "YENI_kok": "ağız",
+        "sinif": "DUZELDI"
+      },
+      {
+        "yuzey": "nefsin",
+        "beklenen_kok": "nefis",
+        "TABAN": null,
+        "YENI": [
+          "nefis",
+          "POSS_2SG"
+        ],
+        "TABAN_kok": null,
+        "YENI_kok": "nefis",
+        "sinif": "DUZELDI"
+      },
+      {
+        "yuzey": "Kanadalı",
+        "beklenen_kok": "Kanada",
+        "TABAN": null,
+        "YENI": [
+          "Kanada",
+          "DERIV_lI"
+        ],
+        "TABAN_kok": null,
+        "YENI_kok": "Kanada",
+        "sinif": "DUZELDI"
+      },
+      {
+        "yuzey": "Brezilyalı",
+        "beklenen_kok": "Brezilya",
+        "TABAN": null,
+        "YENI": [
+          "Brezilya",
+          "DERIV_lI"
+        ],
+        "TABAN_kok": null,
+        "YENI_kok": "Brezilya",
+        "sinif": "DUZELDI"
+      },
+      {
+        "yuzey": "İsveçli",
+        "beklenen_kok": "İsveç",
+        "TABAN": null,
+        "YENI": [
+          "İsveç",
+          "DERIV_lI"
+        ],
+        "TABAN_kok": null,
+        "YENI_kok": "İsveç",
+        "sinif": "DUZELDI"
+      },
+      {
+        "yuzey": "Avusturyalı",
+        "beklenen_kok": "Avusturya",
+        "TABAN": null,
+        "YENI": [
+          "Avusturya",
+          "DERIV_lI"
+        ],
+        "TABAN_kok": null,
+        "YENI_kok": "Avusturya",
+        "sinif": "DUZELDI"
+      },
+      {
+        "yuzey": "Hollandalı",
+        "beklenen_kok": "Hollanda",
+        "TABAN": null,
+        "YENI": [
+          "Hollanda",
+          "DERIV_lI"
+        ],
+        "TABAN_kok": null,
+        "YENI_kok": "Hollanda",
+        "sinif": "DUZELDI"
+      },
+      {
+        "yuzey": "Polonyalı",
+        "beklenen_kok": "Polonya",
+        "TABAN": null,
+        "YENI": [
+          "Polonya",
+          "DERIV_lI"
+        ],
+        "TABAN_kok": null,
+        "YENI_kok": "Polonya",
+        "sinif": "DUZELDI"
+      },
+      {
+        "yuzey": "İrlandalı",
+        "beklenen_kok": "İrlanda",
+        "TABAN": null,
+        "YENI": [
+          "İrlanda",
+          "DERIV_lI"
+        ],
+        "TABAN_kok": null,
+        "YENI_kok": "İrlanda",
+        "sinif": "DUZELDI"
+      },
+      {
+        "yuzey": "İsviçreli",
+        "beklenen_kok": "İsviçre",
+        "TABAN": null,
+        "YENI": [
+          "İsviçre",
+          "DERIV_lI"
+        ],
+        "TABAN_kok": null,
+        "YENI_kok": "İsviçre",
+        "sinif": "DUZELDI"
+      },
+      {
+        "yuzey": "İranlı",
+        "beklenen_kok": "İran",
+        "TABAN": null,
+        "YENI": [
+          "İran",
+          "DERIV_lI"
+        ],
+        "TABAN_kok": null,
+        "YENI_kok": "İran",
+        "sinif": "DUZELDI"
+      },
+      {
+        "yuzey": "Norveçli",
+        "beklenen_kok": "Norveç",
+        "TABAN": null,
+        "YENI": [
+          "Norveç",
+          "DERIV_lI"
+        ],
+        "TABAN_kok": null,
+        "YENI_kok": "Norveç",
+        "sinif": "DUZELDI"
+      },
+      {
+        "yuzey": "Portekizli",
+        "beklenen_kok": "Portekiz",
+        "TABAN": null,
+        "YENI": [
+          "Portekiz",
+          "DERIV_lI"
+        ],
+        "TABAN_kok": null,
+        "YENI_kok": "Portekiz",
+        "sinif": "DUZELDI"
+      },
+      {
+        "yuzey": "Çinli",
+        "beklenen_kok": "Çin",
+        "TABAN": null,
+        "YENI": [
+          "Çin",
+          "DERIV_lI"
+        ],
+        "TABAN_kok": null,
+        "YENI_kok": "Çin",
+        "sinif": "DUZELDI"
+      },
+      {
+        "yuzey": "Ukraynalı",
+        "beklenen_kok": "Ukrayna",
+        "TABAN": null,
+        "YENI": [
+          "Ukrayna",
+          "DERIV_lI"
+        ],
+        "TABAN_kok": null,
+        "YENI_kok": "Ukrayna",
+        "sinif": "DUZELDI"
+      },
+      {
+        "yuzey": "Britanyalı",
+        "beklenen_kok": "Britanya",
+        "TABAN": null,
+        "YENI": [
+          "Britanya",
+          "DERIV_lI"
+        ],
+        "TABAN_kok": null,
+        "YENI_kok": "Britanya",
+        "sinif": "DUZELDI"
+      },
+      {
+        "yuzey": "İsrailli",
+        "beklenen_kok": "İsrail",
+        "TABAN": null,
+        "YENI": [
+          "İsrail",
+          "POSS_3SG"
+        ],
+        "TABAN_kok": null,
+        "YENI_kok": "İsrail",
+        "sinif": "DUZELDI"
+      },
+      {
+        "yuzey": "Osmanlı",
+        "beklenen_kok": "Osmanlı",
+        "TABAN": null,
+        "YENI": [
+          "Osmanlı"
+        ],
+        "TABAN_kok": null,
+        "YENI_kok": "Osmanlı",
+        "sinif": "DUZELDI"
+      },
+      {
+        "yuzey": "Fransa",
+        "beklenen_kok": "Fransa",
+        "TABAN": null,
+        "YENI": [
+          "Fransa"
+        ],
+        "TABAN_kok": null,
+        "YENI_kok": "Fransa",
+        "sinif": "DUZELDI"
+      },
+      {
+        "yuzey": "Fransız",
+        "beklenen_kok": "Fransız",
+        "TABAN": null,
+        "YENI": [
+          "Fransız"
+        ],
+        "TABAN_kok": null,
+        "YENI_kok": "Fransız",
+        "sinif": "DUZELDI"
+      },
+      {
+        "yuzey": "Anadolu",
+        "beklenen_kok": "Anadolu",
+        "TABAN": null,
+        "YENI": [
+          "Anadolu"
+        ],
+        "TABAN_kok": null,
+        "YENI_kok": "Anadolu",
+        "sinif": "DUZELDI"
+      },
+      {
+        "yuzey": "vali",
+        "beklenen_kok": "vali",
+        "TABAN": null,
+        "YENI": [
+          "vali"
+        ],
+        "TABAN_kok": null,
+        "YENI_kok": "vali",
+        "sinif": "DUZELDI"
+      },
+      {
+        "yuzey": "milletvekili",
+        "beklenen_kok": "milletvekili",
+        "TABAN": null,
+        "YENI": [
+          "milletvekili"
+        ],
+        "TABAN_kok": null,
+        "YENI_kok": "milletvekili",
+        "sinif": "DUZELDI"
+      },
+      {
+        "yuzey": "Atatürk",
+        "beklenen_kok": "Atatürk",
+        "TABAN": null,
+        "YENI": [
+          "Atatürk"
+        ],
+        "TABAN_kok": null,
+        "YENI_kok": "Atatürk",
+        "sinif": "DUZELDI"
+      },
+      {
+        "yuzey": "Bizans",
+        "beklenen_kok": "Bizans",
+        "TABAN": null,
+        "YENI": [
+          "Bizans"
+        ],
+        "TABAN_kok": null,
+        "YENI_kok": "Bizans",
+        "sinif": "DUZELDI"
+      },
+      {
+        "yuzey": "Katolik",
+        "beklenen_kok": "Katolik",
+        "TABAN": null,
+        "YENI": [
+          "Katolik"
+        ],
+        "TABAN_kok": null,
+        "YENI_kok": "Katolik",
+        "sinif": "DUZELDI"
+      }
+    ],
+    "not": "`ZATEN_DOGRU` kalemler bu listeyle ILGISIZDIR — onlari 'gecti' saymak sahte kanit olurdu. HUKUM yalniz `KALDI` uzerinden verilir."
+  },
+  "negatif": {
+    "bos_kalanlar": {
+      "zzqqxx": null,
+      "qwertyuiop": null
+    },
+    "sabitler": {
+      "başkenti": {
+        "TABAN": [
+          "başkent",
+          "POSS_3SG"
+        ],
+        "YENI": [
+          "başkent",
+          "POSS_3SG"
+        ]
+      },
+      "yılında": {
+        "TABAN": [
+          "yıl",
+          "POSS_2SG",
+          "CASE_LOC"
+        ],
+        "YENI": [
+          "yıl",
+          "POSS_2SG",
+          "CASE_LOC"
+        ]
+      },
+      "olarak": {
+        "TABAN": [
+          "ol",
+          "GERUND_ArAk"
+        ],
+        "YENI": [
+          "ol",
+          "GERUND_ArAk"
+        ]
+      }
+    },
+    "ihlal": [],
+    "TEMIZ": true
+  },
+  "KENDI_KUSURLARIM": [],
+  "son_guncelleme_utc": "2026-09-19T09:48:16Z"
+}

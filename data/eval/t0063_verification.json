@@ -1,0 +1,308 @@
+{
+  "task_id": "T-0063",
+  "title": "B′ ekseninin onarımı — Bağımsız Doğrulama Raporu",
+  "verifier": "antigravity",
+  "stamp_utc": "2026-09-18T07:15:00Z",
+  "verdict": "PASS_WITH_FINDINGS",
+  "summary": {
+    "core_architecture": "PASS (Dengeli 3-sınıf tasarımı marginal bedava kazancı sıfırlamış, eksen her iki korpusta geçerli)",
+    "claims_status": "3/4 TAM DOĞRULANDI, 1/4 DÜZELTME GEREKTİRİYOR (İddia 3te %0ın kazanç/kayıp yönü ters yazılmış)",
+    "findings_count": 3
+  },
+  "claims_assessment": {
+    "claim_1_axis_validity": {
+      "claim": "Eksen iki bağımsız korpusta GEÇERLİ: taban şansın 10-12 puan üstünde (%43.35 / %45.66; şans %33.33) ve K1/K3 tam şans düzeyinde (32.6-33.4).",
+      "status": "CONFIRMED",
+      "measurements": {
+        "raw_full": {
+          "base_true_pct": 43.34597555836494,
+          "chance_pct": 33.333333333333336,
+          "K1_pct": 32.8023598820059,
+          "K3_pct": 32.79393173198483,
+          "p_vs_chance": 0.0
+        },
+        "gts_dict": {
+          "base_true_pct": 45.65812792009022,
+          "chance_pct": 33.333333333333336,
+          "K1_pct": 32.59223457386821,
+          "K3_pct": 33.3494441759304,
+          "p_vs_chance": 0.0
+        }
+      }
+    },
+    "claim_2_protection_gate": {
+      "claim": "İlan edilen >=%90 koruma kapısını dört kolun dördü de iki korpusta geçti.",
+      "status": "CONFIRMED_POINT_ESTIMATE",
+      "retention_pct": {
+        "carpenter_v2": {
+          "raw_full": 97.67,
+          "gts_dict": 91.53,
+          "passes": true
+        },
+        "f4_r05": {
+          "raw_full": 98.58,
+          "gts_dict": 101.09,
+          "passes": true
+        },
+        "f4_r10": {
+          "raw_full": 96.66,
+          "gts_dict": 96.61,
+          "passes": true
+        },
+        "f4_replay": {
+          "raw_full": 103.77,
+          "gts_dict": 100.07,
+          "passes": true
+        }
+      },
+      "note": "carpenter_v2/gts_dict için %95 GA [%89.81, %93.25] olup %90 eşiğinin altına inmektedir (B3 bulgusu)."
+    },
+    "claim_3_mcnemar_paired": {
+      "claim": "McNemar: %10 iki korpusta anlamlı küçük kayıp; %5 saptanabilir değişim yok; %0 iki korpusta anlamlı kazanç.",
+      "status": "PARTIALLY_CORRECT_WITH_INVERSION_ERROR",
+      "independent_calculation": {
+        "carpenter_v2": {
+          "raw_full": {
+            "n01_loss": 981,
+            "n10_gain": 861,
+            "p_exact": 0.005545079798197112,
+            "net_effect": "SIGNIFICANT_LOSS (-1.011 points)"
+          },
+          "gts_dict": {
+            "n01_loss": 468,
+            "n10_gain": 228,
+            "p_exact": 5.631462103862406e-20,
+            "net_effect": "SIGNIFICANT_LOSS (-3.867 points)"
+          }
+        },
+        "f4_r05": {
+          "raw_full": {
+            "n01_loss": 808,
+            "n10_gain": 735,
+            "p_exact": 0.0667759363602167,
+            "net_effect": "NO_DETECTABLE_CHANGE (p > 0.05)"
+          },
+          "gts_dict": {
+            "n01_loss": 363,
+            "n10_gain": 394,
+            "p_exact": 0.27554093108073835,
+            "net_effect": "NO_DETECTABLE_CHANGE (p > 0.05)"
+          }
+        },
+        "f4_r10": {
+          "raw_full": {
+            "n01_loss": 735,
+            "n10_gain": 563,
+            "p_exact": 2.0047929547568137e-06,
+            "net_effect": "SIGNIFICANT_SMALL_LOSS (-1.450 points)"
+          },
+          "gts_dict": {
+            "n01_loss": 342,
+            "n10_gain": 246,
+            "p_exact": 8.645028448220789e-05,
+            "net_effect": "SIGNIFICANT_SMALL_LOSS (-1.547 points)"
+          }
+        },
+        "f4_replay": {
+          "raw_full": {
+            "n01_loss": 664,
+            "n10_gain": 858,
+            "p_exact": 7.289507561800453e-07,
+            "net_effect": "SIGNIFICANT_GAIN (+1.635 points)"
+          },
+          "gts_dict": {
+            "n01_loss": 479,
+            "n10_gain": 481,
+            "p_exact": 0.9742550918067948,
+            "net_effect": "NO_DETECTABLE_CHANGE (p > 0.05)"
+          }
+        }
+      },
+      "error_detail": "Raporun F5 bulgusu ve not metni %0 için anlamlı KAZANÇ iddia etmiştir. Oysa n01(loss) > n10(gain) olup %0 her iki korpusta da tabandan düşüktür (B1 bulgusu)."
+    },
+    "claim_4_combined_verdict": {
+      "claim": "%5, %10, %25 A+B+C üçünü de geçiyor; %0 Adan kalıyor.",
+      "status": "CONFIRMED",
+      "table": {
+        "carpenter_v2": {
+          "A_prime": "FAIL (+15.96% / +14.84% > 10%)",
+          "B_prime": "PASS (97.7% / 91.5% >= 90%)",
+          "C": "PASS (+0.0371)",
+          "combined": "FAIL"
+        },
+        "f4_r05": {
+          "A_prime": "PASS (+7.98% / +8.84% <= 10%)",
+          "B_prime": "PASS (98.6% / 101.1% >= 90%)",
+          "C": "PASS (+0.0242)",
+          "combined": "PASS"
+        },
+        "f4_r10": {
+          "A_prime": "PASS (+4.39% / +4.75% <= 10%)",
+          "B_prime": "PASS (96.7% / 96.6% >= 90%)",
+          "C": "PASS (+0.0200)",
+          "combined": "PASS"
+        },
+        "f4_replay": {
+          "A_prime": "PASS (+4.07% / +5.23% <= 10%)",
+          "B_prime": "PASS (103.8% / 100.1% >= 90%)",
+          "C": "PASS (+0.0129)",
+          "combined": "PASS"
+        }
+      }
+    }
+  },
+  "specific_examinations": {
+    "test_A_balance": {
+      "question": "Denge gerçekten tutuyor mu? Her idnin ni eşit mi? Sabit tahmin tam %33.3 mü?",
+      "result": "CONFIRMED_PERFECT",
+      "details": {
+        "raw_full": {
+          "target_counts": {
+            "32137": 3955,
+            "32142": 3955,
+            "32138": 3955
+          },
+          "total": 11865,
+          "naive_majority_accuracy_pct": 33.333333333333336
+        },
+        "gts_dict": {
+          "target_counts": {
+            "32138": 2069,
+            "32137": 2069,
+            "32140": 2069
+          },
+          "total": 6207,
+          "naive_majority_accuracy_pct": 33.333333333333336
+        }
+      },
+      "conclusion": "Dengeleme kusursuzdur. Herhangi bir sabit tahmincinin marjinal kazancı tam olarak sıfırdır."
+    },
+    "test_B_k3_boundary_and_permutation": {
+      "question": "K3 farkı 10.55 puan sınırda. Permütasyon sağlam mı? Eşiğe yakınlık bir artefakt mı?",
+      "result": "PASS_WITH_STATISTICAL_CAVEAT",
+      "permutation_diagnostics": {
+        "raw_full": {
+          "fixed_points_before_repair": 1,
+          "fixed_points_after_repair": 0,
+          "same_token_pct_after_shuffle": 33.2996,
+          "theoretical_chance_pct": 33.3277
+        },
+        "gts_dict": {
+          "fixed_points_before_repair": 2,
+          "fixed_points_after_repair": 0,
+          "same_token_pct_after_shuffle": 34.1228,
+          "theoretical_chance_pct": 33.3226
+        }
+      },
+      "paired_difference_statistics": {
+        "raw_full": {
+          "point_estimate_pct": 10.552,
+          "se_pct": 0.6247,
+          "ci_95_analytical": [
+            9.328,
+            11.776
+          ],
+          "ci_95_bootstrap": [
+            9.313,
+            11.85
+          ],
+          "threshold_10_in_ci": true,
+          "z_vs_10": 0.8837,
+          "p_one_sided_H0_le_10": 0.1884
+        },
+        "gts_dict": {
+          "point_estimate_pct": 12.309,
+          "se_pct": 0.8643,
+          "ci_95_analytical": [
+            10.615,
+            14.003
+          ],
+          "ci_95_bootstrap": [
+            10.585,
+            14.065
+          ],
+          "threshold_10_in_ci": false,
+          "z_vs_10": 2.6712,
+          "p_one_sided_H0_le_10": 0.0038
+        }
+      },
+      "conclusion": "Permütasyon algoritması doğru çalışmakta ve sabit nokta bırakmamaktadır. Ancak raw_full üzerinde farkın 10.0 puan eşiğini geçmesi istatistiksel olarak anlamlı değildir (p=0.1884, %95 GA 10.0 eşiğini kesmektedir). Bu bir kusur değil, sınır uyarısıdır (B2 bulgusu)."
+    },
+    "test_C_hitvec_alignment_and_mcnemar": {
+      "question": "Hitvec hizalaması tam mı? 5 checkpoint aynı konumlarda mı puanlandı?",
+      "result": "CONFIRMED_BIT_EXACT",
+      "details": {
+        "collect_positions_deterministic": true,
+        "sample_ordering_identical_across_checkpoints": true,
+        "hitvec_lengths": {
+          "raw_full": 11865,
+          "gts_dict": 6207
+        },
+        "mcnemar_matrix_reconstruction": "2x2 kontenjans tablosundaki n00, n01, n10, n11 toplamları her checkpoint için tam N eşittir.",
+        "exact_binomial_p_values": "Fractions tabanlı tam iki yönlü binom hesaplaması rapordaki sayılarla bit-bit uyumludur."
+      }
+    }
+  },
+  "findings": [
+    {
+      "id": "B1",
+      "severity": "high",
+      "title": "F5 Bulgusunda Yön Tersliği: carpenter_v2 Noktalamada Tabanı Geçmiyor, Aksine Anlamlı Şekilde Kaybediyor",
+      "detail": "Raporun F5 maddesi ve T-0063 notu: %0 (carpenter_v2) iki korpusta da noktalamada tabanı ANLAMLI biçimde geçiyor (p=5,5e-03 / 5,6e-20) ... anlamlı KAZANÇ ifadesini kullanmaktadır. Bu bir yön tersliği hatasıdır. Sayısal ölçüm: raw_full üzerinde taban 5143 doğru (%43.35), carpenter_v2 5023 doğru (%42.34), n01(kayıp)=981 > n10(kazanç)=861, drop = +1.011 puan (p=0.0055). gts_dict üzerinde taban 2834 doğru (%45.66), carpenter_v2 2594 doğru (%41.79), n01(kayıp)=468 > n10(kazanç)=228, drop = +3.867 puan (p=5.6e-20). carpenter_v2 her iki korpusta da tabana göre ANLAMLI DERECEDE KAYBETMİŞTİR. Noktalamada tabanı anlamlı geçen tek kol %25 f4_replay koludur (raw_full üzerinde +1.64 puan, p=7.3e-7). carpenter_v2nin retentionı >= %90 olduğu için kapıyı geçmektedir, ancak kazanç iddia edilemez."
+    },
+    {
+      "id": "B2",
+      "severity": "medium",
+      "title": "raw_full K3 Farkı (10.55 Puan) İstatistiki Olarak 10.0 Eşiğinden Ayırt Edilemiyor",
+      "detail": "raw_full üzerinde K3 farkı nokta tahmini olarak 10.552 puandır (ilan edilen eşik: >= 10.0). Ancak eşleştirilmiş %95 Güven Aralığı [9.328, 11.776] (bootstrap: [9.313, 11.850]) olup alt sınır 10.0 eşiğinin altındadır. H0: fark <= 10.0 hipotezinin tek yönlü p değeri p=0.1884tür. Dolayısıyla raw_fullun K3 kontrolünü geçmesi istatistiksel bir kesinlik değil, nokta tahmini başarısıdır. Claudenun rapora yazdığı F7 sınır uyarısı yerindedir ve bu analizle desteklenmektedir."
+    },
+    {
+      "id": "B3",
+      "severity": "low",
+      "title": "carpenter_v2 / gts_dict Koruma Oranının %95 Güven Aralığı %90 Eşiğini Kesmektedir",
+      "detail": "carpenter_v2nin gts_dict üzerindeki göreli koruma oranı nokta tahmini %91.53tür (ilan edilen sınır bandı %88-92). Eşleştirilmiş bootstrap %95 GA [%89.81, %93.25] olup alt sınır %90 eşiğinin altına inmektedir. Bu kol zaten A ekseninden elendiği için nihai birleşik kararı etkilememektedir."
+    }
+  ],
+  "checksum_verification": {
+    "all_8_artifacts_match_sha256": true,
+    "details": [
+      {
+        "path": "scratch/t0063_b_probe.py",
+        "sha256": "1b9f6fd241e828ecec8b81be83901609256dad09523774c9157f43dddd62ef4c",
+        "match": true
+      },
+      {
+        "path": "scratch/t0063_verdict.py",
+        "sha256": "06db8372214b4ef721b75504553515b680cd0926f1978d108a603fe6d7537ab4",
+        "match": true
+      },
+      {
+        "path": "scratch/t0063_b_raw_full.json",
+        "sha256": "10473a92efa773c2c356e77234a49e8ee43a7764dba39838f6cf4a823280ba72",
+        "match": true
+      },
+      {
+        "path": "scratch/t0063_b_gts_dict.json",
+        "sha256": "a516fd0493d9156fd0b12f95b84aa04aac1d77127056f353138d335d9aa05b4f",
+        "match": true
+      },
+      {
+        "path": "scratch/t0063_verdict.json",
+        "sha256": "8f633ff97b946e39448797ed3ccc6ceaa6c06bbd022079f3a333356504bf07bb",
+        "match": true
+      },
+      {
+        "data/eval/b_prime_axis_design_2026-09-18.md": "08ce2b59b2f4ce8162e9e808f156e6deb001754cc6a9c869a54bb5acf7c16778",
+        "match": true
+      },
+      {
+        "data/eval/forgetting_measurement_design_2026-09-18.md": "544fae2dfb381c153ae23f9276778981d123c218ca3fcf4d4a53fe090beb737e",
+        "match": true
+      },
+      {
+        ".agent-bus/notes/T-0063.md": "7acf5ea39d560b7c4071cb11d6d96384f9c4dacb88b6dc148bc417e78789cd6f",
+        "match": true
+      }
+    ]
+  }
+}

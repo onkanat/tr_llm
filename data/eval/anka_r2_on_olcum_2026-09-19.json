@@ -1,0 +1,663 @@
+{
+  "gorev": "T-0080",
+  "asama": "Faz 2 on olcum — D1 yeniden cercevesi",
+  "baslangic_utc": "2026-09-19T08:50:52Z",
+  "ilan_edilen_kapilar": {
+    "H1_beraberlik_payi": {
+      "destek": ">=80",
+      "curutme": "<50",
+      "not": "beraberlik == skor esitligi (|fark|<0.1, skor tamsayi)"
+    },
+    "H3_ad_alani_silerek": {
+      "destek": ">=50",
+      "curutme": "<10",
+      "not": "SABIT KUME (iki sozlukte de cozulenler); KAPSAMA KAYBI ayrica raporlanir"
+    },
+    "H6_ad_alani_silmeden": {
+      "destek": ">=50",
+      "curutme": "<10",
+      "ilan_notu": "H6 kosumdan ONCE eklendi; H3'un %13 kapsama kaybini gordukten sonra asil tasarim olarak olculur. Kapsama kaybi TANIM GEREGI 0.",
+      "kapi": "G1 <= %1,0 (Faz 0 ilani)"
+    },
+    "H4_V1_kirilmasi": {
+      "destek": ">=4/5 KORUNUR",
+      "not": "ILAN DUZELTMESI: on-sondanma bugunku secimin ZATEN dogru oldugunu gosterdi => 'duzelir' degil 'korunur' (tavan artefakti onlendi)"
+    },
+    "H5_D1_hedef": {
+      "destek": "4/4"
+    },
+    "OLCUT_G1": {
+      "ilan": "yok — bu betikte ILK KEZ olculuyor",
+      "not": "G1'in bilinen yer-gercekte yanlis pozitifi varsa G1 bir hata olcusu DEGILDIR"
+    }
+  },
+  "kimlik": {
+    "sozluk": {
+      "yol": "data/rebuild/vocab_base_32852.json"
+    },
+    "lexicon": {
+      "yol": "data/lexicon/roots.tsv",
+      "sha256": "fe3005e5e2a594f09cbcfc3286e2c8812953ae6614333815ab87a7e3a6763598"
+    }
+  },
+  "lexicon": {
+    "baslik": [
+      "lemma",
+      "pos",
+      "attributes"
+    ],
+    "satir": 52373,
+    "benzersiz_lemma": 49635,
+    "sirasizlik_ilk_satirlar": [
+      50475,
+      50476,
+      50478,
+      50481,
+      50482
+    ],
+    "kuyruk_basi_satir": 50475,
+    "kuyruk_satir_sayisi": 1900
+  },
+  "son_guncelleme_utc": "2026-09-19T08:52:05Z",
+  "K0": {
+    "hatali": [],
+    "TEMIZ": true
+  },
+  "dedektor": {
+    "turemis_gorunumlu": 18244,
+    "sure_sn": 9.5,
+    "poz_kaybolan": [],
+    "neg_sizan": [],
+    "TEMIZ": true
+  },
+  "orneklem": {
+    "dosya_basi": {
+      "tr-00000.parquet": 1688,
+      "tr-00001.parquet": 1524
+    },
+    "kabul_makale": 3212,
+    "benzersiz_yuzey": 236573,
+    "sure_sn": 2.5
+  },
+  "tam_sozluk": {
+    "cozulebilen_yuzey": 111432,
+    "G1_ihlal": 2668,
+    "G1_yuzde": 2.3943,
+    "kaynak_dagilimi": {
+      "cekirdek": 1878,
+      "turemis_gorunumlu": 733,
+      "kuyruk": 57
+    },
+    "beraberlik_dagilimi": {
+      "beraberlik": 2642,
+      "beraberlik_degil": 26
+    },
+    "ornek_ihlal": [
+      {
+        "yuzey": "olan",
+        "kaynak": "cekirdek",
+        "bugun": [
+          "o",
+          "DERIV_lAn"
+        ],
+        "kisa_kok": "o",
+        "kisa_kok_satir": 31630,
+        "aday_yolu": 2
+      },
+      {
+        "yuzey": "kurdu",
+        "kaynak": "cekirdek",
+        "bugun": [
+          "kur",
+          "COPULA_PAST"
+        ],
+        "kisa_kok": "kur",
+        "kisa_kok_satir": 25664,
+        "aday_yolu": 6
+      },
+      {
+        "yuzey": "belli",
+        "kaynak": "cekirdek",
+        "bugun": [
+          "bel",
+          "DERIV_lI"
+        ],
+        "kisa_kok": "bel",
+        "kisa_kok_satir": 6663,
+        "aday_yolu": 4
+      },
+      {
+        "yuzey": "günümüzde",
+        "kaynak": "cekirdek",
+        "bugun": [
+          "gün",
+          "POSS_1PL",
+          "CASE_LOC"
+        ],
+        "kisa_kok": "gün",
+        "kisa_kok_satir": 17910,
+        "aday_yolu": 2
+      },
+      {
+        "yuzey": "ölmeden",
+        "kaynak": "cekirdek",
+        "bugun": [
+          "öl",
+          "GERUND_mAdAn"
+        ],
+        "kisa_kok": "öl",
+        "kisa_kok_satir": 48341,
+        "aday_yolu": 3
+      },
+      {
+        "yuzey": "ölünce",
+        "kaynak": "cekirdek",
+        "bugun": [
+          "öl",
+          "GERUND_IncA"
+        ],
+        "kisa_kok": "öl",
+        "kisa_kok_satir": 48341,
+        "aday_yolu": 2
+      },
+      {
+        "yuzey": "Günümüzde",
+        "kaynak": "cekirdek",
+        "bugun": [
+          "gün",
+          "POSS_1PL",
+          "CASE_LOC"
+        ],
+        "kisa_kok": "gün",
+        "kisa_kok_satir": 17910,
+        "aday_yolu": 2
+      },
+      {
+        "yuzey": "topraklar",
+        "kaynak": "cekirdek",
+        "bugun": [
+          "toprak",
+          "PLURAL"
+        ],
+        "kisa_kok": "toprak",
+        "kisa_kok_satir": 41099,
+        "aday_yolu": 5
+      },
+      {
+        "yuzey": "onun",
+        "kaynak": "cekirdek",
+        "bugun": [
+          "o",
+          "CASE_GEN"
+        ],
+        "kisa_kok": "o",
+        "kisa_kok_satir": 31630,
+        "aday_yolu": 6
+      },
+      {
+        "yuzey": "torunları",
+        "kaynak": "turemis_gorunumlu",
+        "bugun": [
+          "torun",
+          "POSS_3PL"
+        ],
+        "kisa_kok": "torun",
+        "kisa_kok_satir": 41169,
+        "aday_yolu": 5
+      },
+      {
+        "yuzey": "birinde",
+        "kaynak": "cekirdek",
+        "bugun": [
+          "bir",
+          "POSS_2SG",
+          "CASE_LOC"
+        ],
+        "kisa_kok": "bir",
+        "kisa_kok_satir": 7599,
+        "aday_yolu": 4
+      },
+      {
+        "yuzey": "Bunun",
+        "kaynak": "cekirdek",
+        "bugun": [
+          "bu",
+          "CASE_GEN"
+        ],
+        "kisa_kok": "bu",
+        "kisa_kok_satir": 8469,
+        "aday_yolu": 4
+      }
+    ],
+    "sure_sn": 35.7
+  },
+  "H1_beraberlik": {
+    "yuzde": 99.0255,
+    "beraberlik": 2642,
+    "toplam": 2668,
+    "hukum": "BERABERLIK_KIRMA"
+  },
+  "H6_ad_alani_silmeden": {
+    "cozulebilen_yuzey": 111432,
+    "kaybolan_yuzey": 0,
+    "G1_ihlal": 921,
+    "G1_yuzde": 0.8265,
+    "dusus_yuzde": 65.4798,
+    "secimi_degisen_yuzey": 18277,
+    "tamamen_turemis_koklu_yuzey": 14790,
+    "ornek_degisim": [
+      {
+        "yuzey": "ayrımı",
+        "bugun": [
+          "ayrım",
+          "POSS_3SG"
+        ],
+        "ayrimli": [
+          "ayrı",
+          "POSS_1SG",
+          "CASE_ACC"
+        ]
+      },
+      {
+        "yuzey": "gelebilir",
+        "bugun": [
+          "gelebil",
+          "TENSE_AORIST"
+        ],
+        "ayrimli": [
+          "gel",
+          "POTENTIAL",
+          "TENSE_AORIST"
+        ]
+      },
+      {
+        "yuzey": "engelleyen",
+        "bugun": [
+          "engelle",
+          "PART_An"
+        ],
+        "ayrimli": [
+          "engel",
+          "DERIV_lA",
+          "PART_An"
+        ]
+      },
+      {
+        "yuzey": "ince",
+        "bugun": [
+          "ince"
+        ],
+        "ayrimli": [
+          "In",
+          "CASE_EQU"
+        ]
+      },
+      {
+        "yuzey": "oyunun",
+        "bugun": [
+          "oyun",
+          "POSS_2SG"
+        ],
+        "ayrimli": [
+          "oy",
+          "POSS_2SG",
+          "CASE_GEN"
+        ]
+      },
+      {
+        "yuzey": "şeritlerin",
+        "bugun": [
+          "şeritler",
+          "POSS_2SG"
+        ],
+        "ayrimli": [
+          "şerit",
+          "PLURAL",
+          "POSS_2SG"
+        ]
+      },
+      {
+        "yuzey": "fotoğrafçılık",
+        "bugun": [
+          "fotoğrafçı",
+          "DERIV_lIk"
+        ],
+        "ayrimli": [
+          "fotoğraf",
+          "DERIV_CI",
+          "DERIV_lIk"
+        ]
+      },
+      {
+        "yuzey": "fotoğrafçılıkta",
+        "bugun": [
+          "fotoğrafçı",
+          "DERIV_lIk",
+          "CASE_LOC"
+        ],
+        "ayrimli": [
+          "fotoğraf",
+          "DERIV_CI",
+          "DERIV_lIk",
+          "CASE_LOC"
+        ]
+      }
+    ],
+    "hukum": "DESTEKLENDI",
+    "kapi_G1": {
+      "deger": 0.8265,
+      "ilan_esik": 1.0,
+      "GECIYOR": true
+    }
+  },
+  "H6b_degisimin_cerrahisi": {
+    "degisen": 18277,
+    "ihlal_gecisleri": {
+      "temiz->temiz": 17736,
+      "temiz->ihlal": 145,
+      "ihlal->temiz": 394,
+      "ihlal->ihlal": 2
+    },
+    "cerrahi_cozulen": 394,
+    "YENI_ihlal": 145,
+    "yanal_degisim": 17738,
+    "rz_azalan": 18036,
+    "rz_artan": 226,
+    "rz_esit": 15,
+    "butun_kelime_okunusu_yok_olan": 15,
+    "ornek_yok_olan": [
+      "ince",
+      "resim",
+      "için",
+      "gösterilen",
+      "eser",
+      "Han",
+      "doğum",
+      "gelen",
+      "Batı",
+      "Kara",
+      "ile",
+      "üzerine",
+      "posta",
+      "ağı",
+      "değer"
+    ],
+    "not": "'ihlal' burada G1 ihlali; G1 bir HATA olcusu DEGIL (bkz. G1_olcut_gecerliligi) => 'cozulen' sayisi KAZANC kaniti DEGILDIR"
+  },
+  "H6c_totoloji": {
+    "G1_once": 2668,
+    "G1_sonra": 921,
+    "toplam_dusus": 1747,
+    "karardan_gelen_net": 249,
+    "ayni_kararla_flip_olan": 1498,
+    "kok_ayni_morfem_farkli": 0,
+    "cikarimla_aday_silinmesinden": 1498,
+    "silinme_payi_yuzde": 85.75,
+    "hukum": "TOTOLOJI_BASKIN",
+    "not": "Secilen analiz BIREBIR AYNI oldugu hâlde G1 'ihlal'den 'temiz'e donen yuzeyler: bunlarda HICBIR KARAR DEGISMEDI, yalnizca olcutun saydigi alternatif silindi => bu pay 'iyilesme' DEGIL, olcutun kendi payini yemesidir ([[gosterim-uyusmazligi-olcutu-oldurur]] ailesi)"
+  },
+  "H8_uzunluk_ekseni": {
+    "vakalar": [
+      {
+        "yuzey": "bunun",
+        "etiket": "DOGRU",
+        "beraberlik": true,
+        "bugun": "bu",
+        "en_uzun_kurali": "bun",
+        "onek_mi": true,
+        "degisir": true
+      },
+      {
+        "yuzey": "onun",
+        "etiket": "DOGRU",
+        "beraberlik": true,
+        "bugun": "o",
+        "en_uzun_kurali": "on",
+        "onek_mi": true,
+        "degisir": true
+      },
+      {
+        "yuzey": "ölmeden",
+        "etiket": "DOGRU",
+        "beraberlik": true,
+        "bugun": "öl",
+        "en_uzun_kurali": "ölme",
+        "onek_mi": true,
+        "degisir": true
+      },
+      {
+        "yuzey": "topraklar",
+        "etiket": "DOGRU",
+        "beraberlik": true,
+        "bugun": "toprak",
+        "en_uzun_kurali": "toprakla",
+        "onek_mi": true,
+        "degisir": true
+      },
+      {
+        "yuzey": "günümüzde",
+        "etiket": "DOGRU",
+        "beraberlik": true,
+        "bugun": "gün",
+        "en_uzun_kurali": "günü",
+        "onek_mi": true,
+        "degisir": true
+      },
+      {
+        "yuzey": "ağacı",
+        "etiket": "YANLIS",
+        "beraberlik": true,
+        "bugun": "ağa",
+        "en_uzun_kurali": "ağaç",
+        "onek_mi": true,
+        "degisir": true
+      },
+      {
+        "yuzey": "aklı",
+        "etiket": "YANLIS",
+        "beraberlik": true,
+        "bugun": "ak",
+        "en_uzun_kurali": "akıl",
+        "onek_mi": true,
+        "degisir": true
+      },
+      {
+        "yuzey": "kanadı",
+        "etiket": "YANLIS",
+        "beraberlik": true,
+        "bugun": "kana",
+        "en_uzun_kurali": "kanat",
+        "onek_mi": true,
+        "degisir": true
+      },
+      {
+        "yuzey": "gönlü",
+        "etiket": "YANLIS",
+        "beraberlik": true,
+        "bugun": "gön",
+        "en_uzun_kurali": "gönül",
+        "onek_mi": true,
+        "degisir": true
+      }
+    ],
+    "n": 9,
+    "beraberlik_sayisi": 9,
+    "onek_sayisi": 9,
+    "en_uzun_kurali_degistirir": 9,
+    "duzelen_yanlis": 4,
+    "bozulan_dogru": 5,
+    "net": -1,
+    "hukum": "AYIRT_EDICI_DEGIL",
+    "esik_duzeltmesi": "ilk kosumda hukum 'net != 0' ile kurulmustu; net=-1 yaniltici bicimde KISMEN_AYIRT_EDICI etiketi uretti; esik net<=0 olarak duzeltildi ve yeniden olculdu"
+  },
+  "filtre_kontrolu": {
+    "cikan_lemma": 19338,
+    "kalan_lemma": 33035,
+    "hatali": []
+  },
+  "H3_filtrelenmis_sozluk": {
+    "cozulebilen_yuzey": 96642,
+    "kaybolan_yuzey": 14790,
+    "kaybolan_yuzde": 13.2727,
+    "G1_yuzde": 0.6043,
+    "kesisim_cozulen": 96642,
+    "kesisim_G1_once": 2.412,
+    "kesisim_G1_sonra": 0.6043,
+    "ihlal_once": 2331,
+    "ihlal_sonra": 584,
+    "dusus_yuzde": 74.9464,
+    "sure_sn": 24.7,
+    "hukum": "DESTEKLENDI"
+  },
+  "H4_V1_kirilmasi": {
+    "satirlar": [
+      {
+        "yuzey": "bunun",
+        "bek": "bu",
+        "once": "bu",
+        "silme_sonrasi": "bu",
+        "ayrim_sonrasi": "bu",
+        "once_dogru": true,
+        "silme_dogru": true,
+        "ayrim_dogru": true
+      },
+      {
+        "yuzey": "onun",
+        "bek": "o",
+        "once": "o",
+        "silme_sonrasi": "o",
+        "ayrim_sonrasi": "o",
+        "once_dogru": true,
+        "silme_dogru": true,
+        "ayrim_dogru": true
+      },
+      {
+        "yuzey": "ölmeden",
+        "bek": "öl",
+        "once": "öl",
+        "silme_sonrasi": "öl",
+        "ayrim_sonrasi": "öl",
+        "once_dogru": true,
+        "silme_dogru": true,
+        "ayrim_dogru": true
+      },
+      {
+        "yuzey": "topraklar",
+        "bek": "toprak",
+        "once": "toprak",
+        "silme_sonrasi": "toprak",
+        "ayrim_sonrasi": "toprak",
+        "once_dogru": true,
+        "silme_dogru": true,
+        "ayrim_dogru": true
+      },
+      {
+        "yuzey": "günümüzde",
+        "bek": "gün",
+        "once": "gün",
+        "silme_sonrasi": "gün",
+        "ayrim_sonrasi": "gün",
+        "once_dogru": true,
+        "silme_dogru": true,
+        "ayrim_dogru": true
+      }
+    ],
+    "toplam": 5,
+    "once_dogru": 5,
+    "silme_korunan": 5,
+    "ayrim_korunan": 5,
+    "ilan_duzeltmesi": "on-sondanma: bugun secim ZATEN dogru => olcut 'duzelir' degil 'KORUNUR'; hem silme hem ayrim olculur"
+  },
+  "H5_D1_hedefi": {
+    "satirlar": [
+      {
+        "yuzey": "ağacı",
+        "bek": "ağaç",
+        "once": "ağa",
+        "silme_sonrasi": "ağaç",
+        "ayrim_sonrasi": "ağaç",
+        "silme_dogru": true,
+        "ayrim_dogru": true
+      },
+      {
+        "yuzey": "aklı",
+        "bek": "akıl",
+        "once": "ak",
+        "silme_sonrasi": "ak",
+        "ayrim_sonrasi": "ak",
+        "silme_dogru": false,
+        "ayrim_dogru": false
+      },
+      {
+        "yuzey": "kanadı",
+        "bek": "kanat",
+        "once": "kana",
+        "silme_sonrasi": "kanat",
+        "ayrim_sonrasi": "kanat",
+        "silme_dogru": true,
+        "ayrim_dogru": true
+      },
+      {
+        "yuzey": "gönlü",
+        "bek": "gönül",
+        "once": "gön",
+        "silme_sonrasi": "gön",
+        "ayrim_sonrasi": "gön",
+        "silme_dogru": false,
+        "ayrim_dogru": false
+      }
+    ],
+    "toplam": 4,
+    "silme_dogru": 2,
+    "ayrim_dogru": 2
+  },
+  "G1_olcut_gecerliligi": {
+    "yer_gercek": {
+      "bunun": "DOGRU",
+      "onun": "DOGRU",
+      "ölmeden": "DOGRU",
+      "topraklar": "DOGRU",
+      "günümüzde": "DOGRU",
+      "ağacı": "YANLIS",
+      "aklı": "YANLIS",
+      "kanadı": "YANLIS",
+      "gönlü": "YANLIS"
+    },
+    "G1_ihlal_diyor": {
+      "bunun": true,
+      "onun": true,
+      "ölmeden": true,
+      "topraklar": true,
+      "günümüzde": true,
+      "ağacı": true,
+      "aklı": true,
+      "kanadı": true,
+      "gönlü": true
+    },
+    "DOGRU_oldugu_halde_ihlal_sayilan": [
+      "bunun",
+      "onun",
+      "ölmeden",
+      "topraklar",
+      "günümüzde"
+    ],
+    "yanlis_pozitif": 5,
+    "test_edilen": 9,
+    "hukum": "OLCUT_HATA_OLCUSU_DEGIL",
+    "sonuc": "G1 'daha uzun koklu GECERLI yol var' sinyalini olcer; bu sinyal DOGRU ve YANLIS okumada AYNI cikiyor => G1 bir hata olcusu DEGIL, G1 kapisinin 'uzun=k dogru' varsayimi CURUDU"
+  },
+  "HUKUM": {
+    "H1": "BERABERLIK_KIRMA",
+    "H6_silmeden": "DESTEKLENDI",
+    "H3_silerek": "DESTEKLENDI",
+    "H4": "korunan silme 5/5 · ayrim 5/5",
+    "H5": "silme 2/4 · ayrim 2/4",
+    "G1_olcut": "OLCUT_HATA_OLCUSU_DEGIL",
+    "kaynak_dagilimi": {
+      "cekirdek": 1878,
+      "turemis_gorunumlu": 733,
+      "kuyruk": 57
+    },
+    "en_buyuk_kaynak": "cekirdek"
+  }
+}

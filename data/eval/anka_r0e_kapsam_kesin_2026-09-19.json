@@ -1,0 +1,374 @@
+{
+  "gorev": "T-0080",
+  "asama": "Faz 0e — kesin kapsam sayimi",
+  "baslangic_utc": "2026-09-19T08:32:48Z",
+  "kimlik": {
+    "sozluk": {
+      "yol": "data/rebuild/vocab_base_32852.json",
+      "sha256": "7611b6a523a2bb524cc21aa9cc64235aa6a2ae99f87f46ac51cb2915e61164ad"
+    },
+    "lexicon": {
+      "yol": "data/lexicon/roots.tsv",
+      "sha256": "fe3005e5e2a594f09cbcfc3286e2c8812953ae6614333815ab87a7e3a6763598"
+    },
+    "regresyon": {
+      "yol": "tests/morphology_regression_100.json",
+      "sha256": "cbe00f31c4dcc34ba2baed5317f1bf38b4e69b130c5271205c1dd5709dab18da"
+    }
+  },
+  "K0": {
+    "hatali": [],
+    "TEMIZ": true
+  },
+  "G4_filtre_kontrolu": {
+    "buyuk_id": 1354,
+    "poz_kaybolan": [],
+    "neg_sizan": [],
+    "TEMIZ": true
+  },
+  "V1_curutme_kontrolu": {
+    "bugun_dogru_ve_V1_bozuyor": [
+      "bunun",
+      "onun",
+      "ölmeden",
+      "topraklar",
+      "günümüzde"
+    ],
+    "beklenen": [
+      "bunun",
+      "onun",
+      "ölmeden",
+      "topraklar",
+      "günümüzde"
+    ]
+  },
+  "orneklem": {
+    "kabul_makale": 3212,
+    "dosya_basi": {
+      "tr-00000.parquet": 1688,
+      "tr-00001.parquet": 1524
+    },
+    "kelime_jetonu": 2449120,
+    "benzersiz_yuzey": 236573,
+    "bin_jeton": 4722122,
+    "akis_sure_sn": 238.8
+  },
+  "bin_siniflar": {
+    "DIGER": {
+      "jeton": 4118698,
+      "yuzde": 87.2213
+    },
+    "PN": {
+      "jeton": 379874,
+      "yuzde": 8.0446
+    },
+    "UNK": {
+      "jeton": 81221,
+      "yuzde": 1.72
+    },
+    "LIT": {
+      "jeton": 142329,
+      "yuzde": 3.0141
+    }
+  },
+  "bin_payda_notu": "A1 ureticisi AYNI yolu kullanir (anka_a1_build.py:108); A1 tam kulliyat: PN %7,9365 · UNK %2,6346 · LIT %2,3029",
+  "son_guncelleme_utc": "2026-09-19T08:37:29Z",
+  "G6_pozitif_kontrol": [
+    {
+      "yuzey": "başkenti",
+      "vektor": [
+        "başkent",
+        "POSS_3SG"
+      ],
+      "geri": "başkenti",
+      "beklenen": "başkenti",
+      "TAM": true
+    },
+    {
+      "yuzey": "yılında",
+      "vektor": [
+        "yıl",
+        "POSS_2SG",
+        "CASE_LOC"
+      ],
+      "geri": "yılında",
+      "beklenen": "yılında",
+      "TAM": true
+    },
+    {
+      "yuzey": "Ankarada",
+      "vektor": [
+        "Ankara",
+        "CASE_LOC"
+      ],
+      "geri": "Ankara'da",
+      "beklenen": "Ankara'da",
+      "TAM": true
+    }
+  ],
+  "G6_kesme_simetrisi": [
+    {
+      "yuzey": "Ankarada",
+      "geri": "Ankara'da",
+      "yeniden_compile": [],
+      "SIMETRIK": false
+    }
+  ],
+  "olcum": {
+    "cozulebilen_yuzey": 111432,
+    "G1_ihlal": 2668,
+    "G1_yuzde": 2.3943,
+    "V1_degisen_kok": 2668,
+    "G6_TAM": 84930,
+    "G6_ALTERNATIF": 23147,
+    "G6_HATA": 3355,
+    "G6_yuzde": 96.9892,
+    "G6_decompiler_istisna": 0,
+    "HATA_ayristirma": {
+      "kesme_sozlesmesi": 2831,
+      "geri_bos": 0,
+      "diger": 524,
+      "not": "decompiler ozel addan sonra KESME koyuyor ('Ankara'da') ama derleyici kesme'li formu OKUYAMIYOR (compile -> []). Bu ASIMETRI G6'nin HATA dalinda sakliydi; Faz 0 ayristirmiyordu.",
+      "ornek_kesme": [
+        {
+          "yuzey": "Kıpçaklar",
+          "geri": "Kıpçak'lar",
+          "yeniden_compile": [],
+          "secilen": [
+            "Kıpçak",
+            "PLURAL"
+          ]
+        },
+        {
+          "yuzey": "Bulgarları",
+          "geri": "Bulgar'ları",
+          "yeniden_compile": [],
+          "secilen": [
+            "Bulgar",
+            "POSS_3PL"
+          ]
+        },
+        {
+          "yuzey": "kuzeyine",
+          "geri": "Kuzey'ine",
+          "yeniden_compile": [],
+          "secilen": [
+            "Kuzey",
+            "POSS_2SG",
+            "CASE_DAT"
+          ]
+        },
+        {
+          "yuzey": "ulustan",
+          "geri": "Ulus'tan",
+          "yeniden_compile": [],
+          "secilen": [
+            "Ulus",
+            "CASE_ABL"
+          ]
+        },
+        {
+          "yuzey": "olursa",
+          "geri": "Olur'sa",
+          "yeniden_compile": [],
+          "secilen": [
+            "Olur",
+            "COPULA_COND"
+          ]
+        }
+      ]
+    },
+    "ornek_ihlal": [
+      {
+        "yuzey": "olan",
+        "bugun": [
+          "o",
+          "DERIV_lAn"
+        ],
+        "V1": [
+          "ol",
+          "PART_An"
+        ]
+      },
+      {
+        "yuzey": "kurdu",
+        "bugun": [
+          "kur",
+          "COPULA_PAST"
+        ],
+        "V1": [
+          "kurt",
+          "POSS_3SG"
+        ]
+      },
+      {
+        "yuzey": "belli",
+        "bugun": [
+          "bel",
+          "DERIV_lI"
+        ],
+        "V1": [
+          "bell",
+          "POSS_3SG"
+        ]
+      },
+      {
+        "yuzey": "günümüzde",
+        "bugun": [
+          "gün",
+          "POSS_1PL",
+          "CASE_LOC"
+        ],
+        "V1": [
+          "günü",
+          "POSS_1PL",
+          "CASE_LOC"
+        ]
+      },
+      {
+        "yuzey": "ölmeden",
+        "bugun": [
+          "öl",
+          "GERUND_mAdAn"
+        ],
+        "V1": [
+          "ölme",
+          "CASE_ABL"
+        ]
+      },
+      {
+        "yuzey": "ölünce",
+        "bugun": [
+          "öl",
+          "GERUND_IncA"
+        ],
+        "V1": [
+          "ölü",
+          "POSS_2SG",
+          "CASE_EQU"
+        ]
+      },
+      {
+        "yuzey": "Günümüzde",
+        "bugun": [
+          "gün",
+          "POSS_1PL",
+          "CASE_LOC"
+        ],
+        "V1": [
+          "günü",
+          "POSS_1PL",
+          "CASE_LOC"
+        ]
+      },
+      {
+        "yuzey": "topraklar",
+        "bugun": [
+          "toprak",
+          "PLURAL"
+        ],
+        "V1": [
+          "toprakla",
+          "TENSE_AORIST"
+        ]
+      },
+      {
+        "yuzey": "onun",
+        "bugun": [
+          "o",
+          "CASE_GEN"
+        ],
+        "V1": [
+          "on",
+          "POSS_2SG"
+        ]
+      },
+      {
+        "yuzey": "torunları",
+        "bugun": [
+          "torun",
+          "POSS_3PL"
+        ],
+        "V1": [
+          "torunlar",
+          "POSS_3SG"
+        ]
+      }
+    ],
+    "not": "G1 yalniz cozulebilen yuzey TIPI uzerinden (jeton agirlikli DEGIL); G6 paydasi da cozulebilen yuzey tipi"
+  },
+  "regresyon": {
+    "gorev_tipleri": {
+      "ROOT": 25,
+      "PLURAL": 25,
+      "CASE": 25,
+      "TENSE": 25
+    },
+    "ROOT_oge": 25,
+    "V1_ONCESI": 24,
+    "V1_SONRASI": 23,
+    "not": "fixtur ROOT/PLURAL/CASE/TENSE x 25; yalniz ROOT oracle"
+  },
+  "D1_hedef": {
+    "ağacı": {
+      "bek": "ağaç",
+      "bugun": "ağa",
+      "V1": "ağaç"
+    },
+    "aklı": {
+      "bek": "akıl",
+      "bugun": "ak",
+      "V1": "akıl"
+    },
+    "kanadı": {
+      "bek": "kanat",
+      "bugun": "kana",
+      "V1": "kanat"
+    },
+    "gönlü": {
+      "bek": "gönül",
+      "bugun": "gön",
+      "V1": "gönül"
+    }
+  },
+  "olculen_kapilar": {
+    "G1_yuzde": {
+      "deger": 2.3943,
+      "ilan_esik": 1.0,
+      "yon": "<=",
+      "GECIYOR": false
+    },
+    "G2_UNK": {
+      "deger": 1.72,
+      "ilan_esik": 1.5,
+      "yon": "<=",
+      "GECIYOR": false
+    },
+    "G3_PN": {
+      "deger": 8.0446,
+      "ilan_esik": 3.0,
+      "yon": "<=",
+      "GECIYOR": false
+    },
+    "G4_LIT_bolu_PN": {
+      "deger": 0.3747,
+      "ilan_esik": 1.0,
+      "yon": ">=",
+      "GECIYOR": false
+    },
+    "G6_yuzde": {
+      "deger": 96.9892,
+      "ilan_esik": 99.0,
+      "yon": ">=",
+      "GECIYOR": false
+    },
+    "G5_kapsam": {
+      "not": "Faz 4'te YAZILAN .bin'den olculur"
+    }
+  },
+  "hukum": {
+    "faz0": "TAMAM — D2/D3/D4 olcumleri kalici artefaktta; kapilarin hicbiri gecmiyor",
+    "D1": "ACIK TASARIM SORUSU: planin V1 kurali (en uzun kok) CURUDU. Bugun dogru olan 5/5 okumayi bozuyor, ROOT oracle'i 24->23 yapiyor, 2.403 degisimin 2.403'unde morfem sayisi ESIT (beraberlik kirici).",
+    "sonraki": "Faz 2/D1 yeniden tasarlanmali ve KENDI olcum turunu almali; Faz 1 (lexicon) ve Faz 3-5 buna bagli"
+  }
+}

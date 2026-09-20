@@ -1,0 +1,107 @@
+{
+  "gorev": "T-0070",
+  "baslangic_utc": "2026-09-18T12:17:50Z",
+  "sozluk": "data/rebuild/vocab_base_32852.json",
+  "tohum": 42,
+  "ornek_hedef": 1500,
+  "kurallar": [
+    "```.*?```",
+    "`([^`]*)`",
+    "!\\[[^\\]]*\\]\\([^)]*\\)",
+    "\\[([^\\]]*)\\]\\([^)]*\\)",
+    "\\[\\[[^\\]]*\\]\\]",
+    "\\{\\{[^}]*\\}\\}",
+    "<[^>]{1,200}>",
+    "https?://\\S+",
+    "^#{1,6}\\s*",
+    "\\*{2,}|_{2,}",
+    "^\\s*\\|.*\\|\\s*$",
+    "^\\s*[-*+]{1}\\s+",
+    "[ \\t]{2,}",
+    "\\n{3,}"
+  ],
+  "last_write_utc": "2026-09-18T12:21:01Z",
+  "pozitif_kontrol": {
+    "referans": "Ankara, Turkiye'nin baskentidir. Nufusu 2026'da 5.700.000 idi; hava -3 dereceydi! Neden? (bkz. 2. madde)",
+    "ham": {
+      "jeton": 59,
+      "unk": 3,
+      "unk_orani": 5.0847,
+      "noktalama": 12,
+      "noktalama_orani": 20.339,
+      "karakter_jeton": 1.7627
+    },
+    "arinmis": {
+      "jeton": 59,
+      "unk": 3,
+      "unk_orani": 5.0847,
+      "noktalama": 12,
+      "noktalama_orani": 20.339,
+      "karakter_jeton": 1.7627
+    },
+    "hat_canli": true,
+    "yorum": "HAT CANLI"
+  },
+  "kulliyat": {
+    "parquet_adet": 2,
+    "ham_makale": 631148,
+    "ham_karakter": 1443545748
+  },
+  "ornek_makale": 1500,
+  "ham": {
+    "jeton": 1512048,
+    "karakter": 3368974,
+    "unk_orani": 6.5896,
+    "noktalama_orani": 10.3546,
+    "karakter_jeton": 2.2281
+  },
+  "arinmis": {
+    "jeton": 833293,
+    "karakter": 2034099,
+    "unk_orani": 1.6087,
+    "noktalama_orani": 6.0797,
+    "karakter_jeton": 2.441
+  },
+  "elenen_belge": 642,
+  "sure_sn": 66.0,
+  "jeton_sn": 35519.8,
+  "karakter_once_jeton_sonra": {
+    "ham_oran": 60.38,
+    "kayip_yuzde": 39.62
+  },
+  "kendini_yanislama": {
+    "iddia": "kurtarilan kulliyat + arinma, noktalama yetenekli on-egitimin ana kaldicidir",
+    "curuten_sart": "arinmis UNK >= ham UNK VE arinmis noktalama < %5",
+    "cürudu": false
+  },
+  "hassasiyet_satir_filtresi": {
+    "satir_min_0": {
+      "elenen_belge": 576,
+      "jeton": 876016,
+      "unk_orani": 1.5873,
+      "noktalama_orani": 6.1113,
+      "karakter_jeton": 2.4335
+    },
+    "satir_min_10": {
+      "elenen_belge": 615,
+      "jeton": 862569,
+      "unk_orani": 1.5981,
+      "noktalama_orani": 6.0699,
+      "karakter_jeton": 2.4248
+    },
+    "satir_min_20": {
+      "elenen_belge": 642,
+      "jeton": 833293,
+      "unk_orani": 1.6087,
+      "noktalama_orani": 6.0797,
+      "karakter_jeton": 2.441
+    },
+    "satir_min_40": {
+      "elenen_belge": 672,
+      "jeton": 779161,
+      "unk_orani": 1.5727,
+      "noktalama_orani": 6.0119,
+      "karakter_jeton": 2.4939
+    }
+  }
+}

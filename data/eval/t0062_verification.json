@@ -1,0 +1,87 @@
+{
+  "task_id": "T-0062",
+  "baslik": "Olcum zeminini duzelt — tutma kumesi kanitli A'/B' + C'nin tam kafayla yeniden olcumu (5 nokta)",
+  "dogrulama_damgasi": "2026-09-18T04:25:00Z",
+  "dogrulayan": "antigravity (yurutucu rolu, bagimsiz dogrulama)",
+  "yonetim": "PASS_WITH_FINDINGS",
+  "ozet": "T-0062'nin temel mimari ve ampirik iddialari bagimsiz olarak DOGRULANDI. Olcum zeminindeki kirlilik (train_balanced_sft_v2.bin'in taban tarafindan ezberlenmis olmasi) ve C eksenindeki 31.357 satirlik kafa kirpilmasi artefaktlari basariyla giderilmistir. A' ekseninde %5, %10 ve %25 kollarinin <= %10 goreli artis esigini gectigi, yalnizca %0 kolunun kaldigi tescillenmistir. B' ekseninin acik sozlukte negatif beceri (sabit cogunluk tahmincisinin altinda kalma) sergiledigi ve unutma olcutu olarak gecersiz oldugu teshisi dogrudur. Ayrica Claude'un endise ettigi uc suphe matematiksel olarak sinanmistir: dar GA'larin kayit ici kumelemeden kaynaklanmadigi (4000 pencerenin 4000'inin de ayri kayittan geldigi) kanitlanmis; ancak C eksenindeki %5 dirsek iddiasinin GA ile degil, yalnizca nokta tahminine dayandigi (paired GA'larin sifiri kestigi) kritik bir bulgu olarak kayda gecirilmistir.",
+  "dogrulanan_iddialar": [
+    {
+      "iddia": "1. A' TERSINE DONDU (Tutulmus zeminde %5, %10, %25 geciyor, %0 kaliyor)",
+      "durum": "DOGRULANDI",
+      "olcum": {
+        "taban_ce_gts": 6.0654,
+        "taban_ce_raw": 5.7032,
+        "ezber_dilimi_ce": 1.962547,
+        "oran_gts": 3.0906,
+        "oran_raw": 2.906,
+        "egitilmemis_taban_ce_kontrolu": 5.489884,
+        "kollar_gts_artis_pct": {
+          "carpenter_v2_0pct": 15.9614,
+          "f4_r05_5pct": 7.9808,
+          "f4_r10_10pct": 4.3943,
+          "f4_replay_25pct": 4.0673
+        },
+        "kollar_raw_artis_pct": {
+          "carpenter_v2_0pct": 14.8397,
+          "f4_r05_5pct": 8.8427,
+          "f4_r10_10pct": 4.7493,
+          "f4_replay_25pct": 5.2345
+        }
+      },
+      "hukum": "Taban CE farki gercekten ~3.1x duzeyindedir (6.0654 / 1.9625). Dilime hic dokunmamis modelin CE'sinin 5.4899 olmasi, 1.9625'in ezber cukuru oldugunu kesinlestirir. %10 esigi bu olcekte hem gts hem raw korpuslarinda monotoniciteyi korumakta ve %5, %10, %25 kollari esik altinda kalmaktadir."
+    },
+    {
+      "iddia": "2. B' EKSENI GECERSIZ (Taban top-1, sabit-tahmin tabaninin altinda)",
+      "durum": "DOGRULANDI",
+      "olcum": {
+        "raw_full_cogunluk_payi_pct": 70.1,
+        "raw_full_taban_top1_pct": 26.1,
+        "gts_dict_cogunluk_payi_pct": 54.8,
+        "gts_dict_taban_top1_pct": 18.3,
+        "carpenter_v2_raw_top1_pct": 29.2
+      },
+      "hukum": "Model 32.852'lik acik sozlukte noktalama konumu icin tahmin yaptiginda, naive nokta tahmincisinin (%70.1) cok altinda kalmaktadir. Ayrica %0 kolunun (%29.2) tabanin (%26.1) ustunde cikmasi, eksenin unutma sinyali tasimadigini kanitlar. B' bir unutma kapisi olamaz."
+    },
+    {
+      "iddia": "3. ESKI BULGUNUN ORNEKLEME ARTEFAKTI OLDUGU (Kapsam dar bolgeden yayilmis orneklemeye)",
+      "durum": "DOGRULANDI",
+      "olcum": {
+        "eski_raw_kapsam": "154 / 2038 kayit (%7.6)",
+        "yeni_raw_kapsam": "1000 / 2038 kayit (%49.1)",
+        "eski_gts_kapsam": "129 / 4261 kayit (%3.0)",
+        "yeni_gts_kapsam": "1000 / 4261 kayit (%23.5)"
+      },
+      "hukum": "k*7919 % N moduler dagitimi ile 1000 konum 1000 farkli kayda yayilmis ve eski 'tum kollar tabanin altinda' iddiasinin dar bir dosya basi artefakti oldugu kanitlanmistir."
+    }
+  ],
+  "suphe_ve_curutme_analizi": [
+    {
+      "suphe": "A' pencerelerinin hep kayit basina dusmesi / onek yanliligi A' yonunu taklit edebilir mi?",
+      "analiz": "HAYIR, ELENDI. t0062_ab_probe.py icinde A_masked32 olcumu pencerenin ilk 32 tokenini -100 yapip yalnizca 32-64 arasini puanlamaktadir. Maskeli CE sonuclari (gts: v2 +17.50%, r05 +8.32%, r10 +4.39%, replay +3.93%) maskesiz sonuclarla (|fark| <= 0.02 nat) birebir ayni yon ve buyuklugu vermistir. Onek/istem yanliligi yoktur."
+    },
+    {
+      "suphe": "GA'lar cok dar (+-0.011 nat) — ayni kayittan coklu pencere cekilmesi GA'yi sisirdi mi?",
+      "analiz": "HAYIR, KESINLIKLE SISIRMEDI. Matematiksel kontrol yapilmistir: gts_dict'te 4000 pencere gcd(37, 4261)=1 sayesinde tam 4000 FARKLI kayittan cekilmistir (oran %100.0). raw_full'da 2000 pencere tam 2000 FARKLI kayittan cekilmistir (oran %100.0). Pencereler arasi kayit-ici kumeleme/bagimlilik SIFIRDIR. N=4000 bagimsiz gozlem oldugu icin Merkezi Limit Teoremi geregi SE = sigma / sqrt(4000) ~= 0.0055 nat ve 95% GA = +-0.011 nat tamamen mesru ve saglamdir."
+    },
+    {
+      "suphe": "C'de %5 dirsek iddiasi GA'larla destekli mi, yoksa nokta tahminine mi dayaniyor?",
+      "analiz": "DIKKAT: DIRSEK IDDIASI GA ILE DESTEKLI DEGILDIR, NOKTA TAHMINIDIR. N=100 held-out ornegi uzerinde eslestirilmis (paired) bootstrap hesaplanmistir: r05 (%5) vs r10 (%10) farki (+0.0662) icin 95% GA [-0.0257, +0.1581] araligindadir ve SIFIRI KESER. r05 (%5) vs base farki (+0.0574) icin 95% GA [-0.0314, +0.1462] araligindadir ve SIFIRI KESER. v2 (%0) vs r05 (%5) farki (+0.0257) icin 95% GA [-0.0055, +0.0570] araligindadir ve SIFIRI KESER. C ekseninde N=100 orneklemindeki varyans yuksektir; dolayisiyla %5 noktasi kati-istatistiksel bir kirilma noktasi degil, ortalamalar uzerinden secilmis ampirik bir Pareto calisma noktasidir."
+    }
+  ],
+  "bulgular": [
+    {
+      "id": "B1",
+      "siddet": "ORTA (karar verici uyarisi)",
+      "baslik": "C ekseninde %5 dirsek tespiti istatistiksel guven araligiyla teyitli degildir",
+      "detay": "A' ekseninde unutma farklari N=4000'de kesin olarak ayrismisken (GA'lar kesismez), C ekseninde N=100 kollar arasi paired ROUGE-L GA'lari sifiri kesmektedir. %5 tercihi kati bir istatistiksel kanit degil, ortalama ROUGE-L ve A' trade-off'u uzerinden yapilan sezgisel bir Pareto secimidir."
+    },
+    {
+      "id": "B2",
+      "siddet": "DUSUK (metodolojik teyit)",
+      "baslik": "C tam kafa (32.852) ile calistirildiginda gercek ROUGE seviyesi 0.065'ten 0.34-0.38 bandina cikmistir",
+      "detay": "31.357 satirlik kirpilmis modelin ROUGE-L'i 0.0651 iken, tam kafada noktalama ve ek uretiminin acilmasiyla taban ROUGE-L'i 0.3425'e cikmistir. Mutlak ROUGE-L degerleri artik dilbilgisel Turkceyi temsil etmektedir."
+    }
+  ],
+  "nihai_hukum": "T-0062 mimari, olcum ve zemin duzeltmesi acisindan PASS_WITH_FINDINGS. A' artik gercek bir genelleme olcutudur ve %5 replay (f4_r05) unutmayi %10 esigi altinda tutarak tabanin uzerinde ceket kazanci saglamaktadir."
+}

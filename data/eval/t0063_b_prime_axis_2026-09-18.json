@@ -1,0 +1,478 @@
+{
+ "task_id": "T-0063",
+ "title": "B′ ekseninin onarımı — dengeli 3-sınıf kısıtlı top-1",
+ "stamp_utc": "2026-09-18T06:55Z",
+ "record_stamp_utc": "2026-09-18T07:32Z",
+ "stamp_note": "stamp_utc = ÖLÇÜM anının damgası; record_stamp_utc = bu kaydın (yeniden) üretildiği an, betik tarafından hesaplandı — elle yazılmadı.",
+ "executor": "claude",
+ "authority": "Onkanat kararı (18 Eyl, T-0062 kapanışı): 'önce B′ eksenini onar'",
+ "design_doc": "data/eval/b_prime_axis_design_2026-09-18.md",
+ "declared_before_measurement": {
+  "metric": "dengeli 3-sınıf, kısıtlı top-1 (3 id arasında argmax)",
+  "chance_pct": 33.333,
+  "threshold": "PASS ⇔ kolun skoru ≥ tabanın %90'ı",
+  "controls": {
+   "K1": "karıştırılmış bağlam ∈ [%25, %42]",
+   "K2": "gerçek > karıştırılmış bağlam",
+   "K3": "gerçek − karıştırılmış hedef ≥ 10 puan",
+   "K4": "taban şansın üstünde, tek yönlü binom p < 0,01",
+   "K5": "iki korpusta aynı işaret"
+  },
+  "threshold_unchanged_after_measurement": true
+ },
+ "axis_valid": [
+  "raw_full",
+  "gts_dict"
+ ],
+ "controls": {
+  "raw_full": {
+   "chance_pct": 33.333333333333336,
+   "base_true_pct": 43.34597555836494,
+   "base_K1_pct": 32.8023598820059,
+   "base_K3_pct": 32.79393173198483,
+   "base_p_vs_chance": 0.0,
+   "K1_in_chance_band": true,
+   "K2_true_gt_K1": true,
+   "K3_true_minus_K3_points": 10.552,
+   "K3_apart": true,
+   "K4_base_above_chance": true,
+   "valid": true
+  },
+  "gts_dict": {
+   "chance_pct": 33.333333333333336,
+   "base_true_pct": 45.65812792009022,
+   "base_K1_pct": 32.59223457386821,
+   "base_K3_pct": 33.3494441759304,
+   "base_p_vs_chance": 0.0,
+   "K1_in_chance_band": true,
+   "K2_true_gt_K1": true,
+   "K3_true_minus_K3_points": 12.309,
+   "K3_apart": true,
+   "K4_base_above_chance": true,
+   "valid": true
+  }
+ },
+ "corpora": {
+  "raw_full": {
+   "n_positions": 11865,
+   "chance_pct": 33.333333333333336,
+   "ids": [
+    32137,
+    32142,
+    32138
+   ],
+   "id_counts_in_corpus": {
+    "32137": 7775,
+    "32142": 4684,
+    "32138": 3955
+   },
+   "device": "cpu",
+   "checkpoints": {
+    "f3_clean": {
+     "path": "data/kristal_model_f3_clean.pt",
+     "n": 11865,
+     "top1_pct": 43.346,
+     "top1_hits": 5143,
+     "K1_shuffled_context_pct": 32.802,
+     "K3_shuffled_target_pct": 32.794,
+     "mean_rank_full_vocab": 58.0,
+     "p_vs_chance": 0.0
+    },
+    "carpenter_v2": {
+     "path": "data/kristal_model_carpenter_v2.pt",
+     "n": 11865,
+     "top1_pct": 42.335,
+     "top1_hits": 5023,
+     "K1_shuffled_context_pct": 33.477,
+     "K3_shuffled_target_pct": 32.895,
+     "mean_rank_full_vocab": 143.6,
+     "p_vs_chance": 0.0,
+     "retention_pct": 97.67,
+     "drop_points": 1.011,
+     "chance_normalized_gain_vs_base": 0.899,
+     "mcnemar_vs_base": {
+      "n01_loss": 981,
+      "n10_gain": 861,
+      "p_two_sided": 0.005545079798197112,
+      "note": null
+     },
+     "passes_declared_gate": true
+    },
+    "f4_r05": {
+     "path": "data/kristal_model_f4_r05.pt",
+     "n": 11865,
+     "top1_pct": 42.731,
+     "top1_hits": 5070,
+     "K1_shuffled_context_pct": 32.853,
+     "K3_shuffled_target_pct": 32.735,
+     "mean_rank_full_vocab": 84.8,
+     "p_vs_chance": 0.0,
+     "retention_pct": 98.58,
+     "drop_points": 0.615,
+     "chance_normalized_gain_vs_base": 0.9386,
+     "mcnemar_vs_base": {
+      "n01_loss": 808,
+      "n10_gain": 735,
+      "p_two_sided": 0.0667759363602167,
+      "note": null
+     },
+     "passes_declared_gate": true
+    },
+    "f4_r10": {
+     "path": "data/kristal_model_f4_r10.pt",
+     "n": 11865,
+     "top1_pct": 41.896,
+     "top1_hits": 4971,
+     "K1_shuffled_context_pct": 32.6,
+     "K3_shuffled_target_pct": 33.291,
+     "mean_rank_full_vocab": 64.6,
+     "p_vs_chance": 0.0,
+     "retention_pct": 96.66,
+     "drop_points": 1.45,
+     "chance_normalized_gain_vs_base": 0.8552,
+     "mcnemar_vs_base": {
+      "n01_loss": 735,
+      "n10_gain": 563,
+      "p_two_sided": 2.0047929547568137e-06,
+      "note": null
+     },
+     "passes_declared_gate": true
+    },
+    "f4_replay": {
+     "path": "data/kristal_model_f4_replay.pt",
+     "n": 11865,
+     "top1_pct": 44.981,
+     "top1_hits": 5337,
+     "K1_shuffled_context_pct": 33.384,
+     "K3_shuffled_target_pct": 33.215,
+     "mean_rank_full_vocab": 42.3,
+     "p_vs_chance": 0.0,
+     "retention_pct": 103.77,
+     "drop_points": -1.635,
+     "chance_normalized_gain_vs_base": 1.1633,
+     "mcnemar_vs_base": {
+      "n01_loss": 664,
+      "n10_gain": 858,
+      "p_two_sided": 7.289507561800453e-07,
+      "note": null
+     },
+     "passes_declared_gate": true
+    }
+   }
+  },
+  "gts_dict": {
+   "n_positions": 6207,
+   "chance_pct": 33.333333333333336,
+   "ids": [
+    32138,
+    32137,
+    32140
+   ],
+   "id_counts_in_corpus": {
+    "32138": 16023,
+    "32137": 7645,
+    "32140": 2069
+   },
+   "device": "cpu",
+   "checkpoints": {
+    "f3_clean": {
+     "path": "data/kristal_model_f3_clean.pt",
+     "n": 6207,
+     "top1_pct": 45.658,
+     "top1_hits": 2834,
+     "K1_shuffled_context_pct": 32.592,
+     "K3_shuffled_target_pct": 33.349,
+     "mean_rank_full_vocab": 165.1,
+     "p_vs_chance": 0.0
+    },
+    "carpenter_v2": {
+     "path": "data/kristal_model_carpenter_v2.pt",
+     "n": 6207,
+     "top1_pct": 41.792,
+     "top1_hits": 2594,
+     "K1_shuffled_context_pct": 33.865,
+     "K3_shuffled_target_pct": 33.269,
+     "mean_rank_full_vocab": 368.3,
+     "p_vs_chance": 0.0,
+     "retention_pct": 91.53,
+     "drop_points": 3.867,
+     "chance_normalized_gain_vs_base": 0.6863,
+     "mcnemar_vs_base": {
+      "n01_loss": 468,
+      "n10_gain": 228,
+      "p_two_sided": 5.631462103862406e-20,
+      "note": null
+     },
+     "passes_declared_gate": true
+    },
+    "f4_r05": {
+     "path": "data/kristal_model_f4_r05.pt",
+     "n": 6207,
+     "top1_pct": 46.158,
+     "top1_hits": 2865,
+     "K1_shuffled_context_pct": 33.639,
+     "K3_shuffled_target_pct": 34.252,
+     "mean_rank_full_vocab": 192.8,
+     "p_vs_chance": 0.0,
+     "retention_pct": 101.09,
+     "drop_points": -0.499,
+     "chance_normalized_gain_vs_base": 1.0405,
+     "mcnemar_vs_base": {
+      "n01_loss": 363,
+      "n10_gain": 394,
+      "p_two_sided": 0.27554093108073835,
+      "note": null
+     },
+     "passes_declared_gate": true
+    },
+    "f4_r10": {
+     "path": "data/kristal_model_f4_r10.pt",
+     "n": 6207,
+     "top1_pct": 44.111,
+     "top1_hits": 2738,
+     "K1_shuffled_context_pct": 33.285,
+     "K3_shuffled_target_pct": 33.269,
+     "mean_rank_full_vocab": 140.2,
+     "p_vs_chance": 0.0,
+     "retention_pct": 96.61,
+     "drop_points": 1.547,
+     "chance_normalized_gain_vs_base": 0.8745,
+     "mcnemar_vs_base": {
+      "n01_loss": 342,
+      "n10_gain": 246,
+      "p_two_sided": 8.645028448220789e-05,
+      "note": null
+     },
+     "passes_declared_gate": true
+    },
+    "f4_replay": {
+     "path": "data/kristal_model_f4_replay.pt",
+     "n": 6207,
+     "top1_pct": 45.69,
+     "top1_hits": 2836,
+     "K1_shuffled_context_pct": 33.462,
+     "K3_shuffled_target_pct": 34.445,
+     "mean_rank_full_vocab": 176.9,
+     "p_vs_chance": 0.0,
+     "retention_pct": 100.07,
+     "drop_points": -0.032,
+     "chance_normalized_gain_vs_base": 1.0026,
+     "mcnemar_vs_base": {
+      "n01_loss": 479,
+      "n10_gain": 481,
+      "p_two_sided": 0.9742550918067948,
+      "note": null
+     },
+     "passes_declared_gate": true
+    }
+   }
+  }
+ },
+ "verdicts": {
+  "carpenter_v2": {
+   "cells": [
+    "  97.7% (+1.01p) G p=5.5e-03",
+    "  91.5% (+3.87p) G p=5.6e-20"
+   ],
+   "passes": [
+    true,
+    true
+   ],
+   "overall": "GECTI"
+  },
+  "f4_r05": {
+   "cells": [
+    "  98.6% (+0.61p) G p=6.7e-02",
+    " 101.1% (-0.50p) G p=2.8e-01"
+   ],
+   "passes": [
+    true,
+    true
+   ],
+   "overall": "GECTI"
+  },
+  "f4_r10": {
+   "cells": [
+    "  96.7% (+1.45p) G p=2.0e-06",
+    "  96.6% (+1.55p) G p=8.6e-05"
+   ],
+   "passes": [
+    true,
+    true
+   ],
+   "overall": "GECTI"
+  },
+  "f4_replay": {
+   "cells": [
+    " 103.8% (-1.64p) G p=7.3e-07",
+    " 100.1% (-0.03p) G p=9.7e-01"
+   ],
+   "passes": [
+    true,
+    true
+   ],
+   "overall": "GECTI"
+  }
+ },
+ "findings": [
+  {
+   "id": "F1",
+   "severity": "info",
+   "text": "Eksen iki bağımsız korpusta da geçerli: taban %43,35 / %45,66 — şansın (%33,3) 10–12 puan üstünde; K1 ve K3 tam şans düzeyinde (32,6–33,4). Skorun tamamı bağlamdan geliyor."
+  },
+  {
+   "id": "F2",
+   "severity": "info",
+   "text": "İlan edilen ≥%90 kapısı: dört kolun dördü de iki korpusta geçti."
+  },
+  {
+   "id": "F3",
+   "severity": "warning",
+   "text": "%10 (f4_r10) İKİ korpusta da anlamlı ama küçük kayıp gösteriyor (McNemar p=2,0e-06 ve 8,6e-05; +1,45 / +1,55 puan). Kapıyı geçiyor; 'kayıp yok' denemez."
+  },
+  {
+   "id": "F4",
+   "severity": "warning",
+   "text": "K5 işaret tutarsızlığı: %5 (f4_r05) raw'da +0,61 puan kayıp, gts'te −0,50 puan kazanç. Tasarım gereği tek korpusta karar verilemez; hüküm etkilenmiyor (ikisinde de ≥%90) ama kurulabilecek cümle '%5 korur' değil '%5'te saptanabilir değişim yok'tur."
+  },
+  {
+   "id": "F5",
+   "severity": "info",
+   "text": "%0 (carpenter_v2) iki korpusta da noktalamada tabanın ALTINDA ve kayıp ANLAMLI (McNemar p=5,5e-03 / 5,6e-20; +1,011 / +3,867 puan düşüş; n_kayıp 981/468 > n_kazanç 861/228). Koruma ≥%90 olduğu için kapıyı GEÇER, ama 'kazanç' iddia EDİLEMEZ. (DÜZELTME: bu maddenin ilk sürümü yönü ters okuyordu — bkz. correction_2026_09_18.)"
+  },
+  {
+   "id": "F6",
+   "severity": "warning",
+   "text": "carpenter_v2/gts_dict koruması %91,53 — tasarım §5'in ilan edilen %88–92 sınır bandında; kural gereği açıkça raporlandı, hüküm değişmedi. SINIR (B3): eşleştirilmiş bootstrap %95 GA [%89,81, %93,25] — alt sınır %90 kapısının altına sarkıyor; yani bu hücre kapıyı 'kesin' geçmiş sayılamaz, nokta tahminiyle geçmiştir. Kol zaten A′'dan elendiği için nihai hüküm etkilenmez."
+  },
+  {
+   "id": "F7",
+   "severity": "warning",
+   "text": "raw_full K3 farkı 10,55 puan — ilan edilen 10 puan eşiğinin yalnız 0,55 puan üstünde. Eşik değiştirilmedi; sınır kayda geçti. SINIR (B2): eşleştirilmiş %95 GA [9,33, 11,78] puan ve H0:fark≤10 tek yönlü z-testi p=0,1884 → alt sınır 10,0'ın ALTINDA. Yani raw_full'un K3'ü 'kesinleşmiş marj' değil NOKTA TAHMİNİ başarısıdır. Eksenin geçerliliği bu sınıra dayanmaz: asıl kanıt K1 ve K3'ün şans düzeyine oturmasıdır (32,6–33,4) — bkz. F1."
+  }
+ ],
+ "tool_defects_found_and_fixed": [
+  {
+   "defect": "mcnemar() içinde `2.0 ** m` float taşması (m~1000–2000)",
+   "effect": "İlk koşu ölçümü bitirdikten SONRA çöktü; JSON hiç yazılmadı, 26 dakikalık ölçüm kayboldu.",
+   "fix": "Tam sayı + fractions.Fraction ile taşmasız hesap; float alt-taşması açıkça bildiriliyor ('p < 1e-300').",
+   "verified": "Düzeltilmiş koşu, çöken koşunun basılmış sayılarını birebir üretti → çökme ölçümden sonraydı ve betik deterministik."
+  },
+  {
+   "defect": "Sonuç yalnız koşu SONUNDA diske yazılıyordu",
+   "effect": "Tek bir geç çökme tüm ölçümü götürdü.",
+   "fix": "Her checkpoint'ten sonra artımlı save()"
+  },
+  {
+   "defect": "Kabuk sarmalayıcıda koşulsuz `echo TAMAM` sentinel'i",
+   "effect": "Sarmalayıcı, python FileNotFoundError ile ölürken bile 'TAMAM' bastı → sahte bitiş sinyali.",
+   "fix": "Çıkış kodu rc=$? ile yakalanıyor, 'BAŞARISIZ' yalnız rc!=0 iken basılıyor."
+  },
+  {
+   "defect": "zsh tırnaksız $VAR genişletmesi sözcüklere bölmüyor",
+   "effect": "Checkpoint listesi tek argüman oldu → torch.load 'dosya bulunamadı'.",
+   "fix": "Argümanlar satır içi verildi."
+  }
+ ],
+ "determinism_check": {
+  "claim": "Aynı betik + aynı girdiler → aynı sayılar",
+  "evidence": "İkinci koşu raw_full'da birebir aynı beş değeri üretti",
+  "values": [
+   43.35,
+   42.33,
+   42.73,
+   41.9,
+   44.98
+  ]
+ },
+ "limitations": [
+  "Kısıtlı argmax yapay bir görevdir (model normalde 32.852 sınıf arasından seçer); bilerek seçildi çünkü tam-sözlük top-1 marginal tarafından ele geçiriliyordu.",
+  "3 id'ye kısıtlı — '?', '-', ':' gibi seyreklikler dışarıda; eksen noktalamanın dengelenebilen üç sınıfını temsil eder.",
+  "Eski B′ sayılarıyla KIYASLANAMAZ (farklı ölçüt, farklı örneklem).",
+  "Cihaz cpu (sandbox); CPU/MPS izolasyonu T-0062'de yapıldı (fark yok)."
+ ],
+ "independent_verification": {
+  "path": "data/eval/t0063_verification.json",
+  "sha256": "cb41734f911268fdf623b5aab16f14cd0fd82b9d0f88f45ba7b57b178a90319e",
+  "size_bytes": 12243,
+  "verdict": "PASS_WITH_FINDINGS",
+  "findings_count": 3,
+  "what_was_confirmed": [
+   "Denge kusursuz: iki korpusta da üç id tam eşit; sabit tahmin payı tam %33,3333",
+   "K1/K3 permütasyonu deterministik ve sabit noktasız (derangement)",
+   "5 checkpoint için hitvec uzunluk ve sıralaması birebir aynı",
+   "2x2 McNemar tabloları bağımsız yeniden üretildi; tam binom p'leri bit-bit eşleşti",
+   "8/8 artefakt sha256 birebir"
+  ],
+  "findings": [
+   "B1",
+   "B2",
+   "B3"
+  ],
+  "own_recomputation": {
+   "path": "scratch/t0065_b1_verify.json",
+   "sha256": "597aa2d8e15af5b9e637ba987a9d1b7e5782f0cf325e2d82c7f79197ad255566",
+   "method": "B1, ölçümün sakladığı hitvec'lerden yürütücü tarafından YENİDEN hesaplandı (scratch/t0065_b1_verify.py); doğrulayıcının sayıları ölçülmeden kabul edilmedi.",
+   "b1_reproduced": true,
+   "tool_labels_were_correct": true,
+   "root_cause": "Araç kusuru YOK: saklanan 'n01_loss' değeri gerçekten kayıp sayısıdır ve yeniden hesapla birebir uyuştu. Hata, rapor/not metninde bu çiftin yön olarak ters okunmasıydı."
+  }
+ },
+ "correction_2026_09_18": {
+  "task": "T-0065",
+  "trigger": "Bağımsız doğrulayıcı bulgusu B1 (yön tersliği)",
+  "what_changed": "F5 maddesi ve .agent-bus/notes/T-0063.md'deki %0 okuması: 'anlamlı KAZANÇ' -> 'anlamlı KAYIP' (kapı yine geçilir). Ayrıca F6/F7'ye doğrulayıcının B3/B2 güven aralığı sınırları eklendi.",
+  "what_did_NOT_change": "Hiçbir eşik, hiçbir ölçüm sayısı, hiçbir kol hükmü, hiçbir artefakt digesti (ölçüm çıktıları) değişmedi. Eksen geçerliliği ve ≥%90 kapısı hükümleri aynıdır.",
+  "record": "data/eval/t0065_verification_processing_2026-09-18.md"
+ },
+ "artifacts": [
+  {
+   "path": "scratch/t0063_b_probe.py",
+   "sha256": "1b9f6fd241e828ecec8b81be83901609256dad09523774c9157f43dddd62ef4c",
+   "size_bytes": 11325
+  },
+  {
+   "path": "scratch/t0063_verdict.py",
+   "sha256": "06db8372214b4ef721b75504553515b680cd0926f1978d108a603fe6d7537ab4",
+   "size_bytes": 5541
+  },
+  {
+   "path": "scratch/t0063_b_raw_full.json",
+   "sha256": "10473a92efa773c2c356e77234a49e8ee43a7764dba39838f6cf4a823280ba72",
+   "size_bytes": 1434713
+  },
+  {
+   "path": "scratch/t0063_b_gts_dict.json",
+   "sha256": "a516fd0493d9156fd0b12f95b84aa04aac1d77127056f353138d335d9aa05b4f",
+   "size_bytes": 755690
+  },
+  {
+   "path": "scratch/t0063_verdict.json",
+   "sha256": "8f633ff97b946e39448797ed3ccc6ceaa6c06bbd022079f3a333356504bf07bb",
+   "size_bytes": 1656
+  },
+  {
+   "path": "data/eval/b_prime_axis_design_2026-09-18.md",
+   "sha256": "1777bbf73db92716fffddefef6bef48476b95109741ab5023efa411eac6e16b2",
+   "size_bytes": 10459
+  },
+  {
+   "path": "data/eval/forgetting_measurement_design_2026-09-18.md",
+   "sha256": "6d8e29f78b1ef6b845c28a54d9df69fc7580f01d0787d3e3008e606b054306f7",
+   "size_bytes": 18928
+  },
+  {
+   "path": ".agent-bus/notes/T-0063.md",
+   "sha256": "69d9fb1baaf7a6cdf18cce41dd7b6672a47d103a3670b207bb2c2e596a743077",
+   "size_bytes": 16538
+  }
+ ],
+ "acceptance_check": {
+  "axis_valid_two_corpora": true,
+  "all_arms_meet_declared_gate": true,
+  "threshold_unchanged": true,
+  "borderline_cells_reported": true,
+  "sign_inconsistency_reported": true,
+  "artifacts_hashed_with_full_digest": true
+ }
+}

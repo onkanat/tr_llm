@@ -1,0 +1,490 @@
+{
+  "gorev": "T-0080",
+  "asama": "Faz 3-b — eksik KOK KIMLIGI siklik egrisi",
+  "baslangic_utc": "2026-09-19T10:11:50Z",
+  "mod": "YAZ",
+  "ilan_edilen_kural": {
+    "R1": "aday kume = DAR (184, kosulsuz) ∪ derleyicinin urettigi kok kimliklerinden stoi'da OLMAYANLAR",
+    "R2": "N* = en kucuk N, kurtarilan(N) >= 90% x kurtarilan(EN IYI)",
+    "R3": "N* ilan edilir; yeni dosyaya yazilir; uzerine YAZILMAZ",
+    "ilan_ani": "betik yazildigi an; egri OLCULMEDEN once"
+  },
+  "kimlik": {
+    "roots_anka_r1.tsv": "ea874a73c0d5669a591cef00c9d4fb16916ea3e60e42df9d3c73445c4b7efd59",
+    "roots.tsv": "fe3005e5e2a594f09cbcfc3286e2c8812953ae6614333815ab87a7e3a6763598",
+    "vocab_base_32852.json": "7611b6a523a2bb524cc21aa9cc64235aa6a2ae99f87f46ac51cb2915e61164ad",
+    "yuzeyler.tsv": "ffac4c78c614bac6485cb61cc053a61de9674e04277c508b1d9b238dfc47acdc"
+  },
+  "onbellek": {
+    "benzersiz_yuzey": 236573,
+    "ham_jeton": 2449120,
+    "meta_benzersiz": 236573,
+    "meta_jeton": 2449120
+  },
+  "E2_dar": {
+    "adet": 184,
+    "ilan_edilen": 184,
+    "stoi_disi_tamam": true,
+    "ilk_5": [
+      "Abu Dabi",
+      "Abuja",
+      "Addis Ababa",
+      "Afganistan",
+      "Akra"
+    ],
+    "son_5": [
+      "İsveç",
+      "İsviçre",
+      "İzlanda",
+      "Şam",
+      "Şili"
+    ]
+  },
+  "E1": {
+    "hatali": [],
+    "TEMIZ": true
+  },
+  "taban_sayim": {
+    "VAR_pozisyon": 2795475,
+    "KOK_EKSIK_pozisyon": 58562,
+    "KOK_EKSIK_benzersiz": 1146,
+    "EK_EKSIK_pozisyon": 0,
+    "EK_EKSIK_benzersiz": 0,
+    "EK_EKSIK_ilk_10": [],
+    "ANALIZSIZ_BUYUK": 365312,
+    "ANALIZSIZ_KUCUK": 338212
+  },
+  "son_guncelleme_utc": "2026-09-19T10:12:26Z",
+  "sure_sn": 36.8,
+  "KENDI_KUSURLARIM": [],
+  "teshis_kok_sozlukte_olmayan": {
+    "adet": 0,
+    "ilk_10": [],
+    "not": "derleyici urettiyse sozlukte olmali; bu liste bos DEGILSE kapsam notu"
+  },
+  "egri_basi": [
+    {
+      "kimlik": "İngiliz",
+      "jeton": 5485,
+      "sozlukte": true,
+      "buyuk_harf": true
+    },
+    {
+      "kimlik": "Fransız",
+      "jeton": 5013,
+      "sozlukte": true,
+      "buyuk_harf": true
+    },
+    {
+      "kimlik": "İtalyan",
+      "jeton": 2962,
+      "sozlukte": true,
+      "buyuk_harf": true
+    },
+    {
+      "kimlik": "Roma",
+      "jeton": 1412,
+      "sozlukte": true,
+      "buyuk_harf": true
+    },
+    {
+      "kimlik": "İspanyol",
+      "jeton": 1319,
+      "sozlukte": true,
+      "buyuk_harf": true
+    },
+    {
+      "kimlik": "Hollanda",
+      "jeton": 1194,
+      "sozlukte": true,
+      "buyuk_harf": true
+    },
+    {
+      "kimlik": "Kanada",
+      "jeton": 1194,
+      "sozlukte": true,
+      "buyuk_harf": true
+    },
+    {
+      "kimlik": "Avusturya",
+      "jeton": 1165,
+      "sozlukte": true,
+      "buyuk_harf": true
+    },
+    {
+      "kimlik": "İstanbul",
+      "jeton": 1094,
+      "sozlukte": true,
+      "buyuk_harf": true
+    },
+    {
+      "kimlik": "Polonya",
+      "jeton": 1075,
+      "sozlukte": true,
+      "buyuk_harf": true
+    },
+    {
+      "kimlik": "Brezilya",
+      "jeton": 1003,
+      "sozlukte": true,
+      "buyuk_harf": true
+    },
+    {
+      "kimlik": "İsveç",
+      "jeton": 996,
+      "sozlukte": true,
+      "buyuk_harf": true
+    },
+    {
+      "kimlik": "Fransa",
+      "jeton": 974,
+      "sozlukte": true,
+      "buyuk_harf": true
+    },
+    {
+      "kimlik": "vali",
+      "jeton": 834,
+      "sozlukte": true,
+      "buyuk_harf": false
+    },
+    {
+      "kimlik": "İrlanda",
+      "jeton": 834,
+      "sozlukte": true,
+      "buyuk_harf": true
+    },
+    {
+      "kimlik": "Almanya",
+      "jeton": 789,
+      "sozlukte": true,
+      "buyuk_harf": true
+    },
+    {
+      "kimlik": "İsviçre",
+      "jeton": 786,
+      "sozlukte": true,
+      "buyuk_harf": true
+    },
+    {
+      "kimlik": "Arjantin",
+      "jeton": 711,
+      "sozlukte": true,
+      "buyuk_harf": true
+    },
+    {
+      "kimlik": "Kore",
+      "jeton": 694,
+      "sozlukte": true,
+      "buyuk_harf": true
+    },
+    {
+      "kimlik": "Belçika",
+      "jeton": 656,
+      "sozlukte": true,
+      "buyuk_harf": true
+    },
+    {
+      "kimlik": "Portekiz",
+      "jeton": 618,
+      "sozlukte": true,
+      "buyuk_harf": true
+    },
+    {
+      "kimlik": "Meksika",
+      "jeton": 576,
+      "sozlukte": true,
+      "buyuk_harf": true
+    },
+    {
+      "kimlik": "İngiltere",
+      "jeton": 573,
+      "sozlukte": true,
+      "buyuk_harf": true
+    },
+    {
+      "kimlik": "Azerbaycan",
+      "jeton": 541,
+      "sozlukte": true,
+      "buyuk_harf": true
+    },
+    {
+      "kimlik": "Katolik",
+      "jeton": 541,
+      "sozlukte": true,
+      "buyuk_harf": true
+    },
+    {
+      "kimlik": "İskoç",
+      "jeton": 541,
+      "sozlukte": true,
+      "buyuk_harf": true
+    },
+    {
+      "kimlik": "Norveç",
+      "jeton": 530,
+      "sozlukte": true,
+      "buyuk_harf": true
+    },
+    {
+      "kimlik": "Nazi",
+      "jeton": 511,
+      "sozlukte": true,
+      "buyuk_harf": true
+    },
+    {
+      "kimlik": "İslam",
+      "jeton": 494,
+      "sozlukte": true,
+      "buyuk_harf": true
+    },
+    {
+      "kimlik": "milletvekili",
+      "jeton": 474,
+      "sozlukte": true,
+      "buyuk_harf": false
+    },
+    {
+      "kimlik": "Ukrayna",
+      "jeton": 412,
+      "sozlukte": true,
+      "buyuk_harf": true
+    },
+    {
+      "kimlik": "Irak",
+      "jeton": 386,
+      "sozlukte": true,
+      "buyuk_harf": true
+    },
+    {
+      "kimlik": "İzmir",
+      "jeton": 369,
+      "sozlukte": true,
+      "buyuk_harf": true
+    },
+    {
+      "kimlik": "İngilizce",
+      "jeton": 367,
+      "sozlukte": true,
+      "buyuk_harf": true
+    },
+    {
+      "kimlik": "Japonya",
+      "jeton": 359,
+      "sozlukte": true,
+      "buyuk_harf": true
+    },
+    {
+      "kimlik": "Zaza",
+      "jeton": 343,
+      "sozlukte": true,
+      "buyuk_harf": true
+    },
+    {
+      "kimlik": "Macaristan",
+      "jeton": 326,
+      "sozlukte": true,
+      "buyuk_harf": true
+    },
+    {
+      "kimlik": "Rumen",
+      "jeton": 283,
+      "sozlukte": true,
+      "buyuk_harf": true
+    },
+    {
+      "kimlik": "Küba",
+      "jeton": 278,
+      "sozlukte": true,
+      "buyuk_harf": true
+    },
+    {
+      "kimlik": "Finlandiya",
+      "jeton": 259,
+      "sozlukte": true,
+      "buyuk_harf": true
+    }
+  ],
+  "egri": [
+    {
+      "K": 1,
+      "eklenen_satir": 33037,
+      "kumulatif_kurtarilan": 5485,
+      "marjinal_son200": null
+    },
+    {
+      "K": 10,
+      "eklenen_satir": 33046,
+      "kumulatif_kurtarilan": 21913,
+      "marjinal_son200": null
+    },
+    {
+      "K": 50,
+      "eklenen_satir": 33086,
+      "kumulatif_kurtarilan": 41218,
+      "marjinal_son200": null
+    },
+    {
+      "K": 100,
+      "eklenen_satir": 33136,
+      "kumulatif_kurtarilan": 47999,
+      "marjinal_son200": null
+    },
+    {
+      "K": 200,
+      "eklenen_satir": 33236,
+      "kumulatif_kurtarilan": 53291,
+      "marjinal_son200": null
+    },
+    {
+      "K": 250,
+      "eklenen_satir": 33286,
+      "kumulatif_kurtarilan": 54485,
+      "marjinal_son200": null
+    },
+    {
+      "K": 400,
+      "eklenen_satir": 33436,
+      "kumulatif_kurtarilan": 56394,
+      "marjinal_son200": null
+    },
+    {
+      "K": 500,
+      "eklenen_satir": 33536,
+      "kumulatif_kurtarilan": 57109,
+      "marjinal_son200": null
+    },
+    {
+      "K": 600,
+      "eklenen_satir": 33636,
+      "kumulatif_kurtarilan": 57601,
+      "marjinal_son200": null
+    },
+    {
+      "K": 800,
+      "eklenen_satir": 33836,
+      "kumulatif_kurtarilan": 58164,
+      "marjinal_son200": null
+    },
+    {
+      "K": 1000,
+      "eklenen_satir": 34036,
+      "kumulatif_kurtarilan": 58416,
+      "marjinal_son200": null
+    }
+  ],
+  "marjinal": [
+    {
+      "K": 200,
+      "son200_kazanc": 53291,
+      "kumulatif": 53291
+    },
+    {
+      "K": 400,
+      "son200_kazanc": 3103,
+      "kumulatif": 56394
+    },
+    {
+      "K": 600,
+      "son200_kazanc": 1207,
+      "kumulatif": 57601
+    },
+    {
+      "K": 800,
+      "son200_kazanc": 563,
+      "kumulatif": 58164
+    },
+    {
+      "K": 1000,
+      "son200_kazanc": 252,
+      "kumulatif": 58416
+    }
+  ],
+  "E3": {
+    "monoton": true
+  },
+  "karar": {
+    "en_iyi_kurtarilan": 58562,
+    "esik_%90": 52705.8,
+    "N_yildiz_ek_kimlik": 182,
+    "N_yildiz_toplam": 33034,
+    "kurtarilan_N_yildiz": 52714,
+    "tam_kol_kurtarilan": 58562,
+    "tam_kol_ek_kimlik": 1146,
+    "ek_kimlik_sozlukte_olmayan": 0,
+    "buyuk_harfli_ek": 174,
+    "kucuk_harfli_ek": 8,
+    "ornek_ilk_20": [
+      "İngiliz",
+      "Fransız",
+      "İtalyan",
+      "Roma",
+      "İspanyol",
+      "Hollanda",
+      "Kanada",
+      "Avusturya",
+      "İstanbul",
+      "Polonya",
+      "Brezilya",
+      "İsveç",
+      "Fransa",
+      "vali",
+      "İrlanda",
+      "Almanya",
+      "İsviçre",
+      "Arjantin",
+      "Kore",
+      "Belçika"
+    ],
+    "ornek_son_5": [
+      "Slovakya",
+      "İznik",
+      "Amsterdam",
+      "Katar",
+      "Monako"
+    ]
+  },
+  "birlesim": {
+    "dar": 184,
+    "egri_tepe": 182,
+    "kesisim": 104,
+    "birlesik": 262,
+    "beklenen_N": 33114
+  },
+  "cikti_yolu": "data/rebuild/vocab_anka_r1_33114.json",
+  "E4_onek": {
+    "id_0_32851_birebir": true,
+    "farkli": []
+  },
+  "cikti_digest": {
+    "sha256": "f9940a8d8e1f7cd9428d389f12ff4c5ee448e5a7bfcdcc8ecc9c616fce950984",
+    "bayt": 747458,
+    "giris": 33114
+  },
+  "tetikleyici_kontrol": {
+    "İstanbul": {
+      "token_vector": [
+        "İstanbul"
+      ],
+      "stoi_disi": []
+    },
+    "İngiliz": {
+      "token_vector": [
+        "İngiliz"
+      ],
+      "stoi_disi": []
+    },
+    "Fransa": {
+      "token_vector": [
+        "Fransa"
+      ],
+      "stoi_disi": []
+    }
+  },
+  "E4_yazilan_dosyadan": {
+    "beklenen_kimlik": 262,
+    "KALAN": [],
+    "kalan_adet": 0,
+    "giris": 33114
+  },
+  "SONUC": "YAZILDI"
+}

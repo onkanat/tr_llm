@@ -1,0 +1,3737 @@
+{
+ "gorev": "T-0086",
+ "amac": "Ölü atıf denetimi: emekli-notu satırlarını ayıkla, kapsamı beyan et",
+ "birim": "taban_ad (tam yolun ÜST KÜMESİ)",
+ "manifest": "data/eval/t0069_pre_delete_manifest.json",
+ "manifest_sha256": "4e1c4d51a896936909b1750b52088e8939e03e966b42fd8ea84934e0993e6e61",
+ "n_olu_yol": 51,
+ "n_taban_ad": 46,
+ "n_taranan_dosya": 1166,
+ "etiket_kod": "EMEKL[İI]\\s*\\(T-\\d+\\)",
+ "etiket_belge": "TAR[İI]HSEL",
+ "kapsam_toplam": {
+  "KOD": {
+   "ham": 136,
+   "emekli": 6,
+   "olu": 130,
+   "dosya": 39
+  },
+  "SCRATCH": {
+   "ham": 406,
+   "emekli": 0,
+   "olu": 406,
+   "dosya": 85
+  },
+  "KANARYA": {
+   "ham": 8,
+   "emekli": 4,
+   "olu": 4,
+   "dosya": 2
+  },
+  "BELGE": {
+   "ham": 204,
+   "emekli": 1,
+   "olu": 203,
+   "dosya": 106
+  },
+  "KAYIT": {
+   "ham": 1706,
+   "emekli": 0,
+   "olu": 1706,
+   "dosya": 110
+  }
+ },
+ "genel_toplam": {
+  "ham": 2460,
+  "emekli": 11,
+  "olu": 2449
+ },
+ "gercek_olü_kanarya_haric": 2445,
+ "kanarya_beklenen": {
+  "scratch/anka_r9_kanarya.py": {
+   "ham": 5,
+   "emekli": 2,
+   "olu": 3
+  },
+  "scratch/anka_r9_kanarya.md": {
+   "ham": 3,
+   "emekli": 2,
+   "olu": 1
+  }
+ },
+ "taban_ad_basina": {
+  "t0046_smoke.pt": 16,
+  "kristal_model.pt": 687,
+  "kristal_carpenter_model.pt": 313,
+  "kristal_model_sft.pt": 127,
+  "kristal_model_pre_clean.pt": 75,
+  "kristal_model_step_b1_final.pt": 53,
+  "kristal_model_f3a.pt": 46,
+  "kristal_model_f3b.pt": 27,
+  "kristal_model_f3_sft.pt": 30,
+  "kristal_model_f3.pt": 61,
+  "t0053_padfix_probe.pt": 22,
+  "kristal_model_f3_clean.pt": 138,
+  "kristal_model_f3_clean_sft.pt": 24,
+  "kristal_model_carpenter_v2.pt": 70,
+  "kristal_model_f4_replay.pt": 47,
+  "kristal_model_f4_r05.pt": 104,
+  "kristal_model_f4_r10.pt": 38,
+  "kristal_b1_5_best.pt": 92,
+  "kristal_rag_arm_c_best.pt": 26,
+  "kristal_rag_arm_a_best.pt": 28,
+  "kristal_b1_5_entity_ready.pt": 25,
+  "kristal_b1_5_epoch1.pt": 25,
+  "kristal_b1_5_epoch2.pt": 24,
+  "kristal_b1_5_epoch3.pt": 26,
+  "kristal_model_backup.pt": 21,
+  "kristal_model_backup_v160.pt": 20,
+  "kristal_model_base.pt": 29,
+  "kristal_model_step_a_ep1.pt": 18,
+  "kristal_model_step_a_ep2.pt": 18,
+  "kristal_model_step_a_ep3.pt": 18,
+  "kristal_model_step_a_final.pt": 27,
+  "kristal_model_step_b1_ep1.pt": 18,
+  "kristal_model_step_b1_ep2.pt": 18,
+  "kristal_model_step_b1_ep3.pt": 18,
+  "kristal_rag_arm_b_best.pt": 24,
+  "t0046_verify_smoke.pt": 11,
+  "t0053_unmasked_probe.pt": 10,
+  "kristal_rag_pilot_best.pt": 22,
+  "kristal_rag_pilot_ep1.pt": 8,
+  "kristal_rag_pilot_ep2.pt": 8,
+  "kristal_rag_pilot_ep3.pt": 8,
+  "kristal_rag_pilot_ep4.pt": 8,
+  "kristal_rag_pilot_ep5.pt": 8,
+  "kristal_rag_pilot_ep6.pt": 8,
+  "kristal_rag_pilot_ep7.pt": 8,
+  "kristal_rag_pilot_ep8.pt": 8
+ },
+ "dosya_basina": {
+  ".agent-bus/notes/T-0046.md": {
+   "kapsam": "KAYIT",
+   "ham": 4,
+   "emekli": 0,
+   "olu": 4,
+   "olu_taban_ad": {
+    "t0046_smoke.pt": 1,
+    "kristal_model.pt": 3
+   }
+  },
+  ".agent-bus/notes/T-0047.md": {
+   "kapsam": "KAYIT",
+   "ham": 5,
+   "emekli": 0,
+   "olu": 5,
+   "olu_taban_ad": {
+    "kristal_carpenter_model.pt": 2,
+    "kristal_model.pt": 3
+   }
+  },
+  ".agent-bus/notes/T-0048.md": {
+   "kapsam": "KAYIT",
+   "ham": 5,
+   "emekli": 0,
+   "olu": 5,
+   "olu_taban_ad": {
+    "kristal_model.pt": 2,
+    "kristal_model_sft.pt": 2,
+    "kristal_carpenter_model.pt": 1
+   }
+  },
+  ".agent-bus/notes/T-0049.md": {
+   "kapsam": "KAYIT",
+   "ham": 2,
+   "emekli": 0,
+   "olu": 2,
+   "olu_taban_ad": {
+    "kristal_model_pre_clean.pt": 1,
+    "kristal_carpenter_model.pt": 1
+   }
+  },
+  ".agent-bus/notes/T-0050.md": {
+   "kapsam": "KAYIT",
+   "ham": 7,
+   "emekli": 0,
+   "olu": 7,
+   "olu_taban_ad": {
+    "kristal_model.pt": 3,
+    "kristal_model_step_b1_final.pt": 1,
+    "kristal_model_pre_clean.pt": 1,
+    "kristal_model_sft.pt": 1,
+    "kristal_carpenter_model.pt": 1
+   }
+  },
+  ".agent-bus/notes/T-0051.md": {
+   "kapsam": "KAYIT",
+   "ham": 11,
+   "emekli": 0,
+   "olu": 11,
+   "olu_taban_ad": {
+    "kristal_model.pt": 3,
+    "kristal_model_f3a.pt": 2,
+    "kristal_model_f3b.pt": 2,
+    "kristal_model_step_b1_final.pt": 1,
+    "kristal_model_pre_clean.pt": 1,
+    "kristal_model_sft.pt": 1,
+    "kristal_carpenter_model.pt": 1
+   }
+  },
+  ".agent-bus/notes/T-0052.md": {
+   "kapsam": "KAYIT",
+   "ham": 8,
+   "emekli": 0,
+   "olu": 8,
+   "olu_taban_ad": {
+    "kristal_model.pt": 3,
+    "kristal_model_f3_sft.pt": 2,
+    "kristal_model_f3.pt": 3
+   }
+  },
+  ".agent-bus/notes/T-0053.md": {
+   "kapsam": "KAYIT",
+   "ham": 10,
+   "emekli": 0,
+   "olu": 10,
+   "olu_taban_ad": {
+    "kristal_model.pt": 2,
+    "t0053_padfix_probe.pt": 2,
+    "kristal_model_step_b1_final.pt": 1,
+    "kristal_model_pre_clean.pt": 1,
+    "kristal_model_sft.pt": 1,
+    "kristal_carpenter_model.pt": 1,
+    "kristal_model_f3_sft.pt": 1,
+    "kristal_model_f3.pt": 1
+   }
+  },
+  ".agent-bus/notes/T-0054.md": {
+   "kapsam": "KAYIT",
+   "ham": 19,
+   "emekli": 0,
+   "olu": 19,
+   "olu_taban_ad": {
+    "kristal_model_f3_clean.pt": 4,
+    "kristal_model.pt": 3,
+    "kristal_model_f3_clean_sft.pt": 2,
+    "kristal_model_f3_sft.pt": 2,
+    "kristal_model_f3.pt": 2,
+    "kristal_model_step_b1_final.pt": 1,
+    "kristal_model_pre_clean.pt": 1,
+    "kristal_model_sft.pt": 1,
+    "kristal_carpenter_model.pt": 1,
+    "kristal_model_f3a.pt": 1,
+    "kristal_model_f3b.pt": 1
+   }
+  },
+  ".agent-bus/notes/T-0058.md": {
+   "kapsam": "KAYIT",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_model_f3_clean_sft.pt": 1
+   }
+  },
+  ".agent-bus/notes/T-0059.md": {
+   "kapsam": "KAYIT",
+   "ham": 7,
+   "emekli": 0,
+   "olu": 7,
+   "olu_taban_ad": {
+    "kristal_model_f3_clean.pt": 2,
+    "kristal_carpenter_model.pt": 1,
+    "kristal_model_carpenter_v2.pt": 4
+   }
+  },
+  ".agent-bus/notes/T-0060.md": {
+   "kapsam": "KAYIT",
+   "ham": 4,
+   "emekli": 0,
+   "olu": 4,
+   "olu_taban_ad": {
+    "kristal_model_f3_clean.pt": 1,
+    "kristal_model_f4_replay.pt": 3
+   }
+  },
+  ".agent-bus/notes/T-0061.md": {
+   "kapsam": "KAYIT",
+   "ham": 6,
+   "emekli": 0,
+   "olu": 6,
+   "olu_taban_ad": {
+    "kristal_model_f4_r05.pt": 3,
+    "kristal_model_f3_clean.pt": 2,
+    "kristal_model_f4_r10.pt": 1
+   }
+  },
+  ".agent-bus/notes/T-0064.md": {
+   "kapsam": "KAYIT",
+   "ham": 2,
+   "emekli": 0,
+   "olu": 2,
+   "olu_taban_ad": {
+    "kristal_model_f4_r05.pt": 2
+   }
+  },
+  ".agent-bus/notes/T-0065.md": {
+   "kapsam": "KAYIT",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_model_f4_r05.pt": 1
+   }
+  },
+  ".agent-bus/notes/T-0067.md": {
+   "kapsam": "KAYIT",
+   "ham": 2,
+   "emekli": 0,
+   "olu": 2,
+   "olu_taban_ad": {
+    "kristal_model.pt": 2
+   }
+  },
+  ".agent-bus/notes/T-0069.md": {
+   "kapsam": "KAYIT",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_model.pt": 1
+   }
+  },
+  ".agent-bus/notes/T-0081.md": {
+   "kapsam": "KAYIT",
+   "ham": 2,
+   "emekli": 0,
+   "olu": 2,
+   "olu_taban_ad": {
+    "kristal_model.pt": 2
+   }
+  },
+  ".agent-bus/notes/T-0082.md": {
+   "kapsam": "KAYIT",
+   "ham": 2,
+   "emekli": 0,
+   "olu": 2,
+   "olu_taban_ad": {
+    "kristal_model.pt": 2
+   }
+  },
+  ".agent-bus/notes/T-0087.md": {
+   "kapsam": "KAYIT",
+   "ham": 4,
+   "emekli": 0,
+   "olu": 4,
+   "olu_taban_ad": {
+    "kristal_model.pt": 3,
+    "kristal_carpenter_model.pt": 1
+   }
+  },
+  ".agent-bus/notes/T-0089.md": {
+   "kapsam": "KAYIT",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_model_sft.pt": 1
+   }
+  },
+  ".agent-bus/state/inbox/antigravity/2026-09-14T18-26-06Z-claude.json": {
+   "kapsam": "BELGE",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_model.pt": 1
+   }
+  },
+  ".agent-bus/state/inbox/antigravity/2026-09-15T03-51-39Z-claude.json": {
+   "kapsam": "BELGE",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_carpenter_model.pt": 1
+   }
+  },
+  ".agent-bus/state/inbox/antigravity/2026-09-15T05-44-56Z-claude.json": {
+   "kapsam": "BELGE",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_model.pt": 1
+   }
+  },
+  ".agent-bus/state/inbox/antigravity/2026-09-15T10-56-51Z-claude.json": {
+   "kapsam": "BELGE",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_model.pt": 1
+   }
+  },
+  ".agent-bus/state/inbox/antigravity/2026-09-15T13-57-27Z-claude.json": {
+   "kapsam": "BELGE",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_carpenter_model.pt": 1
+   }
+  },
+  ".agent-bus/state/inbox/antigravity/2026-09-15T16-53-54Z-claude.json": {
+   "kapsam": "BELGE",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_model.pt": 1
+   }
+  },
+  ".agent-bus/state/inbox/antigravity/2026-09-16T13-12-03Z-claude.json": {
+   "kapsam": "BELGE",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_model.pt": 1
+   }
+  },
+  ".agent-bus/state/inbox/antigravity/2026-09-16T13-55-41Z-claude.json": {
+   "kapsam": "BELGE",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_carpenter_model.pt": 1
+   }
+  },
+  ".agent-bus/state/inbox/antigravity/2026-09-16T14-44-41Z-claude.json": {
+   "kapsam": "BELGE",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_carpenter_model.pt": 1
+   }
+  },
+  ".agent-bus/state/inbox/antigravity/2026-09-16T15-41-08Z-claude.json": {
+   "kapsam": "BELGE",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_model.pt": 1
+   }
+  },
+  ".agent-bus/state/inbox/antigravity/2026-09-16T16-01-06Z-claude.json": {
+   "kapsam": "BELGE",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_model_f3a.pt": 1
+   }
+  },
+  ".agent-bus/state/inbox/antigravity/2026-09-16T16-04-26Z-claude.json": {
+   "kapsam": "BELGE",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_model_f3a.pt": 1
+   }
+  },
+  ".agent-bus/state/inbox/antigravity/2026-09-16T18-23-13Z-claude.json": {
+   "kapsam": "BELGE",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "t0053_padfix_probe.pt": 1
+   }
+  },
+  ".agent-bus/state/inbox/antigravity/2026-09-16T20-11-25Z-claude.json": {
+   "kapsam": "BELGE",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_model_f3_clean.pt": 1
+   }
+  },
+  ".agent-bus/state/inbox/antigravity/2026-09-16T21-29-27Z-claude.json": {
+   "kapsam": "BELGE",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_model.pt": 1
+   }
+  },
+  ".agent-bus/state/inbox/antigravity/2026-09-18T07-21-40Z-claude.json": {
+   "kapsam": "BELGE",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_model_f4_r05.pt": 1
+   }
+  },
+  ".agent-bus/state/inbox/antigravity/2026-09-18T07-34-14Z-claude.json": {
+   "kapsam": "BELGE",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_model_f4_r05.pt": 1
+   }
+  },
+  ".agent-bus/state/inbox/antigravity/2026-09-18T09-23-54Z-claude.json": {
+   "kapsam": "BELGE",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_model.pt": 1
+   }
+  },
+  ".agent-bus/state/inbox/antigravity/2026-09-18T12-12-59Z-claude.json": {
+   "kapsam": "BELGE",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_model.pt": 1
+   }
+  },
+  ".agent-bus/state/inbox/antigravity/2026-09-20T04-42-04Z-claude.json": {
+   "kapsam": "BELGE",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_model.pt": 1
+   }
+  },
+  ".agent-bus/state/inbox/claude/2026-09-15T04-22-47Z-antigravity.json": {
+   "kapsam": "BELGE",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_carpenter_model.pt": 1
+   }
+  },
+  ".agent-bus/state/inbox/claude/2026-09-15T06-08-23Z-antigravity.json": {
+   "kapsam": "BELGE",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_carpenter_model.pt": 1
+   }
+  },
+  ".agent-bus/state/inbox/claude/2026-09-15T07-12-21Z-antigravity.json": {
+   "kapsam": "BELGE",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_b1_5_best.pt": 1
+   }
+  },
+  ".agent-bus/state/inbox/claude/2026-09-15T10-45-56Z-antigravity.json": {
+   "kapsam": "BELGE",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_model.pt": 1
+   }
+  },
+  ".agent-bus/state/inbox/claude/2026-09-16T12-49-39Z-antigravity.json": {
+   "kapsam": "BELGE",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_model.pt": 1
+   }
+  },
+  ".agent-bus/state/inbox/claude/2026-09-16T14-26-23Z-antigravity.json": {
+   "kapsam": "BELGE",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_model_sft.pt": 1
+   }
+  },
+  ".agent-bus/state/inbox/claude/2026-09-16T15-34-59Z-antigravity.json": {
+   "kapsam": "BELGE",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_model.pt": 1
+   }
+  },
+  ".agent-bus/state/inbox/claude/2026-09-16T16-12-14Z-antigravity.json": {
+   "kapsam": "BELGE",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_model_f3a.pt": 1
+   }
+  },
+  ".agent-bus/state/inbox/claude/2026-09-16T17-39-12Z-antigravity.json": {
+   "kapsam": "BELGE",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_model_f3.pt": 1
+   }
+  },
+  ".agent-bus/state/inbox/claude/2026-09-16T19-06-42Z-antigravity.json": {
+   "kapsam": "BELGE",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "t0053_padfix_probe.pt": 1
+   }
+  },
+  ".agent-bus/state/inbox/claude/2026-09-16T19-18-34Z-antigravity.json": {
+   "kapsam": "BELGE",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_model_f3_clean.pt": 1
+   }
+  },
+  ".agent-bus/state/inbox/claude/2026-09-16T20-07-45Z-antigravity.json": {
+   "kapsam": "BELGE",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_model_f3_clean.pt": 1
+   }
+  },
+  ".agent-bus/state/inbox/claude/2026-09-16T23-48-03Z-antigravity.json": {
+   "kapsam": "BELGE",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_model_carpenter_v2.pt": 1
+   }
+  },
+  ".agent-bus/state/inbox/claude/2026-09-17T00-51-56Z-antigravity.json": {
+   "kapsam": "BELGE",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_model_f4_replay.pt": 1
+   }
+  },
+  ".agent-bus/state/inbox/claude/2026-09-18T02-07-32Z-antigravity.json": {
+   "kapsam": "BELGE",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_model_f3_clean.pt": 1
+   }
+  },
+  ".agent-bus/state/inbox/claude/2026-09-18T02-11-14Z-antigravity.json": {
+   "kapsam": "BELGE",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_model_carpenter_v2.pt": 1
+   }
+  },
+  ".agent-bus/state/inbox/claude/2026-09-20T04-12-10Z-claude.json": {
+   "kapsam": "BELGE",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_model.pt": 1
+   }
+  },
+  ".agent-bus/state/inbox/claude/2026-09-20T05-31-49Z-claude.json": {
+   "kapsam": "BELGE",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_model.pt": 1
+   }
+  },
+  ".agent-bus/state/inbox/claude/2026-09-20T07-37-56Z-claude.json": {
+   "kapsam": "BELGE",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_model_sft.pt": 1
+   }
+  },
+  ".agent-bus/state/results/T-0014.json": {
+   "kapsam": "BELGE",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_model.pt": 1
+   }
+  },
+  ".agent-bus/state/results/T-0016.json": {
+   "kapsam": "BELGE",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_carpenter_model.pt": 1
+   }
+  },
+  ".agent-bus/state/results/T-0018.json": {
+   "kapsam": "BELGE",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_carpenter_model.pt": 1
+   }
+  },
+  ".agent-bus/state/results/T-0019.json": {
+   "kapsam": "BELGE",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_carpenter_model.pt": 1
+   }
+  },
+  ".agent-bus/state/results/T-0020.json": {
+   "kapsam": "BELGE",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_carpenter_model.pt": 1
+   }
+  },
+  ".agent-bus/state/results/T-0022.json": {
+   "kapsam": "BELGE",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_b1_5_best.pt": 1
+   }
+  },
+  ".agent-bus/state/results/T-0048.json": {
+   "kapsam": "BELGE",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_model_sft.pt": 1
+   }
+  },
+  ".agent-bus/state/results/T-0050.json": {
+   "kapsam": "BELGE",
+   "ham": 6,
+   "emekli": 0,
+   "olu": 6,
+   "olu_taban_ad": {
+    "kristal_model.pt": 2,
+    "kristal_model_step_b1_final.pt": 1,
+    "kristal_model_pre_clean.pt": 1,
+    "kristal_model_sft.pt": 1,
+    "kristal_carpenter_model.pt": 1
+   }
+  },
+  ".agent-bus/state/results/T-0051.json": {
+   "kapsam": "BELGE",
+   "ham": 3,
+   "emekli": 0,
+   "olu": 3,
+   "olu_taban_ad": {
+    "kristal_model_f3a.pt": 2,
+    "kristal_model_f3b.pt": 1
+   }
+  },
+  ".agent-bus/state/results/T-0052.json": {
+   "kapsam": "BELGE",
+   "ham": 3,
+   "emekli": 0,
+   "olu": 3,
+   "olu_taban_ad": {
+    "kristal_model_f3.pt": 2,
+    "kristal_model_f3_sft.pt": 1
+   }
+  },
+  ".agent-bus/state/results/T-0053.json": {
+   "kapsam": "BELGE",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "t0053_padfix_probe.pt": 1
+   }
+  },
+  ".agent-bus/state/results/T-0054.json": {
+   "kapsam": "BELGE",
+   "ham": 6,
+   "emekli": 0,
+   "olu": 6,
+   "olu_taban_ad": {
+    "kristal_model_f3_clean.pt": 4,
+    "kristal_model_f3_clean_sft.pt": 2
+   }
+  },
+  ".agent-bus/state/results/T-0059.json": {
+   "kapsam": "BELGE",
+   "ham": 5,
+   "emekli": 0,
+   "olu": 5,
+   "olu_taban_ad": {
+    "kristal_model_carpenter_v2.pt": 5
+   }
+  },
+  ".agent-bus/state/results/T-0060.json": {
+   "kapsam": "BELGE",
+   "ham": 5,
+   "emekli": 0,
+   "olu": 5,
+   "olu_taban_ad": {
+    "kristal_model_f4_replay.pt": 3,
+    "kristal_model_f3_clean.pt": 1,
+    "kristal_model_carpenter_v2.pt": 1
+   }
+  },
+  ".agent-bus/state/results/T-0061.json": {
+   "kapsam": "BELGE",
+   "ham": 2,
+   "emekli": 0,
+   "olu": 2,
+   "olu_taban_ad": {
+    "kristal_model_f4_r05.pt": 1,
+    "kristal_model_f4_r10.pt": 1
+   }
+  },
+  ".agent-bus/state/results/T-0064.json": {
+   "kapsam": "BELGE",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_model_f4_r05.pt": 1
+   }
+  },
+  ".agent-bus/state/results/T-0069.json": {
+   "kapsam": "BELGE",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_model.pt": 1
+   }
+  },
+  ".agent-bus/state/results/T-0081.json": {
+   "kapsam": "BELGE",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_model.pt": 1
+   }
+  },
+  ".agent-bus/state/results/T-0082.json": {
+   "kapsam": "BELGE",
+   "ham": 2,
+   "emekli": 0,
+   "olu": 2,
+   "olu_taban_ad": {
+    "kristal_model.pt": 2
+   }
+  },
+  ".agent-bus/state/results/T-0085.json": {
+   "kapsam": "BELGE",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_model.pt": 1
+   }
+  },
+  ".agent-bus/state/results/T-0087.json": {
+   "kapsam": "BELGE",
+   "ham": 2,
+   "emekli": 0,
+   "olu": 2,
+   "olu_taban_ad": {
+    "kristal_model.pt": 2
+   }
+  },
+  ".agent-bus/state/results/T-0089.json": {
+   "kapsam": "BELGE",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_model_sft.pt": 1
+   }
+  },
+  ".agent-bus/state/tasks/T-0013.json": {
+   "kapsam": "BELGE",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_model.pt": 1
+   }
+  },
+  ".agent-bus/state/tasks/T-0015.json": {
+   "kapsam": "BELGE",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_carpenter_model.pt": 1
+   }
+  },
+  ".agent-bus/state/tasks/T-0016.json": {
+   "kapsam": "BELGE",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_carpenter_model.pt": 1
+   }
+  },
+  ".agent-bus/state/tasks/T-0018.json": {
+   "kapsam": "BELGE",
+   "ham": 2,
+   "emekli": 0,
+   "olu": 2,
+   "olu_taban_ad": {
+    "kristal_carpenter_model.pt": 2
+   }
+  },
+  ".agent-bus/state/tasks/T-0020.json": {
+   "kapsam": "BELGE",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_b1_5_best.pt": 1
+   }
+  },
+  ".agent-bus/state/tasks/T-0022.json": {
+   "kapsam": "BELGE",
+   "ham": 2,
+   "emekli": 0,
+   "olu": 2,
+   "olu_taban_ad": {
+    "kristal_b1_5_best.pt": 2
+   }
+  },
+  ".agent-bus/state/tasks/T-0027.json": {
+   "kapsam": "BELGE",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_b1_5_best.pt": 1
+   }
+  },
+  ".agent-bus/state/tasks/T-0034.json": {
+   "kapsam": "BELGE",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_carpenter_model.pt": 1
+   }
+  },
+  ".agent-bus/state/tasks/T-0035.json": {
+   "kapsam": "BELGE",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_carpenter_model.pt": 1
+   }
+  },
+  ".agent-bus/state/tasks/T-0036.json": {
+   "kapsam": "BELGE",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_carpenter_model.pt": 1
+   }
+  },
+  ".agent-bus/state/tasks/T-0046.json": {
+   "kapsam": "BELGE",
+   "ham": 4,
+   "emekli": 0,
+   "olu": 4,
+   "olu_taban_ad": {
+    "kristal_model.pt": 4
+   }
+  },
+  ".agent-bus/state/tasks/T-0047.json": {
+   "kapsam": "BELGE",
+   "ham": 2,
+   "emekli": 0,
+   "olu": 2,
+   "olu_taban_ad": {
+    "kristal_carpenter_model.pt": 2
+   }
+  },
+  ".agent-bus/state/tasks/T-0048.json": {
+   "kapsam": "BELGE",
+   "ham": 3,
+   "emekli": 0,
+   "olu": 3,
+   "olu_taban_ad": {
+    "kristal_carpenter_model.pt": 2,
+    "kristal_model_sft.pt": 1
+   }
+  },
+  ".agent-bus/state/tasks/T-0049.json": {
+   "kapsam": "BELGE",
+   "ham": 3,
+   "emekli": 0,
+   "olu": 3,
+   "olu_taban_ad": {
+    "kristal_carpenter_model.pt": 1,
+    "kristal_model.pt": 2
+   }
+  },
+  ".agent-bus/state/tasks/T-0050.json": {
+   "kapsam": "BELGE",
+   "ham": 6,
+   "emekli": 0,
+   "olu": 6,
+   "olu_taban_ad": {
+    "kristal_carpenter_model.pt": 2,
+    "kristal_model.pt": 1,
+    "kristal_model_step_b1_final.pt": 1,
+    "kristal_model_pre_clean.pt": 1,
+    "kristal_model_sft.pt": 1
+   }
+  },
+  ".agent-bus/state/tasks/T-0051.json": {
+   "kapsam": "BELGE",
+   "ham": 7,
+   "emekli": 0,
+   "olu": 7,
+   "olu_taban_ad": {
+    "kristal_model.pt": 3,
+    "kristal_model_f3a.pt": 3,
+    "kristal_model_f3b.pt": 1
+   }
+  },
+  ".agent-bus/state/tasks/T-0052.json": {
+   "kapsam": "BELGE",
+   "ham": 5,
+   "emekli": 0,
+   "olu": 5,
+   "olu_taban_ad": {
+    "kristal_model.pt": 2,
+    "kristal_model_f3_sft.pt": 1,
+    "kristal_model_f3.pt": 2
+   }
+  },
+  ".agent-bus/state/tasks/T-0053.json": {
+   "kapsam": "BELGE",
+   "ham": 3,
+   "emekli": 0,
+   "olu": 3,
+   "olu_taban_ad": {
+    "kristal_model.pt": 1,
+    "t0053_padfix_probe.pt": 2
+   }
+  },
+  ".agent-bus/state/tasks/T-0054.json": {
+   "kapsam": "BELGE",
+   "ham": 6,
+   "emekli": 0,
+   "olu": 6,
+   "olu_taban_ad": {
+    "kristal_model_f3_clean.pt": 3,
+    "kristal_model.pt": 2,
+    "kristal_model_f3_clean_sft.pt": 1
+   }
+  },
+  ".agent-bus/state/tasks/T-0058.json": {
+   "kapsam": "BELGE",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_model.pt": 1
+   }
+  },
+  ".agent-bus/state/tasks/T-0059.json": {
+   "kapsam": "BELGE",
+   "ham": 4,
+   "emekli": 0,
+   "olu": 4,
+   "olu_taban_ad": {
+    "kristal_b1_5_best.pt": 1,
+    "kristal_model_carpenter_v2.pt": 3
+   }
+  },
+  ".agent-bus/state/tasks/T-0060.json": {
+   "kapsam": "BELGE",
+   "ham": 5,
+   "emekli": 0,
+   "olu": 5,
+   "olu_taban_ad": {
+    "kristal_model_carpenter_v2.pt": 2,
+    "kristal_model_f4_replay.pt": 2,
+    "kristal_model_f3_clean.pt": 1
+   }
+  },
+  ".agent-bus/state/tasks/T-0061.json": {
+   "kapsam": "BELGE",
+   "ham": 4,
+   "emekli": 0,
+   "olu": 4,
+   "olu_taban_ad": {
+    "kristal_model_carpenter_v2.pt": 1,
+    "kristal_model_f4_r05.pt": 1,
+    "kristal_model_f4_r10.pt": 1,
+    "kristal_model_f3_clean.pt": 1
+   }
+  },
+  ".agent-bus/state/tasks/T-0064.json": {
+   "kapsam": "BELGE",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_model_f4_r05.pt": 1
+   }
+  },
+  ".agent-bus/state/tasks/T-0066.json": {
+   "kapsam": "BELGE",
+   "ham": 2,
+   "emekli": 0,
+   "olu": 2,
+   "olu_taban_ad": {
+    "kristal_model.pt": 2
+   }
+  },
+  ".agent-bus/state/tasks/T-0067.json": {
+   "kapsam": "BELGE",
+   "ham": 3,
+   "emekli": 0,
+   "olu": 3,
+   "olu_taban_ad": {
+    "kristal_model.pt": 3
+   }
+  },
+  ".agent-bus/state/tasks/T-0069.json": {
+   "kapsam": "BELGE",
+   "ham": 2,
+   "emekli": 0,
+   "olu": 2,
+   "olu_taban_ad": {
+    "kristal_model.pt": 2
+   }
+  },
+  ".agent-bus/state/tasks/T-0081.json": {
+   "kapsam": "BELGE",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_model.pt": 1
+   }
+  },
+  ".agent-bus/state/tasks/T-0083.json": {
+   "kapsam": "BELGE",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_model.pt": 1
+   }
+  },
+  ".agent-bus/state/tasks/T-0085.json": {
+   "kapsam": "BELGE",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_model.pt": 1
+   }
+  },
+  ".agent-bus/state/tasks/T-0086.json": {
+   "kapsam": "BELGE",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_carpenter_model.pt": 1
+   }
+  },
+  ".agent-bus/state/tasks/T-0087.json": {
+   "kapsam": "BELGE",
+   "ham": 2,
+   "emekli": 0,
+   "olu": 2,
+   "olu_taban_ad": {
+    "kristal_model.pt": 2
+   }
+  },
+  ".agent-bus/state/tasks/T-0088.json": {
+   "kapsam": "BELGE",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_model.pt": 1
+   }
+  },
+  ".agent-bus/state/tasks/T-0089.json": {
+   "kapsam": "BELGE",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_model.pt": 1
+   }
+  },
+  ".agent-bus/state/tasks/T-0090.json": {
+   "kapsam": "BELGE",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_model.pt": 1
+   }
+  },
+  ".agent-bus/tasks/T-0002.json": {
+   "kapsam": "KAYIT",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_rag_arm_c_best.pt": 1
+   }
+  },
+  ".agent-bus/tasks/T-0007.json": {
+   "kapsam": "KAYIT",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_rag_arm_a_best.pt": 1
+   }
+  },
+  ".agent-bus/tasks/T-0008.json": {
+   "kapsam": "KAYIT",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_rag_arm_a_best.pt": 1
+   }
+  },
+  ".agent-bus/tasks/T-0010.json": {
+   "kapsam": "KAYIT",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_b1_5_entity_ready.pt": 1
+   }
+  },
+  ".agent-bus/tasks/T-0011.json": {
+   "kapsam": "KAYIT",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_b1_5_best.pt": 1
+   }
+  },
+  ".agent-bus/tasks/T-0013.json": {
+   "kapsam": "KAYIT",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_model.pt": 1
+   }
+  },
+  ".agent-bus/tasks/T-0015.json": {
+   "kapsam": "KAYIT",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_carpenter_model.pt": 1
+   }
+  },
+  ".agent-bus/tasks/T-0016.json": {
+   "kapsam": "KAYIT",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_carpenter_model.pt": 1
+   }
+  },
+  ".agent-bus/tasks/T-0018.json": {
+   "kapsam": "KAYIT",
+   "ham": 2,
+   "emekli": 0,
+   "olu": 2,
+   "olu_taban_ad": {
+    "kristal_carpenter_model.pt": 2
+   }
+  },
+  ".agent-bus/tasks/T-0020.json": {
+   "kapsam": "KAYIT",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_b1_5_best.pt": 1
+   }
+  },
+  ".agent-bus/tasks/T-0022.json": {
+   "kapsam": "KAYIT",
+   "ham": 2,
+   "emekli": 0,
+   "olu": 2,
+   "olu_taban_ad": {
+    "kristal_b1_5_best.pt": 2
+   }
+  },
+  "CHANGELOG.md": {
+   "kapsam": "BELGE",
+   "ham": 9,
+   "emekli": 0,
+   "olu": 9,
+   "olu_taban_ad": {
+    "kristal_model_f3.pt": 2,
+    "kristal_b1_5_best.pt": 1,
+    "kristal_carpenter_model.pt": 4,
+    "kristal_model.pt": 2
+   }
+  },
+  "CLAUDE.md": {
+   "kapsam": "BELGE",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_model.pt": 1
+   }
+  },
+  "README.md": {
+   "kapsam": "BELGE",
+   "ham": 2,
+   "emekli": 0,
+   "olu": 2,
+   "olu_taban_ad": {
+    "kristal_model.pt": 2
+   }
+  },
+  "USER_GUIDE.md": {
+   "kapsam": "BELGE",
+   "ham": 8,
+   "emekli": 1,
+   "olu": 7,
+   "olu_taban_ad": {
+    "kristal_model.pt": 4,
+    "kristal_carpenter_model.pt": 3,
+    "kristal_b1_5_best.pt": 1
+   }
+  },
+  "chat_prompt.py": {
+   "kapsam": "KOD",
+   "ham": 1,
+   "emekli": 1,
+   "olu": 0,
+   "olu_taban_ad": {
+    "kristal_model.pt": 1
+   }
+  },
+  "data/b1_5_splits/training_history.json": {
+   "kapsam": "BELGE",
+   "ham": 4,
+   "emekli": 0,
+   "olu": 4,
+   "olu_taban_ad": {
+    "kristal_b1_5_epoch1.pt": 1,
+    "kristal_b1_5_epoch2.pt": 1,
+    "kristal_b1_5_epoch3.pt": 1,
+    "kristal_b1_5_best.pt": 1
+   }
+  },
+  "data/eval/anka_r10_okuma_varsayilanlari_2026-09-20.json": {
+   "kapsam": "KAYIT",
+   "ham": 2,
+   "emekli": 0,
+   "olu": 2,
+   "olu_taban_ad": {
+    "kristal_model.pt": 2
+   }
+  },
+  "data/eval/anka_r10_okuma_varsayilanlari_2026-09-20.md": {
+   "kapsam": "KAYIT",
+   "ham": 6,
+   "emekli": 0,
+   "olu": 6,
+   "olu_taban_ad": {
+    "kristal_model.pt": 5,
+    "kristal_carpenter_model.pt": 1
+   }
+  },
+  "data/eval/anka_r11_kucuk_borclar_2026-09-20.json": {
+   "kapsam": "KAYIT",
+   "ham": 4,
+   "emekli": 0,
+   "olu": 4,
+   "olu_taban_ad": {
+    "kristal_model.pt": 2,
+    "kristal_carpenter_model.pt": 1,
+    "kristal_model_sft.pt": 1
+   }
+  },
+  "data/eval/anka_r11_kucuk_borclar_2026-09-20.md": {
+   "kapsam": "KAYIT",
+   "ham": 5,
+   "emekli": 0,
+   "olu": 5,
+   "olu_taban_ad": {
+    "kristal_model.pt": 2,
+    "kristal_carpenter_model.pt": 1,
+    "kristal_model_sft.pt": 2
+   }
+  },
+  "data/eval/anka_r12_train_dpo_kapisi_2026-09-20.json": {
+   "kapsam": "KAYIT",
+   "ham": 2,
+   "emekli": 0,
+   "olu": 2,
+   "olu_taban_ad": {
+    "kristal_model_sft.pt": 1,
+    "kristal_model.pt": 1
+   }
+  },
+  "data/eval/anka_r12_train_dpo_kapisi_2026-09-20.md": {
+   "kapsam": "KAYIT",
+   "ham": 3,
+   "emekli": 0,
+   "olu": 3,
+   "olu_taban_ad": {
+    "kristal_model.pt": 1,
+    "kristal_model_sft.pt": 2
+   }
+  },
+  "data/eval/anka_r6_belge_onarim_2026-09-20.md": {
+   "kapsam": "KAYIT",
+   "ham": 5,
+   "emekli": 0,
+   "olu": 5,
+   "olu_taban_ad": {
+    "kristal_carpenter_model.pt": 1,
+    "kristal_b1_5_best.pt": 1,
+    "kristal_model.pt": 3
+   }
+  },
+  "data/eval/anka_r6b_belge_tarihsel_2026-09-20.md": {
+   "kapsam": "KAYIT",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_model.pt": 1
+   }
+  },
+  "data/eval/anka_r8_train_varsayilan_2026-09-20.md": {
+   "kapsam": "KAYIT",
+   "ham": 4,
+   "emekli": 0,
+   "olu": 4,
+   "olu_taban_ad": {
+    "kristal_model.pt": 4
+   }
+  },
+  "data/eval/anka_r9_olu_atif_denetimi_2026-09-20.json": {
+   "kapsam": "KAYIT",
+   "ham": 934,
+   "emekli": 0,
+   "olu": 934,
+   "olu_taban_ad": {
+    "t0046_smoke.pt": 9,
+    "kristal_model.pt": 192,
+    "kristal_carpenter_model.pt": 111,
+    "kristal_model_sft.pt": 50,
+    "kristal_model_pre_clean.pt": 27,
+    "kristal_model_step_b1_final.pt": 21,
+    "kristal_model_f3a.pt": 21,
+    "kristal_model_f3b.pt": 14,
+    "kristal_model_f3_sft.pt": 15,
+    "kristal_model_f3.pt": 26,
+    "t0053_padfix_probe.pt": 11,
+    "kristal_model_f3_clean.pt": 60,
+    "kristal_model_f3_clean_sft.pt": 12,
+    "kristal_model_carpenter_v2.pt": 29,
+    "kristal_model_f4_replay.pt": 21,
+    "kristal_model_f4_r05.pt": 47,
+    "kristal_model_f4_r10.pt": 19,
+    "kristal_b1_5_best.pt": 36,
+    "kristal_rag_arm_c_best.pt": 11,
+    "kristal_rag_arm_a_best.pt": 12,
+    "kristal_b1_5_entity_ready.pt": 10,
+    "kristal_b1_5_epoch1.pt": 9,
+    "kristal_b1_5_epoch2.pt": 9,
+    "kristal_b1_5_epoch3.pt": 9,
+    "kristal_model_backup.pt": 8,
+    "kristal_model_backup_v160.pt": 8,
+    "kristal_model_base.pt": 11,
+    "kristal_model_step_a_ep1.pt": 7,
+    "kristal_model_step_a_ep2.pt": 7,
+    "kristal_model_step_a_ep3.pt": 7,
+    "kristal_model_step_a_final.pt": 11,
+    "kristal_model_step_b1_ep1.pt": 7,
+    "kristal_model_step_b1_ep2.pt": 7,
+    "kristal_model_step_b1_ep3.pt": 7,
+    "kristal_rag_arm_b_best.pt": 10,
+    "t0046_verify_smoke.pt": 6,
+    "t0053_unmasked_probe.pt": 6,
+    "kristal_rag_pilot_best.pt": 11,
+    "kristal_rag_pilot_ep1.pt": 5,
+    "kristal_rag_pilot_ep2.pt": 5,
+    "kristal_rag_pilot_ep3.pt": 5,
+    "kristal_rag_pilot_ep4.pt": 5,
+    "kristal_rag_pilot_ep5.pt": 5,
+    "kristal_rag_pilot_ep6.pt": 5,
+    "kristal_rag_pilot_ep7.pt": 5,
+    "kristal_rag_pilot_ep8.pt": 5
+   }
+  },
+  "data/eval/anka_r9_olu_atif_denetimi_2026-09-20.md": {
+   "kapsam": "KAYIT",
+   "ham": 3,
+   "emekli": 0,
+   "olu": 3,
+   "olu_taban_ad": {
+    "kristal_carpenter_model.pt": 1,
+    "kristal_model_f3_clean.pt": 1,
+    "kristal_model_f4_r05.pt": 1
+   }
+  },
+  "data/eval/exp_c_recheck_2026-09-15.json": {
+   "kapsam": "KAYIT",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_carpenter_model.pt": 1
+   }
+  },
+  "data/eval/f0_identity_scope_2026-09-15.json": {
+   "kapsam": "KAYIT",
+   "ham": 28,
+   "emekli": 0,
+   "olu": 28,
+   "olu_taban_ad": {
+    "kristal_b1_5_best.pt": 3,
+    "kristal_b1_5_entity_ready.pt": 1,
+    "kristal_b1_5_epoch1.pt": 1,
+    "kristal_b1_5_epoch2.pt": 1,
+    "kristal_b1_5_epoch3.pt": 1,
+    "kristal_carpenter_model.pt": 1,
+    "kristal_model.pt": 3,
+    "kristal_model_backup.pt": 1,
+    "kristal_model_backup_v160.pt": 1,
+    "kristal_model_base.pt": 1,
+    "kristal_model_pre_clean.pt": 1,
+    "kristal_model_sft.pt": 1,
+    "kristal_model_step_a_ep1.pt": 1,
+    "kristal_model_step_a_ep2.pt": 1,
+    "kristal_model_step_a_ep3.pt": 1,
+    "kristal_model_step_a_final.pt": 1,
+    "kristal_model_step_b1_ep1.pt": 1,
+    "kristal_model_step_b1_ep2.pt": 1,
+    "kristal_model_step_b1_ep3.pt": 1,
+    "kristal_model_step_b1_final.pt": 2,
+    "kristal_rag_arm_a_best.pt": 1,
+    "kristal_rag_arm_b_best.pt": 1,
+    "kristal_rag_arm_c_best.pt": 1
+   }
+  },
+  "data/eval/f3_split_plan_2026-09-16.md": {
+   "kapsam": "KAYIT",
+   "ham": 6,
+   "emekli": 0,
+   "olu": 6,
+   "olu_taban_ad": {
+    "kristal_model.pt": 1,
+    "kristal_model_f3a.pt": 1,
+    "kristal_model_f3.pt": 3,
+    "kristal_carpenter_model.pt": 1
+   }
+  },
+  "data/eval/f4_decision_2026-09-18.md": {
+   "kapsam": "KAYIT",
+   "ham": 2,
+   "emekli": 0,
+   "olu": 2,
+   "olu_taban_ad": {
+    "kristal_model_f4_r05.pt": 2
+   }
+  },
+  "data/eval/forgetting_baseline_2026-09-17.json": {
+   "kapsam": "KAYIT",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_model_f3_clean.pt": 1
+   }
+  },
+  "data/eval/forgetting_measurement_design_2026-09-17.md": {
+   "kapsam": "KAYIT",
+   "ham": 3,
+   "emekli": 0,
+   "olu": 3,
+   "olu_taban_ad": {
+    "kristal_model_f3_clean.pt": 1,
+    "kristal_model_carpenter_v2.pt": 1,
+    "kristal_model_f3.pt": 1
+   }
+  },
+  "data/eval/forgetting_measurement_design_2026-09-18.md": {
+   "kapsam": "KAYIT",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_model.pt": 1
+   }
+  },
+  "data/eval/neglected_work_plan_2026-09-16.md": {
+   "kapsam": "KAYIT",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_model_f3.pt": 1
+   }
+  },
+  "data/eval/regeneration_plan_2026-09-15.json": {
+   "kapsam": "KAYIT",
+   "ham": 8,
+   "emekli": 0,
+   "olu": 8,
+   "olu_taban_ad": {
+    "kristal_model.pt": 5,
+    "kristal_model_step_b1_final.pt": 1,
+    "kristal_carpenter_model.pt": 1,
+    "kristal_b1_5_best.pt": 1
+   }
+  },
+  "data/eval/regeneration_recon_2026-09-15.json": {
+   "kapsam": "KAYIT",
+   "ham": 4,
+   "emekli": 0,
+   "olu": 4,
+   "olu_taban_ad": {
+    "kristal_model.pt": 1,
+    "kristal_carpenter_model.pt": 1,
+    "kristal_model_sft.pt": 2
+   }
+  },
+  "data/eval/rigorous_evaluation_report.json": {
+   "kapsam": "KAYIT",
+   "ham": 3,
+   "emekli": 0,
+   "olu": 3,
+   "olu_taban_ad": {
+    "kristal_rag_arm_a_best.pt": 1,
+    "kristal_rag_arm_b_best.pt": 1,
+    "kristal_rag_arm_c_best.pt": 1
+   }
+  },
+  "data/eval/t0015_verification.json": {
+   "kapsam": "KAYIT",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_carpenter_model.pt": 1
+   }
+  },
+  "data/eval/t0016_verification.json": {
+   "kapsam": "KAYIT",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_carpenter_model.pt": 1
+   }
+  },
+  "data/eval/t0018_verification.json": {
+   "kapsam": "KAYIT",
+   "ham": 4,
+   "emekli": 0,
+   "olu": 4,
+   "olu_taban_ad": {
+    "kristal_model.pt": 2,
+    "kristal_carpenter_model.pt": 2
+   }
+  },
+  "data/eval/t0018_why_no_memorization.json": {
+   "kapsam": "KAYIT",
+   "ham": 12,
+   "emekli": 0,
+   "olu": 12,
+   "olu_taban_ad": {
+    "kristal_carpenter_model.pt": 6,
+    "kristal_model.pt": 5,
+    "kristal_model_step_b1_final.pt": 1
+   }
+  },
+  "data/eval/t0020_verification.json": {
+   "kapsam": "KAYIT",
+   "ham": 2,
+   "emekli": 0,
+   "olu": 2,
+   "olu_taban_ad": {
+    "kristal_carpenter_model.pt": 2
+   }
+  },
+  "data/eval/t0021_verification.json": {
+   "kapsam": "KAYIT",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_carpenter_model.pt": 1
+   }
+  },
+  "data/eval/t0022_verification.json": {
+   "kapsam": "KAYIT",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_b1_5_best.pt": 1
+   }
+  },
+  "data/eval/t0027_model_state_2026-09-15.json": {
+   "kapsam": "KAYIT",
+   "ham": 179,
+   "emekli": 0,
+   "olu": 179,
+   "olu_taban_ad": {
+    "kristal_b1_5_best.pt": 11,
+    "kristal_b1_5_entity_ready.pt": 7,
+    "kristal_b1_5_epoch1.pt": 9,
+    "kristal_b1_5_epoch2.pt": 9,
+    "kristal_b1_5_epoch3.pt": 10,
+    "kristal_carpenter_model.pt": 8,
+    "kristal_model.pt": 11,
+    "kristal_model_backup.pt": 8,
+    "kristal_model_backup_v160.pt": 7,
+    "kristal_model_base.pt": 8,
+    "kristal_model_pre_clean.pt": 7,
+    "kristal_model_sft.pt": 7,
+    "kristal_model_step_a_ep1.pt": 7,
+    "kristal_model_step_a_ep2.pt": 7,
+    "kristal_model_step_a_ep3.pt": 7,
+    "kristal_model_step_a_final.pt": 7,
+    "kristal_model_step_b1_ep1.pt": 7,
+    "kristal_model_step_b1_ep2.pt": 7,
+    "kristal_model_step_b1_ep3.pt": 7,
+    "kristal_model_step_b1_final.pt": 7,
+    "kristal_rag_arm_a_best.pt": 7,
+    "kristal_rag_arm_b_best.pt": 7,
+    "kristal_rag_arm_c_best.pt": 7
+   }
+  },
+  "data/eval/t0027_verification.json": {
+   "kapsam": "KAYIT",
+   "ham": 4,
+   "emekli": 0,
+   "olu": 4,
+   "olu_taban_ad": {
+    "kristal_model.pt": 4
+   }
+  },
+  "data/eval/t0028_instruction_alignment_2026-09-15.json": {
+   "kapsam": "KAYIT",
+   "ham": 3,
+   "emekli": 0,
+   "olu": 3,
+   "olu_taban_ad": {
+    "kristal_model_base.pt": 1,
+    "kristal_model.pt": 2
+   }
+  },
+  "data/eval/t0030_verification.json": {
+   "kapsam": "KAYIT",
+   "ham": 4,
+   "emekli": 0,
+   "olu": 4,
+   "olu_taban_ad": {
+    "kristal_model.pt": 2,
+    "kristal_carpenter_model.pt": 2
+   }
+  },
+  "data/eval/t0030_wiki_revival_2026-09-15.json": {
+   "kapsam": "KAYIT",
+   "ham": 2,
+   "emekli": 0,
+   "olu": 2,
+   "olu_taban_ad": {
+    "kristal_model.pt": 2
+   }
+  },
+  "data/eval/t0034_criterion_and_generator_2026-09-15.json": {
+   "kapsam": "KAYIT",
+   "ham": 3,
+   "emekli": 0,
+   "olu": 3,
+   "olu_taban_ad": {
+    "kristal_model.pt": 2,
+    "kristal_carpenter_model.pt": 1
+   }
+  },
+  "data/eval/t0038_verification.json": {
+   "kapsam": "KAYIT",
+   "ham": 2,
+   "emekli": 0,
+   "olu": 2,
+   "olu_taban_ad": {
+    "kristal_model.pt": 1,
+    "kristal_carpenter_model.pt": 1
+   }
+  },
+  "data/eval/t0046_pipeline_switch_2026-09-16.json": {
+   "kapsam": "KAYIT",
+   "ham": 5,
+   "emekli": 0,
+   "olu": 5,
+   "olu_taban_ad": {
+    "kristal_model.pt": 4,
+    "t0046_smoke.pt": 1
+   }
+  },
+  "data/eval/t0046_verification.json": {
+   "kapsam": "KAYIT",
+   "ham": 11,
+   "emekli": 0,
+   "olu": 11,
+   "olu_taban_ad": {
+    "kristal_model.pt": 9,
+    "t0046_verify_smoke.pt": 2
+   }
+  },
+  "data/eval/t0047_frozen_write_gate_2026-09-16.json": {
+   "kapsam": "KAYIT",
+   "ham": 7,
+   "emekli": 0,
+   "olu": 7,
+   "olu_taban_ad": {
+    "kristal_model.pt": 4,
+    "kristal_carpenter_model.pt": 3
+   }
+  },
+  "data/eval/t0047_verification.json": {
+   "kapsam": "KAYIT",
+   "ham": 11,
+   "emekli": 0,
+   "olu": 11,
+   "olu_taban_ad": {
+    "kristal_model.pt": 3,
+    "kristal_carpenter_model.pt": 5,
+    "kristal_model_sft.pt": 3
+   }
+  },
+  "data/eval/t0048_frozen_write_holes_2026-09-16.json": {
+   "kapsam": "KAYIT",
+   "ham": 10,
+   "emekli": 0,
+   "olu": 10,
+   "olu_taban_ad": {
+    "kristal_model.pt": 3,
+    "kristal_model_sft.pt": 5,
+    "kristal_carpenter_model.pt": 2
+   }
+  },
+  "data/eval/t0048_verification.json": {
+   "kapsam": "KAYIT",
+   "ham": 4,
+   "emekli": 0,
+   "olu": 4,
+   "olu_taban_ad": {
+    "kristal_model.pt": 1,
+    "kristal_model_sft.pt": 1,
+    "kristal_carpenter_model.pt": 2
+   }
+  },
+  "data/eval/t0049_retrain_gate_2026-09-16.json": {
+   "kapsam": "KAYIT",
+   "ham": 9,
+   "emekli": 0,
+   "olu": 9,
+   "olu_taban_ad": {
+    "kristal_model.pt": 2,
+    "kristal_model_pre_clean.pt": 3,
+    "kristal_model_sft.pt": 2,
+    "kristal_carpenter_model.pt": 2
+   }
+  },
+  "data/eval/t0049_verification.json": {
+   "kapsam": "KAYIT",
+   "ham": 4,
+   "emekli": 0,
+   "olu": 4,
+   "olu_taban_ad": {
+    "kristal_model.pt": 3,
+    "kristal_model_pre_clean.pt": 1
+   }
+  },
+  "data/eval/t0050_f3_prep_2026-09-16.json": {
+   "kapsam": "KAYIT",
+   "ham": 16,
+   "emekli": 0,
+   "olu": 16,
+   "olu_taban_ad": {
+    "kristal_model.pt": 4,
+    "kristal_model_step_b1_final.pt": 3,
+    "kristal_model_pre_clean.pt": 3,
+    "kristal_model_sft.pt": 3,
+    "kristal_carpenter_model.pt": 3
+   }
+  },
+  "data/eval/t0050_verification.json": {
+   "kapsam": "KAYIT",
+   "ham": 4,
+   "emekli": 0,
+   "olu": 4,
+   "olu_taban_ad": {
+    "kristal_model.pt": 3,
+    "kristal_model_f3a.pt": 1
+   }
+  },
+  "data/eval/t0051_f3_short_2026-09-16.json": {
+   "kapsam": "KAYIT",
+   "ham": 4,
+   "emekli": 0,
+   "olu": 4,
+   "olu_taban_ad": {
+    "kristal_model.pt": 1,
+    "kristal_model_f3a.pt": 2,
+    "kristal_model_f3b.pt": 1
+   }
+  },
+  "data/eval/t0051_verification.json": {
+   "kapsam": "KAYIT",
+   "ham": 3,
+   "emekli": 0,
+   "olu": 3,
+   "olu_taban_ad": {
+    "kristal_model.pt": 1,
+    "kristal_model_f3a.pt": 1,
+    "t0046_smoke.pt": 1
+   }
+  },
+  "data/eval/t0052_f3_full_2026-09-16.json": {
+   "kapsam": "KAYIT",
+   "ham": 4,
+   "emekli": 0,
+   "olu": 4,
+   "olu_taban_ad": {
+    "kristal_model.pt": 1,
+    "kristal_model_f3_sft.pt": 1,
+    "kristal_model_f3.pt": 2
+   }
+  },
+  "data/eval/t0052_verification.json": {
+   "kapsam": "KAYIT",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_model.pt": 1
+   }
+  },
+  "data/eval/t0053_pad_fix_2026-09-16.json": {
+   "kapsam": "KAYIT",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "t0053_padfix_probe.pt": 1
+   }
+  },
+  "data/eval/t0053_verification.json": {
+   "kapsam": "KAYIT",
+   "ham": 2,
+   "emekli": 0,
+   "olu": 2,
+   "olu_taban_ad": {
+    "t0053_unmasked_probe.pt": 1,
+    "kristal_model_f3_clean.pt": 1
+   }
+  },
+  "data/eval/t0054_f3_clean_2026-09-16.json": {
+   "kapsam": "KAYIT",
+   "ham": 13,
+   "emekli": 0,
+   "olu": 13,
+   "olu_taban_ad": {
+    "kristal_model.pt": 2,
+    "kristal_model_f3_clean_sft.pt": 1,
+    "kristal_model_f3_clean.pt": 2,
+    "kristal_model_step_b1_final.pt": 1,
+    "kristal_model_pre_clean.pt": 1,
+    "kristal_model_sft.pt": 1,
+    "kristal_carpenter_model.pt": 1,
+    "kristal_model_f3a.pt": 1,
+    "kristal_model_f3b.pt": 1,
+    "kristal_model_f3_sft.pt": 1,
+    "kristal_model_f3.pt": 1
+   }
+  },
+  "data/eval/t0054_verification.json": {
+   "kapsam": "KAYIT",
+   "ham": 2,
+   "emekli": 0,
+   "olu": 2,
+   "olu_taban_ad": {
+    "kristal_model_f3_clean.pt": 2
+   }
+  },
+  "data/eval/t0058_g3_rate_context_2026-09-16.json": {
+   "kapsam": "KAYIT",
+   "ham": 2,
+   "emekli": 0,
+   "olu": 2,
+   "olu_taban_ad": {
+    "kristal_model_f3_sft.pt": 1,
+    "kristal_model_f3_clean_sft.pt": 1
+   }
+  },
+  "data/eval/t0058_verification.json": {
+   "kapsam": "KAYIT",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_model.pt": 1
+   }
+  },
+  "data/eval/t0059_f4_carpenter_v2_2026-09-17.json": {
+   "kapsam": "KAYIT",
+   "ham": 3,
+   "emekli": 0,
+   "olu": 3,
+   "olu_taban_ad": {
+    "kristal_model_f3_clean.pt": 1,
+    "kristal_model_carpenter_v2.pt": 2
+   }
+  },
+  "data/eval/t0059_verification.json": {
+   "kapsam": "KAYIT",
+   "ham": 3,
+   "emekli": 0,
+   "olu": 3,
+   "olu_taban_ad": {
+    "kristal_model_carpenter_v2.pt": 2,
+    "kristal_model.pt": 1
+   }
+  },
+  "data/eval/t0060_f4_replay_2026-09-17.json": {
+   "kapsam": "KAYIT",
+   "ham": 4,
+   "emekli": 0,
+   "olu": 4,
+   "olu_taban_ad": {
+    "kristal_model_f3_clean.pt": 2,
+    "kristal_model_carpenter_v2.pt": 1,
+    "kristal_model_f4_replay.pt": 1
+   }
+  },
+  "data/eval/t0060_verification.json": {
+   "kapsam": "KAYIT",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_model_f4_replay.pt": 1
+   }
+  },
+  "data/eval/t0061_f4_replay_sweep_2026-09-17.json": {
+   "kapsam": "KAYIT",
+   "ham": 7,
+   "emekli": 0,
+   "olu": 7,
+   "olu_taban_ad": {
+    "kristal_model_f3_clean.pt": 3,
+    "kristal_model_carpenter_v2.pt": 1,
+    "kristal_model_f4_replay.pt": 1,
+    "kristal_model_f4_r05.pt": 1,
+    "kristal_model_f4_r10.pt": 1
+   }
+  },
+  "data/eval/t0063_b_prime_axis_2026-09-18.json": {
+   "kapsam": "KAYIT",
+   "ham": 10,
+   "emekli": 0,
+   "olu": 10,
+   "olu_taban_ad": {
+    "kristal_model_f3_clean.pt": 2,
+    "kristal_model_carpenter_v2.pt": 2,
+    "kristal_model_f4_r05.pt": 2,
+    "kristal_model_f4_r10.pt": 2,
+    "kristal_model_f4_replay.pt": 2
+   }
+  },
+  "data/eval/t0065_verification_processing_2026-09-18.md": {
+   "kapsam": "KAYIT",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_model_f4_r05.pt": 1
+   }
+  },
+  "data/eval/t0066_frame_addendum_2026-09-18.md": {
+   "kapsam": "KAYIT",
+   "ham": 4,
+   "emekli": 0,
+   "olu": 4,
+   "olu_taban_ad": {
+    "kristal_model.pt": 4
+   }
+  },
+  "data/eval/t0066_text_vs_rag_2026-09-18.json": {
+   "kapsam": "KAYIT",
+   "ham": 3,
+   "emekli": 0,
+   "olu": 3,
+   "olu_taban_ad": {
+    "kristal_model_f3_clean.pt": 1,
+    "kristal_model_f4_r05.pt": 1,
+    "kristal_model.pt": 1
+   }
+  },
+  "data/eval/t0066_text_vs_rag_2026-09-18.md": {
+   "kapsam": "KAYIT",
+   "ham": 2,
+   "emekli": 0,
+   "olu": 2,
+   "olu_taban_ad": {
+    "kristal_model_f3_clean.pt": 1,
+    "kristal_model_f4_r05.pt": 1
+   }
+  },
+  "data/eval/t0066_text_vs_rag_design_2026-09-18.md": {
+   "kapsam": "KAYIT",
+   "ham": 6,
+   "emekli": 0,
+   "olu": 6,
+   "olu_taban_ad": {
+    "kristal_model_f4_r05.pt": 1,
+    "kristal_model_f3_clean.pt": 1,
+    "kristal_model.pt": 4
+   }
+  },
+  "data/eval/t0067_axis_c_2026-09-18.json": {
+   "kapsam": "KAYIT",
+   "ham": 2,
+   "emekli": 0,
+   "olu": 2,
+   "olu_taban_ad": {
+    "kristal_model_f3_clean.pt": 1,
+    "kristal_model_f4_r05.pt": 1
+   }
+  },
+  "data/eval/t0067_role_2026-09-18.md": {
+   "kapsam": "KAYIT",
+   "ham": 5,
+   "emekli": 0,
+   "olu": 5,
+   "olu_taban_ad": {
+    "kristal_model.pt": 3,
+    "kristal_model_f4_r05.pt": 1,
+    "kristal_model_f3_clean.pt": 1
+   }
+  },
+  "data/eval/t0067_role_design_2026-09-18.md": {
+   "kapsam": "KAYIT",
+   "ham": 8,
+   "emekli": 0,
+   "olu": 8,
+   "olu_taban_ad": {
+    "kristal_model.pt": 4,
+    "kristal_model_f4_r05.pt": 2,
+    "kristal_model_f3_clean.pt": 2
+   }
+  },
+  "data/eval/t0067_role_measurement_2026-09-18.json": {
+   "kapsam": "KAYIT",
+   "ham": 2,
+   "emekli": 0,
+   "olu": 2,
+   "olu_taban_ad": {
+    "kristal_model_f3_clean.pt": 1,
+    "kristal_model_f4_r05.pt": 1
+   }
+  },
+  "data/eval/t0068_belge_ayristirma_2026-09-18.json": {
+   "kapsam": "KAYIT",
+   "ham": 2,
+   "emekli": 0,
+   "olu": 2,
+   "olu_taban_ad": {
+    "kristal_model_f3_clean.pt": 1,
+    "kristal_model_f4_r05.pt": 1
+   }
+  },
+  "data/eval/t0068_belge_ayristirma_design_2026-09-18.md": {
+   "kapsam": "KAYIT",
+   "ham": 2,
+   "emekli": 0,
+   "olu": 2,
+   "olu_taban_ad": {
+    "kristal_model_f3_clean.pt": 1,
+    "kristal_model_f4_r05.pt": 1
+   }
+  },
+  "data/eval/t0069_deletion_result_2026-09-18.json": {
+   "kapsam": "KAYIT",
+   "ham": 51,
+   "emekli": 0,
+   "olu": 51,
+   "olu_taban_ad": {
+    "kristal_rag_pilot_best.pt": 1,
+    "kristal_rag_pilot_ep1.pt": 1,
+    "kristal_rag_pilot_ep2.pt": 1,
+    "kristal_rag_pilot_ep3.pt": 1,
+    "kristal_rag_pilot_ep4.pt": 1,
+    "kristal_rag_pilot_ep5.pt": 1,
+    "kristal_rag_pilot_ep6.pt": 1,
+    "kristal_rag_pilot_ep7.pt": 1,
+    "kristal_rag_pilot_ep8.pt": 1,
+    "kristal_b1_5_best.pt": 1,
+    "kristal_b1_5_entity_ready.pt": 1,
+    "kristal_b1_5_epoch1.pt": 1,
+    "kristal_b1_5_epoch2.pt": 1,
+    "kristal_b1_5_epoch3.pt": 1,
+    "kristal_carpenter_model.pt": 2,
+    "kristal_model.pt": 2,
+    "kristal_model_backup.pt": 1,
+    "kristal_model_backup_v160.pt": 1,
+    "kristal_model_base.pt": 1,
+    "kristal_model_carpenter_v2.pt": 1,
+    "kristal_model_f3.pt": 1,
+    "kristal_model_f3_clean.pt": 1,
+    "kristal_model_f3_clean_sft.pt": 1,
+    "kristal_model_f3_sft.pt": 1,
+    "kristal_model_f3a.pt": 1,
+    "kristal_model_f3b.pt": 1,
+    "kristal_model_f4_r05.pt": 1,
+    "kristal_model_f4_r10.pt": 1,
+    "kristal_model_f4_replay.pt": 1,
+    "kristal_model_pre_clean.pt": 2,
+    "kristal_model_sft.pt": 2,
+    "kristal_model_step_a_ep1.pt": 1,
+    "kristal_model_step_a_ep2.pt": 1,
+    "kristal_model_step_a_ep3.pt": 1,
+    "kristal_model_step_a_final.pt": 1,
+    "kristal_model_step_b1_ep1.pt": 1,
+    "kristal_model_step_b1_ep2.pt": 1,
+    "kristal_model_step_b1_ep3.pt": 1,
+    "kristal_model_step_b1_final.pt": 2,
+    "kristal_rag_arm_a_best.pt": 1,
+    "kristal_rag_arm_b_best.pt": 1,
+    "kristal_rag_arm_c_best.pt": 1,
+    "t0046_smoke.pt": 1,
+    "t0046_verify_smoke.pt": 1,
+    "t0053_padfix_probe.pt": 1,
+    "t0053_unmasked_probe.pt": 1
+   }
+  },
+  "data/eval/t0069_model_deletion_2026-09-18.md": {
+   "kapsam": "KAYIT",
+   "ham": 54,
+   "emekli": 0,
+   "olu": 54,
+   "olu_taban_ad": {
+    "kristal_model_f4_r05.pt": 2,
+    "kristal_model.pt": 4,
+    "kristal_rag_pilot_best.pt": 1,
+    "kristal_rag_pilot_ep1.pt": 1,
+    "kristal_rag_pilot_ep2.pt": 1,
+    "kristal_rag_pilot_ep3.pt": 1,
+    "kristal_rag_pilot_ep4.pt": 1,
+    "kristal_rag_pilot_ep5.pt": 1,
+    "kristal_rag_pilot_ep6.pt": 1,
+    "kristal_rag_pilot_ep7.pt": 1,
+    "kristal_rag_pilot_ep8.pt": 1,
+    "kristal_b1_5_best.pt": 1,
+    "kristal_b1_5_entity_ready.pt": 1,
+    "kristal_b1_5_epoch1.pt": 1,
+    "kristal_b1_5_epoch2.pt": 1,
+    "kristal_b1_5_epoch3.pt": 1,
+    "kristal_carpenter_model.pt": 2,
+    "kristal_model_backup.pt": 1,
+    "kristal_model_backup_v160.pt": 1,
+    "kristal_model_base.pt": 1,
+    "kristal_model_carpenter_v2.pt": 1,
+    "kristal_model_f3.pt": 1,
+    "kristal_model_f3_clean.pt": 1,
+    "kristal_model_f3_clean_sft.pt": 1,
+    "kristal_model_f3_sft.pt": 1,
+    "kristal_model_f3a.pt": 1,
+    "kristal_model_f3b.pt": 1,
+    "kristal_model_f4_r10.pt": 1,
+    "kristal_model_f4_replay.pt": 1,
+    "kristal_model_pre_clean.pt": 2,
+    "kristal_model_sft.pt": 2,
+    "kristal_model_step_a_ep1.pt": 1,
+    "kristal_model_step_a_ep2.pt": 1,
+    "kristal_model_step_a_ep3.pt": 1,
+    "kristal_model_step_a_final.pt": 1,
+    "kristal_model_step_b1_ep1.pt": 1,
+    "kristal_model_step_b1_ep2.pt": 1,
+    "kristal_model_step_b1_ep3.pt": 1,
+    "kristal_model_step_b1_final.pt": 2,
+    "kristal_rag_arm_a_best.pt": 1,
+    "kristal_rag_arm_b_best.pt": 1,
+    "kristal_rag_arm_c_best.pt": 1,
+    "t0046_smoke.pt": 1,
+    "t0046_verify_smoke.pt": 1,
+    "t0053_padfix_probe.pt": 1,
+    "t0053_unmasked_probe.pt": 1
+   }
+  },
+  "data/eval/t0069_pre_delete_manifest.json": {
+   "kapsam": "KAYIT",
+   "ham": 51,
+   "emekli": 0,
+   "olu": 51,
+   "olu_taban_ad": {
+    "kristal_rag_pilot_best.pt": 1,
+    "kristal_rag_pilot_ep1.pt": 1,
+    "kristal_rag_pilot_ep2.pt": 1,
+    "kristal_rag_pilot_ep3.pt": 1,
+    "kristal_rag_pilot_ep4.pt": 1,
+    "kristal_rag_pilot_ep5.pt": 1,
+    "kristal_rag_pilot_ep6.pt": 1,
+    "kristal_rag_pilot_ep7.pt": 1,
+    "kristal_rag_pilot_ep8.pt": 1,
+    "kristal_b1_5_best.pt": 1,
+    "kristal_b1_5_entity_ready.pt": 1,
+    "kristal_b1_5_epoch1.pt": 1,
+    "kristal_b1_5_epoch2.pt": 1,
+    "kristal_b1_5_epoch3.pt": 1,
+    "kristal_carpenter_model.pt": 2,
+    "kristal_model.pt": 2,
+    "kristal_model_backup.pt": 1,
+    "kristal_model_backup_v160.pt": 1,
+    "kristal_model_base.pt": 1,
+    "kristal_model_carpenter_v2.pt": 1,
+    "kristal_model_f3.pt": 1,
+    "kristal_model_f3_clean.pt": 1,
+    "kristal_model_f3_clean_sft.pt": 1,
+    "kristal_model_f3_sft.pt": 1,
+    "kristal_model_f3a.pt": 1,
+    "kristal_model_f3b.pt": 1,
+    "kristal_model_f4_r05.pt": 1,
+    "kristal_model_f4_r10.pt": 1,
+    "kristal_model_f4_replay.pt": 1,
+    "kristal_model_pre_clean.pt": 2,
+    "kristal_model_sft.pt": 2,
+    "kristal_model_step_a_ep1.pt": 1,
+    "kristal_model_step_a_ep2.pt": 1,
+    "kristal_model_step_a_ep3.pt": 1,
+    "kristal_model_step_a_final.pt": 1,
+    "kristal_model_step_b1_ep1.pt": 1,
+    "kristal_model_step_b1_ep2.pt": 1,
+    "kristal_model_step_b1_ep3.pt": 1,
+    "kristal_model_step_b1_final.pt": 2,
+    "kristal_rag_arm_a_best.pt": 1,
+    "kristal_rag_arm_b_best.pt": 1,
+    "kristal_rag_arm_c_best.pt": 1,
+    "t0046_smoke.pt": 1,
+    "t0046_verify_smoke.pt": 1,
+    "t0053_padfix_probe.pt": 1,
+    "t0053_unmasked_probe.pt": 1
+   }
+  },
+  "data/eval/temel_marangoz_ikili_test_2026-09-15.json": {
+   "kapsam": "KAYIT",
+   "ham": 6,
+   "emekli": 0,
+   "olu": 6,
+   "olu_taban_ad": {
+    "kristal_carpenter_model.pt": 3,
+    "kristal_model.pt": 3
+   }
+  },
+  "data/eval/vocab_restore_recheck_2026-09-15.json": {
+   "kapsam": "KAYIT",
+   "ham": 2,
+   "emekli": 0,
+   "olu": 2,
+   "olu_taban_ad": {
+    "kristal_carpenter_model.pt": 2
+   }
+  },
+  "data/eval_metrics_results.json": {
+   "kapsam": "BELGE",
+   "ham": 6,
+   "emekli": 0,
+   "olu": 6,
+   "olu_taban_ad": {
+    "kristal_model.pt": 5,
+    "kristal_carpenter_model.pt": 1
+   }
+  },
+  "scratch/_smoke_heldout.json": {
+   "kapsam": "SCRATCH",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_model_f3_clean.pt": 1
+   }
+  },
+  "scratch/anka_r9_kanarya.md": {
+   "kapsam": "KANARYA",
+   "ham": 3,
+   "emekli": 2,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_model.pt": 1,
+    "kristal_model_f3.pt": 1,
+    "kristal_model_sft.pt": 1
+   }
+  },
+  "scratch/anka_r9_kanarya.py": {
+   "kapsam": "KANARYA",
+   "ham": 5,
+   "emekli": 2,
+   "olu": 3,
+   "olu_taban_ad": {
+    "kristal_model.pt": 3,
+    "kristal_carpenter_model.pt": 1,
+    "kristal_model_sft.pt": 1
+   }
+  },
+  "scratch/anka_r9_olu_atif_denetimi.py": {
+   "kapsam": "SCRATCH",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_model.pt": 1
+   }
+  },
+  "scratch/archive/t0063_report_original.json": {
+   "kapsam": "SCRATCH",
+   "ham": 10,
+   "emekli": 0,
+   "olu": 10,
+   "olu_taban_ad": {
+    "kristal_model_f3_clean.pt": 2,
+    "kristal_model_carpenter_v2.pt": 2,
+    "kristal_model_f4_r05.pt": 2,
+    "kristal_model_f4_r10.pt": 2,
+    "kristal_model_f4_replay.pt": 2
+   }
+  },
+  "scratch/archive/t0064_decision_original.md": {
+   "kapsam": "SCRATCH",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_model_f4_r05.pt": 1
+   }
+  },
+  "scratch/generate_t0028_report.py": {
+   "kapsam": "SCRATCH",
+   "ham": 3,
+   "emekli": 0,
+   "olu": 3,
+   "olu_taban_ad": {
+    "kristal_model_base.pt": 1,
+    "kristal_model.pt": 2
+   }
+  },
+  "scratch/measure_forward_pass.py": {
+   "kapsam": "SCRATCH",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_model_sft.pt": 1
+   }
+  },
+  "scratch/run_goal_pipeline_pre_m1.py": {
+   "kapsam": "SCRATCH",
+   "ham": 19,
+   "emekli": 0,
+   "olu": 19,
+   "olu_taban_ad": {
+    "kristal_carpenter_model.pt": 5,
+    "kristal_model.pt": 13,
+    "kristal_model_sft.pt": 1
+   }
+  },
+  "scratch/run_t0016_benchmark.py": {
+   "kapsam": "SCRATCH",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_carpenter_model.pt": 1
+   }
+  },
+  "scratch/run_t0018_diagnostic.py": {
+   "kapsam": "SCRATCH",
+   "ham": 6,
+   "emekli": 0,
+   "olu": 6,
+   "olu_taban_ad": {
+    "kristal_carpenter_model.pt": 2,
+    "kristal_model.pt": 3,
+    "kristal_model_step_b1_final.pt": 1
+   }
+  },
+  "scratch/t0034_outoutput_ab.py": {
+   "kapsam": "SCRATCH",
+   "ham": 4,
+   "emekli": 0,
+   "olu": 4,
+   "olu_taban_ad": {
+    "kristal_model.pt": 2,
+    "kristal_carpenter_model.pt": 2
+   }
+  },
+  "scratch/t0034_results.json": {
+   "kapsam": "SCRATCH",
+   "ham": 2,
+   "emekli": 0,
+   "olu": 2,
+   "olu_taban_ad": {
+    "kristal_model.pt": 1,
+    "kristal_carpenter_model.pt": 1
+   }
+  },
+  "scratch/t0035_rakam_kesme_probe.py": {
+   "kapsam": "SCRATCH",
+   "ham": 2,
+   "emekli": 0,
+   "olu": 2,
+   "olu_taban_ad": {
+    "kristal_model.pt": 1,
+    "kristal_carpenter_model.pt": 1
+   }
+  },
+  "scratch/t0036_kosullanma_probe.py": {
+   "kapsam": "SCRATCH",
+   "ham": 2,
+   "emekli": 0,
+   "olu": 2,
+   "olu_taban_ad": {
+    "kristal_model.pt": 1,
+    "kristal_carpenter_model.pt": 1
+   }
+  },
+  "scratch/t0038_olcut_probe.py": {
+   "kapsam": "SCRATCH",
+   "ham": 2,
+   "emekli": 0,
+   "olu": 2,
+   "olu_taban_ad": {
+    "kristal_model.pt": 1,
+    "kristal_carpenter_model.pt": 1
+   }
+  },
+  "scratch/t0046_spec_taslak.md": {
+   "kapsam": "SCRATCH",
+   "ham": 3,
+   "emekli": 0,
+   "olu": 3,
+   "olu_taban_ad": {
+    "kristal_model.pt": 2,
+    "t0046_smoke.pt": 1
+   }
+  },
+  "scratch/t0047_mutant_backup.py": {
+   "kapsam": "SCRATCH",
+   "ham": 18,
+   "emekli": 0,
+   "olu": 18,
+   "olu_taban_ad": {
+    "kristal_carpenter_model.pt": 5,
+    "kristal_model.pt": 13
+   }
+  },
+  "scratch/t0047_spec_taslak.md": {
+   "kapsam": "SCRATCH",
+   "ham": 6,
+   "emekli": 0,
+   "olu": 6,
+   "olu_taban_ad": {
+    "kristal_model.pt": 5,
+    "kristal_carpenter_model.pt": 1
+   }
+  },
+  "scratch/t0047_verify_probe.py": {
+   "kapsam": "SCRATCH",
+   "ham": 7,
+   "emekli": 0,
+   "olu": 7,
+   "olu_taban_ad": {
+    "kristal_model.pt": 5,
+    "kristal_carpenter_model.pt": 2
+   }
+  },
+  "scratch/t0047_verify_raw.txt": {
+   "kapsam": "SCRATCH",
+   "ham": 13,
+   "emekli": 0,
+   "olu": 13,
+   "olu_taban_ad": {
+    "kristal_model.pt": 9,
+    "kristal_carpenter_model.pt": 4
+   }
+  },
+  "scratch/t0048_backup/run_goal_pipeline.py": {
+   "kapsam": "SCRATCH",
+   "ham": 18,
+   "emekli": 0,
+   "olu": 18,
+   "olu_taban_ad": {
+    "kristal_carpenter_model.pt": 5,
+    "kristal_model.pt": 13
+   }
+  },
+  "scratch/t0048_backup/test_compiler_entrypoints.py": {
+   "kapsam": "SCRATCH",
+   "ham": 3,
+   "emekli": 0,
+   "olu": 3,
+   "olu_taban_ad": {
+    "kristal_model.pt": 1,
+    "kristal_carpenter_model.pt": 2
+   }
+  },
+  "scratch/t0048_backup/train.py": {
+   "kapsam": "SCRATCH",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_model.pt": 1
+   }
+  },
+  "scratch/t0048_backup/train_dpo.py": {
+   "kapsam": "SCRATCH",
+   "ham": 3,
+   "emekli": 0,
+   "olu": 3,
+   "olu_taban_ad": {
+    "kristal_model_sft.pt": 1,
+    "kristal_model.pt": 2
+   }
+  },
+  "scratch/t0048_m1_backup.py": {
+   "kapsam": "SCRATCH",
+   "ham": 19,
+   "emekli": 0,
+   "olu": 19,
+   "olu_taban_ad": {
+    "kristal_carpenter_model.pt": 5,
+    "kristal_model.pt": 13,
+    "kristal_model_sft.pt": 1
+   }
+  },
+  "scratch/t0048_m1b_backup.py": {
+   "kapsam": "SCRATCH",
+   "ham": 19,
+   "emekli": 0,
+   "olu": 19,
+   "olu_taban_ad": {
+    "kristal_carpenter_model.pt": 5,
+    "kristal_model.pt": 13,
+    "kristal_model_sft.pt": 1
+   }
+  },
+  "scratch/t0048_m2_backup.py": {
+   "kapsam": "SCRATCH",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_model.pt": 1
+   }
+  },
+  "scratch/t0048_spec_taslak.md": {
+   "kapsam": "SCRATCH",
+   "ham": 4,
+   "emekli": 0,
+   "olu": 4,
+   "olu_taban_ad": {
+    "kristal_model.pt": 3,
+    "kristal_carpenter_model.pt": 1
+   }
+  },
+  "scratch/t0048_verify_probe.py": {
+   "kapsam": "SCRATCH",
+   "ham": 2,
+   "emekli": 0,
+   "olu": 2,
+   "olu_taban_ad": {
+    "kristal_carpenter_model.pt": 2
+   }
+  },
+  "scratch/t0048_verify_raw.txt": {
+   "kapsam": "SCRATCH",
+   "ham": 7,
+   "emekli": 0,
+   "olu": 7,
+   "olu_taban_ad": {
+    "kristal_model_sft.pt": 3,
+    "kristal_model.pt": 2,
+    "kristal_carpenter_model.pt": 2
+   }
+  },
+  "scratch/t0049_backup/retrain_clean_models.py": {
+   "kapsam": "SCRATCH",
+   "ham": 21,
+   "emekli": 0,
+   "olu": 21,
+   "olu_taban_ad": {
+    "kristal_model.pt": 15,
+    "kristal_model_pre_clean.pt": 2,
+    "kristal_model_sft.pt": 1,
+    "kristal_carpenter_model.pt": 3
+   }
+  },
+  "scratch/t0049_m1_backup.py": {
+   "kapsam": "SCRATCH",
+   "ham": 21,
+   "emekli": 0,
+   "olu": 21,
+   "olu_taban_ad": {
+    "kristal_model.pt": 15,
+    "kristal_model_pre_clean.pt": 2,
+    "kristal_model_sft.pt": 1,
+    "kristal_carpenter_model.pt": 3
+   }
+  },
+  "scratch/t0049_m2_backup.py": {
+   "kapsam": "SCRATCH",
+   "ham": 21,
+   "emekli": 0,
+   "olu": 21,
+   "olu_taban_ad": {
+    "kristal_model.pt": 15,
+    "kristal_model_pre_clean.pt": 2,
+    "kristal_model_sft.pt": 1,
+    "kristal_carpenter_model.pt": 3
+   }
+  },
+  "scratch/t0049_spec_taslak.md": {
+   "kapsam": "SCRATCH",
+   "ham": 2,
+   "emekli": 0,
+   "olu": 2,
+   "olu_taban_ad": {
+    "kristal_model_pre_clean.pt": 1,
+    "kristal_model_sft.pt": 1
+   }
+  },
+  "scratch/t0049_verify_probe.py": {
+   "kapsam": "SCRATCH",
+   "ham": 8,
+   "emekli": 0,
+   "olu": 8,
+   "olu_taban_ad": {
+    "kristal_model.pt": 4,
+    "kristal_model_pre_clean.pt": 2,
+    "kristal_carpenter_model.pt": 2
+   }
+  },
+  "scratch/t0049_verify_raw.txt": {
+   "kapsam": "SCRATCH",
+   "ham": 14,
+   "emekli": 0,
+   "olu": 14,
+   "olu_taban_ad": {
+    "kristal_model.pt": 4,
+    "kristal_model_pre_clean.pt": 4,
+    "kristal_model_sft.pt": 3,
+    "kristal_model_step_b1_final.pt": 1,
+    "kristal_carpenter_model.pt": 2
+   }
+  },
+  "scratch/t0051_spec_taslak.md": {
+   "kapsam": "SCRATCH",
+   "ham": 5,
+   "emekli": 0,
+   "olu": 5,
+   "olu_taban_ad": {
+    "kristal_model_f3a.pt": 2,
+    "kristal_model.pt": 3
+   }
+  },
+  "scratch/t0051_verify_probe.py": {
+   "kapsam": "SCRATCH",
+   "ham": 5,
+   "emekli": 0,
+   "olu": 5,
+   "olu_taban_ad": {
+    "kristal_model.pt": 1,
+    "kristal_model_f3a.pt": 1,
+    "kristal_model_f3b.pt": 1,
+    "kristal_model_pre_clean.pt": 1,
+    "kristal_carpenter_model.pt": 1
+   }
+  },
+  "scratch/t0052_spec_taslak.md": {
+   "kapsam": "SCRATCH",
+   "ham": 3,
+   "emekli": 0,
+   "olu": 3,
+   "olu_taban_ad": {
+    "kristal_model_f3.pt": 2,
+    "kristal_model.pt": 1
+   }
+  },
+  "scratch/t0052_verify_probe.py": {
+   "kapsam": "SCRATCH",
+   "ham": 6,
+   "emekli": 0,
+   "olu": 6,
+   "olu_taban_ad": {
+    "kristal_model.pt": 1,
+    "kristal_model_f3a.pt": 1,
+    "kristal_model_f3b.pt": 1,
+    "kristal_model_f3_sft.pt": 1,
+    "kristal_model_f3.pt": 1,
+    "kristal_carpenter_model.pt": 1
+   }
+  },
+  "scratch/t0053_spec_taslak.md": {
+   "kapsam": "SCRATCH",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_model.pt": 1
+   }
+  },
+  "scratch/t0054_ab_spec_taslak.md": {
+   "kapsam": "SCRATCH",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_model.pt": 1
+   }
+  },
+  "scratch/t0054_verify_probe.py": {
+   "kapsam": "SCRATCH",
+   "ham": 7,
+   "emekli": 0,
+   "olu": 7,
+   "olu_taban_ad": {
+    "kristal_model.pt": 1,
+    "kristal_model_f3a.pt": 1,
+    "kristal_model_f3b.pt": 1,
+    "kristal_model_f3_sft.pt": 1,
+    "kristal_model_f3.pt": 1,
+    "kristal_model_f3_clean_sft.pt": 1,
+    "kristal_model_f3_clean.pt": 1
+   }
+  },
+  "scratch/t0057_f4_spec_taslak.md": {
+   "kapsam": "SCRATCH",
+   "ham": 4,
+   "emekli": 0,
+   "olu": 4,
+   "olu_taban_ad": {
+    "kristal_model_carpenter_v2.pt": 1,
+    "kristal_model_f3_clean.pt": 1,
+    "kristal_model_f3.pt": 1,
+    "kristal_carpenter_model.pt": 1
+   }
+  },
+  "scratch/t0057_mutant_backup.py": {
+   "kapsam": "SCRATCH",
+   "ham": 2,
+   "emekli": 0,
+   "olu": 2,
+   "olu_taban_ad": {
+    "kristal_model.pt": 2
+   }
+  },
+  "scratch/t0058_g3_probe.py": {
+   "kapsam": "SCRATCH",
+   "ham": 3,
+   "emekli": 0,
+   "olu": 3,
+   "olu_taban_ad": {
+    "kristal_model.pt": 1,
+    "kristal_model_f3.pt": 1,
+    "kristal_model_f3_clean.pt": 1
+   }
+  },
+  "scratch/t0058_verify_probe.py": {
+   "kapsam": "SCRATCH",
+   "ham": 4,
+   "emekli": 0,
+   "olu": 4,
+   "olu_taban_ad": {
+    "kristal_model.pt": 2,
+    "kristal_model_f3.pt": 1,
+    "kristal_model_f3_clean.pt": 1
+   }
+  },
+  "scratch/t0061_write_notes.py": {
+   "kapsam": "SCRATCH",
+   "ham": 6,
+   "emekli": 0,
+   "olu": 6,
+   "olu_taban_ad": {
+    "kristal_model_f4_r05.pt": 3,
+    "kristal_model_f3_clean.pt": 2,
+    "kristal_model_f4_r10.pt": 1
+   }
+  },
+  "scratch/t0062_ab_heldout_gts.json": {
+   "kapsam": "SCRATCH",
+   "ham": 5,
+   "emekli": 0,
+   "olu": 5,
+   "olu_taban_ad": {
+    "kristal_model_f3_clean.pt": 1,
+    "kristal_model_carpenter_v2.pt": 1,
+    "kristal_model_f4_replay.pt": 1,
+    "kristal_model_f4_r05.pt": 1,
+    "kristal_model_f4_r10.pt": 1
+   }
+  },
+  "scratch/t0062_ab_heldout_raw.json": {
+   "kapsam": "SCRATCH",
+   "ham": 5,
+   "emekli": 0,
+   "olu": 5,
+   "olu_taban_ad": {
+    "kristal_model_f3_clean.pt": 1,
+    "kristal_model_carpenter_v2.pt": 1,
+    "kristal_model_f4_replay.pt": 1,
+    "kristal_model_f4_r05.pt": 1,
+    "kristal_model_f4_r10.pt": 1
+   }
+  },
+  "scratch/t0062_ab_old_control.json": {
+   "kapsam": "SCRATCH",
+   "ham": 5,
+   "emekli": 0,
+   "olu": 5,
+   "olu_taban_ad": {
+    "kristal_model_f3_clean.pt": 1,
+    "kristal_model_carpenter_v2.pt": 1,
+    "kristal_model_f4_replay.pt": 1,
+    "kristal_model_f4_r05.pt": 1,
+    "kristal_model_f4_r10.pt": 1
+   }
+  },
+  "scratch/t0062_c5_carpenter_v2.json": {
+   "kapsam": "SCRATCH",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_model_carpenter_v2.pt": 1
+   }
+  },
+  "scratch/t0062_c5_f3_clean.json": {
+   "kapsam": "SCRATCH",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_model_f3_clean.pt": 1
+   }
+  },
+  "scratch/t0062_c5_f4_r05.json": {
+   "kapsam": "SCRATCH",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_model_f4_r05.pt": 1
+   }
+  },
+  "scratch/t0062_c5_f4_r10.json": {
+   "kapsam": "SCRATCH",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_model_f4_r10.pt": 1
+   }
+  },
+  "scratch/t0062_c5_f4_replay.json": {
+   "kapsam": "SCRATCH",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_model_f4_replay.pt": 1
+   }
+  },
+  "scratch/t0062_c_full_carpenter_v2.json": {
+   "kapsam": "SCRATCH",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_model_carpenter_v2.pt": 1
+   }
+  },
+  "scratch/t0062_c_full_f3_clean.json": {
+   "kapsam": "SCRATCH",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_model_f3_clean.pt": 1
+   }
+  },
+  "scratch/t0062_c_full_f4_r05.json": {
+   "kapsam": "SCRATCH",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_model_f4_r05.pt": 1
+   }
+  },
+  "scratch/t0062_c_full_f4_r10.json": {
+   "kapsam": "SCRATCH",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_model_f4_r10.pt": 1
+   }
+  },
+  "scratch/t0062_c_full_f4_replay.json": {
+   "kapsam": "SCRATCH",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_model_f4_replay.pt": 1
+   }
+  },
+  "scratch/t0062_carpenter_eval_full.py": {
+   "kapsam": "SCRATCH",
+   "ham": 2,
+   "emekli": 0,
+   "olu": 2,
+   "olu_taban_ad": {
+    "kristal_b1_5_best.pt": 1,
+    "kristal_model.pt": 1
+   }
+  },
+  "scratch/t0062_devcheck_raw_mps.json": {
+   "kapsam": "SCRATCH",
+   "ham": 2,
+   "emekli": 0,
+   "olu": 2,
+   "olu_taban_ad": {
+    "kristal_model_f3_clean.pt": 1,
+    "kristal_model_carpenter_v2.pt": 1
+   }
+  },
+  "scratch/t0063_b_gts_dict.json": {
+   "kapsam": "SCRATCH",
+   "ham": 5,
+   "emekli": 0,
+   "olu": 5,
+   "olu_taban_ad": {
+    "kristal_model_f3_clean.pt": 1,
+    "kristal_model_carpenter_v2.pt": 1,
+    "kristal_model_f4_r05.pt": 1,
+    "kristal_model_f4_r10.pt": 1,
+    "kristal_model_f4_replay.pt": 1
+   }
+  },
+  "scratch/t0063_b_raw_full.json": {
+   "kapsam": "SCRATCH",
+   "ham": 5,
+   "emekli": 0,
+   "olu": 5,
+   "olu_taban_ad": {
+    "kristal_model_f3_clean.pt": 1,
+    "kristal_model_carpenter_v2.pt": 1,
+    "kristal_model_f4_r05.pt": 1,
+    "kristal_model_f4_r10.pt": 1,
+    "kristal_model_f4_replay.pt": 1
+   }
+  },
+  "scratch/t0064_make_decision.py": {
+   "kapsam": "SCRATCH",
+   "ham": 2,
+   "emekli": 0,
+   "olu": 2,
+   "olu_taban_ad": {
+    "kristal_model_f4_r05.pt": 2
+   }
+  },
+  "scratch/t0065_make_record.py": {
+   "kapsam": "SCRATCH",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_model_f4_r05.pt": 1
+   }
+  },
+  "scratch/t0066_measure.py": {
+   "kapsam": "SCRATCH",
+   "ham": 3,
+   "emekli": 0,
+   "olu": 3,
+   "olu_taban_ad": {
+    "kristal_model_f3_clean.pt": 1,
+    "kristal_model_f4_r05.pt": 1,
+    "kristal_model.pt": 1
+   }
+  },
+  "scratch/t0066_pilot.py": {
+   "kapsam": "SCRATCH",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_model_f3_clean.pt": 1
+   }
+  },
+  "scratch/t0067_axis_c.py": {
+   "kapsam": "SCRATCH",
+   "ham": 2,
+   "emekli": 0,
+   "olu": 2,
+   "olu_taban_ad": {
+    "kristal_model_f3_clean.pt": 1,
+    "kristal_model_f4_r05.pt": 1
+   }
+  },
+  "scratch/t0067_frame_addendum.py": {
+   "kapsam": "SCRATCH",
+   "ham": 4,
+   "emekli": 0,
+   "olu": 4,
+   "olu_taban_ad": {
+    "kristal_model.pt": 4
+   }
+  },
+  "scratch/t0067_handikap.py": {
+   "kapsam": "SCRATCH",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_model.pt": 1
+   }
+  },
+  "scratch/t0067_make_note.py": {
+   "kapsam": "SCRATCH",
+   "ham": 2,
+   "emekli": 0,
+   "olu": 2,
+   "olu_taban_ad": {
+    "kristal_model.pt": 2
+   }
+  },
+  "scratch/t0067_make_report.py": {
+   "kapsam": "SCRATCH",
+   "ham": 5,
+   "emekli": 0,
+   "olu": 5,
+   "olu_taban_ad": {
+    "kristal_model.pt": 3,
+    "kristal_model_f4_r05.pt": 1,
+    "kristal_model_f3_clean.pt": 1
+   }
+  },
+  "scratch/t0067_measure.py": {
+   "kapsam": "SCRATCH",
+   "ham": 2,
+   "emekli": 0,
+   "olu": 2,
+   "olu_taban_ad": {
+    "kristal_model_f3_clean.pt": 1,
+    "kristal_model_f4_r05.pt": 1
+   }
+  },
+  "scratch/t0067_write_design.py": {
+   "kapsam": "SCRATCH",
+   "ham": 8,
+   "emekli": 0,
+   "olu": 8,
+   "olu_taban_ad": {
+    "kristal_model.pt": 4,
+    "kristal_model_f4_r05.pt": 2,
+    "kristal_model_f3_clean.pt": 2
+   }
+  },
+  "scratch/t0068_measure.py": {
+   "kapsam": "SCRATCH",
+   "ham": 2,
+   "emekli": 0,
+   "olu": 2,
+   "olu_taban_ad": {
+    "kristal_model_f3_clean.pt": 1,
+    "kristal_model_f4_r05.pt": 1
+   }
+  },
+  "scratch/t0068_write_design.py": {
+   "kapsam": "SCRATCH",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_model_f3_clean.pt": 1
+   }
+  },
+  "scratch/t0069_make_report.py": {
+   "kapsam": "SCRATCH",
+   "ham": 4,
+   "emekli": 0,
+   "olu": 4,
+   "olu_taban_ad": {
+    "kristal_model_f4_r05.pt": 1,
+    "kristal_model.pt": 3
+   }
+  },
+  "scratch/t0079_train_oncesi.py": {
+   "kapsam": "SCRATCH",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_model.pt": 1
+   }
+  },
+  "scratch/test_inference_pilot.py": {
+   "kapsam": "SCRATCH",
+   "ham": 4,
+   "emekli": 0,
+   "olu": 4,
+   "olu_taban_ad": {
+    "kristal_model_base.pt": 1,
+    "kristal_model.pt": 1,
+    "kristal_b1_5_best.pt": 1,
+    "kristal_carpenter_model.pt": 1
+   }
+  },
+  "scratch/test_user_case.py": {
+   "kapsam": "SCRATCH",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_model.pt": 1
+   }
+  },
+  "scratch/train_pre_m2.py": {
+   "kapsam": "SCRATCH",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_model.pt": 1
+   }
+  },
+  "scratch/verify_clean_models.py": {
+   "kapsam": "SCRATCH",
+   "ham": 4,
+   "emekli": 0,
+   "olu": 4,
+   "olu_taban_ad": {
+    "kristal_model.pt": 2,
+    "kristal_carpenter_model.pt": 2
+   }
+  },
+  "scratch/verify_pedagogical_models.py": {
+   "kapsam": "SCRATCH",
+   "ham": 4,
+   "emekli": 0,
+   "olu": 4,
+   "olu_taban_ad": {
+    "kristal_carpenter_model.pt": 2,
+    "kristal_model.pt": 2
+   }
+  },
+  "scratch/verify_t0027_all_criteria.py": {
+   "kapsam": "SCRATCH",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_b1_5_best.pt": 1
+   }
+  },
+  "scripts/diagnostics_b2_reality_check.py": {
+   "kapsam": "KOD",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_rag_pilot_best.pt": 1
+   }
+  },
+  "scripts/diagnostics_d_rand_and_syntax.py": {
+   "kapsam": "KOD",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_rag_pilot_best.pt": 1
+   }
+  },
+  "scripts/diagnostics_history_gap.py": {
+   "kapsam": "KOD",
+   "ham": 2,
+   "emekli": 0,
+   "olu": 2,
+   "olu_taban_ad": {
+    "kristal_b1_5_best.pt": 1,
+    "kristal_model.pt": 1
+   }
+  },
+  "scripts/diagnostics_in_domain_swap.py": {
+   "kapsam": "KOD",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_rag_pilot_best.pt": 1
+   }
+  },
+  "scripts/diagnostics_t3_t4.py": {
+   "kapsam": "KOD",
+   "ham": 2,
+   "emekli": 0,
+   "olu": 2,
+   "olu_taban_ad": {
+    "kristal_model_step_a_final.pt": 1,
+    "kristal_model.pt": 1
+   }
+  },
+  "scripts/evaluate_b1_5_rigorous.py": {
+   "kapsam": "KOD",
+   "ham": 2,
+   "emekli": 0,
+   "olu": 2,
+   "olu_taban_ad": {
+    "kristal_b1_5_best.pt": 1,
+    "kristal_model.pt": 1
+   }
+  },
+  "scripts/evaluate_carpenter_generation_100.py": {
+   "kapsam": "KOD",
+   "ham": 2,
+   "emekli": 0,
+   "olu": 2,
+   "olu_taban_ad": {
+    "kristal_b1_5_best.pt": 1,
+    "kristal_model.pt": 1
+   }
+  },
+  "scripts/evaluate_chat.py": {
+   "kapsam": "KOD",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_model.pt": 1
+   }
+  },
+  "scripts/evaluate_mcq_conditioning.py": {
+   "kapsam": "KOD",
+   "ham": 3,
+   "emekli": 0,
+   "olu": 3,
+   "olu_taban_ad": {
+    "kristal_model.pt": 1,
+    "kristal_carpenter_model.pt": 2
+   }
+  },
+  "scripts/evaluate_on_train_data.py": {
+   "kapsam": "KOD",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_model.pt": 1
+   }
+  },
+  "scripts/evaluate_rag_baselines.py": {
+   "kapsam": "KOD",
+   "ham": 3,
+   "emekli": 0,
+   "olu": 3,
+   "olu_taban_ad": {
+    "kristal_b1_5_best.pt": 3
+   }
+  },
+  "scripts/evaluate_rag_pilot.py": {
+   "kapsam": "KOD",
+   "ham": 3,
+   "emekli": 0,
+   "olu": 3,
+   "olu_taban_ad": {
+    "kristal_rag_pilot_best.pt": 2,
+    "kristal_b1_5_best.pt": 1
+   }
+  },
+  "scripts/evaluate_realistic_rag_rigorous.py": {
+   "kapsam": "KOD",
+   "ham": 3,
+   "emekli": 0,
+   "olu": 3,
+   "olu_taban_ad": {
+    "kristal_rag_arm_a_best.pt": 1,
+    "kristal_rag_arm_b_best.pt": 1,
+    "kristal_rag_arm_c_best.pt": 1
+   }
+  },
+  "scripts/evaluate_sft_benchmarks.py": {
+   "kapsam": "KOD",
+   "ham": 6,
+   "emekli": 0,
+   "olu": 6,
+   "olu_taban_ad": {
+    "kristal_model.pt": 3,
+    "kristal_carpenter_model.pt": 3
+   }
+  },
+  "scripts/merge_teacher_dataset.py": {
+   "kapsam": "KOD",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_model.pt": 1
+   }
+  },
+  "scripts/prepare_entity_checkpoint.py": {
+   "kapsam": "KOD",
+   "ham": 4,
+   "emekli": 0,
+   "olu": 4,
+   "olu_taban_ad": {
+    "kristal_b1_5_best.pt": 2,
+    "kristal_b1_5_entity_ready.pt": 2
+   }
+  },
+  "scripts/retrain_clean_models.py": {
+   "kapsam": "KOD",
+   "ham": 21,
+   "emekli": 0,
+   "olu": 21,
+   "olu_taban_ad": {
+    "kristal_model.pt": 15,
+    "kristal_model_pre_clean.pt": 2,
+    "kristal_model_sft.pt": 1,
+    "kristal_carpenter_model.pt": 3
+   }
+  },
+  "scripts/run_agent_arena.py": {
+   "kapsam": "KOD",
+   "ham": 1,
+   "emekli": 1,
+   "olu": 0,
+   "olu_taban_ad": {
+    "kristal_model.pt": 1
+   }
+  },
+  "scripts/run_experiment_a.py": {
+   "kapsam": "KOD",
+   "ham": 2,
+   "emekli": 0,
+   "olu": 2,
+   "olu_taban_ad": {
+    "kristal_carpenter_model.pt": 2
+   }
+  },
+  "scripts/run_experiment_b.py": {
+   "kapsam": "KOD",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_carpenter_model.pt": 1
+   }
+  },
+  "scripts/run_experiment_c.py": {
+   "kapsam": "KOD",
+   "ham": 3,
+   "emekli": 0,
+   "olu": 3,
+   "olu_taban_ad": {
+    "kristal_carpenter_model.pt": 3
+   }
+  },
+  "scripts/run_goal_pipeline.py": {
+   "kapsam": "KOD",
+   "ham": 1,
+   "emekli": 1,
+   "olu": 0,
+   "olu_taban_ad": {
+    "kristal_carpenter_model.pt": 1
+   }
+  },
+  "scripts/t0027_measure_models.py": {
+   "kapsam": "KOD",
+   "ham": 26,
+   "emekli": 0,
+   "olu": 26,
+   "olu_taban_ad": {
+    "kristal_rag_arm_a_best.pt": 1,
+    "kristal_rag_pilot_best.pt": 1,
+    "kristal_rag_arm_b_best.pt": 1,
+    "kristal_rag_arm_c_best.pt": 1,
+    "kristal_model.pt": 5,
+    "kristal_b1_5_epoch1.pt": 2,
+    "kristal_b1_5_epoch2.pt": 1,
+    "kristal_b1_5_epoch3.pt": 2,
+    "kristal_b1_5_best.pt": 4,
+    "kristal_model_backup_v160.pt": 1,
+    "kristal_model_backup.pt": 1,
+    "kristal_model_base.pt": 3,
+    "kristal_carpenter_model.pt": 3
+   }
+  },
+  "scripts/test_rag_interactive.py": {
+   "kapsam": "KOD",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_model.pt": 1
+   }
+  },
+  "scripts/test_sft_checkpoint.py": {
+   "kapsam": "KOD",
+   "ham": 2,
+   "emekli": 0,
+   "olu": 2,
+   "olu_taban_ad": {
+    "kristal_model_sft.pt": 1,
+    "kristal_model.pt": 1
+   }
+  },
+  "scripts/train_chat_sft.py": {
+   "kapsam": "KOD",
+   "ham": 2,
+   "emekli": 0,
+   "olu": 2,
+   "olu_taban_ad": {
+    "kristal_model.pt": 2
+   }
+  },
+  "scripts/train_rag_pilot.py": {
+   "kapsam": "KOD",
+   "ham": 4,
+   "emekli": 0,
+   "olu": 4,
+   "olu_taban_ad": {
+    "kristal_rag_pilot_best.pt": 2,
+    "kristal_b1_5_best.pt": 2
+   }
+  },
+  "scripts/train_realistic_rag_arms.py": {
+   "kapsam": "KOD",
+   "ham": 2,
+   "emekli": 0,
+   "olu": 2,
+   "olu_taban_ad": {
+    "kristal_b1_5_best.pt": 1,
+    "kristal_b1_5_entity_ready.pt": 1
+   }
+  },
+  "scripts/train_scientific_sft.py": {
+   "kapsam": "KOD",
+   "ham": 3,
+   "emekli": 0,
+   "olu": 3,
+   "olu_taban_ad": {
+    "kristal_model.pt": 2,
+    "kristal_model_sft.pt": 1
+   }
+  },
+  "scripts/train_sft_fine_tuning.py": {
+   "kapsam": "KOD",
+   "ham": 2,
+   "emekli": 0,
+   "olu": 2,
+   "olu_taban_ad": {
+    "kristal_model.pt": 1,
+    "kristal_model_sft.pt": 1
+   }
+  },
+  "scripts/train_step_a_ablation.py": {
+   "kapsam": "KOD",
+   "ham": 3,
+   "emekli": 0,
+   "olu": 3,
+   "olu_taban_ad": {
+    "kristal_model.pt": 1,
+    "kristal_model_step_a_final.pt": 2
+   }
+  },
+  "scripts/train_step_b1_5_rigorous.py": {
+   "kapsam": "KOD",
+   "ham": 6,
+   "emekli": 0,
+   "olu": 6,
+   "olu_taban_ad": {
+    "kristal_b1_5_best.pt": 2,
+    "kristal_model_step_b1_final.pt": 1,
+    "kristal_model_step_a_final.pt": 1,
+    "kristal_model.pt": 2
+   }
+  },
+  "scripts/train_step_b1_canonical.py": {
+   "kapsam": "KOD",
+   "ham": 3,
+   "emekli": 0,
+   "olu": 3,
+   "olu_taban_ad": {
+    "kristal_model_step_a_final.pt": 1,
+    "kristal_model_step_b1_final.pt": 2
+   }
+  },
+  "test_model.py": {
+   "kapsam": "KOD",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_model.pt": 1
+   }
+  },
+  "test_model_decompiler.py": {
+   "kapsam": "KOD",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_model.pt": 1
+   }
+  },
+  "tests/test_compiler_entrypoints.py": {
+   "kapsam": "KOD",
+   "ham": 10,
+   "emekli": 0,
+   "olu": 10,
+   "olu_taban_ad": {
+    "kristal_model.pt": 1,
+    "kristal_carpenter_model.pt": 2,
+    "kristal_model_sft.pt": 4,
+    "kristal_model_pre_clean.pt": 3
+   }
+  },
+  "train_dpo.py": {
+   "kapsam": "KOD",
+   "ham": 3,
+   "emekli": 3,
+   "olu": 0,
+   "olu_taban_ad": {
+    "kristal_model_sft.pt": 1,
+    "kristal_model.pt": 2
+   }
+  },
+  "verify_rag.py": {
+   "kapsam": "KOD",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_model.pt": 1
+   }
+  },
+  "wiki/entities/chat_prompt.md": {
+   "kapsam": "BELGE",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_model.pt": 1
+   }
+  },
+  "wiki/entities/model_checkpoints.md": {
+   "kapsam": "BELGE",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_b1_5_best.pt": 1
+   }
+  },
+  "wiki/log.md": {
+   "kapsam": "BELGE",
+   "ham": 3,
+   "emekli": 0,
+   "olu": 3,
+   "olu_taban_ad": {
+    "kristal_model.pt": 1,
+    "kristal_model_f3.pt": 2
+   }
+  },
+  "wiki/synthesis.md": {
+   "kapsam": "BELGE",
+   "ham": 1,
+   "emekli": 0,
+   "olu": 1,
+   "olu_taban_ad": {
+    "kristal_model_f3.pt": 1
+   }
+  }
+ },
+ "hatalar": []
+}

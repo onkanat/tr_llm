@@ -1,0 +1,208 @@
+{
+  "gorev": "T-0074",
+  "tur": "KABUL OLCUMU",
+  "baslangic_utc": "2026-09-18T14:13:45Z",
+  "tohum": 1234,
+  "beklenen_ilk_kayip_ln_V": 10.3998,
+  "G1": {
+    "ad": "g1_pretrain_1adim",
+    "rc": 0,
+    "duvar_sure": 5.68,
+    "log": "scratch/t0074_logs/g1_pretrain_1adim.log",
+    "ilk_kayip": 10.6204,
+    "son_kayip": 10.6204,
+    "kayip_ornek": [
+      10.6204
+    ],
+    "adim_sure_ornek": [
+      [
+        1,
+        0.9
+      ]
+    ],
+    "toplam_sure": 0.9,
+    "mps": true,
+    "runtime_error": false,
+    "beklenen": 10.3998,
+    "sapma": 0.2206,
+    "PASS": true
+  },
+  "tohum_determinizmi": {
+    "ayni": false,
+    "ilk_kayip_A": 10.6204,
+    "ilk_kayip_A2": 10.6204
+  },
+  "G5": {
+    "ad": "g5_pretrain_200adim",
+    "rc": 0,
+    "duvar_sure": 101.67,
+    "log": "scratch/t0074_logs/g5_pretrain_200adim.log",
+    "ilk_kayip": 10.6204,
+    "son_kayip": 5.0228,
+    "kayip_ornek": [
+      10.6204,
+      6.1433,
+      6.0048,
+      5.7343,
+      5.6738,
+      5.7827,
+      4.9475,
+      5.1584,
+      4.9694,
+      4.9841,
+      5.1272,
+      5.2085,
+      4.7416,
+      4.8803,
+      4.1968,
+      5.079,
+      5.0733,
+      5.3381,
+      4.743,
+      4.1722,
+      5.0228
+    ],
+    "adim_sure_ornek": [
+      [
+        1,
+        0.86
+      ],
+      [
+        10,
+        0.4
+      ],
+      [
+        20,
+        0.4
+      ],
+      [
+        30,
+        0.4
+      ],
+      [
+        40,
+        0.4
+      ],
+      [
+        50,
+        0.4
+      ],
+      [
+        60,
+        0.39
+      ],
+      [
+        70,
+        0.4
+      ],
+      [
+        80,
+        0.39
+      ],
+      [
+        90,
+        0.4
+      ],
+      [
+        100,
+        0.4
+      ],
+      [
+        110,
+        0.39
+      ],
+      [
+        120,
+        0.42
+      ],
+      [
+        130,
+        0.4
+      ],
+      [
+        140,
+        0.41
+      ],
+      [
+        150,
+        0.4
+      ],
+      [
+        160,
+        0.4
+      ],
+      [
+        170,
+        0.5
+      ],
+      [
+        180,
+        0.47
+      ],
+      [
+        190,
+        0.41
+      ],
+      [
+        200,
+        0.42
+      ]
+    ],
+    "toplam_sure": 97.3,
+    "mps": true,
+    "runtime_error": false,
+    "frobenius_A_vs_B": 123.11970120696144,
+    "son10_ortalama": 4.8456,
+    "ilk": 10.6204,
+    "PASS": true
+  },
+  "G3": {
+    "mps": {
+      "rc": 1,
+      "runtime_error": true,
+      "log": "scratch/t0074_logs/g3_sft_mps.log"
+    },
+    "cpu": {
+      "rc": 1,
+      "runtime_error": true,
+      "log": "scratch/t0074_logs/g3_sft_cpu.log"
+    },
+    "mesaj_mps": true,
+    "PASS": true
+  },
+  "G2": {
+    "pad_id": 1,
+    "pad_konum": 9,
+    "kayip_ignore_ile": 5.06516171,
+    "kayip_pad_konumlari_cikarilarak": 5.06516123,
+    "fark": 4.76837e-07,
+    "esik": 1e-06,
+    "PASS": true
+  },
+  "bitis_utc": "2026-09-18T14:15:42Z",
+  "kapi_ozet": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G5_gecerlilik_onkosulu": true
+  },
+  "uretilen": {
+    "data/eval/t0074_acceptance_2026-09-18.json": "4bfd3a2d11f7a3fd607e79204d3217d27f98ed87d3d913e19e63583ea6c86bdc",
+    "data/eval/t0074_acceptance_2026-09-18.md": "3991b98e8eb0899d90723876ca917e6460f172da2c0d9cd224992c36ec305332",
+    "/Users/hakankilicaslan/Git/tr_llm/scratch/t0074_kabul.py": "9f667e3d8ea711f649c528ee55078a2884e2306a708c8777fb843ea6dfa9a4ff"
+  },
+  "G4": {
+    "rc": 0,
+    "passed": 212,
+    "failed": 0,
+    "kritik": [],
+    "log": "scratch/t0074_logs/g4_pytest.log",
+    "PASS": true
+  },
+  "rapor": {
+    "data/eval/t0074_acceptance_2026-09-18.md": "ba5849d8d358ae587b534f7d22c724a453897567cb319160746c289c03de4ad9",
+    "uretildi_utc": "2026-09-18T14:18:46Z"
+  }
+}

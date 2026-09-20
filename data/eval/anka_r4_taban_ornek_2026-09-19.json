@@ -1,0 +1,2196 @@
+{
+  "gorev": "T-0080",
+  "asama": "Faz 4 — kapsam kapilari (SONRA), r1_on ile AYNI ornekleyici",
+  "baslangic_utc": "2026-09-19T11:10:01Z",
+  "kimlik": {
+    "sozluk": {
+      "yol": "data/rebuild/vocab_base_32852.json",
+      "sha256": "7611b6a523a2bb524cc21aa9cc64235aa6a2ae99f87f46ac51cb2915e61164ad"
+    },
+    "lexicon": {
+      "yol": "data/lexicon/roots.tsv",
+      "sha256": "fe3005e5e2a594f09cbcfc3286e2c8812953ae6614333815ab87a7e3a6763598"
+    },
+    "regresyon": {
+      "yol": "tests/morphology_regression_100.json",
+      "sha256": "cbe00f31c4dcc34ba2baed5317f1bf38b4e69b130c5271205c1dd5709dab18da"
+    }
+  },
+  "K0": {
+    "hatali": [],
+    "TEMIZ": true
+  },
+  "G4_filtre_kontrolu": {
+    "buyuk_id": 1354,
+    "poz_kaybolan": [],
+    "neg_sizan": [],
+    "TEMIZ": true
+  },
+  "V1_curutme_kontrolu": {
+    "bugun_dogru_ve_V1_bozuyor": [
+      "bunun",
+      "onun",
+      "ölmeden",
+      "topraklar",
+      "günümüzde"
+    ],
+    "beklenen": [
+      "bunun",
+      "onun",
+      "ölmeden",
+      "topraklar",
+      "günümüzde"
+    ]
+  },
+  "orneklem": {
+    "kabul_makale": 3212,
+    "dosya_basi": {
+      "tr-00000.parquet": 1688,
+      "tr-00001.parquet": 1524
+    },
+    "kelime_jetonu": 2449120,
+    "benzersiz_yuzey": 236573,
+    "bin_jeton": 4738026,
+    "akis_sure_sn": 239.7
+  },
+  "bin_siniflar": {
+    "DIGER": {
+      "jeton": 4140965,
+      "yuzde": 87.3985
+    },
+    "PN": {
+      "jeton": 379922,
+      "yuzde": 8.0186
+    },
+    "UNK": {
+      "jeton": 74543,
+      "yuzde": 1.5733
+    },
+    "LIT": {
+      "jeton": 142596,
+      "yuzde": 3.0096
+    }
+  },
+  "bin_payda_notu": "A1 ureticisi AYNI yolu kullanir (anka_a1_build.py:108); A1 tam kulliyat: PN %7,9365 · UNK %2,6346 · LIT %2,3029",
+  "son_guncelleme_utc": "2026-09-19T11:15:19Z",
+  "G6_pozitif_kontrol": [
+    {
+      "yuzey": "başkenti",
+      "vektor": [
+        "başkent",
+        "POSS_3SG"
+      ],
+      "geri": "başkenti",
+      "beklenen": "başkenti",
+      "TAM": true
+    },
+    {
+      "yuzey": "yılında",
+      "vektor": [
+        "yıl",
+        "POSS_2SG",
+        "CASE_LOC"
+      ],
+      "geri": "yılında",
+      "beklenen": "yılında",
+      "TAM": true
+    },
+    {
+      "yuzey": "Ankarada",
+      "vektor": [
+        "Ankara",
+        "CASE_LOC"
+      ],
+      "geri": "Ankara'da",
+      "beklenen": "Ankara'da",
+      "TAM": true
+    }
+  ],
+  "G6_kesme_simetrisi": [
+    {
+      "yuzey": "Ankarada",
+      "geri": "Ankara'da",
+      "yeniden_compile": [],
+      "SIMETRIK": false
+    }
+  ],
+  "olcum": {
+    "cozulebilen_yuzey": 113496,
+    "G1_ihlal": 2700,
+    "G1_yuzde": 2.3789,
+    "V1_degisen_kok": 2700,
+    "G6_TAM": 86784,
+    "G6_ALTERNATIF": 23220,
+    "G6_HATA": 3492,
+    "G6_yuzde": 96.9232,
+    "G6_decompiler_istisna": 0,
+    "HATA_ayristirma": {
+      "kesme_sozlesmesi": 2961,
+      "geri_bos": 0,
+      "diger": 531,
+      "not": "decompiler ozel addan sonra KESME koyuyor ('Ankara'da') ama derleyici kesme'li formu OKUYAMIYOR (compile -> []). Bu ASIMETRI G6'nin HATA dalinda sakliydi; Faz 0 ayristirmiyordu.",
+      "ornek_kesme": [
+        {
+          "yuzey": "Kıpçaklar",
+          "geri": "Kıpçak'lar",
+          "yeniden_compile": [],
+          "secilen": [
+            "Kıpçak",
+            "PLURAL"
+          ]
+        },
+        {
+          "yuzey": "Bulgarları",
+          "geri": "Bulgar'ları",
+          "yeniden_compile": [],
+          "secilen": [
+            "Bulgar",
+            "POSS_3PL"
+          ]
+        },
+        {
+          "yuzey": "kuzeyine",
+          "geri": "Kuzey'ine",
+          "yeniden_compile": [],
+          "secilen": [
+            "Kuzey",
+            "POSS_2SG",
+            "CASE_DAT"
+          ]
+        },
+        {
+          "yuzey": "ulustan",
+          "geri": "Ulus'tan",
+          "yeniden_compile": [],
+          "secilen": [
+            "Ulus",
+            "CASE_ABL"
+          ]
+        },
+        {
+          "yuzey": "olursa",
+          "geri": "Olur'sa",
+          "yeniden_compile": [],
+          "secilen": [
+            "Olur",
+            "COPULA_COND"
+          ]
+        }
+      ]
+    },
+    "ornek_ihlal": [
+      {
+        "yuzey": "olan",
+        "bugun": [
+          "o",
+          "DERIV_lAn"
+        ],
+        "V1": [
+          "ol",
+          "PART_An"
+        ]
+      },
+      {
+        "yuzey": "kurdu",
+        "bugun": [
+          "kur",
+          "COPULA_PAST"
+        ],
+        "V1": [
+          "kurt",
+          "POSS_3SG"
+        ]
+      },
+      {
+        "yuzey": "belli",
+        "bugun": [
+          "bel",
+          "DERIV_lI"
+        ],
+        "V1": [
+          "bell",
+          "POSS_3SG"
+        ]
+      },
+      {
+        "yuzey": "günümüzde",
+        "bugun": [
+          "gün",
+          "POSS_1PL",
+          "CASE_LOC"
+        ],
+        "V1": [
+          "günü",
+          "POSS_1PL",
+          "CASE_LOC"
+        ]
+      },
+      {
+        "yuzey": "ölmeden",
+        "bugun": [
+          "öl",
+          "GERUND_mAdAn"
+        ],
+        "V1": [
+          "ölme",
+          "CASE_ABL"
+        ]
+      },
+      {
+        "yuzey": "ölünce",
+        "bugun": [
+          "öl",
+          "GERUND_IncA"
+        ],
+        "V1": [
+          "ölü",
+          "POSS_2SG",
+          "CASE_EQU"
+        ]
+      },
+      {
+        "yuzey": "Günümüzde",
+        "bugun": [
+          "gün",
+          "POSS_1PL",
+          "CASE_LOC"
+        ],
+        "V1": [
+          "günü",
+          "POSS_1PL",
+          "CASE_LOC"
+        ]
+      },
+      {
+        "yuzey": "topraklar",
+        "bugun": [
+          "toprak",
+          "PLURAL"
+        ],
+        "V1": [
+          "toprakla",
+          "TENSE_AORIST"
+        ]
+      },
+      {
+        "yuzey": "onun",
+        "bugun": [
+          "o",
+          "CASE_GEN"
+        ],
+        "V1": [
+          "on",
+          "POSS_2SG"
+        ]
+      },
+      {
+        "yuzey": "torunları",
+        "bugun": [
+          "torun",
+          "POSS_3PL"
+        ],
+        "V1": [
+          "torunlar",
+          "POSS_3SG"
+        ]
+      }
+    ],
+    "not": "G1 yalniz cozulebilen yuzey TIPI uzerinden (jeton agirlikli DEGIL); G6 paydasi da cozulebilen yuzey tipi"
+  },
+  "D2_aday": {
+    "d": {
+      "sayi": 28301,
+      "buyuk_harfli": false
+    },
+    "ö": {
+      "sayi": 17988,
+      "buyuk_harfli": false
+    },
+    "Fransız": {
+      "sayi": 4930,
+      "turev_ek": "sız",
+      "govde": "Fran",
+      "govde_sozlukte": false,
+      "buyuk_harfli": true
+    },
+    "1": {
+      "sayi": 4483,
+      "buyuk_harfli": false
+    },
+    "2": {
+      "sayi": 3588,
+      "buyuk_harfli": false
+    },
+    "3": {
+      "sayi": 2842,
+      "buyuk_harfli": false
+    },
+    "2020": {
+      "sayi": 2732,
+      "buyuk_harfli": false
+    },
+    "Osmanlı": {
+      "sayi": 2562,
+      "turev_ek": "lı",
+      "govde": "Osman",
+      "govde_sozlukte": false,
+      "buyuk_harfli": true
+    },
+    "5": {
+      "sayi": 2484,
+      "buyuk_harfli": false
+    },
+    "nbsp": {
+      "sayi": 2405,
+      "buyuk_harfli": false
+    },
+    "4": {
+      "sayi": 2384,
+      "buyuk_harfli": false
+    },
+    "6": {
+      "sayi": 2111,
+      "buyuk_harfli": false
+    },
+    "2019": {
+      "sayi": 2073,
+      "buyuk_harfli": false
+    },
+    "II": {
+      "sayi": 1982,
+      "buyuk_harfli": true
+    },
+    "2021": {
+      "sayi": 1971,
+      "buyuk_harfli": false
+    },
+    "7": {
+      "sayi": 1965,
+      "buyuk_harfli": false
+    },
+    "2017": {
+      "sayi": 1930,
+      "buyuk_harfli": false
+    },
+    "2018": {
+      "sayi": 1887,
+      "buyuk_harfli": false
+    },
+    "8": {
+      "sayi": 1830,
+      "buyuk_harfli": false
+    },
+    "10": {
+      "sayi": 1822,
+      "buyuk_harfli": false
+    },
+    "12": {
+      "sayi": 1787,
+      "buyuk_harfli": false
+    },
+    "I": {
+      "sayi": 1709,
+      "buyuk_harfli": true
+    },
+    "20": {
+      "sayi": 1672,
+      "buyuk_harfli": false
+    },
+    "2016": {
+      "sayi": 1583,
+      "buyuk_harfli": false
+    },
+    "2023": {
+      "sayi": 1555,
+      "buyuk_harfli": false
+    },
+    "9": {
+      "sayi": 1551,
+      "buyuk_harfli": false
+    },
+    "2022": {
+      "sayi": 1535,
+      "buyuk_harfli": false
+    },
+    "15": {
+      "sayi": 1486,
+      "buyuk_harfli": false
+    },
+    "19": {
+      "sayi": 1394,
+      "buyuk_harfli": false
+    },
+    "16": {
+      "sayi": 1384,
+      "buyuk_harfli": false
+    },
+    "ABD": {
+      "sayi": 1364,
+      "buyuk_harfli": true
+    },
+    "11": {
+      "sayi": 1327,
+      "buyuk_harfli": false
+    },
+    "2015": {
+      "sayi": 1308,
+      "buyuk_harfli": false
+    },
+    "2025": {
+      "sayi": 1308,
+      "buyuk_harfli": false
+    },
+    "17": {
+      "sayi": 1270,
+      "buyuk_harfli": false
+    },
+    "14": {
+      "sayi": 1250,
+      "buyuk_harfli": false
+    },
+    "000": {
+      "sayi": 1235,
+      "buyuk_harfli": false
+    },
+    "18": {
+      "sayi": 1229,
+      "buyuk_harfli": false
+    },
+    "13": {
+      "sayi": 1153,
+      "buyuk_harfli": false
+    },
+    "1980": {
+      "sayi": 1147,
+      "buyuk_harfli": false
+    },
+    "25": {
+      "sayi": 1139,
+      "buyuk_harfli": false
+    },
+    "30": {
+      "sayi": 1089,
+      "buyuk_harfli": false
+    },
+    "0": {
+      "sayi": 1078,
+      "buyuk_harfli": false
+    },
+    "MÖ": {
+      "sayi": 1061,
+      "buyuk_harfli": true
+    },
+    "1945": {
+      "sayi": 1051,
+      "buyuk_harfli": false
+    },
+    "23": {
+      "sayi": 1032,
+      "buyuk_harfli": false
+    },
+    "21": {
+      "sayi": 1018,
+      "buyuk_harfli": false
+    },
+    "2014": {
+      "sayi": 1017,
+      "buyuk_harfli": false
+    },
+    "1990": {
+      "sayi": 1016,
+      "buyuk_harfli": false
+    },
+    "1994": {
+      "sayi": 1014,
+      "buyuk_harfli": false
+    },
+    "1993": {
+      "sayi": 1012,
+      "buyuk_harfli": false
+    },
+    "1942": {
+      "sayi": 1007,
+      "buyuk_harfli": false
+    },
+    "2013": {
+      "sayi": 1002,
+      "buyuk_harfli": false
+    },
+    "22": {
+      "sayi": 1000,
+      "buyuk_harfli": false
+    },
+    "1992": {
+      "sayi": 990,
+      "buyuk_harfli": false
+    },
+    "24": {
+      "sayi": 989,
+      "buyuk_harfli": false
+    },
+    "1939": {
+      "sayi": 983,
+      "buyuk_harfli": false
+    },
+    "1979": {
+      "sayi": 975,
+      "buyuk_harfli": false
+    },
+    "1930": {
+      "sayi": 975,
+      "buyuk_harfli": false
+    },
+    "Fransa": {
+      "sayi": 964,
+      "buyuk_harfli": true
+    },
+    "C": {
+      "sayi": 962,
+      "buyuk_harfli": true
+    },
+    "1936": {
+      "sayi": 961,
+      "buyuk_harfli": false
+    },
+    "1984": {
+      "sayi": 961,
+      "buyuk_harfli": false
+    },
+    "1940": {
+      "sayi": 960,
+      "buyuk_harfli": false
+    },
+    "1989": {
+      "sayi": 958,
+      "buyuk_harfli": false
+    },
+    "1982": {
+      "sayi": 942,
+      "buyuk_harfli": false
+    },
+    "26": {
+      "sayi": 941,
+      "buyuk_harfli": false
+    },
+    "1981": {
+      "sayi": 940,
+      "buyuk_harfli": false
+    },
+    "1987": {
+      "sayi": 939,
+      "buyuk_harfli": false
+    },
+    "1941": {
+      "sayi": 936,
+      "buyuk_harfli": false
+    },
+    "1944": {
+      "sayi": 934,
+      "buyuk_harfli": false
+    },
+    "1988": {
+      "sayi": 930,
+      "buyuk_harfli": false
+    },
+    "1991": {
+      "sayi": 929,
+      "buyuk_harfli": false
+    },
+    "27": {
+      "sayi": 926,
+      "buyuk_harfli": false
+    },
+    "1946": {
+      "sayi": 925,
+      "buyuk_harfli": false
+    },
+    "1926": {
+      "sayi": 923,
+      "buyuk_harfli": false
+    },
+    "Kanadalı": {
+      "sayi": 923,
+      "turev_ek": "lı",
+      "govde": "Kanada",
+      "govde_sozlukte": false,
+      "buyuk_harfli": true
+    },
+    "1938": {
+      "sayi": 919,
+      "buyuk_harfli": false
+    },
+    "1937": {
+      "sayi": 918,
+      "buyuk_harfli": false
+    },
+    "1948": {
+      "sayi": 917,
+      "buyuk_harfli": false
+    },
+    "Mustafa": {
+      "sayi": 915,
+      "buyuk_harfli": true
+    },
+    "28": {
+      "sayi": 915,
+      "buyuk_harfli": false
+    },
+    "1932": {
+      "sayi": 915,
+      "buyuk_harfli": false
+    },
+    "1983": {
+      "sayi": 912,
+      "buyuk_harfli": false
+    },
+    "1986": {
+      "sayi": 910,
+      "buyuk_harfli": false
+    },
+    "2012": {
+      "sayi": 899,
+      "buyuk_harfli": false
+    },
+    "1928": {
+      "sayi": 893,
+      "buyuk_harfli": false
+    },
+    "1929": {
+      "sayi": 889,
+      "buyuk_harfli": false
+    },
+    "1927": {
+      "sayi": 887,
+      "buyuk_harfli": false
+    },
+    "1934": {
+      "sayi": 886,
+      "buyuk_harfli": false
+    },
+    "1947": {
+      "sayi": 878,
+      "buyuk_harfli": false
+    },
+    "1925": {
+      "sayi": 876,
+      "buyuk_harfli": false
+    },
+    "1933": {
+      "sayi": 873,
+      "buyuk_harfli": false
+    },
+    "2005": {
+      "sayi": 868,
+      "buyuk_harfli": false
+    },
+    "1943": {
+      "sayi": 868,
+      "buyuk_harfli": false
+    },
+    "1995": {
+      "sayi": 864,
+      "buyuk_harfli": false
+    },
+    "29": {
+      "sayi": 861,
+      "buyuk_harfli": false
+    },
+    "1973": {
+      "sayi": 861,
+      "buyuk_harfli": false
+    },
+    "1985": {
+      "sayi": 861,
+      "buyuk_harfli": false
+    },
+    "1968": {
+      "sayi": 859,
+      "buyuk_harfli": false
+    },
+    "2004": {
+      "sayi": 856,
+      "buyuk_harfli": false
+    },
+    "1996": {
+      "sayi": 855,
+      "buyuk_harfli": false
+    },
+    "2000": {
+      "sayi": 847,
+      "buyuk_harfli": false
+    },
+    "1931": {
+      "sayi": 847,
+      "buyuk_harfli": false
+    },
+    "2011": {
+      "sayi": 847,
+      "buyuk_harfli": false
+    },
+    "2007": {
+      "sayi": 845,
+      "buyuk_harfli": false
+    },
+    "2010": {
+      "sayi": 842,
+      "buyuk_harfli": false
+    },
+    "1969": {
+      "sayi": 842,
+      "buyuk_harfli": false
+    },
+    "Brezilyalı": {
+      "sayi": 842,
+      "turev_ek": "lı",
+      "govde": "Brezilya",
+      "govde_sozlukte": false,
+      "buyuk_harfli": true
+    },
+    "1935": {
+      "sayi": 839,
+      "buyuk_harfli": false
+    },
+    "1924": {
+      "sayi": 836,
+      "buyuk_harfli": false
+    },
+    "2002": {
+      "sayi": 835,
+      "buyuk_harfli": false
+    },
+    "1974": {
+      "sayi": 835,
+      "buyuk_harfli": false
+    },
+    "1950": {
+      "sayi": 834,
+      "buyuk_harfli": false
+    },
+    "2008": {
+      "sayi": 832,
+      "buyuk_harfli": false
+    },
+    "jpg": {
+      "sayi": 829,
+      "buyuk_harfli": false
+    },
+    "Robert": {
+      "sayi": 829,
+      "buyuk_harfli": true
+    },
+    "1922": {
+      "sayi": 828,
+      "buyuk_harfli": false
+    },
+    "William": {
+      "sayi": 827,
+      "buyuk_harfli": true
+    },
+    "1923": {
+      "sayi": 821,
+      "buyuk_harfli": false
+    },
+    "James": {
+      "sayi": 820,
+      "buyuk_harfli": true
+    },
+    "2006": {
+      "sayi": 819,
+      "buyuk_harfli": false
+    },
+    "1970": {
+      "sayi": 812,
+      "buyuk_harfli": false
+    },
+    "1971": {
+      "sayi": 808,
+      "buyuk_harfli": false
+    },
+    "1972": {
+      "sayi": 808,
+      "buyuk_harfli": false
+    },
+    "1967": {
+      "sayi": 805,
+      "buyuk_harfli": false
+    },
+    "1978": {
+      "sayi": 803,
+      "buyuk_harfli": false
+    },
+    "Anadolu": {
+      "sayi": 796,
+      "turev_ek": "lu",
+      "govde": "Anado",
+      "govde_sozlukte": false,
+      "buyuk_harfli": true
+    },
+    "Türkiye'nin": {
+      "sayi": 794,
+      "buyuk_harfli": true
+    },
+    "1997": {
+      "sayi": 794,
+      "buyuk_harfli": false
+    },
+    "1976": {
+      "sayi": 794,
+      "buyuk_harfli": false
+    },
+    "1960": {
+      "sayi": 791,
+      "buyuk_harfli": false
+    },
+    "1975": {
+      "sayi": 787,
+      "buyuk_harfli": false
+    },
+    "1949": {
+      "sayi": 784,
+      "buyuk_harfli": false
+    },
+    "i": {
+      "sayi": 783,
+      "buyuk_harfli": false
+    },
+    "1921": {
+      "sayi": 778,
+      "buyuk_harfli": false
+    },
+    "Hollandalı": {
+      "sayi": 778,
+      "turev_ek": "lı",
+      "govde": "Hollanda",
+      "govde_sozlukte": false,
+      "buyuk_harfli": true
+    },
+    "1964": {
+      "sayi": 772,
+      "buyuk_harfli": false
+    },
+    "A": {
+      "sayi": 770,
+      "buyuk_harfli": true
+    },
+    "1956": {
+      "sayi": 768,
+      "buyuk_harfli": false
+    },
+    "1920": {
+      "sayi": 767,
+      "buyuk_harfli": false
+    },
+    "1963": {
+      "sayi": 767,
+      "buyuk_harfli": false
+    },
+    "1954": {
+      "sayi": 766,
+      "buyuk_harfli": false
+    },
+    "1952": {
+      "sayi": 764,
+      "buyuk_harfli": false
+    },
+    "2003": {
+      "sayi": 757,
+      "buyuk_harfli": false
+    },
+    "1966": {
+      "sayi": 754,
+      "buyuk_harfli": false
+    },
+    "2024": {
+      "sayi": 751,
+      "buyuk_harfli": false
+    },
+    "Türkiye'de": {
+      "sayi": 746,
+      "buyuk_harfli": true
+    },
+    "1951": {
+      "sayi": 746,
+      "buyuk_harfli": false
+    },
+    "2009": {
+      "sayi": 740,
+      "buyuk_harfli": false
+    },
+    "1957": {
+      "sayi": 740,
+      "buyuk_harfli": false
+    },
+    "1977": {
+      "sayi": 735,
+      "buyuk_harfli": false
+    },
+    "1955": {
+      "sayi": 731,
+      "buyuk_harfli": false
+    },
+    "George": {
+      "sayi": 730,
+      "buyuk_harfli": true
+    },
+    "1958": {
+      "sayi": 725,
+      "buyuk_harfli": false
+    },
+    "31": {
+      "sayi": 724,
+      "buyuk_harfli": false
+    },
+    "1998": {
+      "sayi": 724,
+      "buyuk_harfli": false
+    },
+    "Charles": {
+      "sayi": 717,
+      "buyuk_harfli": true
+    },
+    "2001": {
+      "sayi": 716,
+      "buyuk_harfli": false
+    },
+    "İsveçli": {
+      "sayi": 715,
+      "turev_ek": "li",
+      "govde": "İsveç",
+      "govde_sozlukte": false,
+      "buyuk_harfli": true
+    },
+    "1918": {
+      "sayi": 714,
+      "buyuk_harfli": false
+    },
+    "1965": {
+      "sayi": 707,
+      "buyuk_harfli": false
+    },
+    "1961": {
+      "sayi": 706,
+      "buyuk_harfli": false
+    },
+    "1999": {
+      "sayi": 703,
+      "buyuk_harfli": false
+    },
+    "1953": {
+      "sayi": 697,
+      "buyuk_harfli": false
+    },
+    "1959": {
+      "sayi": 689,
+      "buyuk_harfli": false
+    },
+    "Jean": {
+      "sayi": 688,
+      "buyuk_harfli": true
+    },
+    "Avusturyalı": {
+      "sayi": 687,
+      "turev_ek": "lı",
+      "govde": "Avusturya",
+      "govde_sozlukte": false,
+      "buyuk_harfli": true
+    },
+    "Almanya": {
+      "sayi": 680,
+      "buyuk_harfli": true
+    },
+    "David": {
+      "sayi": 676,
+      "buyuk_harfli": true
+    },
+    "III": {
+      "sayi": 671,
+      "buyuk_harfli": true
+    },
+    "Polonyalı": {
+      "sayi": 666,
+      "turev_ek": "lı",
+      "govde": "Polonya",
+      "govde_sozlukte": false,
+      "buyuk_harfli": true
+    },
+    "1962": {
+      "sayi": 663,
+      "buyuk_harfli": false
+    },
+    "1919": {
+      "sayi": 659,
+      "buyuk_harfli": false
+    },
+    "1914": {
+      "sayi": 643,
+      "buyuk_harfli": false
+    },
+    "Mehmet": {
+      "sayi": 632,
+      "buyuk_harfli": true
+    },
+    "m": {
+      "sayi": 623,
+      "buyuk_harfli": false
+    },
+    "Paul": {
+      "sayi": 620,
+      "buyuk_harfli": true
+    },
+    "Ahmet": {
+      "sayi": 611,
+      "buyuk_harfli": true
+    },
+    "Çin": {
+      "sayi": 608,
+      "buyuk_harfli": true
+    },
+    "km": {
+      "sayi": 608,
+      "buyuk_harfli": false
+    },
+    "1916": {
+      "sayi": 566,
+      "buyuk_harfli": false
+    },
+    "İngiltere": {
+      "sayi": 564,
+      "buyuk_harfli": true
+    },
+    "Bizans": {
+      "sayi": 555,
+      "buyuk_harfli": true
+    },
+    "1917": {
+      "sayi": 553,
+      "buyuk_harfli": false
+    },
+    "İsrail": {
+      "sayi": 551,
+      "buyuk_harfli": true
+    },
+    "B": {
+      "sayi": 549,
+      "buyuk_harfli": true
+    },
+    "1913": {
+      "sayi": 536,
+      "buyuk_harfli": false
+    },
+    "İtalya": {
+      "sayi": 533,
+      "buyuk_harfli": true
+    },
+    "1915": {
+      "sayi": 520,
+      "buyuk_harfli": false
+    },
+    "Thomas": {
+      "sayi": 518,
+      "buyuk_harfli": true
+    },
+    "İrlandalı": {
+      "sayi": 512,
+      "turev_ek": "lı",
+      "govde": "İrlanda",
+      "govde_sozlukte": false,
+      "buyuk_harfli": true
+    },
+    "Richard": {
+      "sayi": 511,
+      "buyuk_harfli": true
+    },
+    "1912": {
+      "sayi": 507,
+      "buyuk_harfli": false
+    },
+    "Rusya": {
+      "sayi": 499,
+      "buyuk_harfli": true
+    },
+    "1910": {
+      "sayi": 492,
+      "buyuk_harfli": false
+    },
+    "İsviçreli": {
+      "sayi": 492,
+      "turev_ek": "li",
+      "govde": "İsviçre",
+      "govde_sozlukte": false,
+      "buyuk_harfli": true
+    },
+    "1911": {
+      "sayi": 491,
+      "buyuk_harfli": false
+    },
+    "Joseph": {
+      "sayi": 491,
+      "buyuk_harfli": true
+    },
+    "Muhammed": {
+      "sayi": 488,
+      "buyuk_harfli": true
+    },
+    "1908": {
+      "sayi": 486,
+      "buyuk_harfli": false
+    },
+    "J": {
+      "sayi": 483,
+      "buyuk_harfli": true
+    },
+    "Louis": {
+      "sayi": 478,
+      "buyuk_harfli": true
+    },
+    "100": {
+      "sayi": 475,
+      "buyuk_harfli": false
+    },
+    "Katolik": {
+      "sayi": 470,
+      "turev_ek": "lik",
+      "govde": "Kato",
+      "govde_sozlukte": false,
+      "buyuk_harfli": true
+    },
+    "Michael": {
+      "sayi": 467,
+      "buyuk_harfli": true
+    },
+    "Avusturya": {
+      "sayi": 465,
+      "buyuk_harfli": true
+    },
+    "1906": {
+      "sayi": 449,
+      "buyuk_harfli": false
+    },
+    "1903": {
+      "sayi": 440,
+      "buyuk_harfli": false
+    },
+    "Belçikalı": {
+      "sayi": 440,
+      "turev_ek": "lı",
+      "govde": "Belçika",
+      "govde_sozlukte": false,
+      "buyuk_harfli": true
+    },
+    "Henry": {
+      "sayi": 439,
+      "buyuk_harfli": true
+    },
+    "Azerbaycan": {
+      "sayi": 438,
+      "buyuk_harfli": true
+    },
+    "Meksikalı": {
+      "sayi": 438,
+      "turev_ek": "lı",
+      "govde": "Meksika",
+      "govde_sozlukte": false,
+      "buyuk_harfli": true
+    },
+    "İran": {
+      "sayi": 436,
+      "buyuk_harfli": true
+    },
+    "M": {
+      "sayi": 432,
+      "buyuk_harfli": true
+    },
+    "1904": {
+      "sayi": 432,
+      "buyuk_harfli": false
+    },
+    "1905": {
+      "sayi": 420,
+      "buyuk_harfli": false
+    },
+    "Peter": {
+      "sayi": 418,
+      "buyuk_harfli": true
+    },
+    "Atatürk": {
+      "sayi": 417,
+      "buyuk_harfli": true
+    },
+    "1907": {
+      "sayi": 410,
+      "buyuk_harfli": false
+    },
+    "1909": {
+      "sayi": 400,
+      "buyuk_harfli": false
+    },
+    "Polonya": {
+      "sayi": 397,
+      "buyuk_harfli": true
+    },
+    "Hollanda": {
+      "sayi": 395,
+      "buyuk_harfli": true
+    },
+    "S": {
+      "sayi": 394,
+      "buyuk_harfli": true
+    },
+    "Britanyalı": {
+      "sayi": 392,
+      "turev_ek": "lı",
+      "govde": "Britanya",
+      "govde_sozlukte": false,
+      "buyuk_harfli": true
+    },
+    "ABD'nin": {
+      "sayi": 392,
+      "buyuk_harfli": true
+    },
+    "R": {
+      "sayi": 391,
+      "buyuk_harfli": true
+    },
+    "1902": {
+      "sayi": 390,
+      "buyuk_harfli": false
+    },
+    "Cengiz": {
+      "sayi": 386,
+      "buyuk_harfli": true
+    },
+    "a": {
+      "sayi": 379,
+      "buyuk_harfli": false
+    },
+    "1894": {
+      "sayi": 378,
+      "buyuk_harfli": false
+    },
+    "1900": {
+      "sayi": 376,
+      "buyuk_harfli": false
+    },
+    "Danimarkalı": {
+      "sayi": 375,
+      "turev_ek": "lı",
+      "govde": "Danimarka",
+      "govde_sozlukte": false,
+      "buyuk_harfli": true
+    },
+    "Süleyman": {
+      "sayi": 373,
+      "buyuk_harfli": true
+    },
+    "1898": {
+      "sayi": 369,
+      "buyuk_harfli": false
+    },
+    "50": {
+      "sayi": 367,
+      "buyuk_harfli": false
+    },
+    "H": {
+      "sayi": 361,
+      "buyuk_harfli": true
+    },
+    "''": {
+      "sayi": 361,
+      "buyuk_harfli": false
+    },
+    "1895": {
+      "sayi": 360,
+      "buyuk_harfli": false
+    },
+    "İranlı": {
+      "sayi": 358,
+      "turev_ek": "lı",
+      "govde": "İran",
+      "govde_sozlukte": false,
+      "buyuk_harfli": true
+    },
+    "Edward": {
+      "sayi": 358,
+      "buyuk_harfli": true
+    },
+    "Japonya": {
+      "sayi": 358,
+      "buyuk_harfli": true
+    },
+    "Norveçli": {
+      "sayi": 357,
+      "turev_ek": "li",
+      "govde": "Norveç",
+      "govde_sozlukte": false,
+      "buyuk_harfli": true
+    },
+    "1899": {
+      "sayi": 354,
+      "buyuk_harfli": false
+    },
+    "F": {
+      "sayi": 353,
+      "buyuk_harfli": true
+    },
+    "1897": {
+      "sayi": 352,
+      "buyuk_harfli": false
+    },
+    "D": {
+      "sayi": 351,
+      "buyuk_harfli": true
+    },
+    "V": {
+      "sayi": 350,
+      "buyuk_harfli": true
+    },
+    "Portekizli": {
+      "sayi": 349,
+      "turev_ek": "li",
+      "govde": "Portekiz",
+      "govde_sozlukte": false,
+      "buyuk_harfli": true
+    },
+    "Ahmed": {
+      "sayi": 347,
+      "buyuk_harfli": true
+    },
+    "1901": {
+      "sayi": 347,
+      "buyuk_harfli": false
+    },
+    "Karl": {
+      "sayi": 343,
+      "buyuk_harfli": true
+    },
+    "milletvekili": {
+      "sayi": 342,
+      "turev_ek": "li",
+      "govde": "milletveki",
+      "govde_sozlukte": false,
+      "buyuk_harfli": false
+    },
+    "1891": {
+      "sayi": 342,
+      "buyuk_harfli": false
+    },
+    "Yunanistan": {
+      "sayi": 341,
+      "buyuk_harfli": true
+    },
+    "İmparatorluğu'nun": {
+      "sayi": 338,
+      "buyuk_harfli": true
+    },
+    "1890": {
+      "sayi": 333,
+      "buyuk_harfli": false
+    },
+    "İstanbul'da": {
+      "sayi": 331,
+      "buyuk_harfli": true
+    },
+    "1889": {
+      "sayi": 331,
+      "buyuk_harfli": false
+    },
+    "St": {
+      "sayi": 330,
+      "buyuk_harfli": true
+    },
+    "Britanya": {
+      "sayi": 330,
+      "buyuk_harfli": true
+    },
+    "idi": {
+      "sayi": 326,
+      "buyuk_harfli": false
+    },
+    "Japonya'nın": {
+      "sayi": 326,
+      "buyuk_harfli": true
+    },
+    "Hüseyin": {
+      "sayi": 325,
+      "buyuk_harfli": true
+    },
+    "1896": {
+      "sayi": 323,
+      "buyuk_harfli": false
+    },
+    "T": {
+      "sayi": 323,
+      "buyuk_harfli": true
+    },
+    "Pierre": {
+      "sayi": 322,
+      "buyuk_harfli": true
+    },
+    "1893": {
+      "sayi": 322,
+      "buyuk_harfli": false
+    },
+    "ı": {
+      "sayi": 320,
+      "buyuk_harfli": false
+    },
+    "1892": {
+      "sayi": 320,
+      "buyuk_harfli": false
+    },
+    "1882": {
+      "sayi": 318,
+      "buyuk_harfli": false
+    },
+    "rock": {
+      "sayi": 318,
+      "buyuk_harfli": false
+    },
+    "Macaristan": {
+      "sayi": 316,
+      "buyuk_harfli": true
+    },
+    "500": {
+      "sayi": 315,
+      "buyuk_harfli": false
+    },
+    "Filistin": {
+      "sayi": 314,
+      "buyuk_harfli": true
+    },
+    "İrlanda": {
+      "sayi": 310,
+      "buyuk_harfli": true
+    },
+    "Albert": {
+      "sayi": 306,
+      "buyuk_harfli": true
+    },
+    "Lee": {
+      "sayi": 304,
+      "buyuk_harfli": true
+    },
+    "1887": {
+      "sayi": 303,
+      "buyuk_harfli": false
+    },
+    "1881": {
+      "sayi": 302,
+      "buyuk_harfli": false
+    },
+    "İbrahim": {
+      "sayi": 301,
+      "buyuk_harfli": true
+    },
+    "York": {
+      "sayi": 301,
+      "buyuk_harfli": true
+    },
+    "Abdullah": {
+      "sayi": 300,
+      "buyuk_harfli": true
+    },
+    "Friedrich": {
+      "sayi": 295,
+      "buyuk_harfli": true
+    },
+    "IV": {
+      "sayi": 294,
+      "buyuk_harfli": true
+    },
+    "1878": {
+      "sayi": 291,
+      "buyuk_harfli": false
+    },
+    "W": {
+      "sayi": 290,
+      "buyuk_harfli": true
+    },
+    "Kıbrıs": {
+      "sayi": 289,
+      "buyuk_harfli": true
+    },
+    "1873": {
+      "sayi": 289,
+      "buyuk_harfli": false
+    },
+    "İsrailli": {
+      "sayi": 289,
+      "turev_ek": "li",
+      "govde": "İsrail",
+      "govde_sozlukte": false,
+      "buyuk_harfli": true
+    },
+    "1883": {
+      "sayi": 287,
+      "buyuk_harfli": false
+    },
+    "Fenerbahçe": {
+      "sayi": 286,
+      "buyuk_harfli": true
+    },
+    "40": {
+      "sayi": 283,
+      "buyuk_harfli": false
+    },
+    "İsviçre": {
+      "sayi": 283,
+      "buyuk_harfli": true
+    },
+    "Alexander": {
+      "sayi": 280,
+      "buyuk_harfli": true
+    },
+    "Danimarka": {
+      "sayi": 278,
+      "buyuk_harfli": true
+    },
+    "Çinli": {
+      "sayi": 277,
+      "turev_ek": "li",
+      "govde": "Çin",
+      "govde_sozlukte": false,
+      "buyuk_harfli": true
+    },
+    "Galatasaray": {
+      "sayi": 276,
+      "buyuk_harfli": true
+    },
+    "1888": {
+      "sayi": 275,
+      "buyuk_harfli": false
+    },
+    "rapçi": {
+      "sayi": 274,
+      "buyuk_harfli": false
+    },
+    "İsveç": {
+      "sayi": 273,
+      "buyuk_harfli": true
+    },
+    "Osman": {
+      "sayi": 272,
+      "buyuk_harfli": true
+    },
+    "Atatürk'ün": {
+      "sayi": 271,
+      "buyuk_harfli": true
+    },
+    "Ukraynalı": {
+      "sayi": 271,
+      "turev_ek": "lı",
+      "govde": "Ukrayna",
+      "govde_sozlukte": false,
+      "buyuk_harfli": true
+    },
+    "G": {
+      "sayi": 269,
+      "buyuk_harfli": true
+    },
+    "1886": {
+      "sayi": 269,
+      "buyuk_harfli": false
+    },
+    "TV": {
+      "sayi": 269,
+      "buyuk_harfli": true
+    },
+    "Cumhuriyeti'nin": {
+      "sayi": 268,
+      "buyuk_harfli": true
+    },
+    "1876": {
+      "sayi": 265,
+      "buyuk_harfli": false
+    },
+    "Clinton": {
+      "sayi": 263,
+      "buyuk_harfli": true
+    },
+    "l": {
+      "sayi": 262,
+      "buyuk_harfli": false
+    },
+    "ismi": {
+      "sayi": 261,
+      "buyuk_harfli": false
+    },
+    "Mehmed": {
+      "sayi": 260,
+      "buyuk_harfli": true
+    },
+    "1859": {
+      "sayi": 260,
+      "buyuk_harfli": false
+    },
+    "Smith": {
+      "sayi": 258,
+      "buyuk_harfli": true
+    },
+    "t": {
+      "sayi": 258,
+      "buyuk_harfli": false
+    },
+    "y": {
+      "sayi": 255,
+      "buyuk_harfli": false
+    },
+    "Wilhelm": {
+      "sayi": 255,
+      "buyuk_harfli": true
+    },
+    "Jacques": {
+      "sayi": 255,
+      "buyuk_harfli": true
+    },
+    "1884": {
+      "sayi": 254,
+      "buyuk_harfli": false
+    },
+    "1866": {
+      "sayi": 252,
+      "buyuk_harfli": false
+    },
+    "Portekiz": {
+      "sayi": 252,
+      "buyuk_harfli": true
+    },
+    "Hans": {
+      "sayi": 251,
+      "buyuk_harfli": true
+    },
+    "1885": {
+      "sayi": 250,
+      "buyuk_harfli": false
+    },
+    "İsmail": {
+      "sayi": 249,
+      "buyuk_harfli": true
+    },
+    "2026": {
+      "sayi": 249,
+      "buyuk_harfli": false
+    },
+    "200": {
+      "sayi": 247,
+      "buyuk_harfli": false
+    },
+    "1880": {
+      "sayi": 247,
+      "buyuk_harfli": false
+    },
+    "Carl": {
+      "sayi": 247,
+      "buyuk_harfli": true
+    },
+    "1874": {
+      "sayi": 247,
+      "buyuk_harfli": false
+    },
+    "Microsoft": {
+      "sayi": 245,
+      "buyuk_harfli": true
+    },
+    "1879": {
+      "sayi": 245,
+      "buyuk_harfli": false
+    },
+    "X": {
+      "sayi": 244,
+      "buyuk_harfli": true
+    },
+    "José": {
+      "sayi": 243,
+      "buyuk_harfli": true
+    },
+    "1865": {
+      "sayi": 242,
+      "buyuk_harfli": false
+    },
+    "Daniel": {
+      "sayi": 241,
+      "buyuk_harfli": true
+    },
+    "1870": {
+      "sayi": 241,
+      "buyuk_harfli": false
+    },
+    "Hindistan": {
+      "sayi": 240,
+      "buyuk_harfli": true
+    },
+    "Arthur": {
+      "sayi": 239,
+      "buyuk_harfli": true
+    },
+    "1863": {
+      "sayi": 238,
+      "buyuk_harfli": false
+    },
+    "Savaşı'nda": {
+      "sayi": 237,
+      "buyuk_harfli": true
+    },
+    "60": {
+      "sayi": 234,
+      "buyuk_harfli": false
+    },
+    "Johann": {
+      "sayi": 234,
+      "buyuk_harfli": true
+    },
+    "Maria": {
+      "sayi": 233,
+      "buyuk_harfli": true
+    },
+    "İbn": {
+      "sayi": 232,
+      "buyuk_harfli": true
+    },
+    "1868": {
+      "sayi": 232,
+      "buyuk_harfli": false
+    },
+    "Avrupa'da": {
+      "sayi": 231,
+      "buyuk_harfli": true
+    },
+    "x": {
+      "sayi": 230,
+      "buyuk_harfli": false
+    },
+    "1877": {
+      "sayi": 230,
+      "buyuk_harfli": false
+    },
+    "ABD'de": {
+      "sayi": 229,
+      "buyuk_harfli": true
+    },
+    "1875": {
+      "sayi": 229,
+      "buyuk_harfli": false
+    },
+    "CHP": {
+      "sayi": 229,
+      "buyuk_harfli": true
+    },
+    "Ömer": {
+      "sayi": 229,
+      "buyuk_harfli": true
+    },
+    "Paris": {
+      "sayi": 225,
+      "buyuk_harfli": true
+    },
+    "Marie": {
+      "sayi": 224,
+      "buyuk_harfli": true
+    },
+    "François": {
+      "sayi": 222,
+      "buyuk_harfli": true
+    },
+    "1856": {
+      "sayi": 222,
+      "buyuk_harfli": false
+    },
+    "Mary": {
+      "sayi": 221,
+      "buyuk_harfli": true
+    },
+    "Birliği'nin": {
+      "sayi": 217,
+      "buyuk_harfli": true
+    },
+    "1862": {
+      "sayi": 217,
+      "buyuk_harfli": false
+    },
+    "yürürlüğe": {
+      "sayi": 216,
+      "buyuk_harfli": false
+    },
+    "b": {
+      "sayi": 216,
+      "buyuk_harfli": false
+    },
+    "Anna": {
+      "sayi": 216,
+      "buyuk_harfli": true
+    },
+    "2023'te": {
+      "sayi": 216,
+      "buyuk_harfli": false
+    },
+    "Fransa'da": {
+      "sayi": 215,
+      "buyuk_harfli": true
+    },
+    "Belçika": {
+      "sayi": 215,
+      "buyuk_harfli": true
+    },
+    "1858": {
+      "sayi": 215,
+      "buyuk_harfli": false
+    },
+    "Carlos": {
+      "sayi": 215,
+      "buyuk_harfli": true
+    },
+    "HIV": {
+      "sayi": 213,
+      "buyuk_harfli": true
+    },
+    "Alfred": {
+      "sayi": 212,
+      "buyuk_harfli": true
+    },
+    "Paşa'nın": {
+      "sayi": 211,
+      "buyuk_harfli": true
+    },
+    "Marx": {
+      "sayi": 211,
+      "buyuk_harfli": true
+    },
+    "Savaşı'nın": {
+      "sayi": 211,
+      "buyuk_harfli": true
+    },
+    "Henri": {
+      "sayi": 210,
+      "buyuk_harfli": true
+    },
+    "1872": {
+      "sayi": 210,
+      "buyuk_harfli": false
+    },
+    "altfamilyasına": {
+      "sayi": 210,
+      "buyuk_harfli": false
+    },
+    "Jan": {
+      "sayi": 209,
+      "buyuk_harfli": true
+    },
+    "Bill": {
+      "sayi": 209,
+      "buyuk_harfli": true
+    },
+    "Londra": {
+      "sayi": 208,
+      "buyuk_harfli": true
+    },
+    "1861": {
+      "sayi": 208,
+      "buyuk_harfli": false
+    },
+    "32": {
+      "sayi": 206,
+      "buyuk_harfli": false
+    },
+    "Çin'in": {
+      "sayi": 205,
+      "buyuk_harfli": true
+    },
+    "Devleti'nin": {
+      "sayi": 205,
+      "buyuk_harfli": true
+    },
+    "hakkı": {
+      "sayi": 205,
+      "buyuk_harfli": false
+    },
+    "1869": {
+      "sayi": 205,
+      "buyuk_harfli": false
+    },
+    "Walter": {
+      "sayi": 204,
+      "buyuk_harfli": true
+    },
+    "L": {
+      "sayi": 204,
+      "buyuk_harfli": true
+    },
+    "P": {
+      "sayi": 203,
+      "buyuk_harfli": true
+    },
+    "Saint": {
+      "sayi": 202,
+      "buyuk_harfli": true
+    },
+    "1867": {
+      "sayi": 201,
+      "buyuk_harfli": false
+    },
+    "Adolf": {
+      "sayi": 201,
+      "buyuk_harfli": true
+    },
+    "Orhan": {
+      "sayi": 201,
+      "buyuk_harfli": true
+    },
+    "Ankara'da": {
+      "sayi": 201,
+      "buyuk_harfli": true
+    },
+    "Bulgaristan": {
+      "sayi": 200,
+      "buyuk_harfli": true
+    },
+    "vali": {
+      "sayi": 200,
+      "turev_ek": "li",
+      "govde": "va",
+      "govde_sozlukte": false,
+      "buyuk_harfli": false
+    },
+    "1864": {
+      "sayi": 199,
+      "buyuk_harfli": false
+    },
+    "MS": {
+      "sayi": 199,
+      "buyuk_harfli": true
+    },
+    "Elazığ": {
+      "sayi": 199,
+      "buyuk_harfli": true
+    },
+    "Suudi": {
+      "sayi": 199,
+      "buyuk_harfli": true
+    },
+    "Finlandiya": {
+      "sayi": 197,
+      "buyuk_harfli": true
+    }
+  },
+  "D2_taban_agirlikli": [
+    {
+      "taban": "Fran",
+      "jeton": 4930
+    },
+    {
+      "taban": "Osman",
+      "jeton": 2562
+    },
+    {
+      "taban": "Kanada",
+      "jeton": 923
+    },
+    {
+      "taban": "Brezilya",
+      "jeton": 842
+    },
+    {
+      "taban": "Anado",
+      "jeton": 796
+    },
+    {
+      "taban": "Hollanda",
+      "jeton": 778
+    },
+    {
+      "taban": "İsveç",
+      "jeton": 715
+    },
+    {
+      "taban": "Avusturya",
+      "jeton": 687
+    },
+    {
+      "taban": "Polonya",
+      "jeton": 666
+    },
+    {
+      "taban": "İrlanda",
+      "jeton": 512
+    },
+    {
+      "taban": "İsviçre",
+      "jeton": 492
+    },
+    {
+      "taban": "Kato",
+      "jeton": 470
+    },
+    {
+      "taban": "Belçika",
+      "jeton": 440
+    },
+    {
+      "taban": "Meksika",
+      "jeton": 438
+    },
+    {
+      "taban": "Britanya",
+      "jeton": 392
+    },
+    {
+      "taban": "Danimarka",
+      "jeton": 375
+    },
+    {
+      "taban": "İran",
+      "jeton": 358
+    },
+    {
+      "taban": "Norveç",
+      "jeton": 357
+    },
+    {
+      "taban": "Portekiz",
+      "jeton": 349
+    },
+    {
+      "taban": "milletveki",
+      "jeton": 342
+    },
+    {
+      "taban": "İsrail",
+      "jeton": 289
+    },
+    {
+      "taban": "Çin",
+      "jeton": 277
+    },
+    {
+      "taban": "Ukrayna",
+      "jeton": 271
+    },
+    {
+      "taban": "va",
+      "jeton": 200
+    }
+  ],
+  "D2_not": "`sayi` = orneklemdeki yuzey sikligi. `D2_taban_agirlikli` turev yuzeyleri TABAN lemma basina toplar; asil ekleme listesi odur. Taban sozlukte VARSA o yuzey D2 degil D3/D1 isidir.",
+  "regresyon": {
+    "gorev_tipleri": {
+      "ROOT": 25,
+      "PLURAL": 25,
+      "CASE": 25,
+      "TENSE": 25
+    },
+    "ROOT_oge": 25,
+    "V1_ONCESI": 24,
+    "V1_SONRASI": 23,
+    "not": "fixtur ROOT/PLURAL/CASE/TENSE x 25; yalniz ROOT oracle"
+  },
+  "D1_hedef": {
+    "ağacı": {
+      "bek": "ağaç",
+      "bugun": "ağa",
+      "V1": "ağaç"
+    },
+    "aklı": {
+      "bek": "akıl",
+      "bugun": "ak",
+      "V1": "akıl"
+    },
+    "kanadı": {
+      "bek": "kanat",
+      "bugun": "kana",
+      "V1": "kanat"
+    },
+    "gönlü": {
+      "bek": "gönül",
+      "bugun": "gön",
+      "V1": "gönül"
+    }
+  },
+  "atif_kontrol": {
+    "pozitif_cozulen": [
+      "Ankara"
+    ],
+    "pozitif_trie": true,
+    "pozitif_ok": true,
+    "negatif_cozulen": [],
+    "negatif_trie": false,
+    "negatif_ok": true,
+    "istanbul_bu_tabanda": [
+      "İstanbul"
+    ],
+    "yeni_blok_bos": true
+  },
+  "yeni_kimlik_atif": {
+    "yeni_kimlik_id": 0,
+    "yeni_kimlik_pozisyon": 0,
+    "kalan_kok_eksik_pozisyon": 24841,
+    "analizsiz_buyuk": 405536,
+    "analizsiz_kucuk": 339606,
+    "var_pozisyon": 2774113
+  },
+  "atif_liveness": {
+    "analizsiz": 745142,
+    "ANALIZSIZ_BACAGI_CANLI": true,
+    "not": "LIVENESS kontrolu: atif blogunun ANALIZSIZ dali gercekten atesledi mi? Bu bir DOGRULUK kontrolu DEGIL (o is yukaridaki trie+derleyici cifti); yalniz dalin OLU olmadigini gosterir."
+  },
+  "olculen_kapilar": {
+    "G1_yuzde": {
+      "deger": 2.3789,
+      "ilan_esik": 1.0,
+      "yon": "<=",
+      "GECIYOR": false
+    },
+    "G2_UNK": {
+      "deger": 1.5733,
+      "ilan_esik": 1.5,
+      "yon": "<=",
+      "GECIYOR": false
+    },
+    "G3_PN": {
+      "deger": 8.0186,
+      "ilan_esik": 3.0,
+      "yon": "<=",
+      "GECIYOR": false
+    },
+    "G4_LIT_bolu_PN": {
+      "deger": 0.3753,
+      "ilan_esik": 1.0,
+      "yon": ">=",
+      "GECIYOR": false
+    },
+    "G6_yuzde": {
+      "deger": 96.9232,
+      "ilan_esik": 99.0,
+      "yon": ">=",
+      "GECIYOR": false
+    },
+    "G5_kapsam": {
+      "not": "Faz 4'te YAZILAN .bin'den olculur"
+    }
+  },
+  "hukum": {
+    "kapsam": "⚠ BU KOSUM 'ONCE' TABANI KONTROLUDUR — HUKUM DEGILDIR. Amaci: r1_on'un PN/UNK degerlerini BAGIMSIZ yeniden uretmek (8,0186/1,5733) ve atif blogunun ANALIZSIZ bacagini ONCE tarafinda olcmek. Buradaki G3_curutme kendini kendisiyle kiyaslar ⇒ TANIM GEREGI etkisizdir; hukum SONRA kosumundan gelir.",
+    "hukum_kullanilmaz": true,
+    "gecen": [],
+    "kalan": [
+      "G1_yuzde",
+      "G2_UNK",
+      "G3_PN",
+      "G4_LIT_bolu_PN",
+      "G6_yuzde"
+    ],
+    "G3_curutme": {
+      "birim": ".bin JETON sinifi (yuzde)",
+      "yer_tutucu_ONCE": 9.5919,
+      "yer_tutucu_SONRA": 9.5919,
+      "yon": "DUSMELI",
+      "hukum": "AYIRT EDEMEDI: yer tutucu dusmedi"
+    },
+    "G3_atif": {
+      "birim": "YUZEY-SIKLIGI agirlikli MORFEM POZISYONU (jeton sinifi DEGIL)",
+      "yeni_kimlik_pozisyon": 0,
+      "kalan_kok_eksik_pozisyon": 24841,
+      "analizsiz_pozisyon": 745142,
+      "yorum": "Dususun KAYNAGI: yeni kimlikli konumlar. ANALIZSIZ'in BU birimdeki davranisi ayrica okunur; iki birim karistirilmaz."
+    },
+    "kiyas_uyarisi": "PN/UNK 'once' degerleri %8,0186/%1,5733 ILE AYNI ORNEKLEYICIDEN gelir; orneklem kimligi (dosya_basi/bin_jeton) birebir degilse kiyas GECERSIZ."
+  }
+}

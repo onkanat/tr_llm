@@ -1,0 +1,57 @@
+{
+  "gorev": "T-0073",
+  "tur": "A1 GPU verim sondasi",
+  "ilan_utc": "2026-09-18T14:44:17Z",
+  "neden_jeton_sn": "sn/adim birimi batch ve blok ile degisir; T-0072 ve Antigravity ayni sinifta hata yapti (birini sabit sanip digerinin adim sayisiyla carpmak). Sonda sn/adim raporlamaz, dogrudan jeton/sn olcer.",
+  "formuller": {
+    "jeton_sn": "batch * blok * adim / toplam_sure",
+    "adim": "hedef_jeton / (batch * blok)",
+    "saat": "adim / jeton_sn / 3600"
+  },
+  "izgara": {
+    "batch": [
+      8,
+      16,
+      32,
+      64
+    ],
+    "blok": [
+      128,
+      256
+    ],
+    "tarama_adim": 50,
+    "dogrulama_adim": 200
+  },
+  "veri": "data/anka_a1_pretrain.bin",
+  "hedef_jeton": 100000000,
+  "kapilar": {
+    "S1_olcum_gecerli": {
+      "kosul": "rc=0 VE log'da 'Metal GPU (MPS)' VAR VE 'Sifirdan egitim' VAR VE 'Toplam Süre' VAR",
+      "ayirt_edicilik": "sandbox icinde kosulursa MPS gorunmez -> CPU'ya duser; bu kapi o hucreyi GECERSIZ kilar"
+    },
+    "S2_yuk_yok": {
+      "kosul": "son adim suresi / ilk adim suresi < 1,5",
+      "ayirt_edicilik": "makinede baska GPU isi varsa sapma buyur (T-0052'de 2,2x olculdu)",
+      "OLCULEN_KUSUR": "pay 1. adim MPS derleme ISINMASIDIR, yuk degil (b8k128: ilk 1,28 sn <-> kararli 0,68 sn = 2,91). Bu yuzden hukmu raporlanir ama SECIMI yapmaz; secim sapma_duzeltilmis (adim 2 vs son) ile (bkz. §0.6)"
+    },
+    "S3_butce_formulu": {
+      "kosul": "en iyi hucreden adim ve saat, FORMULLE hesaplanip yazildi"
+    },
+    "S4_dokunulmadi": {
+      "kosul": "data/*.pt envanteri ayni VE korpus sha256 ayni"
+    },
+    "S5_artimli": {
+      "kosul": "her hucreden sonra yazildi; sentinel rc=0"
+    }
+  },
+  "curutme": "Eger tum hucrelerde jeton/sn benzer cikarsa (batch/blok duyarsiz), 'blok buyutmek adim sayisini dusurur ama adim suresini de buyutur' gerekcesi CURUR ve butce yalnizca jeton/sn ile verilir.",
+  "baslangic_pt": [
+    "data/_archive/rag_pilot_invalidated/train_fast_ds.pt|4755355|1789328227",
+    "data/_archive/rag_pilot_invalidated/val_fast_ds.pt|593967|1789328229",
+    "data/b1_5_splits/train_ds.pt|69857903|1789314197",
+    "data/b1_5_splits/train_fast_ds.pt|44027101|1789314604",
+    "data/b1_5_splits/val_ds.pt|16681209|1789314204",
+    "data/b1_5_splits/val_fast_ds.pt|5471221|1789314611"
+  ],
+  "korpus_sha256_once": "383a9c890b75ec96195122b9981d7a73371d3bcaa3b9f6e7c2a188510d917cb8"
+}

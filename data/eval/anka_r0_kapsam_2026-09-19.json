@@ -1,0 +1,1102 @@
+{
+  "gorev": "ANKA-R0",
+  "asama": "FAZ0-KAPSAM-OLCUMU",
+  "baslangic_utc": "2026-09-19T08:04:55Z",
+  "gerekce": "Onaysiz olcum kalici olmadigi icin kapsam boslugu gorunmez kaldi; bu betik onu kalicilastirir ve kapilari OLCUMDEN ONCE ilan eder.",
+  "ilan_edilen_orneklem": {
+    "hedef_kabul_dosya_basina": 1500,
+    "sira": "parquet sirasi (sorted glob), satir sirasi",
+    "damga": "2026-09-19T00:00:00Z",
+    "not": "kota DOSYA BASINA; tek toplam kota koymak ikinci parqueti tamamen disarida birakiyordu"
+  },
+  "ilan_edilen_kapilar": {
+    "G1_en_uzun_eslesme_ihlali": {
+      "esik": 1.0,
+      "yon": "<=",
+      "birim": "% (jeton agirlikli)",
+      "gerekce": "D1: skor yalniz morfem sayar; kisa kok beraberlikte kazanir",
+      "curutme": "G1 duserken G6 TAM orani ARTMIYORSA kazanc skordan degil aday kumesinden gelir ⇒ hüküm AYIRT EDEMEDİ"
+    },
+    "G2_UNK_orani": {
+      "esik": 1.5,
+      "yon": "<=",
+      "birim": "% (jeton agirlikli)",
+      "gerekce": "A1 tam kulliyat %2,6346",
+      "mevcut_bilinen": 2.6346,
+      "curutme": "UNK duserken <PROPER_NOUN> ARTARSA yalniz yer degistirme olur"
+    },
+    "G3_PROPER_NOUN_orani": {
+      "esik": 3.0,
+      "yon": "<=",
+      "birim": "% (jeton agirlikli)",
+      "gerekce": "A1 tam kulliyat %7,9365 (D2)",
+      "mevcut_bilinen": 7.9365,
+      "curutme": "PN duserken ALTERNATIF orani ARTARSA kazanc belirsizlik kaymasindandir ⇒ hüküm AYIRT EDEMEDİ"
+    },
+    "G4_literal_ad_bolu_yer_tutucu": {
+      "esik": 1.0,
+      "yon": ">=",
+      "birim": "oran",
+      "gerekce": "A1'de 0,29 ⇒ cokme 3,45x baskin (T-0079)",
+      "mevcut_bilinen": 0.2902,
+      "curutme": "Oran 1,0'i gecerken literal ad CESITI artmiyorsa yalniz birkac ad tekrar ediliyordur"
+    },
+    "G5_sozluk_kapsamı": {
+      "esik": 95.0,
+      "yon": ">=",
+      "birim": "% (gozlenen giris / toplam giris)",
+      "gerekce": "A1 raporu %86,3 raporladi ama HIC KAPIYA BAGLAMADI",
+      "mevcut_bilinen": 86.3,
+      "curutme": "Kapsam artarken kulliyat orani artmiyorsa gozlenen girisler seyrek kelimelerdir, etkisizdir"
+    },
+    "G6_tur_ozdesligi": {
+      "esik": 99.0,
+      "yon": ">=",
+      "birim": "% (TAM+ALTERNATIF, jeton agirlikli)",
+      "gerekce": "Analiz yuzeye geri donmeli; donmuyorsa tag akisi suratle uyusmuyor demektir",
+      "curutme": "G6 artarken G3 dusmuyorsa kazanc kapsamdan degil skordan gelir"
+    }
+  },
+  "ilan_edilen_pozitif_kontrol": {
+    "başkenti": [
+      "başkent",
+      "POSS_3SG"
+    ],
+    "yılında": [
+      "yıl",
+      "POSS_2SG",
+      "CASE_LOC"
+    ],
+    "olarak": [
+      "ol",
+      "GERUND_ArAk"
+    ],
+    "Ankarada": [
+      "Ankara",
+      "CASE_LOC"
+    ]
+  },
+  "ilan_edilen_hedef_kontrol": {
+    "ağacı": [
+      "ağaç",
+      "POSS_3SG"
+    ],
+    "aklı": [
+      "akıl",
+      "POSS_3SG"
+    ],
+    "kanadı": [
+      "kanat",
+      "POSS_3SG"
+    ],
+    "gönlü": [
+      "gönül",
+      "POSS_3SG"
+    ],
+    "ağzı": [
+      "ağız",
+      "POSS_3SG"
+    ],
+    "hakkı": [
+      "hak",
+      "POSS_3SG"
+    ],
+    "adıyla": [
+      "ad",
+      "POSS_3SG",
+      "CASE_INSTR"
+    ]
+  },
+  "kaynak_temizleme": {
+    "kaynak": "scratch/anka_a1_build.py:67-75,151-155",
+    "kural_sayisi": 14,
+    "min_belge_kar": 300,
+    "not": "temizlemesiz olcum GECERSIZDIR (bkz. modul docstring)"
+  },
+  "son_guncelleme_utc": "2026-09-19T08:06:00Z",
+  "K0_derleyici_pozitif_kontrol": {
+    "durumlar": {
+      "başkenti": {
+        "beklenen": [
+          "başkent",
+          "POSS_3SG"
+        ],
+        "olculen": [
+          "başkent",
+          "POSS_3SG"
+        ],
+        "tuttu": true
+      },
+      "yılında": {
+        "beklenen": [
+          "yıl",
+          "POSS_2SG",
+          "CASE_LOC"
+        ],
+        "olculen": [
+          "yıl",
+          "POSS_2SG",
+          "CASE_LOC"
+        ],
+        "tuttu": true
+      },
+      "olarak": {
+        "beklenen": [
+          "ol",
+          "GERUND_ArAk"
+        ],
+        "olculen": [
+          "ol",
+          "GERUND_ArAk"
+        ],
+        "tuttu": true
+      },
+      "Ankarada": {
+        "beklenen": [
+          "Ankara",
+          "CASE_LOC"
+        ],
+        "olculen": [
+          "Ankara",
+          "CASE_LOC"
+        ],
+        "tuttu": true
+      },
+      "zzqqxx": {
+        "beklenen": [],
+        "olculen": [],
+        "tuttu": true
+      },
+      "qwertyuiop": {
+        "beklenen": [],
+        "olculen": [],
+        "tuttu": true
+      }
+    },
+    "TEMIZ": true,
+    "dusenler": []
+  },
+  "K0b_hedef_kontrol_bugun": {
+    "ağacı": {
+      "beklenen_faz2_sonrasi": [
+        "ağaç",
+        "POSS_3SG"
+      ],
+      "bugun": [
+        "ağa",
+        "DERIV_CI"
+      ],
+      "bugun_tuttu": false
+    },
+    "aklı": {
+      "beklenen_faz2_sonrasi": [
+        "akıl",
+        "POSS_3SG"
+      ],
+      "bugun": [
+        "ak",
+        "DERIV_lI"
+      ],
+      "bugun_tuttu": false
+    },
+    "kanadı": {
+      "beklenen_faz2_sonrasi": [
+        "kanat",
+        "POSS_3SG"
+      ],
+      "bugun": [
+        "kana",
+        "TENSE_PAST"
+      ],
+      "bugun_tuttu": false
+    },
+    "gönlü": {
+      "beklenen_faz2_sonrasi": [
+        "gönül",
+        "POSS_3SG"
+      ],
+      "bugun": [
+        "gön",
+        "DERIV_lI"
+      ],
+      "bugun_tuttu": false
+    },
+    "ağzı": {
+      "beklenen_faz2_sonrasi": [
+        "ağız",
+        "POSS_3SG"
+      ],
+      "bugun": [],
+      "bugun_tuttu": false
+    },
+    "hakkı": {
+      "beklenen_faz2_sonrasi": [
+        "hak",
+        "POSS_3SG"
+      ],
+      "bugun": [],
+      "bugun_tuttu": false
+    },
+    "adıyla": {
+      "beklenen_faz2_sonrasi": [
+        "ad",
+        "POSS_3SG",
+        "CASE_INSTR"
+      ],
+      "bugun": [],
+      "bugun_tuttu": false
+    }
+  },
+  "G1_dedektor_pozitif_kontrol": {
+    "durumlar": {
+      "ağacı": {
+        "secilen": [
+          "ağa",
+          "DERIV_CI"
+        ],
+        "dedektor_ihlal_dedi": true
+      },
+      "aklı": {
+        "secilen": [
+          "ak",
+          "DERIV_lI"
+        ],
+        "dedektor_ihlal_dedi": true
+      },
+      "kanadı": {
+        "secilen": [
+          "kana",
+          "TENSE_PAST"
+        ],
+        "dedektor_ihlal_dedi": true
+      },
+      "gönlü": {
+        "secilen": [
+          "gön",
+          "DERIV_lI"
+        ],
+        "dedektor_ihlal_dedi": true
+      }
+    },
+    "TEMIZ": true,
+    "kaciranlar": []
+  },
+  "kimlik": {
+    "sozluk": {
+      "yol": "data/rebuild/vocab_base_32852.json",
+      "giris": 32852,
+      "sha256": "7611b6a523a2bb524cc21aa9cc64235aa6a2ae99f87f46ac51cb2915e61164ad"
+    },
+    "lexicon": {
+      "yol": "data/lexicon/roots.tsv",
+      "benzersiz_lemma": 48200,
+      "sha256": "fe3005e5e2a594f09cbcfc3286e2c8812953ae6614333815ab87a7e3a6763598"
+    }
+  },
+  "kaynaklar": [
+    {
+      "yol": "/Users/hakankilicaslan/.cache/huggingface/hub/datasets--open-index--open-wikipedia-markdown/snapshots/69994857faf414dab416b32a411f0d77119f5761/data/tr/tr-00000.parquet",
+      "sha256": "17df2980dd5a28ce8f449ab7b199e875165bb7ad81305c1c544896d3c3f2b732"
+    },
+    {
+      "yol": "/Users/hakankilicaslan/.cache/huggingface/hub/datasets--open-index--open-wikipedia-markdown/snapshots/69994857faf414dab416b32a411f0d77119f5761/data/tr/tr-00001.parquet",
+      "sha256": "a358fb4fd5179e8ac282ff266c7ad19d53eafe680911986a7b2c04d941127ca9"
+    }
+  ],
+  "orneklem": {
+    "okunan_makale": 8427,
+    "kabul_makale": 3000,
+    "kisa_reddedilen": 5427,
+    "dosya_basi_kabul": {
+      "tr-00000.parquet": 1500,
+      "tr-00001.parquet": 1500
+    },
+    "kelime_jetonu": 2124185,
+    "benzersiz_yuzey": 215881,
+    "akis_sure_sn": 2.1
+  },
+  "G4_filtre_kontrolu": {
+    "buyuk_id_buyuklugu": 1354,
+    "poz_kaybolan": [],
+    "neg_sizan": [],
+    "TEMIZ": true,
+    "not": "etiket adlari (POSS_3SG vb.) literal ad sayilirsa sayi ~13x siser"
+  },
+  "G6_siniflandirici_kontrolu": {
+    "kontrol": [
+      {
+        "aciklama": "kimlik",
+        "beklenen": "TAM",
+        "gelen": "TAM"
+      },
+      {
+        "aciklama": "bos geri donus",
+        "beklenen": "HATA",
+        "gelen": "HATA"
+      },
+      {
+        "aciklama": "sabit nokta",
+        "beklenen": "ALTERNATIF",
+        "gelen": "ALTERNATIF"
+      },
+      {
+        "aciklama": "sabit DEGIL",
+        "beklenen": "HATA",
+        "gelen": "HATA"
+      }
+    ],
+    "dusen": [],
+    "TEMIZ": true,
+    "not": "uc dal da ulasilabilir; HATA yolu ilk surumde YOKTU (olculdu)"
+  },
+  "bin_toplam_jeton": 3522329,
+  "bin_literal_ad_jeton": 120242,
+  "siniflar_payda_notu": "kelime_yuzde = betigin siniflamasi (yuzey basina 1); bin_yuzde = yuzey OCCURRENCE'i kendi jetonlarina acilarak sayildi. IKISI DE A1 RAPORUNUN %7,94/%2,63'u ILE KIYASLANMAZ: (a) A1 paydasi .bin'deki TUM jetonlar (BOS/EOS dahil), (b) bu betik yalniz SADECE_KELIME'den gecen yuzeyleri gezdirir => rakam/noktalama tasiyan jetonlar paydada YOK. Gercek .bin kapilari Faz 4'te YAZILAN .bin'den olculur.",
+  "siniflar": {
+    "OK": {
+      "kelime_jeton": 1709880,
+      "kelime_yuzde": 80.4958,
+      "bin_jeton": 3108020,
+      "bin_yuzde": 88.2376,
+      "benzersiz": 109359
+    },
+    "PN": {
+      "kelime_jeton": 349439,
+      "kelime_yuzde": 16.4505,
+      "bin_jeton": 349439,
+      "bin_yuzde": 9.9207,
+      "benzersiz": 83168
+    },
+    "UNK": {
+      "kelime_jeton": 64866,
+      "kelime_yuzde": 3.0537,
+      "bin_jeton": 64870,
+      "bin_yuzde": 1.8417,
+      "benzersiz": 23354
+    }
+  },
+  "mekanizmalar": {
+    "ARTIK_isaretleme": {
+      "kelime_jeton": 5772,
+      "kelime_yuzde": 0.2717,
+      "benzersiz": 348
+    },
+    "D2_eksik_lemma": {
+      "kelime_jeton": 310527,
+      "kelime_yuzde": 14.6186,
+      "benzersiz": 68934
+    },
+    "D3_morfofonoloji": {
+      "kelime_jeton": 46330,
+      "kelime_yuzde": 2.1811,
+      "benzersiz": 18799
+    },
+    "D4_ek_parcasi": {
+      "kelime_jeton": 827,
+      "kelime_yuzde": 0.0389,
+      "benzersiz": 16
+    },
+    "D4_kesme": {
+      "kelime_jeton": 49066,
+      "kelime_yuzde": 2.3099,
+      "benzersiz": 17398
+    },
+    "RAKAM": {
+      "kelime_jeton": 1783,
+      "kelime_yuzde": 0.0839,
+      "benzersiz": 1027
+    }
+  },
+  "en_sik": {
+    "PN": [
+      {
+        "yuzey": "İngiliz",
+        "sayi": 5270
+      },
+      {
+        "yuzey": "Fransız",
+        "sayi": 4851
+      },
+      {
+        "yuzey": "İtalyan",
+        "sayi": 2875
+      },
+      {
+        "yuzey": "I",
+        "sayi": 1531
+      },
+      {
+        "yuzey": "İspanyol",
+        "sayi": 1293
+      },
+      {
+        "yuzey": "ABD",
+        "sayi": 1276
+      },
+      {
+        "yuzey": "İstanbul",
+        "sayi": 979
+      },
+      {
+        "yuzey": "Kanadalı",
+        "sayi": 921
+      },
+      {
+        "yuzey": "Fransa",
+        "sayi": 896
+      },
+      {
+        "yuzey": "Mustafa",
+        "sayi": 849
+      },
+      {
+        "yuzey": "Brezilyalı",
+        "sayi": 842
+      },
+      {
+        "yuzey": "William",
+        "sayi": 812
+      },
+      {
+        "yuzey": "C",
+        "sayi": 803
+      },
+      {
+        "yuzey": "James",
+        "sayi": 802
+      },
+      {
+        "yuzey": "Robert",
+        "sayi": 799
+      },
+      {
+        "yuzey": "Hollandalı",
+        "sayi": 768
+      },
+      {
+        "yuzey": "George",
+        "sayi": 715
+      },
+      {
+        "yuzey": "İsveçli",
+        "sayi": 713
+      },
+      {
+        "yuzey": "Charles",
+        "sayi": 707
+      },
+      {
+        "yuzey": "Avusturyalı",
+        "sayi": 685
+      },
+      {
+        "yuzey": "Jean",
+        "sayi": 681
+      },
+      {
+        "yuzey": "David",
+        "sayi": 665
+      },
+      {
+        "yuzey": "A",
+        "sayi": 661
+      },
+      {
+        "yuzey": "Polonyalı",
+        "sayi": 656
+      },
+      {
+        "yuzey": "Almanya",
+        "sayi": 621
+      },
+      {
+        "yuzey": "III",
+        "sayi": 618
+      },
+      {
+        "yuzey": "Paul",
+        "sayi": 604
+      },
+      {
+        "yuzey": "İngiltere",
+        "sayi": 549
+      },
+      {
+        "yuzey": "İskoç",
+        "sayi": 537
+      },
+      {
+        "yuzey": "Thomas",
+        "sayi": 512
+      },
+      {
+        "yuzey": "İrlandalı",
+        "sayi": 511
+      },
+      {
+        "yuzey": "B",
+        "sayi": 505
+      },
+      {
+        "yuzey": "Richard",
+        "sayi": 492
+      },
+      {
+        "yuzey": "İsviçreli",
+        "sayi": 490
+      },
+      {
+        "yuzey": "Joseph",
+        "sayi": 473
+      },
+      {
+        "yuzey": "Louis",
+        "sayi": 472
+      },
+      {
+        "yuzey": "Muhammed",
+        "sayi": 466
+      },
+      {
+        "yuzey": "Michael",
+        "sayi": 459
+      },
+      {
+        "yuzey": "J",
+        "sayi": 453
+      },
+      {
+        "yuzey": "Katolik",
+        "sayi": 442
+      },
+      {
+        "yuzey": "Belçikalı",
+        "sayi": 438
+      },
+      {
+        "yuzey": "Meksikalı",
+        "sayi": 438
+      },
+      {
+        "yuzey": "Henry",
+        "sayi": 432
+      },
+      {
+        "yuzey": "Azerbaycan",
+        "sayi": 429
+      },
+      {
+        "yuzey": "Avusturya",
+        "sayi": 422
+      },
+      {
+        "yuzey": "Peter",
+        "sayi": 410
+      },
+      {
+        "yuzey": "Britanyalı",
+        "sayi": 390
+      },
+      {
+        "yuzey": "İslam",
+        "sayi": 386
+      },
+      {
+        "yuzey": "ABD'nin",
+        "sayi": 377
+      },
+      {
+        "yuzey": "Danimarkalı",
+        "sayi": 375
+      },
+      {
+        "yuzey": "Polonya",
+        "sayi": 373
+      },
+      {
+        "yuzey": "Nazi",
+        "sayi": 372
+      },
+      {
+        "yuzey": "R",
+        "sayi": 371
+      },
+      {
+        "yuzey": "İranlı",
+        "sayi": 357
+      },
+      {
+        "yuzey": "Norveçli",
+        "sayi": 357
+      },
+      {
+        "yuzey": "Edward",
+        "sayi": 355
+      },
+      {
+        "yuzey": "M",
+        "sayi": 354
+      },
+      {
+        "yuzey": "Portekizli",
+        "sayi": 348
+      },
+      {
+        "yuzey": "H",
+        "sayi": 343
+      },
+      {
+        "yuzey": "Japonya",
+        "sayi": 343
+      }
+    ],
+    "UNK": [
+      {
+        "yuzey": "nbsp",
+        "sayi": 1615
+      },
+      {
+        "yuzey": "jpg",
+        "sayi": 606
+      },
+      {
+        "yuzey": "adıyla",
+        "sayi": 444
+      },
+      {
+        "yuzey": "km",
+        "sayi": 342
+      },
+      {
+        "yuzey": "rock",
+        "sayi": 316
+      },
+      {
+        "yuzey": "''",
+        "sayi": 296
+      },
+      {
+        "yuzey": "rapçi",
+        "sayi": 274
+      },
+      {
+        "yuzey": "idi",
+        "sayi": 264
+      },
+      {
+        "yuzey": "milletvekili",
+        "sayi": 241
+      },
+      {
+        "yuzey": "altfamilyasına",
+        "sayi": 210
+      },
+      {
+        "yuzey": "2023'te",
+        "sayi": 205
+      },
+      {
+        "yuzey": "yürürlüğe",
+        "sayi": 201
+      },
+      {
+        "yuzey": "hakkı",
+        "sayi": 192
+      },
+      {
+        "yuzey": "karşıtı",
+        "sayi": 177
+      },
+      {
+        "yuzey": "yönetici",
+        "sayi": 165
+      },
+      {
+        "yuzey": "ismi",
+        "sayi": 163
+      },
+      {
+        "yuzey": "dilbilimci",
+        "sayi": 160
+      },
+      {
+        "yuzey": "vb",
+        "sayi": 158
+      },
+      {
+        "yuzey": "yayınlanan",
+        "sayi": 149
+      },
+      {
+        "yuzey": "yayınlandı",
+        "sayi": 149
+      },
+      {
+        "yuzey": "nın",
+        "sayi": 145
+      },
+      {
+        "yuzey": "valisi",
+        "sayi": 145
+      },
+      {
+        "yuzey": "gerekçesiyle",
+        "sayi": 143
+      },
+      {
+        "yuzey": "align",
+        "sayi": 133
+      },
+      {
+        "yuzey": "oymağına",
+        "sayi": 124
+      },
+      {
+        "yuzey": "frac",
+        "sayi": 118
+      },
+      {
+        "yuzey": "yüzücü",
+        "sayi": 115
+      },
+      {
+        "yuzey": "ın",
+        "sayi": 114
+      },
+      {
+        "yuzey": "hâline",
+        "sayi": 109
+      },
+      {
+        "yuzey": "demiryolu",
+        "sayi": 107
+      },
+      {
+        "yuzey": "işgalinden",
+        "sayi": 105
+      },
+      {
+        "yuzey": "country",
+        "sayi": 104
+      },
+      {
+        "yuzey": "oymağıdır",
+        "sayi": 104
+      },
+      {
+        "yuzey": "di",
+        "sayi": 103
+      },
+      {
+        "yuzey": "mathbb",
+        "sayi": 101
+      },
+      {
+        "yuzey": "generali",
+        "sayi": 100
+      },
+      {
+        "yuzey": "blues",
+        "sayi": 98
+      },
+      {
+        "yuzey": "altfamilyasıdır",
+        "sayi": 98
+      },
+      {
+        "yuzey": "bilimkurgu",
+        "sayi": 97
+      },
+      {
+        "yuzey": "ndash",
+        "sayi": 96
+      },
+      {
+        "yuzey": "hapse",
+        "sayi": 94
+      },
+      {
+        "yuzey": "işgali",
+        "sayi": 94
+      },
+      {
+        "yuzey": "mathrm",
+        "sayi": 94
+      },
+      {
+        "yuzey": "000'den",
+        "sayi": 91
+      },
+      {
+        "yuzey": "finalde",
+        "sayi": 91
+      },
+      {
+        "yuzey": "2022'de",
+        "sayi": 91
+      },
+      {
+        "yuzey": "2021'de",
+        "sayi": 89
+      },
+      {
+        "yuzey": "2020'de",
+        "sayi": 89
+      },
+      {
+        "yuzey": "du",
+        "sayi": 85
+      },
+      {
+        "yuzey": "svg",
+        "sayi": 85
+      },
+      {
+        "yuzey": "unvanı",
+        "sayi": 84
+      },
+      {
+        "yuzey": "2019'da",
+        "sayi": 84
+      },
+      {
+        "yuzey": "mathbf",
+        "sayi": 83
+      },
+      {
+        "yuzey": "ediyor",
+        "sayi": 82
+      },
+      {
+        "yuzey": "unvanını",
+        "sayi": 81
+      },
+      {
+        "yuzey": "2018'de",
+        "sayi": 77
+      },
+      {
+        "yuzey": "üreticisi",
+        "sayi": 77
+      },
+      {
+        "yuzey": "by",
+        "sayi": 77
+      },
+      {
+        "yuzey": "vali",
+        "sayi": 77
+      },
+      {
+        "yuzey": "2009'da",
+        "sayi": 76
+      }
+    ],
+    "en_uzun_ihlali": [
+      {
+        "yuzey": "anlamlara",
+        "secilen_kok": "anlam",
+        "daha_uzun_aday": "anlamla",
+        "vektor": [
+          "anlam",
+          "PLURAL",
+          "CASE_DAT"
+        ]
+      },
+      {
+        "yuzey": "Camlara",
+        "secilen_kok": "cam",
+        "daha_uzun_aday": "camla",
+        "vektor": [
+          "cam",
+          "PLURAL",
+          "CASE_DAT"
+        ]
+      },
+      {
+        "yuzey": "çekmek",
+        "secilen_kok": "çek",
+        "daha_uzun_aday": "çekme",
+        "vektor": [
+          "çek",
+          "INF_mAk"
+        ]
+      },
+      {
+        "yuzey": "olan",
+        "secilen_kok": "o",
+        "daha_uzun_aday": "ol",
+        "vektor": [
+          "o",
+          "DERIV_lAn"
+        ]
+      },
+      {
+        "yuzey": "kaybetmeyen",
+        "secilen_kok": "kaybet",
+        "daha_uzun_aday": "kaybetme",
+        "vektor": [
+          "kaybet",
+          "NEG",
+          "PART_An"
+        ]
+      },
+      {
+        "yuzey": "edilmektedir",
+        "secilen_kok": "edil",
+        "daha_uzun_aday": "edilme",
+        "vektor": [
+          "edil",
+          "INF_mAk",
+          "CASE_LOC",
+          "COPULA_AORIST"
+        ]
+      },
+      {
+        "yuzey": "anılmaktadır",
+        "secilen_kok": "anıl",
+        "daha_uzun_aday": "anılma",
+        "vektor": [
+          "anıl",
+          "INF_mAk",
+          "CASE_LOC",
+          "COPULA_AORIST"
+        ]
+      },
+      {
+        "yuzey": "toplamıştır",
+        "secilen_kok": "topla",
+        "daha_uzun_aday": "toplam",
+        "vektor": [
+          "topla",
+          "TENSE_EVIDENTIAL",
+          "COPULA_AORIST"
+        ]
+      },
+      {
+        "yuzey": "kurdu",
+        "secilen_kok": "kur",
+        "daha_uzun_aday": "kurt",
+        "vektor": [
+          "kur",
+          "COPULA_PAST"
+        ]
+      },
+      {
+        "yuzey": "kurduğu",
+        "secilen_kok": "kur",
+        "daha_uzun_aday": "kurt",
+        "vektor": [
+          "kur",
+          "PART_DIk",
+          "POSS_3SG"
+        ]
+      },
+      {
+        "yuzey": "verdiği",
+        "secilen_kok": "ver",
+        "daha_uzun_aday": "verdi",
+        "vektor": [
+          "ver",
+          "PART_DIk",
+          "POSS_3SG"
+        ]
+      },
+      {
+        "yuzey": "tutmaktadır",
+        "secilen_kok": "tut",
+        "daha_uzun_aday": "tutma",
+        "vektor": [
+          "tut",
+          "INF_mAk",
+          "CASE_LOC",
+          "COPULA_AORIST"
+        ]
+      },
+      {
+        "yuzey": "hırsızlık",
+        "secilen_kok": "hır",
+        "daha_uzun_aday": "hırs",
+        "vektor": [
+          "hır",
+          "DERIV_sIz",
+          "DERIV_lIk"
+        ]
+      },
+      {
+        "yuzey": "belli",
+        "secilen_kok": "bel",
+        "daha_uzun_aday": "bell",
+        "vektor": [
+          "bel",
+          "DERIV_lI"
+        ]
+      },
+      {
+        "yuzey": "aralarında",
+        "secilen_kok": "ara",
+        "daha_uzun_aday": "arala",
+        "vektor": [
+          "ara",
+          "POSS_3PL",
+          "CASE_LOC_N"
+        ]
+      }
+    ]
+  },
+  "olculen_kapilar": {
+    "G1_en_uzun_eslesme_ihlali": {
+      "deger": 10.713,
+      "pay": 10754,
+      "payda": 100383,
+      "payda_notu": "cozulebilen kelime tipi (jeton agirlikli DEGIL)",
+      "ilan_esik": 1.0,
+      "ilan_yon": "<=",
+      "GECIYOR": false
+    },
+    "G2_UNK_orani": {
+      "deger": 1.8417,
+      "payda": ".bin",
+      "kelime_paydasi": 3.0537,
+      "ilan_esik": 1.5,
+      "ilan_yon": "<=",
+      "GECIYOR": false
+    },
+    "G3_PROPER_NOUN_orani": {
+      "deger": 9.9207,
+      "payda": ".bin",
+      "kelime_paydasi": 16.4505,
+      "ilan_esik": 3.0,
+      "ilan_yon": "<=",
+      "GECIYOR": false
+    },
+    "G4_literal_ad_bolu_yer_tutucu": {
+      "deger": 0.3441,
+      "literal_ad_jeton": 120242,
+      "yer_tutucu_jeton": 349439,
+      "payda": ".bin (orneklem)",
+      "not": "ORNEKLEMDE literal ad jetonu / <PROPER_NOUN> jetonu. ILK SURUM `w in buyuk_id` yaziyordu: w STR, buyuk_id INT kumesi => daima False => G4 0,0 cikiyordu (SESSIZ tip hatasi, kontrol de yoktu)",
+      "ilan_esik": 1.0,
+      "ilan_yon": ">=",
+      "GECIYOR": false
+    },
+    "G5_sozluk_kapsamı": {
+      "not": "bu olcum kulliyat .bin'inden yapilir (Faz 4), orneklemden DEGIL",
+      "mevcut_bilinen_A1": 86.3
+    },
+    "G6_tur_ozdesligi": {
+      "deger": 97.3223,
+      "TAM": 76997,
+      "ALTERNATIF": 20698,
+      "HATA": 2688,
+      "payda": 100383,
+      "not": "bu, decompile→compile'in KENDI tutarliligi; sentetik lemma sondasi (TAM %81,24→%84,90) AYRI bir olcumdur ve karistirilmamalidir. ILK SURUM `tur_ok + alternatif` yaziyordu: `alternatif` else dalinda artiyordu => pay ile payda AYNI kurulumdan => G6 ASLA DUSEMEZDİ (100,0 basti; plan 94,22 diyordu)",
+      "ilan_esik": 99.0,
+      "ilan_yon": ">=",
+      "GECIYOR": false
+    }
+  },
+  "sure_sn": 65.0,
+  "bitis_utc": "2026-09-19T08:06:00Z",
+  "rc": 0
+}

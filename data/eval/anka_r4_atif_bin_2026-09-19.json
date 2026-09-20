@@ -1,0 +1,59 @@
+{
+  "atif": {
+    "birim": ".bin JETON KUTLESI (100M <-> 100M); konum-konum eslesmesi DEGIL",
+    "yeni_blok_id": 262,
+    "yeni_blok_buyuk_harf_id": 254,
+    "yeni_blok_kucuk_harf_id": 8,
+    "yeni_blok_kucuk_ornek": [
+      "align",
+      "frac",
+      "mathbb",
+      "mathbf",
+      "mathrm",
+      "milletvekili",
+      "sqrt",
+      "vali"
+    ],
+    "yeni_blok_jeton": 756058,
+    "yeni_blok_jeton_yuzde": 0.7561,
+    "yeni_blok_BUYUK_jeton": 719265,
+    "yeni_blok_buyuk_jeton_yuzde": 0.7193,
+    "yeni_blok_KUCUK_jeton": 36793,
+    "PN_dusus_jeton": 800205,
+    "PN_dususun_yeni_blokla_ACIKLANAN_orani": 0.8989,
+    "PN_dusus_ACIKLANMAYAN_jeton": 80940,
+    "LIT_artis_jeton": 785194,
+    "LIT_artisin_yeni_blokla_ACIKLANAN_orani": 0.916
+  },
+  "nufus": {
+    "kabul_belge_A1": 146560,
+    "kabul_belge_A1r": 145151,
+    "belge_ortusme_yuzde": 99.0386,
+    "okunan_makale_A1": 194345,
+    "okunan_makale_A1r": 192750,
+    "A1_100M_dolan_makale_araligi": [
+      192000,
+      194000
+    ],
+    "A1r_100M_dolan_makale_araligi": [
+      186000,
+      188000
+    ],
+    "A1_kumulatif_jeton_A1r_noktasinda": 99559155,
+    "A1r_de_OLMAYAN_kuyruk_jeton": 440845,
+    "A1r_de_OLMAYAN_kuyruk_yuzde_ALT": 0.4408,
+    "A1r_de_OLMAYAN_kuyruk_yuzde_UST": 1.105,
+    "seri_kayit_araligi_makale": 2000,
+    "kusur_beyani": "KIYAS GECERLILIGI: iki 100M kulliyat ayni sirali akistan, ayni temizlemeyle ve ayni hedefle derlendi; ancak durma noktasi BELGE SINIRINDA farkli (A1 192,000-194,000 · A1-r 186,000-188,000 okunan makale) ve A1'in %0.4408-%1.105 dilimi A1-r'de YOKtur. Bu dilim ATIF kutlesinden KUCUK degildir; bu yuzden 100M<->100M kiyasi TEK BASINA hukum vermez. HUKUM, AYNI BELGELERI okuyan ornekleyici kiyasina dayanir (ilan §4: ayni 14 kural, ayni MIN_BELGE_KAR, ayni HEDEF_KABUL_PER_FILE)."
+  },
+  "kiyas_kaynak": "data/eval/anka_r4_kiyas_taban_2026-09-19.json",
+  "kontrol": {
+    "kiyas_sozluk_giris_A1": 32852,
+    "kiyas_sozluk_giris_A1r": 33114,
+    "build_benzersiz_id_A1": 28352,
+    "build_benzersiz_id_A1r": 28599,
+    "PN_eslesme": true,
+    "UNK_eslesme": true,
+    "yeni_blok_eslesme": true
+  }
+}

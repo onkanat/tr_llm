@@ -1,0 +1,434 @@
+{
+  "gorev": "T-0080",
+  "asama": "Faz 0c — G1 dogru olcut + V1 simulasyonu",
+  "baslangic_utc": "2026-09-19T08:10:20Z",
+  "kimlik": {
+    "sozluk": {
+      "yol": "data/rebuild/vocab_base_32852.json",
+      "sha256": "7611b6a523a2bb524cc21aa9cc64235aa6a2ae99f87f46ac51cb2915e61164ad"
+    },
+    "lexicon": {
+      "yol": "data/lexicon/roots.tsv",
+      "sha256": "fe3005e5e2a594f09cbcfc3286e2c8812953ae6614333815ab87a7e3a6763598"
+    },
+    "regresyon": {
+      "yol": "tests/morphology_regression_100.json",
+      "sha256": "cbe00f31c4dcc34ba2baed5317f1bf38b4e69b130c5271205c1dd5709dab18da"
+    }
+  },
+  "K0": {
+    "hatali": [],
+    "TEMIZ": true
+  },
+  "K0b_hedef_kontrol": {
+    "ağacı": {
+      "beklenen_kok": "ağaç",
+      "bugun": [
+        "ağa",
+        "DERIV_CI"
+      ],
+      "kok_dogru": false
+    },
+    "aklı": {
+      "beklenen_kok": "akıl",
+      "bugun": [
+        "ak",
+        "DERIV_lI"
+      ],
+      "kok_dogru": false
+    },
+    "kanadı": {
+      "beklenen_kok": "kanat",
+      "bugun": [
+        "kana",
+        "TENSE_PAST"
+      ],
+      "kok_dogru": false
+    },
+    "gönlü": {
+      "beklenen_kok": "gönül",
+      "bugun": [
+        "gön",
+        "DERIV_lI"
+      ],
+      "kok_dogru": false
+    },
+    "ağzı": {
+      "beklenen_kok": "ağız",
+      "bugun": [],
+      "kok_dogru": false
+    },
+    "hakkı": {
+      "beklenen_kok": "hak",
+      "bugun": [],
+      "kok_dogru": false
+    },
+    "adıyla": {
+      "beklenen_kok": "ad",
+      "bugun": [],
+      "kok_dogru": false
+    }
+  },
+  "orneklem": {
+    "kabul_makale": 3000,
+    "benzersiz_yuzey": 208971,
+    "kelime_jetonu": 2089203,
+    "dosya_basi": {
+      "tr-00000.parquet": 1500,
+      "tr-00001.parquet": 1500
+    },
+    "akis_sure_sn": 1.7
+  },
+  "son_guncelleme_utc": "2026-09-19T08:11:17Z",
+  "olcum": {
+    "cozulebilen_yuzey_tipi": 98305,
+    "ihlal_FAZ0_olcutu_aday_var": 10547,
+    "ihlal_DOGRU_olcut_gecerli_analizde_uzun_kok": 2393,
+    "ihlal_faz0_yuzde": 10.7289,
+    "ihlal_dogru_yuzde": 2.4343,
+    "v1_degisen_vektor": 2393,
+    "v1_degisen_VE_ihlaldi": 2393,
+    "v1_degisen_ama_ihlal_DEGILDI": 0,
+    "needs_disambiguation": 30836,
+    "needs_disambiguation_yuzde": 31.3677,
+    "ornek_ihlal": [
+      {
+        "yuzey": "olan",
+        "secilen": "o",
+        "secilen_vektor": [
+          "o",
+          "DERIV_lAn"
+        ],
+        "en_uzun_kok": "ol",
+        "analiz_sayisi": 2
+      },
+      {
+        "yuzey": "kurdu",
+        "secilen": "kur",
+        "secilen_vektor": [
+          "kur",
+          "COPULA_PAST"
+        ],
+        "en_uzun_kok": "kurt",
+        "analiz_sayisi": 6
+      },
+      {
+        "yuzey": "belli",
+        "secilen": "bel",
+        "secilen_vektor": [
+          "bel",
+          "DERIV_lI"
+        ],
+        "en_uzun_kok": "bell",
+        "analiz_sayisi": 4
+      },
+      {
+        "yuzey": "günümüzde",
+        "secilen": "gün",
+        "secilen_vektor": [
+          "gün",
+          "POSS_1PL",
+          "CASE_LOC"
+        ],
+        "en_uzun_kok": "günü",
+        "analiz_sayisi": 2
+      },
+      {
+        "yuzey": "ölmeden",
+        "secilen": "öl",
+        "secilen_vektor": [
+          "öl",
+          "GERUND_mAdAn"
+        ],
+        "en_uzun_kok": "ölme",
+        "analiz_sayisi": 3
+      },
+      {
+        "yuzey": "ölünce",
+        "secilen": "öl",
+        "secilen_vektor": [
+          "öl",
+          "GERUND_IncA"
+        ],
+        "en_uzun_kok": "ölü",
+        "analiz_sayisi": 2
+      },
+      {
+        "yuzey": "Günümüzde",
+        "secilen": "gün",
+        "secilen_vektor": [
+          "gün",
+          "POSS_1PL",
+          "CASE_LOC"
+        ],
+        "en_uzun_kok": "günü",
+        "analiz_sayisi": 2
+      },
+      {
+        "yuzey": "topraklar",
+        "secilen": "toprak",
+        "secilen_vektor": [
+          "toprak",
+          "PLURAL"
+        ],
+        "en_uzun_kok": "toprakla",
+        "analiz_sayisi": 5
+      },
+      {
+        "yuzey": "onun",
+        "secilen": "o",
+        "secilen_vektor": [
+          "o",
+          "CASE_GEN"
+        ],
+        "en_uzun_kok": "on",
+        "analiz_sayisi": 6
+      },
+      {
+        "yuzey": "torunları",
+        "secilen": "torun",
+        "secilen_vektor": [
+          "torun",
+          "POSS_3PL"
+        ],
+        "en_uzun_kok": "torunlar",
+        "analiz_sayisi": 5
+      },
+      {
+        "yuzey": "birinde",
+        "secilen": "bir",
+        "secilen_vektor": [
+          "bir",
+          "POSS_2SG",
+          "CASE_LOC"
+        ],
+        "en_uzun_kok": "biri",
+        "analiz_sayisi": 4
+      },
+      {
+        "yuzey": "Bunun",
+        "secilen": "bu",
+        "secilen_vektor": [
+          "bu",
+          "CASE_GEN"
+        ],
+        "en_uzun_kok": "bun",
+        "analiz_sayisi": 4
+      }
+    ],
+    "ornek_degisim": [
+      {
+        "yuzey": "olan",
+        "eski": [
+          "o",
+          "DERIV_lAn"
+        ],
+        "yeni": [
+          "ol",
+          "PART_An"
+        ],
+        "gecerli_ihlaldi": true
+      },
+      {
+        "yuzey": "kurdu",
+        "eski": [
+          "kur",
+          "COPULA_PAST"
+        ],
+        "yeni": [
+          "kurt",
+          "POSS_3SG"
+        ],
+        "gecerli_ihlaldi": true
+      },
+      {
+        "yuzey": "belli",
+        "eski": [
+          "bel",
+          "DERIV_lI"
+        ],
+        "yeni": [
+          "bell",
+          "POSS_3SG"
+        ],
+        "gecerli_ihlaldi": true
+      },
+      {
+        "yuzey": "günümüzde",
+        "eski": [
+          "gün",
+          "POSS_1PL",
+          "CASE_LOC"
+        ],
+        "yeni": [
+          "günü",
+          "POSS_1PL",
+          "CASE_LOC"
+        ],
+        "gecerli_ihlaldi": true
+      },
+      {
+        "yuzey": "ölmeden",
+        "eski": [
+          "öl",
+          "GERUND_mAdAn"
+        ],
+        "yeni": [
+          "ölme",
+          "CASE_ABL"
+        ],
+        "gecerli_ihlaldi": true
+      },
+      {
+        "yuzey": "ölünce",
+        "eski": [
+          "öl",
+          "GERUND_IncA"
+        ],
+        "yeni": [
+          "ölü",
+          "POSS_2SG",
+          "CASE_EQU"
+        ],
+        "gecerli_ihlaldi": true
+      },
+      {
+        "yuzey": "Günümüzde",
+        "eski": [
+          "gün",
+          "POSS_1PL",
+          "CASE_LOC"
+        ],
+        "yeni": [
+          "günü",
+          "POSS_1PL",
+          "CASE_LOC"
+        ],
+        "gecerli_ihlaldi": true
+      },
+      {
+        "yuzey": "topraklar",
+        "eski": [
+          "toprak",
+          "PLURAL"
+        ],
+        "yeni": [
+          "toprakla",
+          "TENSE_AORIST"
+        ],
+        "gecerli_ihlaldi": true
+      },
+      {
+        "yuzey": "onun",
+        "eski": [
+          "o",
+          "CASE_GEN"
+        ],
+        "yeni": [
+          "on",
+          "POSS_2SG"
+        ],
+        "gecerli_ihlaldi": true
+      },
+      {
+        "yuzey": "torunları",
+        "eski": [
+          "torun",
+          "POSS_3PL"
+        ],
+        "yeni": [
+          "torunlar",
+          "POSS_3SG"
+        ],
+        "gecerli_ihlaldi": true
+      },
+      {
+        "yuzey": "birinde",
+        "eski": [
+          "bir",
+          "POSS_2SG",
+          "CASE_LOC"
+        ],
+        "yeni": [
+          "biri",
+          "POSS_2SG",
+          "CASE_LOC"
+        ],
+        "gecerli_ihlaldi": true
+      },
+      {
+        "yuzey": "Bunun",
+        "eski": [
+          "bu",
+          "CASE_GEN"
+        ],
+        "yeni": [
+          "bun",
+          "POSS_2SG"
+        ],
+        "gecerli_ihlaldi": true
+      }
+    ]
+  },
+  "V1_hedef_kontrol": {
+    "ağacı": {
+      "beklenen_kok": "ağaç",
+      "bugun": "ağa",
+      "v1_sonrasi": "ağaç",
+      "v1_duzeltiyor": true
+    },
+    "aklı": {
+      "beklenen_kok": "akıl",
+      "bugun": "ak",
+      "v1_sonrasi": "akıl",
+      "v1_duzeltiyor": true
+    },
+    "kanadı": {
+      "beklenen_kok": "kanat",
+      "bugun": "kana",
+      "v1_sonrasi": "kanat",
+      "v1_duzeltiyor": true
+    },
+    "gönlü": {
+      "beklenen_kok": "gönül",
+      "bugun": "gön",
+      "v1_sonrasi": "gönül",
+      "v1_duzeltiyor": true
+    },
+    "ağzı": {
+      "beklenen_kok": "ağız",
+      "bugun": null,
+      "v1_sonrasi": null,
+      "v1_duzeltiyor": false
+    },
+    "hakkı": {
+      "beklenen_kok": "hak",
+      "bugun": null,
+      "v1_sonrasi": null,
+      "v1_duzeltiyor": false
+    },
+    "adıyla": {
+      "beklenen_kok": "ad",
+      "bugun": null,
+      "v1_sonrasi": null,
+      "v1_duzeltiyor": false
+    }
+  },
+  "regresyon_100": {
+    "yol": "tests/morphology_regression_100.json",
+    "sha256": "cbe00f31c4dcc34ba2baed5317f1bf38b4e69b130c5271205c1dd5709dab18da",
+    "cozulebilen": 100,
+    "V1_ONCESI_dogru": 24,
+    "V1_SONRASI_dogru": 23,
+    "V1_ile_BOZULAN": [
+      {
+        "yuzey": "gölgeler",
+        "beklenen": "gölge",
+        "eski": "gölge",
+        "yeni": "gölgele"
+      }
+    ],
+    "not": "bu 100 oge testin GERCEK oracle'i; testin kendisi yalniz ilk 10'una ve `len(enc)>=2`'ye bakiyor (asla dusemez) => vakum"
+  },
+  "DURDURULDU": "V1 simulasyonu kabul edilemez: duzelen=4/7 · regresyonda bozulan=1"
+}

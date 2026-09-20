@@ -1,0 +1,129 @@
+{
+  "gorev": "T-0080",
+  "asama": "Faz 3 on olcum",
+  "baslangic_utc": "2026-09-19T09:59:49Z",
+  "kimlik": {
+    "roots_anka_r1.tsv": "ea874a73c0d5669a591cef00c9d4fb16916ea3e60e42df9d3c73445c4b7efd59",
+    "roots.tsv": "fe3005e5e2a594f09cbcfc3286e2c8812953ae6614333815ab87a7e3a6763598",
+    "vocab_base_32852.json": "7611b6a523a2bb524cc21aa9cc64235aa6a2ae99f87f46ac51cb2915e61164ad",
+    "yuzeyler.tsv": "ffac4c78c614bac6485cb61cc053a61de9674e04277c508b1d9b238dfc47acdc"
+  },
+  "onbellek": {
+    "benzersiz_yuzey": 236573,
+    "ham_jeton": 2449120,
+    "meta_benzersiz": 236573,
+    "meta_jeton": 2449120
+  },
+  "vocab_taban": {
+    "giris": 32852
+  },
+  "O1": {
+    "hatali": [],
+    "TEMIZ": true
+  },
+  "suzgec": {
+    "kural": "mesru(): >=2 harf · yalniz harf/bosluk/tire · `-`/`.`/rakam ile baslamaz",
+    "GENIS_elenen_adet": 68,
+    "elenen_ornek": [
+      "---",
+      "------",
+      "-------",
+      "--------",
+      "---------",
+      "----------",
+      "-----------",
+      "------------",
+      "-------------",
+      "--------------",
+      "---------------",
+      "----------------",
+      "-----------------",
+      "------------------",
+      "-------------------",
+      "--------------------",
+      "---------------------",
+      "----------------------",
+      "-----------------------",
+      "------------------------"
+    ]
+  },
+  "kollar": {
+    "DAR_yeni_lemma": 207,
+    "DAR_zaten_stoi": 23,
+    "DAR_stoi_disi": 184,
+    "GENIS_mesru_eksik": 16333,
+    "GENIS_ilk_buyuk": 1224,
+    "GENIS_ilk_kucuk": 15109,
+    "N_DAR": 33036,
+    "N_GENIS": 49185
+  },
+  "pozisyon_sayimi_KELIME_SUZGECLI": {
+    "VAR": 0,
+    "EKSIK_BUYUK": 0,
+    "EKSIK_KUCUK": 0,
+    "EKSIK_EK": 0,
+    "ANALIZSIZ_BUYUK": 0,
+    "ANALIZSIZ_KUCUK": 0,
+    "TABAN": {
+      "VAR": 2795475,
+      "EKSIK_BUYUK": 56860,
+      "EKSIK_KUCUK": 1702,
+      "EKSIK_EK": 0,
+      "ANALIZSIZ_BUYUK": 363712,
+      "ANALIZSIZ_KUCUK": 105256
+    },
+    "DAR": {
+      "VAR": 2829195,
+      "EKSIK_BUYUK": 24000,
+      "EKSIK_KUCUK": 842,
+      "EKSIK_EK": 0,
+      "ANALIZSIZ_BUYUK": 363712,
+      "ANALIZSIZ_KUCUK": 105256
+    },
+    "GENIS": {
+      "VAR": 2854037,
+      "EKSIK_BUYUK": 0,
+      "EKSIK_KUCUK": 0,
+      "EKSIK_EK": 0,
+      "ANALIZSIZ_BUYUK": 363712,
+      "ANALIZSIZ_KUCUK": 105256
+    }
+  },
+  "pozisyon_sayimi": {
+    "TABAN": {
+      "VAR": 2795475,
+      "EKSIK_BUYUK": 56860,
+      "EKSIK_KUCUK": 1702,
+      "EKSIK_EK": 0,
+      "ANALIZSIZ_BUYUK": 365312,
+      "ANALIZSIZ_KUCUK": 338212
+    },
+    "DAR": {
+      "VAR": 2829195,
+      "EKSIK_BUYUK": 24000,
+      "EKSIK_KUCUK": 842,
+      "EKSIK_EK": 0,
+      "ANALIZSIZ_BUYUK": 365312,
+      "ANALIZSIZ_KUCUK": 338212
+    },
+    "GENIS": {
+      "VAR": 2854037,
+      "EKSIK_BUYUK": 0,
+      "EKSIK_KUCUK": 0,
+      "EKSIK_EK": 0,
+      "ANALIZSIZ_BUYUK": 365312,
+      "ANALIZSIZ_KUCUK": 338212
+    }
+  },
+  "hukum": {
+    "TABAN_yer_tutucu_pozisyon": 762086,
+    "DAR_kazanc": 33720,
+    "GENIS_kazanc": 58562,
+    "GENIS_sonrasi_yer_tutucu": 703524,
+    "ANALIZSIZ_sozlukle_DUZELMEZ": 703524,
+    "yorum": "`EKSIK_*` sinifi sozlukle DUZELIR (kimlik var, stoi'da yok). `ANALIZSIZ_*` sinifi sozlukle DUZELMEZ (derleyici yol bulamiyor) ⇒ GENIS kol sozluk kusurunun TAMAMINI kapatir mi, bu sayidan gorulur."
+  },
+  "SONUC": "OLCULDU",
+  "son_guncelleme_utc": "2026-09-19T10:01:37Z",
+  "sure_sn": 108.7
+}

@@ -1,0 +1,373 @@
+{
+  "gorev": "T-0071",
+  "baslangic_utc": "2026-09-18T12:38:46Z",
+  "sozluk": {
+    "yol": "data/rebuild/vocab_base_32852.json",
+    "sha256_once": "7611b6a523a2bb524cc21aa9cc64235aa6a2ae99f87f46ac51cb2915e61164ad",
+    "giris": 32852,
+    "next_id": 32852,
+    "id_uzayi_genismedi": true
+  },
+  "tasarim": {
+    "literal_entity_mode": true,
+    "belge_duzeyi": "makale (<BOS>...<EOS>)",
+    "satir_min": 0,
+    "min_belge_karakter": 300,
+    "hedef_train": 100000000,
+    "hedef_val": 2000000,
+    "block_size_meta": 128,
+    "sira": "parquet dosya sirasi (glob sorted) + satir sirasi — deterministik"
+  },
+  "ilerleme": [
+    {
+      "makale": 2000,
+      "train": 7802323,
+      "val": 0,
+      "sn": 64.5
+    },
+    {
+      "makale": 4000,
+      "train": 13891974,
+      "val": 0,
+      "sn": 156.1
+    },
+    {
+      "makale": 8000,
+      "train": 20330493,
+      "val": 0,
+      "sn": 253.4
+    },
+    {
+      "makale": 10000,
+      "train": 23915100,
+      "val": 0,
+      "sn": 312.9
+    },
+    {
+      "makale": 12000,
+      "train": 27337252,
+      "val": 0,
+      "sn": 361.9
+    },
+    {
+      "makale": 14000,
+      "train": 30833104,
+      "val": 0,
+      "sn": 414.0
+    },
+    {
+      "makale": 16000,
+      "train": 34189603,
+      "val": 0,
+      "sn": 462.6
+    },
+    {
+      "makale": 18000,
+      "train": 37112106,
+      "val": 0,
+      "sn": 508.1
+    },
+    {
+      "makale": 20000,
+      "train": 40191107,
+      "val": 0,
+      "sn": 553.9
+    },
+    {
+      "makale": 22000,
+      "train": 43689473,
+      "val": 0,
+      "sn": 604.3
+    },
+    {
+      "makale": 24000,
+      "train": 46202091,
+      "val": 0,
+      "sn": 639.1
+    },
+    {
+      "makale": 26000,
+      "train": 48947328,
+      "val": 0,
+      "sn": 679.7
+    },
+    {
+      "makale": 30000,
+      "train": 53667449,
+      "val": 0,
+      "sn": 748.3
+    },
+    {
+      "makale": 36000,
+      "train": 57803288,
+      "val": 0,
+      "sn": 805.3
+    },
+    {
+      "makale": 38000,
+      "train": 60083019,
+      "val": 0,
+      "sn": 837.8
+    },
+    {
+      "makale": 40000,
+      "train": 62512198,
+      "val": 0,
+      "sn": 872.8
+    },
+    {
+      "makale": 46000,
+      "train": 65766866,
+      "val": 0,
+      "sn": 915.0
+    },
+    {
+      "makale": 50000,
+      "train": 67165359,
+      "val": 0,
+      "sn": 932.0
+    },
+    {
+      "makale": 58000,
+      "train": 69532204,
+      "val": 0,
+      "sn": 963.9
+    },
+    {
+      "makale": 60000,
+      "train": 70011980,
+      "val": 0,
+      "sn": 969.6
+    },
+    {
+      "makale": 66000,
+      "train": 71796157,
+      "val": 0,
+      "sn": 995.0
+    },
+    {
+      "makale": 70000,
+      "train": 73738865,
+      "val": 0,
+      "sn": 1023.7
+    },
+    {
+      "makale": 72000,
+      "train": 75752996,
+      "val": 0,
+      "sn": 1050.7
+    },
+    {
+      "makale": 74000,
+      "train": 77325948,
+      "val": 0,
+      "sn": 1068.5
+    },
+    {
+      "makale": 76000,
+      "train": 78728780,
+      "val": 0,
+      "sn": 1085.3
+    },
+    {
+      "makale": 82000,
+      "train": 83662535,
+      "val": 0,
+      "sn": 1148.1
+    },
+    {
+      "makale": 84000,
+      "train": 85343130,
+      "val": 0,
+      "sn": 1172.2
+    },
+    {
+      "makale": 86000,
+      "train": 87279834,
+      "val": 0,
+      "sn": 1196.9
+    },
+    {
+      "makale": 88000,
+      "train": 89202399,
+      "val": 0,
+      "sn": 1223.7
+    },
+    {
+      "makale": 90000,
+      "train": 90997582,
+      "val": 0,
+      "sn": 1249.5
+    },
+    {
+      "makale": 92000,
+      "train": 92791424,
+      "val": 0,
+      "sn": 1272.2
+    },
+    {
+      "makale": 94000,
+      "train": 94778293,
+      "val": 0,
+      "sn": 1303.3
+    },
+    {
+      "makale": 96000,
+      "train": 96739845,
+      "val": 0,
+      "sn": 1331.7
+    },
+    {
+      "makale": 98000,
+      "train": 98736549,
+      "val": 0,
+      "sn": 1356.5
+    },
+    {
+      "makale": 100000,
+      "train": 100000000,
+      "val": 600186,
+      "sn": 1378.6
+    }
+  ],
+  "train": [
+    100000000
+  ],
+  "val": [
+    2000000
+  ],
+  "last_write_utc": "2026-09-18T13:02:04Z",
+  "K7_pozitif_kontrol": {
+    "referans": "Ankara, Turkiye'nin baskentidir. Nufusu 2026'da 5.700.000 idi; hava -3 dereceydi! Neden? (bkz. 2. madde)",
+    "jeton": 59,
+    "noktalama": 12,
+    "hat_canli": true,
+    "yorum": "HAT CANLI"
+  },
+  "kaynak_dosyalar": [
+    {
+      "yol": "/Users/hakankilicaslan/.cache/huggingface/hub/datasets--open-index--open-wikipedia-markdown/snapshots/69994857faf414dab416b32a411f0d77119f5761/data/tr/tr-00000.parquet",
+      "sha256": "17df2980dd5a28ce8f449ab7b199e875165bb7ad81305c1c544896d3c3f2b732",
+      "jeton": 102001712,
+      "okundu": true
+    },
+    {
+      "yol": "/Users/hakankilicaslan/.cache/huggingface/hub/datasets--open-index--open-wikipedia-markdown/snapshots/69994857faf414dab416b32a411f0d77119f5761/data/tr/tr-00001.parquet",
+      "sha256": "a358fb4fd5179e8ac282ff266c7ad19d53eafe680911986a7b2c04d941127ca9",
+      "jeton": 0,
+      "okundu": false
+    }
+  ],
+  "kaynak_toplam_bayt": 567009660,
+  "sayac": {
+    "makale": 101594,
+    "elenen_kisa": 25818,
+    "tekrar_id": 0,
+    "tekrar_metin": 0,
+    "kullanilan": 73767,
+    "val_kullanilan": 2009
+  },
+  "sure_sn": 1395.2,
+  "akis_sure_sn": 1394.6,
+  "jeton_sn_akis": 73140.0,
+  "jeton_sn_toplam": 73109.0,
+  "artefakt_train": {
+    "yol": "data/anka_pretrain.bin",
+    "jeton": 100000000,
+    "sha256": "0e55f0c0c24617a9323059c71563a9ce943177ccc90cd56824be1a7f26d2b164",
+    "bayt": 200000000,
+    "max_id": 32850,
+    "min_id": 0,
+    "benzersiz_id": 27668,
+    "pad_adet": 0,
+    "pad_orani": 0.0,
+    "unk_adet": 1578127,
+    "unk_orani": 1.5781,
+    "noktalama_adet": 6468340,
+    "noktalama_orani": 6.4683,
+    "bos_adet": 73767,
+    "eos_adet": 73766
+  },
+  "artefakt_val": {
+    "yol": "data/anka_pretrain_val.bin",
+    "jeton": 2000000,
+    "sha256": "4be459821814e9221f731d8a20c03ab790b460beb05619d68ba331028978141b",
+    "bayt": 4000000,
+    "max_id": 32850,
+    "min_id": 0,
+    "benzersiz_id": 13041,
+    "pad_adet": 0,
+    "pad_orani": 0.0,
+    "unk_adet": 29192,
+    "unk_orani": 1.4596,
+    "noktalama_adet": 125633,
+    "noktalama_orani": 6.2816,
+    "bos_adet": 2009,
+    "eos_adet": 2008
+  },
+  "olcum_hedefi": {
+    "unk_orani_akis": 1.5758,
+    "noktalama_orani_akis": 6.4647
+  },
+  "kesisim": {
+    "train_belge_id": 73767,
+    "val_belge_id": 2009,
+    "kesisim_adet": 0,
+    "kesisim_ornek": []
+  },
+  "kapilar": {
+    "K1_noktalama": {
+      "max_id": 32850,
+      "esik_max_id": 32145,
+      "noktalama_orani": 6.4683,
+      "esik": 5.0,
+      "PASS": true
+    },
+    "K2_unk": {
+      "unk_orani_akis": 1.5758,
+      "esik": 4.0,
+      "PASS": true
+    },
+    "K3_pad": {
+      "pad_orani": 0.0,
+      "esik": 1.0,
+      "PASS": true
+    },
+    "K4_olcek": {
+      "jeton": 100000000,
+      "esik": 90000000,
+      "PASS": true
+    },
+    "K5_tekrarsizlik": {
+      "tekrar_id_elenen": 0,
+      "tekrar_metin_elenen": 0,
+      "benzersiz_belge_id": 101594,
+      "train_belge_id": 73767,
+      "val_belge_id": 2009,
+      "kesisim_adet": 0,
+      "PASS": true
+    },
+    "K6_izlenebilirlik": {
+      "kaynak_adet": 2,
+      "hepsinin_sha256_var": true,
+      "toplam_kaynak_jeton": 102001712,
+      "PASS": true
+    },
+    "K7_pozitif_kontrol": {
+      "hat_canli": true,
+      "PASS": true
+    }
+  },
+  "kapi_ozet": {
+    "K1_noktalama": true,
+    "K2_unk": true,
+    "K3_pad": true,
+    "K4_olcek": true,
+    "K5_tekrarsizlik": true,
+    "K6_izlenebilirlik": true,
+    "K7_pozitif_kontrol": true
+  },
+  "bitis_utc": "2026-09-18T13:02:04Z",
+  "sozluk_sha256_sonra": "7611b6a523a2bb524cc21aa9cc64235aa6a2ae99f87f46ac51cb2915e61164ad",
+  "sozluk_degismedi": true
+}

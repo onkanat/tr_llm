@@ -1,0 +1,701 @@
+{
+  "gorev": "T-0070",
+  "damga_utc": "2026-09-18T12:15:46Z",
+  "salt_okunur": true,
+  "sozluk": {
+    "yol": "data/rebuild/vocab_base_32852.json",
+    "sha256": "7611b6a523a2bb524cc21aa9cc64235aa6a2ae99f87f46ac51cb2915e61164ad",
+    "satir": 32852,
+    "next_id": 32852,
+    "noktalama_bloku": [
+      ".",
+      ",",
+      "?",
+      "!",
+      "-",
+      ":",
+      ";",
+      "(",
+      ")"
+    ],
+    "kesme_id": 32850,
+    "varlik_ornek": [
+      "<ENT>",
+      "</ENT>",
+      "<CAP>",
+      "<ALL_CAPS>"
+    ]
+  },
+  "bin_dosyalari": [
+    {
+      "yol": "data/train.bin",
+      "bayt": 21523330,
+      "sha256": "00519ef695265a179336101efb0975aa8c522f288b7d55c9b53aa50bdc74cc5c",
+      "jeton": 10761665,
+      "etkin_jeton": 10761665,
+      "pad_adet": 0,
+      "pad_orani": 0.0,
+      "unk_adet": 595691,
+      "unk_orani": 5.5353,
+      "max_id": 25664,
+      "min_id": 0,
+      "benzersiz_id": 25600,
+      "noktalama_adet": 0,
+      "noktalama_orani": 0.0,
+      "varlik_adet": 0,
+      "noktalama_var": false
+    },
+    {
+      "yol": "data/train_all_chosen.bin",
+      "bayt": 36194594,
+      "sha256": "6d33433bb2c983dc810e5b646b61e0982d45bf15f0726675dfd4ecfc7f008b2a",
+      "jeton": 18097297,
+      "etkin_jeton": 18097297,
+      "pad_adet": 0,
+      "pad_orani": 0.0,
+      "unk_adet": 1991483,
+      "unk_orani": 11.0043,
+      "max_id": 28260,
+      "min_id": 0,
+      "benzersiz_id": 13508,
+      "noktalama_adet": 0,
+      "noktalama_orani": 0.0,
+      "varlik_adet": 0,
+      "noktalama_var": false
+    },
+    {
+      "yol": "data/train_balanced_sft.bin",
+      "bayt": 46713074,
+      "sha256": "55863e36b62414c6ada30956b30dc64a5254fe0717582384d43abd5d9cf46a24",
+      "jeton": 23356537,
+      "etkin_jeton": 23356537,
+      "pad_adet": 0,
+      "pad_orani": 0.0,
+      "unk_adet": 2007159,
+      "unk_orani": 8.5936,
+      "max_id": 32136,
+      "min_id": 0,
+      "benzersiz_id": 17040,
+      "noktalama_adet": 0,
+      "noktalama_orani": 0.0,
+      "varlik_adet": 0,
+      "noktalama_var": false
+    },
+    {
+      "yol": "data/train_balanced_sft_v2.bin",
+      "bayt": 3586866,
+      "sha256": "53b8406eee7e98d8339cd047a18a281b7a355ca5ba1891137701890dc322402c",
+      "jeton": 1793433,
+      "etkin_jeton": 1793433,
+      "pad_adet": 0,
+      "pad_orani": 0.0,
+      "unk_adet": 30216,
+      "unk_orani": 1.6848,
+      "max_id": 32850,
+      "min_id": 0,
+      "benzersiz_id": 9162,
+      "noktalama_adet": 180336,
+      "noktalama_orani": 10.0554,
+      "varlik_adet": 225891,
+      "noktalama_var": true
+    },
+    {
+      "yol": "data/train_carpenter_specialization.bin",
+      "bayt": 1735300,
+      "sha256": "13dd81bf700690b78ca15246a2fc1582ee6f8fea587c6d4e78f8ab1e1017b109",
+      "jeton": 867650,
+      "etkin_jeton": 867650,
+      "pad_adet": 0,
+      "pad_orani": 0.0,
+      "unk_adet": 11711,
+      "unk_orani": 1.3497,
+      "max_id": 32850,
+      "min_id": 0,
+      "benzersiz_id": 3273,
+      "noktalama_adet": 74379,
+      "noktalama_orani": 8.5725,
+      "varlik_adet": 12659,
+      "noktalama_var": true
+    },
+    {
+      "yol": "data/train_chat_balanced.bin",
+      "bayt": 6240000,
+      "sha256": "443f93d352b07defca91b2a620f2e4154c3ed0b14f7c695535c959209e7608fa",
+      "jeton": 3120000,
+      "etkin_jeton": 1550854,
+      "pad_adet": 1569146,
+      "pad_orani": 50.2931,
+      "unk_adet": 26039,
+      "unk_orani": 0.8346,
+      "max_id": 32850,
+      "min_id": 0,
+      "benzersiz_id": 11780,
+      "noktalama_adet": 139731,
+      "noktalama_orani": 4.4786,
+      "varlik_adet": 100760,
+      "noktalama_var": true
+    },
+    {
+      "yol": "data/train_chat_balanced_clean.bin",
+      "bayt": 4832000,
+      "sha256": "cbfb69b7ffa528a474b5dde53b55a2b01d45b44b9ff954af73ce9d2343b63612",
+      "jeton": 2416000,
+      "etkin_jeton": 1117492,
+      "pad_adet": 1298508,
+      "pad_orani": 53.7462,
+      "unk_adet": 20395,
+      "unk_orani": 0.8442,
+      "max_id": 32850,
+      "min_id": 0,
+      "benzersiz_id": 10599,
+      "noktalama_adet": 104828,
+      "noktalama_orani": 4.3389,
+      "varlik_adet": 60969,
+      "noktalama_var": true
+    },
+    {
+      "yol": "data/train_chat_sft.bin",
+      "bayt": 2464000,
+      "sha256": "de3e9f9bb7f10cca69c499347ceb54b0f22e13cffd96d2f193a6668af25b8ff6",
+      "jeton": 1232000,
+      "etkin_jeton": 567445,
+      "pad_adet": 664555,
+      "pad_orani": 53.9412,
+      "unk_adet": 17810,
+      "unk_orani": 1.4456,
+      "max_id": 28259,
+      "min_id": 0,
+      "benzersiz_id": 8170,
+      "noktalama_adet": 0,
+      "noktalama_orani": 0.0,
+      "varlik_adet": 0,
+      "noktalama_var": false
+    },
+    {
+      "yol": "data/train_corpus.bin",
+      "bayt": 1191110,
+      "sha256": "64c47070cf2de0c6a9f93b6ebc9f0b7a56b35bb3c17494ee7541951cf8bc2a58",
+      "jeton": 595555,
+      "etkin_jeton": 595555,
+      "pad_adet": 0,
+      "pad_orani": 0.0,
+      "unk_adet": 12572,
+      "unk_orani": 2.111,
+      "max_id": 16652,
+      "min_id": 0,
+      "benzersiz_id": 15120,
+      "noktalama_adet": 0,
+      "noktalama_orani": 0.0,
+      "varlik_adet": 0,
+      "noktalama_var": false
+    },
+    {
+      "yol": "data/train_deep_sft.bin",
+      "bayt": 22433024,
+      "sha256": "3bb7bee22c6c216774bbe9c1d2ca03b06efc4cae89f13dffd398a0ea8c5995fb",
+      "jeton": 11216512,
+      "etkin_jeton": 2769078,
+      "pad_adet": 8447434,
+      "pad_orani": 75.3125,
+      "unk_adet": 37963,
+      "unk_orani": 0.3385,
+      "max_id": 31321,
+      "min_id": 0,
+      "benzersiz_id": 20239,
+      "noktalama_adet": 0,
+      "noktalama_orani": 0.0,
+      "varlik_adet": 0,
+      "noktalama_var": false
+    },
+    {
+      "yol": "data/train_dpo_chosen.bin",
+      "bayt": 2343842,
+      "sha256": "f95d34e91e1e7058e9dfc49bf5812f259dbe92486fd3d6853ead95fec251a002",
+      "jeton": 1171921,
+      "etkin_jeton": 1171921,
+      "pad_adet": 0,
+      "pad_orani": 0.0,
+      "unk_adet": 163677,
+      "unk_orani": 13.9666,
+      "max_id": 17285,
+      "min_id": 0,
+      "benzersiz_id": 6461,
+      "noktalama_adet": 0,
+      "noktalama_orani": 0.0,
+      "varlik_adet": 0,
+      "noktalama_var": false
+    },
+    {
+      "yol": "data/train_f4_replay_mix.bin",
+      "bayt": 2313860,
+      "sha256": "ebe3261e8d40440e2a38b3f40c47bf88ee07bfae119d5021c6c005992807029f",
+      "jeton": 1156930,
+      "etkin_jeton": 1014356,
+      "pad_adet": 142574,
+      "pad_orani": 12.3235,
+      "unk_adet": 14173,
+      "unk_orani": 1.2251,
+      "max_id": 32850,
+      "min_id": 0,
+      "benzersiz_id": 6026,
+      "noktalama_adet": 87691,
+      "noktalama_orani": 7.5796,
+      "varlik_adet": 22215,
+      "noktalama_var": true
+    },
+    {
+      "yol": "data/train_future_finetune.bin",
+      "bayt": 12408840,
+      "sha256": "80340a98b23381098bea27ec831e0c231e2efc8de4eca31396209fdfe15595ee",
+      "jeton": 6204420,
+      "etkin_jeton": 6204420,
+      "pad_adet": 0,
+      "pad_orani": 0.0,
+      "unk_adet": 434020,
+      "unk_orani": 6.9953,
+      "max_id": 31338,
+      "min_id": 0,
+      "benzersiz_id": 2659,
+      "noktalama_adet": 0,
+      "noktalama_orani": 0.0,
+      "varlik_adet": 0,
+      "noktalama_var": false
+    },
+    {
+      "yol": "data/train_infancy.bin",
+      "bayt": 679484,
+      "sha256": "499c527ad29eef41ed13abecf6fe737860c8a16e656da173f21ead887b77f030",
+      "jeton": 339742,
+      "etkin_jeton": 339742,
+      "pad_adet": 0,
+      "pad_orani": 0.0,
+      "unk_adet": 15857,
+      "unk_orani": 4.6674,
+      "max_id": 16654,
+      "min_id": 0,
+      "benzersiz_id": 4428,
+      "noktalama_adet": 0,
+      "noktalama_orani": 0.0,
+      "varlik_adet": 0,
+      "noktalama_var": false
+    },
+    {
+      "yol": "data/train_parenting.bin",
+      "bayt": 902716,
+      "sha256": "f15ec66f6f92fa6cf7d86ff9a13292bb2def6bf95c4972a9993fb32a88a42f8c",
+      "jeton": 451358,
+      "etkin_jeton": 451358,
+      "pad_adet": 0,
+      "pad_orani": 0.0,
+      "unk_adet": 0,
+      "unk_orani": 0.0,
+      "max_id": 16656,
+      "min_id": 2,
+      "benzersiz_id": 4146,
+      "noktalama_adet": 0,
+      "noktalama_orani": 0.0,
+      "varlik_adet": 0,
+      "noktalama_var": false
+    },
+    {
+      "yol": "data/train_pedagogy_highschool.bin",
+      "bayt": 4688298,
+      "sha256": "4392e79deb90e96b429724b5df9b32553c97bcdd27904027ee0248b830b6c8b4",
+      "jeton": 2344149,
+      "etkin_jeton": 2344149,
+      "pad_adet": 0,
+      "pad_orani": 0.0,
+      "unk_adet": 46895,
+      "unk_orani": 2.0005,
+      "max_id": 31356,
+      "min_id": 0,
+      "benzersiz_id": 17048,
+      "noktalama_adet": 0,
+      "noktalama_orani": 0.0,
+      "varlik_adet": 0,
+      "noktalama_var": false
+    },
+    {
+      "yol": "data/train_wiki.bin",
+      "bayt": 16457684,
+      "sha256": "5237d2475c0a5a8f44d94a9d3aa595f82b8df33c7024aceeead120390346c095",
+      "jeton": 8228842,
+      "etkin_jeton": 8228842,
+      "pad_adet": 0,
+      "pad_orani": 0.0,
+      "unk_adet": 352512,
+      "unk_orani": 4.2839,
+      "max_id": 27243,
+      "min_id": 0,
+      "benzersiz_id": 22640,
+      "noktalama_adet": 0,
+      "noktalama_orani": 0.0,
+      "varlik_adet": 0,
+      "noktalama_var": false
+    }
+  ],
+  "bin_ozet": {
+    "adet": 17,
+    "ham_jeton": 93354011,
+    "etkin_jeton": 81231794,
+    "pad_adet": 12122217,
+    "noktalamasiz_adet": 12,
+    "noktalamali_adet": 5,
+    "pad_orani_ustu_10": [
+      "data/train_chat_balanced.bin",
+      "data/train_chat_balanced_clean.bin",
+      "data/train_chat_sft.bin",
+      "data/train_deep_sft.bin",
+      "data/train_f4_replay_mix.bin"
+    ],
+    "kutuphane_id_araligi": [
+      16652,
+      16654,
+      16656,
+      17285,
+      25664,
+      27243,
+      28259,
+      28260,
+      31321,
+      31338,
+      31356,
+      32136,
+      32850
+    ]
+  },
+  "jsonl_kaynaklari": [
+    {
+      "yol": "data/benchmark_evaluation_raw.jsonl",
+      "bayt": 23319,
+      "sha256": "74982858b3502d4b0ff6192498a280abd0de5535205f0fadf352b8784d9d830c",
+      "kayit": 31,
+      "bozuk_satir": 0,
+      "alanlar": {
+        "checkpoint": 31,
+        "test_type": 31,
+        "persona": 31,
+        "soru": 31,
+        "girdi_morfemleri": 31,
+        "ham_cikti": 31,
+        "decompile": 31,
+        "is_answerable": 20,
+        "is_abstain": 20,
+        "referans_cevap": 11
+      }
+    },
+    {
+      "yol": "data/future_train_archive.jsonl",
+      "bayt": 1534425,
+      "sha256": "103320d4a8ccb7c0709cf113f31752145e4adc00e83432549ecc16b37307a0ff",
+      "kayit": 358,
+      "bozuk_satir": 0,
+      "alanlar": {
+        "instruction": 358,
+        "input": 358,
+        "output": 358,
+        "decompiled_output": 358,
+        "rag_document": 358,
+        "retrieval_collection": 358,
+        "similarity_score": 358,
+        "similarity_threshold": 358,
+        "entropy_pre": 358,
+        "entropy_post": 358,
+        "tau": 358,
+        "reason": 358
+      }
+    },
+    {
+      "yol": "data/future_train_vector.jsonl",
+      "bayt": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "kayit": 0,
+      "bozuk_satir": 0,
+      "alanlar": {}
+    },
+    {
+      "yol": "data/simulasyon_bellek_export.jsonl",
+      "bayt": 44691411,
+      "sha256": "f823f8b399aab3aa3531fdfef5af1a0828be6d79572ce0d7895a588d1626f792",
+      "kayit": 4073,
+      "bozuk_satir": 0,
+      "alanlar": {
+        "id": 4073,
+        "payload": 4073,
+        "vectors": 4073
+      }
+    },
+    {
+      "yol": "data/train_sft.jsonl",
+      "bayt": 218,
+      "sha256": "e8ce5961fd3655040d62cc5e728d7978eded9ad5372fae2f40006405eaee857b",
+      "kayit": 2,
+      "bozuk_satir": 0,
+      "alanlar": {
+        "instruction": 2,
+        "input": 2,
+        "output": 2
+      }
+    },
+    {
+      "yol": "data/pedagogy/arena_base_accumulated.jsonl",
+      "bayt": 355511,
+      "sha256": "376527959d54ef77c414b3ee382e7c0b49eb062dedbb782bacd7bdc21d36b8ab",
+      "kayit": 899,
+      "bozuk_satir": 0,
+      "alanlar": {
+        "instruction": 899,
+        "input": 899,
+        "output": 899,
+        "domain": 899,
+        "rep": 899
+      }
+    },
+    {
+      "yol": "data/pedagogy/arena_carpenter_accumulated.jsonl",
+      "bayt": 115527,
+      "sha256": "317586ca3deec3b6cf0d644f7682192ed399e493a53acee5daff3e4df2be5285",
+      "kayit": 302,
+      "bozuk_satir": 0,
+      "alanlar": {
+        "instruction": 302,
+        "input": 302,
+        "output": 302,
+        "domain": 302
+      }
+    },
+    {
+      "yol": "data/pedagogy/carpenter_specialization_dataset.jsonl",
+      "bayt": 2001426,
+      "sha256": "146a73dce0bf95f11ad9647510c8b500ecabb2f69308e39f597148e2660946fd",
+      "kayit": 5400,
+      "bozuk_satir": 0,
+      "alanlar": {
+        "instruction": 5400,
+        "input": 5400,
+        "output": 5400
+      }
+    },
+    {
+      "yol": "data/pedagogy/chat_conversations.jsonl",
+      "bayt": 1490191,
+      "sha256": "3ec93fb27d0bb8b4103ef045056ae292c0da82fa4db6a16bcf8c116e670a5bd9",
+      "kayit": 6000,
+      "bozuk_satir": 0,
+      "alanlar": {
+        "instruction": 6000,
+        "input": 6000,
+        "output": 6000
+      }
+    },
+    {
+      "yol": "data/pedagogy/cot_vault.jsonl",
+      "bayt": 91867,
+      "sha256": "97b06fe5befd6613b520d28dc20a74deaeb30e4e8f7e6675a23720a019ff5619",
+      "kayit": 91,
+      "bozuk_satir": 0,
+      "alanlar": {
+        "timestamp": 91,
+        "query": 91,
+        "instruction": 91,
+        "thought_trace": 91,
+        "final_answer": 91,
+        "source": 91
+      }
+    },
+    {
+      "yol": "data/pedagogy/dpo_all_tokenized.jsonl",
+      "bayt": 137561614,
+      "sha256": "02004c390576ea250c202ada13634ebfbe736d7f5c9e871fccb6de6dca66b894",
+      "kayit": 6198,
+      "bozuk_satir": 0,
+      "alanlar": {
+        "prompt_ids": 6198,
+        "chosen_ids": 6198,
+        "rejected_ids": 6198
+      }
+    },
+    {
+      "yol": "data/pedagogy/dpo_tokenized.jsonl",
+      "bayt": 8613921,
+      "sha256": "c352abce074cf8c751fe4e1405be3e8471ba39dc851a5c9b414c644d5b057ce0",
+      "kayit": 321,
+      "bozuk_satir": 0,
+      "alanlar": {
+        "prompt_ids": 321,
+        "chosen_ids": 321,
+        "rejected_ids": 321
+      }
+    },
+    {
+      "yol": "data/pedagogy/high_school_foundation_dataset.jsonl",
+      "bayt": 274650,
+      "sha256": "59e2f2786d0ec0d1574a77e5b7354e02ae957345a1b4ddce945d0db19527bdf1",
+      "kayit": 688,
+      "bozuk_satir": 0,
+      "alanlar": {
+        "instruction": 688,
+        "input": 688,
+        "output": 688,
+        "expected_keywords": 184,
+        "target_collection": 184
+      }
+    },
+    {
+      "yol": "data/pedagogy/infancy_dataset.jsonl",
+      "bayt": 1122769,
+      "sha256": "357c48f46d21b40f5b9168e5e1c07cdf7ef5ab0241145fb5a77b6d7ad5d65048",
+      "kayit": 3682,
+      "bozuk_satir": 0,
+      "alanlar": {
+        "instruction": 3682,
+        "input": 3682,
+        "output": 3682
+      }
+    },
+    {
+      "yol": "data/pedagogy/lexical_semantics_dataset.jsonl",
+      "bayt": 4066310,
+      "sha256": "a7c1289d59fcc3537b11d4c310688e8ee122f9564245b30a34eefe28d35301f9",
+      "kayit": 25000,
+      "bozuk_satir": 0,
+      "alanlar": {
+        "instruction": 25000,
+        "input": 25000,
+        "output": 25000
+      }
+    },
+    {
+      "yol": "data/pedagogy/literature_poetry_dataset.jsonl",
+      "bayt": 109552,
+      "sha256": "30e4845e75df876681051ca49f2473f173d1594d7445c1506d331150a11e78e4",
+      "kayit": 220,
+      "bozuk_satir": 0,
+      "alanlar": {
+        "instruction": 220,
+        "input": 220,
+        "output": 220,
+        "expected_keywords": 220,
+        "target_collection": 220
+      }
+    },
+    {
+      "yol": "data/pedagogy/middle_school_chat.jsonl",
+      "bayt": 25677,
+      "sha256": "72f3e32a3d81cd678927f5b19ba0d146ceaabf76eef1038336872907e45903d8",
+      "kayit": 125,
+      "bozuk_satir": 0,
+      "alanlar": {
+        "instruction": 125,
+        "input": 125,
+        "output": 125
+      }
+    },
+    {
+      "yol": "data/pedagogy/parenting_dataset.jsonl",
+      "bayt": 2251615,
+      "sha256": "84c7b44fda0a3a6460415649c72643a4436045cd23612fd6584728b01f79dee2",
+      "kayit": 19342,
+      "bozuk_satir": 0,
+      "alanlar": {
+        "instruction": 19342,
+        "input": 19342,
+        "output": 19342
+      }
+    },
+    {
+      "yol": "data/pedagogy/parenting_deep_dataset.jsonl",
+      "bayt": 4798816,
+      "sha256": "da2f45ca2716ebf94ceeb38609e5e07dcc61fdef7823e1ed378c9e2a92f3e912",
+      "kayit": 40001,
+      "bozuk_satir": 0,
+      "alanlar": {
+        "instruction": 40001,
+        "input": 40001,
+        "output": 40001
+      }
+    },
+    {
+      "yol": "data/pedagogy/rag_dataset.jsonl",
+      "bayt": 4474800,
+      "sha256": "32e524a1a90e3af52b8be97d5f99798ad9ec7edf94cfa4e0ea4fc9abd4ca2d95",
+      "kayit": 11963,
+      "bozuk_satir": 0,
+      "alanlar": {
+        "instruction": 11963,
+        "input": 11963,
+        "output": 11963
+      }
+    },
+    {
+      "yol": "data/pedagogy/rag_interactive_dataset.jsonl",
+      "bayt": 1512834,
+      "sha256": "36f552519ad40512beac749dda84fdcd0f50151543c47cbe8ca58b8fcf2f1911",
+      "kayit": 6599,
+      "bozuk_satir": 0,
+      "alanlar": {
+        "instruction": 6599,
+        "input": 6599,
+        "output": 6599
+      }
+    },
+    {
+      "yol": "data/pedagogy/raw_teacher_cards_archive.jsonl",
+      "bayt": 306190,
+      "sha256": "a53df3cd18276e7c534005b76865d98b02ae2d24248ae0396bbd9f669834232a",
+      "kayit": 48,
+      "bozuk_satir": 0,
+      "alanlar": {
+        "client": 48,
+        "collection": 48,
+        "id": 48,
+        "payload": 48,
+        "timestamp": 48
+      }
+    },
+    {
+      "yol": "data/pedagogy/turk_tarihi_chat.jsonl",
+      "bayt": 2774490,
+      "sha256": "cd606873519879a11bb5bec7dd680d0d9f5b4a9ff6c64d07dc46a429109c2309",
+      "kayit": 6101,
+      "bozuk_satir": 0,
+      "alanlar": {
+        "instruction": 6101,
+        "input": 6101,
+        "output": 6101
+      }
+    },
+    {
+      "yol": "data/pedagogy/turk_tarihi_dpo_tokenized.jsonl",
+      "bayt": 282415,
+      "sha256": "73794f8d48a7acb6e1a650de729179d8279cf0a86a82e0e424ca991e407c3d97",
+      "kayit": 406,
+      "bozuk_satir": 0,
+      "alanlar": {
+        "prompt_ids": 406,
+        "chosen_ids": 406,
+        "rejected_ids": 406
+      }
+    },
+    {
+      "yol": "data/pedagogy/turk_tarihi_sft.jsonl",
+      "bayt": 3062397,
+      "sha256": "b4d937531651f933b7462388e9544a673b765bbdd02c40eca4446c1358d0fcce",
+      "kayit": 6507,
+      "bozuk_satir": 0,
+      "alanlar": {
+        "instruction": 6507,
+        "input": 6507,
+        "output": 6507
+      }
+    }
+  ],
+  "jsonl_ozet": {
+    "adet": 25,
+    "kayit": 144357,
+    "bozuk_satir": 0,
+    "bos_dosyalar": [
+      "data/future_train_vector.jsonl"
+    ]
+  }
+}
