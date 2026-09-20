@@ -317,7 +317,14 @@ def main():
 
     # Stage 1: Pretraining
     print(f"\n{C_BOLD}[2.1 / 4] Stage-1: Temel Ön Eğitim (Pretraining {train_steps} adım)...{C_RESET}")
-    stage1_cmd = [python_bin, "train.py", "--device", device, "--data", "data/train.bin", "--steps", train_steps, "--from-scratch", "--vocab", vocab_path, "--save-path", base_model]
+    # `--pretrain` ZORUNLU (T-0090 · ÖLÇÜLDÜ, 20 Eyl 2026). Gerekçe: bu bayrak olmadan
+    # hedef `mask_prompt_targets` ile üretilir; `data/train.bin` düz-metin olduğu için
+    # pencerenin TAMAMI -100'e düşer ⇒ `train.py:275` canlı kapısı İLK partide durur ve
+    # boru hattı burada ölür (ölçülen taban: **rc=1**, RuntimeError "SFT maskelemesi bu
+    # partide HICBIR hedef birakmadi"). Kapı SESSİZ DEĞİL (T-0073 düzeltmesi çalışıyor),
+    # ama stage-1 bu bayrak olmadan HİÇ koşamıyordu. `--pretrain` ile aynı komut
+    # **rc=0** ve ilk kayıp **10,5279** (sıfırdan koşum canlılık imzası; ln 33114 = 10,4076).
+    stage1_cmd = [python_bin, "train.py", "--device", device, "--data", "data/train.bin", "--steps", train_steps, "--from-scratch", "--pretrain", "--vocab", vocab_path, "--save-path", base_model]
     if allow_frozen_write:
         stage1_cmd.append("--allow-frozen-write")
     check_frozen_save_path(base_model, allow_frozen_write=allow_frozen_write)

@@ -17,7 +17,7 @@ import sys
 import json
 import re
 from datetime import datetime, timezone
-from typing import List, Tuple, Optional
+from typing import List, Tuple, Optional, NoReturn
 import torch
 
 # Ensure parent directory is in path
@@ -287,6 +287,22 @@ def print_status(model_path: str, device: torch.device, vocab_size: int,
     print(f"{C_MAGENTA}====================================={C_RESET}\n")
 
 
+def _durdur(mesaj: str) -> NoReturn:
+    """Fail-closed durma: mesajı **stderr**'e basar ve `rc=2` ile çıkar (T-0090).
+
+    NEDEN (ölçüldü, 20 Eyl 2026 · bu değişiklikten ÖNCE): üç yapılandırma dalı
+    `print` + çıplak `return` ile bitiyordu ⇒ `main()` normal dönüyor ve betik
+    **rc=0** ile çıkıyordu. Çağıran, "sözlük dosyası yok" ile "başarıyla koştu"yu
+    AYIRT EDEMİYORDU (ölçülen taban: üç dalın üçü de rc=0). Emsal: `train_dpo.py`
+    `_durdur` (T-0089) — orada da DPO hiç yapılmadan başarı dönüyordu.
+
+    Mesaj stderr'e gider: stdout interaktif sohbet akışıdır, bu ise bir **uyarı**
+    değil bir **durma**dır (önem derecesi taşımalı ve boru hattında görünmelidir).
+    """
+    print(f"{C_RED}DURDURULDU: {mesaj}{C_RESET}", file=sys.stderr, flush=True)
+    sys.exit(2)
+
+
 def main():
     if "--gateway" in sys.argv:
         from scripts.run_agent_arena import main as run_arena_main
@@ -306,14 +322,14 @@ def main():
         if arg == "--vocab" and arg_idx + 1 < len(sys.argv):
             vocab_path = sys.argv[arg_idx + 1]
     if not vocab_path:
-        print(f"{C_RED}Hata: --vocab verilmedi. Varsayilan KALDIRILDI (T-0087): eski "
-              f"varsayilan 'data/vocab.json' (31.357) BAYATTI ve checkpoint'i sessizce "
-              f"kirpiyordu. Sozluk, checkpoint satir sayisiyla AYNI olmalidir; or. "
-              f"--vocab data/rebuild/vocab_anka_r1_33114.json{C_RESET}")
-        sys.exit(2)
+        _durdur("--vocab verilmedi. Varsayilan KALDIRILDI (T-0087): eski "
+                "varsayilan 'data/vocab.json' (31.357) BAYATTI ve checkpoint'i sessizce "
+                "kirpiyordu. Sozluk, checkpoint satir sayisiyla AYNI olmalidir; or. "
+                "--vocab data/rebuild/vocab_anka_r1_33114.json")
     if not os.path.exists(vocab_path):
-        print(f"{C_RED}Hata: Sözlük dosyası '{vocab_path}' bulunamadı! Lütfen önce verileri derleyin.{C_RESET}")
-        return
+        # T-0090: bu dal eskiden `print` + çıplak `return` idi ⇒ betik **rc=0** ile
+        # çıkıyordu ve çağıran "sözlük yok"u "başarıyla koştu"dan ayırt edemiyordu.
+        _durdur(f"Sözlük dosyası '{vocab_path}' bulunamadı! Lütfen önce verileri derleyin.")
     vocab.load(vocab_path)
     vocab_size = len(vocab.stoi)
     
@@ -321,8 +337,8 @@ def main():
     lexicon = LexiconManager()
     lexicon_path = 'data/lexicon/roots.tsv'
     if not os.path.exists(lexicon_path):
-        print(f"{C_RED}Hata: {lexicon_path} bulunamadı!{C_RESET}")
-        return
+        # T-0090: eskiden `print` + çıplak `return` ⇒ rc=0 (ölçüldü).
+        _durdur(f"{lexicon_path} bulunamadı! Derleyici sözlüksüz kurulamaz.")
     lexicon.load_from_tsv(lexicon_path)
     compiler = CrystalCompiler(lexicon, build_default_graph())
     tokenizer = KristalTokenizer(compiler, vocab)
@@ -343,13 +359,12 @@ def main():
             model_path = sys.argv[arg_idx + 1]
 
     if not model_path:
-        print(f"{C_RED}Hata: --model verilmedi. Varsayilan KALDIRILDI (T-0087): eski "
-              f"varsayilan silinmis bir checkpoint zincirinin adini tasiyordu. "
-              f"Or. --model data/anka_a1r.pt{C_RESET}")
-        sys.exit(2)
+        _durdur("--model verilmedi. Varsayilan KALDIRILDI (T-0087): eski "
+                "varsayilan silinmis bir checkpoint zincirinin adini tasiyordu. "
+                "Or. --model data/anka_a1r.pt")
     if not os.path.exists(model_path):
-        print(f"{C_RED}Hata: Eğitilmiş model dosyası '{model_path}' bulunamadı!{C_RESET}")
-        return
+        # T-0090: eskiden `print` + çıplak `return` ⇒ rc=0 (ölçüldü).
+        _durdur(f"Eğitilmiş model dosyası '{model_path}' bulunamadı!")
         
     print(f"  {C_CYAN}Model Ağırlıkları Yükleniyor: {model_path}{C_RESET}")
     model = load_model_instance(model_path, vocab_size, vocab, device)

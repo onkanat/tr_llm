@@ -184,20 +184,28 @@ pip install -r requirements.txt
 
 ### 3. Etkileşimli CLI Arayüzü ile Sohbet & Ajan Arenası
 ```bash
-./venv/bin/python chat_prompt.py
+# `--vocab` ve `--model` ZORUNLUDUR (varsayilan YOK; T-0087): verilmezse ya da verilen
+# yol yoksa sohbet KOSMADAN `rc=2` ile durur (T-0090: eskiden rc=0 ile donuyordu).
+./venv/bin/python chat_prompt.py \
+  --vocab data/rebuild/vocab_anka_r1_33114.json --model data/anka_a1r.pt
 # Doğrudan terminalden 'arena' yazarak pedagojik süpervizör moduna geçebilirsiniz.
 ```
 
 ### 4. Otonom Ajan Arenasını veya REST API Sunucusunu Çalıştırma
 ```bash
+# `--model` ve `--vocab` ZORUNLUDUR (varsayilan YOK; T-0088): verilmezse ya da verilen
+# yol yoksa arena KOSMADAN durur. Sozluk, checkpoint satir sayisiyla AYNI olmalidir.
 # 1931 Türk Tarihi müfredatında 3 turluk otonom pedagojik sınav ve RAG doğrulama:
-./venv/bin/python scripts/run_agent_arena.py --domain history_1931 --rounds 3 --device cpu
+./venv/bin/python scripts/run_agent_arena.py --domain history_1931 --rounds 3 --device cpu \
+  --model data/anka_a1r.pt --vocab data/rebuild/vocab_anka_r1_33114.json
 
 # Ahşap alanında 2 turluk otonom pedagojik sınav ve RAG enjeksiyonu:
-./venv/bin/python scripts/run_agent_arena.py --domain carpenter --rounds 2
+./venv/bin/python scripts/run_agent_arena.py --domain carpenter --rounds 2 \
+  --model data/anka_a1r.pt --vocab data/rebuild/vocab_anka_r1_33114.json
 
 # Dış agent sistemleri için REST API sunucusu:
-./venv/bin/python scripts/run_agent_arena.py --server --port 8080
+./venv/bin/python scripts/run_agent_arena.py --server --port 8080 \
+  --model data/anka_a1r.pt --vocab data/rebuild/vocab_anka_r1_33114.json
 ```
 
 ### 5. 3 Aşamalı Sıralı Model Eğitimi (SFT ➔ Chat ➔ DPO)
@@ -218,7 +226,7 @@ cp data/kristal_model.pt data/kristal_model_sft.pt
 
 > [!IMPORTANT]
 > **Güncel veri hattı ve eğitim kapıları (16 Eyl 2026):**
-> - Eğitim hattı (`train.py` ile çağrılan `train_scientific_sft.py`, `retrain_clean_models.py`, `run_goal_pipeline.py`, `evaluate_sft_benchmarks.py`) artık **`data/train_balanced_sft_v2.bin`** okur ve sözlük olarak **`data/rebuild/vocab_base_32852.json` (32.852)** yükler; checkpoint'ler `resize_state_dict` ile hizalanır ve uyumsuzluk `[SOZLESME_UYARI]` satırıyla **görünür** biçimde basılır.
+> - Eğitim hattı (`train.py` ile çağrılan `train_scientific_sft.py`, `retrain_clean_models.py`, `run_goal_pipeline.py`, `evaluate_sft_benchmarks.py`) artık **`data/train_balanced_sft_v2.bin`** okur; sözlük **TABAN** olarak `data/rebuild/vocab_base_32852.json` (32.852) alınır, ancak güncel A1-r külliyatı için **33.114 girişli** `data/rebuild/vocab_anka_r1_33114.json` **`--vocab` ile AÇIKÇA verilmelidir** (T-0088: sözlük artık gömülü bir sabit değil, parametredir ve tüm eğitim aşamalarına geçilir). Checkpoint'ler `resize_state_dict` ile hizalanır ve uyumsuzluk `[SOZLESME_UYARI]` satırıyla **görünür** biçimde basılır.
 > - **Donmuş yola yazım operatör onayı ister:** dört eğitim girişi yazmadan önce `check_frozen_save_path` çağırır; onay `--allow-frozen-write` ile verilir ve hedef `writes[]`'te beyan edilip üst dizin kiralanmalıdır.
 > - **`<PAD>` kayıp maskesi** varsayılan olarak aktiftir ve kayıp **ölçeğini** değiştirir → maskeleme öncesi/sonrası kayıp değerleri kıyaslanmamalıdır.
 > - Eğitim koşumları sırasında makinede GPU tüketen başka iş çalıştırılmamalıdır (ölçüldü: adım süresi 0,43 → 3,45 sn/adım).
@@ -234,8 +242,8 @@ cp data/kristal_model.pt data/kristal_model_sft.pt
 | `scripts/train_chat_sft.py` | `--data <dosya.bin>`, `--steps <sayı>`, `--batch-size <sayı>`, `--device <cpu\|mps>`, `--base-model <model.pt>` | Causal prompt masking ile sohbet ve diyalog yeteneklerini dengeli biçimde ince ayarlar. |
 | `train_dpo.py` | **`--vocab <sozluk.json>`**, **`--ref-model <pt>`**, **`--active-model <pt>`** (üçü de **ZORUNLU**), `--data <dosya.jsonl>`, `--steps <sayı>`, `--batch-size <sayı>`, `--beta <sayı>`, `--save-path <pt>` | Dondurulmuş referans model ile aktif model arasında Bradley-Terry DPO optimizasyonu yürütür. Üç zorunlu bayraktan biri eksikse ya da verilen yol yoksa koşum **başlamadan `rc=2` ile durur**; sözlük ile checkpoint'in satır sayısı uyuşmazsa da durur (T-0089). Varsayılanı olan tek girdi `--data`'dır ve o da yoksa koşum durur. |
 | `scripts/prepare_turk_tarihi_pipeline.py` | Yok | HF 1931 Türk Tarihi veri setini indirip derler, sözlüğü genişletir ve Qdrant'a indeksler. |
-| `scripts/run_agent_arena.py` | `--domain <history_1931\|carpenter\|pedagogy\|literary>`, `--rounds <sayı>`, `--auto-retrain`, `--server` | Usta-çırak pedagojik döngüsünü (Gemini/Ollama) veya HTTP REST API Gateway sunucusunu başlatır. |
-| `chat_prompt.py` | `--model <model.pt>`, `mode` (SFT/Normal/RAG), `arena`, `--gateway` | Terminal üzerinden çekirdek veya uzmanlaşmış modelle gerçek zamanlı interaktif diyalog sağlar. |
+| `scripts/run_agent_arena.py` | **`--model <pt>`**, **`--vocab <sozluk.json>`** (ikisi de **ZORUNLU**; T-0088), `--domain <history_1931\|carpenter\|pedagogy\|literary\|…>`, `--rounds <sayı>`, `--repetitions <sayı>`, `--device <cpu\|mps>`, `--auto-retrain`, `--server`, `--port <sayı>` | Usta-çırak pedagojik döngüsünü (Gemini/Ollama) veya HTTP REST API Gateway sunucusunu başlatır. `--model`/`--vocab` verilmezse ya da verilen yol/uyum yoksa arena **koşmadan durur**. |
+| `chat_prompt.py` | **`--vocab <sozluk.json>`**, **`--model <model.pt>`** (ikisi de **ZORUNLU**; T-0087), `mode` (SFT/Normal/RAG), `arena`, `--gateway` | Terminal üzerinden çekirdek veya uzmanlaşmış modelle gerçek zamanlı interaktif diyalog sağlar. Zorunlu iki bayraktan biri eksikse ya da verilen yol yoksa sohbet **başlamadan `rc=2` ile durur**; sözlük ile checkpoint satır sayısı uyuşmazsa da durur (T-0087/T-0090). |
 | `rag_tool.py` | `add`, `search`, `list`, `status`, `reset` | Vektörel belleğe (kristal_bellek) harici TXT, MD, PDF veya JSON belge ekler ve yönetir. |
 | `scripts/prepare_reasoning_dataset.py` | `--vault <yol>`, `--output <yol>`, `--min-len <sayı>` | CoT kasasındaki düşünce zincirlerini Evre 5 için `train_reasoning_cot.bin` olarak derler. |
 | `scripts/sanitize_vector_memory.py` | `--db-path <yol>`, `--clean-points`, `--seed-woods` | Qdrant vektörel belleğini CoT sızıntılarından arındırır ve saf ağaç/marangozluk kartlarını indeksler. |

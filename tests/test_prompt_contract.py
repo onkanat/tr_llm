@@ -24,14 +24,16 @@ from src.compiler.core import CrystalCompiler
 import chat_prompt
 
 # T-0088: GUNCEL kulliyat sozlugu. Test bu yolu ACIKCA gecirir; bayat varsayilan YOK.
-# (env fixture'i hala `data/vocab.json` yukler; o ayri ve ACIK bir maddedir.)
+# T-0090: `env` fixture'i da ARTIK AYNI guncel sozlugu yukler. Eskiden `data/vocab.json`
+# (31.357) yukluyordu; o sozluk guncel checkpoint'lerden KUCUK oldugu icin fixture,
+# urunun gordugu sozlukten FARKLI bir tokenizer kuruyordu (T-0088 §10/3 acik maddesi).
 GUNCEL_VOCAB = "data/rebuild/vocab_anka_r1_33114.json"
 
 # Fixture to provide tokenizer and vocab
 @pytest.fixture(scope="module")
 def env():
     vocab = Vocabulary()
-    vocab.load("data/vocab.json")
+    vocab.load(GUNCEL_VOCAB)
     lex = LexiconManager()
     lex.load_from_tsv("data/lexicon/roots.tsv")
     comp = CrystalCompiler(lex, build_default_graph())
