@@ -23,6 +23,10 @@ from src.compiler.morphotactics import build_default_graph
 from src.compiler.core import CrystalCompiler
 import chat_prompt
 
+# T-0088: GUNCEL kulliyat sozlugu. Test bu yolu ACIKCA gecirir; bayat varsayilan YOK.
+# (env fixture'i hala `data/vocab.json` yukler; o ayri ve ACIK bir maddedir.)
+GUNCEL_VOCAB = "data/rebuild/vocab_anka_r1_33114.json"
+
 # Fixture to provide tokenizer and vocab
 @pytest.fixture(scope="module")
 def env():
@@ -237,16 +241,16 @@ def test_canary_d_tokenizer_config_validation_and_describe(env, capsys):
     """Canary (d): TokenizerConfig.validate() is actively called and warns on literal_entity_mode=True."""
     from src.llm.prompt_contract import describe, TokenizerConfig
 
-    # Normal mode -> no warning
+    # Normal mode -> no warning. T-0088: config artik ZORUNLU (bayat varsayilan KALDIRILDI).
     capsys.readouterr()  # clear buffer
-    desc_default = describe()
+    desc_default = describe(TokenizerConfig(vocab_path=GUNCEL_VOCAB))
     out_default = capsys.readouterr().out
     assert "[SOZLESME]" in desc_default
     assert "literal_entity=False" in desc_default
     assert "[SOZLESME_UYARI]" not in out_default
 
     # Entity mode -> prints [SOZLESME_UYARI]
-    cfg_entity = TokenizerConfig(literal_entity_mode=True)
+    cfg_entity = TokenizerConfig(vocab_path=GUNCEL_VOCAB, literal_entity_mode=True)
     desc_entity = describe(cfg_entity)
     out_entity = capsys.readouterr().out
     assert "[SOZLESME]" in desc_entity
@@ -257,6 +261,23 @@ def test_canary_d_tokenizer_config_validation_and_describe(env, capsys):
     with pytest.raises(FileNotFoundError):
         cfg_bad = TokenizerConfig(vocab_path="data/non_existent_vocab_file_12345.json")
         describe(cfg_bad)
+
+
+def test_canary_e_tokenizer_config_fail_closed(env):
+    """T-0088 fail-closed kanaryası: sözlük yolu VERİLMEZSE sessizce bayat varsayılana
+    düşülmez. Düzeltmeden ÖNCE bu çağrı `data/vocab.json` (BAYAT, 31.357) kabul ederdi
+    ve hiçbir uyarı vermezdi; kapı artık çağrı anında durur."""
+    # 1) Argümansız TokenizerConfig geçersiz
+    with pytest.raises(ValueError):
+        TokenizerConfig().validate()
+
+    # 2) Argümansız describe() durur (eskiden SESSİZCE bayat sözlüğe düşüyordu)
+    with pytest.raises(ValueError):
+        describe()
+
+    # 3) POZİTİF KONTROL: geçerli yol verilince çalışır — kanarya kendi kendini
+    #    çürütmesin (yoksa "her zaman duruyor" da kapıyı geçerdi).
+    assert "[SOZLESME]" in describe(TokenizerConfig(vocab_path=GUNCEL_VOCAB))
 
 
 def test_positive_control_detector_finds_unmigrated():

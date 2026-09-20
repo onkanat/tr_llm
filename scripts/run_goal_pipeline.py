@@ -8,8 +8,27 @@ Bu betik kullanıcının /goal talimatını baştan sona eksiksiz yürütür:
 1. Temel Model için 300 Tur x 3 Tekrarlı Lise & Z Kuşağı Müfredat Arenası (Gemini/Ollama Öğretmen).
 2. Biriken verilerin derlenmesi ve Full Temel Model Eğitimi (Pretrain -> SFT -> Chat -> DPO).
 3. Marangozluk Modülü için 300 Adımlık Uzmanlık Arenası.
-4. Biriken veri ile kristal_carpenter_model.pt modülünün yeniden eğitimi.
+4. Biriken veri ile marangozluk uzmanlık modülünün (ayrı checkpoint) yeniden eğitimi.
 5. Her iki modelin çıkarım ve test doğrulaması.
+
+KULLANIM (T-0088 — dört parametre ZORUNLUDUR, hiçbirinin varsayılanı yoktur):
+  ./venv/bin/python scripts/run_goal_pipeline.py \
+      --base-model data/anka_a1r.pt \
+      --carpenter-model data/anka_carpenter.pt \
+      --sft-model data/anka_sft.pt \
+      --vocab data/rebuild/vocab_anka_r1_33114.json
+
+T-0088 NOTU (ölçüm, tasarım DEĞİŞTİRİLMEDİ): bu betiğin girdi yolları eskiden
+gomulu sabitlerdi ve o dosyalar (Kristal zinciri) 18 Eyl 2026'da SİLİNDİ ⇒ yollar
+artık ÇAĞRIDAN gelir ve eksikse betik HİÇBİR İŞE BAŞLAMADAN durur. Ölçülmüş,
+KAPATILMAMIŞ borçlar rapora yazıldı (bu betik onları sessizce "düzeltmez"):
+  * 1. aşamadaki `train.py` çağrısında `--pretrain` YOKTUR (bkz. D1 sessiz
+    sıfır-kayıp tuzağı). Kusur mu, veri kümesi mi gerektirmiyor: ölçülmedi.
+
+T-0089 NOTU (bu satır GÜNCELLENDİ): T-0088'de burada "4. aşamadaki `train_dpo.py`
+sözlüğü `data/vocab.json`e sabittir ve `--vocab` KABUL ETMEZ ⇒ bu betikten
+düzeltilemez" yazıyordu. O borç KAPANDI: `train_dpo.py` artık `--vocab` alır ve
+sözlük/checkpoint çiftini ZORUNLU tutar ⇒ 4. aşama sözlüğü AÇIKÇA geçirir.
 """
 
 import os
@@ -149,7 +168,33 @@ def main():
     parser.add_argument("--carpenter-steps", type=int, default=150, help="Marangozluk eğitim adım sayısı")
     parser.add_argument("--device", type=str, default="mps" if torch.backends.mps.is_available() else "cpu", help="Donanım cihazı (mps/cpu)")
     parser.add_argument("--allow-frozen-write", action="store_true", default=False, help="Donmuş kütüklere (data/*.pt, data/*.bin vb.) yazma izni ver")
+    parser.add_argument("--base-model", type=str, default=None, help="Temel model checkpoint yolu — ZORUNLU (varsayilan YOK; T-0088)")
+    parser.add_argument("--carpenter-model", type=str, default=None, help="Marangozluk uzmanlik checkpoint yolu — ZORUNLU (T-0088)")
+    parser.add_argument("--sft-model", type=str, default=None, help="SFT ara checkpoint yolu (DPO'nun girdisi) — ZORUNLU (T-0088)")
+    parser.add_argument("--vocab", type=str, default=None, help="Kulliyat sozlugu — ZORUNLU; derleme ve tum egitim asamalarina AYNEN gecilir (T-0088)")
     args = parser.parse_args()
+
+    # EMEKLI (T-0088): bu betikte gomulu VARSAYILAN olarak duran checkpoint adlari
+    #   data/kristal_model.pt · data/kristal_model_sft.pt · data/kristal_carpenter_model.pt
+    # idi; o zincir 18 Eyl 2026'da SILINDI. Varsayilan BASKA BIR ADA tasinmadi (T-0085
+    # emsali: uydurma ad yazilmaz) — yollar CAGRIDAN gelir ve eksikse betik HICBIR ISE
+    # BASLAMADAN durur. Ayrica derleme sozlugu de gomulu idi (32.852 TABAN sozluk);
+    # kulliyat sozlugu 33.114 oldugu icin sessiz kirpma riski tasiyordu ⇒ o da ACIKCA
+    # istenir ve TUM egitim asamalarina gecilir (T-0088, T-0087 ailesi).
+    eksik = [ad for ad, deger in (("--base-model", args.base_model),
+                                  ("--carpenter-model", args.carpenter_model),
+                                  ("--sft-model", args.sft_model),
+                                  ("--vocab", args.vocab)) if not deger]
+    if eksik:
+        parser.error(f"{' ve '.join(eksik)} ZORUNLUDUR. Bu betikte eskiden gomulu varsayilan "
+                     "yollar vardi ve o artefaktlar artik YOKTUR/BAYATTIR; guncel yollari "
+                     "acikca verin (T-0088).")
+    yok = [y for y in (args.vocab,) if not os.path.exists(y)]
+    if yok:
+        # Sozluk dosyasi okunamazsa `Vocabulary.load` BOS sozluk uretir (sessiz sinif);
+        # kapi onu ise baslamadan keser. Checkpoint'ler ise bu kosumda URETILECEK olabilir
+        # ⇒ onlar icin var-yok kapisi KONULMAZ (uretilen hedef, onceden var olmayabilir).
+        parser.error("VERILEN SOZLUK YOLU YOK: " + " · ".join(yok) + " (T-0088)")
 
     device = args.device
     base_rounds = args.base_rounds
@@ -159,6 +204,10 @@ def main():
     dpo_steps = str(args.dpo_steps)
     carpenter_steps = str(args.carpenter_steps)
     allow_frozen_write = args.allow_frozen_write
+    base_model = args.base_model
+    carpenter_model = args.carpenter_model
+    sft_model = args.sft_model
+    vocab_path = args.vocab
 
     print(f"{C_BOLD}{C_GREEN}======================================================================")
     print("  KRİSTAL-VEKTÖREL: OTONOM /GOAL EĞİTİM VE UZMANLAŞMA BORU HATTI")
@@ -174,7 +223,7 @@ def main():
     # -------------------------------------------------------------------------
     log_phase(f"AŞAMA 1: TEMEL MODEL LİSE & Z KUŞAĞI ARENASI ({base_rounds} Tur x {base_reps} Tekrar)")
     
-    gateway_base = AgentGateway.create_default(model_path="data/kristal_model.pt", device=device)
+    gateway_base = AgentGateway.create_default(model_path=base_model, vocab_path=vocab_path, device=device)
     retrain_pipeline = RetrainPipeline(device=device)
     supervisor_base = PedagogicalSupervisor(
         gateway=gateway_base,
@@ -242,9 +291,10 @@ def main():
             "data/future_train_vector.jsonl"
         ],
         output_bin="data/train_balanced_sft.bin",
-        vocab_path="data/rebuild/vocab_base_32852.json",
+        vocab_path=vocab_path,
         literal_entity_mode=True,
-        block_size=64
+        block_size=64,
+        allow_frozen_write=allow_frozen_write
     )
 
     # 2. Update Chat SFT dataset with base arena archive
@@ -257,56 +307,62 @@ def main():
             "data/future_train_vector.jsonl"
         ],
         output_bin="data/train_chat_balanced.bin",
-        vocab_path="data/rebuild/vocab_base_32852.json",
+        vocab_path=vocab_path,
         literal_entity_mode=True,
-        block_size=64
+        block_size=64,
+        allow_frozen_write=allow_frozen_write
     )
 
     python_bin = sys.executable
 
     # Stage 1: Pretraining
     print(f"\n{C_BOLD}[2.1 / 4] Stage-1: Temel Ön Eğitim (Pretraining {train_steps} adım)...{C_RESET}")
-    stage1_cmd = [python_bin, "train.py", "--device", device, "--data", "data/train.bin", "--steps", train_steps, "--from-scratch", "--save-path", "data/kristal_model.pt"]
+    stage1_cmd = [python_bin, "train.py", "--device", device, "--data", "data/train.bin", "--steps", train_steps, "--from-scratch", "--vocab", vocab_path, "--save-path", base_model]
     if allow_frozen_write:
         stage1_cmd.append("--allow-frozen-write")
-    check_frozen_save_path("data/kristal_model.pt", allow_frozen_write=allow_frozen_write)
+    check_frozen_save_path(base_model, allow_frozen_write=allow_frozen_write)
     run_cmd(stage1_cmd, "Stage-1 Pretraining")
 
     # Stage 2: SFT Fine-Tuning
     print(f"\n{C_BOLD}[2.2 / 4] Stage-2: Dengeli SFT Eğitimi ({train_steps} adım)...{C_RESET}")
-    stage2_cmd = [python_bin, "train.py", "--device", device, "--data", "data/train_balanced_sft_v2.bin", "--steps", train_steps, "--load-path", "data/kristal_model.pt", "--save-path", "data/kristal_model.pt"]
+    stage2_cmd = [python_bin, "train.py", "--device", device, "--data", "data/train_balanced_sft_v2.bin", "--steps", train_steps, "--vocab", vocab_path, "--load-path", base_model, "--save-path", base_model]
     if allow_frozen_write:
         stage2_cmd.append("--allow-frozen-write")
-    check_frozen_save_path("data/kristal_model.pt", allow_frozen_write=allow_frozen_write)
+    check_frozen_save_path(base_model, allow_frozen_write=allow_frozen_write)
     run_cmd(stage2_cmd, "Stage-2 SFT")
 
     # Stage 3: Chat SFT
     print(f"\n{C_BOLD}[2.3 / 4] Stage-3: Chat SFT Eğitimi ({train_steps} adım)...{C_RESET}")
-    stage3_cmd = [python_bin, "train.py", "--device", device, "--data", "data/train_chat_balanced.bin", "--steps", train_steps, "--load-path", "data/kristal_model.pt", "--save-path", "data/kristal_model.pt"]
+    stage3_cmd = [python_bin, "train.py", "--device", device, "--data", "data/train_chat_balanced.bin", "--steps", train_steps, "--vocab", vocab_path, "--load-path", base_model, "--save-path", base_model]
     if allow_frozen_write:
         stage3_cmd.append("--allow-frozen-write")
-    check_frozen_save_path("data/kristal_model.pt", allow_frozen_write=allow_frozen_write)
+    check_frozen_save_path(base_model, allow_frozen_write=allow_frozen_write)
     run_cmd(stage3_cmd, "Stage-3 Chat SFT")
 
     # Stage 4: DPO Alignment (CPU)
     print(f"\n{C_BOLD}[2.4 / 4] Stage-4: DPO Tercih Hizalama Eğitimi ({dpo_steps} adım)...{C_RESET}")
     import shutil
-    check_frozen_save_path("data/kristal_model_sft.pt", allow_frozen_write=allow_frozen_write)
-    shutil.copyfile("data/kristal_model.pt", "data/kristal_model_sft.pt")
-    stage4_cmd = [python_bin, "train_dpo.py", "--steps", dpo_steps]
+    check_frozen_save_path(sft_model, allow_frozen_write=allow_frozen_write)
+    shutil.copyfile(base_model, sft_model)
+    # T-0089: `train_dpo.py` artik sozlugu ve model yollarini ZORUNLU tutar ve
+    # sozluk<->checkpoint satir sayisini KAPIDA denetler ⇒ ucu de ACIKCA gecilir.
+    # Model yollari zaten geciliyordu; T-0088'de "gecilemez" diye beyan edilen
+    # `--vocab` borcu bu degisiklikle kapandi (bkz. dosya basi T-0089 notu).
+    # Semantik KORUNUR: referans = base'in kopyasi (sft_model), aktif/kayit = base_model.
+    stage4_cmd = [python_bin, "train_dpo.py", "--steps", dpo_steps, "--vocab", vocab_path, "--ref-model", sft_model, "--active-model", base_model]
     if allow_frozen_write:
         stage4_cmd.append("--allow-frozen-write")
-    check_frozen_save_path("data/kristal_model.pt", allow_frozen_write=allow_frozen_write)
+    check_frozen_save_path(base_model, allow_frozen_write=allow_frozen_write)
     run_cmd(stage4_cmd, "Stage-4 DPO Alignment")
 
-    print(f"\n{C_GREEN}Full Temel Model Eğitimi Başarıyla Tamamlandı: data/kristal_model.pt{C_RESET}\n")
+    print(f"\n{C_GREEN}Full Temel Model Eğitimi Başarıyla Tamamlandı: {base_model}{C_RESET}\n")
 
     # -------------------------------------------------------------------------
     # AŞAMA 3: MARANGOZLUK MODÜLÜ ARENASI (300 ADIM)
     # -------------------------------------------------------------------------
     log_phase(f"AŞAMA 3: MARANGOZLUK UZMANLIK ARENASI ({carpenter_rounds} Adım)")
 
-    gateway_carp = AgentGateway.create_default(model_path="data/kristal_model.pt", device=device)
+    gateway_carp = AgentGateway.create_default(model_path=base_model, vocab_path=vocab_path, device=device)
     supervisor_carp = PedagogicalSupervisor(
         gateway=gateway_carp,
         retrain_pipeline=retrain_pipeline,
@@ -356,27 +412,29 @@ def main():
             carpenter_arena_archive
         ],
         output_bin="data/train_carpenter_specialization.bin",
-        vocab_path="data/rebuild/vocab_base_32852.json",
+        vocab_path=vocab_path,
         literal_entity_mode=True,
-        block_size=64
+        block_size=64,
+        allow_frozen_write=allow_frozen_write
     )
 
     print(f"\n2. Marangozluk Modülü Eğitiliyor ({device} üzerinde {carpenter_steps} adım)...", flush=True)
     carpenter_cmd = [
         python_bin, "train.py",
         "--device", device,
-        "--base-model", "data/kristal_model.pt",
-        "--output-model", "data/kristal_carpenter_model.pt",
+        "--base-model", base_model,
+        "--output-model", carpenter_model,
         "--data", "data/train_carpenter_specialization.bin",
         "--steps", carpenter_steps,
+        "--vocab", vocab_path,
         "--lr", "0.0003"
     ]
     if allow_frozen_write:
         carpenter_cmd.append("--allow-frozen-write")
-    check_frozen_save_path("data/kristal_carpenter_model.pt", allow_frozen_write=allow_frozen_write)
+    check_frozen_save_path(carpenter_model, allow_frozen_write=allow_frozen_write)
     run_cmd(carpenter_cmd, "Carpenter Specialization Retraining")
 
-    print(f"\n{C_GREEN}Marangozluk Modülü Başarıyla Eğitildi: data/kristal_carpenter_model.pt{C_RESET}\n", flush=True)
+    print(f"\n{C_GREEN}Marangozluk Modülü Başarıyla Eğitildi: {carpenter_model}{C_RESET}\n", flush=True)
 
     # -------------------------------------------------------------------------
     # AŞAMA 5: DOĞRULAMA VE TEST ÇIKARIMLARI
@@ -384,7 +442,7 @@ def main():
     log_phase("AŞAMA 5: KAPSAMLI DOĞRULAMA VE MODEL ÇIKARIM TESTLERİ")
 
     print(f"{C_CYAN}Doğrulama modelleri yükleniyor...{C_RESET}", flush=True)
-    test_gateway = AgentGateway.create_default(model_path="data/kristal_model.pt", device=device)
+    test_gateway = AgentGateway.create_default(model_path=base_model, vocab_path=vocab_path, device=device)
     test_queries = [
         ("Hücre teorisinin temel ilkeleri nelerdir?", "Lise düzeyinde eğitim almış Z kuşağı genci olarak açıkla."),
         ("Selam nasılsın, sınav haftasındayım çok bunaldım ne yapayım?", "Lise düzeyinde eğitim almış Z kuşağı genci olarak açıkla."),
@@ -399,7 +457,7 @@ def main():
         print(f"Entropi: {res['entropy_post']:.2f} | RAG Skoru: {res['rag_score']:.3f}\n", flush=True)
     test_gateway.close()
 
-    carp_gateway = AgentGateway.create_default(model_path="data/kristal_carpenter_model.pt", device=device)
+    carp_gateway = AgentGateway.create_default(model_path=carpenter_model, vocab_path=vocab_path, device=device)
     carp_queries = [
         ("Kırlangıç kuyruğu birleştirme nerelerde kullanılır?", "ahşap uzmanı olarak cevapla."),
         ("Lamba zıvana geçme hangi ahşap yüzeylerde uygulanır?", "ahşap uzmanı olarak cevapla.")

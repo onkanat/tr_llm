@@ -251,7 +251,15 @@ def test_ast_run_goal_pipeline_has_frozen_guards():
     """KAPI b & c & T-0048 ekseni (i) & (ii): AST testi.
     scripts/run_goal_pipeline.py main() fonksiyonunda:
     (i) Her eğitim run_cmd çağrısından önce check_frozen_save_path çağrısı bulunmalı (sıra ve sayı tam).
-    (ii) shutil.copyfile çağrısından önce hedefi ('data/kristal_model_sft.pt') denetleyen check_frozen_save_path çağrısı bulunmalı.
+    (ii) shutil.copyfile çağrısından önce KOPYALAMA HEDEFİNİ denetleyen check_frozen_save_path
+         çağrısı bulunmalı.
+
+    T-0088 (ölçüldü): bu testin (ii) maddesi ÖNCE `prev_args[0] == "data/kristal_model_sft.pt"`
+    diye SABİT bir yol adına assert ediyordu. O dosya 18 Eyl 2026'da SİLİNDİ ve T-0088'de
+    yol çağırdan gelen bir parametreye dönüştü ⇒ assert 'sft_model' (ast.Name) verdi ve test
+    DÜŞTÜ. Yani test, silinmiş bir artefakt adını **canlı tutan** son kilit taşıydı: bu satır
+    yüzünden ölü literali kaldırmak test kırıyordu. Düzeltme ölçütü DEĞİŞTİRMEDİ, sadece
+    adı SABİTLEMEYİ bıraktı: guard'ın hedefi, kopyalamanın HEDEF argümanıyla AYNI olmalı.
     """
     pipeline_path = "scripts/run_goal_pipeline.py"
     with open(pipeline_path, "r", encoding="utf-8") as f:
@@ -306,8 +314,14 @@ def test_ast_run_goal_pipeline_has_frozen_guards():
     assert prev_name == "check_frozen_save_path", (
         f"shutil.copyfile öncesinde check_frozen_save_path yok! Önceki çağrı: {prev_name}"
     )
-    assert len(prev_args) >= 1 and prev_args[0] == "data/kristal_model_sft.pt", (
-        f"shutil.copyfile öncesindeki guard hedefi 'data/kristal_model_sft.pt' olmalı, bulunan: {prev_args}"
+    # T-0088: ad SABİTLENMEZ; ölçüt "guard hedefi == kopyalamanın HEDEFİ" olur.
+    cp_name, cp_lineno, cp_args = calls[cp_idx]
+    assert len(cp_args) == 2, (
+        f"shutil.copyfile iki argüman almalı (kaynak, hedef), bulunan: {cp_args}"
+    )
+    assert len(prev_args) >= 1 and prev_args[0] == cp_args[1], (
+        f"shutil.copyfile öncesindeki guard'ın hedefi kopyalama HEDEFİYLE aynı olmalı; "
+        f"guard={prev_args} kopya={cp_args} (satır {prev_lineno} / {cp_lineno})"
     )
 
 

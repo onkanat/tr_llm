@@ -98,12 +98,18 @@ A1-r **düz-metin ön-eğitimidir** (`--pretrain`), SFT değil. Ölçüldü:
 **dağılımında yoktur**; zarfı verip cevap beklemek **dağılım dışı** bir istektir.
 Bu checkpoint **metni sürdürür**; **soru cevaplamaz**.
 
-### Bugün çalışmayan yollar (ölçüldü — sessizce yanlış sonuç vermezler, sesli dururlar)
+### Bugün çalışmayan yollar (ölçüldü — 20 Eyl 2026 damgası)
 
 | Betik | Neden çalışmaz |
 |---|---|
 | `test_model.py` | `data/vocab.json` (31.357) sabit-kodlu ⇒ şekil uyuşmazlığı; ayrıca `data/kristal_model.pt` (silinmiş) okur ve dosya yoksa **sessizce `return` eder** |
-| `chat_prompt.py` | Aynı iki kusur; `--model` bayrağı **var** ama `--vocab` bayrağı **yok** ⇒ sözlük değiştirilemez |
+| `scripts/run_goal_pipeline.py` | Dört yol parametresi (`--base-model`, `--carpenter-model`, `--sft-model`, `--vocab`) **zorunludur**, varsayılanı yoktur; verilmezse hiçbir işe başlamadan durur. DPO aşamasının sözlük kısıtı **T-0089'da kapandı** (aşağıdaki nota bakın) |
+| `scripts/run_agent_arena.py` | `--model` ve `--vocab` **zorunludur**, varsayılanı yoktur. Uçtan uca koşum ölçülmedi (qdrant bağımlılığı + ağır checkpoint yüklemesi) |
+| `train_dpo.py` | `--vocab`, `--ref-model`, `--active-model` **zorunludur**, varsayılanı yoktur; üçünden biri eksikse ya da verilen yol yoksa **hiçbir işe başlamadan `rc=2` ile durur**. `--data`'nın varsayılanı (`data/pedagogy/dpo_all_tokenized.jsonl`) vardır ama dosya yoksa yine durur. Uçtan uca **eğitim** koşumu ölçülmedi (kapı ölçüldü, koşum değil) |
+
+**Onarıldı (T-0089 · damgalı ölçüm: 20 Eyl 2026):** `train_dpo.py` artık sözlüğü ve iki model yolunu **açıkça** alır. Ölçülen önce/sonra: argümansız koşum **`rc=0`** (yani "Hata: … bulunamadı!" basıp **başarı** dönüyordu) → **`rc=2`**; bayrak yokluğu ile *yolu olmayan* girdi ayrı ayrı durur; sözlük↔checkpoint satır sayısı uyuşmazlığı (31.357 ↔ 33.114, fark **1.757**) eyleme dönük mesajla durur. Satır sayısı eşitse kapı **geçer** (pozitif kontrol). `scripts/run_goal_pipeline.py` 4. aşaması da sözlüğü artık geçirir.
+
+**Onarıldı (T-0087, ölçüldü):** `chat_prompt.py` artık `--model` **ve** `--vocab` bayraklarının ikisini de kabul eder; ikisi de verilmezse `sys.exit(2)` ile sesli durur, yani sözlük **değiştirilebilir**. Kalan ölçülmüş kusur: sözlük yolu *verilip de dosya bulunamazsa* `return` ile çıkar (rc=0) — o dal sesli değildir.
 
 ---
 
@@ -270,6 +276,13 @@ cp data/kristal_model.pt data/kristal_model_sft.pt
 ./venv/bin/python train_dpo.py --data data/pedagogy/turk_tarihi_dpo_tokenized.jsonl --steps 100 --batch-size 4 --beta 0.1
 ```
 
+> **TARİHSEL Not (damgalı ölçüm: 20 Eyl 2026).** Yukarıdaki D bloğu **o dönemin kaydıdır** ve
+> silinmiş Kristal zincirini anar (`data/kristal_model.pt`). Ayrıca **T-0089'dan sonra
+> 3. aşamanın komutu bu hâliyle ÇALIŞMAZ**: `train_dpo.py` artık `--vocab`, `--ref-model`
+> ve `--active-model` bayraklarını **zorunlu** tutar ve eksikse `rc=2` ile durur. Blok
+> **silinmedi**, kendi damgasıyla korundu; güncel karşılığı **doğrulanmadığı için
+> yazılmamıştır** (bkz. yukarıdaki "Bugün çalışmayan yollar" tablosu).
+
 ---
 
 ## 4. Veri Seti Oluşturma ve Derleme
@@ -424,12 +437,16 @@ Büyük dil modellerinin (Antigravity Agent'ları, Google Gemini API, Ollama vb.
 Küçük modeli çoklu branşta (1931 Türk Tarihi, Edebiyat & Şiir, Lise Fen/Sosyal, Marangozluk, Morfoloji) doğrudan sınava tabi tutmak ve anlık epistemik durumunu görmek için:
 ```bash
 # 1931 Türk Tarihi sınavı:
-./venv/bin/python scripts/run_agent_arena.py --domain history_1931 --rounds 3 --device cpu
+./venv/bin/python scripts/run_agent_arena.py --domain history_1931 --rounds 3 --device cpu \
+    --model data/anka_a1r.pt --vocab data/rebuild/vocab_anka_r1_33114.json
 
 # Ahşap ve marangozluk sınavı:
-./venv/bin/python scripts/run_agent_arena.py --domain carpenter --rounds 3 --device cpu
+./venv/bin/python scripts/run_agent_arena.py --domain carpenter --rounds 3 --device cpu \
+    --model data/anka_a1r.pt --vocab data/rebuild/vocab_anka_r1_33114.json
 ```
 Önemli seçenekler:
+- `--model <checkpoint.pt>` (**ZORUNLU**; varsayılanı yoktur — eskiden silinmiş bir checkpoint'i gösteriyordu)
+- `--vocab <sözlük.json>` (**ZORUNLU**; checkpoint satır sayısıyla **aynı** olmalıdır, yoksa sessiz kırpma riski doğar)
 - `--domain <history_1931|carpenter|pedagogy|literary|highschool|arena_mix>` (Sınav alanı)
 - `--rounds <sayı>` (Diyalog tur sayısı)
 - `--retrain-threshold 5` (future_train kütüğü için otomatik eğitim tetik eşiği)

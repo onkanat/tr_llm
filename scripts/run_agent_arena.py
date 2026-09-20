@@ -9,13 +9,19 @@ pedagojik süpervizör ile küçük KristalLM modelini otonom eğitme ve sınama
 
 Kullanım:
   # Marangozluk alanında 2 tur pedagojik diyalog ve RAG enjeksiyonu:
-  ./venv/bin/python scripts/run_agent_arena.py --domain carpenter --rounds 2
+  # (T-0088: --model ve --vocab ZORUNLUDUR; ikisi de checkpoint satır sayısıyla
+  #  AYNI olmalıdır. Ornek yollar, T-0087'nin önerdiği GÜNCEL Anka checkpoint'i ve
+  #  onun külliyat sözlüğüdür — uydurma ad değil, ölçülmüş dosyalardır.)
+  ./venv/bin/python scripts/run_agent_arena.py --domain carpenter --rounds 2 \
+      --model data/anka_a1r.pt --vocab data/rebuild/vocab_anka_r1_33114.json
 
   # Dilbilgisi alanında otomatik yeniden eğitim bayrağı ile:
-  ./venv/bin/python scripts/run_agent_arena.py --domain pedagogy --auto-retrain
+  ./venv/bin/python scripts/run_agent_arena.py --domain pedagogy --auto-retrain \
+      --model data/anka_a1r.pt --vocab data/rebuild/vocab_anka_r1_33114.json
 
   # Dış agent'lar için HTTP REST API Sunucusu olarak çalıştırma:
-  ./venv/bin/python scripts/run_agent_arena.py --server --port 8080
+  ./venv/bin/python scripts/run_agent_arena.py --server --port 8080 \
+      --model data/anka_a1r.pt --vocab data/rebuild/vocab_anka_r1_33114.json
 """
 
 import os
@@ -46,7 +52,8 @@ def main():
     parser.add_argument("--domain", type=str, default="arena_mix", choices=["carpenter", "pedagogy", "literary", "highschool", "highschool_genz", "arena_mix", "poetry", "edebiyat", "history_1931", "turk_tarihi"], help="Eğitim/Soru alanı")
     parser.add_argument("--rounds", type=int, default=10, help="Diyalog tur sayısı")
     parser.add_argument("--repetitions", type=int, default=1, help="Müfredat üzerinden geçilecek tekrar (epoch) sayısı")
-    parser.add_argument("--model", type=str, default="data/kristal_model.pt", help="Sınanacak model dosya yolu")
+    parser.add_argument("--model", type=str, default=None, help="Sınanacak model dosya yolu — ZORUNLU (varsayilan YOK; T-0088)")
+    parser.add_argument("--vocab", type=str, default=None, help="Külliyat sözlüğü — ZORUNLU; checkpoint satır sayısıyla AYNI olmalı (T-0088)")
     parser.add_argument("--auto-retrain", action="store_true", help="future_train eşiği aşıldığında modeli otomatik yeniden eğit")
     parser.add_argument("--retrain-threshold", type=int, default=5, help="Otomatik eğitim için biriken kayıt eşiği")
     parser.add_argument("--device", type=str, default="cpu", help="Hesaplama cihazı (cpu / mps)")
@@ -61,10 +68,34 @@ def main():
     
     args = parser.parse_args()
 
+    # EMEKLI (T-0088): eski varsayilan `--model` degeri `data/kristal_model.pt` idi ve o
+    # checkpoint SILINMISTIR. Varsayilan BASKA BIR ADA tasinmadi (T-0085 emsali: uydurma ad
+    # yazilmaz) — bunun yerine yoklugu ACIKCA durdurulur. Kapi CAGRI ANINDADIR.
+    #
+    # OLCUM (T-0088): bu cagri yeri T-0087'DEN BERI ZATEN DURUYORDU, cunku
+    # `AgentGateway.create_default` artik `vocab_path`i de ZORUNLU tutuyor ama burada
+    # GECILMIYORDU (olculdu: RuntimeError "DURDURULDU: vocab_path verilmedi"). Yani
+    # sozluk yolu da ayni kapidan gecer; ikisi tek yerde ve ACIKCA istenir.
+    eksik = [ad for ad, deger in (("--model", args.model), ("--vocab", args.vocab)) if not deger]
+    if eksik:
+        parser.error(
+            f"{' ve '.join(eksik)} ZORUNLUDUR. Eskiden varsayilan degerler vardi ve o "
+            "artefaktlar artik YOKTUR/BAYATTIR; guncel checkpoint ve onun kulliyat sozlugunu "
+            "acikca verin (T-0088). Ornek: --model data/anka_a1r.pt "
+            "--vocab data/rebuild/vocab_anka_r1_33114.json"
+        )
+    yok = [y for y in (args.model, args.vocab) if not os.path.exists(y)]
+    if yok:
+        # Sessiz dusme YOK: yol verilmis ama dosya yoksa da DURULUR. Sozluk dosyasi
+        # okunamazsa `Vocabulary.load` bos sozluk uretir (ayri bir sessizlik sinifi);
+        # kapi onu cagri aninda keser (T-0088).
+        parser.error("VERILEN YOL YOK: " + " · ".join(yok) + " (T-0088)")
+
     print(f"\n{C_MAGENTA}{C_BOLD}" + "=" * 65)
     print("  KRİSTAL-VEKTÖREL MİMARİSİ: OTONOM PEDAGOJİK AJAN ARENASI")
     print("=" * 65 + f"{C_RESET}")
     print(f"Model:          {C_CYAN}{args.model}{C_RESET}")
+    print(f"Sözlük:         {C_CYAN}{args.vocab}{C_RESET}")
     print(f"Cihaz:          {C_CYAN}{args.device}{C_RESET}")
     print(f"Hedef Alan:     {C_YELLOW}{args.domain}{C_RESET}")
     print(f"Plan:           {C_GREEN}{args.rounds} Tur x {args.repetitions} Tekrar (Toplam: {args.rounds * args.repetitions} Sınav){C_RESET}")
@@ -77,7 +108,7 @@ def main():
         print()
 
     print(f"{C_BLUE}[1/3] Ajan Kapısı ve Bileşenler Yükleniyor...{C_RESET}")
-    gateway = AgentGateway.create_default(model_path=args.model, device=args.device)
+    gateway = AgentGateway.create_default(model_path=args.model, vocab_path=args.vocab, device=args.device)
     retrain_pipeline = RetrainPipeline(device=args.device)
     supervisor = PedagogicalSupervisor(
         gateway=gateway,

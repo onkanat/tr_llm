@@ -16,8 +16,9 @@ MİMARİ PRENSİPLER (CLAUDE.md & T-0013):
      totolojisi (Python str için her zaman doğru) bulunmaktadır. `tokenizer.py` dondurulmuş
      olduğundan değiştirilmez; sözleşme bu "girdi boş da olsa <INPUT> etiketini her zaman bas"
      davranışını kanonik kabul eder.
-  5. Servis Uyarısı: literal_entity_mode servis yolunda KAPALIDIR (data/kristal_model.pt
-     entity mimarisiyle eğitilmemiştir).
+  5. Servis Uyarısı: literal_entity_mode servis yolunda KAPALIDIR (servis checkpoint'i
+     entity mimarisiyle eğitilmemiştir). T-0088: bu ilke cümlesi eskiden SİLİNMİŞ bir
+     checkpoint adını anıyordu; ad kaldırıldı, ilke korundu.
 """
 
 from dataclasses import dataclass
@@ -32,15 +33,25 @@ from src.llm.tokenizer import KristalTokenizer, Vocabulary
 @dataclass(frozen=True)
 class TokenizerConfig:
     """Tokenizer ve sözlük konfigürasyonu. Açık ve loglanabilir parametreler."""
-    vocab_path: str = "data/vocab.json"
+    # FAIL-CLOSED (T-0088): varsayilan KALDIRILDI. Once `data/vocab.json` idi ve BAYAT bir
+    # sozlugu (31.357) isaret ediyordu; guncel kulliyat sozlugu 33.114 girişlidir. Sessiz
+    # bir varsayilana dusmek yerine yoklugu ACIKCA durdurulur. Varsayilan BASKA BIR ADA da
+    # tasinmadi (T-0085 emsali): uydurma bir ad, hangi kulliyata ait oldugu belirsiz bir
+    # okuma hedefi yaratirdi.
+    vocab_path: Optional[str] = None
     literal_entity_mode: bool = False
 
     def validate(self) -> None:
+        if self.vocab_path is None:
+            raise ValueError(
+                "TokenizerConfig.vocab_path VERILMEDI. Sözlük yolu ZORUNLUDUR: bayat bir "
+                "varsayilana dusmek yerine duruyorum (T-0088).")
         if not os.path.exists(self.vocab_path):
             raise FileNotFoundError(f"Sözlük dosyası bulunamadı: {self.vocab_path}")
         if self.literal_entity_mode:
-            # Servis modelinin güvenliği için açık uyarı
-            print("[SOZLESME_UYARI] literal_entity_mode=True aktif. Servis modeli (kristal_model.pt) "
+            # Servis modelinin güvenliği için açık uyarı. T-0088: eski metin adı silinmiş
+            # Kristal checkpoint'ini anıyordu; ad kaldırıldı, uyarı korundu.
+            print("[SOZLESME_UYARI] literal_entity_mode=True aktif. Servis checkpoint'i "
                   "bu modda eğitilmemiştir; dikkatli kullanınız.")
 
 
@@ -93,8 +104,15 @@ def build_rag_input(doc_text: str, query: str) -> str:
 
 
 def describe(config: Optional[TokenizerConfig] = None) -> str:
-    """Sözleşme durumunu standart formatta döner."""
-    cfg = config or TokenizerConfig()
+    """Sözleşme durumunu standart formatta döner.
+
+    T-0088: `config` artik ZORUNLUDUR. Once argumansiz cagri sessizce BAYAT varsayilana
+    (`data/vocab.json`, 31.357) dusuyordu; kapi cagri anina tasindi.
+    """
+    if config is None:
+        raise ValueError("describe(): config VERILMEDI. Sözlük yolu çağırandan gelmelidir; "
+                         "bayat bir varsayilana dusulmez (T-0088).")
+    cfg = config
     cfg.validate()
     token_count = 0
     if os.path.exists(cfg.vocab_path):
