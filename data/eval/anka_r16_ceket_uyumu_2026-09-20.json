@@ -1,0 +1,267 @@
+{
+  "gorev": "T-0093",
+  "tarih": "2026-09-20",
+  "yurutucu": "claude",
+  "claimed_at": "2026-09-20T13:10:15Z",
+  "operator_sorusu": "Test et Anka ya ceket uyuyormu ?",
+  "U1_sozluk_kimligi": {
+    "ceket_sozluk": "data/rebuild/vocab_base_32852.json",
+    "ceket_sha256": "7611b6a523a2bb524cc21aa9cc64235aa6a2ae99f87f46ac51cb2915e61164ad",
+    "a1_meta_beyan": "7611b6a523a2bb524cc21aa9cc64235aa6a2ae99f87f46ac51cb2915e61164ad",
+    "ayni_dosya": true,
+    "ceket_giris": 32852
+  },
+  "U2_onek_degismezligi": {
+    "karsilastirilan_id": 32852,
+    "farkli_id": 0,
+    "fark_ornek": [],
+    "a1r_giris": 33114,
+    "a1r_eklenen_id": 262,
+    "eklenen_ilk": [
+      "Abu Dabi",
+      "Abuja",
+      "Addis Ababa",
+      "Adıyaman",
+      "Afganistan",
+      "Akra"
+    ],
+    "eklenen_son": "Şırnak"
+  },
+  "U3_id_gecerliligi": {
+    "jeton": 867650,
+    "meta_total_tokens": 867650,
+    "meta_ile_ayni": true,
+    "max_id": 32850,
+    "min_id": 0,
+    "ceket_sozluk_boyu": 32852,
+    "a1r_sozluk_boyu": 33114,
+    "gecersiz_ceket": 0,
+    "gecersiz_a1r": 0
+  },
+  "U4_cozme": {
+    "ceket_bos": 12763,
+    "ceket_eos": 12763,
+    "ceket_cerceve_farki": 0,
+    "meta_record_count": 12763,
+    "record_count_ile_ayni": true,
+    "a1_bos": 146560,
+    "a1_eos": 146559,
+    "a1_cerceve_farki": 1,
+    "ceket_bas_cozum": "<BOS><INSTRUCTION>ahşapuzmanPOSS_3SGolGERUND_ArAkcevapla.</INSTRUCTION><INPUT>şerittestereCASE_LOCbıçakkesimsırasındayanCASE_DATkaçTENSE_PROGCOPULA_CONDsorunNeCOPULA_AORIST?</INPUT><OUTPUT>teknikrapor:teknikçözüm:şerittesterekılavuzrulmanPOSS_3PLbıçakCASE_DATçokuzakCOPULA_AORIST,bıçakgerginDERIV_lIkPOSS_3SGyeterDERIV_sIzCOPULA_AORISTveyabıçakPOSS_2SGbirtarafPOSS_2SGCASE_LOCREL_kiçaprazdişPLURALkörelTENSE_EVIDENTIALCOPULA_AORIST.</OUTPUT><EOS><BOS><INSTRUCTION>atölyepratikPOSS_3SG:AhşabınsonkatyüzeyPOSS_2SGCASE_LOCsubazDERIV_lIverniknasıltatbikedilTENSE_NECESSCOPULA_AORIST?</INSTRUCTION><INPUT></INPUT><OUTPUT>teknikçözüm:subaz",
+    "ceket_orta_cozum": "ı<ENT><CAP>şita</ENT>'(kışnağmePOSS_3PL)şiirPOSS_2SGCASE_LOCkaryağışPOSS_2SGCASE_ACCaruzvezinPOSS_3SGveahenkCASE_INSresmetTENSE_EVIDENTIALCOPULA_AORIST;dahaönceduyulmamışyeniimgePLURAL(tamlamaPLURAL)kurTENSE_EVIDENTIALCOPULA_AORIST.</OUTPUT><EOS><BOS><INSTRUCTION>hangiağaçtürPOSS_3SGbuişiçinuygunCOPULA_AORIST?</INSTRUCTION><INPUT>zengindamardesenPOSS_2SGCASE_DATveasilkahverengitonPLURALCASE_DATsahip,işlemePOSS_3SGkolay,formPOSS_2SGCASE_ACCmükemmelkoruPART_AnlüksmobilyaağaDERIV_CICOPULA_AORIST.</INPUT><OUTPUT>bugereksinimiçincevizağaDERIV_CIsonderece",
+    "a1_pozitif_kontrol": "<BOS>film(anlamayrımPOSS_3SG)filmşuanlamPLURALCASE_DATgelebilTENSE_AORIST:camPLURALCASE_DATyapıştırılGERUND_ArAkiçeriCASE_GENgörünmePOSS_3SGCASE_ACC_NengellePART_AnbirtürinceyapraksinemaDERIV_CIDERIV_lIkCASE_LOC,biroyunPOSS_2SGbütünPOSS_2SGCASE_ACCtaşıPART_AnşeritveyaşeritlerPOSS_2SGbütünPOSS_3SGfilm(fotoğrafçıDERIV_lIk),fotoğrafçıDERIV_lIkCASE_LOC,radyografiCASE_LOCvesinemaDERIV_CIDERIV_lIkCASE_LOCresimçekINF_mAkiçinkullanılPART_An;selülozCASE_ABL,saydam,bükülebilTENSE_AORISTşeritfilm(sinema),sinema<UNK>gösterileneser,<UNK>,<PROPER_NOUN><PROPER_NOUN>yazPART_DIkPOSS_3SGtek",
+    "not": "İki külliyat da DOĞAL düz metne DEĞİL, derleyicinin derlenmiş jeton akışına (lemma + morfoloji etiketi bitişik) çözülür. Bu İKİ KÜLLİYATIN ortak biçimidir, ceketin kusuru değildir."
+  },
+  "U6_temsil": {
+    "ceket": {
+      "jeton": 867650,
+      "proper_noun": 2,
+      "proper_noun_orani": 2.3050769319426037e-06,
+      "literal_ad": 16857,
+      "literal_ad_orani": 0.019428340920878234,
+      "literal_bolu_pn": 8428.5,
+      "ent": 1088,
+      "cap": 924,
+      "all_caps": 164,
+      "unk": 11711,
+      "unk_orani": 0.013497377974989915
+    },
+    "anka_a1": {
+      "jeton": 100000000,
+      "proper_noun": 7936521,
+      "proper_noun_orani": 0.07936521,
+      "literal_ad": 2302966,
+      "literal_ad_orani": 0.02302966,
+      "literal_bolu_pn": 0.29017323837484965,
+      "ent": 0,
+      "cap": 0,
+      "all_caps": 0,
+      "unk": 2629227,
+      "unk_orani": 0.02629227
+    },
+    "filtre_pozitif_kontrol": {
+      "ceket": [
+        "Ankara",
+        "Mehmet",
+        "Antalya",
+        "Adana"
+      ],
+      "a1r": [
+        "Ankara",
+        "Mehmet",
+        "Antalya",
+        "Adana"
+      ]
+    },
+    "ceket_literal_ad_tipi": 1354,
+    "a1r_literal_ad_tipi": 1608,
+    "t0078_kanonik_referans_tipi": 1354,
+    "a1_literal_bolu_pn_kanonik_referans": 0.2902,
+    "oran_orani_pn": 2.9043921536181955e-05,
+    "oran_orani_literal": 0.8436225684998491,
+    "pn_sayi_orani": 3968260.5,
+    "pn_oran_orani": 34430.61222825,
+    "kulliyat_boy_orani": 115.25384659713018
+  },
+  "U5_canlilik": {
+    "rc": 0,
+    "log": "/tmp/claude-501/t0093/r16_u5a_sifirdan.log",
+    "ilk": 10.5812,
+    "son": 8.1759,
+    "son60_ort": 9.3785,
+    "son60_std": 1.2026,
+    "ln_V": 10.3998,
+    "sifirdan_sapma": 0.1814,
+    "olu_mu": false,
+    "data_pt_degismedi": [
+      "anka_a1.pt",
+      "anka_a1r.pt"
+    ]
+  },
+  "U5b_giydirme": {
+    "ceket": {
+      "rc": 0,
+      "log": "/tmp/claude-501/t0093/r16_u5b_ceket.log",
+      "ilk": 7.6883,
+      "son": 7.1236,
+      "son60_ort": 6.9998,
+      "son60_std": 0.3251
+    },
+    "anka_kendi_kulliyati": {
+      "rc": 0,
+      "log": "/tmp/claude-501/t0093/r16_u5b_a1r_oz.log",
+      "ilk": 4.035,
+      "son": 3.5756,
+      "son60_ort": 3.9833,
+      "son60_std": 0.2867
+    },
+    "zorluk_orani": 1.7572866718549947,
+    "acik_nat": 3.0164999999999997,
+    "not": "EŞLEŞTİRİLMİŞ kontrol: AYNI model (anka_a1r.pt), AYNI protokol, AYNI tohum; yalnız VERİ değişir. Şekil uyuşmazlığı uyarısı ÇIKMADI ⇒ yeniden eşleme gerekmedi (U2 önek invaryantının doğrudan sonucu)."
+  },
+  "U7_ablasyon": {
+    "entli": {
+      "rc": 0,
+      "log": "/tmp/claude-501/t0093/r16_u7_entli.log",
+      "ilk": 8.2196,
+      "son": 7.3452,
+      "son60_ort": 7.6779,
+      "son60_std": 0.3148,
+      "makale": 789,
+      "jeton": 59462,
+      "jeton_payi": 0.06853224226358555
+    },
+    "entsiz": {
+      "rc": 0,
+      "log": "/tmp/claude-501/t0093/r16_u7_entsiz.log",
+      "ilk": 7.1059,
+      "son": 6.4672,
+      "son60_ort": 6.985,
+      "son60_std": 0.2789,
+      "makale": 11974,
+      "jeton": 808188,
+      "jeton_payi": 0.9314677577364144
+    },
+    "markup_farki_nat": 0.6928999999999998,
+    "agirlikli_katki_nat": 0.04748599066443842,
+    "toplam_acik_nat": 3.0164999999999997,
+    "aciktan_payi": 0.015742082103244962,
+    "not": "Bulgu HİPOTEZİN TERSİ: A1'in hiç görmediği <ENT>/<CAP> kanalı, toplam açığın yalnız küçük bir payını açıklıyor. Kalan pay bu ablasyonla AYRIŞTIRILMADI (aday: alan kayması, literal-ad temsili, <INSTRUCTION> biçimi)."
+  },
+  "donmus_denetimi": {
+    "desen_sayisi": 10,
+    "taranan": 78,
+    "degisen_donmus": 0,
+    "degisen_liste": [],
+    "data_eval_disi_degisen": 0,
+    "claimed_at": "2026-09-20T13:10:15Z",
+    "olcut": "mtime >= claimed_at (ZAMANSAL)"
+  },
+  "pytest": {
+    "rc": 1,
+    "ozet": "1 failed, 237 passed in 77.25s (0:01:17)",
+    "dusen_testler": [
+      "test_gateway_http_server_endpoints"
+    ],
+    "claudemd_damgali_taban": "213 passed, 1 failed (19 Eyl 2026)",
+    "aciklama": "Artış bu arada kapanan T-0088/T-0090/T-0092'nin EKLEDİĞİ testlerdendir; bu görev hiçbir test dosyasına dokunmadı."
+  },
+  "digestler": {
+    "data/train_carpenter_specialization.bin": {
+      "sha256": "13dd81bf700690b78ca15246a2fc1582ee6f8fea587c6d4e78f8ab1e1017b109",
+      "bayt": 1735300
+    },
+    "data/anka_a1_pretrain.bin": {
+      "sha256": "383a9c890b75ec96195122b9981d7a73371d3bcaa3b9f6e7c2a188510d917cb8",
+      "bayt": 200000000
+    },
+    "data/rebuild/vocab_base_32852.json": {
+      "sha256": "7611b6a523a2bb524cc21aa9cc64235aa6a2ae99f87f46ac51cb2915e61164ad",
+      "bayt": 741650
+    },
+    "data/rebuild/vocab_anka_r1_33114.json": {
+      "sha256": "f9940a8d8e1f7cd9428d389f12ff4c5ee448e5a7bfcdcc8ecc9c616fce950984",
+      "bayt": 747458
+    },
+    "data/anka_a1.pt": {
+      "sha256": "f32d492d9361c668bc86e4e4b0f99f5c473af552486837452475f8b0aa3eb5b4",
+      "bayt": 372124278
+    },
+    "data/anka_a1r.pt": {
+      "sha256": "b93cc1cd54093fc63342d394abe528f2128dc16e20b4d7ac6ab680854b4d6293",
+      "bayt": 373735137
+    },
+    "data/train_carpenter_specialization.bin.meta.json": {
+      "sha256": "b0088fd6ae8969f950006aa31e7797b405f27618bba80d825041d898f8013560",
+      "bayt": 714695
+    },
+    "data/anka_a1_pretrain.bin.meta.json": {
+      "sha256": "6afd761dc49f57a908acc04eccbc1d50a02902817cc0702ed02a12afe4468320",
+      "bayt": 1028
+    },
+    "data/anka_a1r_pretrain.bin.meta.json": {
+      "sha256": "6c7aab3290d2b49078e314478594cc57c5b1c44f7f76a576dbb5ceb7600c3ee7",
+      "bayt": 1383
+    },
+    "scratch/t0093_probe.py": {
+      "sha256": "d6e598a82c22892197c84758dcb1b6126da1d05c21a81a0c60f91bad793e3cf6",
+      "bayt": 5393
+    },
+    "scratch/t0093_probe_v2.py": {
+      "sha256": "aac3f5e312ff074a0a9919690e884258a58c2ed5418afa3266f9854fbb53ba25",
+      "bayt": 6013
+    },
+    "train.py": {
+      "sha256": "ecf3a79e9e38600abb8068cbe11066d9e453dc4d83b44c46c604b01d6fabaa7f",
+      "bayt": 25710
+    }
+  },
+  "kusur_kaniti_v1_hatali_cikti": {
+    "yol": "/tmp/claude-501/t0093/v1_hatali_cikti.txt",
+    "sha256": "79cddd82072a5b4e081d28f8a79ef2839dcdbd933ac49b6cace643aa20a6bf94"
+  },
+  "curutme_maddeleri": {
+    "1_U1_U2_fark_ise_uymuyor": {
+      "atesledi": false,
+      "olcum": "U1 ayni_dosya=True · U2 farkli_id=0"
+    },
+    "2_U4_cop_ama_pozitif_temiz_ise_id_kaymasi": {
+      "atesledi": false,
+      "olcum": "ÖNCÜL OLUŞMADI: pozitif kontrol de doğal düz metne çözülmüyor; iki külliyat da derlenmiş akışa çözülüyor ⇒ karşılaştırma tabanı yok"
+    },
+    "3_U5_kayip_tam_sifir_ise_olu": {
+      "atesledi": false,
+      "olcum": "ilk kayip=10.5812"
+    },
+    "4_U6_iki_oran_ayni_ise_temsil_farki_yok": {
+      "atesledi": false,
+      "olcum": "ceket literal/PN=8428.5000 · A1=0.2902 ⇒ 29,046×"
+    }
+  },
+  "hukum": {
+    "mekanik_uyum_U1_U5": "TAM UYUYOR (5/5): ayni sozluk dosyasi · onek invaryanti fark 0 · gecersiz id 0 · cerceve dengeli · gradyan canli",
+    "temsil_ekseni_U6": "AYRISIYOR ve ayrisma BUYUK: ceket adi ISARETLER (<ENT><CAP>) veya literal birakir (PN=2 jeton), A1 <PROPER_NOUN>'a cokertir (PN=%7,94)",
+    "yon": "Ayrisma A1-r'nin GITTIGI YONLE AYNI: A1-r sozluge 254 literal ad ekledi",
+    "iddia_siniri": "Bu olcum GIYDIRILEBILIRLIGI olcer, GIYILMIS KALITEYI degil. 'Uyuyor' != 'iyi calisiyor'."
+  }
+}
