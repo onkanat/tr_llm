@@ -1,0 +1,371 @@
+{
+  "gorev": "T-0092",
+  "baslik": "AdamW momentleri kaydedilsin: --save-optimizer / --load-optimizer + eslesme kapisi",
+  "durum": "done",
+  "damga_utc": "2026-09-20T11:52:54Z",
+  "yetki": "operator onayi — 'Onay bekleyen isler icin devam et' => is akisi (4) AdamW momentleri",
+  "kaynak": "T-0080 kapanis raporu §8/3 (tam metinden okundu)",
+  "rapor_md": {
+    "yol": "data/eval/anka_r15_adamw_moments_2026-09-20.md",
+    "bayt": 20104,
+    "sha256": "786212320e743fdb55eabcb15f055f25e02a90a8318bf364268300050311cc08"
+  },
+  "ilan_edilen_karar": {
+    "karar": "yan dosya (sidecar) mekanizmasi; --save-optimizer / --load-optimizer; model_sha256 eslesme kapisi; VARSAYILAN KAPALI",
+    "curutme_maddeleri": [
+      {
+        "no": 1,
+        "metin": "varsayilan kosumda yan dosya olusur veya model digest'i degisirse => degisiklik GERI ALINIR",
+        "atesledi": false
+      },
+      {
+        "no": 2,
+        "metin": "G4/G5'in DURAN dali olculemezse => o kapi IDDIA EDILMEZ, rapora 'olculemedi' yazilir",
+        "atesledi": false
+      },
+      {
+        "no": 3,
+        "metin": "G3'te kayit sayisi 101 cikmazsa => mekanizma calismiyor; 'kismen calisti' yazilmaz",
+        "atesledi": false
+      }
+    ]
+  },
+  "olcumler": {
+    "M1_kusur": {
+      "referans_state_kaydi": 101,
+      "mevcut_devam_kaydi": 0,
+      "yan_dosyali_devam_kaydi": 101,
+      "momentler_kayip": true
+    },
+    "M2_kaybin_olcusu": {
+      "ayni_parti_tek_adim": true,
+      "kayip_her_halde_ayni": 0.337373,
+      "momentli_delta_norm": 4.735192,
+      "momentsiz_delta_norm": 8.194721,
+      "oran": 1.7306,
+      "yan_dosyadan_delta_norm": 4.735192,
+      "referanstan_fark": 0.0
+    },
+    "M3_maliyet": {
+      "model_bayt": 373727988,
+      "model_mib": 356.4,
+      "yan_dosya_bayt": 747482741,
+      "yan_dosya_mib": 712.9,
+      "oran_yuzde": 200.01,
+      "parametre_sayisi": 93424986,
+      "sha256_suresi_sn": 0.16,
+      "sha256_hizi_mib_sn": 2232,
+      "kosum_suresi_sn": {
+        "bayrak_kapali": 1.16,
+        "bayrak_acik": 2.37
+      }
+    },
+    "M4_gidis_donus": {
+      "bit_ozdes": true,
+      "farkli_alanlar": [],
+      "param_group_lr": [
+        0.001,
+        0.001
+      ],
+      "param_group_wd": [
+        0.01,
+        0.01
+      ]
+    },
+    "M5_bayat_iddia_curudu": {
+      "iddia": "checkpoint'lerin %21'i mask tamponu",
+      "anka_a1r_pt_anahtar": 101,
+      "mask_cached_anahtari": "YOK",
+      "hukum": "BU ARTEFAKT ICIN CURUDU"
+    },
+    "G0_determinizm": {
+      "ayni_tohum_digest": "48b6da7231af67480727904c565e0ef3338256a4a5f0428095a7d6e4dd94c423",
+      "d1_seed1234": "48b6da7231af67480727904c565e0ef3338256a4a5f0428095a7d6e4dd94c423",
+      "d2_seed1234": "48b6da7231af67480727904c565e0ef3338256a4a5f0428095a7d6e4dd94c423",
+      "d3_seed999": "81082fd6e7792e3003dc011d8931237a75d166215e811b25a8533356a2e7d920",
+      "ayni_mi": true,
+      "farkli_tohum_farkli_mi": true
+    },
+    "G1_varsayilan": {
+      "model_digest_bayrak_acik": "48b6da7231af67480727904c565e0ef3338256a4a5f0428095a7d6e4dd94c423",
+      "model_digest_bayrak_kapali": "48b6da7231af67480727904c565e0ef3338256a4a5f0428095a7d6e4dd94c423",
+      "ayni_mi": true,
+      "yan_dosya_olustu_mu": false,
+      "stdout_diff_satir": 3,
+      "diff_niteligi": "ucu de anlamsal DEGIL: 2 zamanlama degeri + kayit yolunu tasiyan satir; kayip satirlari ayni; yeni [ckpt] satiri BASILMADI (--save-every yok)",
+      "log_bit_bit_ayni_iddiasi": "REDDEDILDI — 'log bit-bit ayni' DEGILDIR"
+    },
+    "G3_gercek_program": {
+      "dogrulama_satiri": "adim=2, 101 parametre",
+      "kayit_sayisi": 101
+    },
+    "G6_uclu_olcum": {
+      "A_goreli_donmus_model": {
+        "rc": 1,
+        "kapi": "ATESLENDI",
+        "artefakt": "yok"
+      },
+      "B_goreli_yalniz_yan_dosya_donmus": {
+        "rc": 1,
+        "kapi": "ATESLENDI",
+        "artefakt": "yok",
+        "mesaj": "data/anka_t0092_sonda_v2.opt.pt"
+      },
+      "C_mutlak_donmus_model": {
+        "rc": 0,
+        "kapi": "ATESLENMEDI",
+        "artefakt": "model + yan dosya YAZILDI (frozen data/)"
+      }
+    }
+  },
+  "kapilar": {
+    "toplam": 10,
+    "gecen": 10,
+    "duran_dal": 4,
+    "gecen_dal": 6,
+    "liste": [
+      {
+        "id": "G0",
+        "ne": "--seed ayni tohumda AYNI, farkli tohumda FARKLI agirlik",
+        "dal": "gecen+ayirt eden",
+        "sonuc": "GECTI"
+      },
+      {
+        "id": "G1",
+        "ne": "--save-optimizer YOK => yan dosya OLUSMAZ",
+        "dal": "gecen",
+        "sonuc": "GECTI"
+      },
+      {
+        "id": "G2",
+        "ne": "yan dosya olusur; model_sha256 = GERCEK digest",
+        "dal": "gecen",
+        "sonuc": "GECTI"
+      },
+      {
+        "id": "G3",
+        "ne": "devam kosumu momentleri yukler",
+        "dal": "gecen",
+        "sonuc": "GECTI"
+      },
+      {
+        "id": "G4a",
+        "ne": "yan dosya yok + bayrak yok => DURMAZ, stderr'e uyarir",
+        "dal": "duran-degil",
+        "sonuc": "GECTI"
+      },
+      {
+        "id": "G4b",
+        "ne": "yan dosya yok + --load-optimizer => rc=2",
+        "dal": "DURAN",
+        "sonuc": "GECTI"
+      },
+      {
+        "id": "G5",
+        "ne": "digest uyusmuyor => rc=2",
+        "dal": "DURAN",
+        "sonuc": "GECTI"
+      },
+      {
+        "id": "G5b",
+        "ne": "model_sha256 alani YOK => rc=2",
+        "dal": "DURAN",
+        "sonuc": "GECTI"
+      },
+      {
+        "id": "G6a",
+        "ne": "goreli donmus model yolu => DURUR",
+        "dal": "DURAN",
+        "sonuc": "GECTI"
+      },
+      {
+        "id": "G6b",
+        "ne": "model serbest ama .opt.pt donmus => DURUR (mesaj yan dosyayi anar)",
+        "dal": "DURAN",
+        "sonuc": "GECTI"
+      }
+    ]
+  },
+  "kanarya_uc_dal": {
+    "KANARYA-1_kusurlu": {
+      "guard": 2,
+      "save": 3,
+      "beklenen": "DUSTU",
+      "olculen": "DUSTU"
+    },
+    "KANARYA-2_saglam": {
+      "guard": 3,
+      "save": 3,
+      "beklenen": "GECTI",
+      "olculen": "GECTI"
+    },
+    "KANARYA-3_gercek": {
+      "guard": 2,
+      "save": 2,
+      "beklenen": "GECTI",
+      "olculen": "GECTI"
+    },
+    "hukum": "kapi VAKUM DEGIL: kusurlu kanaryayi yakaliyor, saglami geciriyor"
+  },
+  "yeni_bulgular": [
+    {
+      "no": "7/1",
+      "baslik": "Donmus kapi MUTLAK yollarda FAIL-OPEN",
+      "yer": "src/llm/frozen_guard.py:59",
+      "kok_neden": "fnmatch.fnmatch(os.path.normpath(path), p) or fnmatch.fnmatch(path, p); os.path.normpath mutlak yolu goreli YAPMAZ; 'data/*.pt' deseni '/Users/.../data/x.pt' ile eslesmez",
+      "olcum": "rc=0 ile TAMAMLANDI; model 356,4 MiB + yan dosya 712,9 MiB frozen data/ altina YAZILDI",
+      "onceden_mi": true,
+      "son_commit": "4251c53 (2026-09-16)",
+      "bu_gorevde_degisti_mi": false,
+      "kapsam": "KAPSAM DISI — DUZELTILMEDI; operator karari bekler",
+      "gerekce": "dosya writes[]'te degil; paylasilan guvenlik modulu; projenin yerlesik uygulamasi olculen yeni kusuru beyan edip duzeltmemektir"
+    },
+    {
+      "no": "7/2",
+      "baslik": "Iki os.replace arasi kesinti reziduel riski",
+      "durum": "BEYAN EDILDI — OLCULMEDI",
+      "aciklama": "model once, yan dosya sonra => kesinti uyusmazlik birakir ve eslesme kapisi yakalar; bu CIKARIMDIR, kesinti uretilip olculmedi"
+    },
+    {
+      "no": "7/3",
+      "baslik": "tests/test_compiler_entrypoints.py sayi sabitlemesi",
+      "durum": "KAPANDI (kapsam ici — spec duzeltmesi 1)",
+      "eski": "len(save_indices) == 1",
+      "yeni": "guard sayisi >= save sayisi",
+      "neden_yalniz_konum_yetmez": "erken guard butun save'lerden once geldigi icin 'save'den once guard var mi' kontrolu HICBIR ZAMAN dusemez => VAKUM KAPI"
+    }
+  ],
+  "kendi_kusurlarim": [
+    {
+      "no": 1,
+      "kusur": "v1 sonda: optimizer durumunu parametre NESNESI kimligiyle karsilastirdim; state nesne anahtarli => her arama None => 'bit-ozdes DEGIL' SAHTE sonucu",
+      "sonuc": "v2 state_dict() ile duzeltti; True",
+      "sinif": "arac kusuru, bulgu degil"
+    },
+    {
+      "no": 2,
+      "kusur": "zsh unquoted degiskeni kelimelere AYIRMAZ; '$C' tek arguman olarak gecti => kosum VARSAYILAN bayraklarla calisti (vocab 32.852, 100 adim, SFT); diger bayraklarin uygulandigini sandim",
+      "sonuc": "dizi (C=(...) + \"${C[@]}\") ile yeniden olctum; kapi sonucu yine gecerliydi",
+      "sinif": "olcum kabi kusuru"
+    },
+    {
+      "no": 3,
+      "kusur": "kanarya sayacim torch.save'in .attr'ini okumadi => 'save=0' basti => 'bagimsiz capraz dogrulama' BOSTU",
+      "sonuc": ".attr eklenince guard=2 save=3 / 3,3 / 2,2",
+      "sinif": "arac kusuru"
+    },
+    {
+      "no": 4,
+      "kusur": "ilk G6 testi MUTLAK yol kullaniyordu; kapi ateslenmeyince data/ altina 356 MB yazdi (test tasarimim kapinin calisacagini VARSAYDI)",
+      "sonuc": "artefaktlar finally + rm ile silindi; data/ altinda kalinti YOK; test goreli yola cevrildi (kapida kosum maliyeti SIFIR)",
+      "sinif": "test tasarimi kusuru — 7/1 bulgusunu ORTAYA CIKARDI (sansla)"
+    },
+    {
+      "no": 5,
+      "kusur": "ayni tohumlu iki kosumu FARKLI dosya adlariyla kaydedip cmp/sha256 ile karsilastirdim => SAHTE 'determinizm yok' sonucu; torch.save ZIP kabidir ve arsiv uye adlari dosya adini tasir",
+      "sonuc": "tensor tensor: 101/101 ozdes, ZIP CRC'leri ayni; AYNI taban adla digest'ler BIREBIR esit",
+      "sinif": "kabuk farki icerik farki degildir"
+    },
+    {
+      "no": 6,
+      "kusur": "writes[] beyanim GEC kaldi: tests/test_compiler_entrypoints.py'yi beyanimda YOKKEN degistirdim (kira kapsamindaydi ama BEYAN eksikti)",
+      "sonuc": "spec sonradan duzeltildi (oku->yaz->TEKRAR oku); spec_duzeltmeleri[0] altinda onceki writes[] ve onceki sha256 SAKLANDI; bus_send ile bildirildi",
+      "sinif": "SPEC.md Kural 1 — sira yanlisti, kayit duzeltilmedi BUYUTULDU"
+    }
+  ],
+  "acik_maddeler": [
+    "Donmus kapinin mutlak yol acigi (7/1) — DUZELTILMEDI, operator karari bekler",
+    "Iki os.replace arasi kesinti (7/2) — BEYAN EDILDI, OLCULMEDI",
+    "Gercek egitim kalitesine etkisi OLCULMEDI: olculen sey ilk guncellemenin buyuklugu (1,7306x) ve gidis-donusun bit-ozdesligi; 'momentler kaydediliyor' != 'model daha iyi'",
+    "data/anka_a1.pt / anka_a1r.pt moment TASIMAZ — bu gorev onlari yeniden uretmedi; gercek kazanc bundan SONRA kaydedilen checkpoint'lerde baslar",
+    "T-0091'den devreden: plausibility oracle yok · buyuk-harf homografi sinifi · plan<->kod uyusmazligi · D4 (kesme/rakam) · REPL EOF asirmasi · T-0086 oz-referansi"
+  ],
+  "takim_sagligi": {
+    "komut": "venv/bin/pytest -q",
+    "sonuc": "1 failed, 237 passed in 77.30s (0:01:17)",
+    "taban": "1 failed, 227 passed",
+    "sapma": "+10 (yeni kapi dosyasi)",
+    "dusen_tek_test": "test_agent_gateway.py — sandbox soket yasagi (socketserver.py:478 PermissionError), ilan edilmis taban davranisi"
+  },
+  "donmus_yuzey_denetimi": {
+    "son_60dk_degisen_pt_bin": 0,
+    "data_anka_t0092_sonda_kalinti": "YOK",
+    "src_compiler_tokenizer_frozen_guard": "degismedi",
+    "yontem": "Python ile tek tek (kabuk find KULLANILMADI — T-0091 §7/4 dersi)"
+  },
+  "yonetisim": {
+    "kiralama": "T-0092 dort kiralama aldi (train.py, tests/, data/eval/, .agent-bus/notes/) ve kapanista BOSALTILDI",
+    "spec_duzeltmesi": "spec_duzeltmeleri[0] — writes[] += tests/test_compiler_entrypoints.py; onceki writes[] ve onceki spec sha256 saklandi",
+    "bus_send": "2026-09-20T11-50-47Z-claude.json",
+    "git_add_A": "KULLANILMADI",
+    "push": "YOK",
+    "egitim_kosusu": "YOK"
+  },
+  "digestler_sha256_tam": {
+    "/Users/hakankilicaslan/Git/tr_llm/train.py": {
+      "bayt": 25710,
+      "sha256": "ecf3a79e9e38600abb8068cbe11066d9e453dc4d83b44c46c604b01d6fabaa7f",
+      "not": "DEGISTI"
+    },
+    "/Users/hakankilicaslan/Git/tr_llm/tests/test_train_optimizer_state.py": {
+      "bayt": 14124,
+      "sha256": "00de0f8871ba79ee02c9850ae3d2e3c21f7a26a196afedaee38f20e7f79d2e11",
+      "not": "YENI (10 kapi)"
+    },
+    "/Users/hakankilicaslan/Git/tr_llm/tests/test_compiler_entrypoints.py": {
+      "bayt": 25006,
+      "sha256": "235cc81cf7ac62ed0c9490b743d273f2155bb44c1c0a92c55f5ea54886405bec",
+      "not": "DEGISTI (§7/3)"
+    },
+    "/Users/hakankilicaslan/Git/tr_llm/src/llm/frozen_guard.py": {
+      "bayt": 2965,
+      "sha256": "75b3bf6e4384bc808230fb6b8f06c3187c93d78a45d742a4fb75f85f9ac3097b",
+      "not": "DOKUNULMADI — mutlak yol aciginin kaynagi"
+    },
+    "/Users/hakankilicaslan/Git/tr_llm/.agent-bus/frozen.json": {
+      "bayt": 1086,
+      "sha256": "c2eb9a69492d7a4e6eba78d3a7b3ded1544182fe1d88950e7e7f627dacdf77fa",
+      "not": "DOKUNULMADI (10 desen)"
+    },
+    "/Users/hakankilicaslan/Git/tr_llm/data/anka_a1r.pt": {
+      "bayt": 373735137,
+      "sha256": "b93cc1cd54093fc63342d394abe528f2128dc16e20b4d7ac6ab680854b4d6293",
+      "not": "DOKUNULMADI — YALNIZ OKUNDU"
+    },
+    "/Users/hakankilicaslan/Git/tr_llm/data/train.bin": {
+      "bayt": 21523330,
+      "sha256": "00519ef695265a179336101efb0975aa8c522f288b7d55c9b53aa50bdc74cc5c",
+      "not": "DOKUNULMADI — YALNIZ OKUNDU"
+    },
+    "$TMPDIR/t0092_probe2.py": {
+      "bayt": 3707,
+      "sha256": "7deffc82bd40cb7f96b342ed797dc99c2fa567691b2532e233abf4ca09b9eb4f",
+      "not": "kusur + maliyet + gidis-donus (§2)"
+    },
+    "$TMPDIR/t0092_det.py": {
+      "bayt": 1644,
+      "sha256": "ea8610fa860159152ad0026e0560de11228b6438d0a28f34676c079583d14669",
+      "not": "tensor tensor karsilastirma + ZIP kabi (§6/5)"
+    },
+    "$TMPDIR/t0092_kanarya.py": {
+      "bayt": 4005,
+      "sha256": "98d5e1481320ef7877ebe0e7446f67d4ef4c3c2f3d25618735d16b64facce44f",
+      "not": "AST testinin ayirt ediciligi (§7/3)"
+    },
+    "$TMPDIR/t0092/probe2.txt": {
+      "bayt": 766,
+      "sha256": "087af0c2b309438cae1764581fe53704331d8c8325e9558273b5c4dfc51a443c",
+      "not": "sonda CIKTISI"
+    },
+    "$TMPDIR/t0092/kanarya.txt": {
+      "bayt": 576,
+      "sha256": "029a465502e8c14904a16450daaed63fa4e284984669fa238451347542015a4c",
+      "not": "sonda CIKTISI"
+    }
+  },
+  "sonda_kaynaklari": {
+    "$TMPDIR/t0092_probe2.py": "# -*- coding: utf-8 -*-\n\"\"\"T-0092 · AdamW moment olcumu — v2. v1'deki KENDI arac kusurum duzeltildi.\n\nv1 kusuru: `o1.state` anahtarlari PARAMETRE NESNESIDIR; `o3.state.get(p1)` bu yuzden her\nzaman None dondu ve \"gidis-donus bit-ozdes DEGIL\" gibi SAHTE bir sonuc uretti. Dogru yol\n`state_dict()` (indeks anahtarli) uzerinden karsilastirmaktir. Ayrica v1'de agirliklar ile\nmomentler FARKLI adim seviyesindeydi (agirlik 2, moment 3) => delta farki da yanilticiydi.\n\"\"\"\nimport os, sys, tempfile, torch, torch.optim as optim\nsys.path.insert(0, os.getcwd())\nfrom src.llm.tokenizer import Vocabulary\nfrom scripts.train_step_demo import KristalLM\n\nTMP = tempfile.mkdtemp(prefix=\"t0092v2_\")\nV = 33114\nvocab = Vocabulary(); vocab.load(\"data/rebuild/vocab_anka_r1_33114.json\")\n\ndef yeni_model():\n    torch.manual_seed(1234)\n    return KristalLM(vocab_size=V, n_embd=768, vocab=vocab, n_layer=6, n_head=6,\n                     dropout=0.0, block_size=32)\n\ndef veri():\n    torch.manual_seed(7)\n    return torch.randint(0, V, (2, 32)), torch.randint(0, V, (2, 32))\n\nx, y = veri()\n\ndef adim(model, opt):\n    opt.zero_grad()\n    _, loss = model(x, y, None)\n    loss.backward()\n    once = {k: v.detach().clone() for k, v in model.state_dict().items()}\n    opt.step()\n    sonra = model.state_dict()\n    L = sum(float(((sonra[k] - once[k]).float() ** 2).sum()) for k in once) ** 0.5\n    return loss.item(), L\n\nmA = yeni_model(); oA = optim.AdamW(mA.parameters(), lr=1e-3, weight_decay=0.01)\nfor _ in range(2):\n    adim(mA, oA)\n\nW = os.path.join(TMP, \"w.pt\"); O = os.path.join(TMP, \"w.pt.opt.pt\")\ntorch.save(mA.state_dict(), W)\ntorch.save({\"optimizer\": oA.state_dict(), \"adim\": 2}, O)\nsdA = oA.state_dict()\nprint(f\"referans: state kaydi {len(sdA['state'])} · param grup {len(sdA['param_groups'])}\")\nprint(f\"  W {os.path.getsize(W)/2**20:.1f} MiB · O {os.path.getsize(O)/2**20:.1f} MiB \"\n      f\"(= modelin %{100*os.path.getsize(O)/os.path.getsize(W):.1f}'i)\")\n\nmB = yeni_model(); mB.load_state_dict(torch.load(W, map_location=\"cpu\"))\noB = optim.AdamW(mB.parameters(), lr=1e-3, weight_decay=0.01)\nprint(f\"\\n(A) MEVCUT devam: optimizer.state kaydi = {len(oB.state)}  <-- momentler YOK\")\n\nmC = yeni_model(); mC.load_state_dict(torch.load(W, map_location=\"cpu\"))\noC = optim.AdamW(mC.parameters(), lr=1e-3, weight_decay=0.01)\noC.load_state_dict(torch.load(O, map_location=\"cpu\")[\"optimizer\"])\nprint(f\"(B) YAN DOSYALI devam: optimizer.state kaydi = {len(oC.state)}\")\n\nsdC = oC.state_dict()\nfarkli = []\nif sdC[\"state\"].keys() != sdA[\"state\"].keys():\n    farkli.append(\"ANAHTAR KUMESI FARKLI\")\nfor i in sdC[\"state\"]:\n    for k in sdA[\"state\"][i]:\n        a, b = sdA[\"state\"][i][k], sdC[\"state\"][i][k]\n        if isinstance(a, torch.Tensor):\n            if not torch.equal(a.cpu(), b.cpu()): farkli.append((i, k))\n        elif a != b: farkli.append((i, k))\nprint(f\"\\nM4 · optimizer gidis-donus BIT-OZDES mi: {not farkli}  (farkli alan: {farkli[:5]})\")\npg, pg2 = sdA[\"param_groups\"][0], sdC[\"param_groups\"][0]\nprint(f\"     param_group: lr {pg['lr']}=={pg2['lr']} · wd {pg['weight_decay']}=={pg2['weight_decay']}\")\n\nlA, LA = adim(mA, oA)\nlB, LB = adim(mB, oB)\nlC, LC = adim(mC, oC)\nprint(f\"\\nM2 · AYNI partiden tek adim:\")\nprint(f\"     (A) MOMENTLI (referans)  kayip {lA:.6f} · ||delta|| {LA:.6f}\")\nprint(f\"     (B) MOMENTSIZ (mevcut)   kayip {lB:.6f} · ||delta|| {LB:.6f}   oran {LB/LA:.4f}x\")\nprint(f\"     (C) YAN DOSYADAN moment  kayip {lC:.6f} · ||delta|| {LC:.6f}   oran {LC/LA:.4f}x\")\nprint(f\"     (C) ile (A) farki: {abs(LC-LA):.3e}\")\nsd = torch.load(\"data/anka_a1r.pt\", map_location=\"cpu\")\nprint(f\"\\nM5 · anka_a1r.pt 'mask'/'cached':\", [k for k in sd if \"mask\" in k or \"cached\" in k] or \"YOK\")\nprint(f\"GECICI: {TMP}\")\n",
+    "$TMPDIR/t0092_det.py": "#!/usr/bin/env python3\n# -*- coding: utf-8 -*-\n\"\"\"T-0092 determinizm sondasi: ayni tohum => AYNI AGIRLIKLAR mi?\n\nUYARI (kabuk tuzagi): `cmp`/sha256 DOSYA BAYTINI olcer. torch.save bir ZIP kabidir;\nkabuk basligi degisebilir. Bu sonda TENSOR TENSOR karsilastirir (torch.equal), ve\nfark varsa HANGI anahtarda oldugunu ve buyuklugunu yazar. Ayrica ham bayt farkinin\nZIP basliginda mi yoksa veri blogunda mi oldugunu ayirt eder.\n\"\"\"\nimport sys\nimport torch\nimport zipfile\n\nyol = sys.argv[1:]\nassert len(yol) == 2, \"iki checkpoint yolu ver\"\na, b = (torch.load(p, map_location=\"cpu\") for p in yol)\n\nprint(f\"A: {yol[0]}\")\nprint(f\"B: {yol[1]}\")\nprint(f\"anahtar sayisi: {len(a)} vs {len(b)} | kume esit: {set(a) == set(b)}\")\n\nfarkli = []\nesit = 0\nfor k in a:\n    if k not in b:\n        farkli.append((k, \"ANAHTAR YOK\"))\n        continue\n    ta, tb = a[k], b[k]\n    if ta.shape != tb.shape:\n        farkli.append((k, f\"SEKIL {tuple(ta.shape)} vs {tuple(tb.shape)}\"))\n        continue\n    if torch.equal(ta, tb):\n        esit += 1\n    else:\n        d = (ta.float() - tb.float()).abs()\n        farkli.append((k, f\"max|fark|={d.max().item():.6e} farkli_eleman={(d > 0).sum().item()}/{d.numel()}\"))\n\nprint(f\"TENSOR-OZDES: {esit}/{len(a)}\")\nprint(f\"FARKLI: {len(farkli)}\")\nfor k, m in farkli[:20]:\n    print(f\"  - {k}: {m}\")\n\n# ZIP kabugu: fark baslikta mi veride mi?\nprint(\"\\n--- ZIP kabi ---\")\nfor p in yol:\n    with zipfile.ZipFile(p) as z:\n        adlar = z.namelist()\n        print(f\"{p}: {len(adlar)} uye\")\n        for n in adlar[:6]:\n            i = z.getinfo(n)\n            print(f\"   {n}: date_time={i.date_time} CRC={i.CRC:08x} boyut={i.file_size}\")\n",
+    "$TMPDIR/t0092_kanarya.py": "#!/usr/bin/env python3\n# -*- coding: utf-8 -*-\n\"\"\"T-0092 kanaryası: `test_ast_train_py_has_frozen_guards` GERÇEKTEN AYIRT EDİYOR mu?\n\nNeden gerekli: T-0092 `train.py`'ye İKİNCİ bir `torch.save` ekledi ve o test düştü.\nTesti güçlendirirken en büyük risk, \"her şeye geçen\" (vakum) bir kapı yazmaktır —\nözellikle de erken guard BÜTÜN save'lerden önce geldiği için konum kontrolü tek başına\nASLA düşemez. Bu sonda, testin KENDİ kodunu (kopyasını değil) üç kanarya üzerinde koşturur:\n\n  KANARYA-1 (kusurlu)  : guard'sız ÜÇÜNCÜ bir torch.save  => test DÜŞMELİ\n  KANARYA-2 (sağlam)   : guard'LI üçüncü save+guard çifti => test GEÇMELİ (yanlış pozitif yok)\n  KANARYA-3 (gerçek)   : depodaki gerçek train.py         => test GEÇMELİ\n\nKanaryalar gerçek `train.py`'nin METİNSEL dönüşümüdür; mantık kopyalanmaz.\n\"\"\"\nimport ast\nimport os\nimport shutil\nimport sys\nimport tempfile\nfrom pathlib import Path\n\nDEPO = Path(\"/Users/hakankilicaslan/Git/tr_llm\")\nsys.path.insert(0, str(DEPO))\nsys.path.insert(0, str(DEPO / \"tests\"))\n\nfrom test_compiler_entrypoints import test_ast_train_py_has_frozen_guards as KAPI  # noqa: E402\n\nGERCEK = (DEPO / \"train.py\").read_text(encoding=\"utf-8\")\n\n# Sabitleyici: yan dosya kaydından SONRAKİ satırı çapa al (T-0092'nin eklediği blok).\nCAPA = '                os.replace(opt_gecici, opt_save_path)\\n'\nassert GERCEK.count(CAPA) == 1, f\"çapa satırı {GERCEK.count(CAPA)} kez bulundu (1 olmalı)\"\n\nKUSURLU = GERCEK.replace(\n    CAPA,\n    CAPA + '\\n                torch.save({\"x\": 1}, \"kanarya.pt\")   # GUARD YOK\\n',\n)\nSAGLAM = GERCEK.replace(\n    CAPA,\n    CAPA + '\\n                check_frozen_save_path(\"kanarya.pt\")\\n'\n           '                torch.save({\"x\": 1}, \"kanarya.pt\")\\n',\n)\n\n\ndef ast_sayim(kaynak: str) -> str:\n    \"\"\"Kanaryanın AST şeklini bağımsız olarak say (testin gördüğünü çapraz doğrula).\n\n    NOT (kendi kusurum, ölçüldü): ilk sürümde `torch.save` bir `ast.Attribute` olduğu için\n    ad yalnız `torch` çıkıyordu ve sayaç `save=0` basıyordu ⇒ \"bağımsız çapraz doğrulama\"\n    HİÇBİR ŞEY doğrulamıyordu. `.attr` eklenerek düzeltildi.\n    \"\"\"\n    tree = ast.parse(kaynak)\n    main_fn = next(n for n in ast.walk(tree)\n                   if isinstance(n, ast.FunctionDef) and n.name == \"main\")\n    guard = save = 0\n    for stmt in main_fn.body:\n        for sub in ast.walk(stmt):\n            if isinstance(sub, ast.Call):\n                f = sub.func\n                if isinstance(f, ast.Name):\n                    ad = f.id\n                elif isinstance(f, ast.Attribute):\n                    val = getattr(f.value, \"id\", \"\")\n                    ad = f\"{val}.{f.attr}\" if val else f.attr\n                else:\n                    continue\n                if ad == \"check_frozen_save_path\":\n                    guard += 1\n                elif ad == \"torch.save\":\n                    save += 1\n    return f\"guard={guard} save={save}\"\n\n\ndef kos(ad: str, kaynak: str, beklenen: str) -> bool:\n    gecici = Path(tempfile.mkdtemp(dir=os.environ[\"TMPDIR\"]))\n    (gecici / \"train.py\").write_text(kaynak, encoding=\"utf-8\")\n    onceki = os.getcwd()\n    try:\n        os.chdir(gecici)\n        try:\n            KAPI()\n            sonuc, ayrinti = \"GECTI\", \"\"\n        except AssertionError as e:\n            sonuc, ayrinti = \"DUSTU\", str(e).splitlines()[0][:150]\n    finally:\n        os.chdir(onceki)\n        shutil.rmtree(gecici, ignore_errors=True)\n    ok = sonuc == beklenen\n    print(f\"{'OK ' if ok else 'IHLAL'} | {ad:26s} | {ast_sayim(kaynak):16s} | \"\n          f\"beklenen={beklenen:5s} olculen={sonuc:5s} | {ayrinti}\")\n    return ok\n\n\nprint(\"T-0092 kanarya — testin KENDİ kodu, üç denek üzerinde:\\n\")\nsonuclar = [\n    kos(\"KANARYA-1 (kusurlu)\", KUSURLU, \"DUSTU\"),\n    kos(\"KANARYA-2 (sağlam)\", SAGLAM, \"GECTI\"),\n    kos(\"KANARYA-3 (gerçek)\", GERCEK, \"GECTI\"),\n]\nprint(f\"\\nSONUC: {sum(sonuclar)}/3 beklendigi gibi\")\nsys.exit(0 if all(sonuclar) else 1)\n"
+  }
+}

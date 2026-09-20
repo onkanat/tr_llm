@@ -15,12 +15,42 @@ from src.llm.prompt_contract import resize_state_dict
 
 def check_frozen_save_path(save_path: str, allow_frozen_write: bool = False) -> None:
     """Belirtilen kaydetme yolunun donmuş olup olmadığını denetler.
-    
+
     Donmuş yola yazma izni (allow_frozen_write=True) açıkça verilmemişse RuntimeError fırlatır.
     """
     from src.llm.frozen_guard import is_frozen_path
     if is_frozen_path(save_path) and not allow_frozen_write:
         raise RuntimeError(f"Donmuş yola yazma engellendi: {save_path} (allow_frozen_write=False)")
+
+
+def _durdur(mesaj: str) -> None:
+    """SESSİZ DURMA YASAĞI (T-0092). Yanlış/eşleşmeyen optimizer durumunu yüklemek
+    koşumu yarım saat sonra anlaşılmaz biçimde bozmak yerine BURADA durdurur.
+
+    `print` + çıplak `return` sınıfı (T-0089/T-0090): süreç rc=0 ile çıkar ve çağıran
+    "başarıyla koştu" ile "durdu"yu ayırt edemez. Bu yüzden mesaj stderr'e gider ve
+    süreç rc=2 ile çıkar."""
+    print(f"DURDURULDU: {mesaj}", file=sys.stderr, flush=True)
+    sys.exit(2)
+
+
+def optimizer_sidecar_path(save_path: str) -> str:
+    """AdamW momentlerinin yan dosya yolu.
+
+    YAN DOSYA seçildi (tek-sözlük formatı DEĞİL): `torch.save(model.state_dict())`
+    biçimini değiştirmek mevcut TÜM yükleyicileri (chat_prompt.py, run_agent_arena.py,
+    test_model.py, src/llm/prompt_contract) kırardı. Yan dosya model biçimini
+    DEĞİŞTİRMEZ => sıfır yükleme kırılması."""
+    return save_path + ".opt.pt"
+
+
+def sha256_file(path: str) -> str:
+    """Dosyanın tam sha256'sı (akışlı; 356 MiB'lik checkpoint belleğe sığdırılmaz)."""
+    h = hashlib.sha256()
+    with open(path, "rb") as f:
+        for blok in iter(lambda: f.read(1 << 20), b""):
+            h.update(blok)
+    return h.hexdigest()
 
 def main():
     print("=" * 60)
@@ -56,8 +86,19 @@ def main():
         torch.set_num_threads(num_cores)
         print(f"CPU modu seçildi ({num_cores} iş parçacığı aktif).", flush=True)
 
-    # 2. Vocabulary & Data Loading
-    # SOZLUK YOLU (T-0080). VARSAYILAN DEGISMEDI => mevcut davranis bit-bit ayni kalir.
+    # TOHUM (--seed, T-0092). VARSAYILAN YOK => mevcut davranis bit-bit ayni kalir (tohum
+    # verilmezse hicbir sey cagrilmaz). Gerekce (OLCULDU): bu dosyada ve veri kumesinde
+    # HICBIR yerde tohum kurulmuyordu; `KristalDataset.get_batch` global `torch.randint`
+    # kullaniyor => AYNI komut farkli agirliklar uretiyor ve "degisiklik davranisi
+    # degistirdi mi" sorusu OLCULEMIYOR. Bu bayrak, degismezleri olculebilir kilar.
+    for arg_idx, arg in enumerate(sys.argv):
+        if arg == "--seed" and arg_idx + 1 < len(sys.argv):
+            _tohum = int(sys.argv[arg_idx + 1])
+            torch.manual_seed(_tohum)
+            np.random.seed(_tohum)
+            print(f"Tohum (seed) kuruldu: {_tohum}", flush=True)
+
+    # 2. Vocabulary & Data Loading    # SOZLUK YOLU (T-0080). VARSAYILAN DEGISMEDI => mevcut davranis bit-bit ayni kalir.
     # Gerekce (OLCULDU): sozluk yolu sabit-kodlu iken kulliyat yeni kimlikler tasiyorsa
     # (Anka A1-r: id 33.113'e kadar) model embedding tablosunun DISINA indeksler. Bu
     # SESSIZ bir arizadir: (a) kosum ortasinda RuntimeError, (b) MPS gecersiz indekste
@@ -187,6 +228,19 @@ def main():
     allow_frozen_write = "--allow-frozen-write" in sys.argv
     check_frozen_save_path(model_save_path, allow_frozen_write=allow_frozen_write)
 
+    # ADAMW MOMENTLERI (T-0092). OLCULEN KUSUR: `torch.save(model.state_dict())` yalniz
+    # agirliklari yazar; devam kosumunda optimizer.state BOS kalir (olculdu: 0 kayit) ve
+    # ilk guncelleme %73 DAHA BUYUK cikar (||delta|| 8,194721 vs 4,735192). Cozum yan dosya.
+    # VARSAYILAN KAPALI: bayrak verilmezse davranis BIT-BIT ayni kalir (yan dosya olusmaz).
+    save_optimizer = "--save-optimizer" in sys.argv
+    load_optimizer = "--load-optimizer" in sys.argv
+    opt_save_path = optimizer_sidecar_path(model_save_path)
+
+    # DONMUS KAPI YAN DOSYA ICIN DE (T-0048 AST degismezi: kontrol torch.save'dan ONCE).
+    # `<yol>.opt.pt` da `data/*.pt` donmus desenine girer; kontrol ATLANMAZ.
+    if save_optimizer:
+        check_frozen_save_path(opt_save_path, allow_frozen_write=allow_frozen_write)
+
     # PERIYODIK KAYIT (--save-every N). VARSAYILAN 0 = KAPALI => mevcut davranis bit-bit
     # ayni kalir. Gerekce: model su ana kadar YALNIZCA dongu bittikten sonra kaydediliyordu;
     # 10 saatlik bir on-egitimde bu TEK NOKTA ARIZASIDIR (kesinti/OOM tum ilerlemeyi siler).
@@ -209,6 +263,7 @@ def main():
     loss_report = "--loss-report" in sys.argv
 
     lr = 1e-3
+    devam_edildi = False
     if os.path.exists(model_load_path) and not from_scratch:
         print(f"Mevcut model ağırlıkları '{model_load_path}' tespit edildi, eğitim devam ettiriliyor (Resume)...", flush=True)
         state_dict = torch.load(model_load_path, map_location=device)
@@ -218,6 +273,7 @@ def main():
         state_dict = resize_state_dict(model, state_dict)
         model.load_state_dict(state_dict, strict=False)
         lr = 2e-4  # Lower learning rate when fine-tuning/resuming
+        devam_edildi = True
     else:
         print("Sıfırdan eğitim (From Scratch) başlatılıyor...", flush=True)
 
@@ -230,6 +286,52 @@ def main():
     # Using AdamW optimizer
     optimizer = optim.AdamW(model.parameters(), lr=lr, weight_decay=0.01)
     print(f"Model mimarisi kuruldu ve cihaza taşındı. (Öğrenme Oranı: {lr})", flush=True)
+
+    # ADAMW MOMENTLERINI GERI YUKLE (T-0092). Sirasi onemli: optimizer yukarida KURULMALI,
+    # cunku state_dict ancak kurulmus bir optimizer'a yuklenebilir.
+    opt_load_path = optimizer_sidecar_path(model_load_path)
+    if os.path.exists(opt_load_path):
+        if not load_optimizer:
+            # SESSIZ SURPRIZ YASAK: yan dosya VAR ama bayrak YOK. Yuklememek mesru bir
+            # tercihtir, ama kullanicinin BUNDAN HABERI OLMALIDIR.
+            print(
+                f"UYARI: optimizer yan dosyasi BULUNDU ama --load-optimizer verilmedi: "
+                f"'{opt_load_path}'. Momentler YUKLENMEDI, sifirdan basliyor.",
+                file=sys.stderr, flush=True)
+        else:
+            payload = torch.load(opt_load_path, map_location="cpu")
+            if not isinstance(payload, dict) or "optimizer" not in payload:
+                _durdur(f"optimizer yan dosyasi bozuk: '{opt_load_path}' icinde 'optimizer' alani yok "
+                        f"(bulunan anahtarlar: {sorted(payload.keys()) if isinstance(payload, dict) else type(payload).__name__})")
+            # ESLESME KAPISI: yan dosya, yaninda kaydedildigi MODEL dosyasinin digest'ini
+            # tasir. Uyusmazsa momentler BASKA bir agirlik kumesine aittir => yapistirmak
+            # sessiz bir soykutugu bozulmasidir. DUR.
+            beklenen = payload.get("model_sha256")
+            if not beklenen:
+                _durdur(f"optimizer yan dosyasinda 'model_sha256' alani YOK: '{opt_load_path}'. "
+                        f"Eslestirme dogrulanamaz => momentler yuklenmedi.")
+            gercek = sha256_file(model_load_path)
+            if gercek != beklenen:
+                _durdur(f"optimizer/model ESLESMIYOR: yan dosya '{opt_load_path}' model_sha256="
+                        f"{beklenen} bekliyor, ama '{model_load_path}' digest'i {gercek}. "
+                        f"Momentler BASKA bir agirlik kumesine ait; yuklenmedi.")
+            optimizer.load_state_dict(payload["optimizer"])
+            print(f"AdamW momentleri geri yuklendi: '{opt_load_path}' "
+                  f"(adim={payload.get('adim')}, model_sha256={gercek[:16]}…, "
+                  f"{len(optimizer.state)} parametre)", flush=True)
+    elif load_optimizer:
+        _durdur(f"--load-optimizer verildi ama yan dosya YOK: '{opt_load_path}'. "
+                f"Momentler sifirdan baslardi; sessizce devam etmek yerine duruldu.")
+    elif devam_edildi:
+        # OLCULEN VARSAYILAN DAVRANIS: eski checkpoint'ler moment TASIMAZ (anka_a1.pt ve
+        # anka_a1r.pt'de optimizer durumu YOK). Bu yuzden yokluk bir HATA degil, bir
+        # EKSIKLIKTIR: kosum durdurulmaz, ama sessiz de kalinmaz.
+        # Yalniz DEVAM kosumunda basilir: sifirdan kosumda moment zaten BEKLENMEZ ve
+        # her yeni kosumda uyari basmak gurultu olurdu (yanlis pozitif).
+        print(
+            f"UYARI: AdamW momenti bulunamadi ('{opt_load_path}' yok) => optimizer SIFIRDAN "
+            f"basliyor. Ilk guncelleme, momentli bir devam kosumuna gore DAHA BUYUK olur "
+            f"(olculdu: 1,73x; T-0092).", file=sys.stderr, flush=True)
 
     # 4. Training Loop Configuration
     batch_size = 32
@@ -305,11 +407,27 @@ def main():
             gecici = model_save_path + ".tmp"
             torch.save(model.state_dict(), gecici)
             os.replace(gecici, model_save_path)
+            # ADAMW MOMENTLERI (T-0092) — MODEL ONCE, YAN DOSYA SONRA. Sira BILINCLI:
+            # aradaki kesinti, yan dosyayi BIR ONCEKI aralikta birakir; o zaman yan dosyanin
+            # `model_sha256`'si diskteki YENI modelle UYUSMAZ => bir sonraki devam kosumu
+            # ESLESME KAPISINDA DURUR. Ters sirada yazsaydik, kesinti "uyusan" gorunen ama
+            # yanlis cift uretebilirdi; bu sirada her kesinti TESPIT EDILEBILIR bir uyusmazlik
+            # birakir (sessiz soykutugu bozulmasi yok).
+            if save_optimizer:
+                opt_gecici = opt_save_path + ".tmp"
+                torch.save({
+                    "optimizer": optimizer.state_dict(),
+                    "adim": step,
+                    "model_sha256": sha256_file(model_save_path),
+                }, opt_gecici)
+                os.replace(opt_gecici, opt_save_path)
             # YENI SATIR YALNIZ --save-every VERILINCE basilir => varsayilan kosumun
             # logu BIT-BIT ayni kalir (K3; eski surumle karsilastirilarak dogrulanir).
             if save_every:
                 tur = "son kayıt" if step == max_steps else "periyodik"
                 print(f"  [ckpt] adım {step}: '{model_save_path}' güncellendi ({tur}, atomik)", flush=True)
+                if save_optimizer:
+                    print(f"  [ckpt] adım {step}: '{opt_save_path}' güncellendi (AdamW momentleri, atomik)", flush=True)
 
     total_time = time.time() - start_time
     print("\n" + "=" * 50, flush=True)

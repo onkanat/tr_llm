@@ -394,12 +394,33 @@ def test_ast_train_py_has_frozen_guards():
     assert len(guard_indices) >= 1, "train.py içinde check_frozen_save_path çağrısı bulunamadı"
     first_guard_idx = guard_indices[0]
 
-    # torch.save denetimi: torch.save çağrısından önce guard bulunmalı
+    # torch.save denetimi: HER torch.save çağrısından önce guard bulunmalı.
+    # ESKİ HÂLİ `len(save_indices) == 1` idi: bu, "train.py'de TEK kayıt yeri var" şeklinde
+    # bir SAYI sabitlemesiydi; testin ilan edilen amacı ise İLİŞKİydi (guard, save'den önce).
+    # T-0092 optimizer yan dosyasını kaydeden İKİNCİ bir `torch.save` ekledi ve o site de
+    # kendi `check_frozen_save_path` çağrısına sahip ⇒ sayı 2 oldu ve test düştü.
+    # Sayıyı 2'ye çekmek bir sonraki kayıt yerinde yine kırılırdı.
+    #
+    # DİKKAT — NEDEN YALNIZ KONUM YETMEZ: erken guard (T-0048) bütün save'lerden ÖNCE
+    # geldiği için "save'den önce bir guard var mı" kontrolü bugünkü şekilde HİÇBİR ZAMAN
+    # düşemez ⇒ VAKUM KAPI. Bu yüzden İKİ kontrol birlikte yapılır ve ikincisi asıl olandır:
+    # her kayıt yerinin KENDİ guard'ı olmalı (guard sayısı ≥ save sayısı). Guard'sız yeni
+    # bir save eklenirse sayı eşitliği bozulur ve test DÜŞER (kanarya ile ölçüldü).
     save_indices = [i for i, (name, _) in enumerate(calls) if name == "torch.save"]
-    assert len(save_indices) == 1, f"Beklenen 1 torch.save çağrısı, bulunan: {len(save_indices)}"
-    save_idx = save_indices[0]
-    assert first_guard_idx < save_idx, (
-        f"Erken guard satırı ({calls[first_guard_idx][1]}) >= torch.save satırı ({calls[save_idx][1]})"
+    assert len(save_indices) >= 1, "train.py içinde torch.save çağrısı bulunamadı"
+    for save_idx in save_indices:
+        assert any(g < save_idx for g in guard_indices), (
+            f"torch.save (satır {calls[save_idx][1]}) ilk guard'dan ÖNCE geliyor "
+            f"(T-0048: kontrol torch.save'dan ÖNCE çalışmalı)"
+        )
+    assert len(guard_indices) >= len(save_indices), (
+        f"HER kayıt yerinin kendi check_frozen_save_path çağrısı olmalı: "
+        f"{len(save_indices)} torch.save ama yalnız {len(guard_indices)} guard. "
+        f"Guard'sız bir kayıt yeri var ⇒ donmuş yola yazma engellenmeden geçebilir."
+    )
+    first_save_idx = save_indices[0]
+    assert first_guard_idx < first_save_idx, (
+        f"Erken guard satırı ({calls[first_guard_idx][1]}) >= torch.save satırı ({calls[first_save_idx][1]})"
     )
 
     # Sıralama: İlk guard çağrısı model yükleme/eğitim döngüsünden önce gelmelidir
