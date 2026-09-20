@@ -1,0 +1,292 @@
+{
+  "gorev": "T-0091",
+  "rapor_md": {
+    "yol": "data/eval/anka_r14_d1_hukmu_2026-09-20.md",
+    "bayt": 14730,
+    "sha256": "87733f4c628c47665493ad232593b04d2367e36865fc968371a35c63e9ca322a",
+    "not": "bu raporun kendisi (metin)"
+  },
+  "baslik": "D1 hükmü — en-uzun-kök kuralı ölçüldü",
+  "damga_utc": "2026-09-20T11:27:44Z",
+  "damga_kaynagi": "datetime.now(timezone.utc) — BETİK hesapladı, elle yazılmadı",
+  "yetki": "Operatör onayı: 'Onay bekleyen işler için devam et' ⇒ iş akışı (2) D1 donmuş derleyici",
+  "donmus_yuzeye_yazma": false,
+  "hukum": "D1 kuralı UYGULANMAZ; src/compiler/** ve data/lexicon/** YAZILMADI",
+  "kapilar": {
+    "K1": {
+      "ilan": "İnsan-etiketli ROOT oracle'da NET > 0 ⇒ kural lehine kanıt",
+      "olculen": "NET = -1 (24/25 mevcut → 23/25 kural)",
+      "hukum": "ATEŞLENMEDİ",
+      "yorum": "Kuralın tek karar değişimi REGRESYON (gölgeler: gölge → gölgele)"
+    },
+    "K2": {
+      "ilan": "Kimlik oracle'da kural en az 1 karar değiştirirse ⇒ kanıt var",
+      "olculen": "değişen = 0 (42.459 vaka)",
+      "hukum": "ATEŞLENMEDİ",
+      "yorum": "ARAÇ ÖLÜ: beraberlik zeminine hiç basmıyor, iki kuralı AYIRT EDEMEZ"
+    },
+    "K3": {
+      "ilan": "MEVCUT kural korunmalı: hiçbir kabul edilen ölçütte düşmemeli",
+      "olculen": "mevcut 24/25 (roots.tsv ve roots_anka_r1.tsv AYNI)",
+      "hukum": "KALDI"
+    },
+    "K4": {
+      "ilan": "Donmuş yüzeyde yazma işareti olmamalı (git)",
+      "olculen": "git log -1 -- src/compiler/ = 6bca90b (T-0081); src/compiler/ temiz",
+      "hukum": "KALDI"
+    }
+  },
+  "olcumler": {
+    "davranis_hedef_4_vaka": {
+      "roots.tsv": {
+        "ağacı": [
+          "ağa",
+          "DERIV_CI"
+        ],
+        "aklı": [
+          "ak",
+          "DERIV_lI"
+        ],
+        "kanadı": [
+          "kana",
+          "TENSE_PAST"
+        ],
+        "gönlü": [
+          "gön",
+          "DERIV_lI"
+        ],
+        "ağzı": [],
+        "hakkı": [],
+        "Fransa": [],
+        "İstanbul": [
+          "İstanbul"
+        ],
+        "İngiliz": [
+          "İngiliz"
+        ]
+      },
+      "roots_anka_r1.tsv": {
+        "ağacı": [
+          "ağa",
+          "DERIV_CI"
+        ],
+        "aklı": [
+          "ak",
+          "DERIV_lI"
+        ],
+        "kanadı": [
+          "kana",
+          "TENSE_PAST"
+        ],
+        "gönlü": [
+          "gön",
+          "DERIV_lI"
+        ],
+        "ağzı": [
+          "ağız",
+          "POSS_3SG"
+        ],
+        "hakkı": [
+          "hak",
+          "POSS_3SG"
+        ],
+        "Fransa": [
+          "Fransa"
+        ],
+        "İstanbul": [
+          "İstanbul"
+        ],
+        "İngiliz": [
+          "İngiliz"
+        ]
+      },
+      "hukum": "D1 4/4 BOZUK (iki sözlükte de); D2/D3-VERİ kazançları GERÇEK ama D1'e ait değil",
+      "regresyon_paketi": {
+        "başkenti": "✓",
+        "yılında": "✓",
+        "olarak": "✓",
+        "Ankarada": "✓",
+        "adıyla": "✓",
+        "zzqqxx": "✓ (negatif)"
+      },
+      "acik": [
+        "1998'de",
+        "Atatürk'ün (D4)"
+      ]
+    },
+    "root_oracle_25": {
+      "mevcut_kural": {
+        "dogru": 24,
+        "toplam": 25,
+        "oran": 0.96
+      },
+      "en_uzun_kok": {
+        "dogru": 23,
+        "toplam": 25,
+        "oran": 0.92
+      },
+      "net": -1,
+      "karar_degisen": 1,
+      "berabere_skorlu_vaka": 13,
+      "degisen_vaka": {
+        "girdi": "gölgeler",
+        "beklenen": "gölge",
+        "mevcut": "gölge",
+        "kural": "gölgele",
+        "sinif": "REGRESYON"
+      },
+      "tek_basarisiz": {
+        "girdi": "tatlısı",
+        "beklenen": "tat",
+        "her_iki_kural": "Tat",
+        "sinif": "büyük-harf homografı"
+      },
+      "kaynak_dosya": "tests/morphology_regression_100.json"
+    },
+    "kimlik_oracle": {
+      "yontem": "Sözlükte kendisinden kısa bir öneki de bulunan her lemma L, derleyiciye L olarak verilir; seçilen kök L olmalıdır (insan etiketi gerekmez)",
+      "roots.tsv": {
+        "hedef_kume": 42459,
+        "mevcut_dogru": 42237,
+        "kural_dogru": 42237,
+        "kurtarilan": 0,
+        "bozulan": 0,
+        "net": 0,
+        "dogru_kok_analyses_icinde_yok": 0,
+        "artik_hata": 222
+      },
+      "roots_anka_r1.tsv": {
+        "hedef_kume": 42578,
+        "mevcut_dogru": 42347,
+        "kural_dogru": 42347,
+        "kurtarilan": 0,
+        "bozulan": 0,
+        "net": 0,
+        "dogru_kok_analyses_icinde_yok": 0,
+        "artik_hata": 231
+      },
+      "hukum": "ARAÇ ÖLÜ (pozitif kontrol yok): 0 karar değişimi ⇒ D1 lehine kanıt DEĞİL",
+      "yan_urun_bulgu": "Artık hataların TAMAMI büyük-harf homografı (abdal←Abdal, acem←Acem, afyon←Afyon, ahi←Ahi, ahlat←Ahlat, akkuş←Akkuş); doğru kök analyses içinde %100 var ⇒ kayıp KAPSAMA değil SEÇİM kaybı; rakip EŞİT UZUNLUKTA olduğu için uzunluk kuralı sıralayamaz"
+    },
+    "artefakt_iddia_uyusmazligi": {
+      "plan_iddiasi": "'Faz 2 derleyici ✓ D1 (en-uzun-kök)'",
+      "olculen": "src/compiler/core.py:174-185 _score_paths = 10.0 - len(path['morphemes']); docstring 'For now, a basic heuristic'; src/compiler/** son commit 6bca90b (T-0081); çalışma ağacı temiz",
+      "hukum": "İddianın KODDA karşılığı YOK — plan kalemi ile artefakt uyuşmuyor"
+    },
+    "model_artefakti_yazma_denetimi": {
+      "yontem": "data/** altındaki .pt/.bin dosyaları Python ile TEK TEK tarandı (kabuk find ifadesi KULLANILMADI — sahte pozitif üretti)",
+      "son_60_dk_degisen": 0,
+      "en_yeni_artefakt": {
+        "yol": "data/anka_a1r.pt",
+        "damga_utc": "2026-09-19T23:55:08Z",
+        "goreve_gore_yas_saat": 11.6
+      },
+      "hukum": "Bu görev hiçbir model artefaktı ÜRETMEDİ ve hiçbirini DEĞİŞTİRMEDİ"
+    },
+    "takim_sagligi": {
+      "komut": "venv/bin/pytest -q",
+      "sonuc": "1 failed, 227 passed",
+      "sure_sn": 19.07,
+      "taban": "T-0090 ile birebir aynı",
+      "dusen": "tests/test_agent_gateway.py::TestAgentGateway::test_gateway_http_server_endpoints — sandbox soket yasağı (socketserver.py:478 PermissionError)",
+      "yorum": "Bu görev kod değiştirmediği için takımın değişmemesi BEKLENEN sonuçtur; ölçüldü, öyle çıktı."
+    }
+  },
+  "kendi_kusurlarim": [
+    "Kimlik oracle'ı D1 aracı sanarak kurdum; pozitif kontrolü (değişen sayacı) ölçümden SONRA ekledim. Doğrusu önce ilan etmekti.",
+    "İlk sondamda sözlük girişini 0 okudum (yanlış alan adı); sözlük GERÇEKTEN yüklüydü. Ölçüm KABININ kusuru — bulgu olarak RAPORLANMADI.",
+    "Planın '✓' satırına önce güvendim; kodu okumadan yazsaydım donmuş yüzeye gereksiz yazma veya gereksiz 'kapandı' beyanı üretirdim.",
+    "Kendi kanıt komutum sahte pozitif üretti: `find data -name \"*.pt\" -o -name \"*.bin\" -newermt \"-60 minutes\"` ifadesi, -print yokken ve VEYA önceliği yüzünden -name \"*.pt\" dalını zaman koşulundan BAĞIMSIZ yazdırdı ⇒ '7 dosya değişti' gibi göründü. Gerçek ölçüm (Python ile tek tek): son 60 dk'da değişen .pt/.bin = 0; en yeni artefakt 2026-09-19T23:55:08Z (bu görevden 11,6 saat önce). Ne donmuş yüzeyde yazma vardı ne bulgu — ölçüm KABININ kusuru."
+  ],
+  "acik_maddeler": [
+    "D1 için gereken plausibility oracle YOK (etiketli veri gerekir) — bu turun dışında",
+    "Büyük-harf homografı sınıfı çözülmedi; hiçbir mevcut kural onu ele almıyor",
+    "Planın 'Faz 2 ✓ D1' iddiası ile kod arasındaki uyuşmazlık kayda geçti; planı düzeltmek ayrı iş",
+    "D4 (kesme/rakam) hâlâ açık — iki vaka [] (T-0080'den devir)",
+    "AdamW momentleri kaydedilmiyor — onaylı iş akışının kalan maddesi"
+  ],
+  "digestler_sha256_tam": {
+    "okunan_degismeyen": [
+      {
+        "yol": "src/compiler/core.py",
+        "bayt": 7502,
+        "sha256": "abbc78433c1b5fc35498c05d727bd461cf3936b06ad777c8d84338a81f3acfa4",
+        "not": "OKUNDU, DEĞİŞMEDİ — _score_paths hâlâ 10.0 - len(morphemes)"
+      },
+      {
+        "yol": "data/lexicon/roots.tsv",
+        "bayt": 870426,
+        "sha256": "fe3005e5e2a594f09cbcfc3286e2c8812953ae6614333815ab87a7e3a6763598",
+        "not": "OKUNDU, DEĞİŞMEDİ — ÜRÜN sözlüğü"
+      },
+      {
+        "yol": "data/lexicon/roots_anka_r1.tsv",
+        "bayt": 873755,
+        "sha256": "ea874a73c0d5669a591cef00c9d4fb16916ea3e60e42df9d3c73445c4b7efd59",
+        "not": "OKUNDU, DEĞİŞMEDİ — T-0080 külliyat sözlüğü"
+      }
+    ],
+    "olcum_araclari": [
+      {
+        "yol": "tests/morphology_regression_100.json",
+        "bayt": 14279,
+        "sha256": "cbe00f31c4dcc34ba2baed5317f1bf38b4e69b130c5271205c1dd5709dab18da",
+        "not": "25 insan-etiketli ROOT öğesi (yer-gerçek)"
+      },
+      {
+        "yol": "tests/test_morphology_regression.py",
+        "bayt": 6088,
+        "sha256": "65a6cd384436698c7cd9afffcf9af0d1569658b409e497b1e1ff8f7b1605ec8b",
+        "not": "provenance sabitleri; LEXICON_SHA256 beyanı"
+      },
+      {
+        "yol": "/tmp/claude-501/t0091_probe.py",
+        "bayt": 987,
+        "sha256": "963fd765e785aaf45789b7bebe2bfbb2952970f4b06d542d92f2ef417da12b9f",
+        "not": "§3 davranış tablosu sondası"
+      },
+      {
+        "yol": "/tmp/claude-501/t0091_d1.py",
+        "bayt": 3213,
+        "sha256": "512ab4056c4e7eecbe1239af4dc279077a84c01bfdc63bcae395c91ab3977b97",
+        "not": "§5 kimlik oracle sondası"
+      },
+      {
+        "yol": "/tmp/claude-501/t0091_d1b.py",
+        "bayt": 1876,
+        "sha256": "aeaa89cf7f919fdf72dfbadb1fc772de778b3b4b4cac86b7406a178a2e3d1f72",
+        "not": "§4 ROOT oracle sondası"
+      }
+    ],
+    "sonda_ciktilari": [
+      {
+        "yol": "/tmp/claude-501/t0091/probe.txt",
+        "bayt": 1507,
+        "sha256": "b5745e666d6e369d61da67ee6f99212651beba0385f9be537111c19e87b3d536"
+      },
+      {
+        "yol": "/tmp/claude-501/t0091/d1.txt",
+        "bayt": 1306,
+        "sha256": "eaa77e5af061e08ac66a248db410577f83cf577653e6c7c9e18bb9a0ff290c39"
+      },
+      {
+        "yol": "/tmp/claude-501/t0091/d1b.txt",
+        "bayt": 816,
+        "sha256": "4de0650ae267627f8679941169526bc7a0ebdf7cdd400b3bc2c2881b73a2ce67"
+      }
+    ]
+  },
+  "surum_durumu": {
+    "src_compiler_son_commit": "6bca90b|2026-09-19|chore(docs+provenance): dokuman borcu D1-D9 onarildi + surumlenmemis kanit yuzeyi eklendi (T-0081)",
+    "git_status_src_compiler_data_lexicon": [
+      "?? data/lexicon/roots_anka_r1.tsv"
+    ]
+  },
+  "iddia_siniri": "Bu görev KOD YAZMAZ, EĞİTİM KOŞMAZ ve donmuş yüzeye YAZMAZ. Ölçülen şey D1 kuralının üç bağımsız ölçütteki etkisidir; ölçülen şey modelin dil kalitesi DEĞİLDİR. Kimlik oracle ARACININ kendisi bu iş için ÖLÜDÜR ve bu raporda öyle beyan edilmiştir.",
+  "sonda_kaynaklari": {
+    "not": "$TMPDIR'de koşuldu; kaynak tam metin olarak burada saklanır ⇒ $TMPDIR silinse de ölçüm yeniden üretilebilir. Depo kökünden `venv/bin/python <sonda>.py` ile koşulmalıdır.",
+    "t0091_probe.py": "import sys\nsys.path.insert(0, \"/Users/hakankilicaslan/Git/tr_llm\")\nfrom src.compiler.core import CrystalCompiler\nfrom src.compiler.morphotactics import build_default_graph\nfrom src.compiler.lexicon import LexiconManager\n\nKOKLER = [\"başkenti\",\"yılında\",\"olarak\",\"Ankarada\",\"ağacı\",\"aklı\",\"kanadı\",\"gönlü\",\n          \"ağzı\",\"hakkı\",\"adıyla\",\"İstanbul\",\"Fransa\",\"İngiliz\",\"1998'de\",\"Atatürk'ün\",\"zzqqxx\"]\n\nfor yol in [\"data/lexicon/roots.tsv\", \"data/lexicon/roots_anka_r1.tsv\"]:\n    lex = LexiconManager()\n    lex.load_from_tsv(yol)\n    c = CrystalCompiler(lex, build_default_graph())\n    print(\"=\" * 70)\n    print(\"LEXICON:\", yol, \"| giris:\", len(getattr(lex, 'lexicon', getattr(lex, 'roots', {})) or {}))\n    for w in KOKLER:\n        try:\n            r = c.compile(w)\n            tv = r.get(\"token_vector\") or []\n            print(f\"  {w:12s} -> {tv if tv else '[] (BOS)'}\")\n        except Exception as e:\n            print(f\"  {w:12s} -> HATA: {type(e).__name__}: {e}\")\n",
+    "t0091_d1.py": "# -*- coding: utf-8 -*-\n\"\"\"T-0091 · D1 ölçümü — KİMLİK ORACLE (kod yazmadan, donmuş yüzeye dokunmadan).\n\nSoru: \"en-uzun-kök kazanır\" kuralı, derleyicinin kök seçimini gerçekten düzeltiyor mu?\nOracle (insan etiketi GEREKTİRMEZ): bir L lemması derleyiciye L olarak verildiğinde\nseçilen kök L olmalıdır. D1'in hedef kümesi = sözlükte KENDİSİNDEN BAŞKA bir öneki de\nbulunan lemmalar (kısa önek kökünün gölgeleme yapabileceği TEK yer).\n\"\"\"\nimport sys, time\nsys.path.insert(0, \"/Users/hakankilicaslan/Git/tr_llm\")\nfrom src.compiler.core import CrystalCompiler\nfrom src.compiler.morphotactics import build_default_graph\nfrom src.compiler.lexicon import LexiconManager\n\ndef lemmalar(yol):\n    with open(yol, encoding=\"utf-8\") as f:\n        return [s.split(\"\\t\")[0] for s in f.read().splitlines()[1:] if s.strip()]\n\nfor LEX in [\"data/lexicon/roots.tsv\", \"data/lexicon/roots_anka_r1.tsv\"]:\n    lem = lemmalar(LEX)\n    kume = set(lem)\n    # D1 HEDEF KUMESI: kendisinden kisa, sozlukte bulunan bir oneki olan lemmalar\n    hedef = [L for L in kume if any(L[:i] in kume for i in range(1, len(L)))]\n    lex = LexiconManager(); lex.load_from_tsv(LEX)\n    c = CrystalCompiler(lex, build_default_graph())\n\n    t0 = time.time()\n    mevcut_d = kural_d = 0\n    mevcut_y = kural_y = 0        # net: mevcut DOGRU / kural YANLIS  (bozulan)\n    kural_kurtar = 0              # net: mevcut YANLIS / kural DOGRU  (kurtarilan)\n    yokluk = 0                    # dogru kok analyses ICINDE hic yok => skorlama onarAmaz\n    kapsama_kaybi = 0             # kural sonrasi analyses bossa\n    ornek = []\n    for L in sorted(hedef):\n        try:\n            r = c.compile(L)\n        except Exception:\n            continue\n        an = r.get(\"analyses\") or []\n        if not an:\n            continue\n        def kok(a):\n            ms = a.get(\"morphemes\") or []\n            return ms[0][\"id\"] if ms else \"\"\n        m = kok(an[0])\n        # KURAL (plan V1): len(kok)*100 - len(morphemes); esitlikte ONCEKI sira korunur\n        s = sorted(an, key=lambda a: (-(len(kok(a)) * 100 - len(a.get(\"morphemes\") or [])),))\n        k = kok(s[0])\n        if not any(kok(a) == L for a in an):\n            yokluk += 1\n        if m == L: mevcut_d += 1\n        if k == L: kural_d += 1\n        if m == L and k != L: mevcut_y += 1\n        if m != L and k == L: kural_kurtar += 1\n        if m != L and k != L and len(ornek) < 6:\n            ornek.append((L, m, k))\n    n = mevcut_d + mevcut_y if (mevcut_d + mevcut_y) else 1\n    print(\"=\" * 78)\n    print(f\"LEXICON: {LEX}\")\n    print(f\"  sozluk lemma: {len(kume)} | D1 HEDEF KUMESI (oneki de sozlukte): {len(hedef)}\")\n    print(f\"  MEVCUT kural dogru : {mevcut_d}/{len(hedef)} = %{100*mevcut_d/len(hedef):.2f}\")\n    print(f\"  EN-UZUN-KOK kurali : {kural_d}/{len(hedef)} = %{100*kural_d/len(hedef):.2f}\")\n    print(f\"  KURTARILAN (yanlis->dogru): {kural_kurtar}\")\n    print(f\"  BOZULAN    (dogru->yanlis): {mevcut_y}\")\n    print(f\"  NET = kurtarilan - bozulan : {kural_kurtar - mevcut_y}\")\n    print(f\"  DOGRU KOK analyses ICINDE YOK : {yokluk}  (skorlama kurali ONARAMAZ)\")\n    print(f\"  ornek yanlislar (L, mevcut, kural): {ornek}\")\n    print(f\"  sure: {time.time()-t0:.1f} sn\")\n",
+    "t0091_d1b.py": "# -*- coding: utf-8 -*-\n\"\"\"D1 · İKİNCİ araç: insan-etiketli ROOT oracle (25 öğe) + ARACIN KENDİSİNİN GÜCÜ.\"\"\"\nimport json, sys\nsys.path.insert(0, \"/Users/hakankilicaslan/Git/tr_llm\")\nfrom src.compiler.core import CrystalCompiler\nfrom src.compiler.morphotactics import build_default_graph\nfrom src.compiler.lexicon import LexiconManager\n\nfixture = json.load(open(\"tests/morphology_regression_100.json\"))\nitems = [x for x in fixture if x[\"instruction\"] == \"Kelimedeki kök morfemini bul.\"]\nprint(\"ROOT oracle adedi:\", len(items))\n\nfor LEX in [\"data/lexicon/roots.tsv\", \"data/lexicon/roots_anka_r1.tsv\"]:\n    lex = LexiconManager(); lex.load_from_tsv(LEX)\n    c = CrystalCompiler(lex, build_default_graph())\n    def kok(a):\n        ms = a.get(\"morphemes\") or []\n        return ms[0][\"id\"] if ms else \"\"\n    mev_d = kural_d = degisen = berabere = 0\n    satirlar = []\n    for x in items:\n        bek = x[\"output\"].split(\"ROOT:\")[1].strip()\n        an = c.compile(x[\"input\"]).get(\"analyses\") or []\n        if not an: continue\n        m = kok(an[0])\n        s = sorted(an, key=lambda a: (-(len(kok(a)) * 100 - len(a.get(\"morphemes\") or [])),))\n        k = kok(s[0])\n        berabere += 1 if len(an) > 1 and an[0].get(\"score\") == an[1].get(\"score\") else 0\n        degisen += 1 if k != m else 0\n        mev_d += 1 if m == bek else 0\n        kural_d += 1 if k == bek else 0\n        satirlar.append((x[\"input\"], bek, m, k, \"kural DEGISTI\" if k != m else \"ayni\"))\n    print(\"=\" * 78)\n    print(f\"LEXICON: {LEX}\")\n    print(f\"  MEVCUT kural : {mev_d}/{len(items)}\")\n    print(f\"  EN-UZUN-KOK  : {kural_d}/{len(items)}\")\n    print(f\"  kuralin KARARI DEGISTIRDIGI vaka: {degisen}   (0 ise ARAC D1'e KOR)\")\n    print(f\"  berabere skorlu vaka (beraberlik zemininin varligi): {berabere}\")\n    for s in satirlar:\n        if s[2] != s[1] or s[3] != s[1]:\n            print(\"    \", s)\n"
+  }
+}
