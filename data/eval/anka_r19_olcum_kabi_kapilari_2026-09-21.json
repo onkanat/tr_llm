@@ -1,0 +1,717 @@
+{
+ "damga_utc": "2026-09-21T10:35:44Z",
+ "gorev": "T-0098",
+ "onceki": "T-0097",
+ "baslik": "Olcum kabi ve kosum isletmesi kusurlarini KALICI KAPIYA cevir",
+ "operatur_talebi": "Bu onyedi kusur icin plan yap",
+ "ozet": {
+  "toplam_kusur": 17,
+  "bu_turda_kapiya_baglanan": 12,
+  "ertelenen": 5,
+  "yeni_olculen_bu_tur": 13,
+  "defter_kaydi": 30,
+  "kapi_sayisi": 9,
+  "test_sayisi": 11
+ },
+ "operatur_kararlari": [
+  {
+   "soru": "Kapilar nereye yazilsin",
+   "secim": "tests/ + scripts/ (kalici, pytest tabanina girer)"
+  },
+  {
+   "soru": "Kapsam",
+   "secim": "Once en agirlari (olcum kabi + kosum isletmesi); ilan kusurlari sonraki tur"
+  },
+  {
+   "soru": "K4",
+   "secim": "Ardil surucuye tasi — donmus scratch/t0097_marangoz.py DUZENLENMEZ"
+  }
+ ],
+ "kapilar": [
+  {
+   "id": "G1",
+   "dosya": "scripts/olcum_kabi.py",
+   "fonksiyon": "say_adim_satirlari",
+   "kusur": "K6+K15",
+   "ne_yapar": "capali+alan-ayristirma IKI sayac; uyusmazsa hata; naif sayaclar reddedilir"
+  },
+  {
+   "id": "G2",
+   "dosya": "scripts/olcum_kabi.py",
+   "fonksiyon": "tuple_alan_denetimi",
+   "kusur": "K16",
+   "ne_yapar": "indeks->ad haritasi bir kez basilir"
+  },
+  {
+   "id": "G3",
+   "dosya": "scripts/olcum_kabi.py",
+   "fonksiyon": "yon_adli+karsilastir",
+   "kusur": "K7",
+   "ne_yapar": "yon eksenden bagimsiz ADIYLA; sozluk ilan §5'ten ayristirilir"
+  },
+  {
+   "id": "G4",
+   "dosya": "scripts/olcum_kabi.py",
+   "fonksiyon": "sayi_kaynagi",
+   "kusur": "K14",
+   "ne_yapar": "her sayi kaynagini tasir: turetilmis/kayitli/olculmus"
+  },
+  {
+   "id": "G5",
+   "dosya": "scripts/olcum_kabi.py",
+   "fonksiyon": "yokluk_beyani",
+   "kusur": "K10",
+   "ne_yapar": "eksik anahtar OLCULEMEDI; asla 'degisti' degil"
+  },
+  {
+   "id": "G6",
+   "dosya": "scripts/olcum_kabi.py",
+   "fonksiyon": "referans_dogrula",
+   "kusur": "K11",
+   "ne_yapar": "kaynak satir no. CANLI dosyadan dogrulanir"
+  },
+  {
+   "id": "H1",
+   "dosya": "scripts/kosum_kapisi.py",
+   "fonksiyon": "tek_egitici_onkontrol",
+   "kusur": "K5",
+   "ne_yapar": "lsof -t; >1 tutucu ⇒ DUR (fail-closed)"
+  },
+  {
+   "id": "H2",
+   "dosya": "scripts/kosum_kapisi.py",
+   "fonksiyon": "kosum_canli_mi",
+   "kusur": "K17",
+   "ne_yapar": "tutucu>=1 ⇒ kapanis/kabul araci rc=2 ile DURUR"
+  },
+  {
+   "id": "H3",
+   "dosya": "scripts/kosum_kapisi.py",
+   "fonksiyon": "timeout_denetimi",
+   "kusur": "K4",
+   "ne_yapar": "her subprocess cagrisi timeout= tasir; string/yorum maskelenir"
+  }
+ ],
+ "testler": [
+  "test_yon_eksenden_okunur",
+  "test_kopya_donmus_kaynagiyla_ayni",
+  "test_sayac_iki_yonlu",
+  "test_sayac_fazla_saymaz",
+  "test_tuple_alan_kaymasi",
+  "test_sayi_kaynagi_zorunlu",
+  "test_yokluk_degisti_degildir",
+  "test_esik_referanslari",
+  "test_timeout_kapisi",
+  "test_tek_egitici_kapisi",
+  "test_kosum_canli_kapisi"
+ ],
+ "olcumler": {
+  "G1_gercek_log": {
+   "dosya": "scratch/t0097_kos/seg_2.log",
+   "dogru": 201,
+   "ilk": 1,
+   "son": 2000,
+   "naif_tek_bosluk": 101,
+   "naif_alt_dizgi": 403,
+   "hukum": "ikisi de REDDEDILDI"
+  },
+  "H3_gercek_surucu": {
+   "dosya": "scratch/t0097_marangoz.py",
+   "eksik_siteler": [
+    179,
+    228
+   ],
+   "kayitli_olan": [
+    179
+   ],
+   "hukum": "kapi kayitli olandan FAZLASINI goruyor"
+  },
+  "mutasyon": {
+   "denenen": 4,
+   "yakalanan": 4,
+   "mutasyonlar": [
+    "K15 kor sayac",
+    "K11 referans yutması",
+    "K4 timeout yutması",
+    "K7 isaret ters"
+   ],
+   "hukum": "testler VAKUM DEGIL; 2/2 kapi dosyasi bit-odes geri alindi"
+  },
+  "kapi_betikleri": {
+   "scripts/olcum_kabi.py": {
+    "PASS": 26,
+    "HATA": 0,
+    "rc": 0
+   },
+   "scripts/kosum_kapisi.py": {
+    "PASS": 9,
+    "HATA": 0,
+    "rc": 0
+   }
+  },
+  "pytest": {
+   "komut": "venv/bin/pytest",
+   "failed": 1,
+   "passed": 248,
+   "sure_sn": 82.39,
+   "dusen": "tests/test_agent_gateway.py::TestAgentGateway::test_gateway_http_server_endpoints",
+   "dusen_neden": "socketserver PermissionError = SANDBOX SOKET YASAGI (degismedi)",
+   "onceki_taban_T0097": {
+    "failed": 1,
+    "passed": 237
+   },
+   "degisim": "+11 passed = bu gorevin testleri; regresyon YOK",
+   "CLAUDE_md_damgasi": "213 passed — BAYAT (T-0097'de de bayatti); CLAUDE.md DEGISTIRILMEDI"
+  },
+  "kismi_anahtar_deligi_uretimi": {
+   "girdi": "korunan_sonra = 15 anahtarin 1'i",
+   "arac_ciktisi": {
+    "durum": "TAM (once+sonra+canli)",
+    "dokunulmadi": true,
+    "degisenler": []
+   },
+   "hukum": "arac 'TAM' diyor; eksik 14 anahtar icin asla 'degisti' denemez"
+  },
+  "korunan_yuzey": {
+   "artefakt": 15,
+   "ayni": 15,
+   "degisen": 0,
+   "eksik": 0,
+   "hukum": "BIT-OZDES"
+  },
+  "K30_uc_dal": {
+   "soru": "scripts/__pycache__/*.pyc'i hangi yol yazar?",
+   "DAL1_pytest_guardli": {
+    "yazdi": false,
+    "not": "tests/test_olcum_kabi_kapilari.py 11 passed; _yukle sys.dont_write_bytecode=True"
+   },
+   "DAL3_guardli_adhoc": {
+    "yazdi": false
+   },
+   "DAL2_guardsiz_adhoc": {
+    "yazdi": true,
+    "not": "POZITIF KONTROL — mekanizma gercek; 10:31'deki iki .pyc bu yoldan"
+   },
+   "hukum": "K23'un guard'i CALISIYOR (iddia curutulmedi, DOGRULANDI); sizan yan urun benim gecici harness'imdan",
+   "duzeltme": "2 .pyc kaldirildi; yuzey geri alindi: 20 dosya, en yeni 2026-09-21T03:42:47Z < claimed_at",
+   "yapisal_kalan": "scripts/__pycache__/ 20 dosya tasiyor ve hicbiri hicbir writes[]'te yok ⇒ K22/K29 ile AYNI SINIF (beyan siniflandirmasi .pyc ureten TUM dizinleri kapsamali)"
+  }
+ },
+ "sapmalar": [
+  {
+   "konu": "H2 olcutu",
+   "plan": "tutucu VE sonuc.json taze (AND)",
+   "uygulanan": "tutucu >= 1 (KATI)",
+   "gerekce": "AND, sonuc.json silindiginde kapiyi FAIL-OPEN yapardi (T-0075)",
+   "kanit": "test_kosum_canli_kapisi: sonuc.json YOKken de DURUR"
+  },
+  {
+   "konu": "Popen kapsami",
+   "plan": "her subprocess cagrisi timeout= tasimali",
+   "uygulanan": "Popen kapsam DISI (ilan edilen sinir)",
+   "gerekce": "Popen.__init__'te timeout parametresi YOK (inspect.signature) ⇒ istemek yanlis pozitif uretir"
+  },
+  {
+   "konu": "B1-B5 duzeltmesi",
+   "plan": "'henuz dondurulmamis araclarda' ⇒ duzeltilir",
+   "uygulanan": "BEYAN edildi, duzeltme KAPIYA tasindi",
+   "gerekce": "OLCUM: besi de scratch/t0097_* icinde, yani TESCILli kayitta; duzenlemek kapali raporu bayatlatir"
+  }
+ ],
+ "geri_cekmeler": [
+  {
+   "iddia": "kapanis.py:108 birlesik_kural_sha256 cipasi FAIL-OPEN'dir",
+   "kaynak": "T-0098 plani (plan zamani)",
+   "olcum": "arac o kalemi ozet'e KOYMAZ; KAPI_DISI_BEYANLAR altinda 'DOGRULANAMADI (recete kayitli degil) — KAPI DEGIL, beyan' diye ACIKCA dislar; gecen = all(ozet.values()) yalniz 7 gercek kapiyi sayar",
+   "hukum": "FAIL-OPEN DEGIL, durust beyan ⇒ iddia KAYITTAN DUSURULDU"
+  }
+ ],
+ "kusurlar": [
+  {
+   "id": "K1",
+   "yer": "ilan §4 (V4)",
+   "metin": "'her olgu 12 satir' YANLIS; gercek 60/48/36",
+   "kanit": "olcum",
+   "sinif": "ilan",
+   "durum": "ERTELENDI",
+   "kapi": "",
+   "tekrar": 1,
+   "kaynak": "T-0097"
+  },
+  {
+   "id": "K2",
+   "yer": "ilan §4 (V7)",
+   "metin": "muhasebe formulu bayat; sapma +9.283",
+   "kanit": "olcum",
+   "sinif": "ilan",
+   "durum": "ERTELENDI",
+   "kapi": "",
+   "tekrar": 1,
+   "kaynak": "T-0097"
+  },
+  {
+   "id": "K3",
+   "yer": "ilan §3",
+   "metin": "--steps 4.596 ↔ segment tablosu 24.000 CELISIYOR",
+   "kanit": "olcum",
+   "sinif": "ilan",
+   "durum": "ERTELENDI",
+   "kapi": "",
+   "tekrar": 1,
+   "kaynak": "T-0097"
+  },
+  {
+   "id": "K4",
+   "yer": "scratch/t0097_marangoz.py:179 + :228",
+   "metin": "subprocess.run'da TIMEOUT YOK ⇒ asili kalma kesme kuralindan kacar",
+   "kanit": "olcum",
+   "sinif": "surucu",
+   "durum": "KAPI",
+   "kapi": "H3",
+   "tekrar": 1,
+   "kaynak": "T-0097"
+  },
+  {
+   "id": "K5",
+   "yer": "kosum isletmesi",
+   "metin": "onceki kosumun oldugu VARSAYILDI ⇒ iki egitici MPS'te kilitlendi (adim 0,39→18,78 sn)",
+   "kanit": "olcum",
+   "sinif": "kosum_isletmesi",
+   "durum": "KAPI",
+   "kapi": "H1",
+   "tekrar": 1,
+   "kaynak": "T-0097"
+  },
+  {
+   "id": "K6",
+   "yer": "S1 saglik sayaci",
+   "metin": "alt dizgi sayimi (b.count('Adim ')) satir basina 2 eslesme verir",
+   "kanit": "olcum",
+   "sinif": "olcum_kabi",
+   "durum": "KAPI",
+   "kapi": "G1",
+   "tekrar": 1,
+   "kaynak": "T-0097"
+  },
+  {
+   "id": "K7",
+   "yer": "rapor ureticisi (C1/C3 yonu)",
+   "metin": "iki eksenin 'iyi'si ZIT isaretliyken tek yon kurali kullanildi",
+   "kanit": "olcum",
+   "sinif": "olcum_kabi",
+   "durum": "KAPI",
+   "kapi": "G3",
+   "tekrar": 1,
+   "kaynak": "T-0097"
+  },
+  {
+   "id": "K8",
+   "yer": "once.json · birlesik_kural_sha256",
+   "metin": "cipaya digest yazildi ama HESAPLANIS BICIMI hicbir artefakta yazilmadi",
+   "kanit": "olcum",
+   "sinif": "beyan",
+   "durum": "ERTELENDI",
+   "kapi": "",
+   "tekrar": 1,
+   "kaynak": "T-0097"
+  },
+  {
+   "id": "K9",
+   "yer": "writes[] beyan boslugu",
+   "metin": "scratch/__pycache__/*.pyc (5 dosya) mtime >= claimed_at ama beyan edilmemis",
+   "kanit": "olcum",
+   "sinif": "beyan",
+   "durum": "KAPATILDI",
+   "kapi": "",
+   "tekrar": "1",
+   "kaynak": "T-0097"
+  },
+  {
+   "id": "K10",
+   "yer": "kapanis araci ilk surumu",
+   "metin": "korunan_sonra kosum bitmeden YOK; arac bunu 'degisti' saydi ⇒ 9/9 SAHTE DUS",
+   "kanit": "olcum",
+   "sinif": "olcum_kabi",
+   "durum": "KAPI",
+   "kapi": "G5",
+   "tekrar": 1,
+   "kaynak": "T-0097"
+  },
+  {
+   "id": "K11",
+   "yer": "rapor esik tablosu",
+   "metin": "kaynak satir numaralari ezberden; 6 satirin 3'u YANLIS",
+   "kanit": "olcum",
+   "sinif": "olcum_kabi",
+   "durum": "KAPI",
+   "kapi": "G6",
+   "tekrar": 1,
+   "kaynak": "T-0097"
+  },
+  {
+   "id": "K12",
+   "yer": "rapor pozitif kontrolu",
+   "metin": "kontrolun BEKLENEN degeri tabloya yanlis yazildi; DOGRU kod suclu ilan edildi",
+   "kanit": "olcum",
+   "sinif": "olcum_kabi",
+   "durum": "KAPATILDI",
+   "kapi": "",
+   "tekrar": 1,
+   "kaynak": "T-0097"
+  },
+  {
+   "id": "K13",
+   "yer": "ilan §5",
+   "metin": "C2/C3'un curutucu esigi SIFIR GENISLIKTE; min etki buyuklugu ilan edilmedi",
+   "kanit": "olcum",
+   "sinif": "ilan",
+   "durum": "ERTELENDI",
+   "kapi": "",
+   "tekrar": 1,
+   "kaynak": "T-0097"
+  },
+  {
+   "id": "K14",
+   "yer": "adim-suresi notunun T-0096 kolonu",
+   "metin": "seri artefakttan OLCULMEDEN yazildi; tepe S3'te, S2'de DEGIL",
+   "kanit": "olcum",
+   "sinif": "olcum_kabi",
+   "durum": "KAPI",
+   "kapi": "G4",
+   "tekrar": 1,
+   "kaynak": "T-0097"
+  },
+  {
+   "id": "K15",
+   "yer": "S6 saglik sayaci",
+   "metin": "'Ad[ıi]m (\\d+)/' tek bosluk varsaydi ⇒ saga yasli sayilar sessizce dustu (log eksik DEGIL, sayac KORDU)",
+   "kanit": "olcum",
+   "sinif": "olcum_kabi",
+   "durum": "KAPI",
+   "kapi": "G1",
+   "tekrar": 1,
+   "kaynak": "T-0097"
+  },
+  {
+   "id": "K16",
+   "yer": "S2 adim-suresi profili",
+   "metin": "tuple (adim,loss,sure) kuruldu ama LOSS sutunu sure diye basildi; sahte bulgu",
+   "kanit": "olcum",
+   "sinif": "olcum_kabi",
+   "durum": "KAPI",
+   "kapi": "G2",
+   "tekrar": 1,
+   "kaynak": "T-0097"
+  },
+  {
+   "id": "K17",
+   "yer": "kosum isletmesi",
+   "metin": "kapanis aracinin DENEME kosumu S2'nin tam ortasinda (764 MB okuma) ⇒ prosedur YANLISTI, etki OLCULEMEDI",
+   "kanit": "olcum",
+   "sinif": "kosum_isletmesi",
+   "durum": "KAPI",
+   "kapi": "H2",
+   "tekrar": 1,
+   "kaynak": "T-0097"
+  },
+  {
+   "id": "K18",
+   "yer": "scripts/kosum_kapisi.py timeout_denetimi",
+   "metin": "string literal icindeki ornek KOD sayildi ⇒ 2 SAHTE POZITIF (K6'nin kardesi)",
+   "kanit": "olcum",
+   "sinif": "olcum_kabi",
+   "durum": "KAPATILDI",
+   "kapi": "",
+   "tekrar": "1",
+   "kaynak": "T-0098"
+  },
+  {
+   "id": "K19",
+   "yer": "scripts/olcum_kabi.py _kontrol",
+   "metin": "FAIL satiri basiliyor ama hatalar'a yazilmiyordu ⇒ kapi FAIL basip rc=0 donebilirdi (fail-open)",
+   "kanit": "olcum",
+   "sinif": "olcum_kabi",
+   "durum": "KAPATILDI",
+   "kapi": "",
+   "tekrar": "1",
+   "kaynak": "T-0098"
+  },
+  {
+   "id": "K20",
+   "yer": "kanarya beklentileri (3. tekrar)",
+   "metin": "pozitif kontrolun beklenen degeri yanlis yazildi: A ekseninde 'yuksek'/'dusmez' pozitif farkta AYIRT EDILEMEZ",
+   "kanit": "olcum",
+   "sinif": "olcum_kabi",
+   "durum": "KAPATILDI",
+   "kapi": "G3",
+   "tekrar": "3",
+   "kaynak": "T-0098"
+  },
+  {
+   "id": "K21",
+   "yer": "timeout kurali kapsami",
+   "metin": "Popen'dan timeout= istemek YANLIS POZITIF: Popen.__init__'te timeout parametresi YOK",
+   "kanit": "olcum",
+   "sinif": "olcum_kabi",
+   "durum": "KAPATILDI",
+   "kapi": "H3",
+   "tekrar": "1",
+   "kaynak": "T-0098"
+  },
+  {
+   "id": "K22",
+   "yer": ".pytest_cache/v/cache/*",
+   "metin": "pytest bu dosyalari gunceller ama writes[]'te beyan edilmemis (K9'un kardesi)",
+   "kanit": "olcum",
+   "sinif": "beyan",
+   "durum": "ACIK",
+   "kapi": "",
+   "tekrar": "1",
+   "kaynak": "T-0098"
+  },
+  {
+   "id": "K23",
+   "yer": "tests/test_olcum_kabi_kapilari.py _yukle",
+   "metin": "gitignored scratch/t0097_rapor.py import ediliyor; onbellek bayat olsaydi scratch/__pycache__'e .pyc YAZARDI",
+   "kanit": "olcum",
+   "sinif": "beyan",
+   "durum": "KAPATILDI",
+   "kapi": "",
+   "tekrar": "1",
+   "kaynak": "T-0098"
+  },
+  {
+   "id": "K24",
+   "yer": "scripts/kosum_kapisi.py main (H2 canli dal)",
+   "metin": "kontrol, tutucu KAPANDIKTAN sonra kosuldu ⇒ canli dal VAKUM'du (yesil gorunurdu)",
+   "kanit": "olcum",
+   "sinif": "olcum_kabi",
+   "durum": "KAPATILDI",
+   "kapi": "H2",
+   "tekrar": "1",
+   "kaynak": "T-0098"
+  },
+  {
+   "id": "K25",
+   "yer": "scratch/t0097_kapanis.py:42 BIRLESIK_ARANAN",
+   "metin": "OLU KOD: atanmis, hic referans edilmemis (grep -c = 1)",
+   "kanit": "olcum",
+   "sinif": "surucu",
+   "durum": "ACIK",
+   "kapi": "",
+   "tekrar": "1",
+   "kaynak": "T-0098"
+  },
+  {
+   "id": "K26",
+   "yer": "scratch/t0097_kapanis.py denetim_donmus",
+   "metin": "KISMI ANAHTAR DELIGI: korunan_sonra'da 15 anahtarin 1'i varken durum='TAM (once+sonra+canli)', degisenler=[] ⇒ eksik 14 anahtar icin asla 'degisti' denemez",
+   "kanit": "olcum",
+   "sinif": "olcum_kabi",
+   "durum": "KAPI",
+   "kapi": "G5",
+   "tekrar": "1",
+   "kaynak": "T-0098"
+  },
+  {
+   "id": "K27",
+   "yer": "scratch/t0097_kapanis.py:339 banner",
+   "metin": "pay turetiliyor, payda SABIT '/7' ⇒ kapi eklenirse banner YANLIS basar",
+   "kanit": "kaynak",
+   "sinif": "beyan",
+   "durum": "ACIK",
+   "kapi": "",
+   "tekrar": "1",
+   "kaynak": "T-0098"
+  },
+  {
+   "id": "K28",
+   "yer": "scratch/t0097_marangoz.py:228",
+   "metin": "IKINCI timeout= eksikligi; K4 yalniz :179 icin kayitliydi ⇒ kapi kusura KOR DEGIL",
+   "kanit": "olcum",
+   "sinif": "surucu",
+   "durum": "KAPI",
+   "kapi": "H3",
+   "tekrar": "1",
+   "kaynak": "T-0098"
+  },
+  {
+   "id": "K29",
+   "yer": "scratch/t0097_kapanis.py:193-196 beyan siniflandirmasi",
+   "metin": "yalniz '__pycache__/' alt dizgisine bakiyor; '.pytest_cache' hic gecmiyor (grep = 0)",
+   "kanit": "olcum",
+   "sinif": "beyan",
+   "durum": "ACIK",
+   "kapi": "",
+   "tekrar": "1",
+   "kaynak": "T-0098"
+  },
+  {
+   "id": "K30",
+   "yer": "gecici harness (T-0098 oturumu)",
+   "metin": "Ad-hoc dogrulama import'lari scripts/__pycache__/ altina BEYAN EDILMEMIS 2 .pyc birakti; writes[] 'tests/__pycache__/' beyan ediyor ama 'scripts/__pycache__/' etmiyor",
+   "kanit": "olcum",
+   "sinif": "beyan",
+   "durum": "KAPATILDI",
+   "kapi": "",
+   "tekrar": 1,
+   "kaynak": "T-0098"
+  }
+ ],
+ "kapsam_sinirlari": [
+  "Kapilar T-0097'nin 17 kusurunu geriye donuk ONARMAZ — yalniz TEKRARINI onler.",
+  "Ilan kusurlari (K1/K2/K3/K8/K13) donmus on-kayittir; onarim T-0067'ye aykiridir ⇒ sonraki tur, ILERIYE donuk.",
+  "scratch/ altindaki kapi araclari TASINMADI (T-0086 araci yerinde) — tasima ayri karardir.",
+  "Gercek bir kosum baslatilmadi ⇒ 'canli kosumda dur' kapisi SAHTE fiksturle sinandi.",
+  "src/** ve mevcut scripts/**/tests/** dosyalari DOKUNULMADI; yalniz YENI dosya eklendi."
+ ],
+ "korunan_digestler": [
+  {
+   "artefakt": "data/anka_a1.pt",
+   "once_sha256": "f32d492d9361c668bc86e4e4b0f99f5c473af552486837452475f8b0aa3eb5b4",
+   "sonra_sha256": "f32d492d9361c668bc86e4e4b0f99f5c473af552486837452475f8b0aa3eb5b4",
+   "hukum": "AYNI"
+  },
+  {
+   "artefakt": "data/anka_a1r.pt",
+   "once_sha256": "b93cc1cd54093fc63342d394abe528f2128dc16e20b4d7ac6ab680854b4d6293",
+   "sonra_sha256": "b93cc1cd54093fc63342d394abe528f2128dc16e20b4d7ac6ab680854b4d6293",
+   "hukum": "AYNI"
+  },
+  {
+   "artefakt": "data/eval/anka_r18_build_2026-09-21.json",
+   "once_sha256": "780e7b50d94ef5ab0735bc2c7a9c82e6ec274400d0bb2e52ef7ffecd51900641",
+   "sonra_sha256": "780e7b50d94ef5ab0735bc2c7a9c82e6ec274400d0bb2e52ef7ffecd51900641",
+   "hukum": "AYNI"
+  },
+  {
+   "artefakt": "data/eval/anka_r18_build_2026-09-21.md",
+   "once_sha256": "84c5f4dbe65894a68ee5e8414cdf0aeccf04840aec2d7e952bb750117ac209ad",
+   "sonra_sha256": "84c5f4dbe65894a68ee5e8414cdf0aeccf04840aec2d7e952bb750117ac209ad",
+   "hukum": "AYNI"
+  },
+  {
+   "artefakt": "data/eval/anka_r18_ceket_2026-09-21.json",
+   "once_sha256": "17f5d9861bdd53ad1f26fb65da090974d71ed056e31f55391354b5fc5de5d064",
+   "sonra_sha256": "17f5d9861bdd53ad1f26fb65da090974d71ed056e31f55391354b5fc5de5d064",
+   "hukum": "AYNI"
+  },
+  {
+   "artefakt": "data/eval/anka_r18_ceket_2026-09-21.md",
+   "once_sha256": "17fe88adf8c44b208ff80e08a4931cc0a96e4501cbe6bb553a4172f436dc9124",
+   "sonra_sha256": "17fe88adf8c44b208ff80e08a4931cc0a96e4501cbe6bb553a4172f436dc9124",
+   "hukum": "AYNI"
+  },
+  {
+   "artefakt": "data/eval/anka_r18_ceket_ilani_2026-09-21.md",
+   "once_sha256": "1efacbb64f2d4a26279cbfc4b17921b37f02846b284abcdf8a7a68c0a731ad70",
+   "sonra_sha256": "1efacbb64f2d4a26279cbfc4b17921b37f02846b284abcdf8a7a68c0a731ad70",
+   "hukum": "AYNI"
+  },
+  {
+   "artefakt": "data/train_carpenter_specialization_anka_r18.bin",
+   "once_sha256": "c9d964d98777358d6acb3db2c04d18a4e9b5bf515f1d8125077ce097857dfb78",
+   "sonra_sha256": "c9d964d98777358d6acb3db2c04d18a4e9b5bf515f1d8125077ce097857dfb78",
+   "hukum": "AYNI"
+  },
+  {
+   "artefakt": "scratch/t0097_kapanis.py",
+   "once_sha256": "60d4bcc2a1c8b77c6cb9591e16aa746469e7bf64d3ef6ff6a74f125507726ff2",
+   "sonra_sha256": "60d4bcc2a1c8b77c6cb9591e16aa746469e7bf64d3ef6ff6a74f125507726ff2",
+   "hukum": "AYNI"
+  },
+  {
+   "artefakt": "scratch/t0097_kos/kapanis.json",
+   "once_sha256": "35c43e70c0d497a54c387fe1a6388cacb339bb224343a383801276d181173e5c",
+   "sonra_sha256": "35c43e70c0d497a54c387fe1a6388cacb339bb224343a383801276d181173e5c",
+   "hukum": "AYNI"
+  },
+  {
+   "artefakt": "scratch/t0097_kos/sonuc.json",
+   "once_sha256": "6e55c266b8af8776994a362bb3fd0dee4735d3540eef1f0e0666d4d2e38cf1ae",
+   "sonra_sha256": "6e55c266b8af8776994a362bb3fd0dee4735d3540eef1f0e0666d4d2e38cf1ae",
+   "hukum": "AYNI"
+  },
+  {
+   "artefakt": "scratch/t0097_marangoz.py",
+   "once_sha256": "63908889bf77dd1628a35aa4862886ac10902a196d5d6b75ec00786b4496f7c2",
+   "sonra_sha256": "63908889bf77dd1628a35aa4862886ac10902a196d5d6b75ec00786b4496f7c2",
+   "hukum": "AYNI"
+  },
+  {
+   "artefakt": "scratch/t0097_rapor.py",
+   "once_sha256": "94d0605865bfb696266437b7b44c34bd64e2b531eb72b02aebd878ba7a1d2afb",
+   "sonra_sha256": "94d0605865bfb696266437b7b44c34bd64e2b531eb72b02aebd878ba7a1d2afb",
+   "hukum": "AYNI"
+  },
+  {
+   "artefakt": "scripts/evaluate_carpenter_anka.py",
+   "once_sha256": "0f017773bb015ef79f7fac02f51b2a14ed9d27a213fef72574ce16357c37188b",
+   "sonra_sha256": "0f017773bb015ef79f7fac02f51b2a14ed9d27a213fef72574ce16357c37188b",
+   "hukum": "AYNI"
+  },
+  {
+   "artefakt": "src/llm/frozen_guard.py",
+   "once_sha256": "75b3bf6e4384bc808230fb6b8f06c3187c93d78a45d742a4fb75f85f9ac3097b",
+   "sonra_sha256": "75b3bf6e4384bc808230fb6b8f06c3187c93d78a45d742a4fb75f85f9ac3097b",
+   "hukum": "AYNI"
+  }
+ ],
+ "yeni_yuzey": [
+  {
+   "dosya": "scripts/olcum_kabi.py",
+   "satir": 458,
+   "sha256": "be5ca2c12f0b88e39e2d5f1d39a213908218c71d625d9f0ba414f3b182aa2624"
+  },
+  {
+   "dosya": "scripts/kosum_kapisi.py",
+   "satir": 386,
+   "sha256": "91179be67c056175331801392c78c9f35f8b9e4c0be6b5d5ba3940968c3e70be"
+  },
+  {
+   "dosya": "tests/test_olcum_kabi_kapilari.py",
+   "satir": 422,
+   "sha256": "5a78d1a046192336bc37219b834d7aa53e37b92556de5993efcd096ca2bd0ef3"
+  }
+ ],
+ "yan_urunler": {
+  "beyan_edilmis": [
+   "tests/__pycache__/test_olcum_kabi_kapilari.cpython-314-pytest-9.0.3.pyc"
+  ],
+  "beyan_EDILMEMIS": [
+   ".pytest_cache/v/cache/nodeids",
+   ".pytest_cache/v/cache/lastfailed"
+  ],
+  "K30_kapatilan": [
+   "scripts/__pycache__/olcum_kabi.cpython-314.pyc",
+   "scripts/__pycache__/kosum_kapisi.cpython-314.pyc"
+  ],
+  "yapisal_beyan_boslugu": {
+   "dizin": "scripts/__pycache__/",
+   "dosya": 20,
+   "en_yeni_damga_utc": "2026-09-21T03:42:47Z",
+   "claimed_at": "2026-09-21T10:24:39Z",
+   "hukum": "20'si de gorevden ONCE; hicbiri beyan edilmemis ⇒ depo genelinde sinif"
+  },
+  "acik_kusur": "K22",
+  "scratch_dokunulmadi": {
+   "dosya": "scratch/__pycache__/t0097_rapor.cpython-314.pyc",
+   "damga": "T-0097 oturumu 07:23:19Z",
+   "bu_kosumda_yazildi": false
+  }
+ },
+ "test_tabani": {
+  "komut": "venv/bin/pytest",
+  "failed": 1,
+  "passed": 248,
+  "sure_sn": 82.39,
+  "onceki_T0097": 237
+ },
+ "rapor_cifti": {
+  "md": "data/eval/anka_r19_olcum_kabi_kapilari_2026-09-21.md",
+  "json": "data/eval/anka_r19_olcum_kabi_kapilari_2026-09-21.json",
+  "capali_digest": "AYRI KANALDA — .agent-bus/notes/T-0098.md",
+  "gerekce": "Karsilikli capa iki dosyanin ICINE yazilsaydi dongu olurdu (her yazim digerinin digestini degistirir)."
+ },
+ "damga_utc_kaynak": "betik hesapladi (datetime.now(utc)) — elle yazilmadi"
+}
