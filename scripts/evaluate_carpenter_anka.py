@@ -67,7 +67,7 @@ WIKI_BIN = "data/anka_a1r_pretrain.bin"
 # LCS-F1 yalnız TANISAL raporlanır, eşik ona bağlanmaz).
 ESIK_EZBER = 10.0            # < %10
 ESIK_TUTARSIZ = 5.0          # < %5  (insan tavanı %3,0 × 1,67 — beyanlı, değişmedi)
-ESIK_ROUGE = 0.35            # >= 0.35 (insan tavanı 0,4164 × 0,84 — değişmedi)
+ESIK_ROUGE = 0.3221          # >= 0,3221 (P5 Dal-K: tavan 0,3835 × 0,84 — arena_base temiz 118; ilan Ekleme §9)
 ESIK_KESISIM = 10.92         # >= %10,92 (insan tavanı %13,0 × 0,84 — P2/0c)
 
 # K3 esikleri: A artis <= +%10 · B dusus <= 5,0 puan (ILAN §4)

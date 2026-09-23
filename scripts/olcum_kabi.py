@@ -315,10 +315,13 @@ ESIK_DOSYASI: str = os.path.join(KOK, "scripts", "evaluate_carpenter_anka.py")
 # x k=0,84) ve satir numaralari evaluate_carpenter_anka.py'deki yorum bloguyla kaydi:
 # EZBER 68, TUTARSIZ 69, ROUGE 70, KESISIM 71, A_ARTIS 74, B_DUSUS 75.
 # Ilan: data/eval/anka_p2_esik_kalibrasyon_ilani_2026-09-23.md
+# P5 Dal-K (23 Eyl 2026): ESIK_ROUGE kalibre edildi 0,35 -> 0,3221 (tavan 0,3835
+# x k=0,84; arena_base temiz 118). Ilan: data/eval/anka_p5_olcut_tazeleme_ilani_
+# 2026-09-23.md Ekleme §9 (operatör kararı; tutarsizlik/kesisim/ezber SABIT).
 ESIK_REFERANSLARI: Tuple[Tuple[int, str, float], ...] = (
     (68, "ESIK_EZBER", 10.0),
     (69, "ESIK_TUTARSIZ", 5.0),
-    (70, "ESIK_ROUGE", 0.35),
+    (70, "ESIK_ROUGE", 0.3221),
     (71, "ESIK_KESISIM", 10.92),
     (74, "ESIK_A_ARTIS", 10.0),
     (75, "ESIK_B_DUSUS", 5.0),
@@ -329,6 +332,7 @@ ESIK_REFERANSLARI: Tuple[Tuple[int, str, float], ...] = (
 # kalibrasyon-sinifi ezber hatalari (eski esik, ham tavan, esik karisikligi).
 K11_YANLIS_REFERANSLAR: Tuple[Tuple[int, str, float], ...] = (
     (71, "ESIK_KESISIM", 80.0),      # Ç4'ün ulaşılamaz eski eşiği geri yazılırsa DÜŞMELİ
+    (70, "ESIK_ROUGE", 0.35),        # P5 öncesi eski eşik geri yazılırsa DÜŞMELİ
     (70, "ESIK_ROUGE", 0.4164),      # ham insan tavanı eşik yazılırsa (tavan ≠ tavan×k)
     (74, "ESIK_A_ARTIS", 5.0),       # B_DUSUS eşiğiyle karıştırılırsa DÜŞMELİ
 )

@@ -326,8 +326,10 @@ def test_esik_referanslari() -> None:
     # (d) Esik SOZLUGU ilani ile esik DOSYASI celismemeli (V7 sinifi: bayat formul)
     # P2/0c kalibrasyonu: KESISIM 10,92 (insan tavani %13,0 x k=0,84) — ilan
     # data/eval/anka_p2_esik_kalibrasyon_ilani_2026-09-23.md
+    # P5 Dal-K: ROUGE 0,3221 (tavan 0,3835 x k=0,84) — ilan
+    # data/eval/anka_p5_olcut_tazeleme_ilani_2026-09-23.md Ekleme §9
     gercek = {ad: deger for _s, ad, deger in OLCUM.ESIK_REFERANSLARI}
-    assert gercek["ESIK_ROUGE"] == 0.35 and gercek["ESIK_KESISIM"] == 10.92, gercek
+    assert gercek["ESIK_ROUGE"] == 0.3221 and gercek["ESIK_KESISIM"] == 10.92, gercek
     with pytest.raises(OLCUM.ReferansUyusmazligi):
         OLCUM.referans_dogrula(ESIK_DOSYASI, 68, "ESIK_EZBER", 99.0)
 
