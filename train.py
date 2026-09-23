@@ -2,6 +2,7 @@ import os
 import sys
 import time
 import json
+import math
 import hashlib
 import numpy as np
 import torch
@@ -51,6 +52,51 @@ def sha256_file(path: str) -> str:
         for blok in iter(lambda: f.read(1 << 20), b""):
             h.update(blok)
     return h.hexdigest()
+
+
+MASKE = -100
+"""Kayıp maskesi — CİHAZDAN BAĞIMSIZ SÖZLEŞME (P2/Aşama 1; train_module.py:145 şablonu).
+
+ÇAKIŞMA ÖLÇÜLDÜ: SFT maskelemesi hedefleri −100 ile işaretlerken eski kod
+`ignore_index=<PAD>` (1) geçiyordu — bu, cross_entropy'nin varsayılan −100 yok
+sayımını EZBERDİ ve −100 hedefler geçersiz sınıf olarak kaldı (MPS'te sessiz bozuk
+kayıp). Tek çözüm TEK maske değeri: PAD hedefleri de −100'e yazılır, forward'a
+yalnız `ignore_index=-100` geçer."""
+
+
+def maske_pad_hedefleri(targets_np: np.ndarray, pad_id: int, pad_mask_active: bool) -> np.ndarray:
+    """PAD→−100 maske deseni (train_module.py:264-265 şablonu; P2/Aşama 1).
+
+    `pad_mask_active=True` (--no-pad-mask YOK): hedefteki PAD konumları MASKE'ye
+    yazılır; forward'a `ignore_index=MASKE` geçilir. PAD'siz dizide NO-OP
+    (kayıp ölçeği değişmez). `pad_mask_active=False`: PAD hedefleri eğitilir
+    (eski maskeleme yok davranışı bit-bit korunur)."""
+    if pad_mask_active and pad_id is not None:
+        targets_np = targets_np.copy()
+        targets_np[targets_np == pad_id] = MASKE
+    return targets_np
+
+
+def get_lr(step: int, peak_lr: float, warmup_steps: int, toplam_adim: int, min_lr: float) -> float:
+    """B1 scheduler şablonu (scripts/train_step_b1_canonical.py:201-242): warmup + cosine.
+
+    Şablonun İLERLEME TUZAĞI KAPANDI: cosine `toplam_adim` sonunda min_lr'de DURUR
+    (progress 1.0'da kırpılır); aşan adımda şablonun kosinüsü geri YÜKSELİYORDU
+    (progress 2,0'da peak_lr'ye döner) — kırpılmayan değer hata değildir ama
+    "bitti sanılan eğride lr yeniden zirveye çıkması" sessiz sürprizdir.
+
+    `toplam_adim <= 0`: cosine ilan edilmedi — warmup'tan sonra lr PEAK'te KALIR
+    (sabit). `warmup_steps <= 0`: warmup yok, ilk adımdan peak.
+    Scheduler'in kendisi yalnız `warmup_steps > 0 veya toplam_adim > 0` iken AKTİF;
+    ikisi de 0 ise hiç çağrılmaz ve lr sabittir (mevcut davranış bit-bit)."""
+    if toplam_adim <= 0:
+        if warmup_steps <= 0 or step >= warmup_steps:
+            return peak_lr
+        return peak_lr * step / max(1, warmup_steps)
+    if warmup_steps > 0 and step <= warmup_steps:
+        return peak_lr * step / max(1, warmup_steps)
+    progress = min(1.0, (step - warmup_steps) / max(1, toplam_adim - warmup_steps))
+    return min_lr + 0.5 * (peak_lr - min_lr) * (1.0 + math.cos(math.pi * progress))
 
 def main():
     print("=" * 60)
@@ -112,9 +158,13 @@ def main():
     vocab_size = len(vocab.stoi)
     print(f"Sözlük Yüklendi ({vocab_path}). Kelime dağarcığı boyutu: {vocab_size}", flush=True)
 
-    pad_ignore_index = None if "--no-pad-mask" in sys.argv else vocab.stoi.get("<PAD>", 1)
-    if pad_ignore_index is not None:
-        print(f"<PAD> kayıp maskesi aktif (ignore_index={pad_ignore_index}).", flush=True)
+    pad_id = vocab.stoi.get("<PAD>", 1)
+    pad_mask_active = "--no-pad-mask" not in sys.argv
+    if pad_mask_active:
+        # PAD maskeleme artık hedef düzeyinde: PAD konumları -100'e yazılır (maske_pad_hedefleri)
+        # ve forward'a tek maske değeri (ignore_index=-100) geçer — PAD id'si ignore_index
+        # olarak EZBERLENDİĞİNDE SFT'nin -100'leri geçersiz sınıf kalıyordu (yukarıdaki MASKE).
+        print(f"<PAD> kayıp maskesi aktif (PAD hedefleri {MASKE}'e yazılır; pad_id={pad_id}).", flush=True)
     else:
         print("<PAD> kayıp maskesi devre dışı (--no-pad-mask).", flush=True)
 
@@ -283,9 +333,32 @@ def main():
         if arg == "--lr" and arg_idx + 1 < len(sys.argv):
             lr = float(sys.argv[arg_idx + 1])
 
+    # AŞAMA 1 (P2) — SCHEDULER/CLIP/WEIGHT-DECAY BAYRAKLARI. Optimizer'dan ÖNCE okunurlar,
+    # cunku weight_decay kurulumda, scheduler ise yukleme dalindan da beslenmelidir.
+    weight_decay = 0.01
+    warmup_steps = 0
+    toplam_adim = 0
+    min_lr = 1e-6
+    for arg_idx, arg in enumerate(sys.argv):
+        if arg == "--weight-decay" and arg_idx + 1 < len(sys.argv):
+            weight_decay = float(sys.argv[arg_idx + 1])
+        if arg == "--warmup-steps" and arg_idx + 1 < len(sys.argv):
+            warmup_steps = int(sys.argv[arg_idx + 1])
+        if arg == "--toplam-adim" and arg_idx + 1 < len(sys.argv):
+            toplam_adim = int(sys.argv[arg_idx + 1])
+        if arg == "--min-lr" and arg_idx + 1 < len(sys.argv):
+            min_lr = float(sys.argv[arg_idx + 1])
+    if weight_decay < 0 or warmup_steps < 0 or toplam_adim < 0 or min_lr < 0:
+        raise RuntimeError(
+            f"--weight-decay/--warmup-steps/--toplam-adim/--min-lr negatif olamaz "
+            f"(wd={weight_decay}, warmup={warmup_steps}, toplam={toplam_adim}, min_lr={min_lr})")
+    scheduler_aktif = warmup_steps > 0 or toplam_adim > 0
+    # VARSAYILAN KAPALI (--warmup-steps 0 ve --toplam-adim 0) => mevcut davranis bit-bit ayni
+    # (lr sabit; scheduler hic uygulanmaz, logda LR alani basilmaz).
+
     # Using AdamW optimizer
-    optimizer = optim.AdamW(model.parameters(), lr=lr, weight_decay=0.01)
-    print(f"Model mimarisi kuruldu ve cihaza taşındı. (Öğrenme Oranı: {lr})", flush=True)
+    optimizer = optim.AdamW(model.parameters(), lr=lr, weight_decay=weight_decay)
+    print(f"Model mimarisi kuruldu ve cihaza taşındı. (Öğrenme Oranı: {lr}, weight_decay: {weight_decay})", flush=True)
 
     # ADAMW MOMENTLERINI GERI YUKLE (T-0092). Sirasi onemli: optimizer yukarida KURULMALI,
     # cunku state_dict ancak kurulmus bir optimizer'a yuklenebilir.
@@ -319,6 +392,21 @@ def main():
             print(f"AdamW momentleri geri yuklendi: '{opt_load_path}' "
                   f"(adim={payload.get('adim')}, model_sha256={gercek[:16]}…, "
                   f"{len(optimizer.state)} parametre)", flush=True)
+            # SCHEDULER DURUMU (P2/Aşama 1): yan dosya, momentlerin kaydedildiği koşumun
+            # scheduler ayarını da taşır. Devam koşumu bayrak vermediyse EĞRİYI SÜRDÜRÜR —
+            # yoksa cosine yeniden tepeden başlar ve "carry var ama LR eğrisi sıfırlandı"
+            # sessiz bozulması olur (ölçüldü: optimizer carry'siz ilk güncelleme 1,73×).
+            sch = payload.get("scheduler")
+            if isinstance(sch, dict):
+                if "--warmup-steps" not in sys.argv:
+                    warmup_steps = int(sch.get("warmup_steps", warmup_steps))
+                if "--toplam-adim" not in sys.argv:
+                    toplam_adim = int(sch.get("toplam_adim", toplam_adim))
+                if "--min-lr" not in sys.argv:
+                    min_lr = float(sch.get("min_lr", min_lr))
+                scheduler_aktif = warmup_steps > 0 or toplam_adim > 0
+                print(f"Scheduler durumu geri yuklendi: warmup={warmup_steps}, "
+                      f"toplam_adim={toplam_adim}, min_lr={min_lr}", flush=True)
     elif load_optimizer:
         _durdur(f"--load-optimizer verildi ama yan dosya YOK: '{opt_load_path}'. "
                 f"Momentler sifirdan baslardi; sessizce devam etmek yerine duruldu.")
@@ -343,10 +431,26 @@ def main():
             batch_size = int(sys.argv[arg_idx + 1])
             
     eval_interval = 10
-    
+
+    # AŞAMA 1 (P2) — GRAD CLIP. VARSAYILAN 1,0 (plan onaylı onarım); `--clip 0` ile KAPALI.
+    clip_deger = 1.0
+    for arg_idx, arg in enumerate(sys.argv):
+        if arg == "--clip" and arg_idx + 1 < len(sys.argv):
+            clip_deger = float(sys.argv[arg_idx + 1])
+    if clip_deger < 0:
+        raise RuntimeError(f"--clip negatif olamaz: {clip_deger}")
+
+    if scheduler_aktif and toplam_adim > 0 and max_steps > toplam_adim:
+        print(f"UYARI: --toplam-adim ({toplam_adim}) < --steps ({max_steps}); cosine "
+              f"{toplam_adim}. adımda min_lr'de DURUR ve geri YÜKSELMEZ (progress 1.0'da "
+              f"kırpılır).", file=sys.stderr, flush=True)
+
     print(f"\nEğitim Başlatılıyor -> Adım Sayısı: {max_steps}, Batch Boyutu: {batch_size}, Block Boyutu: {block_size}, Hedef: {'ON-EGITIM (duz sonraki-jeton)' if pretrain else 'SFT (prompt maskeli)'}", flush=True)
     print("Periyodik kayıt: " + (f"her {save_every} adımda -> '{model_save_path}' ('.tmp' üzerinden atomik)"
                                  if save_every else "KAPALI (yalnız koşum sonunda kaydedilir)"), flush=True)
+    if scheduler_aktif:
+        print(f"Scheduler AKTİF: warmup {warmup_steps} + cosine (toplam_adim={toplam_adim or '—'}), min_lr {min_lr}", flush=True)
+    print(f"Grad clip: {clip_deger if clip_deger > 0 else 'KAPALI'}", flush=True)
     
     model.train()
     start_time = time.time()
@@ -378,23 +482,39 @@ def main():
                     "SFT maskelemesi bu partide HICBIR hedef birakmadi (tum pencereler -100). "
                     "Duz-metin kulliyatinda on-egitim icin --pretrain kullanin. "
                     "Sessizce devam etmek gradyani sifirlar ve kaybi 0.0000 gosterir (T-0073).")
-                        
+
+        # PAD→−100 maske deseni (P2/Aşama 1): SFT'nin -100'leriyle TEK maske değerinde
+        # birleşir; ignore_index=pad_id ezberi (çakışma) bu noktada kapanır.
+        targets_np = maske_pad_hedefleri(targets_np, pad_id, pad_mask_active)
+        if pad_mask_active and int((targets_np != MASKE).sum()) == 0:
+            raise RuntimeError(
+                "PAD maskelemesi bu partide HICBIR hedef birakmadi (tum hedefler PAD/-100). "
+                "Batch hizalamasi ve veri kumesini denetleyin; sessizce devam etmek "
+                "gradyani sifirlar ve kaybi 0.0000 gosterir (T-0073 sinifi).")
+
         x = x_cpu.to(device)
         targets = torch.from_numpy(targets_np).to(device)
         sign_mask = sign_mask_cpu.to(device)
 
         optimizer.zero_grad()
-        logits, loss = model(x, targets, sign_mask, ignore_index=pad_ignore_index)
+        logits, loss = model(x, targets, sign_mask, ignore_index=MASKE)
         loss.backward()
+        if scheduler_aktif:
+            cur_lr = get_lr(step, lr, warmup_steps, toplam_adim, min_lr)
+            for param_group in optimizer.param_groups:
+                param_group["lr"] = cur_lr
+        if clip_deger > 0:
+            torch.nn.utils.clip_grad_norm_(model.parameters(), clip_deger)
         optimizer.step()
-        
+
         loss_val = loss.item()
         loss_history.append(loss_val)
-        
+
         step_dur = time.time() - step_t0
         if step % eval_interval == 0 or step == 1:
             elapsed = time.time() - start_time
-            print(f"Adım {step:4d}/{max_steps} | Kayıp (Loss): {loss_val:.4f} | Adım Süresi: {step_dur:.2f}s | Toplam Süre: {elapsed:.1f}s", flush=True)
+            lr_alan = f" | LR: {cur_lr:.6f}" if scheduler_aktif else ""
+            print(f"Adım {step:4d}/{max_steps} | Kayıp (Loss): {loss_val:.4f} | Adım Süresi: {step_dur:.2f}s | Toplam Süre: {elapsed:.1f}s{lr_alan}", flush=True)
 
         # KAYIT — TEK NOKTA: egitim SONU (step == max_steps) veya periyodik esik.
         # Tek kayit noktasi bilincli: (a) T-0048 AST degismezi "check_frozen_save_path
@@ -417,6 +537,9 @@ def main():
                 opt_gecici = opt_save_path + ".tmp"
                 torch.save({
                     "optimizer": optimizer.state_dict(),
+                    # SCHEDULER DURUMU (P2/Aşama 1): devam koşumu aynı eğriyi sürdürsün.
+                    "scheduler": {"warmup_steps": warmup_steps, "toplam_adim": toplam_adim,
+                                  "min_lr": min_lr, "peak_lr": lr},
                     "adim": step,
                     "model_sha256": sha256_file(model_save_path),
                 }, opt_gecici)

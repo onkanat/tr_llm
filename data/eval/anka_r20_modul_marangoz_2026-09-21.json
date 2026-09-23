@@ -1,0 +1,83 @@
+{
+  "taban": "data/anka_a1r.pt",
+  "taban_sha256": "b93cc1cd54093fc63342d394abe528f2128dc16e20b4d7ac6ab680854b4d6293",
+  "modul": "modules/marangoz.mod.pt",
+  "modul_sha256": "d1ae6a30589ee702525e0aeedfddcf30dfb3d7c3a9a5d98bd3450970f8caebe0",
+  "modul_meta": {
+    "surum": 1,
+    "spec": {
+      "ad": "marangoz",
+      "r": 16,
+      "alpha": 32,
+      "dropout": 0.0,
+      "hedefler": [
+        "attn.q_proj",
+        "attn.k_proj",
+        "attn.v_proj",
+        "attn.out_proj",
+        "mlp.0",
+        "mlp.2"
+      ],
+      "olcek": 2.0
+    },
+    "katman_sayisi": 36,
+    "modul_parametre": 1327104
+  },
+  "A_taban": {
+    "CE_ort": 3.5351739511825144,
+    "CE_std": 0.8031773533088846,
+    "pencere": 256,
+    "blok": 128,
+    "seed": 7,
+    "dilim": "data/anka_a1r_pretrain.bin",
+    "maskesiz": true
+  },
+  "A_sifir_kontrol": {
+    "CE_ort": 3.5351739511825144,
+    "CE_std": 0.8031773533088846,
+    "pencere": 256,
+    "blok": 128,
+    "seed": 7,
+    "dilim": "data/anka_a1r_pretrain.bin",
+    "maskesiz": true
+  },
+  "A_modul": {
+    "CE_ort": 4.269291185773909,
+    "CE_std": 0.8296245587365192,
+    "pencere": 256,
+    "blok": 128,
+    "seed": 7,
+    "dilim": "data/anka_a1r_pretrain.bin",
+    "maskesiz": true
+  },
+  "A_artis_yuzde": 20.76608519775478,
+  "A_esik": 10.0,
+  "A_gec": false,
+  "A_ayirt_edicilik": {
+    "wilson_yari": 0.1016290084452236,
+    "esik_payi": 0.3535173951182515,
+    "ayirt": true
+  },
+  "F_taban": {
+    "CE_ort": 7.218786180019379,
+    "CE_std": 0.4199221283476425,
+    "pencere": 128,
+    "blok": 128,
+    "seed": 7,
+    "dilim": "data/train_carpenter_specialization_anka_r18.bin",
+    "maskesiz": true,
+    "genelleme_degil": true
+  },
+  "F_modul": {
+    "CE_ort": 5.4913832023739815,
+    "CE_std": 0.46256033341312747,
+    "pencere": 128,
+    "blok": 128,
+    "seed": 7,
+    "dilim": "data/train_carpenter_specialization_anka_r18.bin",
+    "maskesiz": true,
+    "genelleme_degil": true
+  },
+  "F_dusus_yuzde": 23.9292719657858,
+  "F_uyari": "uyum (fit) ekseni; GENELLEME ya da yetenek ölçüsü DEĞİL"
+}

@@ -1,0 +1,32 @@
+{
+  "model": "scratch/t0096_kos/seg_6.pt",
+  "module": "modules/seg6_marangoz_1000.mod.pt",
+  "ce_ort": 4.4591,
+  "ppl": 86.41,
+  "benzersiz_4gram": 0.1693,
+  "dongu_orani": 100.0,
+  "n": 25,
+  "max_new": 128,
+  "device": "mps",
+  "modul_katman": 37,
+  "ornek_uretim": [
+    {
+      "benzersiz_4gram": 0.176,
+      "en_cok_tekrar": 104,
+      "uzunluk": 128,
+      "dongu": true
+    },
+    {
+      "benzersiz_4gram": 0.032,
+      "en_cok_tekrar": 122,
+      "uzunluk": 128,
+      "dongu": true
+    },
+    {
+      "benzersiz_4gram": 0.288,
+      "en_cok_tekrar": 64,
+      "uzunluk": 128,
+      "dongu": true
+    }
+  ]
+}

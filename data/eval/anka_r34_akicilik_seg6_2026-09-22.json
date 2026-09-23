@@ -1,0 +1,32 @@
+{
+  "model": "scratch/t0096_kos/seg_6.pt",
+  "module": null,
+  "ce_ort": 6.3965,
+  "ppl": 599.72,
+  "benzersiz_4gram": 0.6198,
+  "dongu_orani": 96.0,
+  "n": 25,
+  "max_new": 128,
+  "device": "mps",
+  "modul_katman": 0,
+  "ornek_uretim": [
+    {
+      "benzersiz_4gram": 0.792,
+      "en_cok_tekrar": 4,
+      "uzunluk": 128,
+      "dongu": true
+    },
+    {
+      "benzersiz_4gram": 0.216,
+      "en_cok_tekrar": 6,
+      "uzunluk": 128,
+      "dongu": true
+    },
+    {
+      "benzersiz_4gram": 0.936,
+      "en_cok_tekrar": 4,
+      "uzunluk": 128,
+      "dongu": true
+    }
+  ]
+}

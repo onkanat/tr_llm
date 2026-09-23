@@ -1,0 +1,51 @@
+{
+  "gorev": "anka_i1 · Faz 0",
+  "data": "scratch/anka_i1_talimat.bin",
+  "data_sha256": "798c2adc55430cd57ce5dfcf182e78d312822782c507f0695779799b1f5f6c3b",
+  "hedef_sozluk": "data/rebuild/vocab_anka_r1_33114.json",
+  "pad_zarf": {
+    "data": "scratch/anka_i1_talimat.bin",
+    "jeton": 2800000,
+    "blok": 21875,
+    "ornek_blok": 4000,
+    "pad_id": 1,
+    "output_id": 1706,
+    "eos_id": 3,
+    "pad_jeton": 1434503,
+    "pad_orani_pct": 51.23225,
+    "max_id": 32850,
+    "output_icerenn_blok_pct": 99.975,
+    "korunan_hedef_orani": {
+      "pad_maskesi_KAPALI": 24.3535,
+      "pad_maskesi_ACIK": 24.3535
+    },
+    "output_suz_blokta_korunan_pct": 0.0
+  },
+  "sozluk_hizasi": {
+    "kaynak_sozluk": "data/rebuild/vocab_base_32852.json",
+    "kaynak_giris": 32852,
+    "hedef_giris": 33114,
+    "ortak_jeton": 32852,
+    "id_kayan_jeton": 0,
+    "ornek_kayanlar": [],
+    "onek_uyumlu": true
+  },
+  "taban_cizgisi": {
+    "kaynaklar": [
+      "data/eval/anka_r23_taban_yetenek_2026-09-21.json",
+      "data/eval/anka_r34_akicilik_taban_2026-09-22.json"
+    ],
+    "zarf_tutarsizlik_pct": 100.0,
+    "ezber_pct": 0.0,
+    "rouge_l": 0.0,
+    "kesisim_pct": 0.0,
+    "a_ce": 3.5351739511825144,
+    "ppl": 33.38,
+    "ppl_kanonik": 34.3,
+    "ce_tavan": 3.8887,
+    "ce_tavan_kaynagi": "ESIK_A_ARTIS=10.0 (evaluate_carpenter_anka.py:68)",
+    "taban_sha256": "b93cc1cd54093fc63342d394abe528f2128dc16e20b4d7ac6ab680854b4d6293",
+    "hedef_sozluk_sha256": "f9940a8d8e1f7cd9428d389f12ff4c5ee448e5a7bfcdcc8ecc9c616fce950984"
+  },
+  "kapilar": "GECTI"
+}

@@ -311,21 +311,26 @@ def referans_dogrula(dosya: str, satir: int, sabit_ad: str, deger: Any) -> Dict[
 ESIK_DOSYASI: str = os.path.join(KOK, "scripts", "evaluate_carpenter_anka.py")
 
 # Ilandan birebir okunan esik referanslari: (satir, sabit ad, deger).
+# P2/0c-0d (23 Eyl 2026): ESIK_KESISIM kalibre edildi 80,0 -> 10,92 (insan tavani %13,0
+# x k=0,84) ve satir numaralari evaluate_carpenter_anka.py'deki yorum bloguyla kaydi:
+# EZBER 68, TUTARSIZ 69, ROUGE 70, KESISIM 71, A_ARTIS 74, B_DUSUS 75.
+# Ilan: data/eval/anka_p2_esik_kalibrasyon_ilani_2026-09-23.md
 ESIK_REFERANSLARI: Tuple[Tuple[int, str, float], ...] = (
-    (62, "ESIK_EZBER", 10.0),
-    (63, "ESIK_TUTARSIZ", 5.0),
-    (64, "ESIK_ROUGE", 0.35),
-    (65, "ESIK_KESISIM", 80.0),
-    (68, "ESIK_A_ARTIS", 10.0),
-    (69, "ESIK_B_DUSUS", 5.0),
+    (68, "ESIK_EZBER", 10.0),
+    (69, "ESIK_TUTARSIZ", 5.0),
+    (70, "ESIK_ROUGE", 0.35),
+    (71, "ESIK_KESISIM", 10.92),
+    (74, "ESIK_A_ARTIS", 10.0),
+    (75, "ESIK_B_DUSUS", 5.0),
 )
 
 # T-0097/K11'de EZBERDEN yazilip YANLIS cikan referanslar — kapinin pozitif kontrolu:
-# bunlar referans_dogrula'dan GECMEMELIDIR.
+# bunlar referans_dogrula'dan GECMEMELIDIR. P2/0d'de ayni kanarya sinifi gucellendi:
+# kalibrasyon-sinifi ezber hatalari (eski esik, ham tavan, esik karisikligi).
 K11_YANLIS_REFERANSLAR: Tuple[Tuple[int, str, float], ...] = (
-    (66, "ESIK_A_ARTIS", 10.0),
-    (70, "ESIK_ROUGE", 0.35),
-    (71, "ESIK_KESISIM", 80.0),
+    (71, "ESIK_KESISIM", 80.0),      # Ç4'ün ulaşılamaz eski eşiği geri yazılırsa DÜŞMELİ
+    (70, "ESIK_ROUGE", 0.4164),      # ham insan tavanı eşik yazılırsa (tavan ≠ tavan×k)
+    (74, "ESIK_A_ARTIS", 5.0),       # B_DUSUS eşiğiyle karıştırılırsa DÜŞMELİ
 )
 
 

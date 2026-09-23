@@ -315,17 +315,21 @@ def test_esik_referanslari() -> None:
             f"{ad}: ilan edilen satir {satir}, dosyada {bulunan} ⇒ referans BAYAT (T-0097/K11)"
         )
 
-    # (c) K11 KANARYASI: T-0097'de ezberden yazilip YANLIS cikan referanslar DUSMELI
+    # (c) K11 KANARYASI: ezberden/bayat yazilip YANLIS cikan referanslar DUSMELI
+    # (P2/0d'de kalibrasyon-sinifi hatalar ile guclendirildi: eski esik, ham tavan,
+    # esik karisikligi — scripts/olcum_kabi.py K11_YANLIS_REFERANSLAR yorumu)
     assert OLCUM.K11_YANLIS_REFERANSLAR, "kanarya listesi bos olamaz"
     for satir, ad, deger in OLCUM.K11_YANLIS_REFERANSLAR:
         with pytest.raises(OLCUM.ReferansUyusmazligi):
             OLCUM.referans_dogrula(ESIK_DOSYASI, satir, ad, deger)
 
     # (d) Esik SOZLUGU ilani ile esik DOSYASI celismemeli (V7 sinifi: bayat formul)
+    # P2/0c kalibrasyonu: KESISIM 10,92 (insan tavani %13,0 x k=0,84) — ilan
+    # data/eval/anka_p2_esik_kalibrasyon_ilani_2026-09-23.md
     gercek = {ad: deger for _s, ad, deger in OLCUM.ESIK_REFERANSLARI}
-    assert gercek["ESIK_ROUGE"] == 0.35 and gercek["ESIK_KESISIM"] == 80.0, gercek
+    assert gercek["ESIK_ROUGE"] == 0.35 and gercek["ESIK_KESISIM"] == 10.92, gercek
     with pytest.raises(OLCUM.ReferansUyusmazligi):
-        OLCUM.referans_dogrula(ESIK_DOSYASI, 62, "ESIK_EZBER", 99.0)
+        OLCUM.referans_dogrula(ESIK_DOSYASI, 68, "ESIK_EZBER", 99.0)
 
 
 def test_timeout_kapisi(tmp_path: Any) -> None:

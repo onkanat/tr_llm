@@ -245,13 +245,40 @@ def main(
     pad_id = vocab.stoi.get("<PAD>", 1)
 
     print(f"\n[4] Tokenlar Blok Boyutuna ({block_size}) Hizalanıyor ve Paketleniyor...")
+    # --- ZARF SÖZLEŞMESİ ONARIMI (ölçüldü, 22 Eyl 2026) -----------------------------
+    # `tokenizer.encode` sona <EOS> EKLER. Eski kod uzun kaydı `rec[:block_size]` ile
+    # kırpıyordu ve bu, sondaki <EOS>'u ATIYORDU. `mask_prompt_targets` kural 3 kaydı
+    # yalnız <EOS> ile kapattığı için, <EOS>'suz bir kaydın ardından gelen kaydın istemi
+    # MASKESİZ kalıyordu (istem sızıntısı) — yani model istemi de hedef sayıyordu.
+    #
+    # ÖLÇÜM (kanıt): `data/train_chat_balanced.bin`'de <EOS>'suz 1.431 kaydın TAMAMI
+    # 128'i dolduran kırpılmış kayıtlardı; PAD'li bloklarda <EOS> açığı SIFIRDI.
+    #   PAD'siz (tam dolu) blok 1.494 · bunlarda <EOS> YOK 1.431 · PAD'li bloklarda YOK 0
+    # ÇÖZÜM: gövdeyi 127 jetonla sınırla ve <EOS>'u GERİ EKLE. Böylece her kayıt
+    # `<BOS> … <EOS> <PAD>×k` biçimindedir ve maske her pencerede kapanır.
+    eos_id = vocab.stoi.get("<EOS>", 3)
     flat_tokens = []
+    kirpilan = 0
     for rec in all_records:
         if len(rec) < block_size:
             padded_rec = rec + [pad_id] * (block_size - len(rec))
+        elif len(rec) == block_size:
+            padded_rec = list(rec)
         else:
-            padded_rec = rec[:block_size]
+            padded_rec = list(rec[:block_size - 1]) + [eos_id]
+            kirpilan += 1
         flat_tokens.extend(padded_rec)
+    if kirpilan:
+        oran = 100.0 * kirpilan / max(1, len(all_records))
+        print(f"[zarf] {kirpilan:,} kayıt 128 jetonu aşıyordu ⇒ 127'ye kırpılıp "
+              f"<EOS> GERİ EKLENDİ (%{oran:.2f}). Eski davranış <EOS>'u atıyordu "
+              f"⇒ istem sızıntısı.", flush=True)
+    if kirpilan > 0.20 * len(all_records):
+        raise RuntimeError(
+            f"ZARF KAPISI: kayıtların %{100.0*kirpilan/len(all_records):.1f}'i blok boyutunu "
+            f"aşıyor ⇒ 128'lik blok tasarımı bu külliyata UYMUYOR. Sessizce kırpmak yerine "
+            f"DURUYORUM (blok boyutunu ya da kayıtları gözden geçirin)."
+        )
 
     # D2: Çıktı dosyasını yazmadan hemen önce tekrar kontrol
     check_output_path(output_bin, allow_frozen_write)
@@ -286,6 +313,13 @@ def main(
         "total_records": len(all_records),
         "total_tokens": len(flat_tokens),
         "block_size": block_size,
+        # ZARF ONARIMI (22 Eyl 2026): blok boyutunu aşan kayıtlar 127'ye kırpılıp <EOS>
+        # geri eklenir. Eski davranış <EOS>'u atıyordu ⇒ istem sızıntısı. Sayı BEYAN EDİLİR.
+        "eos_onarimi": {
+            "kirpilan_kayit": kirpilan,
+            "oran_pct": round(100.0 * kirpilan / max(1, len(all_records)), 4),
+            "kural": "len(rec) > block_size ⇒ rec[:block_size-1] + [<EOS>]",
+        },
         "vocab_path": vocab_path,
         "vocab_size": len(vocab.stoi),
         "literal_entity_mode": literal_entity_mode,

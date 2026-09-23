@@ -122,6 +122,17 @@ def test_G2_yan_dosya_olur_ve_model_sha256_dogrudur(tmp_path):
     assert payload.get("adim") == 2, f"kaydedilen adım 2 olmalıydı: {payload.get('adim')}"
     assert len(payload["optimizer"].get("state", {})) > 0, (
         "kaydedilen optimizer durumu BOŞ ⇒ momentler yine kaydedilmiyor")
+    # SCHEDULER DURUMU (P2/Aşama 1): yan dosya scheduler ayarını da taşımali —
+    # yoksa devam koşumu cosine'ı TEPEYİDEN başlatır (LR eğrisi sıfırlanır).
+    sch = payload.get("scheduler")
+    assert isinstance(sch, dict), f"yan dosyada 'scheduler' bloğu yok: {sorted(payload.keys())}"
+    for anahtar in ("warmup_steps", "toplam_adim", "min_lr", "peak_lr"):
+        assert anahtar in sch, f"scheduler bloğunda '{anahtar}' yok: {sch}"
+    assert sch["warmup_steps"] == 0 and sch["toplam_adim"] == 0, (
+        f"bayraksız koşumda scheduler KAPALI yazılmalıydı: {sch}")
+    # ORTAK --from-scratch ile koşar ⇒ lr varsayılan 1e-3 (2e-4 yalnız DEVAM koşumunun
+    # otomatik lr'sidir — train.py:275).
+    assert abs(sch["peak_lr"] - 1e-3) < 1e-12, f"peak_lr (koşumun lr'si) yanlış: {sch}"
 
 
 def test_G3_devam_kosumunda_momentler_geri_gelir(tmp_path):
@@ -137,6 +148,25 @@ def test_G3_devam_kosumunda_momentler_geri_gelir(tmp_path):
     assert r2.returncode == 0, f"devam koşumu düştü:\n{r2.stdout[-1200:]}\n{r2.stderr[-1500:]}"
     assert "AdamW momentleri geri yuklendi" in r2.stdout, (
         f"momentler geri yüklenmedi:\n{r2.stdout[-1200:]}")
+
+
+def test_G3b_scheduler_durumu_geri_yuklenir(tmp_path):
+    """G3b (P2/Aşama 1): yan dosyadaki scheduler durumu, devam koşumuna GEÇER —
+    bayrak verilmediğinde eğri devam koşumunda TEKRAR TEPEDEN BAŞLAMAMALI."""
+    m1 = tmp_path / "m1.pt"
+    r1 = _kosum(*ORTAK, "--save-path", str(m1), "--save-optimizer",
+                "--warmup-steps", "2", "--toplam-adim", "4", "--min-lr", "1e-6")
+    assert r1.returncode == 0, f"1. koşum düştü:\n{r1.stderr[-1500:]}"
+    m2 = tmp_path / "m2.pt"
+    r2 = _kosum("--device", "cpu", "--data", VERI, "--vocab", VOCAB, "--pretrain",
+                "--steps", "2", "--batch-size", "1", "--block-size", "32",
+                "--load-path", str(m1), "--save-path", str(m2),
+                "--save-optimizer", "--load-optimizer")
+    assert r2.returncode == 0, f"devam koşumu düştü:\n{r2.stdout[-1200:]}\n{r2.stderr[-1500:]}"
+    assert "Scheduler durumu geri yuklendi: warmup=2, toplam_adim=4, min_lr=1e-06" in r2.stdout, (
+        f"scheduler durumu geri yüklenmedi (eğri tepeyi yeniden başlardı):\n{r2.stdout[-1200:]}")
+    # Devam koşumu LR alanını BASMALI (scheduler aktif taşındı):
+    assert "| LR: " in r2.stdout, f"aktif scheduler'da LR loglanmadı:\n{r2.stdout[-800:]}"
 
 
 def test_G4a_yan_dosya_yokken_bayrak_yoksa_UYARIR_ama_DURMAZ(tmp_path):

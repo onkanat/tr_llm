@@ -1,0 +1,868 @@
+{
+  "gorev": "T-0095",
+  "damga_utc": "2026-09-20T15:45:13.593505+00:00",
+  "kapi": "AgentGateway.create_http_server + urllib POST /api/query",
+  "device_istenen": "mps",
+  "device_gercek": "mps",
+  "mps_available": true,
+  "vocab": "data/rebuild/vocab_anka_r1_33114.json",
+  "kulliyat": "data/pedagogy_canonical/carpenter_canonical.jsonl",
+  "modeller": [
+    {
+      "ad": "TABAN",
+      "model_yolu": "data/anka_a1r.pt",
+      "model_sha256": "b93cc1cd54093fc63342d394abe528f2128dc16e20b4d7ac6ab680854b4d6293",
+      "vocab_yolu": "data/rebuild/vocab_anka_r1_33114.json",
+      "vocab_sha256": "f9940a8d8e1f7cd9428d389f12ff4c5ee448e5a7bfcdcc8ecc9c616fce950984",
+      "device_istenen": "mps",
+      "port": 8099,
+      "sorgular": [
+        {
+          "etiket": "M1 vernik",
+          "soru": "Ahşap atölyesi güvenlik ve imalat rehberi: Ahşabın son kat yüzeyinde dolgu verniği nasıl tatbik edilmelidir?",
+          "beklenen_kulliyat_output": "Dolgu verniği uygulamasında ahşabın açık gözeneklerini doldurarak son kat cila için cam gibi pürüzsüz ve homojen bir alt zemin hazırlayan astar verniktir.",
+          "http_kod": 200,
+          "sure_sn": 2.75,
+          "response_text": ", [?] ve [Özel İsim] gibi). bu nedenle, bir [?] olarak kullanılır. [Özel İsim]- i [Özel İsim]), [?] ( 1980-25). [Özel İsim] [?] ( 1980-20",
+          "morphemes": ", <UNK> ve <PROPER_NOUN> gibi ) . bu neden CASE_INS , bir <UNK> ol GERUND_ArAk kullanıl TENSE_AORIST . <PROPER_NOUN> - i <PROPER_NOUN> ) , <UNK> ( 1 9 8 0 - 2 5 ) . <PROPER_NOUN> <UNK> ( 1 9 8 0 - 2 0",
+          "entropy_pre": 6.815682411193848,
+          "entropy_post": 0.5832244157791138,
+          "rag_score": 0.2753333333333333,
+          "source_collection": "kristal_bellek",
+          "router_experts": [
+            "legal",
+            "grammar_core"
+          ],
+          "epistemic_failure": false,
+          "future_train_recorded": false,
+          "hata": null,
+          "kelime_f1_vs_kulliyat": 0.0851
+        },
+        {
+          "etiket": "M2 kurt dişi",
+          "soru": "Geleneksel ahşap zanaatı sorusu: Usta marangoz olarak kurt dişi birleştirme geçme tekniğinin püf noktalarını açıkla.",
+          "beklenen_kulliyat_output": "Kurt dişi birleştirme uygulamasında açılı zikzak dişlerle ahşap parçaların boylamasına eklenerek sonsuz kereste elde edilmesini sağlayan endüstriyel eklemedir. Birleşme yanaklarının birbirine boşluksuz ve kasmadan oturması mukavemet için şarttır.",
+          "http_kod": 200,
+          "sure_sn": 1.2,
+          "response_text": ", [Özel İsim] [?].) ve [Özel İsim] ( 1980-25), [Özel İsim] ( 1980-25), [Özel İsim] ( 1980-2005), [Özel İsim] ( 19",
+          "morphemes": ", <PROPER_NOUN> <UNK> . ) ve <PROPER_NOUN> ( 1 9 8 0 - 2 5 ) , <PROPER_NOUN> ( 1 9 8 0 - 2 5 ) , <PROPER_NOUN> ( 1 9 8 0 - 2 0 0 5 ) , <PROPER_NOUN> ( 1 9",
+          "entropy_pre": 6.370606899261475,
+          "entropy_post": 1.0509843826293945,
+          "rag_score": 0.23680555555555555,
+          "source_collection": "kristal_bellek",
+          "router_experts": [
+            "pedagogy",
+            "legal"
+          ],
+          "epistemic_failure": false,
+          "future_train_recorded": false,
+          "hata": null,
+          "kelime_f1_vs_kulliyat": 0.0408
+        },
+        {
+          "etiket": "M3 şerit testere",
+          "soru": "İki kasnak arasında dönen sürekli esnek şerit bıçağıyla kavisli kesimler, biçme ve kalın keresteyi dilimleme makinesidir.",
+          "beklenen_kulliyat_output": "Bu işlev için marangozlukta 'şerit testere' tercih edilir.",
+          "http_kod": 200,
+          "sure_sn": 1.14,
+          "response_text": "DERIV_lI [?], [Özel İsim] ve diğerlerinde bulunan bir bitkidir. [Özel İsim] [?], [?] ve [?] olarak da bilinir. [Özel İsim], 180 [?]; Cm boyundadır. [Özel İsim], 180 [?];",
+          "morphemes": "DERIV_lI <UNK> , <PROPER_NOUN> ve diğer POSS_3PL CASE_LOC_N bulun PART_An bir bitki COPULA_AORIST . <PROPER_NOUN> <UNK> , <UNK> ve <UNK> ol GERUND_ArAk da bilin TENSE_AORIST . <PROPER_NOUN> , 1 8 0 <UNK> ; Cm boyun CASE_LOC COPULA_AORIST . <PROPER_NOUN> , 1 8 0 <UNK> ;",
+          "entropy_pre": 6.364813804626465,
+          "entropy_post": 0.7316365242004395,
+          "rag_score": 0.38235294117647056,
+          "source_collection": "kristal_bellek",
+          "router_experts": [
+            "grammar_core",
+            "carpenter"
+          ],
+          "epistemic_failure": false,
+          "future_train_recorded": false,
+          "hata": null,
+          "kelime_f1_vs_kulliyat": 0.0
+        },
+        {
+          "etiket": "M4 gönye",
+          "soru": "Atölye şefinin değerlendirmesi: Ahşap atölyesinde gönye aletinin doğru kullanım tekniği nedir?",
+          "beklenen_kulliyat_output": "Teknik Çözüm: Gönye ahşap parçaların 90 derece dik açılarını, düzlemselliklerini ve paralelliklerini kontrol etmeye yarayan l biçimli ölçüm aletidir. Aletin kesici ağzı daima keskin tutulmalı ve parçaya uygun açıyla yanaşılmalıdır.",
+          "http_kod": 200,
+          "sure_sn": 1.03,
+          "response_text": ", [?] ve [Özel İsim] gibi). bu nedenle ilgilidir ve [?], [Özel İsim] ( 1980). bu nedenle, [?] ( 1980). [Özel İsim] [Özel İsim], [Özel İsim] ( 1980",
+          "morphemes": ", <UNK> ve <PROPER_NOUN> gibi ) . bu neden CASE_INS ilgi DERIV_lI COPULA_AORIST ve <UNK> , <PROPER_NOUN> ( 1 9 8 0 ) . bu neden CASE_INS , <UNK> ( 1 9 8 0 ) . <PROPER_NOUN> <PROPER_NOUN> , <PROPER_NOUN> ( 1 9 8 0",
+          "entropy_pre": 6.386025905609131,
+          "entropy_post": 2.277015209197998,
+          "rag_score": 0.2848484848484848,
+          "source_collection": "kristal_bellek",
+          "router_experts": [
+            "legal",
+            "carpenter"
+          ],
+          "epistemic_failure": false,
+          "future_train_recorded": false,
+          "hata": null,
+          "kelime_f1_vs_kulliyat": 0.069
+        },
+        {
+          "etiket": "M5 zeytin ağacı",
+          "soru": "Kıvrımlı, kontrastlı damarlarıyla eşsiz bir desene ve sertliğe sahiptir",
+          "beklenen_kulliyat_output": "Bu gereksinim için zeytin ağacı son derece uygundur. Kıvrımlı, kontrastlı damarlarıyla eşsiz bir desene ve sertliğe sahiptir; dekoratif sunum tahtaları ve mutfak eşyalarında popülerdir.",
+          "http_kod": 200,
+          "sure_sn": 1.97,
+          "response_text": "DERIV_lI COPULA_AORIST. [Özel İsim] [?], [?] ve [?] gibi) ( 1980, [Özel İsim]- [?]). bu türlerdeki bir [Özel İsim] cinsidir. bu türlerde, [?] ( [Özel İsim]) cinsidir",
+          "morphemes": "DERIV_lI COPULA_AORIST . <PROPER_NOUN> <UNK> , <UNK> ve <UNK> gibi ) ( 1 9 8 0 , <PROPER_NOUN> - <UNK> ) . bu tür PLURAL CASE_LOC REL_ki bir <PROPER_NOUN> cins POSS_3SG COPULA_AORIST . bu tür PLURAL CASE_LOC , <UNK> ( <PROPER_NOUN> ) cins POSS_3SG COPULA_AORIST",
+          "entropy_pre": 6.63138484954834,
+          "entropy_post": 4.345710277557373,
+          "rag_score": 1.0,
+          "source_collection": "kristal_bellek",
+          "router_experts": [
+            "legal",
+            "grammar_core"
+          ],
+          "epistemic_failure": true,
+          "future_train_recorded": true,
+          "hata": null,
+          "kelime_f1_vs_kulliyat": 0.1176
+        },
+        {
+          "etiket": "G1 genel",
+          "soru": "Türkiye'nin başkenti neresidir?",
+          "beklenen_kulliyat_output": "KULLIYATTA YOK",
+          "http_kod": 200,
+          "sure_sn": 1.11,
+          "response_text": "[Özel İsim], 1986 yılında inşa edilmiştir. [Özel İsim], 1968 yılında inşa edilmiştir. [Özel İsim], 1968 yılında inşa edilmiştir. [Özel İsim], 1",
+          "morphemes": "<PROPER_NOUN> , 1 9 8 6 yıl POSS_2SG CASE_LOC inşa edil TENSE_EVIDENTIAL COPULA_AORIST . <PROPER_NOUN> , 1 9 6 8 yıl POSS_2SG CASE_LOC inşa edil TENSE_EVIDENTIAL COPULA_AORIST . <PROPER_NOUN> , 1 9 6 8 yıl POSS_2SG CASE_LOC inşa edil TENSE_EVIDENTIAL COPULA_AORIST . <PROPER_NOUN> , 1",
+          "entropy_pre": 6.3309221267700195,
+          "entropy_post": 4.672700881958008,
+          "rag_score": 0.0,
+          "source_collection": "kristal_bellek",
+          "router_experts": [
+            "grammar_core",
+            "legal"
+          ],
+          "epistemic_failure": false,
+          "future_train_recorded": false,
+          "hata": null,
+          "kelime_f1_vs_kulliyat": null
+        }
+      ],
+      "hata": null,
+      "yukleme_sn": 1.32,
+      "gateway_status": {
+        "status": "online",
+        "device": "mps",
+        "kristal_bellek_docs": 25,
+        "simulasyon_bellek_docs": 1,
+        "epistemic_backlog_samples": 0,
+        "future_train_path": "data/future_train_vector.jsonl"
+      },
+      "sure_sn": 11.45,
+      "f1_ort_kulliyat_var": 0.0625,
+      "en_sik_yanit": ", [?] ve [Özel İsim] gibi). bu nedenle, bir [?] olarak kullanılır. [Özel İsim]- i [Özel İsim]), [?] ( 1980-25). [Özel İsim] [?] ( 1980-20",
+      "en_sik_yanit_adet": 1,
+      "benzersiz_yanit": 6
+    },
+    {
+      "ad": "R0",
+      "model_yolu": "scratch/t0094_sonda/arm_R0.pt",
+      "model_sha256": "ba313677466108ba0e18dbb851390a0635c592da8a631cf95eb4729532df2120",
+      "vocab_yolu": "data/rebuild/vocab_anka_r1_33114.json",
+      "vocab_sha256": "f9940a8d8e1f7cd9428d389f12ff4c5ee448e5a7bfcdcc8ecc9c616fce950984",
+      "device_istenen": "mps",
+      "port": 8100,
+      "sorgular": [
+        {
+          "etiket": "M1 vernik",
+          "soru": "Ahşap atölyesi güvenlik ve imalat rehberi: Ahşabın son kat yüzeyinde dolgu verniği nasıl tatbik edilmelidir?",
+          "beklenen_kulliyat_output": "Dolgu verniği uygulamasında ahşabın açık gözeneklerini doldurarak son kat cila için cam gibi pürüzsüz ve homojen bir alt zemin hazırlayan astar verniktir.",
+          "http_kod": 200,
+          "sure_sn": 0.46,
+          "response_text": "teknik çözüm: Tanımlanan özellikler doğrudan kestane ağacına aittir.",
+          "morphemes": "teknik çözüm : Tanımlanan özel DERIV_lIk PLURAL doğrudan kestane ağaç POSS_2SG CASE_DAT ait COPULA_AORIST .",
+          "entropy_pre": 2.590299606323242,
+          "entropy_post": 0.9821505546569824,
+          "rag_score": 0.2753333333333333,
+          "source_collection": "kristal_bellek",
+          "router_experts": [
+            "legal",
+            "pedagogy"
+          ],
+          "epistemic_failure": false,
+          "future_train_recorded": false,
+          "hata": null,
+          "kelime_f1_vs_kulliyat": 0.0
+        },
+        {
+          "etiket": "M2 kurt dişi",
+          "soru": "Geleneksel ahşap zanaatı sorusu: Usta marangoz olarak kurt dişi birleştirme geçme tekniğinin püf noktalarını açıkla.",
+          "beklenen_kulliyat_output": "Kurt dişi birleştirme uygulamasında açılı zikzak dişlerle ahşap parçaların boylamasına eklenerek sonsuz kereste elde edilmesini sağlayan endüstriyel eklemedir. Birleşme yanaklarının birbirine boşluksuz ve kasmadan oturması mukavemet için şarttır.",
+          "http_kod": 200,
+          "sure_sn": 0.42,
+          "response_text": "teknik çözüm: bu gereksinim için marangozlukta kırlangıcın yüzeyine yerleştirilmesidir.",
+          "morphemes": "teknik çözüm : bu gereksinim için marangoz DERIV_lIk CASE_LOC kırlangıç CASE_GEN yüzey POSS_2SG CASE_DAT yerleştirilme POSS_3SG COPULA_AORIST .",
+          "entropy_pre": 1.688599705696106,
+          "entropy_post": 1.0863006114959717,
+          "rag_score": 0.23680555555555555,
+          "source_collection": "kristal_bellek",
+          "router_experts": [
+            "legal",
+            "pedagogy"
+          ],
+          "epistemic_failure": false,
+          "future_train_recorded": false,
+          "hata": null,
+          "kelime_f1_vs_kulliyat": 0.0541
+        },
+        {
+          "etiket": "M3 şerit testere",
+          "soru": "İki kasnak arasında dönen sürekli esnek şerit bıçağıyla kavisli kesimler, biçme ve kalın keresteyi dilimleme makinesidir.",
+          "beklenen_kulliyat_output": "Bu işlev için marangozlukta 'şerit testere' tercih edilir.",
+          "http_kod": 200,
+          "sure_sn": 0.25,
+          "response_text": "bu gereksinim için marangozlukta kırlangıç tercih edilir.",
+          "morphemes": "bu gereksinim için marangoz DERIV_lIk CASE_LOC kırlangıç tercih edil TENSE_AORIST .",
+          "entropy_pre": 1.5234463214874268,
+          "entropy_post": 1.0748939514160156,
+          "rag_score": 0.38235294117647056,
+          "source_collection": "kristal_bellek",
+          "router_experts": [
+            "legal",
+            "pedagogy"
+          ],
+          "epistemic_failure": false,
+          "future_train_recorded": false,
+          "hata": null,
+          "kelime_f1_vs_kulliyat": 0.6667
+        },
+        {
+          "etiket": "M4 gönye",
+          "soru": "Atölye şefinin değerlendirmesi: Ahşap atölyesinde gönye aletinin doğru kullanım tekniği nedir?",
+          "beklenen_kulliyat_output": "Teknik Çözüm: Gönye ahşap parçaların 90 derece dik açılarını, düzlemselliklerini ve paralelliklerini kontrol etmeye yarayan l biçimli ölçüm aletidir. Aletin kesici ağzı daima keskin tutulmalı ve parçaya uygun açıyla yanaşılmalıdır.",
+          "http_kod": 200,
+          "sure_sn": 0.38,
+          "response_text": "teknik çözüm: Tanımlanan özellikler doğrudan kestane ağacına aittir.",
+          "morphemes": "teknik çözüm : Tanımlanan özel DERIV_lIk PLURAL doğrudan kestane ağaç POSS_2SG CASE_DAT ait COPULA_AORIST .",
+          "entropy_pre": 3.347578525543213,
+          "entropy_post": 0.7754754424095154,
+          "rag_score": 0.2848484848484848,
+          "source_collection": "kristal_bellek",
+          "router_experts": [
+            "legal",
+            "pedagogy"
+          ],
+          "epistemic_failure": false,
+          "future_train_recorded": false,
+          "hata": null,
+          "kelime_f1_vs_kulliyat": 0.1053
+        },
+        {
+          "etiket": "M5 zeytin ağacı",
+          "soru": "Kıvrımlı, kontrastlı damarlarıyla eşsiz bir desene ve sertliğe sahiptir",
+          "beklenen_kulliyat_output": "Bu gereksinim için zeytin ağacı son derece uygundur. Kıvrımlı, kontrastlı damarlarıyla eşsiz bir desene ve sertliğe sahiptir; dekoratif sunum tahtaları ve mutfak eşyalarında popülerdir.",
+          "http_kod": 200,
+          "sure_sn": 0.53,
+          "response_text": "teknik çözüm: Tanımlanan özellikler doğrudan kayın ağacına aittir.",
+          "morphemes": "teknik çözüm : Tanımlanan özel DERIV_lIk PLURAL doğrudan kayın ağaç POSS_2SG CASE_DAT ait COPULA_AORIST .",
+          "entropy_pre": 2.965416431427002,
+          "entropy_post": 0.8292009830474854,
+          "rag_score": 1.0,
+          "source_collection": "kristal_bellek",
+          "router_experts": [
+            "legal",
+            "pedagogy"
+          ],
+          "epistemic_failure": false,
+          "future_train_recorded": false,
+          "hata": null,
+          "kelime_f1_vs_kulliyat": 0.0
+        },
+        {
+          "etiket": "G1 genel",
+          "soru": "Türkiye'nin başkenti neresidir?",
+          "beklenen_kulliyat_output": "KULLIYATTA YOK",
+          "http_kod": 200,
+          "sure_sn": 0.3,
+          "response_text": "teknik çözüm: bu gereksinim için marangozlukta kırlangıç tercih edilir.",
+          "morphemes": "teknik çözüm : bu gereksinim için marangoz DERIV_lIk CASE_LOC kırlangıç tercih edil TENSE_AORIST .",
+          "entropy_pre": 3.4988980293273926,
+          "entropy_post": 1.2707960605621338,
+          "rag_score": 0.0,
+          "source_collection": "kristal_bellek",
+          "router_experts": [
+            "legal",
+            "pedagogy"
+          ],
+          "epistemic_failure": false,
+          "future_train_recorded": false,
+          "hata": null,
+          "kelime_f1_vs_kulliyat": null
+        }
+      ],
+      "hata": null,
+      "yukleme_sn": 1.58,
+      "gateway_status": {
+        "status": "online",
+        "device": "mps",
+        "kristal_bellek_docs": 25,
+        "simulasyon_bellek_docs": 1,
+        "epistemic_backlog_samples": 1,
+        "future_train_path": "data/future_train_vector.jsonl"
+      },
+      "sure_sn": 4.84,
+      "f1_ort_kulliyat_var": 0.1652,
+      "en_sik_yanit": "teknik çözüm: Tanımlanan özellikler doğrudan kestane ağacına aittir.",
+      "en_sik_yanit_adet": 2,
+      "benzersiz_yanit": 5
+    },
+    {
+      "ad": "R4",
+      "model_yolu": "scratch/t0094_sonda/arm_R4.pt",
+      "model_sha256": "f3bd5be6aa71702bbaa60a8622e1be2cf00d0b9c15d4737cedcf667bdca9e574",
+      "vocab_yolu": "data/rebuild/vocab_anka_r1_33114.json",
+      "vocab_sha256": "f9940a8d8e1f7cd9428d389f12ff4c5ee448e5a7bfcdcc8ecc9c616fce950984",
+      "device_istenen": "mps",
+      "port": 8101,
+      "sorgular": [
+        {
+          "etiket": "M1 vernik",
+          "soru": "Ahşap atölyesi güvenlik ve imalat rehberi: Ahşabın son kat yüzeyinde dolgu verniği nasıl tatbik edilmelidir?",
+          "beklenen_kulliyat_output": "Dolgu verniği uygulamasında ahşabın açık gözeneklerini doldurarak son kat cila için cam gibi pürüzsüz ve homojen bir alt zemin hazırlayan astar verniktir.",
+          "http_kod": 200,
+          "sure_sn": 0.5,
+          "response_text": "teknik çözüm: bu gereksinim için marangozlukta ve parçaya uygun açıyla yanaşılmalıdır.",
+          "morphemes": "teknik çözüm : bu gereksinim için marangoz DERIV_lIk CASE_LOC ve parça CASE_DAT uygun açı CASE_INS yanaşıl TENSE_NECESS COPULA_AORIST .",
+          "entropy_pre": 1.2011487483978271,
+          "entropy_post": 1.4687097072601318,
+          "rag_score": 0.2753333333333333,
+          "source_collection": "kristal_bellek",
+          "router_experts": [
+            "carpenter",
+            "pedagogy"
+          ],
+          "epistemic_failure": false,
+          "future_train_recorded": false,
+          "hata": null,
+          "kelime_f1_vs_kulliyat": 0.1212
+        },
+        {
+          "etiket": "M2 kurt dişi",
+          "soru": "Geleneksel ahşap zanaatı sorusu: Usta marangoz olarak kurt dişi birleştirme geçme tekniğinin püf noktalarını açıkla.",
+          "beklenen_kulliyat_output": "Kurt dişi birleştirme uygulamasında açılı zikzak dişlerle ahşap parçaların boylamasına eklenerek sonsuz kereste elde edilmesini sağlayan endüstriyel eklemedir. Birleşme yanaklarının birbirine boşluksuz ve kasmadan oturması mukavemet için şarttır.",
+          "http_kod": 200,
+          "sure_sn": 0.46,
+          "response_text": "teknik çözüm: Tanımlanan özellikler doğrudan ahşap parçaya uygun açıyla yanaşılmalıdır.",
+          "morphemes": "teknik çözüm : Tanımlanan özel DERIV_lIk PLURAL doğrudan ahşap parça CASE_DAT uygun açı CASE_INS yanaşıl TENSE_NECESS COPULA_AORIST .",
+          "entropy_pre": 2.755308151245117,
+          "entropy_post": 0.9665629267692566,
+          "rag_score": 0.23680555555555555,
+          "source_collection": "kristal_bellek",
+          "router_experts": [
+            "pedagogy",
+            "carpenter"
+          ],
+          "epistemic_failure": false,
+          "future_train_recorded": false,
+          "hata": null,
+          "kelime_f1_vs_kulliyat": 0.0526
+        },
+        {
+          "etiket": "M3 şerit testere",
+          "soru": "İki kasnak arasında dönen sürekli esnek şerit bıçağıyla kavisli kesimler, biçme ve kalın keresteyi dilimleme makinesidir.",
+          "beklenen_kulliyat_output": "Bu işlev için marangozlukta 'şerit testere' tercih edilir.",
+          "http_kod": 200,
+          "sure_sn": 0.23,
+          "response_text": "bu gereksinim için marangozlukta kullanılır.",
+          "morphemes": "bu gereksinim için marangoz DERIV_lIk CASE_LOC kullanıl TENSE_AORIST .",
+          "entropy_pre": 1.3092199563980103,
+          "entropy_post": 1.2437736988067627,
+          "rag_score": 0.38235294117647056,
+          "source_collection": "kristal_bellek",
+          "router_experts": [
+            "carpenter",
+            "pedagogy"
+          ],
+          "epistemic_failure": false,
+          "future_train_recorded": false,
+          "hata": null,
+          "kelime_f1_vs_kulliyat": 0.4615
+        },
+        {
+          "etiket": "M4 gönye",
+          "soru": "Atölye şefinin değerlendirmesi: Ahşap atölyesinde gönye aletinin doğru kullanım tekniği nedir?",
+          "beklenen_kulliyat_output": "Teknik Çözüm: Gönye ahşap parçaların 90 derece dik açılarını, düzlemselliklerini ve paralelliklerini kontrol etmeye yarayan l biçimli ölçüm aletidir. Aletin kesici ağzı daima keskin tutulmalı ve parçaya uygun açıyla yanaşılmalıdır.",
+          "http_kod": 200,
+          "sure_sn": 0.31,
+          "response_text": "teknik çözüm: Tanımlanan özellikler doğrudan ahşap parça birleşimdir.",
+          "morphemes": "teknik çözüm : Tanımlanan özel DERIV_lIk PLURAL doğrudan ahşap parça birleşim COPULA_AORIST .",
+          "entropy_pre": 1.8099737167358398,
+          "entropy_post": 0.8676245212554932,
+          "rag_score": 0.2848484848484848,
+          "source_collection": "kristal_bellek",
+          "router_experts": [
+            "carpenter",
+            "pedagogy"
+          ],
+          "epistemic_failure": false,
+          "future_train_recorded": false,
+          "hata": null,
+          "kelime_f1_vs_kulliyat": 0.1579
+        },
+        {
+          "etiket": "M5 zeytin ağacı",
+          "soru": "Kıvrımlı, kontrastlı damarlarıyla eşsiz bir desene ve sertliğe sahiptir",
+          "beklenen_kulliyat_output": "Bu gereksinim için zeytin ağacı son derece uygundur. Kıvrımlı, kontrastlı damarlarıyla eşsiz bir desene ve sertliğe sahiptir; dekoratif sunum tahtaları ve mutfak eşyalarında popülerdir.",
+          "http_kod": 200,
+          "sure_sn": 0.56,
+          "response_text": "usta marangoz: bu gereksinim için marangozlukta ve parçaya uygun açıyla yanaşılmalıdır.",
+          "morphemes": "usta marangoz : bu gereksinim için marangoz DERIV_lIk CASE_LOC ve parça CASE_DAT uygun açı CASE_INS yanaşıl TENSE_NECESS COPULA_AORIST .",
+          "entropy_pre": 1.689903736114502,
+          "entropy_post": 1.113182544708252,
+          "rag_score": 1.0,
+          "source_collection": "kristal_bellek",
+          "router_experts": [
+            "carpenter",
+            "pedagogy"
+          ],
+          "epistemic_failure": false,
+          "future_train_recorded": false,
+          "hata": null,
+          "kelime_f1_vs_kulliyat": 0.2286
+        },
+        {
+          "etiket": "G1 genel",
+          "soru": "Türkiye'nin başkenti neresidir?",
+          "beklenen_kulliyat_output": "KULLIYATTA YOK",
+          "http_kod": 200,
+          "sure_sn": 0.49,
+          "response_text": "teknik çözüm: bu gereksinim için marangozlukta ve [?]- ı [Özel İsim], Danimarka'lı bir devlet adamıdır.",
+          "morphemes": "teknik çözüm : bu gereksinim için marangoz DERIV_lIk CASE_LOC ve <UNK> - ı <PROPER_NOUN> , Danimarka DERIV_lI bir devlet adamı COPULA_AORIST .",
+          "entropy_pre": 5.276554107666016,
+          "entropy_post": 4.826875686645508,
+          "rag_score": 0.0,
+          "source_collection": "kristal_bellek",
+          "router_experts": [
+            "carpenter",
+            "pedagogy"
+          ],
+          "epistemic_failure": false,
+          "future_train_recorded": false,
+          "hata": null,
+          "kelime_f1_vs_kulliyat": null
+        }
+      ],
+      "hata": null,
+      "yukleme_sn": 1.43,
+      "gateway_status": {
+        "status": "online",
+        "device": "mps",
+        "kristal_bellek_docs": 25,
+        "simulasyon_bellek_docs": 1,
+        "epistemic_backlog_samples": 1,
+        "future_train_path": "data/future_train_vector.jsonl"
+      },
+      "sure_sn": 4.89,
+      "f1_ort_kulliyat_var": 0.2044,
+      "en_sik_yanit": "teknik çözüm: bu gereksinim için marangozlukta ve parçaya uygun açıyla yanaşılmalıdır.",
+      "en_sik_yanit_adet": 1,
+      "benzersiz_yanit": 6
+    },
+    {
+      "ad": "R10",
+      "model_yolu": "scratch/t0094_sonda/arm_R10.pt",
+      "model_sha256": "1163b918abd6f52ced42b916d8edd085daa835ef912fe37d459cfa9750f125a4",
+      "vocab_yolu": "data/rebuild/vocab_anka_r1_33114.json",
+      "vocab_sha256": "f9940a8d8e1f7cd9428d389f12ff4c5ee448e5a7bfcdcc8ecc9c616fce950984",
+      "device_istenen": "mps",
+      "port": 8102,
+      "sorgular": [
+        {
+          "etiket": "M1 vernik",
+          "soru": "Ahşap atölyesi güvenlik ve imalat rehberi: Ahşabın son kat yüzeyinde dolgu verniği nasıl tatbik edilmelidir?",
+          "beklenen_kulliyat_output": "Dolgu verniği uygulamasında ahşabın açık gözeneklerini doldurarak son kat cila için cam gibi pürüzsüz ve homojen bir alt zemin hazırlayan astar verniktir.",
+          "http_kod": 200,
+          "sure_sn": 0.42,
+          "response_text": "teknik çözüm: bu gereksinim için marangozlukta kırlangıç tercih edilir.",
+          "morphemes": "teknik çözüm : bu gereksinim için marangoz DERIV_lIk CASE_LOC kırlangıç tercih edil TENSE_AORIST .",
+          "entropy_pre": 1.2686915397644043,
+          "entropy_post": 0.8205581903457642,
+          "rag_score": 0.2753333333333333,
+          "source_collection": "kristal_bellek",
+          "router_experts": [
+            "pedagogy",
+            "legal"
+          ],
+          "epistemic_failure": false,
+          "future_train_recorded": false,
+          "hata": null,
+          "kelime_f1_vs_kulliyat": 0.0645
+        },
+        {
+          "etiket": "M2 kurt dişi",
+          "soru": "Geleneksel ahşap zanaatı sorusu: Usta marangoz olarak kurt dişi birleştirme geçme tekniğinin püf noktalarını açıkla.",
+          "beklenen_kulliyat_output": "Kurt dişi birleştirme uygulamasında açılı zikzak dişlerle ahşap parçaların boylamasına eklenerek sonsuz kereste elde edilmesini sağlayan endüstriyel eklemedir. Birleşme yanaklarının birbirine boşluksuz ve kasmadan oturması mukavemet için şarttır.",
+          "http_kod": 200,
+          "sure_sn": 0.41,
+          "response_text": "teknik çözüm: Tanımlanan özellikler doğrudan çam ağacına aittir.",
+          "morphemes": "teknik çözüm : Tanımlanan özel DERIV_lIk PLURAL doğrudan çam ağaç POSS_2SG CASE_DAT ait COPULA_AORIST .",
+          "entropy_pre": 2.3119359016418457,
+          "entropy_post": 0.5271761417388916,
+          "rag_score": 0.23680555555555555,
+          "source_collection": "kristal_bellek",
+          "router_experts": [
+            "pedagogy",
+            "carpenter"
+          ],
+          "epistemic_failure": false,
+          "future_train_recorded": false,
+          "hata": null,
+          "kelime_f1_vs_kulliyat": 0.0
+        },
+        {
+          "etiket": "M3 şerit testere",
+          "soru": "İki kasnak arasında dönen sürekli esnek şerit bıçağıyla kavisli kesimler, biçme ve kalın keresteyi dilimleme makinesidir.",
+          "beklenen_kulliyat_output": "Bu işlev için marangozlukta 'şerit testere' tercih edilir.",
+          "http_kod": 200,
+          "sure_sn": 0.37,
+          "response_text": "teknik çözüm: bu gereksinim için marangozlukta ve iç [?] bahçe mobilyasıdır.",
+          "morphemes": "teknik çözüm : bu gereksinim için marangoz DERIV_lIk CASE_LOC ve iç <UNK> bahçe mobilya POSS_3SG COPULA_AORIST .",
+          "entropy_pre": 1.7603833675384521,
+          "entropy_post": 0.8084903955459595,
+          "rag_score": 0.38235294117647056,
+          "source_collection": "kristal_bellek",
+          "router_experts": [
+            "pedagogy",
+            "legal"
+          ],
+          "epistemic_failure": false,
+          "future_train_recorded": false,
+          "hata": null,
+          "kelime_f1_vs_kulliyat": 0.3158
+        },
+        {
+          "etiket": "M4 gönye",
+          "soru": "Atölye şefinin değerlendirmesi: Ahşap atölyesinde gönye aletinin doğru kullanım tekniği nedir?",
+          "beklenen_kulliyat_output": "Teknik Çözüm: Gönye ahşap parçaların 90 derece dik açılarını, düzlemselliklerini ve paralelliklerini kontrol etmeye yarayan l biçimli ölçüm aletidir. Aletin kesici ağzı daima keskin tutulmalı ve parçaya uygun açıyla yanaşılmalıdır.",
+          "http_kod": 200,
+          "sure_sn": 0.38,
+          "response_text": "teknik çözüm: Tanımlanan özellikler doğrudan çam ağacına aittir.",
+          "morphemes": "teknik çözüm : Tanımlanan özel DERIV_lIk PLURAL doğrudan çam ağaç POSS_2SG CASE_DAT ait COPULA_AORIST .",
+          "entropy_pre": 2.1980645656585693,
+          "entropy_post": 0.5929269790649414,
+          "rag_score": 0.2848484848484848,
+          "source_collection": "kristal_bellek",
+          "router_experts": [
+            "pedagogy",
+            "legal"
+          ],
+          "epistemic_failure": false,
+          "future_train_recorded": false,
+          "hata": null,
+          "kelime_f1_vs_kulliyat": 0.1053
+        },
+        {
+          "etiket": "M5 zeytin ağacı",
+          "soru": "Kıvrımlı, kontrastlı damarlarıyla eşsiz bir desene ve sertliğe sahiptir",
+          "beklenen_kulliyat_output": "Bu gereksinim için zeytin ağacı son derece uygundur. Kıvrımlı, kontrastlı damarlarıyla eşsiz bir desene ve sertliğe sahiptir; dekoratif sunum tahtaları ve mutfak eşyalarında popülerdir.",
+          "http_kod": 200,
+          "sure_sn": 0.87,
+          "response_text": "teknik çözüm: bu işlem için marangozlukta ve parça aletlerin birbirine boşluksuz ve kasmadan oturması mukavemet için şarttır.",
+          "morphemes": "teknik çözüm : bu işlem için marangoz DERIV_lIk CASE_LOC ve parça alet PLURAL POSS_2SG birbiri POSS_2SG CASE_DAT boş DERIV_lIk DERIV_sIz ve kas GERUND_mAdAn oturma POSS_3SG mukavemet için şart COPULA_AORIST .",
+          "entropy_pre": 2.1787567138671875,
+          "entropy_post": 0.4544334411621094,
+          "rag_score": 1.0,
+          "source_collection": "kristal_bellek",
+          "router_experts": [
+            "pedagogy",
+            "legal"
+          ],
+          "epistemic_failure": false,
+          "future_train_recorded": false,
+          "hata": null,
+          "kelime_f1_vs_kulliyat": 0.1951
+        },
+        {
+          "etiket": "G1 genel",
+          "soru": "Türkiye'nin başkenti neresidir?",
+          "beklenen_kulliyat_output": "KULLIYATTA YOK",
+          "http_kod": 200,
+          "sure_sn": 0.53,
+          "response_text": "teknik çözüm: bu gereksinim için marangozlukta ve iç [?] bahçe aletlerinde kullanılan hibrit bir ağaçtır.",
+          "morphemes": "teknik çözüm : bu gereksinim için marangoz DERIV_lIk CASE_LOC ve iç <UNK> bahçe alet POSS_3PL CASE_LOC_N kullanıl PART_An hibrit bir ağaç COPULA_AORIST .",
+          "entropy_pre": 3.7348744869232178,
+          "entropy_post": 1.1058098077774048,
+          "rag_score": 0.0,
+          "source_collection": "kristal_bellek",
+          "router_experts": [
+            "pedagogy",
+            "legal"
+          ],
+          "epistemic_failure": false,
+          "future_train_recorded": false,
+          "hata": null,
+          "kelime_f1_vs_kulliyat": null
+        }
+      ],
+      "hata": null,
+      "yukleme_sn": 1.35,
+      "gateway_status": {
+        "status": "online",
+        "device": "mps",
+        "kristal_bellek_docs": 25,
+        "simulasyon_bellek_docs": 1,
+        "epistemic_backlog_samples": 1,
+        "future_train_path": "data/future_train_vector.jsonl"
+      },
+      "sure_sn": 5.24,
+      "f1_ort_kulliyat_var": 0.1361,
+      "en_sik_yanit": "teknik çözüm: Tanımlanan özellikler doğrudan çam ağacına aittir.",
+      "en_sik_yanit_adet": 2,
+      "benzersiz_yanit": 5
+    },
+    {
+      "ad": "R20",
+      "model_yolu": "scratch/t0094_sonda/arm_R20.pt",
+      "model_sha256": "1d04365518cb067abca89a122913dd1911158196cfb1c9149b7cdba4f675d6fa",
+      "vocab_yolu": "data/rebuild/vocab_anka_r1_33114.json",
+      "vocab_sha256": "f9940a8d8e1f7cd9428d389f12ff4c5ee448e5a7bfcdcc8ecc9c616fce950984",
+      "device_istenen": "mps",
+      "port": 8103,
+      "sorgular": [
+        {
+          "etiket": "M1 vernik",
+          "soru": "Ahşap atölyesi güvenlik ve imalat rehberi: Ahşabın son kat yüzeyinde dolgu verniği nasıl tatbik edilmelidir?",
+          "beklenen_kulliyat_output": "Dolgu verniği uygulamasında ahşabın açık gözeneklerini doldurarak son kat cila için cam gibi pürüzsüz ve homojen bir alt zemin hazırlayan astar verniktir.",
+          "http_kod": 200,
+          "sure_sn": 0.42,
+          "response_text": "teknik çözüm: Tanımlanan özellikler doğrudan kestane ağacına aittir.",
+          "morphemes": "teknik çözüm : Tanımlanan özel DERIV_lIk PLURAL doğrudan kestane ağaç POSS_2SG CASE_DAT ait COPULA_AORIST .",
+          "entropy_pre": 1.157318353652954,
+          "entropy_post": 0.9507243633270264,
+          "rag_score": 0.2753333333333333,
+          "source_collection": "kristal_bellek",
+          "router_experts": [
+            "pedagogy",
+            "carpenter"
+          ],
+          "epistemic_failure": false,
+          "future_train_recorded": false,
+          "hata": null,
+          "kelime_f1_vs_kulliyat": 0.0
+        },
+        {
+          "etiket": "M2 kurt dişi",
+          "soru": "Geleneksel ahşap zanaatı sorusu: Usta marangoz olarak kurt dişi birleştirme geçme tekniğinin püf noktalarını açıkla.",
+          "beklenen_kulliyat_output": "Kurt dişi birleştirme uygulamasında açılı zikzak dişlerle ahşap parçaların boylamasına eklenerek sonsuz kereste elde edilmesini sağlayan endüstriyel eklemedir. Birleşme yanaklarının birbirine boşluksuz ve kasmadan oturması mukavemet için şarttır.",
+          "http_kod": 200,
+          "sure_sn": 0.8,
+          "response_text": "teknik çözüm: usta Tavsiyesi: genel [?] bahçe mobilyasında ve ahşabına çok dayanıklıdır; dış [?] bahçe mobilyası ve tekne güvertelerinde kullanılır.",
+          "morphemes": "teknik çözüm : usta Tavsiyesi : genel <UNK> bahçe mobilya POSS_3SG CASE_LOC_N ve ahşap POSS_2SG CASE_DAT çok dayanıklı COPULA_AORIST ; dış <UNK> bahçe mobilya POSS_3SG ve tekne güverte POSS_3PL CASE_LOC_N kullanıl TENSE_AORIST .",
+          "entropy_pre": 2.605315923690796,
+          "entropy_post": 1.2553224563598633,
+          "rag_score": 0.23680555555555555,
+          "source_collection": "kristal_bellek",
+          "router_experts": [
+            "pedagogy",
+            "carpenter"
+          ],
+          "epistemic_failure": false,
+          "future_train_recorded": false,
+          "hata": null,
+          "kelime_f1_vs_kulliyat": 0.0417
+        },
+        {
+          "etiket": "M3 şerit testere",
+          "soru": "İki kasnak arasında dönen sürekli esnek şerit bıçağıyla kavisli kesimler, biçme ve kalın keresteyi dilimleme makinesidir.",
+          "beklenen_kulliyat_output": "Bu işlev için marangozlukta 'şerit testere' tercih edilir.",
+          "http_kod": 200,
+          "sure_sn": 0.24,
+          "response_text": "bu gereksinim için marangozlukta kullanılır.",
+          "morphemes": "bu gereksinim için marangoz DERIV_lIk CASE_LOC kullanıl TENSE_AORIST .",
+          "entropy_pre": 1.3764102458953857,
+          "entropy_post": 0.6234956383705139,
+          "rag_score": 0.38235294117647056,
+          "source_collection": "kristal_bellek",
+          "router_experts": [
+            "pedagogy",
+            "carpenter"
+          ],
+          "epistemic_failure": false,
+          "future_train_recorded": false,
+          "hata": null,
+          "kelime_f1_vs_kulliyat": 0.4615
+        },
+        {
+          "etiket": "M4 gönye",
+          "soru": "Atölye şefinin değerlendirmesi: Ahşap atölyesinde gönye aletinin doğru kullanım tekniği nedir?",
+          "beklenen_kulliyat_output": "Teknik Çözüm: Gönye ahşap parçaların 90 derece dik açılarını, düzlemselliklerini ve paralelliklerini kontrol etmeye yarayan l biçimli ölçüm aletidir. Aletin kesici ağzı daima keskin tutulmalı ve parçaya uygun açıyla yanaşılmalıdır.",
+          "http_kod": 200,
+          "sure_sn": 0.34,
+          "response_text": "teknik çözüm: Tanımlanan özellikler doğrudan kırlangıç ağacına aittir.",
+          "morphemes": "teknik çözüm : Tanımlanan özel DERIV_lIk PLURAL doğrudan kırlangıç ağaç POSS_2SG CASE_DAT ait COPULA_AORIST .",
+          "entropy_pre": 1.3797687292099,
+          "entropy_post": 0.86179119348526,
+          "rag_score": 0.2848484848484848,
+          "source_collection": "kristal_bellek",
+          "router_experts": [
+            "pedagogy",
+            "carpenter"
+          ],
+          "epistemic_failure": false,
+          "future_train_recorded": false,
+          "hata": null,
+          "kelime_f1_vs_kulliyat": 0.1053
+        },
+        {
+          "etiket": "M5 zeytin ağacı",
+          "soru": "Kıvrımlı, kontrastlı damarlarıyla eşsiz bir desene ve sertliğe sahiptir",
+          "beklenen_kulliyat_output": "Bu gereksinim için zeytin ağacı son derece uygundur. Kıvrımlı, kontrastlı damarlarıyla eşsiz bir desene ve sertliğe sahiptir; dekoratif sunum tahtaları ve mutfak eşyalarında popülerdir.",
+          "http_kod": 200,
+          "sure_sn": 0.49,
+          "response_text": "teknik çözüm: Tanımlanan özellikler doğrudan kestane ağacına aittir.",
+          "morphemes": "teknik çözüm : Tanımlanan özel DERIV_lIk PLURAL doğrudan kestane ağaç POSS_2SG CASE_DAT ait COPULA_AORIST .",
+          "entropy_pre": 2.2033329010009766,
+          "entropy_post": 0.8744345903396606,
+          "rag_score": 1.0,
+          "source_collection": "kristal_bellek",
+          "router_experts": [
+            "pedagogy",
+            "carpenter"
+          ],
+          "epistemic_failure": false,
+          "future_train_recorded": false,
+          "hata": null,
+          "kelime_f1_vs_kulliyat": 0.0
+        },
+        {
+          "etiket": "G1 genel",
+          "soru": "Türkiye'nin başkenti neresidir?",
+          "beklenen_kulliyat_output": "KULLIYATTA YOK",
+          "http_kod": 200,
+          "sure_sn": 0.83,
+          "response_text": "teknik çözüm: bu gereksinim için marangozluktaki en rahat işlenen, yoğun işkence ve nihai yapıya sahiptir; dış [?] ise yüzde 125 derece olmalıdır.",
+          "morphemes": "teknik çözüm : bu gereksinim için marangoz DERIV_lIk CASE_LOC REL_ki en rahat işlen PART_An , yoğun işkence ve nihai yapı CASE_DAT sahip COPULA_AORIST ; dış <UNK> is CASE_DAT yüzde 1 2 5 derece ol TENSE_NECESS COPULA_AORIST .",
+          "entropy_pre": 2.9106481075286865,
+          "entropy_post": 0.9192982912063599,
+          "rag_score": 0.0,
+          "source_collection": "kristal_bellek",
+          "router_experts": [
+            "pedagogy",
+            "carpenter"
+          ],
+          "epistemic_failure": false,
+          "future_train_recorded": false,
+          "hata": null,
+          "kelime_f1_vs_kulliyat": null
+        }
+      ],
+      "hata": null,
+      "yukleme_sn": 1.18,
+      "gateway_status": {
+        "status": "online",
+        "device": "mps",
+        "kristal_bellek_docs": 25,
+        "simulasyon_bellek_docs": 1,
+        "epistemic_backlog_samples": 1,
+        "future_train_path": "data/future_train_vector.jsonl"
+      },
+      "sure_sn": 5.2,
+      "f1_ort_kulliyat_var": 0.1217,
+      "en_sik_yanit": "teknik çözüm: Tanımlanan özellikler doğrudan kestane ağacına aittir.",
+      "en_sik_yanit_adet": 2,
+      "benzersiz_yanit": 5
+    }
+  ],
+  "korunan_yuzey_once": {
+    "data/future_train_vector.jsonl": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "data/qdrant_db/.lock": "67a987c432005e3afcc13a871b3ddabaeee0f4504058da65b0769016d3083b44",
+    "data/qdrant_db/meta.json": "4c35797760c04484b6381f237d8bd7ec13b155857fafb9052dc4e289ade51e4b",
+    "data/qdrant_db/collection/simulasyon_bellek/storage.sqlite": "79c76eb766d3e582bd1128dd855b1d34a7a02eebc1356f1598331968941373e4",
+    "data/qdrant_db/collection/test_temp_coll/storage.sqlite": "6862b8a9abdf270b38adafbd32d1a022fc08bf1ec63cfe3162c187af1471b492",
+    "data/qdrant_db/collection/kristal_bellek/storage.sqlite": "f38f7086a1c7396af9b2359393352ed4a31429cf6ff428b7b1257c25711fcb6d",
+    "data/qdrant_db/collection/muhakeme_bellek/storage.sqlite": "6862b8a9abdf270b38adafbd32d1a022fc08bf1ec63cfe3162c187af1471b492"
+  },
+  "korunan_yuzey_sonra": {
+    "data/future_train_vector.jsonl": "964a168d5075bbf0f31a1f7f5b48b759fafe8f60946d861393af633dbe08410c",
+    "data/qdrant_db/.lock": "67a987c432005e3afcc13a871b3ddabaeee0f4504058da65b0769016d3083b44",
+    "data/qdrant_db/meta.json": "4c35797760c04484b6381f237d8bd7ec13b155857fafb9052dc4e289ade51e4b",
+    "data/qdrant_db/collection/simulasyon_bellek/storage.sqlite": "79c76eb766d3e582bd1128dd855b1d34a7a02eebc1356f1598331968941373e4",
+    "data/qdrant_db/collection/test_temp_coll/storage.sqlite": "6862b8a9abdf270b38adafbd32d1a022fc08bf1ec63cfe3162c187af1471b492",
+    "data/qdrant_db/collection/kristal_bellek/storage.sqlite": "f38f7086a1c7396af9b2359393352ed4a31429cf6ff428b7b1257c25711fcb6d",
+    "data/qdrant_db/collection/muhakeme_bellek/storage.sqlite": "6862b8a9abdf270b38adafbd32d1a022fc08bf1ec63cfe3162c187af1471b492"
+  },
+  "korunan_yuzey_degisti": [
+    "data/future_train_vector.jsonl"
+  ],
+  "olcut_cipalari": {
+    "ref_kendine_f1": 1.0,
+    "bos_yanit_f1": 0.0,
+    "not": "ölçüt ayırt ediyor mu — tavan 1,0, taban 0,0; ikisi de tutuyorsa ölçüt ölü değildir"
+  },
+  "digestler": {
+    "data/anka_a1r.pt": "b93cc1cd54093fc63342d394abe528f2128dc16e20b4d7ac6ab680854b4d6293",
+    "scratch/t0094_sonda/arm_R0.pt": "ba313677466108ba0e18dbb851390a0635c592da8a631cf95eb4729532df2120",
+    "scratch/t0094_sonda/arm_R4.pt": "f3bd5be6aa71702bbaa60a8622e1be2cf00d0b9c15d4737cedcf667bdca9e574",
+    "scratch/t0094_sonda/arm_R10.pt": "1163b918abd6f52ced42b916d8edd085daa835ef912fe37d459cfa9750f125a4",
+    "scratch/t0094_sonda/arm_R20.pt": "1d04365518cb067abca89a122913dd1911158196cfb1c9149b7cdba4f675d6fa",
+    "data/rebuild/vocab_anka_r1_33114.json": "f9940a8d8e1f7cd9428d389f12ff4c5ee448e5a7bfcdcc8ecc9c616fce950984",
+    "data/lexicon/roots.tsv": "fe3005e5e2a594f09cbcfc3286e2c8812953ae6614333815ab87a7e3a6763598",
+    "data/lexicon/roots_anka_r1.tsv": "ea874a73c0d5669a591cef00c9d4fb16916ea3e60e42df9d3c73445c4b7efd59",
+    "data/future_train_vector.jsonl": "964a168d5075bbf0f31a1f7f5b48b759fafe8f60946d861393af633dbe08410c",
+    "data/pedagogy_canonical/carpenter_canonical.jsonl": "d0d9703970d8d41eda64f8a0b8f3064d3c45177bdf77250bab7c71e02fc38ef0",
+    "scratch/t0095_arka_kapi.py": "e248f97b1b4a74b62174f5fb1954acdede4e1eb7afe38e304fef2309449681b1",
+    "scratch/t0095_rapor_uret.py": "9992bc6cfa90b25ca8a125e20466fdfc1c058ee564951fc71ad07833dc014849",
+    "scratch/t0095_arka_kapi/KANIT_future_train_yazilan_kayit.jsonl": "964a168d5075bbf0f31a1f7f5b48b759fafe8f60946d861393af633dbe08410c"
+  },
+  "digest_notu": "Bu JSON'un ve raporun KENDİ digest'i tabloda yoktur: yazıldıkları anda değişirler (T-0094 §7.0 dersi). Okuyucu kendisi hesaplar.",
+  "git_src_scripts": {
+    "ham": "?? scripts/evaluate_carpenter_anka.py",
+    "izlenen_degisen": [],
+    "izlenmeyen_yeni": [
+      "?? scripts/evaluate_carpenter_anka.py"
+    ],
+    "hukum": "TEMIZ — izlenen hiçbir dosya değişmedi",
+    "not": "`??` satırları İZLENMEYEN dosyalardır; bu görevde üretilmedi (T-0094'ün `scripts/evaluate_carpenter_anka.py`'si oturum başındaki git durumunda zaten `??` idi). İzlenen-değişen listesi ayrı tutulur çünkü ikisini tek cümlede birleştirmek yanlış hüküm üretir."
+  },
+  "ince_f1_orani": "sözcük F1, 45 jetonluk ARKA KAPI çıktısı ↔ külliyat referansı; T-0094 ROUGE'u DEĞİLDİR",
+  "kapanis": {
+    "donmus": {
+      "task": "T-0095",
+      "claimed_at": "2026-09-20T15:44:18Z",
+      "desen": 10,
+      "taranan": 1478,
+      "donmus_eslesen": 69,
+      "sonrasi_yazim": [],
+      "hukum": "TEMIZ"
+    },
+    "py_compile": {
+      "toplam": 163,
+      "bozuk": [],
+      "hukum": "TEMIZ"
+    },
+    "sayi_denetimi": {
+      "kontrol": 48,
+      "uyusmazlik": [],
+      "hukum": "TEMIZ"
+    },
+    "pytest": {
+      "son_satir": "1 failed, 237 passed in 92.29s (0:01:32)",
+      "dusen_testler": [
+        "tests/test_agent_gateway.py::TestAgentGateway::test_gateway_http_server_endpoints"
+      ],
+      "ham_kuyruk": [
+        "            self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)",
+        "        # Since Linux 6.12.9, SO_REUSEPORT is not allowed",
+        "        # on other address families than AF_INET/AF_INET6.",
+        "        if (",
+        "            self.allow_reuse_port and hasattr(socket, \"SO_REUSEPORT\")",
+        "            and self.address_family in (socket.AF_INET, socket.AF_INET6)",
+        "        ):",
+        "            self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEPORT, 1)",
+        ">       self.socket.bind(self.server_address)",
+        "E       PermissionError: [Errno 1] Operation not permitted",
+        "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/socketserver.py:478: PermissionError",
+        "=========================== short test summary info ============================",
+        "FAILED tests/test_agent_gateway.py::TestAgentGateway::test_gateway_http_server_endpoints",
+        "1 failed, 237 passed in 92.29s (0:01:32)"
+      ]
+    },
+    "damga_utc": "2026-09-20T15:52:27.738261+00:00"
+  }
+}

@@ -1,0 +1,348 @@
+{
+  "gorev": "T-0094",
+  "asama": "Faz 1 — ceket yeniden derleme",
+  "baslangic_utc": "2026-09-20T13:54:44Z",
+  "kapi_ilani": "data/eval/anka_r17_ceket_kapi_ilani_2026-09-20.md",
+  "tasarim": {
+    "literal_entity_mode": false,
+    "seed": 42,
+    "sozluk": "data/rebuild/vocab_anka_r1_33114.json",
+    "lexicon": "data/lexicon/roots_anka_r1.tsv",
+    "kaynaklar": [
+      "data/pedagogy/carpenter_specialization_dataset.jsonl",
+      "data/pedagogy/parenting_deep_dataset.jsonl",
+      "data/pedagogy/high_school_foundation_dataset.jsonl"
+    ],
+    "parent_max": 1500,
+    "found_max": 700,
+    "block_size": 128,
+    "batch_size": 8,
+    "epoch": 3
+  },
+  "kok_bilgisi": {
+    "sozluk": {
+      "yol": "data/rebuild/vocab_anka_r1_33114.json",
+      "sha256": "f9940a8d8e1f7cd9428d389f12ff4c5ee448e5a7bfcdcc8ecc9c616fce950984"
+    },
+    "lexicon": {
+      "yol": "data/lexicon/roots_anka_r1.tsv",
+      "sha256": "ea874a73c0d5669a591cef00c9d4fb16916ea3e60e42df9d3c73445c4b7efd59"
+    }
+  },
+  "carve_out": {
+    "kaynak": "data/pedagogy/carpenter_specialization_dataset.jsonl",
+    "kaynak_sha256": "146a73dce0bf95f11ad9647510c8b500ecabb2f69308e39f597148e2660946fd",
+    "kaynak_satir": 5400,
+    "egitim_satir": 4861,
+    "heldout_satir": 539,
+    "birim": "onek-normalize output GRUBU (satir DEGIL)",
+    "heldout_grup": 178,
+    "oran": 0.1,
+    "seed": 42,
+    "yontem": "grup anahtari siralama + random.Random(42) permutasyonu",
+    "grup_boyut_dagilimi": {
+      "1": 1350,
+      "9": 400,
+      "18": 25
+    },
+    "gecici_egitim_kumesi": "/tmp/claude-501/t0094_carp_train.jsonl",
+    "gecici_egitim_sha256": "bf72e7caf18e6e4a060ff4aea033f57e8e928ed9d52170456b21a651b1afa1f3",
+    "heldout_yol": "data/eval/anka_r17_heldout_2026-09-20.jsonl",
+    "heldout_sha256": "c397eb08218937ea000cc6120f42a8783e1dcab7948c70b33537af74b50d096e",
+    "heldout_ilk_indeksler": [
+      2,
+      8,
+      16,
+      31,
+      37
+    ],
+    "heldout_son_indeksler": [
+      5371,
+      5378,
+      5380,
+      5383,
+      5399
+    ]
+  },
+  "kontrol_kumeleri": {
+    "negatif": {
+      "Ankara": {
+        "PN": 0,
+        "ENT": 0,
+        "jeton": 3,
+        "ids": [
+          2,
+          31511,
+          3
+        ]
+      },
+      "İstanbul": {
+        "PN": 0,
+        "ENT": 0,
+        "jeton": 3,
+        "ids": [
+          2,
+          33102,
+          3
+        ]
+      },
+      "Fransa": {
+        "PN": 0,
+        "ENT": 0,
+        "jeton": 3,
+        "ids": [
+          2,
+          32907,
+          3
+        ]
+      },
+      "İngiliz": {
+        "PN": 0,
+        "ENT": 0,
+        "jeton": 3,
+        "ids": [
+          2,
+          33087,
+          3
+        ]
+      }
+    },
+    "pozitif": {
+      "Zyxwvukent": {
+        "PN": 1,
+        "ENT": 0,
+        "jeton": 3,
+        "ids": [
+          2,
+          4,
+          3
+        ]
+      }
+    },
+    "kesme": {
+      "Ankara'da": {
+        "PN": 0,
+        "ENT": 0,
+        "jeton": 4,
+        "ids": [
+          2,
+          31511,
+          29,
+          3
+        ]
+      },
+      "Ankara'nın": {
+        "PN": 0,
+        "ENT": 0,
+        "jeton": 4,
+        "ids": [
+          2,
+          31511,
+          56,
+          3
+        ]
+      }
+    }
+  },
+  "korunan_artefaktlar": {
+    "data/train_carpenter_specialization.bin": {
+      "once": "13dd81bf700690b78ca15246a2fc1582ee6f8fea587c6d4e78f8ab1e1017b109",
+      "sonra": "13dd81bf700690b78ca15246a2fc1582ee6f8fea587c6d4e78f8ab1e1017b109",
+      "dokunulmadi": true
+    },
+    "data/anka_a1r.pt": {
+      "once": "b93cc1cd54093fc63342d394abe528f2128dc16e20b4d7ac6ab680854b4d6293",
+      "sonra": "b93cc1cd54093fc63342d394abe528f2128dc16e20b4d7ac6ab680854b4d6293",
+      "dokunulmadi": true
+    },
+    "data/anka_a1.pt": {
+      "once": "f32d492d9361c668bc86e4e4b0f99f5c473af552486837452475f8b0aa3eb5b4",
+      "sonra": "f32d492d9361c668bc86e4e4b0f99f5c473af552486837452475f8b0aa3eb5b4",
+      "dokunulmadi": true
+    },
+    "data/anka_a1r_pretrain.bin": {
+      "once": "9f9875762518829dec8f5baa41bd012ee1abf72fb630e24840bafedf691d4f22",
+      "sonra": "9f9875762518829dec8f5baa41bd012ee1abf72fb630e24840bafedf691d4f22",
+      "dokunulmadi": true
+    }
+  },
+  "source_stats": {
+    "carpenter_specialization": {
+      "missing": false,
+      "raw_lines": 4861,
+      "sampled": 4861,
+      "json_errors": 0,
+      "encode_errors": 0,
+      "normalize_encode_errors": 0,
+      "lines_ok": 4861,
+      "short_skipped": 0,
+      "kept": 9520
+    },
+    "anchor_parenting": {
+      "missing": false,
+      "raw_lines": 40001,
+      "sampled": 1500,
+      "json_errors": 0,
+      "encode_errors": 0,
+      "lines_ok": 1500,
+      "short_skipped": 0,
+      "kept": 1500
+    },
+    "anchor_foundation": {
+      "missing": false,
+      "raw_lines": 688,
+      "sampled": 688,
+      "json_errors": 0,
+      "encode_errors": 0,
+      "lines_ok": 688,
+      "short_skipped": 0,
+      "kept": 688
+    }
+  },
+  "last_write_utc": "2026-09-20T13:54:49Z",
+  "sizinti_onkontrol": {
+    "a_cevap_kapili": {
+      "output_ham": 0,
+      "output_onek_norm": 0
+    },
+    "a_soru_kapisiz": {
+      "input_ham": 48,
+      "instruction_ham": 83,
+      "input_onek_norm": 48,
+      "instruction_onek_norm": 83
+    },
+    "b_kesisim": 0,
+    "heldout_kayit": 1055,
+    "heldout_grup": 178,
+    "heldout_stats": {
+      "missing": false,
+      "raw_lines": 539,
+      "sampled": 539,
+      "json_errors": 0,
+      "encode_errors": 0,
+      "normalize_encode_errors": 0,
+      "lines_ok": 539,
+      "short_skipped": 0,
+      "kept": 1055
+    }
+  },
+  "kapilar": {
+    "V1_sozluk_kimligi": {
+      "meta_sozluk_sha256": "f9940a8d8e1f7cd9428d389f12ff4c5ee448e5a7bfcdcc8ecc9c616fce950984",
+      "ilan": "f9940a8d8e1f7cd9428d389f12ff4c5ee448e5a7bfcdcc8ecc9c616fce950984",
+      "PASS": true
+    },
+    "V2_onek_invaryanti": {
+      "karsilastirilan_id": 32852,
+      "farkli_id": 0,
+      "farkli_ornek": [],
+      "eklenen_id": 262,
+      "PASS": true
+    },
+    "V3_literal_entity": {
+      "ENT_adet": 0,
+      "CAP_adet": 0,
+      "ALL_CAPS_adet": 0,
+      "PASS": true
+    },
+    "V4_temsil": {
+      "yeni_LIT_bolu_PN": 19.0234,
+      "yeni_PN_adet": 811,
+      "yeni_PN_orani": 0.1033,
+      "yeni_LIT_adet": 15428,
+      "eski_LIT_bolu_PN": 8428.5,
+      "eski_PN_adet": 2,
+      "eski_ENT_plus_CAP": 2012,
+      "PASS": true
+    },
+    "V5_olcek": {
+      "yeni_jeton": 784797,
+      "eski_jeton": 867650,
+      "oran": 0.9045,
+      "PASS": true
+    },
+    "V6_muhasebe": {
+      "kept": 11708,
+      "record_count": 11708,
+      "kept_esit_record_count": true,
+      "kept_ozdesligi": true,
+      "json_errors": 0,
+      "encode_errors": 0,
+      "short_skipped": 0,
+      "PASS": true
+    },
+    "V7_sizinti": {
+      "a_cevap_kapili": {
+        "output_ham": 0,
+        "output_onek_norm": 0
+      },
+      "a_cevap_temiz": true,
+      "a_soru_kapisiz": {
+        "input_ham": 48,
+        "instruction_ham": 83,
+        "input_onek_norm": 48,
+        "instruction_onek_norm": 83
+      },
+      "b_heldout_kayit": 1055,
+      "b_korpus_kayit": 11708,
+      "b_kesisim": 0,
+      "b_temiz": true,
+      "c_artefakt_geri_okuma": true,
+      "heldout_stats": {
+        "missing": false,
+        "raw_lines": 539,
+        "sampled": 539,
+        "json_errors": 0,
+        "encode_errors": 0,
+        "normalize_encode_errors": 0,
+        "lines_ok": 539,
+        "short_skipped": 0,
+        "kept": 1055
+      },
+      "PASS": true
+    }
+  },
+  "artefakt": {
+    "yol": "data/train_carpenter_specialization_anka.bin",
+    "jeton": 784797,
+    "sha256": "8cd0696d90ef3816613cdc1c452580a6e9ab381085462e1d3f3e0e19e4f9c25a",
+    "bayt": 1569594,
+    "max_id": 33105,
+    "min_id": 0,
+    "benzersiz_id": 3306,
+    "pad_adet": 0,
+    "unk_adet": 6130,
+    "unk_orani": 0.7811,
+    "noktalama_adet": 68021,
+    "PROPER_NOUN_adet": 811,
+    "PROPER_NOUN_orani": 0.1033,
+    "bos_adet": 11708,
+    "eos_adet": 11708,
+    "OUTPUT_adet": 11708,
+    "ENT_adet": 0,
+    "CAP_adet": 0,
+    "LIT_adet": 15428,
+    "ALL_CAPS_adet": 0,
+    "LIT_bolu_PN": 19.0234
+  },
+  "kapi_ozet": {
+    "V1_sozluk_kimligi": true,
+    "V2_onek_invaryanti": true,
+    "V3_literal_entity": true,
+    "V4_temsil": true,
+    "V5_olcek": true,
+    "V6_muhasebe": true,
+    "V7_sizinti": true
+  },
+  "koken_sonra": {
+    "sozluk": "f9940a8d8e1f7cd9428d389f12ff4c5ee448e5a7bfcdcc8ecc9c616fce950984",
+    "lexicon": "ea874a73c0d5669a591cef00c9d4fb16916ea3e60e42df9d3c73445c4b7efd59"
+  },
+  "koken_degismedi": {
+    "sozluk": true,
+    "lexicon": true
+  },
+  "meta_sha256": "0625d08b5d42696d771abe4db053a9c97dfca1a4c666d9bf22aae737b8e1d6b3",
+  "steps_hesaplanan": 2301,
+  "bitis_utc": "2026-09-20T13:54:49Z"
+}

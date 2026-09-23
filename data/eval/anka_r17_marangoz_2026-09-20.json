@@ -1,0 +1,447 @@
+{
+  "gorev": "T-0096",
+  "ilan": "data/eval/anka_r17_marangoz_ilani_2026-09-20.md",
+  "basladi_utc": "2026-09-20T17:45:24Z",
+  "bitti_utc": "2026-09-20T20:50:38Z",
+  "sure_toplam_s": 11115.4,
+  "sabit": {
+    "vocab": "data/rebuild/vocab_anka_r1_33114.json",
+    "block": 128,
+    "batch": 8,
+    "lr": 0.0002,
+    "sft": true,
+    "taban": "data/anka_a1r.pt",
+    "mix": "scratch/t0096_kos/mix_r4.bin",
+    "replay_oran_yuzde": 25.0,
+    "adim_basina_jeton": 1024
+  },
+  "segmentler": [
+    {
+      "segment": 1,
+      "adim": 1000,
+      "kumulatif_adim": 1000,
+      "tohum": 43,
+      "egitim": {
+        "rc": 0,
+        "sure_s": 404.0,
+        "mps_satiri": true,
+        "sft_satiri": true,
+        "devam_satiri": true,
+        "ilk_kayip": 3.1864,
+        "ckpt_sha256": "8cede2393a60ea62641c1bff1560ab9543e95f97848f33e69d41f6f4cbc6f5f6",
+        "ckpt_bayt": 373734816,
+        "opt_sha256": "35b214e55562667832e548ea74c327c29d9c63b00524317cdc1258571319de9d"
+      },
+      "eval": {
+        "rc": 0,
+        "A_artis_yuzde": 23.3086,
+        "B_dusus_puan": 0.0793,
+        "A_gec": false,
+        "B_gec": true,
+        "unutma_gec": false,
+        "A_yari_genislik": 0.1152,
+        "B_yari_genislik": 1.9498,
+        "rouge_l_ort": 0.1097,
+        "rouge_l_medyan": 0.0952,
+        "ezber_orani": 20.0,
+        "tutarsizlik_orani": 24.0,
+        "kesisim_orani": 0.0,
+        "n": 100,
+        "A_taban_CE": 3.5351739511825144,
+        "A_kol_CE": 4.359172218944877,
+        "B_taban_top1": 49.5638,
+        "B_kol_top1": 49.4845
+      },
+      "hata": null
+    },
+    {
+      "segment": 2,
+      "adim": 2000,
+      "kumulatif_adim": 3000,
+      "tohum": 44,
+      "egitim": {
+        "rc": 0,
+        "sure_s": 896.2,
+        "mps_satiri": true,
+        "sft_satiri": true,
+        "devam_satiri": true,
+        "ilk_kayip": 0.7112,
+        "ckpt_sha256": "ce4c76b69f3e8aead67b2508b52405c484ccc8995bdf8c0f72a583deb72a70ce",
+        "ckpt_bayt": 373734816,
+        "opt_sha256": "e24fb988dc8ebf536dd7292bf6bb266dbd620795e15f404229a3675cee6c27dd"
+      },
+      "eval": {
+        "rc": 0,
+        "A_artis_yuzde": 39.2786,
+        "B_dusus_puan": 4.877,
+        "A_gec": false,
+        "B_gec": true,
+        "unutma_gec": false,
+        "A_yari_genislik": 0.123,
+        "B_yari_genislik": 1.9389,
+        "rouge_l_ort": 0.1173,
+        "rouge_l_medyan": 0.0834,
+        "ezber_orani": 0.0,
+        "tutarsizlik_orani": 5.0,
+        "kesisim_orani": 0.0,
+        "n": 100,
+        "A_taban_CE": 3.5351739511825144,
+        "A_kol_CE": 4.92374117532745,
+        "B_taban_top1": 49.5638,
+        "B_kol_top1": 44.6868
+      },
+      "hata": null
+    },
+    {
+      "segment": 3,
+      "adim": 3000,
+      "kumulatif_adim": 6000,
+      "tohum": 45,
+      "egitim": {
+        "rc": 0,
+        "sure_s": 1395.5,
+        "mps_satiri": true,
+        "sft_satiri": true,
+        "devam_satiri": true,
+        "ilk_kayip": 0.6498,
+        "ckpt_sha256": "3045b420ed37e89cdbec5f235886914e583849603c81943b760a1627559eca70",
+        "ckpt_bayt": 373734816,
+        "opt_sha256": "67471f4d6d5df7ead2bc00d4556be360a1c7c1e31ae74946d60072d374c4bc01"
+      },
+      "eval": {
+        "rc": 0,
+        "A_artis_yuzde": 46.7803,
+        "B_dusus_puan": 8.0095,
+        "A_gec": false,
+        "B_gec": false,
+        "unutma_gec": false,
+        "A_yari_genislik": 0.1294,
+        "B_yari_genislik": 1.922,
+        "rouge_l_ort": 0.1313,
+        "rouge_l_medyan": 0.0952,
+        "ezber_orani": 0.0,
+        "tutarsizlik_orani": 12.0,
+        "kesisim_orani": 10.0,
+        "n": 100,
+        "A_taban_CE": 3.5351739511825144,
+        "A_kol_CE": 5.188938017934561,
+        "B_taban_top1": 49.5638,
+        "B_kol_top1": 41.5543
+      },
+      "hata": null
+    },
+    {
+      "segment": 4,
+      "adim": 4000,
+      "kumulatif_adim": 10000,
+      "tohum": 46,
+      "egitim": {
+        "rc": 0,
+        "sure_s": 1788.2,
+        "mps_satiri": true,
+        "sft_satiri": true,
+        "devam_satiri": true,
+        "ilk_kayip": 0.3721,
+        "ckpt_sha256": "4c12d233e9d834dfa5b5da5cee2666c6312e3b20712c3dd35ce1e5b98b2af6fe",
+        "ckpt_bayt": 373734816,
+        "opt_sha256": "f91dfae425f8d0f99c68865cbb1869eb2e1d90f7e7ffd6d9cb4f819adf1ab9f8"
+      },
+      "eval": {
+        "rc": 0,
+        "A_artis_yuzde": 56.4166,
+        "B_dusus_puan": 10.6264,
+        "A_gec": false,
+        "B_gec": false,
+        "unutma_gec": false,
+        "A_yari_genislik": 0.136,
+        "B_yari_genislik": 1.9017,
+        "rouge_l_ort": 0.2065,
+        "rouge_l_medyan": 0.1647,
+        "ezber_orani": 0.0,
+        "tutarsizlik_orani": 3.0,
+        "kesisim_orani": 7.0,
+        "n": 100,
+        "A_taban_CE": 3.5351739511825144,
+        "A_kol_CE": 5.529599555768073,
+        "B_taban_top1": 49.5638,
+        "B_kol_top1": 38.9374
+      },
+      "hata": null
+    },
+    {
+      "segment": 5,
+      "adim": 6000,
+      "kumulatif_adim": 16000,
+      "tohum": 47,
+      "egitim": {
+        "rc": 0,
+        "sure_s": 2636.9,
+        "mps_satiri": true,
+        "sft_satiri": true,
+        "devam_satiri": true,
+        "ilk_kayip": 0.1932,
+        "ckpt_sha256": "2212582fd8a5ce6723fce682d68babdfb2c34d2bedfbd358c062e0d79f84fe92",
+        "ckpt_bayt": 373734816,
+        "opt_sha256": "6b77a712d9db6b7804ce39755f0c80376f382eec9391e22dac3b128def7a7c1d"
+      },
+      "eval": {
+        "rc": 0,
+        "A_artis_yuzde": 65.0139,
+        "B_dusus_puan": 10.1903,
+        "A_gec": false,
+        "B_gec": false,
+        "unutma_gec": false,
+        "A_yari_genislik": 0.1462,
+        "B_yari_genislik": 1.9055,
+        "rouge_l_ort": 0.2777,
+        "rouge_l_medyan": 0.2543,
+        "ezber_orani": 0.0,
+        "tutarsizlik_orani": 4.0,
+        "kesisim_orani": 8.0,
+        "n": 100,
+        "A_taban_CE": 3.5351739511825144,
+        "A_kol_CE": 5.833526654168963,
+        "B_taban_top1": 49.5638,
+        "B_kol_top1": 39.3735
+      },
+      "hata": null
+    },
+    {
+      "segment": 6,
+      "adim": 8000,
+      "kumulatif_adim": 24000,
+      "tohum": 48,
+      "egitim": {
+        "rc": 0,
+        "sure_s": 3504.2,
+        "mps_satiri": true,
+        "sft_satiri": true,
+        "devam_satiri": true,
+        "ilk_kayip": 0.0938,
+        "ckpt_sha256": "136dda76da419e281cf8b800a0e562381c5e9c7db8ed85136ac3ee4f19578b8b",
+        "ckpt_bayt": 373734816,
+        "opt_sha256": "56352980749fbeb1ccf31fc5cd8f3983f0dca5c92a6aded975da7be30a15b468"
+      },
+      "eval": {
+        "rc": 0,
+        "A_artis_yuzde": 75.6246,
+        "B_dusus_puan": 8.287,
+        "A_gec": false,
+        "B_gec": false,
+        "unutma_gec": false,
+        "A_yari_genislik": 0.1541,
+        "B_yari_genislik": 1.9201,
+        "rouge_l_ort": 0.3035,
+        "rouge_l_medyan": 0.3254,
+        "ezber_orani": 0.0,
+        "tutarsizlik_orani": 5.0,
+        "kesisim_orani": 10.0,
+        "n": 100,
+        "A_taban_CE": 3.5351739511825144,
+        "A_kol_CE": 6.20863498840481,
+        "B_taban_top1": 49.5638,
+        "B_kol_top1": 41.2768
+      },
+      "hata": null
+    }
+  ],
+  "secim": {
+    "karar": "KAPIYI GECEN YOK",
+    "secili": null,
+    "dislanan": [
+      {
+        "segment": 1,
+        "neden": "ezber %20.00 >= %10.0 veya tutarsizlik %24.00 >= %5.0"
+      },
+      {
+        "segment": 2,
+        "neden": "ezber %0.00 >= %10.0 veya tutarsizlik %5.00 >= %5.0"
+      },
+      {
+        "segment": 3,
+        "neden": "ezber %0.00 >= %10.0 veya tutarsizlik %12.00 >= %5.0"
+      },
+      {
+        "segment": 4,
+        "neden": "sert kapi: A %+56.42 (<=+%10.0) B +10.63p (>=-5.0)"
+      },
+      {
+        "segment": 5,
+        "neden": "sert kapi: A %+65.01 (<=+%10.0) B +10.19p (>=-5.0)"
+      },
+      {
+        "segment": 6,
+        "neden": "ezber %0.00 >= %10.0 veya tutarsizlik %5.00 >= %5.0"
+      }
+    ],
+    "gerekce": "ilan §4/5 — PASS yazilmaz"
+  },
+  "curutme_maddeleri": {
+    "C1_unutma_hepsi_kaldi": true,
+    "C1_unutma_gecen_segmentler": [],
+    "C2_erken_ezber_segmentleri": [
+      1
+    ],
+    "C3_max_rouge_l_ort": 0.3035,
+    "C4_hukum": "VAKUM",
+    "C4_insan_tavani_kesisim": 13.0,
+    "C4_esik_kesisim": 80.0,
+    "C5_erken_durma": null,
+    "uretici": "scratch/t0096_kos/kesisim_sondasi.py"
+  },
+  "esik_sayimi": {
+    "gecerli_segment": 6,
+    "unutma_gecen": [],
+    "ezber_gecen": [
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "tutarsizlik_gecen": [
+      4,
+      5
+    ],
+    "rouge_gecen": [],
+    "kesisim_gecen": [],
+    "en_iyi_rouge_l_ort": 0.3035,
+    "en_iyi_A_artis_yuzde": 23.3086,
+    "rouge_esige_oran": 0.8671428571428572,
+    "A_esige_oran": 2.33086,
+    "surucu_kusurlari": [
+      "SIRA SAPMASI: ilan 'sert kapi once' der; kod t0096_marangoz.py:188 (kalite filtresi) once, :195 (sert kapi) sonra. Kume degismez, GEREKCE degisir.",
+      "SABIT SABLON: t0096_marangoz.py:191-192 iki karsilastirmayi 'veya' ile birlikte basar ⇒ ateslememis esik tetiklenmis gorunur (6 gerekcenin 3'u: S2/S3/S6 'ezber %0.00 >= %10.0' YANLIS onermesi tasir)."
+    ]
+  },
+  "erken_durma": null,
+  "teslim": {
+    "yazildi": false,
+    "neden": "ilan §4/5 — kapiyi gecen segment YOK; 'PASS' yazilmaz"
+  },
+  "korunan_once": {
+    "data/anka_a1r.pt": "b93cc1cd54093fc63342d394abe528f2128dc16e20b4d7ac6ab680854b4d6293",
+    "data/train_carpenter_specialization_anka.bin": "8cd0696d90ef3816613cdc1c452580a6e9ab381085462e1d3f3e0e19e4f9c25a",
+    "data/train_chat_balanced.bin": "443f93d352b07defca91b2a620f2e4154c3ed0b14f7c695535c959209e7608fa",
+    "data/rebuild/vocab_anka_r1_33114.json": "f9940a8d8e1f7cd9428d389f12ff4c5ee448e5a7bfcdcc8ecc9c616fce950984",
+    "data/lexicon/roots_anka_r1.tsv": "ea874a73c0d5669a591cef00c9d4fb16916ea3e60e42df9d3c73445c4b7efd59",
+    "data/eval/anka_r17_heldout_2026-09-20.jsonl": "c397eb08218937ea000cc6120f42a8783e1dcab7948c70b33537af74b50d096e"
+  },
+  "korunan_sonra": {
+    "data/anka_a1r.pt": "b93cc1cd54093fc63342d394abe528f2128dc16e20b4d7ac6ab680854b4d6293",
+    "data/train_carpenter_specialization_anka.bin": "8cd0696d90ef3816613cdc1c452580a6e9ab381085462e1d3f3e0e19e4f9c25a",
+    "data/train_chat_balanced.bin": "443f93d352b07defca91b2a620f2e4154c3ed0b14f7c695535c959209e7608fa",
+    "data/rebuild/vocab_anka_r1_33114.json": "f9940a8d8e1f7cd9428d389f12ff4c5ee448e5a7bfcdcc8ecc9c616fce950984",
+    "data/lexicon/roots_anka_r1.tsv": "ea874a73c0d5669a591cef00c9d4fb16916ea3e60e42df9d3c73445c4b7efd59",
+    "data/eval/anka_r17_heldout_2026-09-20.jsonl": "c397eb08218937ea000cc6120f42a8783e1dcab7948c70b33537af74b50d096e"
+  },
+  "korunan_dokunulmadi": {
+    "data/anka_a1r.pt": true,
+    "data/train_carpenter_specialization_anka.bin": true,
+    "data/train_chat_balanced.bin": true,
+    "data/rebuild/vocab_anka_r1_33114.json": true,
+    "data/lexicon/roots_anka_r1.tsv": true,
+    "data/eval/anka_r17_heldout_2026-09-20.jsonl": true
+  },
+  "hukum": null,
+  "rapor_md": "data/eval/anka_r17_marangoz_2026-09-20.md",
+  "rapor_md_sha256": "91923e3a8365dabf547ef67b412993439f57bc891beb113c60684ab4edf05c2f",
+  "uretici": "scratch/t0096_rapor.py",
+  "rapor_md_sha256_kapanis_sonrasi": "9bca4853ad21571a9d1762e78eab223cc7d581d188c2a05c5030b4c698265953",
+  "kapanis": {
+    "donmus": {
+      "task": "T-0096",
+      "claimed_at": "2026-09-20T17:38:44Z",
+      "desen": 10,
+      "taranan": 1532,
+      "donmus_eslesen": 69,
+      "sonrasi_yazim": [],
+      "bildirilen_disi": [],
+      "hukum": "TEMIZ"
+    },
+    "beyan": {
+      "task": "T-0096",
+      "claimed_at": "2026-09-20T17:38:44Z",
+      "bildirilen": 10,
+      "kokler": [
+        "scratch",
+        "data/eval",
+        ".agent-bus/notes"
+      ],
+      "taranan": 784,
+      "beyan_edilen_ama_YOK": [
+        "data/anka_a1r_ceket.pt",
+        "data/anka_a1r_ceket.pt.opt.pt"
+      ],
+      "gerekceli_yok": [
+        "data/anka_a1r_ceket.pt",
+        "data/anka_a1r_ceket.pt.opt.pt"
+      ],
+      "beklenmeyen_yok": [],
+      "teslim_hedefi_okundu": "data/anka_a1r_ceket.pt",
+      "yazilan_ama_beyan_DISI": [],
+      "hukum": "TEMIZ (iki yon kapali; 2 yol ON-KAYITLI kural geregi YOK)",
+      "teslim_dal_asimetrisi": {
+        "olcum": "sonuc.json[teslim] `hedef` alani YOK; ad surucu sabitinden okundu",
+        "hedef": "data/anka_a1r_ceket.pt",
+        "yazildi": false,
+        "neden": "ilan §4/5 — kapiyi gecen segment YOK; 'PASS' yazilmaz",
+        "kaynak": "scratch/t0096_marangoz.py:46 (CEKET_CIKTI) ↔ :351 (hedef yazan dal) ↔ :338/:360 (hedef YAZMAYAN dallar)",
+        "log_izi": "ATESLEYEN dal (:359-361) log'a HICBIR SEY basmaz; kardes dal (:338-341) stderr'e basar ⇒ ayni if/else icinde asimetri",
+        "sinif": "[[duran-dal-iz-birakmaz]] (T-0095) — duran dal kayitta iz birakmaz"
+      }
+    },
+    "on_kayit_sirasi": {
+      "ilan_mtime_utc": "2026-09-20T17:39:35.046594+00:00",
+      "karsilastirilan": 14,
+      "ilandan_ONCE_olan": {},
+      "hukum": "TEMIZ — ilan, olculen TUM ciktilaridan once yazildi"
+    },
+    "py_compile": {
+      "toplam": 166,
+      "bozuk": [],
+      "hukum": "TEMIZ"
+    },
+    "sayi_denetimi": {
+      "kontrol": 54,
+      "uyusmazlik": [],
+      "hukum": "TEMIZ"
+    },
+    "teslim_kimligi": {
+      "hukum": "TESLIM YOK",
+      "neden": "ilan §4/5 — kapiyi gecen segment YOK; 'PASS' yazilmaz"
+    },
+    "pytest": {
+      "son_satir": "1 failed, 237 passed in 81.51s (0:01:21)",
+      "dusen_testler": [
+        "tests/test_agent_gateway.py::TestAgentGateway::test_gateway_http_server_endpoints"
+      ],
+      "ham_kuyruk": [
+        "            self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)",
+        "        # Since Linux 6.12.9, SO_REUSEPORT is not allowed",
+        "        # on other address families than AF_INET/AF_INET6.",
+        "        if (",
+        "            self.allow_reuse_port and hasattr(socket, \"SO_REUSEPORT\")",
+        "            and self.address_family in (socket.AF_INET, socket.AF_INET6)",
+        "        ):",
+        "            self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEPORT, 1)",
+        ">       self.socket.bind(self.server_address)",
+        "E       PermissionError: [Errno 1] Operation not permitted",
+        "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/socketserver.py:478: PermissionError",
+        "=========================== short test summary info ============================",
+        "FAILED tests/test_agent_gateway.py::TestAgentGateway::test_gateway_http_server_endpoints",
+        "1 failed, 237 passed in 81.51s (0:01:21)"
+      ]
+    },
+    "damga_utc": "2026-09-20T20:59:08.886268+00:00",
+    "rapor_md_digest": {
+      "uretici_iddiasi": "91923e3a8365dabf547ef67b412993439f57bc891beb113c60684ab4edf05c2f",
+      "kapanis_oncesi_diskten": "91923e3a8365dabf547ef67b412993439f57bc891beb113c60684ab4edf05c2f",
+      "kapanis_sonrasi_diskten": "9bca4853ad21571a9d1762e78eab223cc7d581d188c2a05c5030b4c698265953",
+      "uretici_iddiasi_kendi_ciktisiyla_tutarli": true,
+      "iddia_nihai_dosyayi_tarif_ediyor": false,
+      "kaynak": "YENIDEN KOSUM — kapanis_oncesi onceki kosumun KAYITLI olcumudur, yeniden hesaplanmadi",
+      "uyari": "`rapor_md_sha256` NİHAİ dosyayı tarif ETMEZ (kapanış §8'i ekledi); nihai digest `rapor_md_sha256_kapanis_sonrasi` alanındadır"
+    }
+  }
+}
