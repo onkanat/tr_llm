@@ -119,6 +119,9 @@ def main() -> int:
     ap.add_argument("--cihaz", default="mps", choices=["mps", "cpu"])
     ap.add_argument("--sonda-n", type=int, default=100)
     ap.add_argument("--sonda-yok", action="store_true", help="smoke: sonda atla")
+    ap.add_argument("--referans-sonda", default=None,
+                    help="TEPE kapısının ilk segment referansı (önceki koşumun "
+                         "son sonda JSON'u); verilmezse ilk sonda referanssız")
     ap.add_argument("--ilan", default="data/eval/anka_p3_ilani_2026-09-23.md")
     a = ap.parse_args()
 
@@ -143,6 +146,15 @@ def main() -> int:
         KOS = f"scratch/{a.kos_adi}"
     taban = a.taban
     cihaz = a.cihaz
+    onceki_sonda: Dict[str, Any] | None = None
+    if a.referans_sonda:
+        if not os.path.exists(a.referans_sonda):
+            P2.durdur(f"referans sonda yok: '{a.referans_sonda}'")
+        with open(a.referans_sonda, encoding="utf-8") as f:
+            onceki_sonda = json.load(f)
+        rk = onceki_sonda["ceket_ekseni"]
+        print(f"[referans] TEPE referansı {a.referans_sonda}: "
+              f"ROUGE {rk.get('rouge_l_ort')} · ezber {rk.get('ezber_orani')}", flush=True)
 
     for yol in (taban, SOZLUK, WIKI_BIN, SFT_BIN, CEKET_BIN, HELDOUT):
         if not os.path.exists(yol):
@@ -229,7 +241,6 @@ def main() -> int:
     pencere_no = 0
     bos_hedef_atlanan = 0
     kaynak_sayac = {"wiki": 0, "ceket": 0, "sft": 0}
-    onceki_sonda: Dict[str, Any] | None = None
     tepe_ckpt: str | None = None
 
     for seg_no, seg_uzunluk in enumerate(SEGMENTLER, 1):
