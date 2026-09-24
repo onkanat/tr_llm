@@ -1,0 +1,162 @@
+{
+  "gorev": "T-0094",
+  "asama": "Faz 2 — Anka'ya bagli uretim kapı",
+  "damga_utc": "2026-09-24T03:02:26Z",
+  "model_path": "data/anka_a2.pt",
+  "model_sha256": "e2352cd3bbf3e88f0d4d2e073d3aa8cd31317073b006ef676e945d4e9c964157",
+  "baseline_path": null,
+  "baseline_sha256": null,
+  "vocab_path": "data/rebuild/vocab_anka_r2.json",
+  "vocab_sha256": "14ce9f4e5d283c85b0c7201b6b778228e371514386d88c30390e1087adcf894b",
+  "vocab_size": 33911,
+  "kafa_boyutu": 33911,
+  "lexicon_path": "data/lexicon/roots_anka_r2.tsv",
+  "lexicon_sha256": "c355a372ed247271d5f7a69770d8de40b974e358f80a02a729417101d9972a54",
+  "literal_entity_mode": false,
+  "heldout_path": "data/eval/anka_r17_heldout_2026-09-20.jsonl",
+  "heldout_sha256": "c397eb08218937ea000cc6120f42a8783e1dcab7948c70b33537af74b50d096e",
+  "train_source": "data/pedagogy/carpenter_specialization_dataset.jsonl",
+  "train_source_sha256": "146a73dce0bf95f11ad9647510c8b500ecabb2f69308e39f597148e2660946fd",
+  "train_satir": 4861,
+  "heldout_satir": 539,
+  "seed": 42,
+  "n": 100,
+  "max_new": 128,
+  "device": "mps",
+  "device_istenen": "mps",
+  "device_notu": "Sayilar YALNIZ ayni cihazdaki kosumlarla kiyaslanabilir (uretim RNG'si cihaza bagli; CPU ile MPS esit degil).",
+  "ceket_ekseni": {
+    "olculdu": true,
+    "n": 100,
+    "kesisim_f1_ort": 0.0035,
+    "kesisim_f1_medyan": 0.0,
+    "kesisim_f1_std": 0.0084,
+    "ezber_orani": 0.0,
+    "ezber_wilson": [
+      0.0,
+      3.699480747600191
+    ],
+    "tutarsizlik_orani": 100.0,
+    "tutarsizlik_wilson": [
+      96.30051925239981,
+      99.99999999999999
+    ],
+    "rouge_l_ort": 0.0049,
+    "rouge_l_medyan": 0.0,
+    "rouge_l_std": 0.0095,
+    "kesisim_orani": 0.0,
+    "kesisim_wilson": [
+      0.0,
+      3.699480747600191
+    ],
+    "ornekler": [
+      {
+        "idx": 1,
+        "input": "Planyalanmış kerestenin diğer yüzünü istenen tam milimetrik kalınlığa ve paralelliğe getiren merdaneli makinedir.",
+        "uretim_yuzey": "INF_mA, [?] ve [?] gibi [?] gibi [?]. [Özel İsim], [Özel İsim], [Özel İsim], [Özel İsim], [Özel İsim], [Özel İsim], [Özel İsim], [Özel İsim], [Özel İsim], [Özel İsim], [Özel İsim], [Özel İsim], [Özel ",
+        "referans": "Teknik Çözüm: Bu işlem için 'kalınlık makinesi' kullanılmalıdır.",
+        "rouge_l": 0.0,
+        "kesisim_f1": 0.025,
+        "ezber": false,
+        "tutarsiz": true
+      },
+      {
+        "idx": 2,
+        "input": "",
+        "uretim_yuzey": "TENSE_AORIST. bu nedenle, [?], [?], [?], [?], [?], [?], [?], [?], [?], [?], [?], [?], [?], [?], [?], [?], [?], [?], [?], [?], [?], [?], [?], [?], [?], [?], [?], [?], [?], [?], [?], [?], [?], [?], [?],",
+        "referans": "Teknik Çözüm: Raspa: Ters damarlı veya dalgalı lifli zorlu ahşaplarda rende izlerini kazıyarak cam gibi kusursuz yüzey bırakan esnek çelik plakadır.",
+        "rouge_l": 0.0,
+        "kesisim_f1": 0.0,
+        "ezber": false,
+        "tutarsiz": true
+      },
+      {
+        "idx": 3,
+        "input": "",
+        "uretim_yuzey": ", [?], [?], [?], [?], [?], [?], [?], [?], [?], [?], [?], [?], [?], [?], [?], [?], [?], [?], [?], [?], [?], [?], [?], [?], [?], [?], [?], [?], [?], [?], [?], [?], [?], [?], [?], [?], [?], [?], [?], [?]",
+        "referans": "Usta Cevabı: Eskitme patinası: Ahşap damarlarını belirginleştirmek için sürülen koyu renkli boyanın yüzeyden silinerek sadece çukurlarda bırakılması yöntemidir.",
+        "rouge_l": 0.0,
+        "kesisim_f1": 0.0,
+        "ezber": false,
+        "tutarsiz": true
+      },
+      {
+        "idx": 4,
+        "input": "",
+        "uretim_yuzey": "TENSE_AORIST. bu nedenle, [?], [?], [?], [?], [?], [?], [?], [?], [?], [?], [?], [?], [?], [?], [?], [?], [?], [?], [?], [?], [?], [?], [?], [?], [?], [?], [?], [?], [?], [?], [?], [?], [?], [?], [?],",
+        "referans": "Teknik Çözüm: Kerpeten: Eğri çakılan veya hatalı çivileri ahşaptan sökmek ve başları kesmek için kullanılan kollu kıskaç aletidir.",
+        "rouge_l": 0.0,
+        "kesisim_f1": 0.0,
+        "ezber": false,
+        "tutarsiz": true
+      },
+      {
+        "idx": 5,
+        "input": "",
+        "uretim_yuzey": "TENSE_AORIST. bu yüzden da [?]. bu yüzden da [?]. bu yüzden da [?]. bu yüzden, [?], [?], [?], [?], [?], [?], [?], [?], [?], [?], [?], [?], [?], [?], [?], [?], [?], [?], [?], [?], [?], [?], [?], [?], [",
+        "referans": "Su terazisi: Montajı yapılan mobilyanın, rafın veya tezgahın yerçekimine göre tam yatay ve dikey dengede olduğunu gösteren havalı tüptür.",
+        "rouge_l": 0.0,
+        "kesisim_f1": 0.0,
+        "ezber": false,
+        "tutarsiz": true
+      }
+    ]
+  },
+  "A_ekseni": {
+    "CE_ort": 3.327869100845419,
+    "CE_std": 0.7741799754895522,
+    "pencere": 256,
+    "blok": 128,
+    "seed": 7,
+    "dilim": "data/anka_a1r_pretrain.bin",
+    "maskesiz": true
+  },
+  "B_ekseni": {
+    "top1": 52.6963,
+    "konum": 2522,
+    "dogru": 1329,
+    "wilson": [
+      50.74505695909598,
+      54.639287015601404
+    ],
+    "wilson_yari": 1.9471,
+    "tarama_pencere": 175,
+    "seed": 7,
+    "blok": [
+      32137,
+      32145
+    ],
+    "cekirdek_top1": 56.8819,
+    "cekirdek_konum": 1642,
+    "kesme": [
+      32137,
+      32138,
+      32142
+    ]
+  },
+  "A_ekseni_taban": null,
+  "B_ekseni_taban": null,
+  "oracle": {
+    "kimlik_rouge": 1.0,
+    "distraktor_rouge": 0.084843,
+    "sabit_tahmin_rouge": 0.077962,
+    "sabit_tahmin_kelime": 28,
+    "tavan": 1.0,
+    "esik_rouge": 0.3221
+  },
+  "esikler": {
+    "ezber": 10.0,
+    "tutarsizlik": 5.0,
+    "rouge": 0.3221,
+    "kesisim": 10.92,
+    "A_artis": 10.0,
+    "B_dusus": 5.0
+  },
+  "hukum": {
+    "ezber_gec": true,
+    "tutarsizlik_gec": false,
+    "rouge_gec": false,
+    "kesisim_gec": false,
+    "ceket_ekseni_gec": false
+  }
+}
