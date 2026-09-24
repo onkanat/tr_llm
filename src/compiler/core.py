@@ -1,13 +1,21 @@
 import json
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Optional
 from src.compiler.lexicon import LexiconManager, turkish_lower
 from src.compiler.morphotactics import MorphotacticsGraph, State
 from src.compiler.phonology import PhonologyEngine
 
+
 class CrystalCompiler:
-    def __init__(self, lexicon: LexiconManager, graph: MorphotacticsGraph):
+    def __init__(self, lexicon: LexiconManager, graph: MorphotacticsGraph,
+                 vocab: Optional[Any] = None):
+        """vocab enjeksiyonu OPTIONAL'dır (T-0103): None (varsayılan) iken
+        davranış birebir aynı kalır. vocab verildiğinde, kelimenin kendisi
+        vocab-dışıysa (OOV) self-match (lemma = kelimenin kendisi) adayı
+        öz-parse engelinden düşülür — OOV lemma'lar kök+ek zincirine
+        çözülür (T-0102 katman-1 onarımı)."""
         self.lexicon = lexicon
         self.graph = graph
+        self.vocab = vocab
 
     def _turkish_lower(self, word: str) -> str:
         """Properly lowercases Turkish text.
@@ -29,6 +37,21 @@ class CrystalCompiler:
         
         # 1. Find all possible roots for the word
         stems = self.lexicon.find_stems(word)
+
+        # T-0103 self-match bypass: OOV kelimenin kendisi lexicon lemma'sa
+        # find_stems onu en-uzun kök olarak döndürür; öz-parse (tek morfem)
+        # vocab-dışı id verir ve UNK'a düşer. Self-match adayı YALNIZ
+        # lemması vocab'ta YOKSA düşürülür (alternatif aday varken).
+        # T-0104 düzeltmesi (build-smoke K7c'nin yakaladığı kusur):
+        # eşleştirme matched_prefix üzerinden YAPILMAZ — 'istanbul' girdisi
+        # ('İstanbul' lemma id'si stoi'da VARKEN) kısa-önek adaylarına
+        # ('is') düşüp boş parse üretiyordu. Ölçüt = lemmayı stoi'da
+        # bulamamak; o zaman öz-parse gerçekten UNK'tır.
+        if self.vocab is not None:
+            filtre = [(p, s) for p, s in stems
+                      if p != word or s.get('lemma') in self.vocab.stoi]
+            if filtre:
+                stems = filtre
         
         # 2. For each root, start recursive DFS pathfinding
         for matched_prefix, stem_data in stems:
