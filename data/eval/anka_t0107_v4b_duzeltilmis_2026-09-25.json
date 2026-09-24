@@ -1,0 +1,48 @@
+{
+  "gorev": "T-0107 — V4b duzeltilmis olcum (kusak-ozel payda)",
+  "ureten_betik": "scratch/anka_t0107_v4b_duzeltme.py",
+  "neden": "r18 build V4b KATALOG_OLGU paydasini iki tarafa da uygular; birlesik katalog (250 olgu) mevcut tarafini (CARP=125 olgu) yanlis paydada olcer — oran 2,086 override artefakti, dengesizlik olcumu DEGIL",
+  "payda": 125,
+  "olcum": {
+    "mevcut_carp": {
+      "yol": "data/pedagogy/carpenter_specialization_dataset.jsonl",
+      "kept": 10575,
+      "jeton": 767428,
+      "jeton_per_olgu": 6139.424
+    },
+    "kuskak_r18": {
+      "yol": "scratch/t0097_kos/katalog_yeni.jsonl",
+      "kept": 10575,
+      "jeton": 783914,
+      "jeton_per_olgu": 6271.312
+    },
+    "kuskak_t107": {
+      "yol": "scratch/t0107_kos/katalog_yeni_2.jsonl",
+      "kept": 10575,
+      "jeton": 816862,
+      "jeton_per_olgu": 6534.896
+    }
+  },
+  "v4b_duzeltilmis": {
+    "mevcut_carp_per_olgu": 6139.424,
+    "kuskak_r18_per_olgu": 6271.312,
+    "kuskak_t107_per_olgu": 6534.896,
+    "oran_t107_vs_mevcut": 1.0644151633768901,
+    "oran_t107_vs_r18": 1.0420301206509897,
+    "oran_r18_vs_mevcut": 1.0214821455563259,
+    "PASS": true,
+    "bant": "0,80–1,20 (r18 V4b eşiği)"
+  },
+  "capraz_denetim": {
+    "t0106_r2_kaynak": "data/eval/anka_t0106_ceket_r2_build_2026-09-24.json",
+    "mevcut_fark_orani": 0.0,
+    "r18_fark_orani": 0.0,
+    "PASS": true
+  },
+  "build_v4b_artefakt": {
+    "kayit": "data/eval/anka_t0107_ceket_v3_build_2026-09-25.json",
+    "kayit_oran": 2.0859,
+    "kok_neden": "KATALOG_OLGU=250 override'ı mevcut tarafı (CARP, 125 olgu) da böldü; r18 build'in tasarım deseni tek-kuşak katalog içindir"
+  },
+  "damga_utc": "2026-09-24T06:36:51Z"
+}

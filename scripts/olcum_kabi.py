@@ -318,6 +318,8 @@ ESIK_DOSYASI: str = os.path.join(KOK, "scripts", "evaluate_carpenter_anka.py")
 # P5 Dal-K (23 Eyl 2026): ESIK_ROUGE kalibre edildi 0,35 -> 0,3221 (tavan 0,3835
 # x k=0,84; arena_base temiz 118). Ilan: data/eval/anka_p5_olcut_tazeleme_ilani_
 # 2026-09-23.md Ekleme §9 (operatör kararı; tutarsizlik/kesisim/ezber SABIT).
+# T-0106 Faz A (24 Eyl 2026): DECOMP ikinci temsil sabitleri eklendi — TAVAN
+# 83, ADAY 84 (hüküm eşiğine BAĞLANMAZ; ilan: anka_t0106_fazA_decomp_rouge_ilani).
 ESIK_REFERANSLARI: Tuple[Tuple[int, str, float], ...] = (
     (68, "ESIK_EZBER", 10.0),
     (69, "ESIK_TUTARSIZ", 5.0),
@@ -325,16 +327,20 @@ ESIK_REFERANSLARI: Tuple[Tuple[int, str, float], ...] = (
     (71, "ESIK_KESISIM", 10.92),
     (74, "ESIK_A_ARTIS", 10.0),
     (75, "ESIK_B_DUSUS", 5.0),
+    (83, "TAVAN_ROUGE_DECOMP", 0.9509),
+    (84, "ESIK_ROUGE_DECOMP_ADAY", 0.7988),
 )
 
 # T-0097/K11'de EZBERDEN yazilip YANLIS cikan referanslar — kapinin pozitif kontrolu:
 # bunlar referans_dogrula'dan GECMEMELIDIR. P2/0d'de ayni kanarya sinifi gucellendi:
 # kalibrasyon-sinifi ezber hatalari (eski esik, ham tavan, esik karisikligi).
+# T-0106 Faz A: ham DECOMP tavan (0,9509) ADAY eşiğe yazılırsa DÜŞMELİ (tavan ≠ tavan×k).
 K11_YANLIS_REFERANSLAR: Tuple[Tuple[int, str, float], ...] = (
     (71, "ESIK_KESISIM", 80.0),      # Ç4'ün ulaşılamaz eski eşiği geri yazılırsa DÜŞMELİ
     (70, "ESIK_ROUGE", 0.35),        # P5 öncesi eski eşik geri yazılırsa DÜŞMELİ
     (70, "ESIK_ROUGE", 0.4164),      # ham insan tavanı eşik yazılırsa (tavan ≠ tavan×k)
     (74, "ESIK_A_ARTIS", 5.0),       # B_DUSUS eşiğiyle karıştırılırsa DÜŞMELİ
+    (84, "ESIK_ROUGE_DECOMP_ADAY", 0.9509),  # ham tavan ADAY eşik yazılırsa DÜŞMELİ
 )
 
 

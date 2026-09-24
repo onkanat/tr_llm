@@ -69,21 +69,26 @@ WARMUP, TOPLAM_ADIM, MIN_LR = 50, 6000, 1e-6
 CLIP = 1.0
 PATERN = 5   # pencere idx % 5: 0 ⇒ wiki (%20) · 1,2 ⇒ ceket (%40) · 3,4 ⇒ SFT (%40)
 TEPE_ESIK = 0.05   # ROUGE-L düşüşü > 0,05 (≈ >2 SE; SE ≈ std/√100) ⇒ tepe, DUR
+LEXICON = "data/lexicon/roots_anka_r1.tsv"   # T-0106 B2: sonda passthrough (ECA default r1)
 
 assert abs(P2.CE_TAVAN - 3.5351739511825144 * (1 + 10.0 / 100.0)) < 1e-3, \
     "CE_TAVAN kanonik sabitle uyuşmuyor — P2 modülünden devral"
 
 
-def sonda_yap(ckpt: str, taban: str, cihaz: str, sonda_n: int) -> Dict[str, Any]:
+def sonda_yap(ckpt: str, taban: str, cihaz: str, sonda_n: int,
+              sozluk: str = SOZLUK, lexicon: str = LEXICON) -> Dict[str, Any]:
     """Mini yetenek sondası — KANONİK kap `scripts/evaluate_carpenter_anka.py`
     alt süreçte (import ederek koşmak model yükleyicisini iki kez kurar; süreç
     izolasyonu MPS belleğini de boşaltır). baseline = KOŞUM BAŞLANGICI (taban):
-    unutma A/B koşumun birikimli LM bedelini ölçer."""
+    unutma A/B koşumun birikimli LM bedelini ölçer.
+    T-0106 B2: --vocab/--lexicon passthrough — ECA'nın r1-default'a düşmesi
+    a2 koşumda kafa kapısında DURURDU (33.911 kafa ≠ 33.114 default)."""
     cikti = f"{KOS}/sonda_{os.path.basename(ckpt).replace('.pt', '')}.json"
     cmd = [sys.executable, "scripts/evaluate_carpenter_anka.py",
            "--model", ckpt, "--baseline", taban,
            "--n", str(sonda_n), "--seed", "42",
-           "--output", cikti, "--device", cihaz, "--ceket-ekseni"]
+           "--output", cikti, "--device", cihaz, "--ceket-ekseni",
+           "--vocab", sozluk, "--lexicon", lexicon]
     r = subprocess.run(cmd, capture_output=True, text=True, cwd=KOK)
     if r.returncode != 0:
         P2.durdur(f"SONDA arka planı başarısız (rc={r.returncode}): "
@@ -110,10 +115,19 @@ def tepe_karari(onceki: Dict[str, Any] | None, sonda: Dict[str, Any]) -> Tuple[b
 
 def main() -> int:
     import argparse
+    global SEGMENTLER, TOPLAM_ADIM, WARMUP, KOS
+    global SOZLUK, LEXICON, WIKI_BIN, SFT_BIN, CEKET_BIN   # T-0106 B2 (ilan §2)
     ap = argparse.ArgumentParser(description="P3 üç kaynaklı yetenek koşumu")
     ap.add_argument("--kapi-sinamasi", action="store_true",
                     help="TEPE + CE kapılarının iki dalını sına ve çık")
     ap.add_argument("--taban", default=TABAN)
+    ap.add_argument("--sozluk", default=SOZLUK,
+                    help="T-0106 B2: derleme sözlüğü (varsayılan P3 r1 sabiti)")
+    ap.add_argument("--lexicon", default=LEXICON,
+                    help="T-0106 B2: sonda lexicon (varsayılan P3 r1 sabiti)")
+    ap.add_argument("--wiki-bin", default=WIKI_BIN)
+    ap.add_argument("--sft-bin", default=SFT_BIN)
+    ap.add_argument("--ceket-bin", default=CEKET_BIN)
     ap.add_argument("--kos-adi", default=None)
     ap.add_argument("--segmentler", default=None, help="virgüllü, ör. '2000,2000,2000'")
     ap.add_argument("--cihaz", default="mps", choices=["mps", "cpu"])
@@ -126,6 +140,16 @@ def main() -> int:
     a = ap.parse_args()
 
     global SEGMENTLER, TOPLAM_ADIM, WARMUP, KOS
+    if a.sozluk:
+        SOZLUK = a.sozluk
+    if a.lexicon:
+        LEXICON = a.lexicon
+    if a.wiki_bin:
+        WIKI_BIN = a.wiki_bin
+    if a.sft_bin:
+        SFT_BIN = a.sft_bin
+    if a.ceket_bin:
+        CEKET_BIN = a.ceket_bin
     if a.kapi_sinamasi:
         # TEPE: yukarı ok +0,01 ⇒ DUR yok · aşağı ok -0,06 ⇒ DUR var ·
         # ezber_orani YÜZDE ölçeğinde: 9,9 ⇒ geç · 10,0 ⇒ DUR (ölçek kanıtı ECA:513)
@@ -174,6 +198,30 @@ def main() -> int:
     if cihaz == "mps" and not torch.backends.mps.is_available():
         P2.durdur("MPS yok — koşum sandbox DIŞINDA koşulmalı")
 
+    # --- VOCAB-UYUM KAPISI (T-0106 B2; fail-closed; ilan §2) ---
+    # Üç bin de SÜRÜCÜ sözlüğüyle derlenmiş olmalı; uyuşmazlık/meta-yok/alan-yok
+    # DURUR — sessiz id-kayması yasak (P3 bin'leri r1-derlemeli, a2 taban r2:
+    # kapı olmadan kafa 33.911 ≠ bin 33.114 sessizçe çarpışırdı).
+    sozluk_sha = sha256_file(SOZLUK)
+    for bin_yol in (WIKI_BIN, SFT_BIN, CEKET_BIN):
+        meta_yol = f"{bin_yol}.meta.json"
+        if not os.path.exists(meta_yol):
+            P2.durdur(f"VOCAB-UYUM KAPISI: meta YOK '{meta_yol}' — sessiz id-kayması riski")
+        with open(meta_yol, encoding="utf-8") as f:
+            meta_bin = json.load(f)
+        m_sha = meta_bin.get("sozluk_sha256")
+        if not m_sha:
+            P2.durdur(f"VOCAB-UYUM KAPISI: {meta_yol}'da sozluk_sha256 YOK — fail-closed")
+        if m_sha != sozluk_sha:
+            P2.durdur(f"VOCAB-UYUM KAPISI: {os.path.basename(bin_yol)} çatlağı — "
+                      f"meta sozluk_sha256 {m_sha[:16]}… != sürücü {sozluk_sha[:16]}…")
+        m_giris = meta_bin.get("sozluk_giris") or meta_bin.get("kap", {}).get("vocab_size")
+        if m_giris is not None and int(m_giris) != len(vocab.stoi):
+            P2.durdur(f"VOCAB-UYUM KAPISI: {os.path.basename(bin_yol)} meta giriş "
+                      f"{m_giris} != sözlük {len(vocab.stoi)}")
+    print(f"[VOCAB-UYUM] 3 bin meta sozluk_sha256 == sürücü {sozluk_sha[:16]}… "
+          f"({len(vocab.stoi):,} giriş)", flush=True)
+
     model = KristalLM(vocab_size=len(vocab.stoi), n_embd=768, vocab=vocab)
     d = torch.load(taban, map_location="cpu")
     for k in [k for k in list(d.keys()) if "cos_cached" in k or "sin_cached" in k or "mask" in k]:
@@ -216,6 +264,8 @@ def main() -> int:
         "ilan": a.ilan,
         "baslangic_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
         "taban": taban, "taban_sha256": taban_sha,
+        "sozluk": SOZLUK, "sozluk_sha256": sha256_file(SOZLUK),
+        "lexicon": LEXICON, "lexicon_sha256": sha256_file(LEXICON),
         "wiki_bin": WIKI_BIN, "sft_bin": SFT_BIN,
         "ceket_bin": CEKET_BIN, "ceket_bin_sha256": sha256_file(CEKET_BIN),
         "ceket_beyan": ("V7 carve: held-out 539 hariç, 4.861+r18 büyütme yasal eğitim "
@@ -338,7 +388,7 @@ def main() -> int:
         sonda: Dict[str, Any] = {"olculdu": False}
         tepe, tepe_gerekce = False, "sonda atlandı (--sonda-yok)"
         if not a.sonda_yok:
-            sonda = sonda_yap(ckpt, taban, cihaz, a.sonda_n)
+            sonda = sonda_yap(ckpt, taban, cihaz, a.sonda_n, SOZLUK, LEXICON)
             tepe, tepe_gerekce = tepe_karari(onceki_sonda, sonda)
         ck = sonda.get("ceket_ekseni", {}) if isinstance(sonda, dict) else {}
         kayit = {

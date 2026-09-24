@@ -3,11 +3,13 @@
 Bu kılavuz, **Kristal–Vektörel Mimarisi** tabanlı Türkçe dil modelini kurmak, eğitmek, veri kümelerini derlemek, etkileşimli olarak test etmek ve Python API'si üzerinden projelere entegre etmek için kapsamlı yönergeler sunar.
 
 > [!WARNING]
-> **TARİHSEL BÖLÜMLER (damgalı ölçüm: 20 Eyl 2026).** Bu kılavuzun bazı bölümleri
+> **TARİHSEL BÖLÜMLER (damgalı ölçüm: 20 Eyl 2026; güncelleme: 23 Eyl 2026).** Bu kılavuzun bazı bölümleri
 > `data/kristal_*.pt` yollarına dayanan komutlar içerir. **Kristal checkpoint zinciri
 > 18 Eyl 2026'da operatör kararıyla silinmiştir**; o dosyalar **diskte de git'te de
-> yoktur** (ölçüldü). Bugün `data/` altında yalnız `data/anka_a1.pt` ve
-> `data/anka_a1r.pt` bulunur. Etkilenen bölümler: **§2** (CLI model yolları),
+> yoktur** (ölçüldü). **23 Eyl 2026:** bayat A1 soyağacı (`anka_a1.pt`,
+> `anka_pretrain.bin`, `anka_a1_pretrain.bin` + val'leri) operatör onayıyla
+> silinmiştir. Bugün `data/` altında checkpoint olarak yalnız **`data/anka_a1r.pt`**
+> (+ `anka_a1r_pretrain.bin` / `_val.bin`) bulunur. Etkilenen bölümler: **§2** (CLI model yolları),
 > **§3** (`--load-path` / `--save-path`), **§4 · Adım B1.5** (checkpoint adı).
 > Bu komutlar **o dönemin kaydıdır ve bugün çalışmaz**; silinmiş içerik burada
 > **korunmuştur** (tarihsel kayıt), ama **güncel karşılıkları yazılmamıştır** —

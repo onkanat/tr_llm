@@ -1,0 +1,17 @@
+{
+  "gorev": "T-0106 Faz B — ceket r2 derleme",
+  "ureten_betik_gercek": "scratch/anka_t0106_ceket_r2_build.py",
+  "taban_uretici": "scratch/anka_r18_ceket_build.py (İMPORT; kopya YOK)",
+  "override": {
+    "vocab": "data/rebuild/vocab_anka_r2.json",
+    "vocab_sha256": "14ce9f4e5d283c85b0c7201b6b778228e371514386d88c30390e1087adcf894b",
+    "sozluk_giris": 33911,
+    "lexicon": "data/lexicon/roots_anka_r2.tsv",
+    "lexicon_sha256": "c355a372ed247271d5f7a69770d8de40b974e358f80a02a729417101d9972a54",
+    "out_bin": "data/train_carpenter_specialization_anka_r18_v2.bin",
+    "out_meta": "data/train_carpenter_specialization_anka_r18_v2.bin.meta.json",
+    "ckpt": "data/eval/anka_t0106_ceket_r2_build_2026-09-24.json"
+  },
+  "teks_degisken": "sozluk+lexicon r1→r2; metin kaynakları/carve/patern AYNI (ilan §1)",
+  "rc": 0
+}

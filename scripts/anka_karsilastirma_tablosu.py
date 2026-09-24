@@ -50,6 +50,10 @@ TARIFLER: List[Tuple[str, str, Optional[str], str]] = [
      "talimat aşaması, lr 10× düşürüldü"),
     ("anka_i1 lr2e-5 nihai",   f"{D}/anka_i1_lr2e5_yetenek_2026-09-22.json", None,
      "talimat aşaması, 6×500 adım (koşum sonunda)"),
+    ("t0106 a2 ceket (son sonda)", "scratch/anka_t0106_kos/sonda_seg_3.json",
+     None, "a2-taban, r2-derleme (T-0106 Faz B)"),
+    ("t0107 v3 ceket (son sonda)", "scratch/anka_t0107/sonda_seg_3.json",
+     None, "a2-taban, v3-birleşik-derleme (T-0107)"),
 ]
 
 
@@ -74,6 +78,8 @@ def satir(etiket: str, kanonik: str, ppl_yolu: Optional[str], not_: str) -> Dict
         "etiket": etiket, "var": True, "not": not_,
         "rouge": c.get("rouge_l_ort"), "tutarsizlik": c.get("tutarsizlik_orani"),
         "kesisim": c.get("kesisim_orani"), "ezber": c.get("ezber_orani"),
+        # T-0106 Faz A: DECOMP ikinci temsil (tanısal, hüküm dışı)
+        "rouge_decomp": c.get("rouge_l_decomp_ort"),
         "ce": A.get("CE_ort"), "ppl_ce": round(math.exp(A["CE_ort"]), 2) if A.get("CE_ort") else None,
         "ce_taban": Ab.get("CE_ort") if Ab else None,
         "a_artis": h.get("A_artis_yuzde"), "b_dusus": h.get("B_dusus_puan"),

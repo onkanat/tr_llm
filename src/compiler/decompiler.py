@@ -81,8 +81,14 @@ class MorphemeDecompiler:
         root_lemma = clean_tags[0]
         
         # If the root is a meta keyword, don't affix
+        # T-0103 düzeltmesi: 'ara' hem meta marker hem GERÇEK lexicon
+        # köküdür (ara-). Meta-kökü yalnız takip eden tag'lerin TÜMÜ
+        # suffix DEĞİLSE ham bırak; hepsi suffix ise normal affix yoluna
+        # gir (ör. 'ara POSS_3SG CASE_LOC_N' → 'arasında').
         if root_lemma.lower() in META_TAGS:
-            return " ".join(clean_tags)
+            kalan = clean_tags[1:]
+            if not all(self.is_suffix(t) for t in kalan):
+                return " ".join(clean_tags)
             
         stems = self.compiler.lexicon.find_stems(root_lemma)
         root_entry = None
@@ -155,8 +161,8 @@ class MorphemeDecompiler:
         entity_chars = []
         all_caps = False
         cap_next = False
-        
-        for tag in tokens:
+
+        for tag_i, tag in enumerate(tokens):
             if tag == "<ENT>":
                 if current_word_tags:
                     reconstructed_words.append(self.decompile_tags(current_word_tags))
@@ -259,13 +265,19 @@ class MorphemeDecompiler:
                 
             is_suf = self.is_suffix(tag)
             is_meta = (tag.lower() in META_TAGS) and not is_suf
-            
+
             if is_meta:
-                if current_word_tags:
-                    reconstructed_words.append(self.decompile_tags(current_word_tags))
-                    current_word_tags = []
-                reconstructed_words.append(tag)
-                continue
+                # T-0103: 'ara' hem meta marker hem GERÇEK lexicon köküdür.
+                # Ardından suffix gelen meta-kök gerçek kelimedir
+                # ('ara POSS_3SG CASE_LOC_N' → 'arasında') — normal kök
+                # dalına düşer; değilse eski davranış (tek başına marker).
+                sonraki = tokens[tag_i + 1] if tag_i + 1 < len(tokens) else ""
+                if not self.is_suffix(sonraki):
+                    if current_word_tags:
+                        reconstructed_words.append(self.decompile_tags(current_word_tags))
+                        current_word_tags = []
+                    reconstructed_words.append(tag)
+                    continue
                 
             if not is_suf:
                 if current_word_tags:

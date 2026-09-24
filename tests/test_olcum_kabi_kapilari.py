@@ -328,8 +328,11 @@ def test_esik_referanslari() -> None:
     # data/eval/anka_p2_esik_kalibrasyon_ilani_2026-09-23.md
     # P5 Dal-K: ROUGE 0,3221 (tavan 0,3835 x k=0,84) — ilan
     # data/eval/anka_p5_olcut_tazeleme_ilani_2026-09-23.md Ekleme §9
+    # T-0106 Faz A: DECOMP aday 0,7988 (tavan 0,9509 x k=0,84) — ilan
+    # data/eval/anka_t0106_fazA_decomp_rouge_ilani_2026-09-24.md (hüküme baglanmaz)
     gercek = {ad: deger for _s, ad, deger in OLCUM.ESIK_REFERANSLARI}
     assert gercek["ESIK_ROUGE"] == 0.3221 and gercek["ESIK_KESISIM"] == 10.92, gercek
+    assert gercek["ESIK_ROUGE_DECOMP_ADAY"] == 0.7988 and gercek["TAVAN_ROUGE_DECOMP"] == 0.9509, gercek
     with pytest.raises(OLCUM.ReferansUyusmazligi):
         OLCUM.referans_dogrula(ESIK_DOSYASI, 68, "ESIK_EZBER", 99.0)
 

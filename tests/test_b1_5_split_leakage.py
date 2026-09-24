@@ -77,7 +77,11 @@ class TestB15SplitLeakage(unittest.TestCase):
         from scripts.import_examples import import_gts_examples
         
         orig_exists = os.path.exists
+        # T-0106 öncesi onaylı silme: data/poems/gts.json diske değil — test
+        # ortam-bagimsiz olmali; gts/lexicon VAR, yalniz vocab YOK mocklanir.
         def mock_exists(path):
+            if path in ('data/poems/gts.json', 'data/lexicon/roots.tsv'):
+                return True
             if path == 'data/vocab.json':
                 return False
             return orig_exists(path)

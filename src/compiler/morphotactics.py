@@ -235,12 +235,23 @@ def build_default_graph() -> MorphotacticsGraph:
             graph.add_transition(from_state, State.ADJ_ROOT, tid, template, attr)
 
     # Noun/Adj to Verb
+    # T-0103: DERIV_lAş/DERIV_lAn isim kökünden de türetim üretir
+    # (horozlaş, uyaklan, hinleş, köleleş — ölçümlü yol-yok sınıfı);
+    # önceden yalnız ADJ_ROOT kaynaklıydı.
     graph.add_transition(State.NOUN_ROOT, State.VERB_ROOT, "DERIV_lA", "lA", "-")
+    graph.add_transition(State.NOUN_ROOT, State.VERB_ROOT, "DERIV_lAş", "lAş", "-")
+    graph.add_transition(State.NOUN_ROOT, State.VERB_ROOT, "DERIV_lAn", "lAn", "-")
     graph.add_transition(State.ADJ_ROOT, State.VERB_ROOT, "DERIV_lAş", "lAş", "-")
     graph.add_transition(State.ADJ_ROOT, State.VERB_ROOT, "DERIV_lAn", "lAn", "-")
 
     # --- TERMINAL STATES ---
+    # T-0103: bare CAUSATIVE/PASSIVE yüzeyleri (aratıl, sövdür,
+    # hiddetlendir, böldürül) sözlük citation-formudur — bu state'ler
+    # terminal işaretli değildi, yol bitmiyordu (ölçümlü yol-yok sınıfı).
+    graph.mark_terminal(State.VERB_VOICE_CAUSATIVE)
+    graph.mark_terminal(State.VERB_VOICE_PASSIVE)
     graph.mark_terminal(State.VERB_ROOT)
+    graph.mark_terminal(State.NOUN_ROOT)
     graph.mark_terminal(State.NOUN_ROOT)
     graph.mark_terminal(State.ADJ_ROOT)
     graph.mark_terminal(State.ADV_ROOT)

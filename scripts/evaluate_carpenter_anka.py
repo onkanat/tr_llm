@@ -76,6 +76,13 @@ ESIK_B_DUSUS = 5.0
 NK_BASI, NK_SONU = 32137, 32145      # olculdu: . , ? ! - : ; ( )
 NK_CEKIRDEK = (32137, 32138, 32142)  # T-0059'un kumesi (onek invaryanti ile aynen)
 
+# T-0106 FAZ A (ilan: anka_t0106_fazA_decomp_rouge_ilani_2026-09-24.md):
+# DECOMP ikinci temsil — HUKUME BAGLANMAZ (aday beyani). Kaynak tavan:
+# scratch/anka_p5akol_derin_analiz.json (r1 gold-gm, n=100 tek orneklem);
+# k=0,84 kalibrasyonu RAW dagiliminda yapildi, DECOMP'a tasima dogrulanmadi.
+TAVAN_ROUGE_DECOMP = 0.9509          # r1 DECOMP tavan (referans gidi-dönüş, P5-A)
+ESIK_ROUGE_DECOMP_ADAY = 0.7988      # tavan × 0,84 — KANARYA: ham tavan esige yazilirsa DÜŞMELİ
+
 BLOCK_SIZE = 4096            # checkpoint mask tamponlariyla ayni olmali
 # --- Olcum gucu: esikler olcum gurultusunun ALTINDA kalmali (olculdu, 2026-09-20) ---
 # B ekseni: T-0059'un n=250'si bu tabanda (p≈%41) Wilson YARI-GENISLIGI ±6,05 puandi
@@ -472,17 +479,26 @@ def main() -> int:
               f"uretim {len(ornek)}×{args.max_new}…", flush=True)
         ezber = tutarsiz = kesisim = 0
         rouges: List[float] = []
+        rouges_decomp: List[float] = []
         kes_f1ler: List[float] = []
         ornekler: List[dict] = []
+        ham_gm: List[str] = []          # T-0106 FAZ A: tam gm dizisi kalici kayit (P3/P4'te kayboldu)
+        decomp_istisna = 0              # sessiz fallback YASAK — beyanli sayac (ilan §2)
+        yuzey_unk = 0
         for i, r in enumerate(ornek):
             _, gen_tok = uret(model, tokenizer, vocab, r.get("instruction", ""),
                               r.get("input", ""), device, args.max_new, eos_id, out_end_id,
                               out_id)
             gm = " ".join(gen_tok)
+            ham_gm.append(gm)
             try:
                 yuzey = decompiler.decompile_sentence(gm)
             except Exception:
                 yuzey = gm
+                decomp_istisna += 1
+            yuzey_unk += yuzey.count("[?]")
+            yw = kelimeler(yuzey)
+            rouges_decomp.append(rouge_l_score(yw, ref_kel[i]))
             gw = kelimeler(gm)
             cg = [tuple(gw[k:k + 4]) for k in range(len(gw) - 3)]
             mem = bool(cg) and (sum(1 for g in cg if g in train_4g) / len(cg)) >= 0.90
@@ -527,12 +543,22 @@ def main() -> int:
             "rouge_l_ort": round(rouge_ort, 4),
             "rouge_l_medyan": round(float(np.median(rouges)), 4),
             "rouge_l_std": round(float(np.std(rouges)), 4),
+            # T-0106 FAZ A: DECOMP ikinci temsil (TANISAL — hukume baglanmaz)
+            "rouge_l_decomp_ort": round(float(np.mean(rouges_decomp)), 4),
+            "rouge_l_decomp_medyan": round(float(np.median(rouges_decomp)), 4),
+            "rouge_l_decomp_std": round(float(np.std(rouges_decomp)), 4),
+            "decompile_istisna": decomp_istisna,
+            "yuzey_unk_sayi": yuzey_unk,
+            "ham_gm": ham_gm,
             "kesisim_orani": round(kes_r, 4), "kesisim_wilson": [kl, kh],
             "ornekler": ornekler,
         }
         print(f"  ezber %{ezber_r:.2f} · tutarsizlik %{tut_r:.2f} · "
               f"ROUGE-L {rouge_ort:.4f} · kesisim %{kes_r:.2f} "
               f"(tanı: LCS-F1 {metrik['kesisim_f1_ort']:.4f})", flush=True)
+        print(f"  DECOMP ROUGE-L {metrik['rouge_l_decomp_ort']:.4f} "
+              f"(aday esik {ESIK_ROUGE_DECOMP_ADAY}, hukume baglanmaz) · "
+              f"decompile istisna {decomp_istisna} · yuzey [?] {yuzey_unk}", flush=True)
     else:
         print("\n[K2] ceket ekseni KAPALI (--ceket-ekseni verilmedi) — "
               "giydirilmemis kosumda beklenen", flush=True)
@@ -595,7 +621,9 @@ def main() -> int:
                    "tavan": 1.0, "esik_rouge": ESIK_ROUGE},
         "esikler": {"ezber": ESIK_EZBER, "tutarsizlik": ESIK_TUTARSIZ,
                     "rouge": ESIK_ROUGE, "kesisim": ESIK_KESISIM,
-                    "A_artis": ESIK_A_ARTIS, "B_dusus": ESIK_B_DUSUS},
+                    "A_artis": ESIK_A_ARTIS, "B_dusus": ESIK_B_DUSUS,
+                    "rouge_decomp_aday": ESIK_ROUGE_DECOMP_ADAY,
+                    "tavan_rouge_decomp": TAVAN_ROUGE_DECOMP},
         "hukum": hukum,
     }
     with open(args.output, "w", encoding="utf-8") as f:
