@@ -1,0 +1,29 @@
+{
+  "gorev": "T-0108 Faz 3 — ceket v4 derleme (üç kuşak birleşik katalog)",
+  "ureten_betik_gercek": "scratch/anka_t0108_ceket_build.py",
+  "taban_uretici": "scratch/anka_r18_ceket_build.py (İMPORT; kopya YOK)",
+  "override": {
+    "vocab": "data/rebuild/vocab_anka_r2.json",
+    "vocab_sha256": "14ce9f4e5d283c85b0c7201b6b778228e371514386d88c30390e1087adcf894b",
+    "sozluk_giris": 33911,
+    "lexicon": "data/lexicon/roots_anka_r2.tsv",
+    "lexicon_sha256": "c355a372ed247271d5f7a69770d8de40b974e358f80a02a729417101d9972a54",
+    "katalog": "scratch/t0108_kos/katalog_birlesik.jsonl",
+    "katalog_sha256": "9c7b6fc7207e9c9a6889ff0c4f7a97b97d0d13fc98b7cde7a1d949d2a858d407",
+    "katalog_satir": 20748,
+    "katalog_olgu": 490,
+    "katalog_ureten": "scratch/anka_t0108_birlesik_uretici.py",
+    "ilan_perspektif_toplam": 1729,
+    "out_bin": "data/train_carpenter_specialization_anka_r18_v4.bin",
+    "out_meta": "data/train_carpenter_specialization_anka_r18_v4.bin.meta.json",
+    "ckpt": "data/eval/anka_t0108_ceket_v4_build_2026-09-24.json"
+  },
+  "beyan": {
+    "katalog_birlesik": "ilk 10.800 satır 07da5a57… (r18+T-0107 kuşakları, T-0107 KATALOG_SHA ile birebir) + son 9.948 satır e31ac563… (T-0108 yeni kuşak)",
+    "ilan_perspektif_toplam_1729": "arz 3× beyanı: üç kuşağın perspektif toplamı (450+450+829); ILAN_ADAY (gen capraz_denetim) DEĞİŞMEDİ",
+    "korunan_ek": "v2 ve v3 bin+meta V10'a EKLENDİ (salt-eklenti; r18 davranış değişmedi)",
+    "build_v5_kapsamı": "build'in V5/V5c yeniden-türetimi gen kuşağına karşıdır (r18 davranışı); 490-olgu karşı koşum KATALOG aşamasında kuşak-başına ölçüldü (scratch/t0108_kos/katalog.json: V5 çakışma 0, V5c 55 gerekçeli hüküm, V5b ort 0,0005)"
+  },
+  "teks_degisken": "arz çeşitliliği: katalog T-0107 birleşik → üç kuşak (490 olgu); vocab/lexicon/carve/patern AYNI (ilan §1)",
+  "rc": 2
+}

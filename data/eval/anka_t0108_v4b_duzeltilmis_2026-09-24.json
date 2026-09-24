@@ -1,0 +1,64 @@
+{
+  "gorev": "T-0108 — V4b duzeltilmis olcum (kusak-ozel payda, 4 kaynak)",
+  "ureten_betik": "scratch/anka_t0108_v4b_duzeltme.py",
+  "neden": "r18 build V4b KATALOG_OLGU paydasini iki tarafa da uygular; birlesik katalog (490 olgu) mevcut tarafini (CARP=125 olgu) yanlis paydada olcer — oran override artefakti, dengesizlik olcumu DEGIL",
+  "payda": {
+    "carp": 125,
+    "r18": 125,
+    "t107": 125,
+    "t0108": 240
+  },
+  "olcum": {
+    "mevcut_carp": {
+      "yol": "data/pedagogy/carpenter_specialization_dataset.jsonl",
+      "payda": 125,
+      "kept": 10575,
+      "jeton": 767428,
+      "jeton_per_olgu": 6139.424
+    },
+    "kuskak_r18": {
+      "yol": "scratch/t0097_kos/katalog_yeni.jsonl",
+      "payda": 125,
+      "kept": 10575,
+      "jeton": 783914,
+      "jeton_per_olgu": 6271.312
+    },
+    "kuskak_t107": {
+      "yol": "scratch/t0107_kos/katalog_yeni_2.jsonl",
+      "payda": 125,
+      "kept": 10575,
+      "jeton": 816862,
+      "jeton_per_olgu": 6534.896
+    },
+    "kuskak_t0108": {
+      "yol": "scratch/t0108_kos/katalog_kusak3.jsonl",
+      "payda": 240,
+      "kept": 19454,
+      "jeton": 1592406,
+      "jeton_per_olgu": 6635.025
+    }
+  },
+  "v4b_duzeltilmis": {
+    "mevcut_carp_per_olgu": 6139.424,
+    "kuskak_r18_per_olgu": 6271.312,
+    "kuskak_t107_per_olgu": 6534.896,
+    "kuskak_t0108_per_olgu": 6635.025,
+    "oran_t0108_vs_mevcut": 1.0807243480821653,
+    "oran_t0108_vs_r18": 1.05799631719806,
+    "oran_t0108_vs_t107": 1.015322202526253,
+    "oran_r18_vs_mevcut": 1.0214821455563259,
+    "PASS": true,
+    "bant": "0,80–1,20 (r18 V4b eşiği)"
+  },
+  "capraz_denetim": {
+    "t0106_r2_kaynak": "data/eval/anka_t0106_ceket_r2_build_2026-09-24.json",
+    "mevcut_fark_orani": 0.0,
+    "r18_fark_orani": 0.0,
+    "PASS": true
+  },
+  "build_v4b_artefakt": {
+    "kayit": "data/eval/anka_t0108_ceket_v4_build_2026-09-24.json",
+    "kok_neden": "KATALOG_OLGU=490 override'ı mevcut tarafı (CARP, 125 olgu) da böler; r18 build'in tasarım deseni tek-kuşak katalog içindir — ölçüm bu dosyada kuşak-özel"
+  },
+  "damga_utc": "2026-09-24T09:32:59Z"
+}

@@ -54,6 +54,8 @@ TARIFLER: List[Tuple[str, str, Optional[str], str]] = [
      None, "a2-taban, r2-derleme (T-0106 Faz B)"),
     ("t0107 v3 ceket (son sonda)", "scratch/anka_t0107/sonda_seg_3.json",
      None, "a2-taban, v3-birleşik-derleme (T-0107)"),
+    ("t0108 v4 ceket (son sonda)", "scratch/anka_t0108/sonda_seg_3.json",
+     None, "a2-taban, v4-üçkuşak-derleme (T-0108, 240-olgu/1-epoch)"),
 ]
 
 
