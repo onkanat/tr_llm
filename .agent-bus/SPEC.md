@@ -1,11 +1,11 @@
 # agent-bus — Ajanlar Arası Koordinasyon Protokolü
 
-**Sürüm:** 1.0 · **Tarih:** 2026-09-14 · **Durum:** **uygulandı ve çalışıyor** (`scripts/agent_bus_mcp.py`) · **son düzenleme:** 2026-09-20 (T-0082)
+**Sürüm:** 1.1 · **Tarih:** 2026-09-14 · **Durum:** **uygulandı ve çalışıyor** (`scripts/agent_bus_mcp.py`) · **son düzenleme:** 2026-09-25 (T-0118)
 
 İki ajan aynı repoda çalışır: **danışman** (Claude Code — analiz, doğrulama, kapı tasarımı)
 ve **yürütücü** (Antigravity — eğitim, refactor, betik, test).
 
-## Amaç
+## Amaç ve Paralel Çalışma Kuralları
 
 Hedef, iki modelin aynı repoda **paralel** çalışmasıdır: duvar saati süresini kısaltmak ve
 sistem kaynaklarını (tek GPU, tek disk, tek bağlam penceresi) verimli kullanmak. agent-bus
@@ -14,6 +14,11 @@ bu hedefin **aracıdır, kendisi değil**.
 Protokolün işi, paralelliği mümkün kılan tek şeyi sağlamaktır: **bir ajanın diğerinin
 üzerine yazmasını yapısal olarak imkânsız kılmak.** Kilit olmadan iki ajan aynı dosyaya
 dokunamaz; kilit yoksa paralellik de yoktur, yalnızca sıralı çalışma vardır.
+
+### Paralel Çalışma ve Cihaz Alanı Kuralı (İlan: 2026-09-25, T-0118)
+Görev şartnamelerine opsiyonel `cihaz` alanı eklenmiştir (`"mps"` | `"cpu"` | `"none"`; varsayılan **`"mps"`** — fail-closed: eski şartnameler MPS kısıtında kalır).
+1. **`cihaz: "mps"` Görevler (Tek Yürütücü):** Donanımda tek bir Apple Silicon GPU (MPS) bulunur. İki modelin aynı anda MPS üzerinde eğitim veya yoğun çıkarım koşturması GPU çekişmesi üretir (ölçüm T-0052: paralel koşum adım süresini 0,39 sn'den 18,78 sn'ye fırlatır — `[[cift-egitici-ayni-gpu-kilitler]]`). Bu nedenle `cihaz: "mps"` görevlerde **tek yürütücü kuralı kesin olarak geçerlidir**; bir ajan aktif bir MPS görevi yürütürken diğer ajan ikinci bir MPS görevi başlatamaz.
+2. **`cihaz: "cpu"` ve `cihaz: "none"` Görevler (Paralel Yürütme):** Veri hazırlığı, derleyici/lexicon testleri, dokümantasyon, refactor ve analiz görevleri GPU çekişmesi üretmez. Bu görevler Antigravity ve Claude tarafından **eşzamanlı ve paralel olarak devralınabilir**.
 
 Bu ayrım bağlayıcıdır: **bus'ı kendi başına cilalamak hedefe hizmet etmez.** Bir görev bus'ı
 kullanmıyorsa, o görev paralelliğe katkı yapmıyor demektir — T-0001'den T-0006'ya kadar altı
@@ -92,11 +97,12 @@ olarak ayrıdır ve **ikisi de okunur**: kökteki dosyalar elle yazılmış tali
   "status": "open",
   "claimed_by": null,
   "claimed_at": null,
-  "ttl_minutes": 120
+  "ttl_minutes": 120,
+  "cihaz": "mps"
 }
 ```
-`status` ∈ `open | claimed | done | blocked`. Tersine dönüş yok: `done` tekrar açılmaz,
-yeni görev açılır.
+`status` ∈ `open | claimed | done | blocked`. `cihaz` ∈ `"mps" | "cpu" | "none"` (varsayılan: `"mps"`).
+Tersine dönüş yok: `done` tekrar açılmaz, yeni görev açılır.
 
 ### Kiralama — `state/leases/<slug>.json`
 ```json
@@ -152,15 +158,15 @@ Mesajlarda bir artefakta atıf yapılırken:
 
 | araç | girdi | çıktı |
 |---|---|---|
-| `bus_post_task` | title, spec, writes[], acceptance[], to?, ttl_minutes? | `{id}` |
-| `bus_list_tasks` | status? | `[task]` |
+| `bus_post_task` | title, spec, writes[], acceptance[], to?, ttl_minutes?, task_id? | `{id}` |
+| `bus_list_tasks` | status?, to? | `[task]` |
 | `bus_claim_task` | id, owner | `{ok, conflicts[]}` |
-| `bus_acquire_lease` | paths[], task_id, owner, ttl_minutes? | `{ok, conflicts[]}` |
+| `bus_acquire_lease` | paths[], task_id, owner, ttl_minutes?, scope? | `{ok, conflicts[]}` |
 | `bus_release_lease` | paths[], task_id | `{ok}` |
 | `bus_lease_status` | paths? | `[lease]` |
 | `bus_report_result` | task_id, status, summary, evidence[]?, changed_files[]?, narrative_log? | `{ok}` |
-| `bus_send` | to, subject, content | `{ok}` |
-| `bus_inbox` | who, unread_only? | `[message]` |
+| `bus_send` | to, subject, content, from_agent? | `{ok}` |
+| `bus_inbox` | who, unread_only?, ack? | `[message]` |
 | `bus_frozen_list` | — | `[glob]` |
 
 Çakışma döndüren araçlar (`claim_task`, `acquire_lease`) **kısmi başarı uygulamaz**:
@@ -172,71 +178,58 @@ Bus **çekme (pull) tabanlıdır**: hiçbir şey yürütücüyü uyarmaz, bildir
 Görevi almak için yürütücünün kendisi sormak zorundadır. Bu yüzden çevrim yürütücünün
 sorumluluğundadır ve sözleşmesi şudur:
 
-1. **Yokla.** `bus_list_tasks(status="open")` çağır.
-2. **Süz.** `bus_list_tasks` yalnızca `status` ile süzer, **alıcıya göre süzmez**.
-   `to` alanı kendi adın olan (veya `to` alanı boş, yani ilan edilmiş) görevleri kendin
-   ayıkla. Başkasının devraldığı görevleri de bu adımda ele — onlar şu an yürütülüyor,
-   hata değil.
-3. **Seç.** Kalan adaylar arasından **en küçük açık kimliği** seç (`T-0007` < `T-0008`).
+1. **Yokla.** `bus_list_tasks(status="open", to=who)` çağır.
+2. **Süz ve Cihaz Kontrolü.** Açık görevler cihaz ve alıcı eşleşmesine göre süzülür.
+   `to` alanı kendi adın olan (veya `to` alanı boş) görevler adaydır.
+   **Cihaz Kuralı:** Eğer başka bir ajan tarafından devralınmış bir `cihaz: "mps"` görevi
+   çalışıyorsa, ikinci bir `cihaz: "mps"` görevi devralınamaz; sıra beklenir. `cihaz: "cpu"`
+   veya `"none"` görevler ise bağımsız olarak paralel devralınabilir.
+3. **Seç.** Kalan uygun adaylar arasından **en küçük açık kimliği** seç (`T-0007` < `T-0008`).
    Sıra kuraldır, tercih değildir: bu kural "hangisinden başlayayım?" sorusunu ortadan
    kaldırır — cevap her zaman dosyadan okunur, sorulmaz.
 4. **Devral.** `bus_claim_task(id, owner)`. Kendi devraldığın bir görevi tekrar devralmak
    **serbesttir**: yeniden başlayan çevrim kendi işine kaldığı yerden devam eder.
-5. **Tek görev.** Aynı anda **tek** görev yürütülür. Zaten devralınmış bir görevin varsa
-   yenisini devralma; önce onu bitir.
+5. **Tek görev.** Aynı anda **tek** görev yürütülür. Zaten devralınmış aktif bir görevin varsa
+   yenisini devralma (`claim_task` kod düzeyinde engeller — P4); önce mevcut görevi bitir.
 6. **Kirala, raporla, tekrarla.** Yazmadan önce `bus_acquire_lease`, bitince
    `bus_report_result`, sonra `bus_release_lease`; ardından 1. adıma dön.
-7. **Boş kuyrukta sessizce bekle.** Açık görev yoksa **soru sorma, mesaj gönderme, boş
+7. **Boş kuyrukta sessizce bekle.** Açık veya uygun görev yoksa **soru sorma, mesaj gönderme, boş
    rapor yazma** — bekle ve sonra tekrar yokla. Cevapsız bir soru çevrimi durdurur;
    bu sözleşmede bekleyen yürütücü doğru davranan yürütücüdür.
 
-**Ölçülmüş devralma davranışı** (14 Eyl 2026, gerçek sunucu):
+**Ölçülmüş devralma davranışı** (25 Eyl 2026, T-0116/T-0117 sonrası güncel):
 
 | durum | sonuç |
 |---|---|
-| başka sahip devralınmış görevi devralır | `ok: false`, `conflicts` dolu |
-| **aynı sahip kendi görevini tekrar devralır** | `ok: true` — çökme sonrası devam yolu |
+| başka sahip devralınmış görevi devralır (süresi dolmamış) | `ok: false`, `conflicts` dolu |
+| **başka sahip süresi dolmuş görevi devralır** | `ok: true`, `task_claim_takeover` olayı yazılır (devralma zaman aşımı aktif) |
+| **aynı sahip kendi görevini tekrar devralır** | `ok: true` — çökme sonrası devam yolu korunur |
+| **aynı sahip başka bir aktif görevi varken 2. görevi devralır** | `ok: false`, `conflicts` dolu (P4: tek görev kuralı koda bağlandı) |
 | `done` görev tekrar devralınır | `ok: false`, terminal |
 | var olmayan kimlik | temiz hata |
 
-Bilinmesi gereken sınır: **devralmanın süresi dolmaz.** Görev kaydında `ttl_minutes`
-alanı vardır ama devralmaya uygulanan bir zaman aşımı yoktur; farklı bir sahibin bayat
-devralması sırayı süresiz kilitler. Tek yürütücülü kurulumda bu zararsızdır (aynı sahip
-her zaman devam edebilir). İkinci bir yürütücü eklenirse önce devralma zaman aşımı
-gerekir — bu, protokolün bilinen bir eksiğidir, sessiz bir tuzak değil.
+Bilinmesi gereken sınır: Devralma zaman aşımı `ttl_minutes` mekanizmasıyla kaynakta mevcuttur
+(`scripts/agent_bus_mcp.py` satır 397-412, `is_expired` + `task_claim_takeover`). Bir ajanın
+süresi dolmuş görevi diğer ajanca güvenle devralınabilir.
 
 ## Bilinen açık kusurlar (yalnız ÖLÇÜLMÜŞ olanlar)
 
 Bu bölüm **yalnız ölçülmüş** maddeleri taşır; her madde bir ölçüm tarihi ve sınanabilir bir
 iddia içerir. Ölçülüp **çürütülen** iddialar buraya yazılmaz (aşağıda listelenir).
 
-1. **`task_updated` olayı YOK.** `log/events.jsonl`'de **19 Eyl 2026 ölçümü: 1.174 olay** /
-   **6 tip** (`lease_acquired` 409 · `lease_released` 372 · `message_sent` 158 ·
-   `result_reported` 87 · `task_claimed` 79 · `task_posted` 69). **20 Eyl 2026 yeniden
-   ölçümü: 1.191 satır**, tip sayısı hâlâ **6** ve aynı adlarla
-   (`lease_acquired` 409 · `lease_released` 384 · `message_sent` 161 · `result_reported` 89 ·
-   `task_claimed` 79 · `task_posted` 69) ⇒ **olay TİPİ olarak `task_updated` hâlâ yok**
-   (kaynakta `grep -c` = **0**). Bir görev şartnamesinin (`spec`, `writes`, `acceptance`)
-   **sonradan değişmesi hiçbir olay üretmez**; bu yüzden kapsam genişletildiğinde denetim
-   kaydı bunu **göstermez**.
-   ⚠ **Ölçüm tuzağı (ölçüldü, 20 Eyl 2026 — kayda geçer):** log artık `task_updated`
-   dizgesini **1 satırda** taşır; ama o satır bir olay **tipi** değil, **T-0081'in
-   `result_reported` kaydının `evidence` metni**dir — yani bu kusuru *anlatan* bir alıntı.
-   `grep task_updated log/events.jsonl` ile denetim yapan okuyucu bu yüzden
-   **yanlışlıkla "kusur kapandı"** sonucuna varır ⇒ iddia **kaynak** üzerinden
-   (`grep -c scripts/agent_bus_mcp.py`) sınanmalıdır, log üzerinden değil.
-   Bu, kapsam genişletmelerinin **yazılı** bir kaydını zorunlu kılar.
-2. **`read` bayrağı hiçbir zaman `true` yapılmaz.** `bus_send` mesajı `read: false` ile
-   yazar; kaynakta `read` yalnızca **okunur**, onu `true`'ya çeviren bir yol **yoktur** ⇒
-   `bus_inbox(unread_only=True)` pratikte **her** mesajı döndürür. "Okundu" bilgisi
-   güvenilir değildir; bir mesajın işlendiği, **yanıtın veya sonucun varlığıyla** anlaşılır.
+1. **`task_updated` olayı (KAPATILDI — T-0117):** T-0117 ile `post_task(..., task_id=...)`
+   aracılığıyla şartname güncellendiğinde `log/events.jsonl`'e `task_updated` tipi olay
+   yazılması sağlandı. Olay listesinde 8. tip olarak tanımlıdır.
+2. **`read` bayrağı (KAPATILDI — T-0117):** T-0117 ile `bus_inbox(who=..., ack=True)`
+   parametresi eklendi; okunan mesajların `read` bayrağı atomik olarak `true` yapılır ve diske işlenir.
 3. **Kök `tasks/` yüzeyi okunur ama yazılmaz.** Görev araması **iki** dizini tarar
    (`state/tasks/` + `.agent-bus/tasks/`), fakat durum değişiklikleri **yalnız**
    `state/tasks/` altına yazılır. Sonuç: yalnız kökte bulunan elle yazılmış bir şartname
    **okunur ama durumu asla güncellenmez** (bayat `status`). Aynı kimlik iki yerde varsa
    `state/tasks/` kazandığı için bu sessiz bir yanlış okuma değil, **bayat bir kopyadır**.
-4. **Devralmanın süresi dolmaz** — yukarıda "Bilinmesi gereken sınır" bölümünde belgeli.
-   Tek yürütücülü kurulumda zararsız; ikinci bir yürütücüde sıra **süresiz kilitlenir**.
+4. **Devralmanın süresi dolmaz (ÇÜRÜTÜLDÜ — T-0116):** Kaynak kodda `is_expired` denetimi ve
+   `task_claim_takeover` mekanizması commit 9e59830'dan beri mevcuttur. Süresi dolan devralma
+   ikinci yürütücüyü süresiz kilitlemez, devralınabilir.
 5. **`notes/` canlı durum tablosu taşımamalıdır.** Notlar iş **sürerken** yazılır; içlerindeki
    "şu an durum X" satırları **yazıldıkları ana** aittir. Ölçülmüş sonuç: canlı iddialar ya
    damgalanmalı (`... itibarıyla`) ya da yazımdan önce `state/`'ten **yeniden okunmalıdır**;
@@ -245,7 +238,8 @@ iddia içerir. Ölçülüp **çürütülen** iddialar buraya yazılmaz (aşağı
 **Çürütülen iddialar (buraya yazılmadı, kayda geçer).** *"Okuma `state/`, yazma köke — asimetri
 kusurdur"* iddiası **ölçümle çürüdü**: yön terstir (yazma `state/`'e) ve daha önemlisi bu
 tasarım yukarıda "Kök dizin" bölümünde **açıkça belgelenmiştir**, kusur değildir. *"Ayna diff'i
-kusurdur"* da yanlıştı: aynalı görevlerde görülen fark **beklenen** davranıştır.
+kusurdur"* da yanlıştı: aynalı görevlerde görülen fark **beklenen** davranıştır. *"Bayat kiralama
+ikinci acquire'ı bloklar"* iddiası T-0116'da çürütüldü (süresi dolan kiralama atlanır, ok=true döner).
 
 ## Uygulama gereksinimleri
 
