@@ -275,7 +275,8 @@ def b_ekseni(model: KristalLM, vocab: Vocabulary, device) -> Dict[str, Any]:
 # ---------------------------------------------------------------- uretim
 def uret(model: KristalLM, tokenizer: KristalTokenizer, vocab: Vocabulary,
          inst: str, inp: str, device, max_new: int,
-         eos_id: int, out_end_id: int, out_id: int) -> Tuple[List[int], List[str]]:
+         eos_id: int, out_end_id: int, out_id: int,
+         rol_zarf: bool = False) -> Tuple[List[int], List[str]]:
     """Greedy uretim — kanonik zarf `render_prompt` ile.
 
     FAIL-CLOSED (T-0094/K7): `tokenizer.encode` sona **`<EOS>` EKLER**. Egitimde
@@ -287,7 +288,7 @@ def uret(model: KristalLM, tokenizer: KristalTokenizer, vocab: Vocabulary,
     Cozum: sonda `<EOS>` varsa KIRP ve son jetonun `<OUTPUT>` oldugunu dogrula.
     Ikisi de tutmazsa burada DURURUZ (sessiz kalip bozuk uretim yapmayiz).
     """
-    prompt_str = render_prompt(inst, inp)
+    prompt_str = render_prompt(inst, inp, rol_zarf=rol_zarf)
     prompt_ids = [int(t) for t in tokenizer.encode(prompt_str)]
     if prompt_ids and prompt_ids[-1] == eos_id:
         prompt_ids = prompt_ids[:-1]
@@ -356,6 +357,8 @@ def main() -> int:
     ap.add_argument("--max-new", type=int, default=128)
     ap.add_argument("--ceket-ekseni", action="store_true",
                     help="ceket (uretim) eksenini olc — taban/giydirilmemis kosumda KAPALI tut")
+    ap.add_argument("--rol-zarf", action="store_true",
+                    help="Uretimde rol zarfi kullan (T-0120; marangoz uzmanlik cercevesi)")
     args = ap.parse_args()
 
     print("=" * 78)
@@ -488,7 +491,7 @@ def main() -> int:
         for i, r in enumerate(ornek):
             _, gen_tok = uret(model, tokenizer, vocab, r.get("instruction", ""),
                               r.get("input", ""), device, args.max_new, eos_id, out_end_id,
-                              out_id)
+                              out_id, rol_zarf=args.rol_zarf)
             gm = " ".join(gen_tok)
             ham_gm.append(gm)
             try:
@@ -609,6 +612,7 @@ def main() -> int:
         "train_source": args.train_source, "train_source_sha256": sha256_yol(args.train_source),
         "train_satir": len(egitim), "heldout_satir": len(held),
         "seed": args.seed, "n": len(ornek), "max_new": args.max_new,
+        "rol_zarf": args.rol_zarf,
         "device": str(device), "device_istenen": args.device,
         "device_notu": "Sayilar YALNIZ ayni cihazdaki kosumlarla kiyaslanabilir "
                        "(uretim RNG'si cihaza bagli; CPU ile MPS esit degil).",

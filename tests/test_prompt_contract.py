@@ -16,7 +16,7 @@ import re
 import pytest
 import torch
 
-from src.llm.prompt_contract import render_prompt, render_example, describe, TokenizerConfig
+from src.llm.prompt_contract import render_prompt, render_example, describe, TokenizerConfig, ROL_ZARFI
 from src.llm.tokenizer import Vocabulary, KristalTokenizer
 from src.compiler.lexicon import LexiconManager
 from src.compiler.morphotactics import build_default_graph
@@ -89,6 +89,48 @@ def test_canary_b_render_example_token_identity(env):
             f"Contract:  {contract_tokens}\n"
             f"Canonical: {canonical_tokens}"
         )
+
+
+def test_render_prompt_rol_zarfi(env):
+    """T-0120: Rol zarfı kalıcı entegrasyonu kanaryası.
+    - rol_zarf=False (varsayılan) çağrısı geriye dönük tam uyumlu ve bit-özdeştir.
+    - rol_zarf=True çağrısı ROL_ZARFI'nı instruction başına ekler.
+    - Boş instruction durumunda rol_zarf=True tek başına ROL_ZARFI üretir.
+    - Her iki durumda da token dizilimi <BOS> ile başlar ve <OUTPUT> ile biter.
+    """
+    tok = env["tokenizer"]
+    out_id = env["vocab"].stoi["<OUTPUT>"]
+    bos_id = env["bos_id"]
+
+    inst = "Ahşap ve marangozluk uzmanı olarak cevapla."
+    inp = "Zıvana nedir?"
+
+    # 1. Varsayılan ile açık rol_zarf=False bit-özdeşliği
+    p_default = render_prompt(inst, inp)
+    p_false = render_prompt(inst, inp, rol_zarf=False)
+    assert p_default == p_false
+    assert ROL_ZARFI not in p_default
+
+    # 2. rol_zarf=True doğrulaması
+    p_true = render_prompt(inst, inp, rol_zarf=True)
+    assert ROL_ZARFI in p_true
+    expected_inst = f"{ROL_ZARFI}\n\n{inst}"
+    assert f"<INSTRUCTION> {expected_inst} </INSTRUCTION>" in p_true
+    assert f"<INPUT> {inp} </INPUT> <OUTPUT>" in p_true
+
+    # 3. Boş instruction ile rol_zarf=True
+    p_empty_inst = render_prompt("", inp, rol_zarf=True)
+    assert f"<INSTRUCTION> {ROL_ZARFI} </INSTRUCTION>" in p_empty_inst
+
+    # 4. Tokenizer seviyesinde yapı bütünlüğü (<BOS>...<OUTPUT>)
+    t_false = tok.encode(p_false)
+    t_true = tok.encode(p_true)
+    assert t_false[0] == bos_id
+    assert t_true[0] == bos_id
+    # encode sonrası son token <EOS> olur, sondan bir önceki <OUTPUT>
+    assert t_false[-2] == out_id
+    assert t_true[-2] == out_id
+    assert t_true[:2] != [bos_id, bos_id]
 
 
 def evaluate_site_tokens(filepath: str, content: str = None, tok = None, bos_id: int = 2):

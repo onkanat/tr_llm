@@ -69,7 +69,13 @@ def render_example(instruction: str, input_text: str, output_text: str) -> str:
     return KristalTokenizer._render_structured_prompt(None, item)
 
 
-def render_prompt(instruction: str, input_text: str) -> str:
+ROL_ZARFI: str = (
+    "[Rol] Sen marangozluk alanında uzman bir ustasın. Cevabını alan\n"
+    "terminolojisiyle, uzman formatında ver."
+)
+
+
+def render_prompt(instruction: str, input_text: str, rol_zarf: bool = False) -> str:
     """
     Kanonik PROMPT zarfı (çıkarsama ve nedensel maskeleme sınırı).
     KristalTokenizer._render_structured_prompt'a delege eder.
@@ -79,9 +85,17 @@ def render_prompt(instruction: str, input_text: str) -> str:
       - instruction boşsa <INSTRUCTION> bloğu atlanır.
       - <INPUT> bloğu HER ZAMAN basılır (boş olsa dahi).
       - <OUTPUT> etiketi ile BİTER (modelin üretimi bu noktadan başlar).
+      - rol_zarf: True ise instruction başına ROL_ZARFI + "\\n\\n" eklenir (T-0114/T-0120 salt-eklenti).
     """
+    ins = instruction.strip() if instruction else ""
+    if rol_zarf:
+        if ins:
+            ins = f"{ROL_ZARFI}\n\n{ins}"
+        else:
+            ins = ROL_ZARFI
+
     item = {
-        "instruction": instruction.strip() if instruction else "",
+        "instruction": ins,
         "input": input_text.strip() if input_text else "",
         "output": ""
     }
