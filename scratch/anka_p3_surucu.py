@@ -117,6 +117,7 @@ def main() -> int:
     import argparse
     global SEGMENTLER, TOPLAM_ADIM, WARMUP, KOS
     global SOZLUK, LEXICON, WIKI_BIN, SFT_BIN, CEKET_BIN   # T-0106 B2 (ilan §2)
+    global PATERN_SIRA
     ap = argparse.ArgumentParser(description="P3 üç kaynaklı yetenek koşumu")
     ap.add_argument("--kapi-sinamasi", action="store_true",
                     help="TEPE + CE kapılarının iki dalını sına ve çık")
@@ -128,6 +129,11 @@ def main() -> int:
     ap.add_argument("--wiki-bin", default=WIKI_BIN)
     ap.add_argument("--sft-bin", default=SFT_BIN)
     ap.add_argument("--ceket-bin", default=CEKET_BIN)
+    ap.add_argument("--patern-sira", default=None,
+                    help="T-0113 salt-eklenti (T-0067 deseni): virgüllü pencere "
+                         "rolü sırası, ör. 'wiki,ceket,sft,sft,sft' (idx %% döngü). "
+                         "Varsayılan YOK ⇒ kanonik PATERN=5 davranışı birebir "
+                         "(0⇒wiki · 1,2⇒ceket · 3,4⇒SFT) korunur.")
     ap.add_argument("--kos-adi", default=None)
     ap.add_argument("--segmentler", default=None, help="virgüllü, ör. '2000,2000,2000'")
     ap.add_argument("--cihaz", default="mps", choices=["mps", "cpu"])
@@ -166,6 +172,13 @@ def main() -> int:
     if a.segmentler:
         SEGMENTLER = [int(s) for s in a.segmentler.split(",") if s.strip()]
         TOPLAM_ADIM = sum(SEGMENTLER)
+    # T-0113 salt-eklenti (T-0067 deseni): pencere rolü sırası. Varsayılan YOK ⇒
+    # kanonik PATERN=5 davranışı bit-özdeş korunur (aşağıdaki rol-eşleme).
+    PATERN_SIRA = None
+    if a.patern_sira:
+        PATERN_SIRA = [s.strip() for s in a.patern_sira.split(",") if s.strip()]
+        if not PATERN_SIRA or not all(s in ("wiki", "ceket", "sft") for s in PATERN_SIRA):
+            P2.durdur("--patern-sira geçersiz: 'wiki|ceket|sft' virgüllü sıra olmalı")
     if a.kos_adi:
         KOS = f"scratch/{a.kos_adi}"
     taban = a.taban
@@ -274,8 +287,12 @@ def main() -> int:
         "segmentler": SEGMENTLER, "blok": BLOK, "batch": BATCH, "lr": LR,
         "scheduler": {"warmup": WARMUP, "toplam_adim": TOPLAM_ADIM, "min_lr": MIN_LR},
         "clip": CLIP,
-        "patern": "pencere idx % 5: 0⇒wiki · 1,2⇒ceket · 3,4⇒sft",
+        "patern": (",".join(PATERN_SIRA) if PATERN_SIRA else
+                   "pencere idx % 5: 0⇒wiki · 1,2⇒ceket · 3,4⇒sft"),
         "tepe_esik": TEPE_ESIK,
+        "kisa_pencere_kapi": ("T-0113b salt-eklenti: y uzunluk != BLOK pencere ATLANIR "
+                              "(blok-hizalı bin son penceresi y=127 üretir; "
+                              "mask_prompt_targets IndexError kanıt 25 Eyl)"),
         "optimizer_carry": carry_beyan,
         "ce_tavan": P2.CE_TAVAN,
         "maske": "PAD→−100 + ignore_index=−100 (P2/Aşama 1)",
@@ -290,6 +307,7 @@ def main() -> int:
     global_adim = 0
     pencere_no = 0
     bos_hedef_atlanan = 0
+    kisa_pencere_atlanan = 0
     kaynak_sayac = {"wiki": 0, "ceket": 0, "sft": 0}
     tepe_ckpt: str | None = None
 
@@ -301,14 +319,33 @@ def main() -> int:
             xs, hedefler = [], []
             deneme = 0
             while len(xs) < BATCH:
-                m = pencere_no % PATERN
-                if m == 0:
+                # T-0113 salt-eklenti: rol --patern-sira'dan; YOKSA kanonik
+                # eşleme (0⇒wiki · 1,2⇒ceket · 3,4⇒SFT) birebir korunur.
+                if PATERN_SIRA is not None:
+                    rol = PATERN_SIRA[pencere_no % len(PATERN_SIRA)]
+                else:
+                    m_kanonik = pencere_no % PATERN
+                    rol = "wiki" if m_kanonik == 0 else (
+                        "ceket" if m_kanonik in (1, 2) else "sft")
+                if rol == "wiki":
                     x_cpu, y_cpu = P2.pencere_oku(wiki_mm, int(rng.integers(0, wiki_blok)))
+                    if y_cpu.shape[0] != BLOK:
+                        kisa_pencere_atlanan += 1
+                        pencere_no += 1; deneme += 1
+                        if deneme >= 4 * BATCH:
+                            break
+                        continue
                     h_np = y_cpu.numpy().copy()
                     h_np = maske_pad_hedefleri(h_np, pad_id, True)
                     kaynak_sayac["wiki"] += 1
-                elif m in (1, 2):
+                elif rol == "ceket":
                     x_cpu, y_cpu = P2.pencere_oku(ceket_mm, int(rng.integers(0, ceket_blok)))
+                    if y_cpu.shape[0] != BLOK:
+                        kisa_pencere_atlanan += 1
+                        pencere_no += 1; deneme += 1
+                        if deneme >= 4 * BATCH:
+                            break
+                        continue
                     h2 = mask_prompt_targets(x_cpu.unsqueeze(0), y_cpu.unsqueeze(0),
                                              output_start_id, eos_id)
                     h_np = np.asarray(h2)[0]
@@ -316,6 +353,12 @@ def main() -> int:
                     kaynak_sayac["ceket"] += 1
                 else:
                     x_cpu, y_cpu = P2.pencere_oku(sft_mm, int(rng.integers(0, sft_blok)))
+                    if y_cpu.shape[0] != BLOK:
+                        kisa_pencere_atlanan += 1
+                        pencere_no += 1; deneme += 1
+                        if deneme >= 4 * BATCH:
+                            break
+                        continue
                     h2 = mask_prompt_targets(x_cpu.unsqueeze(0), y_cpu.unsqueeze(0),
                                              output_start_id, eos_id)
                     h_np = np.asarray(h2)[0]
@@ -400,6 +443,7 @@ def main() -> int:
             "kayip_son": round(kayip_gecmis[-1], 4) if kayip_gecmis else None,
             "lr_son": round(cur_lr, 8) if kayip_gecmis else None,
             "bos_hedef_pencere": bos_hedef_atlanan,
+            "kisa_pencere_atlanan": kisa_pencere_atlanan,
             "kaynak_sayac": dict(kaynak_sayac),
             "ce_kapi_dustu": dustu, "ce_kapi_gerekce": gerekce,
             "sonda": {"n": ck.get("n"), "rouge_l_ort": ck.get("rouge_l_ort"),
