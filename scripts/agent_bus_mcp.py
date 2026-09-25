@@ -298,15 +298,44 @@ class AgentBus:
         acceptance: Optional[List[str]] = None,
         to: Optional[str] = None,
         from_agent: str = "claude",
-        ttl_minutes: int = 120
+        ttl_minutes: int = 120,
+        task_id: Optional[str] = None
     ) -> Dict[str, Any]:
         self.ensure_directories()
         validate_agent_name(from_agent, "from_agent")
         if to is not None and to != "":
             validate_agent_name(to, "to")
+        if task_id is not None:
+            validate_task_id(task_id, "task_id")
 
         clean_writes = [sanitize_rel_path(w) for w in (writes or [])]
         clean_acceptance = [str(a) for a in (acceptance or [])]
+
+        if task_id:
+            existing_task = self.get_task(task_id)
+            if existing_task:
+                # P7: Şartname güncelleme dalı — değişen alanları tespit et ve task_updated olayı yaz
+                changed_fields = {}
+                new_vals = {
+                    "title": title,
+                    "spec": spec,
+                    "writes": clean_writes,
+                    "acceptance": clean_acceptance,
+                    "to": to,
+                    "ttl_minutes": int(ttl_minutes)
+                }
+                for k, v in new_vals.items():
+                    if existing_task.get(k) != v:
+                        changed_fields[k] = {"old": existing_task.get(k), "new": v}
+                        existing_task[k] = v
+
+                target_file = self.get_task_file_path(task_id)
+                atomic_write_json(target_file, existing_task)
+                self.log_event("task_updated", from_agent, {
+                    "id": task_id,
+                    "changed_fields": changed_fields
+                })
+                return {"id": task_id}
 
         # Sonraki ID'yi belirle (T-XXXX)
         max_num = 0
@@ -319,7 +348,7 @@ class AgentBus:
                         if part.isdigit():
                             max_num = max(max_num, int(part))
 
-        next_id = f"T-{max_num + 1:04d}"
+        next_id = task_id or f"T-{max_num + 1:04d}"
         task_data = {
             "id": next_id,
             "from": from_agent,
@@ -343,7 +372,7 @@ class AgentBus:
     # -----------------------------------------------------------------
     # ARAÇ 2: bus_list_tasks
     # -----------------------------------------------------------------
-    def list_tasks(self, status: Optional[str] = None) -> List[Dict[str, Any]]:
+    def list_tasks(self, status: Optional[str] = None, to: Optional[str] = None) -> List[Dict[str, Any]]:
         self.ensure_directories()
         tasks_map: Dict[str, Dict[str, Any]] = {}
         search_dirs = [self.tasks_dir, os.path.join(self.bus_dir, "tasks")]
@@ -365,6 +394,8 @@ class AgentBus:
         results = list(tasks_map.values())
         if status:
             results = [t for t in results if t.get("status") == status]
+        if to:
+            results = [t for t in results if t.get("to") == to or t.get("to") is None]
 
         results.sort(key=lambda x: str(x.get("id", "")))
         return results
@@ -399,6 +430,29 @@ class AgentBus:
 
         if cur_status == "claimed" and not is_expired and claimed_by != owner:
             return {"ok": False, "conflicts": [f"Görev '{task_id}' şu anda '{claimed_by}' tarafından kiralanmıştır (claimed)."]}
+
+        # P4: Tek görev kuralı — aynı owner'ın başka aktif 'claimed' görevi varsa reddet
+        other_active_claimed = []
+        all_tasks = self.list_tasks(status="claimed")
+        for ot in all_tasks:
+            otid = ot.get("id")
+            if otid != task_id and ot.get("claimed_by") == owner:
+                # Zaman aşımı kontrolü
+                ot_claimed_at = ot.get("claimed_at")
+                ot_ttl = int(ot.get("ttl_minutes", 120))
+                ot_expired = False
+                if ot_claimed_at:
+                    ot_dt = parse_iso_datetime(ot_claimed_at)
+                    if ot_dt and now_dt > (ot_dt + timedelta(minutes=ot_ttl)):
+                        ot_expired = True
+                if not ot_expired:
+                    other_active_claimed.append(otid)
+
+        if other_active_claimed:
+            return {
+                "ok": False,
+                "conflicts": [f"Ajan '{owner}' şu anda başka bir aktif görevi devralmış durumdadır: {', '.join(other_active_claimed)}. Aynı anda tek görev kuralı gereği yeni görev devralınamaz."]
+            }
 
         # Görevi sahiplen
         task["status"] = "claimed"
@@ -788,7 +842,7 @@ class AgentBus:
     # -----------------------------------------------------------------
     # ARAÇ 9: bus_inbox
     # -----------------------------------------------------------------
-    def read_inbox(self, who: str, unread_only: bool = False) -> List[Dict[str, Any]]:
+    def read_inbox(self, who: str, unread_only: bool = False, ack: bool = False) -> List[Dict[str, Any]]:
         self.ensure_directories()
         validate_agent_name(who, "who")
 
@@ -816,6 +870,23 @@ class AgentBus:
             extract_message_order(str(x.get("_filename", ""))),
             str(x.get("_filename", ""))
         ))
+
+        # P6: ack=True ise döndürülen mesajların 'read' alanını True yap ve atomik kaydet
+        if ack:
+            for msg in messages:
+                fname = msg.get("_filename")
+                if fname:
+                    fpath = os.path.join(recipient_dir, fname)
+                    if os.path.exists(fpath):
+                        try:
+                            # _filename çalışma zamanı alanıdır, diske yazılmaz
+                            disk_data = {k: v for k, v in msg.items() if k != "_filename"}
+                            disk_data["read"] = True
+                            atomic_write_json(fpath, disk_data)
+                            msg["read"] = True
+                        except Exception as e:
+                            sys.stderr.write(f"[agent-bus ERROR] Mesaj okundu işaretleme hatası ({fname}): {e}\n")
+
         return messages
 
     # -----------------------------------------------------------------
@@ -832,7 +903,7 @@ class AgentBus:
 TOOL_DEFINITIONS = [
     {
         "name": "bus_post_task",
-        "description": "Yeni bir ajan koordinasyon görevi oluşturur (state/tasks/T-XXXX.json).",
+        "description": "Yeni bir ajan koordinasyon görevi oluşturur veya mevcut bir görevi günceller (state/tasks/T-XXXX.json).",
         "inputSchema": {
             "type": "object",
             "properties": {
@@ -842,18 +913,20 @@ TOOL_DEFINITIONS = [
                 "acceptance": {"type": "array", "items": {"type": "string"}, "description": "Kabul kriteri doğrulama adımları"},
                 "to": {"type": "string", "description": "Hedef ajan (antigravity veya claude)"},
                 "from_agent": {"type": "string", "description": "Görevi açan ajan (varsayılan: claude)"},
-                "ttl_minutes": {"type": "integer", "description": "Görevin yaşam süresi (varsayılan: 120)"}
+                "ttl_minutes": {"type": "integer", "description": "Görevin yaşam süresi (varsayılan: 120)"},
+                "task_id": {"type": "string", "description": "Güncellenecek görev ID (opsiyonel, verilirse şartname güncellenir ve task_updated olayı üretilir)"}
             },
             "required": ["title", "spec"]
         }
     },
     {
         "name": "bus_list_tasks",
-        "description": "Mevcut görevleri listeler, istenirse duruma göre filtreler.",
+        "description": "Mevcut görevleri listeler, istenirse duruma ve alıcıya göre filtreler.",
         "inputSchema": {
             "type": "object",
             "properties": {
-                "status": {"type": "string", "enum": ["open", "claimed", "done", "blocked"], "description": "Filtrelenecek durum"}
+                "status": {"type": "string", "enum": ["open", "claimed", "done", "blocked"], "description": "Filtrelenecek durum"},
+                "to": {"type": "string", "description": "Filtrelenecek hedef ajan (belirtilen ajana veya herkese açık görevleri listeler)"}
             }
         }
     },
@@ -952,7 +1025,8 @@ TOOL_DEFINITIONS = [
             "type": "object",
             "properties": {
                 "who": {"type": "string", "description": "Mesajları okunacak ajan adı"},
-                "unread_only": {"type": "boolean", "description": "Yalnızca okunmamış mesajları getir"}
+                "unread_only": {"type": "boolean", "description": "Yalnızca okunmamış mesajları getir"},
+                "ack": {"type": "boolean", "description": "Döndürülen mesajları okundu (read=true) olarak işaretle"}
             },
             "required": ["who"]
         }
@@ -999,10 +1073,11 @@ def execute_tool_call(bus: AgentBus, name: str, args: Dict[str, Any]) -> Any:
             acceptance=args.get("acceptance"),
             to=args.get("to"),
             from_agent=args.get("from_agent", "claude"),
-            ttl_minutes=args.get("ttl_minutes", 120)
+            ttl_minutes=args.get("ttl_minutes", 120),
+            task_id=args.get("task_id")
         )
     elif name == "bus_list_tasks":
-        return bus.list_tasks(status=args.get("status"))
+        return bus.list_tasks(status=args.get("status"), to=args.get("to"))
     elif name == "bus_claim_task":
         return bus.claim_task(task_id=args["id"], owner=args["owner"])
     elif name == "bus_acquire_lease":
@@ -1034,7 +1109,7 @@ def execute_tool_call(bus: AgentBus, name: str, args: Dict[str, Any]) -> Any:
             from_agent=args.get("from_agent", "antigravity")
         )
     elif name == "bus_inbox":
-        return bus.read_inbox(who=args["who"], unread_only=args.get("unread_only", False))
+        return bus.read_inbox(who=args["who"], unread_only=args.get("unread_only", False), ack=args.get("ack", False))
     elif name == "bus_frozen_list":
         return bus.frozen_list()
     else:
@@ -1627,6 +1702,66 @@ def run_selftest(real_repo_root: Optional[str] = None) -> bool:
             return False
 
         # -------------------------------------------------------------
+        # ADIM 12: T-0117 -> Bus-Onarım Paketi (P4 + P6 + P7 + P8)
+        # -------------------------------------------------------------
+        # P4: Tek görev kuralı (aynı owner'ın başka aktif claimed görevi varsa reddet)
+        task_a_res = bus.post_task(title="P4 Görev A", spec="A", to="claude", from_agent="antigravity")
+        task_b_res = bus.post_task(title="P4 Görev B", spec="B", to="claude", from_agent="antigravity")
+        claim_a = bus.claim_task(task_id=task_a_res["id"], owner="claude")
+        assert claim_a.get("ok") is True, f"İlk devralma başarısız: {claim_a}"
+        # Aynı görevi tekrar devralmak SERBEST (yeniden başlama yolu)
+        claim_a_repeat = bus.claim_task(task_id=task_a_res["id"], owner="claude")
+        assert claim_a_repeat.get("ok") is True, f"Kendi görevini tekrar devralma reddedildi: {claim_a_repeat}"
+        # Başka açık görevi devralmak ENGELLENMELİ (P4)
+        claim_b_conflict = bus.claim_task(task_id=task_b_res["id"], owner="claude")
+        p4_pass = (claim_b_conflict.get("ok") is False) and ("Aynı anda tek görev kuralı gereği" in claim_b_conflict.get("conflicts", [""])[0])
+        # Görev A'yı bitir, ardından B'yi devralabilmeli
+        bus.report_result(task_id=task_a_res["id"], status="done", summary="A bitti")
+        claim_b_after_done = bus.claim_task(task_id=task_b_res["id"], owner="claude")
+        p4_pass = p4_pass and (claim_b_after_done.get("ok") is True)
+
+        # P8: bus_list_tasks to filtresi
+        task_c_res = bus.post_task(title="P8 Görev C (Antigravity)", spec="C", to="antigravity", from_agent="claude")
+        task_d_res = bus.post_task(title="P8 Görev D (Genel)", spec="D", to=None, from_agent="claude")
+        list_claude = bus.list_tasks(to="claude")
+        list_anti = bus.list_tasks(to="antigravity")
+        # to="antigravity" listesinde C olmalı, genel D olmalı, to="claude" olan A/B OLMAMALI
+        anti_ids = {t["id"] for t in list_anti}
+        p8_pass = (task_c_res["id"] in anti_ids) and (task_d_res["id"] in anti_ids) and (task_a_res["id"] not in anti_ids)
+
+        # P6: bus_inbox ack parametresi
+        bus.send_message(to="antigravity", subject="Ack Testi", content="Test", from_agent="claude")
+        inbox_before = bus.read_inbox(who="antigravity", unread_only=True, ack=False)
+        has_unread = any(m.get("subject") == "Ack Testi" and not m.get("read") for m in inbox_before)
+        inbox_acked = bus.read_inbox(who="antigravity", unread_only=True, ack=True)
+        inbox_after = bus.read_inbox(who="antigravity", unread_only=True, ack=False)
+        is_now_read = not any(m.get("subject") == "Ack Testi" for m in inbox_after)
+        p6_pass = has_unread and is_now_read
+
+        # P7: task_updated olayı
+        task_e_res = bus.post_task(title="P7 Görev E", spec="Eski şartname", to="antigravity", from_agent="claude")
+        events_count_before = 0
+        if os.path.exists(bus.events_file):
+            with open(bus.events_file, "r", encoding="utf-8") as ef:
+                events_count_before = len([l for l in ef if l.strip()])
+        bus.post_task(title="P7 Görev E (Güncel)", spec="Yeni şartname", to="antigravity", from_agent="claude", task_id=task_e_res["id"])
+        updated_task = bus.get_task(task_e_res["id"])
+        spec_updated = (updated_task.get("spec") == "Yeni şartname") and (updated_task.get("title") == "P7 Görev E (Güncel)")
+        last_event = None
+        if os.path.exists(bus.events_file):
+            with open(bus.events_file, "r", encoding="utf-8") as ef:
+                lines = [l.strip() for l in ef if l.strip()]
+                if lines:
+                    last_event = json.loads(lines[-1])
+        p7_pass = spec_updated and (last_event is not None) and (last_event.get("event") == "task_updated") and ("spec" in last_event.get("payload", {}).get("changed_fields", {}))
+
+        step12_pass = p4_pass and p8_pass and p6_pass and p7_pass
+        print(f"[{'GEÇTİ' if step12_pass else 'KALDI'}] Adım 12: T-0117 -> P4 (tek görev), P8 (to filtresi), P6 (inbox ack), P7 (task_updated) doğrulandı", file=sys.stderr)
+        if not step12_pass:
+            sys.stderr.write(f"  Detay: p4={p4_pass}, p8={p8_pass}, p6={p6_pass}, p7={p7_pass}\n")
+            return False
+
+        # -------------------------------------------------------------
         # EK KONTROL: Kök Çözümleme Önceliği (CLI > AGENT_BUS_ROOT > cwd)
         # -------------------------------------------------------------
         orig_env = os.environ.get("AGENT_BUS_ROOT")
@@ -1646,7 +1781,7 @@ def run_selftest(real_repo_root: Optional[str] = None) -> bool:
                 del os.environ["AGENT_BUS_ROOT"]
 
     print("=================================================================", file=sys.stderr)
-    print("   NİHAİ SONUÇ: 11 ADIMIN HEPSİ BAŞARIYLA GEÇTİ (PASSED)        ", file=sys.stderr)
+    print("   NİHAİ SONUÇ: 12 ADIMIN HEPSİ BAŞARIYLA GEÇTİ (PASSED)        ", file=sys.stderr)
     print("=================================================================", file=sys.stderr)
     return True
 
