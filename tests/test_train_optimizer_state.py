@@ -152,10 +152,24 @@ def test_G3_devam_kosumunda_momentler_geri_gelir(tmp_path):
 
 def test_G3b_scheduler_durumu_geri_yuklenir(tmp_path):
     """G3b (P2/Aşama 1): yan dosyadaki scheduler durumu, devam koşumuna GEÇER —
-    bayrak verilmediğinde eğri devam koşumunda TEKRAR TEPEDEN BAŞLAMAMALI."""
+    bayrak verilmediğinde eğri devam koşumunda TEKRAR TEPEDEN BAŞLAMAMALI.
+
+    T-0129 ONARIM GÜNCELLEMESİ (2026-09-26, operatör onayı — T-0140): onarım kapısı
+    (commit 051f43a) CLI'da `--steps` != `--toplam-adim` ikilisini iki yönde rc=1 ile
+    DURDURUR (kısmi-schedule CLI kullanımı artık çelişkidir). Testin eski r1'i
+    `--steps 2 --toplam-adim 4` ile bilinçli kısmi-schedule kuruyordu ve kapıya çarptı
+    (T-0134 tam paket koşumunda yakalandı; öncesi kanıt: d83e971'de yalnız stderr
+    UYARI, rc=0). Onarım: r1 artık TAM schedule koşar (`--steps 4 --toplam-adim 4`)
+    ve `--save-every 2` ile periyodik kayıt kullanır; r2 scheduler durumunu CLI'da
+    `--toplam-adim` VERMEDEN, yalnız sidecar carry ile alır — testin niyeti
+    (yan dosyadaki scheduler durumunun devam koşumuna geçmesi) korunur.
+    """
     m1 = tmp_path / "m1.pt"
-    r1 = _kosum(*ORTAK, "--save-path", str(m1), "--save-optimizer",
-                "--warmup-steps", "2", "--toplam-adim", "4", "--min-lr", "1e-6")
+    r1 = _kosum("--device", "cpu", "--data", VERI, "--vocab", VOCAB, "--pretrain",
+                "--from-scratch", "--steps", "4", "--batch-size", "1",
+                "--block-size", "32", "--seed", "1234",
+                "--warmup-steps", "2", "--toplam-adim", "4", "--min-lr", "1e-6",
+                "--save-path", str(m1), "--save-optimizer", "--save-every", "2")
     assert r1.returncode == 0, f"1. koşum düştü:\n{r1.stderr[-1500:]}"
     m2 = tmp_path / "m2.pt"
     r2 = _kosum("--device", "cpu", "--data", VERI, "--vocab", VOCAB, "--pretrain",
