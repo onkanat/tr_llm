@@ -1,6 +1,6 @@
 # agent-bus — Ajanlar Arası Koordinasyon Protokolü
 
-**Sürüm:** 1.1 · **Tarih:** 2026-09-14 · **Durum:** **uygulandı ve çalışıyor** (`scripts/agent_bus_mcp.py`) · **son düzenleme:** 2026-09-25 (T-0118)
+**Sürüm:** 1.2 · **Tarih:** 2026-09-14 · **Durum:** **uygulandı ve çalışıyor** (`scripts/agent_bus_mcp.py`) · **son düzenleme:** 2026-09-26 (otomatik onay protokolü)
 
 İki ajan aynı repoda çalışır: **danışman** (Claude Code — analiz, doğrulama, kapı tasarımı)
 ve **yürütücü** (Antigravity — eğitim, refactor, betik, test).
@@ -211,6 +211,29 @@ sorumluluğundadır ve sözleşmesi şudur:
 Bilinmesi gereken sınır: Devralma zaman aşımı `ttl_minutes` mekanizmasıyla kaynakta mevcuttur
 (`scripts/agent_bus_mcp.py` satır 397-412, `is_expired` + `task_claim_takeover`). Bir ajanın
 süresi dolmuş görevi diğer ajanca güvenle devralınabilir.
+
+### Otomatik Onay ve İstek Protokolü (İlan: 2026-09-26)
+
+Operatör kararıyla onay talepleri ve istekler iki ajan arasında **karşılıklı otomatik** işlenir.
+Kanal `state/inbox/`'tır; kural şudur:
+
+1. **claude tarafı — otomatik yanıt döngüsü:** claude, kendi inbox'ını bir izleyiciyle
+   sürekli yoklar; antigravity'den gelen her yeni mesaj operatör aktarımı OLMADAN
+   otomatik işlenir: (a) FAZ bildirimi → bağımsız doğrulama (digest/log/agregat/spot-kontrol)
+   → doğrulama temizse FAZ-geçiş onayı `bus_send` ile **otomatik** verilir; sapma varsa
+   BLOK mesajı + kök neden gönderilir; (b) danışma/istek → soru betimsel cevaplanır
+   (cevap hipotezdir, ölçüm yürütücüdedir).
+2. **antigravity tarafı:** doğrulama-onay beklentisi yalnızca inbox üzerinden iletilir ve
+   gelen onay/istek cevapları beklemeden işleme alınır; kendi isteklerini (dosya paylaşımı,
+   log, danışma) doğrudan inbox'a yazar — operatör aracılığı gerekmez.
+3. **Operatör kapısı OTOMATİKLEŞMEZ.** Aşağıdakiler için insan onayı zorunlu kalır ve bu
+   kapılar otomatik onayın kapsamına girmez: git commit, model `.pt` silme, eşik/TAVAN
+   (ESİK_ROUGE, TAVAN_ROUGE_DECOMP) değişikliği, donmuş yol yazımı, yeni görev şartnamesinin
+   operatör emri olmadan açılması.
+4. **Kural çakışması:** FAZ-geçiş onayının otomatikleşmesi, FAZ içi duraklama noktalarının
+   (ör. bin dekod denetimi) kaldırılması DEĞİLDİR — duraklama noktası aynı denetimi yapar,
+   yalnızca insan aktarım halkası düşer. Doğrulama başarısızsa onay verilmez; fail-closed
+   korunur.
 
 ## Bilinen açık kusurlar (yalnız ÖLÇÜLMÜŞ olanlar)
 
