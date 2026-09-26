@@ -284,6 +284,7 @@ def main():
     # VARSAYILAN KAPALI: bayrak verilmezse davranis BIT-BIT ayni kalir (yan dosya olusmaz).
     save_optimizer = "--save-optimizer" in sys.argv
     load_optimizer = "--load-optimizer" in sys.argv
+    optimizer_fresh = "--optimizer-fresh" in sys.argv
     opt_save_path = optimizer_sidecar_path(model_save_path)
 
     # DONMUS KAPI YAN DOSYA ICIN DE (T-0048 AST degismezi: kontrol torch.save'dan ONCE).
@@ -362,15 +363,23 @@ def main():
 
     # ADAMW MOMENTLERINI GERI YUKLE (T-0092). Sirasi onemli: optimizer yukarida KURULMALI,
     # cunku state_dict ancak kurulmus bir optimizer'a yuklenebilir.
+    # G1 (T-0129) — ÜÇ-DALLI OPTIMIZER MOMENT POLİTİKASI (fail-closed, tek satır görünür beyan):
+    # Dal 1: Moment yüklendi (yan dosya var + --load-optimizer)
+    # Dal 2: Yan dosya var + --load-optimizer yok:
+    #        Yalnız açık --optimizer-fresh bayrağıyla momentsiz devam edilir (beyanlı).
+    #        Aksi halde RuntimeError (fail-closed, sessiz fail-open kapandı).
+    # Dal 3: Yan dosya yok (sıfırdan veya momentsiz checkpoint). Tek satır görünür beyan.
     opt_load_path = optimizer_sidecar_path(model_load_path)
     if os.path.exists(opt_load_path):
         if not load_optimizer:
-            # SESSIZ SURPRIZ YASAK: yan dosya VAR ama bayrak YOK. Yuklememek mesru bir
-            # tercihtir, ama kullanicinin BUNDAN HABERI OLMALIDIR.
+            if not optimizer_fresh:
+                raise RuntimeError(
+                    f"DURDURULDU: optimizer yan dosyası BULUNDU ('{opt_load_path}') ama "
+                    f"--load-optimizer verilmedi. Momentleri yüklemek için '--load-optimizer', "
+                    f"bilinçli olarak sıfırdan başlamak için '--optimizer-fresh' bayrağını verin.")
             print(
-                f"UYARI: optimizer yan dosyasi BULUNDU ama --load-optimizer verilmedi: "
-                f"'{opt_load_path}'. Momentler YUKLENMEDI, sifirdan basliyor.",
-                file=sys.stderr, flush=True)
+                f"[OPTIMIZER] BEYAN: Yan dosya mevcut ('{opt_load_path}') ancak '--optimizer-fresh' "
+                f"ile açıkça sıfırdan başlama seçildi. Momentler YÜKLENMEDİ.", flush=True)
         else:
             payload = torch.load(opt_load_path, map_location="cpu")
             if not isinstance(payload, dict) or "optimizer" not in payload:
@@ -389,7 +398,7 @@ def main():
                         f"{beklenen} bekliyor, ama '{model_load_path}' digest'i {gercek}. "
                         f"Momentler BASKA bir agirlik kumesine ait; yuklenmedi.")
             optimizer.load_state_dict(payload["optimizer"])
-            print(f"AdamW momentleri geri yuklendi: '{opt_load_path}' "
+            print(f"[OPTIMIZER] BEYAN: AdamW momentleri geri yuklendi: '{opt_load_path}' "
                   f"(adim={payload.get('adim')}, model_sha256={gercek[:16]}…, "
                   f"{len(optimizer.state)} parametre)", flush=True)
             # SCHEDULER DURUMU (P2/Aşama 1): yan dosya, momentlerin kaydedildiği koşumun
@@ -410,26 +419,31 @@ def main():
     elif load_optimizer:
         _durdur(f"--load-optimizer verildi ama yan dosya YOK: '{opt_load_path}'. "
                 f"Momentler sifirdan baslardi; sessizce devam etmek yerine duruldu.")
-    elif devam_edildi:
-        # OLCULEN VARSAYILAN DAVRANIS: eski checkpoint'ler moment TASIMAZ (anka_a1.pt ve
-        # anka_a1r.pt'de optimizer durumu YOK). Bu yuzden yokluk bir HATA degil, bir
-        # EKSIKLIKTIR: kosum durdurulmaz, ama sessiz de kalinmaz.
-        # Yalniz DEVAM kosumunda basilir: sifirdan kosumda moment zaten BEKLENMEZ ve
-        # her yeni kosumda uyari basmak gurultu olurdu (yanlis pozitif).
-        print(
-            f"UYARI: AdamW momenti bulunamadi ('{opt_load_path}' yok) => optimizer SIFIRDAN "
-            f"basliyor. Ilk guncelleme, momentli bir devam kosumuna gore DAHA BUYUK olur "
-            f"(olculdu: 1,73x; T-0092).", file=sys.stderr, flush=True)
+    else:
+        # Dal 3: Yan dosya yok. Tek satır görünür beyan (fail-open yok, bilinçli durum).
+        print(f"[OPTIMIZER] BEYAN: Yan dosya yok ('{opt_load_path}'). "
+              f"Optimizer sıfırdan başlatılıyor.", flush=True)
+        if devam_edildi:
+            print(
+                f"UYARI: AdamW momenti bulunamadi ('{opt_load_path}' yok) => optimizer SIFIRDAN "
+                f"basliyor. Ilk guncelleme, momentli bir devam kosumuna gore DAHA BUYUK olur "
+                f"(olculdu: 1,73x; T-0092).", file=sys.stderr, flush=True)
 
     # 4. Training Loop Configuration
     batch_size = 32
-    max_steps = 100
+    max_steps = None
     for arg_idx, arg in enumerate(sys.argv):
         if arg == "--steps" and arg_idx + 1 < len(sys.argv):
             max_steps = int(sys.argv[arg_idx + 1])
         if arg == "--batch-size" and arg_idx + 1 < len(sys.argv):
             batch_size = int(sys.argv[arg_idx + 1])
-            
+
+    # G1 (T-0129) — FAIL-CLOSED: --steps zorunludur (sessiz 100 varsayılanı kaldırıldı).
+    if max_steps is None:
+        raise RuntimeError(
+            "DURDURULDU: --steps belirtilmedi. Sessiz varsayılan (100) KALDIRILDI (G1/T-0129). "
+            "Eğitim adım sayısını açıkça belirtin, ör. --steps 200")
+
     eval_interval = 10
 
     # AŞAMA 1 (P2) — GRAD CLIP. VARSAYILAN 1,0 (plan onaylı onarım); `--clip 0` ile KAPALI.
@@ -440,10 +454,19 @@ def main():
     if clip_deger < 0:
         raise RuntimeError(f"--clip negatif olamaz: {clip_deger}")
 
-    if scheduler_aktif and toplam_adim > 0 and max_steps > toplam_adim:
-        print(f"UYARI: --toplam-adim ({toplam_adim}) < --steps ({max_steps}); cosine "
-              f"{toplam_adim}. adımda min_lr'de DURUR ve geri YÜKSELMEZ (progress 1.0'da "
-              f"kırpılır).", file=sys.stderr, flush=True)
+    # G1 (T-0129 ONARIM) — CLI'da ikisi de verilmişse ve max_steps != toplam_adim ise İKİ YÖNDE DE RuntimeError:
+    # X > Y (adım cosine'ı aşar) VE X < Y (adım erken biter, periyot tamamlanmaz).
+    # Sidecar'dan gelen toplam_adim CLI'da açıkça verilmemişse çelişki sayılmaz (devam koşumu eğriyi sürdürür).
+    cli_toplam_adim_verildi = "--toplam-adim" in sys.argv
+    if cli_toplam_adim_verildi and toplam_adim > 0:
+        if max_steps > toplam_adim:
+            raise RuntimeError(
+                f"DURDURULDU: CLI çelişkisi (--toplam-adim < --steps): --toplam-adim ({toplam_adim}) < "
+                f"--steps ({max_steps}). Cosine periyodu adım sayısından küçük olamaz.")
+        elif max_steps < toplam_adim:
+            raise RuntimeError(
+                f"DURDURULDU: CLI çelişkisi (--toplam-adim > --steps): --toplam-adim ({toplam_adim}) > "
+                f"--steps ({max_steps}). Belirtilen toplam cosine adımı tamamlanmadan eğitim erken biter.")
 
     print(f"\nEğitim Başlatılıyor -> Adım Sayısı: {max_steps}, Batch Boyutu: {batch_size}, Block Boyutu: {block_size}, Hedef: {'ON-EGITIM (duz sonraki-jeton)' if pretrain else 'SFT (prompt maskeli)'}", flush=True)
     print("Periyodik kayıt: " + (f"her {save_every} adımda -> '{model_save_path}' ('.tmp' üzerinden atomik)"
@@ -515,6 +538,10 @@ def main():
             elapsed = time.time() - start_time
             lr_alan = f" | LR: {cur_lr:.6f}" if scheduler_aktif else ""
             print(f"Adım {step:4d}/{max_steps} | Kayıp (Loss): {loss_val:.4f} | Adım Süresi: {step_dur:.2f}s | Toplam Süre: {elapsed:.1f}s{lr_alan}", flush=True)
+            if loss_report:
+                # G5 (T-0131): Maskesiz hedef oranı (hedef != -100) yüzde ölçeğinde periyodik beyan (tanısal)
+                maskesiz_oran = float((targets != MASKE).float().mean().item()) * 100.0
+                print(f"  [MASKE] Adım {step:4d} | Maskesiz Hedef Oranı: %{maskesiz_oran:.2f}", flush=True)
 
         # KAYIT — TEK NOKTA: egitim SONU (step == max_steps) veya periyodik esik.
         # Tek kayit noktasi bilincli: (a) T-0048 AST degismezi "check_frozen_save_path

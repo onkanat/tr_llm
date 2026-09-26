@@ -138,3 +138,118 @@ def test_regression_against_legacy_except_leak():
     # 2. Sızıntı OLMAYAN tüm konumlarda yeni ve eski BİREBİR eşit olmalı
     non_eos_mask = ~eos_mask
     np.testing.assert_array_equal(res_new[non_eos_mask], res_old[non_eos_mask])
+
+
+# =========================================================================
+# G5 (T-0131): Çoklu-Kayıt Pencereleri, Kırpılmış Prompt ve Mutant Sızıntı Testleri
+# =========================================================================
+
+def test_multi_record_window_masking():
+    """G5 (vii): Aynı pencerede ardışık birden fazla soru-cevap (çoklu kayıt) bulunması."""
+    # Kayıt 1: PROMPT_1 -> <OUTPUT> -> ANS_1 -> <EOS>
+    # Kayıt 2: PROMPT_2 -> <OUTPUT> -> ANS_2 -> <EOS>
+    # Son: PAD
+    x = np.array([[101, OUTPUT_START_ID, 201, EOS_ID, 102, OUTPUT_START_ID, 202, EOS_ID, PAD_ID]])
+    y = np.array([[OUTPUT_START_ID, 201, EOS_ID, 102, OUTPUT_START_ID, 202, EOS_ID, PAD_ID, PAD_ID]])
+    
+    res = mask_prompt_targets(x, y, OUTPUT_START_ID, EOS_ID)
+    
+    # Beklenen:
+    # Pos 0: 101 (Prompt 1) -> -100
+    # Pos 1: OUTPUT_START_ID -> Hedef 201 korunmalı
+    # Pos 2: 201 -> Hedef EOS_ID korunmalı
+    # Pos 3: EOS_ID -> -100 (EOS sızıntısı kapalı)
+    # Pos 4: 102 (Prompt 2) -> -100 (yeni prompt maskeli)
+    # Pos 5: OUTPUT_START_ID -> Hedef 202 korunmalı
+    # Pos 6: 202 -> Hedef EOS_ID korunmalı
+    # Pos 7: EOS_ID -> -100 (EOS sızıntısı kapalı)
+    # Pos 8: PAD_ID -> -100
+    expected = np.array([[-100, 201, EOS_ID, -100, -100, 202, EOS_ID, -100, -100]])
+    np.testing.assert_array_equal(res, expected)
+
+
+def test_clipped_prompt_without_output():
+    """G5 (viii): Kırpılmış pencerede yalnızca prompt kuyruğu var, <OUTPUT> pencereye girmemiş."""
+    x = np.array([[101, 102, 103, 104]])
+    y = np.array([[102, 103, 104, 105]])
+    
+    res = mask_prompt_targets(x, y, OUTPUT_START_ID, EOS_ID)
+    # <OUTPUT> olmadığı için tüm pencere -100 olmalı
+    assert np.all(res == -100), "Kırpılmış prompt parçasında tüm hedefler -100 olmalı"
+
+
+def test_clipped_output_without_eos():
+    """G5 (ix): Pencere <OUTPUT> ile başlamış ama pencere sonuna kadar <EOS> gelmemiş (uzun cevap kesilmiş)."""
+    x = np.array([[OUTPUT_START_ID, 201, 202, 203]])
+    y = np.array([[201, 202, 203, 204]])
+    
+    res = mask_prompt_targets(x, y, OUTPUT_START_ID, EOS_ID)
+    # Tüm hedefler cevap içinde kaldığı için korunmalı
+    expected = np.array([[201, 202, 203, 204]])
+    np.testing.assert_array_equal(res, expected)
+
+
+def _mutant_leak_prompt_targets(x: np.ndarray, targets: np.ndarray, output_start_id: int, eos_id: int) -> np.ndarray:
+    """Mutant maskeleme fonksiyonu: Prompt veya EOS bölgesini kasıtlı olarak sızdırır."""
+    res = mask_prompt_targets(x, targets, output_start_id, eos_id)
+    # Kasıtlı hata (mutant): İlk prompt token'ının maskesini kaldır ve hedefini sızdır!
+    # Eğer x'te <OUTPUT> öncesi prompt varsa oraya gerçek hedefi geri koy
+    batch_size, seq_len = x.shape
+    for b in range(batch_size):
+        for i in range(seq_len):
+            if x[b, i] != output_start_id and res[b, i] == -100:
+                # Kasıtlı sızıntı mutantı
+                res[b, i] = targets[b, i]
+                return res
+    return res
+
+
+def _mutant_leak_eos_targets(x: np.ndarray, targets: np.ndarray, output_start_id: int, eos_id: int) -> np.ndarray:
+    """Mutant maskeleme fonksiyonu: EOS sonrası token'ı kasıtlı olarak açık bırakır (legacy sızıntısı)."""
+    return _legacy_inline_mask(x, targets, output_start_id, eos_id)
+
+
+def _verify_no_prompt_leakage(x: np.ndarray, targets_masked: np.ndarray, output_start_id: int, eos_id: int):
+    """Denetçi: SFT maskelenmiş hedeflerde prompt ve EOS sızıntısı olmadığını doğrular.
+    
+    Herhangi bir sızıntı tespit edilirse AssertionError fırlatır.
+    """
+    batch_size, seq_len = x.shape
+    for b in range(batch_size):
+        seq = x[b]
+        is_output = False
+        for i in range(seq_len):
+            tok = seq[i]
+            if tok == output_start_id:
+                is_output = True
+            elif tok == eos_id:
+                # EOS token'ının kendisinden sonraki hedefe geçişi -100 olmalı
+                if targets_masked[b, i] != -100:
+                    raise AssertionError(f"Batch {b}, Pos {i}: EOS konumundaki hedef maskelenmemiş (sızıntı!)")
+                is_output = False
+            elif not is_output:
+                # Prompt bölgesinde hedef mutlaka -100 olmalı
+                if targets_masked[b, i] != -100:
+                    raise AssertionError(f"Batch {b}, Pos {i}: Prompt hedefi maskelenmemiş (sızıntı! tok={tok})")
+
+
+def test_mutant_leakage_detection():
+    """G5 (x): Mutant test — Sentetik prompt veya EOS sızıntısı olduğunda denetçi KIRMIZI,
+    doğru mask_prompt_targets çalıştığında YEŞİL olmalıdır."""
+    x = np.array([[101, 102, OUTPUT_START_ID, 201, EOS_ID, PAD_ID]])
+    y = np.array([[102, OUTPUT_START_ID, 201, EOS_ID, PAD_ID, PAD_ID]])
+    
+    # 1. Doğru fonksiyon YEŞİL olmalı
+    clean_masked = mask_prompt_targets(x, y, OUTPUT_START_ID, EOS_ID)
+    _verify_no_prompt_leakage(x, clean_masked, OUTPUT_START_ID, EOS_ID)
+    
+    # 2. Prompt sızıntısı mutantı KIRMIZI olmalı (AssertionError)
+    prompt_mutant = _mutant_leak_prompt_targets(x, y, OUTPUT_START_ID, EOS_ID)
+    with pytest.raises(AssertionError, match="Prompt hedefi maskelenmemiş"):
+        _verify_no_prompt_leakage(x, prompt_mutant, OUTPUT_START_ID, EOS_ID)
+        
+    # 3. EOS sızıntısı mutantı KIRMIZI olmalı (AssertionError)
+    eos_mutant = _mutant_leak_eos_targets(x, y, OUTPUT_START_ID, EOS_ID)
+    with pytest.raises(AssertionError, match="EOS konumundaki hedef maskelenmemiş"):
+        _verify_no_prompt_leakage(x, eos_mutant, OUTPUT_START_ID, EOS_ID)
+

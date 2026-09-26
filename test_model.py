@@ -9,6 +9,7 @@ from src.compiler.lexicon import LexiconManager
 from src.compiler.morphotactics import build_default_graph
 from src.compiler.core import CrystalCompiler
 from src.llm.tokenizer import KristalTokenizer, Vocabulary
+from src.llm.prompt_contract import resize_state_dict
 from scripts.train_step_demo import KristalLM
 
 def main():
@@ -20,9 +21,25 @@ def main():
     device = torch.device("mps" if torch.backends.mps.is_available() else "cpu")
     print(f"Çıkarım yapılacak cihaz: {device}")
 
+    # CLI argümanları: isteğe bağlı --checkpoint/--model ve --vocab
+    model_path = 'data/kristal_model.pt'
+    vocab_path = 'data/vocab.json'
+
+    for arg_idx, arg in enumerate(sys.argv):
+        if arg in ("--checkpoint", "--model") and arg_idx + 1 < len(sys.argv):
+            model_path = sys.argv[arg_idx + 1]
+        elif arg == "--vocab" and arg_idx + 1 < len(sys.argv):
+            vocab_path = sys.argv[arg_idx + 1]
+
+    # Geriye dönük uyumluluk: kristal_model.pt silinmişse bilinen anka checkpoint'lerine fallback yap
+    if not os.path.exists(model_path) and model_path == 'data/kristal_model.pt':
+        for cand in ['data/anka_a1r.pt', 'data/anka_a2.pt']:
+            if os.path.exists(cand):
+                model_path = cand
+                break
+
     # 2. Load Vocab & Tokenizer
     vocab = Vocabulary()
-    vocab_path = 'data/vocab.json'
     vocab.load(vocab_path)
     vocab_size = len(vocab.stoi)
     print(f"Sözlük Yüklendi. Kelime dağarcığı boyutu: {vocab_size}")
@@ -35,7 +52,6 @@ def main():
     # 3. Load Model
     n_embd = 768
     model = KristalLM(vocab_size=vocab_size, n_embd=n_embd, vocab=vocab, block_size=4096, n_layer=6, n_head=6)
-    model_path = 'data/kristal_model.pt'
     
     if not os.path.exists(model_path):
         print(f"Hata: Eğitilmiş model dosyası '{model_path}' bulunamadı! Lütfen önce eğitimi çalıştırın.")
@@ -46,6 +62,7 @@ def main():
     for k in keys_to_skip:
         del state_dict[k]
         
+    state_dict = resize_state_dict(model, state_dict)
     model.load_state_dict(state_dict, strict=False)
     model.to(device)
     model.eval()
