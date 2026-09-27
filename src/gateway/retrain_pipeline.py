@@ -247,6 +247,16 @@ class RetrainPipeline:
         self._zorunlu(self.model_path, "model_path", "'data/anka_a1r.pt'")
         save_path = self._zorunlu(self.save_path, "save_path", "'data/anka_a2.pt'")
 
+        # T-0148 5A ön-varlık-kapısı: model_path MEVCUT DEĞİLSE betik-öncesi
+        # RuntimeError (sessiz-soyağacı-düşmesi engellenir — train.py:275-276'nın
+        # checkpoint-yoksa-sessizce-sıfırdan-kurma tuzağı beslenmez; T-0087 kalıbı)
+        if not os.path.exists(self.model_path):
+            raise FileNotFoundError(
+                f"DURDURULDU (T-0148 5A): model_path '{self.model_path}' mevcut değil. "
+                "Sessiz soyağacı-düşmesi kapalıdır — train.py fresh-modelle başlamaz; "
+                "checkpoint açık-beyanlı ve VAR olmalıdır."
+            )
+
         bin_path, sample_count = self.compile_backlog_to_bin(block_size=block_size)
 
         python_bin = sys.executable
@@ -262,6 +272,11 @@ class RetrainPipeline:
             "--device", self.device,
             "--save-path", save_path
         ]
+        # T-0148 5A: soy-ağacı İLETİMİ — run_training eskiden --vocab/--load-path
+        # İLETMİYORDU (koşum-1 P5 kanıtı): train.py default vocab_base_32852.json
+        # ile SIFIRDAN kuruyordu (VOCAB-KÖRÜ 10.4746 fresh-imzası). İki flag de
+        # yukarıda ZORUNLU-fail-closed doğrulandı; iletmek tek-ek.
+        cmd.extend(["--vocab", self.vocab_path, "--load-path", self.model_path])
         # Donmus hedefe yazim OPERATOR onayi ister: bayrak yalnizca cagiran acikca
         # istediyse gecilir; aksi halde train.py'nin kendi kapisi kosumu durdurur.
         if self.allow_frozen_write:

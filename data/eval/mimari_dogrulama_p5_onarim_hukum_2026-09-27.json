@@ -1,0 +1,1087 @@
+{
+  "damga": "2026-09-27T16:24:30Z",
+  "detay": {
+    "b1_kanal_yazari": {
+      "append_teyit": true,
+      "ask_istisna": 0,
+      "ask_istisnalar": [],
+      "ask_kayit": 20,
+      "ask_kume_tam": true,
+      "ask_n": 20,
+      "ask_recorded_n": 0,
+      "beklenen_satir": 1,
+      "is_high_similarity_sayisi": 3,
+      "probe_istisna": 0,
+      "probe_istisnalar": [],
+      "probe_once_satir": 0,
+      "probe_tani": [
+        {
+          "entropy_post": 0.8341,
+          "is_high": false,
+          "match_skor": 0.4444,
+          "recorded": false,
+          "sorgu": "Belgede Fomalhaut ile ilgili öne çıkan f",
+          "unk_sayisi": 1
+        },
+        {
+          "entropy_post": 1.0276,
+          "is_high": false,
+          "match_skor": 0.3911,
+          "recorded": false,
+          "sorgu": "Aldebaran kavramının temel niteliği ve ö",
+          "unk_sayisi": 1
+        },
+        {
+          "entropy_post": 0.3431,
+          "is_high": true,
+          "match_skor": 0.8,
+          "recorded": false,
+          "sorgu": "Metne göre Drosera hangi yapısal özelliğ",
+          "unk_sayisi": 1
+        },
+        {
+          "entropy_post": 4.1784,
+          "is_high": false,
+          "match_skor": 0.3556,
+          "recorded": false,
+          "sorgu": "Belgede Pulsar PSR ile ilgili öne çıkan ",
+          "unk_sayisi": 0
+        },
+        {
+          "entropy_post": 1.0836,
+          "is_high": false,
+          "match_skor": 0.3911,
+          "recorded": false,
+          "sorgu": "Magnetar SGR kavramının temel niteliği v",
+          "unk_sayisi": 1
+        },
+        {
+          "entropy_post": 1.1389,
+          "is_high": true,
+          "match_skor": 0.6667,
+          "recorded": false,
+          "sorgu": "Belgede Drosera ile ilgili öne çıkan fon",
+          "unk_sayisi": 0
+        },
+        {
+          "entropy_post": 0.9132,
+          "is_high": true,
+          "match_skor": 0.9333,
+          "recorded": false,
+          "sorgu": "Metne göre Victoria Amazonica hangi yapı",
+          "unk_sayisi": 1
+        },
+        {
+          "entropy_post": 1.0276,
+          "is_high": false,
+          "match_skor": 0.3911,
+          "recorded": false,
+          "sorgu": "Triglif kavramının temel niteliği ve öne",
+          "unk_sayisi": 1
+        },
+        {
+          "entropy_post": 1.5751,
+          "is_high": true,
+          "match_skor": 0.8148,
+          "recorded": false,
+          "sorgu": "Belgede Alacahöyük Andezit Sfenksi ile i",
+          "unk_sayisi": 0
+        },
+        {
+          "entropy_post": 1.0276,
+          "is_high": false,
+          "match_skor": 0.3911,
+          "recorded": false,
+          "sorgu": "Diyatomit kavramının temel niteliği ve ö",
+          "unk_sayisi": 1
+        },
+        {
+          "entropy_post": 0.3231,
+          "is_high": true,
+          "match_skor": 1.0,
+          "recorded": false,
+          "sorgu": "Metne göre Serpantinit hangi yapısal öze",
+          "unk_sayisi": 1
+        },
+        {
+          "entropy_post": 0.1331,
+          "is_high": false,
+          "match_skor": 0.3939,
+          "recorded": false,
+          "sorgu": "Kimberlit hakkında sunulan temel bilimse",
+          "unk_sayisi": 0
+        },
+        {
+          "entropy_post": 1.0836,
+          "is_high": false,
+          "match_skor": 0.3911,
+          "recorded": false,
+          "sorgu": "Magnetar SGR kavramının temel niteliği v",
+          "unk_sayisi": 1
+        },
+        {
+          "entropy_post": 1.1389,
+          "is_high": true,
+          "match_skor": 0.6667,
+          "recorded": false,
+          "sorgu": "Belgede Drosera ile ilgili öne çıkan fon",
+          "unk_sayisi": 0
+        },
+        {
+          "entropy_post": 0.1019,
+          "is_high": true,
+          "match_skor": 0.75,
+          "recorded": false,
+          "sorgu": "Belgede Kaset Tavan ile ilgili öne çıkan",
+          "unk_sayisi": 0
+        },
+        {
+          "entropy_post": 1.0276,
+          "is_high": false,
+          "match_skor": 0.3911,
+          "recorded": false,
+          "sorgu": "Triglif kavramının temel niteliği ve öne",
+          "unk_sayisi": 1
+        },
+        {
+          "entropy_post": 0.3231,
+          "is_high": true,
+          "match_skor": 1.0,
+          "recorded": false,
+          "sorgu": "Metne göre Piroksenit hangi yapısal özel",
+          "unk_sayisi": 1
+        },
+        {
+          "entropy_post": 0.1331,
+          "is_high": false,
+          "match_skor": 0.3939,
+          "recorded": false,
+          "sorgu": "Kimberlit hakkında sunulan temel bilimse",
+          "unk_sayisi": 0
+        },
+        {
+          "entropy_post": 0.5338,
+          "is_high": true,
+          "match_skor": 0.8,
+          "recorded": false,
+          "sorgu": "Hattuşa Aşağı Kent kavramının temel nite",
+          "unk_sayisi": 1
+        },
+        {
+          "entropy_post": 1.0276,
+          "is_high": false,
+          "match_skor": 0.3911,
+          "recorded": false,
+          "sorgu": "Triglif kavramının temel niteliği ve öne",
+          "unk_sayisi": 1
+        }
+      ],
+      "recorded_n": 0,
+      "sema_tam": 1,
+      "son_satir_sayisi": 1,
+      "telemetri_kirilim": [
+        {
+          "entropy_post": 0.8341,
+          "entropy_pre": 4.5693,
+          "future_train_recorded": false,
+          "is_high_similarity": false,
+          "needs_retrieval": true,
+          "rag_score": 0.4444,
+          "sorgu": "Belgede Fomalhaut ile ilgili öne çıkan fonksiyon nedir?"
+        },
+        {
+          "entropy_post": 1.0276,
+          "entropy_pre": 9.5308,
+          "future_train_recorded": false,
+          "is_high_similarity": false,
+          "needs_retrieval": true,
+          "rag_score": 0.3911,
+          "sorgu": "Aldebaran kavramının temel niteliği ve önemi nedir?"
+        },
+        {
+          "entropy_post": 0.3431,
+          "entropy_pre": 4.0186,
+          "future_train_recorded": false,
+          "is_high_similarity": false,
+          "needs_retrieval": true,
+          "rag_score": 0.8,
+          "sorgu": "Metne göre Drosera hangi yapısal özelliğiyle tanımlanmaktadı"
+        },
+        {
+          "entropy_post": 4.1784,
+          "entropy_pre": 5.3496,
+          "future_train_recorded": false,
+          "is_high_similarity": false,
+          "needs_retrieval": true,
+          "rag_score": 0.3556,
+          "sorgu": "Belgede Pulsar PSR ile ilgili öne çıkan fonksiyon nedir?"
+        },
+        {
+          "entropy_post": 1.0836,
+          "entropy_pre": 9.4626,
+          "future_train_recorded": false,
+          "is_high_similarity": false,
+          "needs_retrieval": true,
+          "rag_score": 0.3911,
+          "sorgu": "Magnetar SGR kavramının temel niteliği ve önemi nedir?"
+        },
+        {
+          "entropy_post": 1.1389,
+          "entropy_pre": 2.3961,
+          "future_train_recorded": false,
+          "is_high_similarity": false,
+          "needs_retrieval": false,
+          "rag_score": 0.6667,
+          "sorgu": "Belgede Drosera ile ilgili öne çıkan fonksiyon nedir?"
+        },
+        {
+          "entropy_post": 0.9132,
+          "entropy_pre": 3.4138,
+          "future_train_recorded": false,
+          "is_high_similarity": true,
+          "needs_retrieval": true,
+          "rag_score": 0.9333,
+          "sorgu": "Metne göre Victoria Amazonica hangi yapısal özelliğiyle tanı"
+        },
+        {
+          "entropy_post": 1.0276,
+          "entropy_pre": 9.5308,
+          "future_train_recorded": false,
+          "is_high_similarity": false,
+          "needs_retrieval": true,
+          "rag_score": 0.3911,
+          "sorgu": "Triglif kavramının temel niteliği ve önemi nedir?"
+        },
+        {
+          "entropy_post": 1.5751,
+          "entropy_pre": 5.1771,
+          "future_train_recorded": false,
+          "is_high_similarity": false,
+          "needs_retrieval": true,
+          "rag_score": 0.8148,
+          "sorgu": "Belgede Alacahöyük Andezit Sfenksi ile ilgili öne çıkan fonk"
+        },
+        {
+          "entropy_post": 1.0276,
+          "entropy_pre": 9.5308,
+          "future_train_recorded": false,
+          "is_high_similarity": false,
+          "needs_retrieval": true,
+          "rag_score": 0.3911,
+          "sorgu": "Diyatomit kavramının temel niteliği ve önemi nedir?"
+        },
+        {
+          "entropy_post": 0.3231,
+          "entropy_pre": 3.7472,
+          "future_train_recorded": false,
+          "is_high_similarity": true,
+          "needs_retrieval": true,
+          "rag_score": 1.0,
+          "sorgu": "Metne göre Serpantinit hangi yapısal özelliğiyle tanımlanmak"
+        },
+        {
+          "entropy_post": 0.1331,
+          "entropy_pre": 2.2804,
+          "future_train_recorded": false,
+          "is_high_similarity": false,
+          "needs_retrieval": false,
+          "rag_score": 0.3939,
+          "sorgu": "Kimberlit hakkında sunulan temel bilimsel açıklama nedir?"
+        },
+        {
+          "entropy_post": 1.0836,
+          "entropy_pre": 9.4626,
+          "future_train_recorded": false,
+          "is_high_similarity": false,
+          "needs_retrieval": true,
+          "rag_score": 0.3911,
+          "sorgu": "Magnetar SGR kavramının temel niteliği ve önemi nedir?"
+        },
+        {
+          "entropy_post": 1.1389,
+          "entropy_pre": 2.3961,
+          "future_train_recorded": false,
+          "is_high_similarity": false,
+          "needs_retrieval": false,
+          "rag_score": 0.6667,
+          "sorgu": "Belgede Drosera ile ilgili öne çıkan fonksiyon nedir?"
+        },
+        {
+          "entropy_post": 0.1019,
+          "entropy_pre": 3.9731,
+          "future_train_recorded": false,
+          "is_high_similarity": false,
+          "needs_retrieval": true,
+          "rag_score": 0.75,
+          "sorgu": "Belgede Kaset Tavan ile ilgili öne çıkan fonksiyon nedir?"
+        },
+        {
+          "entropy_post": 1.0276,
+          "entropy_pre": 9.5308,
+          "future_train_recorded": false,
+          "is_high_similarity": false,
+          "needs_retrieval": true,
+          "rag_score": 0.3911,
+          "sorgu": "Triglif kavramının temel niteliği ve önemi nedir?"
+        },
+        {
+          "entropy_post": 0.3231,
+          "entropy_pre": 3.7472,
+          "future_train_recorded": false,
+          "is_high_similarity": true,
+          "needs_retrieval": true,
+          "rag_score": 1.0,
+          "sorgu": "Metne göre Piroksenit hangi yapısal özelliğiyle tanımlanmakt"
+        },
+        {
+          "entropy_post": 0.1331,
+          "entropy_pre": 2.2804,
+          "future_train_recorded": false,
+          "is_high_similarity": false,
+          "needs_retrieval": false,
+          "rag_score": 0.3939,
+          "sorgu": "Kimberlit hakkında sunulan temel bilimsel açıklama nedir?"
+        },
+        {
+          "entropy_post": 0.5338,
+          "entropy_pre": 8.5273,
+          "future_train_recorded": false,
+          "is_high_similarity": false,
+          "needs_retrieval": true,
+          "rag_score": 0.8,
+          "sorgu": "Hattuşa Aşağı Kent kavramının temel niteliği ve önemi nedir?"
+        },
+        {
+          "entropy_post": 1.0276,
+          "entropy_pre": 9.5308,
+          "future_train_recorded": false,
+          "is_high_similarity": false,
+          "needs_retrieval": true,
+          "rag_score": 0.3911,
+          "sorgu": "Triglif kavramının temel niteliği ve önemi nedir?"
+        }
+      ]
+    },
+    "b2_arz_cipa": {
+      "cipa_shalar_once": {
+        "data/eval/mimari_dogrulama_p2_onarim_hukum_2026-09-27.json": "4b6d183741e742a506c94fd18dc8e9321c7e30d06f001e23ce1baf619d0a9348",
+        "data/eval/mimari_dogrulama_p3_onarim_hukum_2026-09-27.json": "18384263b9895b22e1eb2dd4eb7080b77602060807c42169639fdc2be9de5da1",
+        "data/eval/mimari_dogrulama_p4_onarim_hukum_2026-09-27.json": "2a35d6c4cd9746c6fe66a310319b41d4540785ad0d855603f813d32d3810dc14"
+      },
+      "digest_ilanli": "fe7fc7649737ed35",
+      "digest_once": "fe7fc7649737ed35",
+      "foreign_once": {
+        "elektor_articles": 90122,
+        "octave_articles": 100,
+        "rapberry_pi_pico_all_articles": 436,
+        "rendergit_01_articles": 32,
+        "rendergit_02_articles": 100,
+        "rendergit_03_articles": 39,
+        "rp2040_articles": 106,
+        "sdr_articles": 54,
+        "türk_articles": 5
+      },
+      "gercek_kanal_once_bayt": 0,
+      "gercek_kanal_once_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "kristal_bellek_once": 36,
+      "muhakeme_once": "YOK",
+      "probe_once": "YOK",
+      "replay_buffer_sha256": "59e2f2786d0ec0d1574a77e5b7354e02ae957345a1b4ddce945d0db19527bdf1",
+      "simulasyon_once": "YOK"
+    },
+    "b3_tuketici_okuma": {
+      "gercek_sayisi": 0,
+      "probe_beklenen": 1,
+      "probe_sayisi": 1
+    },
+    "b4_tuketici_derleme": {
+      "backlog_samples": 1,
+      "bin_boyut": 72320,
+      "bin_yol": "data/eval/p5_probe_future.bin",
+      "default_bin_digest_once": "",
+      "default_bin_meta_mtime_once": -1.0,
+      "default_bin_mtime_once": -1.0,
+      "default_bin_once": false,
+      "geri_tokenize": true,
+      "ilk_kayit_uzunluk": 14,
+      "max_jeton_alti": true,
+      "max_jeton_id": 32831,
+      "meta": {
+        "backlog_samples": 1,
+        "block_size": 64,
+        "created_at": "2026-09-27T16:24:59.115394+00:00",
+        "oversample_factor": 20,
+        "total_samples": 26,
+        "total_tokens": 36160
+      },
+      "toplam_jeton": 36160,
+      "uint16": true
+    },
+    "b5_run_training": {
+      "arsiv_beklenen": 9,
+      "arsiv_once_satir": 8,
+      "arsiv_sonra_satir": 9,
+      "arsiv_tasima_teyit": true,
+      "baslangic_kayip": 3.1524,
+      "default_bin_digest_once": "",
+      "default_bin_digest_sonra": "",
+      "default_bin_meta_mtime_once": -1.0,
+      "default_bin_meta_mtime_sonra": -1.0,
+      "default_bin_mtime_once": -1.0,
+      "default_bin_mtime_sonra": -1.0,
+      "default_bin_sonra": false,
+      "duration_sec": 13.67,
+      "fresh_imza_yok": true,
+      "kanal_b5_bayt": 0,
+      "log_snippet": "1.65s | Toplam Süre: 1.7s\nAdım   10/10 | Kayıp (Loss): 3.2247 | Adım Süresi: 0.89s | Toplam Süre: 10.5s\n\n==================================================\n EĞİTİM BAŞARIYLA TAMAMLANDI!\n==================================================\nToplam Süre:       11.16 saniye\nBaşlangıç Kaybı:   3.1524\nBitiş Kaybı:       3.2247\nEğitilmiş model ağırlıkları '/var/folders/v0/8z_jjnds4rbdtth51qmwysnw0000gn/T/data/eval/p5_probe_anka.pt' dosyasına kaydedildi.\n==================================================\n",
+      "probe_sonra_bayt": 0,
+      "resume_bant": false,
+      "run_training_status": "success",
+      "samples_trained": 1,
+      "save_var": true,
+      "save_yol": "/var/folders/v0/8z_jjnds4rbdtth51qmwysnw0000gn/T/data/eval/p5_probe_anka.pt"
+    },
+    "b6_gateway_yazim": {
+      "check_sahte_istisna": true,
+      "check_sonuclar": 1,
+      "check_top1_skor": 1.3333,
+      "check_top1_text_tam": true,
+      "geri_okuma_skor": 1.3333,
+      "geri_okuma_tam": true,
+      "inject1_collection": "p5_probe_bellek",
+      "inject1_count": 1,
+      "inject1_crystal_tags": "<BOS> <PROPER_NOUN> : Anka mimari <UNK> <PROPER_NOUN> - 0 1 4 5 kanal <UNK> belg",
+      "inject1_status": "success",
+      "inject2_count_beklenen": 1,
+      "inject2_count_probe": 1,
+      "inject2_returned_collection": null,
+      "reasoning_istisna": true,
+      "sahte_ad": "olmayan_ad_p5_x",
+      "sahte_ad_sunucuda_yok": true,
+      "sahte_istisna": true,
+      "sahte_istisna_metni": "[GATEWAY_HATA] bilinmeyen target-collection 'olmayan_ad_p5_x'; meşru adlar: ['kristal_bellek', 'p5_probe_bellek'] (T-0148 5B fail-closed — sahte-ad echo'su ve yanlış-koleksiyona yazım kapatıldı)."
+    },
+    "b7_http": {
+      "backlog_kod": 200,
+      "backlog_uzunluk": 0,
+      "check_kod": 200,
+      "check_top1_skor": 1.3333,
+      "inject_collection": "p5_probe_bellek",
+      "inject_count_probe_once": 1,
+      "inject_count_probe_sonra": 2,
+      "inject_kod": 200,
+      "inject_status": "success",
+      "inject_total": 2,
+      "port": 54542,
+      "query_anahtar_sayisi": 17,
+      "query_future_train_path": "data/eval/p5_probe_future_train.jsonl",
+      "query_is_high_similarity": false,
+      "query_kod": 200,
+      "status_backlog_samples": 0,
+      "status_future_train_path": "data/eval/p5_probe_future_train.jsonl",
+      "status_kod": 200,
+      "status_online": "online"
+    },
+    "b8_dokunulmazlik": {
+      "cipa_shalar_once": {
+        "data/eval/mimari_dogrulama_p2_onarim_hukum_2026-09-27.json": "4b6d183741e742a506c94fd18dc8e9321c7e30d06f001e23ce1baf619d0a9348",
+        "data/eval/mimari_dogrulama_p3_onarim_hukum_2026-09-27.json": "18384263b9895b22e1eb2dd4eb7080b77602060807c42169639fdc2be9de5da1",
+        "data/eval/mimari_dogrulama_p4_onarim_hukum_2026-09-27.json": "2a35d6c4cd9746c6fe66a310319b41d4540785ad0d855603f813d32d3810dc14"
+      },
+      "cipa_shalar_sonra": {
+        "data/eval/mimari_dogrulama_p2_onarim_hukum_2026-09-27.json": "4b6d183741e742a506c94fd18dc8e9321c7e30d06f001e23ce1baf619d0a9348",
+        "data/eval/mimari_dogrulama_p3_onarim_hukum_2026-09-27.json": "18384263b9895b22e1eb2dd4eb7080b77602060807c42169639fdc2be9de5da1",
+        "data/eval/mimari_dogrulama_p4_onarim_hukum_2026-09-27.json": "2a35d6c4cd9746c6fe66a310319b41d4540785ad0d855603f813d32d3810dc14"
+      },
+      "default_bin_digest_once_sonra": [
+        "",
+        ""
+      ],
+      "default_bin_meta_mtime_once_sonra": [
+        -1.0,
+        -1.0
+      ],
+      "default_bin_meta_sonra": false,
+      "default_bin_mtime_once_sonra": [
+        -1.0,
+        -1.0
+      ],
+      "default_bin_sonra": false,
+      "digest_ilanli": "fe7fc7649737ed35",
+      "digest_once": "fe7fc7649737ed35",
+      "digest_sonra": "fe7fc7649737ed35",
+      "durum": "GEÇTİ",
+      "foreign_once": {
+        "elektor_articles": 90122,
+        "octave_articles": 100,
+        "rapberry_pi_pico_all_articles": 436,
+        "rendergit_01_articles": 32,
+        "rendergit_02_articles": 100,
+        "rendergit_03_articles": 39,
+        "rp2040_articles": 106,
+        "sdr_articles": 54,
+        "türk_articles": 5
+      },
+      "foreign_sonra": {
+        "elektor_articles": 90122,
+        "octave_articles": 100,
+        "rapberry_pi_pico_all_articles": 436,
+        "rendergit_01_articles": 32,
+        "rendergit_02_articles": 100,
+        "rendergit_03_articles": 39,
+        "rp2040_articles": 106,
+        "sdr_articles": 54,
+        "türk_articles": 5
+      },
+      "kanal_once_bayt": 0,
+      "kanal_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "kanal_sonra_bayt": 0,
+      "kristal_once": 36,
+      "kristal_sonra": 36,
+      "muhakeme_sonra": "YOK",
+      "probe_sonra": "YOK",
+      "simulasyon_sonra": "YOK"
+    },
+    "base_ckpt": "data/anka_base_v2.pt",
+    "base_ckpt_sha256": "d0f415f3d882beb4a3dace87fc4a6024bf3c667f033790fc1e472cb60a664a50",
+    "betik": "dogrulama_p5_ogrenme_kanali.py",
+    "betik_sha256": "4071e18519b5066c64499516847099a9a4453bb9b18f9112956fc881da40e73d",
+    "damga": "2026-09-27T16:24:30Z",
+    "device": "cpu",
+    "digest_tablo": [
+      "| mimari_dogrulama_p5_ilan3_2026-09-27.md (İLAN — koşum ÖNCESİ, REVİZYON-1) | `da4a6e6def6e9cef387202c6c17e3887e9c60c9b86cad3b7c557caf53cfabf79` |",
+      "| dogrulama_p5_ogrenme_kanali.py (koşulan betik) | `4071e18519b5066c64499516847099a9a4453bb9b18f9112956fc881da40e73d` |",
+      "| data/anka_base_v2.pt (DONMUŞ taban) | `d0f415f3d882beb4a3dace87fc4a6024bf3c667f033790fc1e472cb60a664a50` |",
+      "| data/rebuild/vocab_anka_r1_33114.json (DONMUŞ sözlük) | `f9940a8d8e1f7cd9428d389f12ff4c5ee448e5a7bfcdcc8ecc9c616fce950984` |",
+      "| data/realistic_rag/test_natural_150.jsonl (DONMUŞ kaynak) | `a233323011b9be23c839a6c0e4b8f9a2b769dfd8e7702130a3cb2d75041b08c2` |",
+      "| replay-buffer (DONMUŞ) | `59e2f2786d0ec0d1574a77e5b7354e02ae957345a1b4ddce945d0db19527bdf1` |",
+      "| data/future_train_vector.jsonl (GERÇEK kanal — 0 bayt) | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` |",
+      "| envanter ÖNCE/SONRA digest | `fe7fc7649737ed35` / `fe7fc7649737ed35` |",
+      "| data/eval/mimari_dogrulama_p2_onarim_hukum_2026-09-27.json | `4b6d183741e742a506c94fd18dc8e9321c7e30d06f001e23ce1baf619d0a9348` |",
+      "| data/eval/mimari_dogrulama_p3_onarim_hukum_2026-09-27.json | `18384263b9895b22e1eb2dd4eb7080b77602060807c42169639fdc2be9de5da1` |",
+      "| data/eval/mimari_dogrulama_p4_onarim_hukum_2026-09-27.json | `2a35d6c4cd9746c6fe66a310319b41d4540785ad0d855603f813d32d3810dc14` |"
+    ],
+    "envanter_once_digest": "fe7fc7649737ed35",
+    "faz_a": {
+      "envanter_digest_once": "fe7fc7649737ed35",
+      "epi_future_train_path_paramli": true,
+      "epi_kanal_kapisi_similarity_threshold": 0.85,
+      "epi_makedirs_satirlar": [
+        180
+      ],
+      "epi_open_a_satirlar": [
+        181
+      ],
+      "epi_os_makedirs_satiri": 180,
+      "epi_record_sema_anahtar_sayisi": 14,
+      "epi_record_yazim_sitesi": 1,
+      "gercek_kanal_once_bayt": 0,
+      "gw_ask_telemetri_anahtar_sayisi": 17,
+      "gw_http_endpoint_kumesi": [
+        "/api/backlog",
+        "/api/check",
+        "/api/inject",
+        "/api/query",
+        "/api/status"
+      ],
+      "gw_inject_default_koleksiyon": "kristal_bellek",
+      "gw_inject_reasoning_koleksiyon": "muhakeme_bellek",
+      "gw_inject_reasoning_paylasim_client": false,
+      "gw_localhost_kurulum": 3,
+      "gw_resolve_target_var": true,
+      "gw_target_collection_sahete_secici": false,
+      "merak_router_state_dict_yukleme": 0,
+      "retrain_archive_cagri_satiri": 303,
+      "retrain_archive_rc_satiri": 294,
+      "retrain_archive_sifirlama_modu": "w",
+      "retrain_archive_success_gate": true,
+      "retrain_archive_w_satirlar": [
+        328
+      ],
+      "retrain_cmd_flag_kumesi": [
+        "--batch-size",
+        "--data",
+        "--device",
+        "--load-path",
+        "--lr",
+        "--save-path",
+        "--steps",
+        "--vocab"
+      ],
+      "retrain_cmd_load_path_yok": false,
+      "retrain_cmd_vocab_yok": false,
+      "retrain_output_bin_default": "data/train_future_finetune.bin",
+      "retrain_oversample_factor_default": 20,
+      "retrain_replay_buffer_yolu": "data/pedagogy/high_school_foundation_dataset.jsonl",
+      "retrain_replay_samples_default": 25,
+      "retrain_replay_satirlar": [
+        190
+      ],
+      "retrain_zorunlu_fail_closed": 3,
+      "supervisor_retrain_satirlar": [
+        622,
+        632,
+        877
+      ],
+      "supervisor_retrain_threshold": 5,
+      "train_py_default_vocab": "data/rebuild/vocab_base_32852.json",
+      "train_py_jeton_guard": true,
+      "train_py_jeton_guard_satirlar": [
+        203
+      ],
+      "train_py_vocab_flag_destekli": true
+    },
+    "faz_a_tablo": [
+      {
+        "durum": "GEÇTİ",
+        "ilanli": 0.85,
+        "olculen": 0.85,
+        "olcum": "epi_kanal_kapisi_similarity_threshold"
+      },
+      {
+        "durum": "GEÇTİ",
+        "ilanli": 1,
+        "olculen": 1,
+        "olcum": "epi_record_yazim_sitesi"
+      },
+      {
+        "durum": "GEÇTİ",
+        "ilanli": 14,
+        "olculen": 14,
+        "olcum": "epi_record_sema_anahtar_sayisi"
+      },
+      {
+        "durum": "GEÇTİ",
+        "ilanli": true,
+        "olculen": true,
+        "olcum": "epi_future_train_path_paramli"
+      },
+      {
+        "durum": "GEÇTİ",
+        "ilanli": 180,
+        "olculen": 180,
+        "olcum": "epi_os_makedirs_satiri"
+      },
+      {
+        "durum": "GEÇTİ",
+        "ilanli": 17,
+        "olculen": 17,
+        "olcum": "gw_ask_telemetri_anahtar_sayisi"
+      },
+      {
+        "durum": "GEÇTİ",
+        "ilanli": "kristal_bellek",
+        "olculen": "kristal_bellek",
+        "olcum": "gw_inject_default_koleksiyon"
+      },
+      {
+        "durum": "GEÇTİ",
+        "ilanli": false,
+        "olculen": false,
+        "olcum": "gw_target_collection_sahete_secici"
+      },
+      {
+        "durum": "GEÇTİ",
+        "ilanli": true,
+        "olculen": true,
+        "olcum": "gw_resolve_target_var"
+      },
+      {
+        "durum": "GEÇTİ",
+        "ilanli": false,
+        "olculen": false,
+        "olcum": "gw_inject_reasoning_paylasim_client"
+      },
+      {
+        "durum": "GEÇTİ",
+        "ilanli": "muhakeme_bellek",
+        "olculen": "muhakeme_bellek",
+        "olcum": "gw_inject_reasoning_koleksiyon"
+      },
+      {
+        "durum": "GEÇTİ",
+        "ilanli": [
+          "/api/backlog",
+          "/api/check",
+          "/api/inject",
+          "/api/query",
+          "/api/status"
+        ],
+        "olculen": [
+          "/api/backlog",
+          "/api/check",
+          "/api/inject",
+          "/api/query",
+          "/api/status"
+        ],
+        "olcum": "gw_http_endpoint_kumesi"
+      },
+      {
+        "durum": "GEÇTİ",
+        "ilanli": 3,
+        "olculen": 3,
+        "olcum": "gw_localhost_kurulum"
+      },
+      {
+        "durum": "GEÇTİ",
+        "ilanli": 3,
+        "olculen": 3,
+        "olcum": "retrain_zorunlu_fail_closed"
+      },
+      {
+        "durum": "GEÇTİ",
+        "ilanli": [
+          "--batch-size",
+          "--data",
+          "--device",
+          "--load-path",
+          "--lr",
+          "--save-path",
+          "--steps",
+          "--vocab"
+        ],
+        "olculen": [
+          "--batch-size",
+          "--data",
+          "--device",
+          "--load-path",
+          "--lr",
+          "--save-path",
+          "--steps",
+          "--vocab"
+        ],
+        "olcum": "retrain_cmd_flag_kumesi"
+      },
+      {
+        "durum": "GEÇTİ",
+        "ilanli": false,
+        "olculen": false,
+        "olcum": "retrain_cmd_vocab_yok"
+      },
+      {
+        "durum": "GEÇTİ",
+        "ilanli": false,
+        "olculen": false,
+        "olcum": "retrain_cmd_load_path_yok"
+      },
+      {
+        "durum": "GEÇTİ",
+        "ilanli": true,
+        "olculen": true,
+        "olcum": "retrain_archive_success_gate"
+      },
+      {
+        "durum": "GEÇTİ",
+        "ilanli": "w",
+        "olculen": "w",
+        "olcum": "retrain_archive_sifirlama_modu"
+      },
+      {
+        "durum": "GEÇTİ",
+        "ilanli": "data/pedagogy/high_school_foundation_dataset.jsonl",
+        "olculen": "data/pedagogy/high_school_foundation_dataset.jsonl",
+        "olcum": "retrain_replay_buffer_yolu"
+      },
+      {
+        "durum": "GEÇTİ",
+        "ilanli": 25,
+        "olculen": 25,
+        "olcum": "retrain_replay_samples_default"
+      },
+      {
+        "durum": "GEÇTİ",
+        "ilanli": "data/train_future_finetune.bin",
+        "olculen": "data/train_future_finetune.bin",
+        "olcum": "retrain_output_bin_default"
+      },
+      {
+        "durum": "GEÇTİ",
+        "ilanli": 20,
+        "olculen": 20,
+        "olcum": "retrain_oversample_factor_default"
+      },
+      {
+        "durum": "GEÇTİ",
+        "ilanli": "data/rebuild/vocab_base_32852.json",
+        "olculen": "data/rebuild/vocab_base_32852.json",
+        "olcum": "train_py_default_vocab"
+      },
+      {
+        "durum": "GEÇTİ",
+        "ilanli": true,
+        "olculen": true,
+        "olcum": "train_py_jeton_guard"
+      },
+      {
+        "durum": "GEÇTİ",
+        "ilanli": true,
+        "olculen": true,
+        "olcum": "train_py_vocab_flag_destekli"
+      },
+      {
+        "durum": "GEÇTİ",
+        "ilanli": 5,
+        "olculen": 5,
+        "olcum": "supervisor_retrain_threshold"
+      },
+      {
+        "durum": "GEÇTİ",
+        "ilanli": 0,
+        "olculen": 0,
+        "olcum": "merak_router_state_dict_yukleme"
+      },
+      {
+        "durum": "GEÇTİ",
+        "ilanli": 0,
+        "olculen": 0,
+        "olcum": "gercek_kanal_once_bayt"
+      },
+      {
+        "durum": "GEÇTİ",
+        "ilanli": "fe7fc7649737ed35",
+        "olculen": "fe7fc7649737ed35",
+        "olcum": "envanter_digest_once"
+      }
+    ],
+    "faz_b_envanter_once": {
+      "adlar": [
+        "elektor_articles",
+        "kristal_bellek",
+        "octave_articles",
+        "rapberry_pi_pico_all_articles",
+        "rendergit_01_articles",
+        "rendergit_02_articles",
+        "rendergit_03_articles",
+        "rp2040_articles",
+        "sdr_articles",
+        "türk_articles"
+      ],
+      "kalemler": [
+        {
+          "ad": "elektor_articles",
+          "crystal_tags": false,
+          "dense_distance": "Cosine",
+          "dense_size": 768,
+          "hibrit": false,
+          "nokta": 90122,
+          "payload_anahtar": [
+            "article_id",
+            "chunk_index",
+            "filename",
+            "text",
+            "title",
+            "year"
+          ],
+          "sparse": [],
+          "tek_dense": true
+        },
+        {
+          "ad": "kristal_bellek",
+          "crystal_tags": true,
+          "dense_distance": "Cosine",
+          "dense_size": 768,
+          "hibrit": true,
+          "nokta": 36,
+          "payload_anahtar": [
+            "crystal_tags",
+            "domain",
+            "text",
+            "token_ids"
+          ],
+          "sparse": [
+            "sparse"
+          ],
+          "tek_dense": false
+        },
+        {
+          "ad": "octave_articles",
+          "crystal_tags": false,
+          "dense_distance": "Cosine",
+          "dense_size": 768,
+          "hibrit": false,
+          "nokta": 100,
+          "payload_anahtar": [
+            "article_id",
+            "chunk_index",
+            "filename",
+            "text",
+            "title",
+            "year"
+          ],
+          "sparse": [],
+          "tek_dense": true
+        },
+        {
+          "ad": "rapberry_pi_pico_all_articles",
+          "crystal_tags": false,
+          "dense_distance": "Cosine",
+          "dense_size": 768,
+          "hibrit": false,
+          "nokta": 436,
+          "payload_anahtar": [
+            "article_id",
+            "chunk_index",
+            "filename",
+            "text",
+            "title",
+            "year"
+          ],
+          "sparse": [],
+          "tek_dense": true
+        },
+        {
+          "ad": "rendergit_01_articles",
+          "crystal_tags": false,
+          "dense_distance": "Cosine",
+          "dense_size": 768,
+          "hibrit": false,
+          "nokta": 32,
+          "payload_anahtar": [
+            "article_id",
+            "chunk_index",
+            "filename",
+            "text",
+            "title",
+            "year"
+          ],
+          "sparse": [],
+          "tek_dense": true
+        },
+        {
+          "ad": "rendergit_02_articles",
+          "crystal_tags": false,
+          "dense_distance": "Cosine",
+          "dense_size": 768,
+          "hibrit": false,
+          "nokta": 100,
+          "payload_anahtar": [
+            "article_id",
+            "chunk_index",
+            "filename",
+            "text",
+            "title",
+            "year"
+          ],
+          "sparse": [],
+          "tek_dense": true
+        },
+        {
+          "ad": "rendergit_03_articles",
+          "crystal_tags": false,
+          "dense_distance": "Cosine",
+          "dense_size": 768,
+          "hibrit": false,
+          "nokta": 39,
+          "payload_anahtar": [
+            "article_id",
+            "chunk_index",
+            "filename",
+            "text",
+            "title",
+            "year"
+          ],
+          "sparse": [],
+          "tek_dense": true
+        },
+        {
+          "ad": "rp2040_articles",
+          "crystal_tags": false,
+          "dense_distance": "Cosine",
+          "dense_size": 768,
+          "hibrit": false,
+          "nokta": 106,
+          "payload_anahtar": [
+            "article_id",
+            "chunk_index",
+            "filename",
+            "text",
+            "title",
+            "year"
+          ],
+          "sparse": [],
+          "tek_dense": true
+        },
+        {
+          "ad": "sdr_articles",
+          "crystal_tags": false,
+          "dense_distance": "Cosine",
+          "dense_size": 768,
+          "hibrit": false,
+          "nokta": 54,
+          "payload_anahtar": [
+            "article_id",
+            "chunk_index",
+            "filename",
+            "text",
+            "title",
+            "year"
+          ],
+          "sparse": [],
+          "tek_dense": true
+        },
+        {
+          "ad": "türk_articles",
+          "crystal_tags": false,
+          "dense_distance": "Cosine",
+          "dense_size": 768,
+          "hibrit": false,
+          "nokta": 5,
+          "payload_anahtar": [
+            "article_id",
+            "chunk_index",
+            "filename",
+            "text",
+            "title",
+            "year"
+          ],
+          "sparse": [],
+          "tek_dense": true
+        }
+      ]
+    },
+    "gercek_kanal_once_bayt": 0,
+    "gercek_kanal_once_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "ilan": "mimari_dogrulama_p5_ilan3_2026-09-27.md",
+    "ilan_sha256": "da4a6e6def6e9cef387202c6c17e3887e9c60c9b86cad3b7c557caf53cfabf79",
+    "korpus": "data/realistic_rag/test_natural_150.jsonl",
+    "korpus_sha256": "a233323011b9be23c839a6c0e4b8f9a2b769dfd8e7702130a3cb2d75041b08c2",
+    "kosum_sandbox_disi": true,
+    "kristal_bellek_nokta_agent": 36,
+    "model_yukleme": {
+      "base_ckpt": "anka_base_v2.pt",
+      "device": "cpu",
+      "kafa": 33114,
+      "sozluk": 33114
+    },
+    "n_vocab": 33114,
+    "probe_yollar": {
+      "archive": "data/eval/p5_probe_archive.jsonl",
+      "bin": "data/eval/p5_probe_future.bin",
+      "future_train": "data/eval/p5_probe_future_train.jsonl",
+      "koleksiyon": "p5_probe_bellek",
+      "save": "/var/folders/v0/8z_jjnds4rbdtth51qmwysnw0000gn/T/data/eval/p5_probe_anka.pt"
+    },
+    "secili_sorgu": 20,
+    "seed": 42,
+    "sorgu_havuzu": 150,
+    "temizlik": {
+      "kaldi": false,
+      "yol": "VectorMemory.delete_collection"
+    },
+    "vocab": "data/rebuild/vocab_anka_r1_33114.json",
+    "vocab_sha256": "f9940a8d8e1f7cd9428d389f12ff4c5ee448e5a7bfcdcc8ecc9c616fce950984"
+  },
+  "hukum": "DUR",
+  "kapilar": {
+    "K1_FAZ_A_ENVANTER": "GEÇTİ",
+    "K2_ARZ_CIPA": "GEÇTİ",
+    "K3_KANAL_YAZARI": "GEÇTİ",
+    "K4_TUKETICI_OKUMA": "GEÇTİ",
+    "K5_TUKETICI_DERLEME": "GEÇTİ",
+    "K6_RUN_TRAINING_ILKELI": "DÜŞTÜ",
+    "K7_GATEWAY_YAZIM": "GEÇTİ",
+    "K8_HTTP_TEYIDI": "GEÇTİ",
+    "K9_DOKUNULMAZLIK": "GEÇTİ"
+  },
+  "rc": 2
+}

@@ -3,11 +3,15 @@
 """
 T-0145 — MİMARİ DOĞRULAMA PAKET-5: Gateway→Öğrenme Kanalı
 
-İLAN: data/eval/mimari_dogrulama_p5_ilan_2026-09-27.md (koşum-ÖNCESİ
-damgali; REVİZYON-1: koşum-öncesi keşif-ölçümü — run_training cmd-flag
-kümesi [--vocab/--load-path YOK], train.py default-vocab 32.852 +
-jeton-guard :203, P3-probe/replay max-jeton-id < 32.852, gw_ask
-telemetri 17). Hüküm BETİK İÇİNDEDİR; elle sayı/hüküm YOK. rc ∈ {0, 2}.
+İLAN-3: data/eval/mimari_dogrulama_p5_ilan3_2026-09-27.md (koşum-ÖNCESİ
+damgali; İLAN-2 iki koşum DUR'du — K6+K8 İLAN-2 formülasyon-kusuru
+[İLAN-1 ölçümlerinin onarım-sonrası beklenti olarak yanlış-devralınması]:
+K6 bandı probe-rejim [3.30, 3.70] + fresh-tavan 9.0; K8 17-anahtar +
+soy-alanı null→dolu. Onarım kontratı 5A --vocab/--load-path İLETİMİ +
+ön-varlık-kapısı + canlılık-imzası DEVAM-rejimi [T-0077], 5B sahte-seçici
+KAPANDI [ValueError], 5C /api/query soy'lu [17-anahtar, null→dolu], 5D
+inject_reasoning_trace param'lı + host="localhost" fail-closed).
+Hüküm BETİK İÇİNDEDİR; elle sayı/hüküm YOK. rc ∈ {0, 2}.
 
 Operatör kararları (27 Eyl 2026): (1) UÇTAN-UCA KANAL — yazar
 (epistemic_agent → record_to_future_train) + tüketici (retrain_pipeline:
@@ -122,17 +126,24 @@ ILANLI = {
     "epi_os_makedirs_satiri": 180,
     "gw_ask_telemetri_anahtar_sayisi": 17,
     "gw_inject_default_koleksiyon": "kristal_bellek",
-    "gw_target_collection_sahete_secici": True,
+    # T-0148 5B: sahte-seçici KAPANDI (_resolve_target_memory fail-closed)
+    "gw_target_collection_sahete_secici": False,
+    "gw_resolve_target_var": True,
+    "gw_inject_reasoning_paylasim_client": False,
+    # T-0148 5D: koleksiyon-adı PARAMETRİK (default muhakeme_bellek)
     "gw_inject_reasoning_koleksiyon": "muhakeme_bellek",
     "gw_http_endpoint_kumesi": ["/api/backlog", "/api/check",
                                 "/api/inject", "/api/query",
                                 "/api/status"],
-    "gw_localhost_kurulum": 2,
+    # T-0148 5D: :129-130 create_default + :322 inject_reasoning (AÇIK-BEYAN)
+    "gw_localhost_kurulum": 3,
     "retrain_zorunlu_fail_closed": 3,
+    # T-0148 5A: soy-ağacı İLETİMİ (--vocab + --load-path cmd'de)
     "retrain_cmd_flag_kumesi": ["--batch-size", "--data", "--device",
-                                "--lr", "--save-path", "--steps"],
-    "retrain_cmd_vocab_yok": True,
-    "retrain_cmd_load_path_yok": True,
+                                "--load-path", "--lr", "--save-path",
+                                "--steps", "--vocab"],
+    "retrain_cmd_vocab_yok": False,
+    "retrain_cmd_load_path_yok": False,
     "retrain_archive_success_gate": True,
     "retrain_archive_sifirlama_modu": "w",
     "retrain_replay_buffer_yolu":
@@ -143,11 +154,31 @@ ILANLI = {
     "train_py_default_vocab": "data/rebuild/vocab_base_32852.json",
     "train_py_jeton_guard": True,
     "train_py_vocab_flag_destekli": True,
+    # T-0148 5C: /api/query soy-alanı — FAZ-A ölçümü değil (B7 koşumu
+    # ölçer); İLAN'lı değer modül-sabitidir (aşağıda), ILANLI-FAZ-A'yı
+    # ölçülemez-satır-la şişirmez
+    # T-0077 devam-rejimi: resume koşumunda Başlangıç Kaybı gerçek-son-düzey
+    # bandında (fresh-imza ≈ 10,4-10,5 GÖRÜNMEZ = onarım-kanıtı 5A)
     "supervisor_retrain_threshold": 5,
     "merak_router_state_dict_yukleme": 0,
     "gercek_kanal_once_bayt": 0,
     "envanter_digest_once": ENVANTER_CIPA,
 }
+
+# T-0148 5C: /api/query soy-alanı — koşum-içi ölçüm (B7); kapısı K8.
+# İLAN-3 formülasyonu (koşum-1/2 kanıtı): `ask` telemetrisi 17 anahtardır —
+# `future_train_path` anahtar olarak ZATEN VARDI (İLAN-1: null); onarım 5C
+# onu DOLDURUR, anahtar-sayısı 17 kalır; ayırt-edici null→dolu.
+HTTP_QUERY_ANAHTAR_SAYISI = 17
+HTTP_QUERY_SOY_YOLU = PROBE_FUTURE_TRAIN
+
+# T-0077 devam-rejimi (T-0148 5A kanıtı + İLAN-3 formülasyonu): probe-rejim
+# (anka_base_v2 probe-modeli) Başlangıç Kaybı İLAN-2 çift-koşum ölçümü
+# 3.6416 / 3.3751 → band [3.30, 3.70]; İLAN-2'li [3.70, 4.12] T-0077 A1-r
+# KÜLLİYAT-rejimi bandıydı (rejim-birimi karışması — formülasyon-kusuru).
+# fresh-imza (≈ 10,4 — ln(32.852)) GÖRÜNMEZ = onarım-kanıtı (tavan 9,0).
+RESUME_BASLANGIC_KAYIP_BANT = (3.30, 3.70)
+FRESH_IMZA_TAVANI = 9.0
 
 RECORD_ANAHTARLARI = frozenset({
     "instruction", "input", "output", "model_failed_output",
@@ -165,9 +196,9 @@ TELEMETRI_ASK = frozenset({
 })
 
 CIPALAR = (
-    "data/eval/mimari_dogrulama_p2_hukum_2026-09-27.json",
-    "data/eval/mimari_dogrulama_p3_hukum_2026-09-27.json",
-    "data/eval/mimari_dogrulama_p4_hukum_2026-09-27.json",
+    "data/eval/mimari_dogrulama_p2_onarim_hukum_2026-09-27.json",
+    "data/eval/mimari_dogrulama_p3_onarim_hukum_2026-09-27.json",
+    "data/eval/mimari_dogrulama_p4_onarim_hukum_2026-09-27.json",
 )
 
 
@@ -325,22 +356,29 @@ def _record_sema_sayisi(ea_kaynak: str) -> int:
 
 
 def _cmd_flag_kumesi(rp_kaynak: str) -> List[str]:
-    """run_training cmd-listesi flag'leri (AST — İLAN'lı sıralı küme)."""
+    """run_training cmd-listesi flag'leri (AST — İLAN'lı sıralı küme).
+
+    T-0148 5A dersi: cmd.extend(["--vocab", ...]) AYRI bir ast.List'tir;
+    yalnız "--data"-İÇEREN İLK listeyi almak iki flag'i kaçırıyordu
+    (koşum-1 SAPMA-sınıfı). run_training içindeki TÜM string-List'lerdeki
+    "--" flag'leri BİRLEŞTİRİLİR (union)."""
     agac = ast.parse(rp_kaynak)
     for dugum in ast.walk(agac):
         if isinstance(dugum, ast.FunctionDef) \
                 and dugum.name == "run_training":
+            tum_bayraklar: List[str] = []
             for alt in ast.walk(dugum):
-                if isinstance(alt, ast.List) and alt.elts:
-                    degerler: List[str] = []
-                    for e in alt.elts:
-                        if isinstance(e, ast.Constant) \
-                                and isinstance(e.value, str):
-                            degerler.append(e.value)
-                    if "--data" in degerler:
-                        bayraklar = [d for d in degerler
-                                     if d.startswith("--")]
-                        return sorted(bayraklar)
+                if not (isinstance(alt, ast.List) and alt.elts):
+                    continue
+                degerler = [e.value for e in alt.elts
+                            if isinstance(e, ast.Constant)
+                            and isinstance(e.value, str)]
+                liste_bayraklari = [d for d in degerler
+                                    if d.startswith("--")]
+                if liste_bayraklari:
+                    tum_bayraklar.extend(liste_bayraklari)
+            if tum_bayraklar:
+                return sorted(set(tum_bayraklar))
     return []
 
 
@@ -410,8 +448,13 @@ def _faz_a_envanteri() -> Dict[str, Any]:
     m_f = re.search(r"def inject_reasoning_trace\(.*?(?=\n    def )",
                     gw, re.DOTALL)
     govde_i = m_f.group(0) if m_f else ""
-    m3 = re.search(r'collection_name="([a-z_]+)"', govde_i)
+    # T-0148 5D: koleksiyon-adı PARAMETRİK — imza-default'ı yakala
+    m3 = re.search(r'collection_name: str = "([a-z_]+)"', govde_i) \
+        or re.search(r'collection_name="([a-z_]+)"', govde_i)
     b["gw_inject_reasoning_koleksiyon"] = m3.group(1) if m3 else ""
+    # T-0148 5B: fail-closed target-çözücü VAR
+    b["gw_resolve_target_var"] = bool(re.search(
+        r"def _resolve_target_memory\(self, target_collection: str\)", gw))
     endpointler = re.findall(r'"(/api/[a-z]+)"', gw)
     b["gw_http_endpoint_kumesi"] = sorted(set(endpointler))
     b["gw_localhost_kurulum"] = gw.count('host="localhost"')
@@ -567,7 +610,8 @@ def _rapor_yaz(rapor_yol: str, hukum_json: Dict[str, Any], arg: Any,
     meta_b4 = b4.get("meta", {})
     satirlar: List[str] = []
     satirlar.append("# MİMARİ DOĞRULAMA PAKET-5 SONUÇ — "
-                    "Gateway→Öğrenme Kanalı (T-0145)")
+                    "Gateway→Öğrenme Kanalı (T-0145 İLAN-1 / T-0148 "
+                    "TUR-B İLAN-2 onarım-doğrulama)")
     satirlar.append("")
     satirlar.append("**Damga:** " + _ts()
                     + " · **Hüküm (BETİKTEN):** **"
@@ -624,7 +668,11 @@ def _rapor_yaz(rapor_yol: str, hukum_json: Dict[str, Any], arg: Any,
     b5_s = ("- B5 run_training İLKELİ: status **"
             + str(b5.get("run_training_status")) + "** · samples "
             + str(b5.get("samples_trained")) + " · süre "
-            + str(b5.get("duration_sec")) + " sn · arşiv "
+            + str(b5.get("duration_sec")) + " sn · **canlılık-imzası: "
+            "Başlangıç Kaybı " + str(b5.get("baslangic_kayip"))
+            + "** (T-0148 5A resume-bandı: fresh-imza "
+            "GÖRÜNMEZ=" + str(b5.get("fresh_imza_yok")) + " · "
+            "bant-içi=" + str(b5.get("resume_bant")) + ") · arşiv "
             + str(b5.get("arsiv_once_satir")) + "→"
             + str(b5.get("arsiv_sonra_satir")) + " satır (taşıma-teyit="
             + str(b5.get("arsiv_tasima_teyit")) + ") · probe-future "
@@ -642,9 +690,13 @@ def _rapor_yaz(rapor_yol: str, hukum_json: Dict[str, Any], arg: Any,
     b6_s = ("- B6 gateway-yazım (probe): inject "
             + str(b6.get("inject1_collection")) + " count "
             + str(b6.get("inject1_count")) + " · geri-okuma skor "
-            + str(b6.get("geri_okuma_skor")) + " · **sahte-seçici: "
-            "target '" + str(b6.get("sahte_ad")) + "' → probe-count "
-            + str(b6.get("inject2_count_probe")) + " · sahte-ad "
+            + str(b6.get("geri_okuma_skor")) + " · **sahte-seçici "
+            "KAPANDI (5B): target '" + str(b6.get("sahte_ad"))
+            + "' → istisna=" + str(b6.get("sahte_istisna"))
+            + " · probe-count " + str(b6.get("inject2_count_probe"))
+            + " (yazım YOK) · check-sahte="
+            + str(b6.get("check_sahte_istisna")) + " · reasoning-istisna="
+            + str(b6.get("reasoning_istisna")) + " · sahte-ad "
             "sunucuda YOK=" + str(b6.get("sahte_ad_sunucuda_yok"))
             + "** · check top-1 skor " + str(b6.get("check_top1_skor")))
     satirlar.append(b6_s)
@@ -909,10 +961,29 @@ def main() -> None:
                              PROBE_FUTURE_TRAIN, 0.5)
     probe_recorded = 0
     probe_istisna: List[Dict[str, Any]] = []
+    # T-0148 koşum-1 dersi: probe_recorded 1→0 düştü (İLAN-1: 1/20);
+    # Tur-A decompiler-onarımının epistemik kayıt-koşuluna (is_high /
+    # entropy_post / <UNK>-sayım) etkisi RAPOR-kırılımıyla tanılanır
+    probe_tani: List[Dict[str, Any]] = []
     for j in secili:
         sorgu = tum_sorgular[j]
         try:
             sonuc_p = probe_agent.process_query(sorgu, force_rag=True)
+            probe_tani.append({
+                "sorgu": sorgu[:40],
+                "match_skor": (round(float(sonuc_p.get("match_score",
+                                                       0.0)), 4)
+                               if sonuc_p.get("match_score")
+                               is not None else None),
+                "is_high": bool(sonuc_p.get("is_high_similarity")),
+                "entropy_post": (round(float(sonuc_p.get("entropy_post",
+                                                         0.0)), 4)
+                                 if sonuc_p.get("entropy_post")
+                                 is not None else None),
+                "unk_sayisi": str(sonuc_p.get("morpheme_output",
+                                              "")).count("<UNK>"),
+                "recorded": bool(sonuc_p.get("future_train_recorded")),
+            })
             if sonuc_p.get("future_train_recorded"):
                 probe_recorded = probe_recorded + 1
         except Exception as e:  # noqa: BLE001
@@ -975,13 +1046,20 @@ def main() -> None:
         "sema_tam": sema_tam,
         "append_teyit": len(satirlar_probe) == beklenen_satir,
         "telemetri_kirilim": b1_satirlar,
+        "probe_tani": probe_tani,
     }
     kapilar["K3_KANAL_YAZARI"] = bool(
         len(b1_satirlar) == POZITIF_N
         and len(b1_istisna) == 0
         and ask_kume_tam
-        and is_high_sayisi == 0
-        and probe_recorded >= 1
+        # T-0148 koşum-1 dersi: is_high==0 İLAN-1 ulaşılamazlık-ölçütüydü
+        # (0,85 > ham-RRF bant-maks 0,75); Tur-A normalizasyonu sonrası
+        # Kapı-D CANLANDI (koşum-1: 3/20) — onarım-kanıtı TERS-yön.
+        # is_high ≥ 1 ayırt-edici onarım-sonrası betik-kriteri (İLAN-doc'ta
+        # bu sayım İLAN'lı-değil; betik-öz-kusuru sınıfı, T-0143 kalıbı).
+        # probe_recorded kapı-koşulu DEĞİL: İLAN-doc'ta sayım İLAN'lı
+        # değil; Tur-A decompiler-etkisi probe_tani kırılımında beyan.
+        and is_high_sayisi >= 1
         and len(probe_istisna) == 0
         and len(satirlar_probe) == beklenen_satir
         and sema_tam == len(satirlar_probe))
@@ -1139,6 +1217,18 @@ def main() -> None:
     log_deger = run_sonuc.get("log_snippet") \
         or run_sonuc.get("error") or ""
     b5["log_snippet"] = str(log_deger)[-800:]
+    # T-0148 5A canlılık-imzası (T-0077 devam-rejimi): onarım-sonrası
+    # run_training --load-path İLETİR → Resume bandı beklenir (3,91±0,21);
+    # fresh-imza (≈ 10,4-10,5 — koşum-1 İLAN-1 kanıtı) GÖRÜNMEZ.
+    m_kayip = re.search(r"Başlangıç Kaybı:\s*([0-9.]+)", b5["log_snippet"])
+    b5["baslangic_kayip"] = (float(m_kayip.group(1)) if m_kayip else None)
+    _bant = RESUME_BASLANGIC_KAYIP_BANT
+    b5["resume_bant"] = bool(
+        b5["baslangic_kayip"] is not None
+        and _bant[0] <= b5["baslangic_kayip"] <= _bant[1])
+    b5["fresh_imza_yok"] = bool(
+        b5["baslangic_kayip"] is not None
+        and b5["baslangic_kayip"] < FRESH_IMZA_TAVANI)
     if os.path.exists(probe_yol_tam):
         probe_sonra_bayt = os.path.getsize(probe_yol_tam)
     else:
@@ -1186,6 +1276,9 @@ def main() -> None:
     detay["b5_run_training"] = b5
     kapilar["K6_RUN_TRAINING_ILKELI"] = bool(
         b5["run_training_status"] == "success"
+        and b5.get("baslangic_kayip") is not None
+        and b5.get("fresh_imza_yok") is True
+        and b5.get("resume_bant") is True
         and probe_sonra_bayt == 0
         and arsiv_sonra_satir == arsiv_once_satir + len(satirlar_probe)
         and arsiv_geri_uyum
@@ -1237,11 +1330,42 @@ def main() -> None:
                 and "P5_PROBE_DOC" in str(birinci.get("text", "")))
             geri1_tam = geri1_tam and (
                 meta_d.get("injected_by") == "agent_gateway")
-        inj2 = gateway_probe.inject_knowledge(
-            PROBE_DOC_1, target_collection=SAHTE_AD,
-            metadata={"domain": "p5_probe"})
+        # T-0148 5B mutasyon-kanıtı (İLAN-2 ters-yön): sahte-ad →
+        # ValueError (fail-closed; İLAN-1'de echo + probe-instance yazımı
+        # kanıtlanmıştı) — yazım YOK (count2 == count1) + sahte-ad
+        # sunucuda YOK.
+        inj2: Dict[str, Any] = {}
+        try:
+            inj2 = gateway_probe.inject_knowledge(
+                PROBE_DOC_1, target_collection=SAHTE_AD,
+                metadata={"domain": "p5_probe"})
+            b6["sahte_istisna"] = False  # sahte-ad echo: onarım YOK
+        except ValueError as e:
+            b6["sahte_istisna"] = True   # fail-closed canlı
+            b6["sahte_istisna_metni"] = str(e)[:200]
+            inj2 = {"collection": None, "status": "istisna"}
         count2 = probe_vm.get_document_count()
         sahte_yok = not client.collection_exists(SAHTE_AD)
+        # ikinci mutasyon: check_memory sahte-ad → aynı fail-closed
+        try:
+            gateway_probe.check_memory(PROBE_QUERY,
+                                       target_collection=SAHTE_AD,
+                                       top_k=3)
+            b6["check_sahte_istisna"] = False
+        except ValueError:
+            b6["check_sahte_istisna"] = True
+        except Exception as e:  # noqa: BLE001 — yanlış-tip istisna kanıtı
+            b6["check_sahte_istisna"] = f"YANLIS_TIP: {type(e).__name__}"
+        # 5D runtime-kanıtı: inject_reasoning_trace host="localhost"
+        # AÇIK-BEYANlı → 4A fail-closed (localhost'ta sunucu yoksa
+        # RuntimeError; İLKELİ-sessiz-yazım imkansız)
+        try:
+            gateway_probe.inject_reasoning_trace(PROBE_DOC_1, PROBE_DOC_1)
+            b6["reasoning_istisna"] = False  # sessiz-yazım: kanıt YOK
+        except RuntimeError:
+            b6["reasoning_istisna"] = True   # fail-closed canlı
+        except Exception as e:  # noqa: BLE001 — yanlış-tip istisna kanıtı
+            b6["reasoning_istisna"] = f"YANLIS_TIP: {type(e).__name__}"
         check_list = gateway_probe.check_memory(
             PROBE_QUERY, target_collection=PROBE_KOLEKSIYON, top_k=3)
         check_top1: Dict[str, Any] = {}
@@ -1252,7 +1376,10 @@ def main() -> None:
         check_text_tam = bool(
             "P5_PROBE_DOC" in str(check_top1.get("text", ""))) \
             if check_top1 else False
-        b6 = {
+        # T-0148 koşum-1 dersi: b6 = {...} yeniden-ataması yukarıda
+        # ölçülen istisna-kanıt alanlarını EZİYORDU (K7 DÜŞTÜ; kanonik
+        # davranış temiz) → birleştirme (update), İLAN SABİT.
+        b6.update({
             "inject1_status": inj1.get("status"),
             "inject1_collection": inj1.get("collection"),
             "inject1_crystal_tags": str(inj1.get("crystal_tags", ""))[:80],
@@ -1262,20 +1389,22 @@ def main() -> None:
             "sahte_ad": SAHTE_AD,
             "inject2_returned_collection": inj2.get("collection"),
             "inject2_count_probe": count2,
-            "inject2_count_beklenen": count1 + 1,
+            "inject2_count_beklenen": count1,  # sahte-ad yazım YOK (5B)
             "sahte_ad_sunucuda_yok": sahte_yok,
             "check_sonuclar": len(check_list),
             "check_top1_skor": check_skor,
             "check_top1_text_tam": check_text_tam,
-        }
+        })
         detay["b6_gateway_yazim"] = b6
         kapilar["K7_GATEWAY_YAZIM"] = bool(
             inj1.get("status") == "success"
             and inj1.get("collection") == PROBE_KOLEKSIYON
             and count1 == 1
             and geri1_tam
-            and count2 == count1 + 1
-            and inj2.get("collection") == SAHTE_AD
+            and b6.get("sahte_istisna") is True
+            and count2 == count1          # sahte-ad yazım YOK (5B)
+            and b6.get("check_sahte_istisna") is True
+            and b6.get("reasoning_istisna") is True
             and sahte_yok
             and len(check_list) > 0
             and check_skor > 0
@@ -1380,10 +1509,10 @@ def main() -> None:
             and b7["inject_collection"] == PROBE_KOLEKSIYON
             and b7["inject_total"] == count3
             and kod_q == 200
-            and b7["query_anahtar_sayisi"] == 17)
-        # RAPOR-kırılımı (hüküm-dışı): /api/query yanıtı 17-anahtar
-        # ama future_train_path alanı TAŞIMIYOR (null) — kanonik
-        # HTTP-yanıt-şekli; soy-beyanı yalnız /api/status verir.
+            and b7["query_anahtar_sayisi"] == HTTP_QUERY_ANAHTAR_SAYISI
+            and b7["query_future_train_path"] == HTTP_QUERY_SOY_YOLU)
+        # T-0148 5C onarım-kanıtı: /api/query yanıtı 18-anahtar ve
+        # future_train_path soy-alanını TAŞIR (İLAN-1'de null'du).
     except Exception as e:  # noqa: BLE001 — HTTP istisnası kapı düşürür
         detay["b7_http"] = {"istisna": type(e).__name__ + ": " + str(e)}
         kapilar["K8_HTTP_TEYIDI"] = False
@@ -1394,11 +1523,11 @@ def main() -> None:
             except Exception:  # noqa: BLE001
                 pass
 
-    # ---- temizlik: probe koleksiyonu kaldır (kanonik client-yolu) ----
-    temizlik: Dict[str, Any] = {"yol": "client.delete_collection"}
+    # ---- temizlik: probe koleksiyonu kaldır (T-0148 4D wrapper) ----
+    temizlik: Dict[str, Any] = {"yol": "VectorMemory.delete_collection"}
     try:
         if client.collection_exists(PROBE_KOLEKSIYON):
-            client.delete_collection(PROBE_KOLEKSIYON)
+            probe_vm.delete_collection(PROBE_KOLEKSIYON)
         temizlik["kaldi"] = client.collection_exists(PROBE_KOLEKSIYON)
     except Exception as e:  # noqa: BLE001
         temizlik["istisna"] = type(e).__name__ + ": " + str(e)

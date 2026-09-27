@@ -3,18 +3,23 @@
 """
 T-0144 — MİMARİ DOĞRULAMA PAKET-4: Üniversal Hafıza (VectorMemory yaşam-döngüsü)
 
-İLAN: data/eval/mimari_dogrulama_p4_ilan_2026-09-27.md (koşum-ÖNCESİ damgalı).
-Hüküm BETİK İÇİNDEDİR; elle sayı/hüküm YOK. rc ∈ {0, 2}.
+İLAN-2: data/eval/mimari_dogrulama_p4_ilan2_2026-09-27.md (koşum-ÖNCESİ
+damgalı). Hüküm BETİK İÇİNDEDİR; elle sayı/hüküm YOK. rc ∈ {0, 2}.
 
+T-0148 TUR-B (İLAN-2): P4 onarımları (4A/4B/4C/4D/4E) SONRASI beklentiler.
 Operatör kararları (27 Eyl 2026, plan onayı + AskUserQuestion):
   (1) YALNIZ DOĞRULAMA — kanonik kod (src/rag/vector_memory.py,
       src/rag/embedding.py, src/rag/rag_pipeline.py build_query_vectors)
-      salt IMPORT, YAZIM YOK; recreate-yıkıcılık [83,123,126] ONARILMAZ —
-      mutasyonla kanıtlanır (yalnız probe koleksiyonunda).
+      salt IMPORT, YAZIM YOK; recreate-yıkıcılık MUTASYONLA kanıtlanır
+      (yalnız probe koleksiyonunda; onarım-sonrası beklenti İLANLI'da:
+      confirm'suz → RuntimeError + veri korunur, confirm'lu → görünür-yıkım).
   (2) GEÇİCİ PROBE + SONDA SİL — yazım+recreate+delete YALNIZ
-      p4_probe_bellek üstünde; koşum sonunda delete_collection ile
-      kaldırılır. kristal_bellek (36 nokta) YALNIZ OKUNUR; 9 foreign
-      koleksiyon DOKUNULMAZ; simulasyon_bellek KURULMAZ.
+      p4_probe_bellek üstünde; koşum sonunda delete_collection (4D
+      wrapper) ile kaldırılır. kristal_bellek (36 nokta) YALNIZ OKUNUR;
+      9 foreign koleksiyon DOKUNULMAZ; simulasyon_bellek KURULMAZ.
+  (3) B6 fallback-merdiveni RAPOR-düzeyinden KAPIYA yükseltildi
+      (K8_B6_FALLBACK_FAIL_CLOSED): sahte-host → RuntimeError (4A
+      fail-closed) + cache-yazım YOK (mutasyon-kanıtı).
 
 Kanonik kod IMPORT edilir (kopya YASAK):
   VectorMemory                       (src/rag/vector_memory.py)
@@ -79,7 +84,7 @@ KANONIK_YASAK = frozenset({
 EXPECTED_KAPILAR = frozenset({
     "K1_FAZ_A_ENVANTER", "K2_ARZ_CIPA", "K3_B1_BAGLANMA",
     "K4_B3_DETERMINIZM", "K5_B4_ADD_YOLU", "K6_B5_MUTASYON_KANITI",
-    "K7_DOKUNULMAZLIK",
+    "K7_DOKUNULMAZLIK", "K8_B6_FALLBACK_FAIL_CLOSED",
 })
 OOV_SORGU = "zzqwxx zqxwv zqqzzq"  # P2/P3'ün aynısı
 PROBE_METINLER = [
@@ -93,20 +98,34 @@ PROBE_METINLER = [
     "p4_probe belge sekiz: hibrit recall kendi belge",
 ]
 ILANLI = {
-    # ---- FAZ-A kod-envanteri (koşumsuz) ----
+    # ---- FAZ-A kod-envanteri (koşumsuz; T-0148 onarım-sonrası beklenti) ----
     "vm_qdrantclient_kurulum": 3,           # host / local-path / :memory:
-    "vm_remote_timeout_sn": 2.0,            # :50
-    "vm_cache_yazim_sitesi": 1,             # :73 (tek yazım)
-    "vm_cache_evict_sitesi": 1,             # :44 (evict-pop)
-    "vm_cache_guardi": "if not self.is_in_memory:",   # :72 — in-memory
-    "vm_cache_guard_satiri": 72,            #   cache'e YAZILMAZ
-    "vm_cache_yazim_satiri": 73,
-    "vm_recreate_delete_satirlar": [83, 123, 126],    # P2/P3 çıpası birebir
-    "vm_otomatik_kurulum_birebir": True,    # :75-77 bandı metin-teyitli
+    "vm_remote_timeout_sn": 2.0,            # :62
+    "vm_cache_yazim_sitesi": 1,             # :93 (tek yazım)
+    "vm_cache_evict_sitesi": 1,             # :54 (init-içi evict-pop)
+    # :92 — T-0148 4A: cache'e yalnız REMOTE yazılır (local/:memory: yazmaz)
+    "vm_cache_guardi":
+        'if not self.is_in_memory and self.storage_type.startswith("remote"):',
+    "vm_cache_guard_satiri": 92,
+    "vm_cache_yazim_satiri": 93,
+    # onarım-sonrası: init-auto :103 + def-recreate :143 + del :155 +
+    # def-wrapper :164 + wrapper-docstring :165 + wrapper-içi del :171
+    "vm_recreate_delete_satirlar": [103, 143, 155, 164, 165, 171],
+    "vm_otomatik_kurulum_birebir": True,    # :95-97 bandı metin-teyitli
     "embedding_random_seedli": 1,           # random.Random( tek site
     "embedding_random_seedli_siz": 0,       # seed'siz random.-çağrı
-    "gateway_localhost_kurulum": 2,         # :123-124 — sessiz-fallback riski
+    # :129-130 create_default + :322 inject_reasoning (T-0148 5D: 3. site
+    # AÇIK-BEYANlı — storage_path=None; sessiz-fallback default'u YOK)
+    "gateway_localhost_kurulum": 3,
     "gateway_kanonik_koleksiyonlar": ["kristal_bellek", "simulasyon_bellek"],
+    # T-0148 4B: kurucu default'u KALDIRILDI → host'suz çağrı :memory:'ye
+    "vm_varsayilan_storage_path": "None",
+    # T-0148 4C: upsert parametre-sitesi (dublor-yazımı fail-closed)
+    "vm_upsert_param": 1,                   # "upsert: bool = False" tek-sitesi
+    # T-0148 4E: confirm_destroy parametre-sitesi (sessiz-yıkım kapısı)
+    "vm_confirm_destroy_param": 1,
+    # T-0148 4D: delete_collection VectorMemory-wrapper'ı VAR
+    "vm_delete_wrapper": 1,
     # ---- FAZ-B İLAN'lı ----
     "b1_storage_type": "remote (192.168.1.5:6333)",
     "b1_cache_anahtari": "remote:192.168.1.5:6333",
@@ -116,11 +135,18 @@ ILANLI = {
     "simulasyon_bellek_yok": True,
     "b3_p2_birebir": 20,
     "b3_cift_kosum_birebir": 20,
-    "b4_count_sekansi": [0, 3, 8, 9],
-    "b4_geri_okuma_birebir": 9,
+    # [0,3,8] → upsert=True İLK-yazım (+1, hash-id) → upsert TEKRAR
+    # (9 — DUBLÖR YOK) → default upsert=False dublör (+1) → 10
+    # (T-0148 4C mutasyon-kanıtı)
+    "b4_count_sekansi": [0, 3, 8, 9, 10],
+    "b4_upsert_count": 9,                   # upsert=True İLK-yazım (hash-id)
+    "b4_geri_okuma_birebir": 10,            # 8 belge + upsert + default-dublör
     "b4_pozitif_beklenen": 8,
-    "b5_recreate_nokta": 0,
-    "b5_dense_size": 384,
+    # T-0148 4E: confirm'suz recreate DOLU'da istisna → veri KORUNUR (10)
+    "b5_explicit_once_nokta": 10,
+    "b5_confirm_nokta": 0,                  # confirm_destroy=True → görünür-yıkım
+    "b5_auto_nokta": 1,                     # auto-recreate ENGELLENDİ (1 korunur)
+    "b5_dense_size": 768,                   # boyut-uyuşmazlıkta recreate YOK
     "kanal_once_bayt": 0,
     "kanal_sonra_bayt": 0,
 }
@@ -221,13 +247,20 @@ def _faz_a_envanteri(repo_root: str) -> Dict[str, Any]:
                          if "recreate_collection" in s
                          or "delete_collection" in s]
     bulgular["vm_recreate_delete_satirlar"] = recreate_satirlar
-    # otomatik-kurulum bandı :75-77 (koleksiyon-yoksa sessiz kurulum)
-    ok_band = (75 <= len(vm_satirlar)
-               and "collection_exists" in vm_satirlar[74]
-               and "_create_hybrid_collection" in vm_satirlar[75]
-               and "_next_point_id" in vm_satirlar[76])
+    # T-0148 4E onarım parametreleri (İLAN-2'li siteler)
+    bulgular["vm_upsert_param"] = vm.count("upsert: bool = False")
+    bulgular["vm_confirm_destroy_param"] = vm.count(
+        "confirm_destroy: bool = False")
+    bulgular["vm_delete_wrapper"] = int(
+        "def delete_collection(self, collection_name: Optional[str] = None)"
+        " -> bool:" in vm)
+    # otomatik-kurulum bandı :95-97 (koleksiyon-yoksa sessiz kurulum)
+    ok_band = (97 <= len(vm_satirlar)
+               and "collection_exists" in vm_satirlar[94]
+               and "_create_hybrid_collection" in vm_satirlar[95]
+               and "_next_point_id" in vm_satirlar[96])
     bulgular["vm_otomatik_kurulum_birebir"] = bool(ok_band)
-    bulgular["vm_otomatik_kurulum_bandi"] = vm_satirlar[74:77]
+    bulgular["vm_otomatik_kurulum_bandi"] = vm_satirlar[94:97]
 
     emb_yol = os.path.join(repo_root, "src", "rag", "embedding.py")
     emb = open(emb_yol, encoding="utf-8").read()
@@ -283,6 +316,11 @@ def _faz_a_kapilari(faz_a: Dict[str, Any]) -> Tuple[bool,
         "gateway_localhost_kurulum": faz_a["gateway_localhost_kurulum"],
         "gateway_kanonik_koleksiyonlar":
             faz_a["gateway_kanonik_koleksiyonlar"],
+        "vm_varsayilan_storage_path":
+            faz_a["vm_varsayilan_storage_path"],
+        "vm_upsert_param": faz_a["vm_upsert_param"],
+        "vm_confirm_destroy_param": faz_a["vm_confirm_destroy_param"],
+        "vm_delete_wrapper": faz_a["vm_delete_wrapper"],
     }
     detay: List[Dict[str, Any]] = []
     tamam = True
@@ -317,11 +355,12 @@ def main() -> None:
                         default="data/rebuild/vocab_anka_r1_33114.json")
     ayrici.add_argument(
         "--p2-hukum",
-        default="data/eval/mimari_dogrulama_p2_hukum_2026-09-27.json")
+        default="data/eval/mimari_dogrulama_p2_onarim_hukum_2026-09-27.json")
     ayrici.add_argument(
-        "--ilan", default="data/eval/mimari_dogrulama_p4_ilan_2026-09-27.md")
+        "--ilan", default="data/eval/mimari_dogrulama_p4_ilan2_2026-09-27.md")
     ayrici.add_argument(
-        "--rapor", default="data/eval/mimari_dogrulama_p4_sonuc_2026-09-27.md")
+        "--rapor",
+        default="data/eval/mimari_dogrulama_p4_onarim_sonuc_2026-09-27.md")
     ayrici.add_argument("--hukum-json", default=None)
     arg = ayrici.parse_args()
     damga = _ts()
@@ -485,7 +524,7 @@ def main() -> None:
                              port=arg.port)
         b4["guard_probe_adi"] = probe.collection_name
         arasekans: List[int] = [int(probe.get_document_count())]
-        b4["otomatik_kurulum"] = arasekans[0] == 0  # :75-77 sessiz-kurulum
+        b4["otomatik_kurulum"] = arasekans[0] == 0  # :95-97 sessiz-kurulum
         cp: List[int] = [arasekans[0]]              # İLAN'lı [0, 3, 8, 9]
         for metin in PROBE_METINLER[:3]:            # add_document ×3
             _probe_yaz(probe, metin, tokenizer)
@@ -503,16 +542,34 @@ def main() -> None:
                             "crystal_tags": t_tags, "token_ids": t_ids})
         probe.add_documents_batch(toplu, d_liste, s_liste, m_liste)
         cp.append(int(probe.get_document_count()))  # checkpoint: 8
-        # DUBLÖR-teyidi: aynı metin tekrar → +1 (API-düzeyi upsert YOK)
+        # DUBLÖR-teyidi (T-0148 4C mutasyon-kanıtı): upsert=True İLK
+        # yazım hash-türetilmiş deterministik id YARATIR (+1); TEKRAR
+        # upsert aynı id'yi yeniden-yazar → DUBLÖR YOK (9 kalır);
+        # default upsert=False monoton-sayaç bit-uyumlu (+1 → 10)
+        _, _, d_up, s_up = _probe_vektor(PROBE_METINLER[0], tokenizer)
+        probe.add_documents_batch([PROBE_METINLER[0]], [d_up], [s_up],
+                                  [{"domain": "p4_probe"}], upsert=True)
+        cp.append(int(probe.get_document_count()))  # checkpoint: 9 (İLK)
+        b4["upsert_count"] = cp[-1]
+        # TEKRAR-upsert cp'ye eklenmez (İLAN'lı sekans 5- checkpoint:
+        # [0, 3, 8, 9, 10] — koşum-1'de 6-checkpoint sekansıyla
+        # hizasızlıktı; ölçüm İLAN'a hizalandı: TEKRAR ayrı alanda)
+        probe.add_documents_batch([PROBE_METINLER[0]], [d_up], [s_up],
+                                  [{"domain": "p4_probe"}], upsert=True)
+        b4["upsert_tekrar_count"] = int(probe.get_document_count())
+        b4["upsert_dublor_yok"] = bool(
+            b4["upsert_tekrar_count"] == 9
+            and b4["upsert_tekrar_count"] == b4["upsert_count"])
+        # default upsert=False (bit-uyumlu monoton-sayaç): aynı metin → +1
         _probe_yaz(probe, PROBE_METINLER[0], tokenizer)
-        cp.append(int(probe.get_document_count()))  # checkpoint: 9
+        cp.append(int(probe.get_document_count()))  # checkpoint: 10
         b4["count_sekansi"] = cp                    # İLAN'lı checkpoint-sekansı
         b4["count_ara_sekans"] = arasekans          # adım-adım (RAPOR)
         # geri-okuma birebir
         geri = probe.list_documents(20)
         geri_metin = sorted(
             str(r["payload"].get("text", "")) for r in geri)
-        beklenen = sorted(PROBE_METINLER + [PROBE_METINLER[0]])
+        beklenen = sorted(PROBE_METINLER + [PROBE_METINLER[0]] * 2)
         b4["geri_okuma_sayi"] = len(geri)
         b4["geri_okuma_birebir"] = (geri_metin == beklenen
                                     and all(r["payload"].get("domain")
@@ -544,6 +601,10 @@ def main() -> None:
         kapilar["K5_B4_ADD_YOLU"] = bool(
             b4["guard_probe_adi"] == PROBE_KOLEKSIYON
             and b4["count_sekansi"] == ILANLI["b4_count_sekansi"]
+            and b4.get("upsert_dublor_yok") is True
+            and b4.get("upsert_count") == ILANLI["b4_upsert_count"]
+            and b4.get("upsert_tekrar_count")
+            == ILANLI["b4_upsert_count"]
             and b4["geri_okuma_sayi"] == ILANLI["b4_geri_okuma_birebir"]
             and geri_metin == beklenen
             and dense_pozitif == ILANLI["b4_pozitif_beklenen"]
@@ -554,21 +615,34 @@ def main() -> None:
         kapilar["K5_B4_ADD_YOLU"] = False
 
     # ============ B5: recreate-yıkıcılık MUTASYON-kanıtı (probe) =========
-    b5: Dict[str, Any] = {"explicit_recreate_nokta": None,
-                          "auto_recreate_nokta": None,
-                          "dense_size_after": None,
-                          "reset_mesaji": None, "kaldi": None}
+    # T-0148 4E onarım-kanıtı (İLAN-2): confirm'suz recreate DOLU
+    # koleksiyonda RuntimeError (veri KORUNUR); confirm_destroy=True →
+    # GÖRÜNÜR yıkım ([UYARI]) → 0 nokta; boyut-uyuşmazlık auto-recreate
+    # ENGELLENDİ (veri korunur, dense 768 kalır); temizlik YENİ
+    # delete_collection-wrappER'iyla (4D kanıtı).
+    b5: Dict[str, Any] = {"confirm_suz_istisna": None,
+                          "confirm_nokta": None,
+                          "dense_size_after": None, "kaldi": None}
     try:
-        # (i) explicit recreate (9 nokta) → sessiz SİLME → 0 nokta
-        once_nokta_on_explicit = int(probe.get_document_count())  # 9 (B4'ten)
+        # (i) confirm'suz recreate DOLU koleksiyonda → RuntimeError (4E)
+        once_nokta_explicit = int(probe.get_document_count())  # 9 (B4'ten)
+        b5["once_nokta_explicit"] = once_nokta_explicit
+        try:
+            probe.recreate_collection(768)
+            b5["confirm_suz_istisna"] = False  # sessiz-yıkım: kanıt YOK
+        except RuntimeError:
+            b5["confirm_suz_istisna"] = True   # 4E guard canlı
+        b5["confirm_suz_nokta_korundu"] = bool(
+            int(probe.get_document_count()) == once_nokta_explicit)
+        # (ii) confirm_destroy=True → GÖRÜNÜR yıkım ([UYARI]) → 0 nokta
         buf = io.StringIO()
         with redirect_stdout(buf):
-            probe.recreate_collection(768)
-        b5["reset_mesaji"] = "has been reset" in buf.getvalue()
-        b5["explicit_recreate_nokta"] = int(probe.get_document_count())
-        b5["once_nokta_on_explicit"] = once_nokta_on_explicit
-        # (ii) boyut-uyuşmazlık auto-recreate (:83 yolu): 1 belge geri-yaz →
-        #      fresh VectorMemory(vector_size=384) → sessiz recreate → 0 nokta
+            probe.recreate_collection(768, confirm_destroy=True)
+        b5["uyari_mesaji"] = "[UYARI]" in buf.getvalue()
+        b5["confirm_nokta"] = int(probe.get_document_count())
+        # (iii) boyut-uyuşmazlık auto-recreate: 1 belge geri-yaz →
+        #       fresh VectorMemory(384) → recreate ENGELLENDİ (init-içi
+        #       guard-istisnası count-fallback'e düşer; veri korunur)
         _probe_yaz(probe, PROBE_METINLER[1], tokenizer)
         b5["once_nokta_on_auto"] = int(probe.get_document_count())  # 1
         probe_384 = VectorMemory(PROBE_KOLEKSIYON, 384, host=arg.host,
@@ -577,71 +651,88 @@ def main() -> None:
         info = yonet_client.get_collection(PROBE_KOLEKSIYON)
         b5["dense_size_after"] = int(
             info.config.params.vectors["dense"].size)
-        b5["yikicilik_kanitlandi"] = bool(
-            b5["explicit_recreate_nokta"] == ILANLI["b5_recreate_nokta"]
-            and b5["auto_recreate_nokta"] == ILANLI["b5_recreate_nokta"]
-            and b5["once_nokta_on_explicit"] == len(PROBE_METINLER) + 1
-            and b5["once_nokta_on_auto"] == 1
-            and b5["dense_size_after"] == ILANLI["b5_dense_size"]
-            and b5["reset_mesaji"])
-        # (iii) temizlik: probe kaldırılır (operatör kararı: sonda sil).
-        # NOT (T-0144 2. koşum dersi): VectorMemory'de delete_collection
-        # METODU YOK — kanonik yol client.delete_collection (:126'daki
-        # client-çağrısı; wrapper yok).
-        probe_384.client.delete_collection(PROBE_KOLEKSIYON)
+        # (iv) temizlik: YENİ VectorMemory.delete_collection-wrappER'i
+        # (T-0148 4D; T-0144'te wrapper-YOK bulgusunun onarım-kanıtı)
+        b5["delete_wrapper_sonuc"] = bool(probe_384.delete_collection(
+            PROBE_KOLEKSIYON))
         b5["kaldi"] = bool(yonet_client.collection_exists(PROBE_KOLEKSIYON))
         b5["temizlik"] = not b5["kaldi"]
         detay["b5_mutasyon"] = b5
         kapilar["K6_B5_MUTASYON_KANITI"] = bool(
-            b5["yikicilik_kanitlandi"] and not b5["kaldi"])
+            b5["confirm_suz_istisna"] is True
+            and b5["confirm_suz_nokta_korundu"] is True
+            and b5["once_nokta_explicit"] == ILANLI["b5_explicit_once_nokta"]
+            and b5["uyari_mesaji"] is True
+            and b5["confirm_nokta"] == ILANLI["b5_confirm_nokta"]
+            and b5["once_nokta_on_auto"] == 1
+            and b5["auto_recreate_nokta"] == ILANLI["b5_auto_nokta"]
+            and b5["dense_size_after"] == ILANLI["b5_dense_size"]
+            and b5["delete_wrapper_sonuc"] is True
+            and not b5["kaldi"])
         probe_384.close()
     except Exception as e:  # noqa: BLE001 — istisna = kapı düşer
         b5["istisna"] = f"{type(e).__name__}: {e}"
         detay["b5_mutasyon"] = b5
         kapilar["K6_B5_MUTASYON_KANITI"] = False
 
-    # ====== B6 (RAPOR — hükme bağlanmaz): sessiz-fallback merdiveni ======
+    # ====== B6: fallback-merdiveni FAIL-CLOSED MUTASYON-kanıtı ===========
+    # T-0148 4A onarım-kanıtı (İLAN-2'de kapıya yükseltildi — eski
+    # İLAN-1'de RAPOR-düzeyiydi): sahte-host (192.0.2.1) RuntimeError
+    # fırlatır (sessiz-local-düşme KAPALI) + cache'e YAZIM YOK (mutasyon-
+    # kanıtı: cache-anahtar kümesi değişmez). Host'suz + storage_path'siz
+    # çağrı :memory:'ye düşer (4B: default "data/qdrant_db" KALDIRILDI).
     b6: Dict[str, Any] = {}
     tmp_kok = tempfile.mkdtemp(prefix="p4_probe_local_")
     try:
         cache_once_anahtarlar = set(VectorMemory._shared_clients.keys())
-        local_vm = VectorMemory(PROBE_KOLEKSIYON, 768, host="192.0.2.1",
-                                port=6333, storage_path=tmp_kok)
-        b6["local_storage_type"] = str(local_vm.storage_type)
-        b6["local_is_in_memory"] = bool(local_vm.is_in_memory)
-        b6["local_cache_yazildi"] = bool(
-            "local:" in ",".join(VectorMemory._shared_clients.keys())
-            and len(VectorMemory._shared_clients)
-            == len(cache_once_anahtarlar) + 1)
-        local_vm.close()
-        b6["local_cache_cikarildi"] = bool(
-            "local:" not in " ".join(VectorMemory._shared_clients.keys()))
-        mem_vm = VectorMemory(PROBE_KOLEKSIYON, 768, host="192.0.2.1",
-                              storage_path="")  # boş storage_path → :memory:
+        # (i) sahte-host — storage_path VERİLMİŞ olsa bile (eski İLAN-1'de
+        #     aynı girdi sessizce "local (...)"e düşüyordu; mutasyon-kanıtı
+        #     ters-yön: onarım-sonrası istisna)
+        try:
+            VectorMemory(PROBE_KOLEKSIYON, 768, host="192.0.2.1",
+                         port=6333, storage_path=tmp_kok)
+            b6["sahte_host_istisna"] = False  # sessiz-düşme: kanıt YOK
+        except RuntimeError:
+            b6["sahte_host_istisna"] = True   # 4A fail-closed canlı
+        except Exception as e:  # noqa: BLE001 — yanlış-tip istisna kanıtı
+            b6["sahte_host_istisna"] = f"YANLIS_TIP: {type(e).__name__}"
+        b6["cache_yazilmadi"] = bool(
+            set(VectorMemory._shared_clients.keys()) == cache_once_anahtarlar)
+        # (ii) host'suz + storage_path'siz çağrı → :memory: (default YOK)
+        mem_vm = VectorMemory(PROBE_KOLEKSIYON, 768)
         b6["mem_storage_type"] = str(mem_vm.storage_type)
         b6["mem_is_in_memory"] = bool(mem_vm.is_in_memory)
         b6["mem_cache_yazilmadi"] = bool(
-            len(VectorMemory._shared_clients)
-            == len(cache_once_anahtarlar))
-        b6["bulgu"] = ("SESSIZ_FALLBACK_CANLI — sahte-hostta remote "
-                       "sessizce local-path'e (ve storage_path-yoksa "
-                       ":memory:'ye) düşer; local-client cache'e YAZILIR "
-                       "(gateway:123-124 storage_path'li çağrı riski)")
+            len(VectorMemory._shared_clients) == len(cache_once_anahtarlar))
+        b6["varsayilan_storage_path"] = str(
+            vector_memory_defaults().get("storage_path"))
+        b6["bulgu"] = ("FAIL_CLOSED_KANITLI — sahte-host RuntimeError "
+                       "(sessiz-local-fallback kapalı, T-0148 4A); "
+                       "cache-yazım YOK; default storage_path KALDIRILDI "
+                       "(host'suz çağrı :memory:'ye düşer, repo-içi yazmaz)")
         detay["b6_fallback"] = b6
+        kapilar["K8_B6_FALLBACK_FAIL_CLOSED"] = bool(
+            b6["sahte_host_istisna"] is True
+            and b6["cache_yazilmadi"] is True
+            and b6["mem_is_in_memory"] is True
+            and b6["mem_cache_yazilmadi"] is True
+            and b6["varsayilan_storage_path"] == "None")
         mem_vm.close()
-    except Exception as e:  # noqa: BLE001 — RAPOR-düzeyi (hükme bağlanmaz)
+    except Exception as e:  # noqa: BLE001 — istisna = kapı düşer
         b6["istisna"] = f"{type(e).__name__}: {e}"
         detay["b6_fallback"] = b6
+        kapilar["K8_B6_FALLBACK_FAIL_CLOSED"] = False
     finally:
         shutil.rmtree(tmp_kok, ignore_errors=True)
 
     # ================= B7: dokunulmazlık (koşum SONU) ====================
     # Temizlik-sigortası (operatör kararı: sonda sil — hükümden bağımsız):
+    # T-0148 4D: YENİ VectorMemory.delete_collection-wrappER'i kullanılır.
     if yonet_client.collection_exists(PROBE_KOLEKSIYON):
         try:
             _temizlik_vm = VectorMemory(PROBE_KOLEKSIYON, 768,
                                         host=arg.host, port=arg.port)
-            _temizlik_vm.client.delete_collection(PROBE_KOLEKSIYON)
+            _temizlik_vm.delete_collection(PROBE_KOLEKSIYON)
             _temizlik_vm.close()
             _stderr("UYARI: temizlik-sigortası devrede — koşum-içi "
                     "kaldırılmamış p4_probe_bellek silindi (kapı zaten "
@@ -750,7 +841,8 @@ def _rapor_yaz(rapor_yol: str, hukum_json: Dict[str, Any], arg: Any,
     d = hukum_json.get("detay", {})
     with open(rapor_yol, "w", encoding="utf-8") as f:
         f.write("# MİMARİ DOĞRULAMA PAKET-4 SONUÇ — Üniversal Hafıza "
-                "(VectorMemory yaşam-döngüsü, T-0144)\n\n")
+                "(VectorMemory yaşam-döngüsü; T-0144 İLAN-1 / T-0148 "
+                "TUR-B İLAN-2 onarım-doğrulama)\n\n")
         f.write(f"**Damga:** {_ts()} · **Hüküm (BETİKTEN):** "
                 f"**{hukum_json['hukum']} (rc={hukum_json['rc']})**\n\n")
         f.write("| Kapı | Durum |\n|---|---|\n")
@@ -767,8 +859,9 @@ def _rapor_yaz(rapor_yol: str, hukum_json: Dict[str, Any], arg: Any,
                 f"{c.get('vm_recreate_delete_satirlar')} · otomatik-kurulum "
                 f"bandı: {c.get('vm_otomatik_kurulum_bandi')}\n")
         f.write(f"- VectorMemory varsayılan storage_path: "
-                f"{c.get('vm_varsayilan_storage_path')} (host'suz "
-                f"çağrıda repo-içi local-storage riski — RAPOR §7)\n")
+                f"{c.get('vm_varsayilan_storage_path')} (T-0148 4B onarım: "
+                f"default KALDIRILDI — host'suz çağrı :memory:'ye düşer, "
+                f"repo-içi yazmaz)\n")
         f.write(f"- embedding deterministik (saf çift-çağrı): "
                 f"{c.get('embedding_deterministik')}\n")
         b1 = d.get("b1_baglanma", {})
@@ -796,30 +889,38 @@ def _rapor_yaz(rapor_yol: str, hukum_json: Dict[str, Any], arg: Any,
                 f"birebir SATIR-düzeyi 4 ondalık (RAPOR §7 beyanı)\n")
         b4 = d.get("b4_add_yolu", {})
         f.write(f"- B4 add-yolu (probe): checkpoint-count-sekansı "
-                f"**{b4.get('count_sekansi')}** (İLAN'lı "
-                f"[0, 3, 8, 9] — dublör +1: API-düzeyi upsert YOK) · "
+                f"**{b4.get('count_sekansi')}** (İLAN-2'li [0, 3, 8, 9, "
+                f"10] — upsert İLK +1 / TEKRAR dublör-YOK + default +1) · "
+                f"  - upsert_count **{b4.get('upsert_count')}** / TEKRAR "
+                f"**{b4.get('upsert_tekrar_count')}** (dublor-yok: "
+                f"{b4.get('upsert_dublor_yok')}; T-0148 4C) · "
                 f"ara-adım-sekansı **{b4.get('count_ara_sekans')}** "
                 f"(RAPOR kırılımı) · "
                 f"geri-okuma **{b4.get('geri_okuma_sayi')}** birebir · "
                 f"pozitif-kontrol dense **{b4.get('pozitif_dense')}/8** + "
                 f"hibrit **{b4.get('pozitif_hibrit')}/8**\n")
         b5 = d.get("b5_mutasyon", {})
-        f.write(f"- B5 recreate-yıkıcılık MUTASYON-KANITI: explicit "
-                f"recreate → **{b5.get('explicit_recreate_nokta')}** nokta "
-                f"(9→0; reset-mesajı {b5.get('reset_mesaji')}) · boyut-"
-                f"uyuşmazlık auto-recreate (:83) → "
-                f"**{b5.get('auto_recreate_nokta')}** nokta (önce 1; "
-                f"dense-size {b5.get('dense_size_after')}) · probe "
-                f"kaldırma: kaldi={b5.get('kaldi')}\n")
+        f.write(f"- B5 recreate-yıkıcılık MUTASYON-KANITI (T-0148 4E): "
+                f"confirm'suz recreate DOLU'da istisna "
+                f"**{b5.get('confirm_suz_istisna')}** (nokta "
+                f"korundu={b5.get('confirm_suz_nokta_korundu')}, "
+                f"önce {b5.get('once_nokta_explicit')}) · "
+                f"confirm_destroy=True → **{b5.get('confirm_nokta')}** "
+                f"nokta ([UYARI] {b5.get('uyari_mesaji')}) · boyut-"
+                f"uyuşmazlık auto-recreate ENGELLENDİ → "
+                f"**{b5.get('auto_recreate_nokta')}** nokta (önce "
+                f"{b5.get('once_nokta_on_auto')}; dense-size "
+                f"{b5.get('dense_size_after')}) · wrapper-temizlik "
+                f"{b5.get('delete_wrapper_sonuc')}; kaldi={b5.get('kaldi')}\n")
         b6 = d.get("b6_fallback", {})
-        f.write(f"- B6 (RAPOR) sessiz-fallback: local "
-                f"**{b6.get('local_storage_type')}** (is_in_memory "
-                f"{b6.get('local_is_in_memory')}; cache-yazıldı "
-                f"{b6.get('local_cache_yazildi')}) · :memory: "
+        f.write(f"- B6 fallback FAIL-CLOSED (T-0148 4A kapısı): "
+                f"sahte-host-istisna **{b6.get('sahte_host_istisna')}** · "
+                f"cache-yazılmadı {b6.get('cache_yazilmadi')} · :memory: "
                 f"**{b6.get('mem_storage_type')}** (is_in_memory "
                 f"{b6.get('mem_is_in_memory')}; cache-yazılmadı "
-                f"{b6.get('mem_cache_yazilmadi')}) · bulgu: "
-                f"{b6.get('bulgu')}\n")
+                f"{b6.get('mem_cache_yazilmadi')}) · varsayılan "
+                f"storage_path **{b6.get('varsayilan_storage_path')}** · "
+                f"bulgu: {b6.get('bulgu')}\n")
         dok = d.get("dokunulmazlik", {})
         f.write(f"- B7 dokunulmazlık: {dok.get('durum')} · digest "
                 f"{dok.get('once_digest')}→{dok.get('sonra_digest')} · "

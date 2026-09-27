@@ -80,15 +80,23 @@ class TestAgentGateway(unittest.TestCase):
         self.assertIn("future_train_recorded", res)
 
     def test_gateway_inject_knowledge_and_check(self):
+        # T-0148 5B: bilinmeyen target-adı artık ValueError'dur (sahte-seçici
+        # mutasyon-kanıtı kapatıldı — eski davranış: 'kristal_bellek' echo'nda
+        # döner ama backing-instance'e yazılırdı). Bilinmeyen-ad dalı ayrıca
+        # kanıtlanır: istisna + count-değişimi YOK + sahte-koleksiyon YOK.
+        with self.assertRaises(ValueError):
+            self.gateway.inject_knowledge(text="Sahte ad kanıtı.", target_collection="olmayan_ad_gw_x")
+        self.assertEqual(self.memory.get_document_count(), 0)
+
         inject_res = self.gateway.inject_knowledge(
             text="Kırlangıç kuyruğu mukavemetli bir köşe birleştirmedir.",
-            target_collection="kristal_bellek"
+            target_collection=self.memory.collection_name
         )
         self.assertEqual(inject_res["status"], "success")
         self.assertGreaterEqual(inject_res["total_documents"], 1)
 
         # Check retrieval
-        check_res = self.gateway.check_memory("Kırlangıç kuyruğu", target_collection="kristal_bellek")
+        check_res = self.gateway.check_memory("Kırlangıç kuyruğu", target_collection=self.memory.collection_name)
         self.assertGreater(len(check_res), 0)
         self.assertIn("Kırlangıç kuyruğu", check_res[0]["text"])
 
@@ -122,10 +130,19 @@ class TestAgentGateway(unittest.TestCase):
         probe = {
             "query": "Kırlangıç kuyruğu nerelerde kullanılır?",
             "instruction": "ahşap uzmanı olarak cevapla.",
-            "target_collection": "kristal_bellek",
+            # T-0148 5B: bilinmeyen target-adı ValueError'dur; test
+            # gateway'in KENDİ koleksiyonunu hedefler.
+            "target_collection": self.memory.collection_name,
             "knowledge_to_inject": "Kırlangıç kuyruğu çekmecelerde ve sandıklarda kullanılır.",
             "expected_keywords": ["çekmece", "sandık"]
         }
+        # T-0148 5D: inject_reasoning_trace default "muhakeme_bellek" için
+        # 4A fail-closed remote-bağlantı kurar (host="localhost") — test
+        # ortamında sunucu yoktur; :memory: instance AÇIK-BEYANla verilir
+        # (kanonik guard bunu yeniden-kullanır: collection_name eşleşir).
+        self.gateway.reasoning_memory = VectorMemory(
+            collection_name="muhakeme_bellek", vector_size=768, storage_path=None
+        )
         step_result = supervisor.execute_supervision_step(probe, auto_inject=True)
         self.assertIn("first_attempt", step_result)
         self.assertIn("is_satisfactory", step_result)
@@ -176,8 +193,10 @@ class TestAgentGateway(unittest.TestCase):
         self.assertEqual(status_data["status"], "online")
         self.assertIn("kristal_bellek_docs", status_data)
 
-        # Test inject payload
-        inject_data = self.gateway.inject_knowledge(text="Test sunucu bilgisi.", target_collection="kristal_bellek")
+        # Test inject payload — T-0148 5B: meşru target-adı
+        # (test-kurulumunun kendi koleksiyonu) kullanılır; "kristal_bellek"
+        # bilinmeyen-ad'dır ve artık ValueError'dur (sahte-seçici kapatıldı).
+        inject_data = self.gateway.inject_knowledge(text="Test sunucu bilgisi.", target_collection=self.memory.collection_name)
         self.assertEqual(inject_data["status"], "success")
 
         # Test query payload

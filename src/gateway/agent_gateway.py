@@ -80,7 +80,7 @@ class AgentGateway:
         model_path: Optional[str] = None,
         vocab_path: Optional[str] = None,
         lexicon_path: str = "data/lexicon/roots.tsv",
-        storage_path: str = "data/qdrant_db",
+        storage_path: Optional[str] = None,
         device: str = "cpu"
     ) -> "AgentGateway":
         """Factory method to load and build the complete default Gateway stack.
@@ -90,6 +90,10 @@ class AgentGateway:
         adini tasiyordu ve (b) BAYAT bir sozluge (data/vocab.json, 31.357) isaret
         ediyordu; (b) checkpoint'in sessizce kirpilmasina yol aciyordu. Ikisi de
         artik ACIKCA verilmelidir; verilmezse kosum BURADA durur.
+
+        T-0148 4B: `storage_path` varsayilani ("data/qdrant_db") KALDIRILDI —
+        host'lu cagri remote'a baglanamazsa vector_memory zaten RuntimeError
+        firlatir (fail-closed); storage_path=None explicit :memory:/remote-beyan.
         """
         from scripts.train_step_demo import KristalLM
         from src.llm.prompt_contract import resize_state_dict
@@ -119,13 +123,18 @@ class AgentGateway:
         tokenizer = KristalTokenizer(compiler, vocab)
         decompiler = MorphemeDecompiler(compiler, vocab)
         
-        # Load Vector Memories
-        memory = VectorMemory(collection_name="kristal_bellek", vector_size=768, host="localhost", port=6333, storage_path=storage_path)
-        general_memory = VectorMemory(collection_name="simulasyon_bellek", vector_size=768, host="localhost", port=6333, storage_path=storage_path)
-        
-        # Load Model
+        # Load Model — T-0087 zorunlu-arg kapısı (T-0148 koşum-sırası-onarımı):
+        # exists-kapısı VectorMemory kurulumundan ÖNCE gelir; 4A fail-closed'da
+        # localhost-kapalı ortamda model-yolu kapısı bağlantı-hatasının
+        # ARKASINDA kalıp ölmez.
         if not os.path.exists(model_path):
             raise FileNotFoundError(f"Gateway model checkpoint'i bulunamadı (sessiz rastgele model engellendi): {model_path}")
+
+        # Load Vector Memories — T-0148 4B: storage_path AÇIK-BEYANlı (default
+        # "data/qdrant_db" kaldırıldı; None = :memory:/remote-beyan; repo-içi
+        # sessiz-yazım yok — data/qdrant_db T-0144 disk-kanıtlı riskti)
+        memory = VectorMemory(collection_name="kristal_bellek", vector_size=768, host="localhost", port=6333, storage_path=storage_path)
+        general_memory = VectorMemory(collection_name="simulasyon_bellek", vector_size=768, host="localhost", port=6333, storage_path=storage_path)
 
         from scripts.train_step_b1_5_rigorous import compute_sha256
 
@@ -227,6 +236,23 @@ class AgentGateway:
             "timestamp": datetime.now(timezone.utc).isoformat()
         }
 
+    def _resolve_target_memory(self, target_collection: str) -> "VectorMemory":
+        """T-0148 5B: üç-dallı fail-closed ad-çözümü. Koşum-1 kanıtı: eski
+        `else (self.general_memory or self.memory)` seçicisi VERİLEN target-ad'ı
+        YOKSAYIYOR — 'olmayan_ad_p5_x' echo'da sahte-adla döner ama yazım
+        general_memory'e gider (mutasyon-kanıtlı sahte-seçici). Bilinmeyen ad
+        artık ValueError'dur; sahte-ad DÖNMEZ."""
+        adlar = {self.memory.collection_name: self.memory}
+        if self.general_memory is not None:
+            adlar[self.general_memory.collection_name] = self.general_memory
+        if target_collection not in adlar:
+            raise ValueError(
+                f"[GATEWAY_HATA] bilinmeyen target-collection '{target_collection}'; "
+                f"meşru adlar: {sorted(adlar)} (T-0148 5B fail-closed — sahte-ad "
+                "echo'su ve yanlış-koleksiyona yazım kapatıldı)."
+            )
+        return adlar[target_collection]
+
     def inject_knowledge(
         self,
         text: str,
@@ -237,7 +263,7 @@ class AgentGateway:
         Ingests a new knowledge document into either kristal_bellek or simulasyon_bellek.
         Computes hybrid Kristal dense and sparse vectors and indexes into Qdrant.
         """
-        target_mem = self.memory if target_collection == "kristal_bellek" else (self.general_memory or self.memory)
+        target_mem = self._resolve_target_memory(target_collection)
         
         # Sanitize against thoughts/reasoning blocks
         import re
@@ -281,19 +307,24 @@ class AgentGateway:
         thought_text: str,
         final_card: str = "",
         domain: str = "general",
-        metadata: Optional[Dict[str, Any]] = None
+        metadata: Optional[Dict[str, Any]] = None,
+        collection_name: str = "muhakeme_bellek"
     ) -> Dict[str, Any]:
         """
-        Ingests a reasoning trace (CoT) into the dedicated 'muhakeme_bellek' collection,
+        Ingests a reasoning trace (CoT) into the dedicated reasoning collection,
         completely isolating thought steps from the declarative 'kristal_bellek' space.
+        T-0148 5D: koleksiyon-adı PARAMETRİK oldu (sabit "muhakeme_bellek"
+        ilkel-tanımdı — param'lı çağrı başka koleksiyonu kuramaz); instance
+        paylaşımlı-client'dan BAĞIMSIZdır (host/storage_path AÇIK-BEYAN —
+        sessiz-merdiven değil; 4A fail-closed bağlantı-kuralına tabi).
         """
-        if self.reasoning_memory is None:
-            client = self.memory.client if self.memory else None
+        if self.reasoning_memory is None or self.reasoning_memory.collection_name != collection_name:
             self.reasoning_memory = VectorMemory(
-                collection_name="muhakeme_bellek",
+                collection_name=collection_name,
                 vector_size=768,
-                client=client,
-                storage_path="data/qdrant_db" if not client else None
+                host="localhost",
+                port=6333,
+                storage_path=None
             )
 
         doc_text = f"Soru: {query}\n\n[Akıl Yürütme]:\n{thought_text.strip()}\n\n[Çözüm]: {final_card.strip()}"
@@ -322,7 +353,7 @@ class AgentGateway:
 
         return {
             "status": "success",
-            "collection": "muhakeme_bellek",
+            "collection": collection_name,
             "query": query,
             "domain": domain,
             "total_documents": self.reasoning_memory.get_document_count()
@@ -337,7 +368,7 @@ class AgentGateway:
         """
         Checks if a document or concept can be retrieved by the model via hybrid search.
         """
-        target_mem = self.memory if target_collection == "kristal_bellek" else (self.general_memory or self.memory)
+        target_mem = self._resolve_target_memory(target_collection)
         
         token_ids = self.tokenizer.encode(query)
         tags = self.tokenizer.decode(token_ids)
@@ -419,6 +450,9 @@ class AgentGateway:
                     instruction = payload.get("instruction", "Belgeye göre cevapla.")
                     mode = payload.get("mode", "RAG")
                     res = gateway.ask(query_text, instruction=instruction, mode=mode)
+                    # T-0148 5C: soy-alanı yanıtta KOŞULSUZ (T-0089 opaklık-dersinin
+                    # HTTP-kardeşi; koşum-1 bulgusu: 17-anahtar ama soy-yolu null'du)
+                    res["future_train_path"] = gateway.future_train_path
                     self._send_json(res)
                 elif self.path == "/api/inject":
                     text = payload.get("text", "")

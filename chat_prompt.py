@@ -344,12 +344,10 @@ def main():
     tokenizer = KristalTokenizer(compiler, vocab)
     decompiler = MorphemeDecompiler(compiler, vocab)
     
-    # Connect to VectorMemory
-    print(f"\n{C_MAGENTA}[RAG] Vektörel belleklere bağlanılıyor...{C_RESET}")
-    memory = VectorMemory(collection_name="kristal_bellek", vector_size=768, host="localhost", port=6333, storage_path="data/qdrant_db")
-    general_memory = VectorMemory(collection_name="simulasyon_bellek", vector_size=768, host="localhost", port=6333, storage_path="data/qdrant_db")
-    
     # Initial Model Selection
+    # T-0148 koşum-sırası-onarımı: zorunlu-arg kapıları (T-0087/T-0090)
+    # VectorMemory bağlantısından ÖNCE gelir — 4A fail-closed'da
+    # localhost-kapalı ortamda kapı-3 ve pozitif-dal kapıları ölmez.
     # FAIL-CLOSED (T-0087): varsayilan KALDIRILDI. Eski varsayilan silinmis Kristal
     # checkpoint zincirinin adini tasiyordu (Kristal zinciri operator karariyla silindi,
     # 18 Eyl 2026). --model/--model-path ACIKCA verilmelidir.
@@ -365,9 +363,16 @@ def main():
     if not os.path.exists(model_path):
         # T-0090: eskiden `print` + çıplak `return` ⇒ rc=0 (ölçüldü).
         _durdur(f"Eğitilmiş model dosyası '{model_path}' bulunamadı!")
-        
+
     print(f"  {C_CYAN}Model Ağırlıkları Yükleniyor: {model_path}{C_RESET}")
     model = load_model_instance(model_path, vocab_size, vocab, device)
+
+    # Connect to VectorMemory — T-0148 4B kalanı: storage_path=None
+    # açık-beyan (bayat "data/qdrant_db" repo-içi yazım-beyanı kaldırıldı;
+    # host'lu remote-bağlantı 4A fail-closed'a tabi).
+    print(f"\n{C_MAGENTA}[RAG] Vektörel belleklere bağlanılıyor...{C_RESET}")
+    memory = VectorMemory(collection_name="kristal_bellek", vector_size=768, host="localhost", port=6333, storage_path=None)
+    general_memory = VectorMemory(collection_name="simulasyon_bellek", vector_size=768, host="localhost", port=6333, storage_path=None)
 
     # Initialize Merak Motoru & Tri-Modal Router
     curiosity_engine = CuriosityEngine(hidden_dim=768, curiosity_dim=768, tau=2.5).to(device)
