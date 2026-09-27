@@ -6,11 +6,20 @@ koşum-öncesi İLAN (data/eval/mimari_dogrulama_p1_ilan_2026-09-27.md) uyarınc
 kanonik zincirin gidiş-dönüş doğrulaması. Kanonik kod IMPORT edilir (kopya YASAK;
 src/compiler/** DONMUŞ). Saf CPU, seed 42, tek süreç, ağ YOK.
 
-HÜKÜM (İLAN §1 — koşum öncesi sabit):
-  FAZ-B birincil kapı (çekimlenebilir sınıfta yüzey-bit-özdeşlik %100, 0 düşen örnek)
+HÜKÜM (İLAN-3 §1 — koşum öncesi sabit, operatör onayı 27 Eyl 2026):
+  FAZ-B birincil kapı: İLAN-3 BİREBİR-ÇIPA — bit_esit==9182 VE ornek==9188
+  VE kalan-6 düşen örnek birebir-dislamalı (YOL_0 5 + BIT_UYUMSUZ 1;
+  {lemma, tags, yuzey, geri} sıra-duyarlı birebir; betik deterministik —
+  SEED 42 + TSV donmuş; koşum-2/3 bit-özdeş ölçüldü, çıpa koşum-2
+  KANIT-ölçümünden formüle edilir, onarım davranışı bu koşumda DEĞİŞMEZ)
   VE FAZ-C 4 bilinen-ksur sınıfının İLANLI sayılarla birebir eşleşmesi
   VE FAZ-A'da istisna-sızlık (compile istisna FIRLATMAZ ilanlı davranış)
   → P1_GECTİ (rc=0); aksi her dal → DUR (rc=2).
+  Bu koşum ONARIM KOŞUMU DEĞİLDİR — İLAN-3 KAPANIŞ-ÇIPASI: decompiler-
+  yüzeyi A-1/A-2 onarımından bu yana DEĞİŞMEDİ; koşum kalan-6'yı beyanlı
+  çıpa ile mühürler (kalan-6 iki alt-sınıf T-0147 raporunda AÇIKÇA
+  dislanmıştır: iki-farklı-lemma 'bil/Bi' + VOWEL_DROP/kök-seçim
+  derin-mekanizması — onarım-genişletme ayrı İLAN'lı turdur).
 
 Çıktı: rapor + hüküm JSON betikten (elle sayı YOK). rc ∈ {0, 2}.
 """
@@ -52,6 +61,31 @@ KSUR3_SATIR_ILANLI = 79            # 72 İ + 7 I (satır bazlı)
 KSUR3_BENZERSIZ_ILANLI = 70        # 63 İ + 7 I (benzersiz lemma; İLAN §6)
 KSUR4_PROBE_N = 200                # OOV probe → 200/200 sessiz-boş, istisna YOK
 YURUYUS_DENEME = 3                 # lemma başına yürüyüş denemesi
+
+# --- İLAN-3 birebir-çıpa (kapanış-çıpası; operatör onayı) ---
+# Betik deterministik (SEED 42 + TSV donmuş) ve koşum-2/3 bit-özdeş
+# ölçüldü (T-0147) → kalan-6 düşen-örnek-beyanı birebir çıpa olarak
+# İLAN'lıdır. Çıpa koşum-2 KANIT-ölçümünden formüle edilir; bu koşum
+# onarım koşumu DEĞİLDİR (decompiler-yüzeyi değişmedi) — çıpa meaningful.
+FAZ_B_ORNEK_CIPA = 9188            # ornek_sayisi birebir
+FAZ_B_BIT_ESIT_CIPA = 9182         # bit_esit birebir (215→6 onarım-sonrası)
+FAZ_B_KALAN_CIPA = 6               # toplam düşen
+FAZ_B_DISLANALI_SINIFLARI = ("YOL_0", "BIT_UYUMSUZ")
+# kalan-6 örnek-beyanı (İLAN-3 tablosu): dusen_ornekler projeksiyonu
+# {lemma, tags, yuzey, geri} ile sıra-duyarlı birebir karşılaştırılır.
+# İki alt-sınıf: YOL_0 → VOWEL_DROP/kök-seçim derin-mekanizması
+# (zeyrek/meçhul/nakil CASE_GEN; güç POSS_1SG; hacir POSS_1PL);
+# BIT_UYUMSUZ → iki-farklı-lemma (bil VERB ↔ 'Bi' büyük-harfli —
+# iki-ayrı-lemma TSV-sembolik kararı ayrı turdadir).
+FAZ_B_DISLANALI_ORNEKLER: List[Dict[str, Any]] = [
+    {"lemma": "zeyrek", "tags": ["zeyrek", "CASE_GEN"], "yuzey": "zeyrekin", "geri": None},
+    {"lemma": "meçhul", "tags": ["meçhul", "CASE_GEN"], "yuzey": "meçhlun", "geri": None},
+    {"lemma": "nakil", "tags": ["nakil", "CASE_GEN"], "yuzey": "naklin", "geri": None},
+    {"lemma": "güç", "tags": ["güç", "POSS_1SG"], "yuzey": "güçüm", "geri": None},
+    {"lemma": "hacir", "tags": ["hacir", "POSS_1PL"], "yuzey": "hacrimiz", "geri": None},
+    {"lemma": "bil", "tags": ["bil", "TENSE_AORIST_VOWEL"], "yuzey": "biler",
+     "geri": "Bi'ler"},
+]
 
 
 def _sha256(yol: str) -> str:
@@ -327,13 +361,27 @@ def hukum(faz_b_sonuc: Dict[str, Any], faz_c_sonuc: Dict[str, Any],
           faz_a_sonuc: Dict[str, Any]) -> Tuple[str, List[Dict[str, Any]]]:
     kapilar: List[Dict[str, Any]] = []
 
+    # İLAN-3 birebir-çıpa (kapanış-çıpası): %100 hedefi koşum-2'de
+    # DUR-kanıtlandı (kalan-6 üçüncü-sınıf; T-0147 operatör kararı) —
+    # İLAN-3'te çıpa bit_esit==9182 + ornek==9188 + kalan-6 birebir-dislama.
+    dislanali_disi = {s: n for s, n in faz_b_sonuc["dusen_siniflari"].items()
+                      if s not in FAZ_B_DISLANALI_SINIFLARI}
+    kalan_6 = [{"lemma": k.get("lemma"), "tags": k.get("tags"),
+                "yuzey": k.get("yuzey"), "geri": k.get("geri")}
+               for k in faz_b_sonuc["dusen_ornekler"]]
     kapilar.append({
-        "ayrac": "FAZ-B: yüzey-bit-özdeşlik %100 (0 düşen örnek, çekimlenebilir sınıf)",
+        "ayrac": "FAZ-B: İLAN-3 birebir-çıpa — bit_esit==9182 / ornek==9188"
+                 " + kalan-6 (YOL_0 5 + BIT_UYUMSUZ 1) birebir-dislamalı",
         "olcum": {"ornek": faz_b_sonuc["ornek_sayisi"],
                   "bit_esit": faz_b_sonuc["bit_esit"],
-                  "dusen": faz_b_sonuc["dusen_siniflari"]},
-        "gec": faz_b_sonuc["ornek_sayisi"] > 0
-        and faz_b_sonuc["bit_esit"] == faz_b_sonuc["ornek_sayisi"],
+                  "dusen": faz_b_sonuc["dusen_siniflari"],
+                  "dislanali_disi": dislanali_disi,
+                  "kalan_6_uyum": kalan_6 == FAZ_B_DISLANALI_ORNEKLER},
+        "gec": faz_b_sonuc["ornek_sayisi"] == FAZ_B_ORNEK_CIPA
+        and faz_b_sonuc["bit_esit"] == FAZ_B_BIT_ESIT_CIPA
+        and sum(faz_b_sonuc["dusen_siniflari"].values()) == FAZ_B_KALAN_CIPA
+        and not dislanali_disi
+        and kalan_6 == FAZ_B_DISLANALI_ORNEKLER,
     })
     kapilar.append({
         "ayrac": "FAZ-A: compile istisna FIRLATMAZ (istisna == 0; ilanlı davranış)",
@@ -410,8 +458,10 @@ def _rapor_yaz(rapor_yol: str, ilan_yol: str, ilan_sha: str, lex_yol: str,
     s.append("")
     s.append("- Hedef/örnek: %d / **%d** (çıkmaz-atılan %d)"
              % (f_b["hedef"], f_b["ornek_sayisi"], f_b["cikmaz_atilan"]))
-    s.append("- **Yüzey-bit-özdeşlik: %d/%d = %.6f** (birincil hüküm: %%100)"
-             % (f_b["bit_esit"], f_b["ornek_sayisi"], f_b["bit_ozdeslik_orani"]))
+    s.append("- **Yüzey-bit-özdeşlik: %d/%d = %.6f** (İLAN-3 birebir-çıpa:"
+             " bit_esit==%d, kalan-6 dislamalı)"
+             % (f_b["bit_esit"], f_b["ornek_sayisi"], f_b["bit_ozdeslik_orani"],
+                FAZ_B_BIT_ESIT_CIPA))
     s.append("- Düşen sınıfları: `%s`" % json.dumps(f_b["dusen_siniflari"],
                                                     ensure_ascii=False))
     s.append("- Düşen örneklerin son-ek kırılımı (kök-neden kaydı): `%s`"
