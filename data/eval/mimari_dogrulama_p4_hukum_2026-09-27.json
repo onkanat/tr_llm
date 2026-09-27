@@ -1,0 +1,650 @@
+{
+  "damga": "2026-09-27T12:31:05Z",
+  "detay": {
+    "b1_baglanma": {
+      "cache_anahtari": true,
+      "cache_reuse": true,
+      "is_in_memory": false,
+      "kristal_nokta": 36,
+      "storage_type": "remote (192.168.1.5:6333)"
+    },
+    "b2_arz_once": {
+      "adlar": [
+        "elektor_articles",
+        "kristal_bellek",
+        "octave_articles",
+        "rapberry_pi_pico_all_articles",
+        "rendergit_01_articles",
+        "rendergit_02_articles",
+        "rendergit_03_articles",
+        "rp2040_articles",
+        "sdr_articles",
+        "türk_articles"
+      ],
+      "digest": "fe7fc7649737ed35",
+      "foreign": {
+        "elektor_articles": 90122,
+        "octave_articles": 100,
+        "rapberry_pi_pico_all_articles": 436,
+        "rendergit_01_articles": 32,
+        "rendergit_02_articles": 100,
+        "rendergit_03_articles": 39,
+        "rp2040_articles": 106,
+        "sdr_articles": 54,
+        "türk_articles": 5
+      },
+      "foreign_sayi": 9,
+      "kristal_bellek_var": true,
+      "kristal_nokta": 36,
+      "probe_once_var": false,
+      "simulasyon_bellek_yok": true
+    },
+    "b3_determinizm": {
+      "benzersiz_sorgu_anahtari": 15,
+      "cift_kosum_birebir": 20,
+      "detay": [
+        {
+          "birebir": true,
+          "p2_skor": 0.35,
+          "p4_skor": 0.35,
+          "sorgu": "Belgede Fomalhaut ile ilgili öne çıkan fonksiyon nedir?"
+        },
+        {
+          "birebir": true,
+          "p2_skor": 0.2933,
+          "p4_skor": 0.2933,
+          "sorgu": "Aldebaran kavramının temel niteliği ve önemi nedir?"
+        },
+        {
+          "birebir": true,
+          "p2_skor": 0.6,
+          "p4_skor": 0.6,
+          "sorgu": "Metne göre Drosera hangi yapısal özelliğiyle tanımlanmaktadı"
+        },
+        {
+          "birebir": true,
+          "p2_skor": 0.35,
+          "p4_skor": 0.35,
+          "sorgu": "Belgede Pulsar PSR ile ilgili öne çıkan fonksiyon nedir?"
+        },
+        {
+          "birebir": true,
+          "p2_skor": 0.2933,
+          "p4_skor": 0.2933,
+          "sorgu": "Magnetar SGR kavramının temel niteliği ve önemi nedir?"
+        },
+        {
+          "birebir": true,
+          "p2_skor": 0.5,
+          "p4_skor": 0.5,
+          "sorgu": "Belgede Drosera ile ilgili öne çıkan fonksiyon nedir?"
+        },
+        {
+          "birebir": true,
+          "p2_skor": 0.7,
+          "p4_skor": 0.7,
+          "sorgu": "Metne göre Victoria Amazonica hangi yapısal özelliğiyle tanı"
+        },
+        {
+          "birebir": true,
+          "p2_skor": 0.2933,
+          "p4_skor": 0.2933,
+          "sorgu": "Triglif kavramının temel niteliği ve önemi nedir?"
+        },
+        {
+          "birebir": true,
+          "p2_skor": 0.6111,
+          "p4_skor": 0.6111,
+          "sorgu": "Belgede Alacahöyük Andezit Sfenksi ile ilgili öne çıkan fonk"
+        },
+        {
+          "birebir": true,
+          "p2_skor": 0.2933,
+          "p4_skor": 0.2933,
+          "sorgu": "Diyatomit kavramının temel niteliği ve önemi nedir?"
+        },
+        {
+          "birebir": true,
+          "p2_skor": 0.75,
+          "p4_skor": 0.75,
+          "sorgu": "Metne göre Serpantinit hangi yapısal özelliğiyle tanımlanmak"
+        },
+        {
+          "birebir": true,
+          "p2_skor": 0.3056,
+          "p4_skor": 0.3056,
+          "sorgu": "Kimberlit hakkında sunulan temel bilimsel açıklama nedir?"
+        },
+        {
+          "birebir": true,
+          "p2_skor": 0.2933,
+          "p4_skor": 0.2933,
+          "sorgu": "Magnetar SGR kavramının temel niteliği ve önemi nedir?"
+        },
+        {
+          "birebir": true,
+          "p2_skor": 0.5,
+          "p4_skor": 0.5,
+          "sorgu": "Belgede Drosera ile ilgili öne çıkan fonksiyon nedir?"
+        },
+        {
+          "birebir": true,
+          "p2_skor": 0.5625,
+          "p4_skor": 0.5625,
+          "sorgu": "Belgede Kaset Tavan ile ilgili öne çıkan fonksiyon nedir?"
+        },
+        {
+          "birebir": true,
+          "p2_skor": 0.2933,
+          "p4_skor": 0.2933,
+          "sorgu": "Triglif kavramının temel niteliği ve önemi nedir?"
+        },
+        {
+          "birebir": true,
+          "p2_skor": 0.75,
+          "p4_skor": 0.75,
+          "sorgu": "Metne göre Piroksenit hangi yapısal özelliğiyle tanımlanmakt"
+        },
+        {
+          "birebir": true,
+          "p2_skor": 0.3056,
+          "p4_skor": 0.3056,
+          "sorgu": "Kimberlit hakkında sunulan temel bilimsel açıklama nedir?"
+        },
+        {
+          "birebir": true,
+          "p2_skor": 0.6,
+          "p4_skor": 0.6,
+          "sorgu": "Hattuşa Aşağı Kent kavramının temel niteliği ve önemi nedir?"
+        },
+        {
+          "birebir": true,
+          "p2_skor": 0.2933,
+          "p4_skor": 0.2933,
+          "sorgu": "Triglif kavramının temel niteliği ve önemi nedir?"
+        }
+      ],
+      "n": 20,
+      "oov": {
+        "has_root_match": true,
+        "skor": 0.7
+      },
+      "p2_birebir": 20,
+      "p2_karsilastirma_n": 20,
+      "p2_skor_anahtari": 15
+    },
+    "b4_add_yolu": {
+      "count_ara_sekans": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "count_sekansi": [
+        0,
+        3,
+        8,
+        9
+      ],
+      "detay": [
+        {
+          "dense_ok": true,
+          "has_root_match": true,
+          "hibrit_ok": true,
+          "hibrit_skor": 1.0,
+          "metin": "p4_probe belge bir: univerzal hafiza yazi yolu dog"
+        },
+        {
+          "dense_ok": true,
+          "has_root_match": true,
+          "hibrit_ok": true,
+          "hibrit_skor": 1.0,
+          "metin": "p4_probe belge iki: add_document tekil yazim kanit"
+        },
+        {
+          "dense_ok": true,
+          "has_root_match": true,
+          "hibrit_ok": true,
+          "hibrit_skor": 1.0,
+          "metin": "p4_probe belge uc: hibrit arama pozitif kontrolu"
+        },
+        {
+          "dense_ok": true,
+          "has_root_match": true,
+          "hibrit_ok": true,
+          "hibrit_skor": 1.0,
+          "metin": "p4_probe belge dort: add_documents_batch parti yaz"
+        },
+        {
+          "dense_ok": true,
+          "has_root_match": true,
+          "hibrit_ok": true,
+          "hibrit_skor": 1.0,
+          "metin": "p4_probe belge bes: nokta sayac davranisi kaniti"
+        },
+        {
+          "dense_ok": true,
+          "has_root_match": true,
+          "hibrit_ok": true,
+          "hibrit_skor": 1.0,
+          "metin": "p4_probe belge alti: geri okuma payload birebir"
+        },
+        {
+          "dense_ok": true,
+          "has_root_match": true,
+          "hibrit_ok": true,
+          "hibrit_skor": 1.0,
+          "metin": "p4_probe belge yedi: dense recall kendi belge"
+        },
+        {
+          "dense_ok": true,
+          "has_root_match": true,
+          "hibrit_ok": true,
+          "hibrit_skor": 1.0,
+          "metin": "p4_probe belge sekiz: hibrit recall kendi belge"
+        }
+      ],
+      "geri_okuma_birebir": true,
+      "geri_okuma_sayi": 9,
+      "guard_probe_adi": "p4_probe_bellek",
+      "otomatik_kurulum": true,
+      "pozitif_dense": 8,
+      "pozitif_hibrit": 8
+    },
+    "b5_mutasyon": {
+      "auto_recreate_nokta": 0,
+      "dense_size_after": 384,
+      "explicit_recreate_nokta": 0,
+      "kaldi": false,
+      "once_nokta_on_auto": 1,
+      "once_nokta_on_explicit": 9,
+      "reset_mesaji": true,
+      "temizlik": true,
+      "yikicilik_kanitlandi": true
+    },
+    "b6_fallback": {
+      "bulgu": "SESSIZ_FALLBACK_CANLI — sahte-hostta remote sessizce local-path'e (ve storage_path-yoksa :memory:'ye) düşer; local-client cache'e YAZILIR (gateway:123-124 storage_path'li çağrı riski)",
+      "local_cache_cikarildi": true,
+      "local_cache_yazildi": false,
+      "local_is_in_memory": false,
+      "local_storage_type": "local (/var/folders/v0/8z_jjnds4rbdtth51qmwysnw0000gn/T/p4_probe_local_izc764zo)",
+      "mem_cache_yazilmadi": true,
+      "mem_is_in_memory": true,
+      "mem_storage_type": "in-memory (:memory:)"
+    },
+    "dokunulmazlik": {
+      "durum": "GEÇTİ",
+      "foreign_once": {
+        "elektor_articles": 90122,
+        "octave_articles": 100,
+        "rapberry_pi_pico_all_articles": 436,
+        "rendergit_01_articles": 32,
+        "rendergit_02_articles": 100,
+        "rendergit_03_articles": 39,
+        "rp2040_articles": 106,
+        "sdr_articles": 54,
+        "türk_articles": 5
+      },
+      "foreign_sonra": {
+        "elektor_articles": 90122,
+        "octave_articles": 100,
+        "rapberry_pi_pico_all_articles": 436,
+        "rendergit_01_articles": 32,
+        "rendergit_02_articles": 100,
+        "rendergit_03_articles": 39,
+        "rp2040_articles": 106,
+        "sdr_articles": 54,
+        "türk_articles": 5
+      },
+      "kanal_once_bayt": 0,
+      "kanal_sonra_bayt": 0,
+      "kristal_once": 36,
+      "kristal_sonra": 36,
+      "once_digest": "fe7fc7649737ed35",
+      "p2_hukum_sha_once": "9b217944ce74becbc632e9e9176af64d036025555eb2ae8f72033bf36f9b0189",
+      "p2_hukum_sha_sonra": "9b217944ce74becbc632e9e9176af64d036025555eb2ae8f72033bf36f9b0189",
+      "probe_sunucuda_yok": true,
+      "simulasyon_bellek_yok": true,
+      "sonra_digest": "fe7fc7649737ed35"
+    },
+    "faz_a": {
+      "embedding_deterministik": true,
+      "embedding_random_seedli": 1,
+      "embedding_random_seedli_siz": 0,
+      "gateway_kanonik_koleksiyonlar": [
+        "kristal_bellek",
+        "simulasyon_bellek"
+      ],
+      "gateway_localhost_kurulum": 2,
+      "vm_cache_evict_satirlar": [
+        44,
+        282
+      ],
+      "vm_cache_evict_sitesi": 1,
+      "vm_cache_guard_satiri": 72,
+      "vm_cache_guard_takipediyor": true,
+      "vm_cache_guardi": "                if not self.is_in_memory:",
+      "vm_cache_yazim_satiri": 73,
+      "vm_cache_yazim_sitesi": 1,
+      "vm_close_pop_satiri": 282,
+      "vm_otomatik_kurulum_bandi": [
+        "        if not self.client.collection_exists(self.collection_name):",
+        "            self._create_hybrid_collection(vector_size)",
+        "            self._next_point_id = 1"
+      ],
+      "vm_otomatik_kurulum_birebir": true,
+      "vm_qdrantclient_kurulum": 3,
+      "vm_recreate_delete_satirlar": [
+        83,
+        123,
+        126
+      ],
+      "vm_remote_timeout_sn": 2.0,
+      "vm_varsayilan_storage_path": "data/qdrant_db"
+    },
+    "faz_a_kapi_detay": [
+      {
+        "durum": "GEÇTİ",
+        "ilanli": 3,
+        "olculen": 3,
+        "olcum": "vm_qdrantclient_kurulum"
+      },
+      {
+        "durum": "GEÇTİ",
+        "ilanli": 2.0,
+        "olculen": 2.0,
+        "olcum": "vm_remote_timeout_sn"
+      },
+      {
+        "durum": "GEÇTİ",
+        "ilanli": 1,
+        "olculen": 1,
+        "olcum": "vm_cache_yazim_sitesi"
+      },
+      {
+        "durum": "GEÇTİ",
+        "ilanli": 1,
+        "olculen": 1,
+        "olcum": "vm_cache_evict_sitesi"
+      },
+      {
+        "durum": "GEÇTİ",
+        "ilanli": 72,
+        "olculen": 72,
+        "olcum": "vm_cache_guard_satiri"
+      },
+      {
+        "durum": "GEÇTİ",
+        "ilanli": 73,
+        "olculen": 73,
+        "olcum": "vm_cache_yazim_satiri"
+      },
+      {
+        "durum": "GEÇTİ",
+        "ilanli": [
+          83,
+          123,
+          126
+        ],
+        "olculen": [
+          83,
+          123,
+          126
+        ],
+        "olcum": "vm_recreate_delete_satirlar"
+      },
+      {
+        "durum": "GEÇTİ",
+        "ilanli": true,
+        "olculen": true,
+        "olcum": "vm_otomatik_kurulum_birebir"
+      },
+      {
+        "durum": "GEÇTİ",
+        "ilanli": 1,
+        "olculen": 1,
+        "olcum": "embedding_random_seedli"
+      },
+      {
+        "durum": "GEÇTİ",
+        "ilanli": 0,
+        "olculen": 0,
+        "olcum": "embedding_random_seedli_siz"
+      },
+      {
+        "durum": "GEÇTİ",
+        "ilanli": 2,
+        "olculen": 2,
+        "olcum": "gateway_localhost_kurulum"
+      },
+      {
+        "durum": "GEÇTİ",
+        "ilanli": [
+          "kristal_bellek",
+          "simulasyon_bellek"
+        ],
+        "olculen": [
+          "kristal_bellek",
+          "simulasyon_bellek"
+        ],
+        "olcum": "gateway_kanonik_koleksiyonlar"
+      },
+      {
+        "durum": "GEÇTİ",
+        "ilanli": true,
+        "olculen": true,
+        "olcum": "vm_cache_guard_takipediyor"
+      }
+    ],
+    "faz_b_envanter_sonra": {
+      "adlar": [
+        "elektor_articles",
+        "kristal_bellek",
+        "octave_articles",
+        "rapberry_pi_pico_all_articles",
+        "rendergit_01_articles",
+        "rendergit_02_articles",
+        "rendergit_03_articles",
+        "rp2040_articles",
+        "sdr_articles",
+        "türk_articles"
+      ],
+      "kalemler": [
+        {
+          "ad": "elektor_articles",
+          "crystal_tags": false,
+          "dense_distance": "Cosine",
+          "dense_size": 768,
+          "hibrit": false,
+          "nokta": 90122,
+          "payload_anahtar": [
+            "article_id",
+            "chunk_index",
+            "filename",
+            "text",
+            "title",
+            "year"
+          ],
+          "sparse": [],
+          "tek_dense": true
+        },
+        {
+          "ad": "kristal_bellek",
+          "crystal_tags": true,
+          "dense_distance": "Cosine",
+          "dense_size": 768,
+          "hibrit": true,
+          "nokta": 36,
+          "payload_anahtar": [
+            "crystal_tags",
+            "domain",
+            "text",
+            "token_ids"
+          ],
+          "sparse": [
+            "sparse"
+          ],
+          "tek_dense": false
+        },
+        {
+          "ad": "octave_articles",
+          "crystal_tags": false,
+          "dense_distance": "Cosine",
+          "dense_size": 768,
+          "hibrit": false,
+          "nokta": 100,
+          "payload_anahtar": [
+            "article_id",
+            "chunk_index",
+            "filename",
+            "text",
+            "title",
+            "year"
+          ],
+          "sparse": [],
+          "tek_dense": true
+        },
+        {
+          "ad": "rapberry_pi_pico_all_articles",
+          "crystal_tags": false,
+          "dense_distance": "Cosine",
+          "dense_size": 768,
+          "hibrit": false,
+          "nokta": 436,
+          "payload_anahtar": [
+            "article_id",
+            "chunk_index",
+            "filename",
+            "text",
+            "title",
+            "year"
+          ],
+          "sparse": [],
+          "tek_dense": true
+        },
+        {
+          "ad": "rendergit_01_articles",
+          "crystal_tags": false,
+          "dense_distance": "Cosine",
+          "dense_size": 768,
+          "hibrit": false,
+          "nokta": 32,
+          "payload_anahtar": [
+            "article_id",
+            "chunk_index",
+            "filename",
+            "text",
+            "title",
+            "year"
+          ],
+          "sparse": [],
+          "tek_dense": true
+        },
+        {
+          "ad": "rendergit_02_articles",
+          "crystal_tags": false,
+          "dense_distance": "Cosine",
+          "dense_size": 768,
+          "hibrit": false,
+          "nokta": 100,
+          "payload_anahtar": [
+            "article_id",
+            "chunk_index",
+            "filename",
+            "text",
+            "title",
+            "year"
+          ],
+          "sparse": [],
+          "tek_dense": true
+        },
+        {
+          "ad": "rendergit_03_articles",
+          "crystal_tags": false,
+          "dense_distance": "Cosine",
+          "dense_size": 768,
+          "hibrit": false,
+          "nokta": 39,
+          "payload_anahtar": [
+            "article_id",
+            "chunk_index",
+            "filename",
+            "text",
+            "title",
+            "year"
+          ],
+          "sparse": [],
+          "tek_dense": true
+        },
+        {
+          "ad": "rp2040_articles",
+          "crystal_tags": false,
+          "dense_distance": "Cosine",
+          "dense_size": 768,
+          "hibrit": false,
+          "nokta": 106,
+          "payload_anahtar": [
+            "article_id",
+            "chunk_index",
+            "filename",
+            "text",
+            "title",
+            "year"
+          ],
+          "sparse": [],
+          "tek_dense": true
+        },
+        {
+          "ad": "sdr_articles",
+          "crystal_tags": false,
+          "dense_distance": "Cosine",
+          "dense_size": 768,
+          "hibrit": false,
+          "nokta": 54,
+          "payload_anahtar": [
+            "article_id",
+            "chunk_index",
+            "filename",
+            "text",
+            "title",
+            "year"
+          ],
+          "sparse": [],
+          "tek_dense": true
+        },
+        {
+          "ad": "türk_articles",
+          "crystal_tags": false,
+          "dense_distance": "Cosine",
+          "dense_size": 768,
+          "hibrit": false,
+          "nokta": 5,
+          "payload_anahtar": [
+            "article_id",
+            "chunk_index",
+            "filename",
+            "text",
+            "title",
+            "year"
+          ],
+          "sparse": [],
+          "tek_dense": true
+        }
+      ]
+    },
+    "ilan_sha256_kosumda": "210dc4f63b5496286909e225e2a033ca492b948e468702abb16b33bfefc0ebca",
+    "kanal_once_bayt": 0,
+    "p2_hukum_sha256_once": "9b217944ce74becbc632e9e9176af64d036025555eb2ae8f72033bf36f9b0189"
+  },
+  "hukum": "P4_GECTİ",
+  "kapilar": {
+    "K1_FAZ_A_ENVANTER": "GEÇTİ",
+    "K2_ARZ_CIPA": "GEÇTİ",
+    "K3_B1_BAGLANMA": "GEÇTİ",
+    "K4_B3_DETERMINIZM": "GEÇTİ",
+    "K5_B4_ADD_YOLU": "GEÇTİ",
+    "K6_B5_MUTASYON_KANITI": "GEÇTİ",
+    "K7_DOKUNULMAZLIK": "GEÇTİ"
+  },
+  "rc": 0
+}
