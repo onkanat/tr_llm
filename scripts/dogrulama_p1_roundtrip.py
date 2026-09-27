@@ -40,7 +40,13 @@ ORNEKLEM_HEDEFI = {"NOUN": 5000, "VERB": 2500, "ADJ": 1500, "ADV": 800, "DIGER":
 # --- İLAN'lı sabitler (fail-closed: betikte tek kaynak, İLAN ile birebir) ---
 KSUR1_ADJ_NOUN_YOK_ILANLI = 3627   # NOUN satırı olmayan ADJ lemma
 KSUR1_ADJ_TOPLAM_ILANLI = 6352     # ADJ lemma toplamı
-KSUR1_PROBE_N = 50                 # yalnız-ADJ + PLURAL → 50/50 sessiz-boş
+KSUR1_PROBE_N = 50                 # yalnız-ADJ + PLURAL probe havuzu
+# İLAN-2 (T-0147 onarım-turu): 6 yalnız-ADJ lemma MEŞRU alternatif-kok
+# çözülemesidir (koşum-1 §7: abuklar=VERB abukla-+AORIST; ademimerkeziyetçiler
+# =+DERIV_CI; akışkanlar=ayrı lemma; …). A-1/A-2 onarımı bu probe'u
+# ETKİLEMEZ (yalnız-ADJ+PLURAL; GERUND_KEN yok; ikiz-satır etkisi yok) →
+# beklenen 0-yol sayısı 44/50 (koşum-1/3 birebir çıpası, seed-42 kararlı).
+KSUR1_PROBE_BEKLENEN_YOL0 = 44
 KSUR2_PROBE_N = 20                 # büyük-harfli lemma probe → %100 kesmeli
 KSUR3_SATIR_ILANLI = 79            # 72 İ + 7 I (satır bazlı)
 KSUR3_BENZERSIZ_ILANLI = 70        # 63 İ + 7 I (benzersiz lemma; İLAN §6)
@@ -337,9 +343,10 @@ def hukum(faz_b_sonuc: Dict[str, Any], faz_c_sonuc: Dict[str, Any],
     c1 = (faz_c_sonuc["ksur1_adj_noun_yok"] == KSUR1_ADJ_NOUN_YOK_ILANLI
           and faz_c_sonuc["ksur1_adj_toplam"] == KSUR1_ADJ_TOPLAM_ILANLI
           and faz_c_sonuc["ksur1_probe"]["n"] == KSUR1_PROBE_N
-          and faz_c_sonuc["ksur1_probe"]["yol0"] == KSUR1_PROBE_N)
+          and faz_c_sonuc["ksur1_probe"]["yol0"] == KSUR1_PROBE_BEKLENEN_YOL0)
     kapilar.append({
-        "ayrac": "KSUR-1: NOUN-satırı-yok ADJ == 3.627 / 6.352 ADJ + probe 50/50 0-yol",
+        "ayrac": "KSUR-1: NOUN-satırı-yok ADJ == 3.627 / 6.352 ADJ + probe 44/50 0-yol"
+                 " (İLAN-2: 6 yol-bulunan meşru-alternatif-kok dislamalı)",
         "olcum": {"adj_noun_yok": faz_c_sonuc["ksur1_adj_noun_yok"],
                   "adj_toplam": faz_c_sonuc["ksur1_adj_toplam"],
                   "probe_yol0": faz_c_sonuc["ksur1_probe"]["yol0"],
@@ -446,7 +453,7 @@ def _rapor_yaz(rapor_yol: str, ilan_yol: str, ilan_sha: str, lex_yol: str,
              % (f_c["ksur1_adj_noun_yok"], f_c["ksur1_adj_toplam"]))
     s.append("| KSUR-1 yalnız-ADJ (rapor) | %d (küçük-harf havuz %d) | 3.282 / 3.249 |"
              % (f_c["ksur1_yalniz_adj"], f_c["ksur1_yalniz_adj_kucuk_harf"]))
-    s.append("| KSUR-1 probe 0-yol | %d/%d | 50/50 |"
+    s.append("| KSUR-1 probe 0-yol | %d/%d | 44/50 (İLAN-2: 6 meşru-alternatif-kok) |"
              % (f_c["ksur1_probe"]["yol0"], f_c["ksur1_probe"]["n"]))
     s.append("| KSUR-2 kesmeli probe | %d/%d (havuz %d) | %%100 |"
              % (f_c["ksur2_probe"]["kesmeli"], f_c["ksur2_probe"]["n"],

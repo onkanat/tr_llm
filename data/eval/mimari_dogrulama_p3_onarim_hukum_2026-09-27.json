@@ -1,0 +1,1050 @@
+{
+  "damga": "2026-09-27T14:29:41Z",
+  "detay": {
+    "arz_once": {
+      "elektor_articles_nokta": 90122,
+      "foreign_koleksiyon_once": 9,
+      "kristal_bellek_nokta_once": 36,
+      "turk_articles_nokta": 5
+    },
+    "b1_merak": {
+      "detay": [
+        {
+          "entropy_post": 0.8341,
+          "entropy_pre": 4.5693,
+          "epistemic_failure": false,
+          "future_train_recorded": false,
+          "is_high_similarity": false,
+          "kosullanma_teyit": true,
+          "match_score": 0.4444,
+          "morpheme_output": "cevap : bu durum , bir cismin kuvvet POSS_2SG CASE_GEN <UNK>",
+          "needs_retrieval": true,
+          "retrieval_triggered": true,
+          "retrieved_document": "Doğal ve tarihsel kayıtlarda Pulsar PSR öne çıkar. Çünkü Pul",
+          "router_experts": [
+            "pedagogy",
+            "grammar_core"
+          ],
+          "sorgu": "Belgede Fomalhaut ile ilgili öne çıkan fonksiyon nedir?"
+        },
+        {
+          "entropy_post": 1.0276,
+          "entropy_pre": 9.5308,
+          "epistemic_failure": false,
+          "future_train_recorded": false,
+          "is_high_similarity": false,
+          "kosullanma_teyit": false,
+          "match_score": 0.3911,
+          "morpheme_output": "cevap : bu durum , bir şey POSS_2SG kendi POSS_3SG CASE_DAT_",
+          "needs_retrieval": true,
+          "retrieval_triggered": true,
+          "retrieved_document": "",
+          "router_experts": [
+            "pedagogy",
+            "grammar_core"
+          ],
+          "sorgu": "Aldebaran kavramının temel niteliği ve önemi nedir?"
+        },
+        {
+          "entropy_post": 0.3431,
+          "entropy_pre": 4.0186,
+          "epistemic_failure": false,
+          "future_train_recorded": false,
+          "is_high_similarity": false,
+          "kosullanma_teyit": true,
+          "match_score": 0.8,
+          "morpheme_output": "teknik çözüm : <PROPER_NOUN> asit POSS_3SG , yağ DERIV_lI tü",
+          "needs_retrieval": true,
+          "retrieval_triggered": true,
+          "retrieved_document": "Yapısal incelemeler Diyatomit varlığını teyit eder. Diyatomi",
+          "router_experts": [
+            "grammar_core",
+            "pedagogy"
+          ],
+          "sorgu": "Metne göre Drosera hangi yapısal özelliğiyle tanımlanmaktadı"
+        },
+        {
+          "entropy_post": 4.1784,
+          "entropy_pre": 5.3496,
+          "epistemic_failure": false,
+          "future_train_recorded": false,
+          "is_high_similarity": false,
+          "kosullanma_teyit": false,
+          "match_score": 0.3556,
+          "morpheme_output": "cevap :",
+          "needs_retrieval": true,
+          "retrieval_triggered": true,
+          "retrieved_document": "",
+          "router_experts": [
+            "pedagogy",
+            "grammar_core"
+          ],
+          "sorgu": "Belgede Pulsar PSR ile ilgili öne çıkan fonksiyon nedir?"
+        },
+        {
+          "entropy_post": 1.0836,
+          "entropy_pre": 9.4626,
+          "epistemic_failure": false,
+          "future_train_recorded": false,
+          "is_high_similarity": false,
+          "kosullanma_teyit": false,
+          "match_score": 0.3911,
+          "morpheme_output": "cevap : bu durum , bir şey POSS_2SG kendi POSS_3SG CASE_DAT_",
+          "needs_retrieval": true,
+          "retrieval_triggered": true,
+          "retrieved_document": "",
+          "router_experts": [
+            "pedagogy",
+            "grammar_core"
+          ],
+          "sorgu": "Magnetar SGR kavramının temel niteliği ve önemi nedir?"
+        },
+        {
+          "entropy_post": 7.5495,
+          "entropy_pre": 2.3961,
+          "epistemic_failure": false,
+          "future_train_recorded": false,
+          "is_high_similarity": false,
+          "kosullanma_teyit": false,
+          "match_score": 0.0,
+          "morpheme_output": "<ARA>",
+          "needs_retrieval": false,
+          "retrieval_triggered": false,
+          "retrieved_document": "",
+          "router_experts": [
+            "pedagogy",
+            "grammar_core"
+          ],
+          "sorgu": "Belgede Drosera ile ilgili öne çıkan fonksiyon nedir?"
+        },
+        {
+          "entropy_post": 0.9132,
+          "entropy_pre": 3.4138,
+          "epistemic_failure": false,
+          "future_train_recorded": false,
+          "is_high_similarity": true,
+          "kosullanma_teyit": true,
+          "match_score": 0.9333,
+          "morpheme_output": "teknik çözüm : <PROPER_NOUN> asit POSS_3SG , yağ DERIV_lI tü",
+          "needs_retrieval": true,
+          "retrieval_triggered": true,
+          "retrieved_document": "Yapısal incelemeler Diyatomit varlığını teyit eder. Diyatomi",
+          "router_experts": [
+            "grammar_core",
+            "pedagogy"
+          ],
+          "sorgu": "Metne göre Victoria Amazonica hangi yapısal özelliğiyle tanı"
+        },
+        {
+          "entropy_post": 1.0276,
+          "entropy_pre": 9.5308,
+          "epistemic_failure": false,
+          "future_train_recorded": false,
+          "is_high_similarity": false,
+          "kosullanma_teyit": false,
+          "match_score": 0.3911,
+          "morpheme_output": "cevap : bu durum , bir şey POSS_2SG kendi POSS_3SG CASE_DAT_",
+          "needs_retrieval": true,
+          "retrieval_triggered": true,
+          "retrieved_document": "",
+          "router_experts": [
+            "pedagogy",
+            "grammar_core"
+          ],
+          "sorgu": "Triglif kavramının temel niteliği ve önemi nedir?"
+        },
+        {
+          "entropy_post": 1.5751,
+          "entropy_pre": 5.1771,
+          "epistemic_failure": false,
+          "future_train_recorded": false,
+          "is_high_similarity": false,
+          "kosullanma_teyit": true,
+          "match_score": 0.8148,
+          "morpheme_output": "<PROPER_NOUN> , Güneş POSS_2SG doğuş POSS_3SG ve gök Tanrı P",
+          "needs_retrieval": true,
+          "retrieval_triggered": true,
+          "retrieved_document": "Doğal ve tarihsel kayıtlarda Alacahöyük Andezit Sfenksi öne ",
+          "router_experts": [
+            "grammar_core",
+            "pedagogy"
+          ],
+          "sorgu": "Belgede Alacahöyük Andezit Sfenksi ile ilgili öne çıkan fonk"
+        },
+        {
+          "entropy_post": 1.0276,
+          "entropy_pre": 9.5308,
+          "epistemic_failure": false,
+          "future_train_recorded": false,
+          "is_high_similarity": false,
+          "kosullanma_teyit": false,
+          "match_score": 0.3911,
+          "morpheme_output": "cevap : bu durum , bir şey POSS_2SG kendi POSS_3SG CASE_DAT_",
+          "needs_retrieval": true,
+          "retrieval_triggered": true,
+          "retrieved_document": "",
+          "router_experts": [
+            "pedagogy",
+            "grammar_core"
+          ],
+          "sorgu": "Diyatomit kavramının temel niteliği ve önemi nedir?"
+        },
+        {
+          "entropy_post": 0.3231,
+          "entropy_pre": 3.7472,
+          "epistemic_failure": false,
+          "future_train_recorded": false,
+          "is_high_similarity": true,
+          "kosullanma_teyit": true,
+          "match_score": 1.0,
+          "morpheme_output": "teknik çözüm : <PROPER_NOUN> asit POSS_3SG , yağ DERIV_lI tü",
+          "needs_retrieval": true,
+          "retrieval_triggered": true,
+          "retrieved_document": "Yapısal incelemeler Diyatomit varlığını teyit eder. Diyatomi",
+          "router_experts": [
+            "grammar_core",
+            "pedagogy"
+          ],
+          "sorgu": "Metne göre Serpantinit hangi yapısal özelliğiyle tanımlanmak"
+        },
+        {
+          "entropy_post": 0.1331,
+          "entropy_pre": 2.2804,
+          "epistemic_failure": false,
+          "future_train_recorded": false,
+          "is_high_similarity": false,
+          "kosullanma_teyit": false,
+          "match_score": 0.0,
+          "morpheme_output": "cevap : bu durum , bir şey POSS_2SG kendi POSS_3SG CASE_ACC_",
+          "needs_retrieval": false,
+          "retrieval_triggered": false,
+          "retrieved_document": "",
+          "router_experts": [
+            "pedagogy",
+            "grammar_core"
+          ],
+          "sorgu": "Kimberlit hakkında sunulan temel bilimsel açıklama nedir?"
+        },
+        {
+          "entropy_post": 1.0836,
+          "entropy_pre": 9.4626,
+          "epistemic_failure": false,
+          "future_train_recorded": false,
+          "is_high_similarity": false,
+          "kosullanma_teyit": false,
+          "match_score": 0.3911,
+          "morpheme_output": "cevap : bu durum , bir şey POSS_2SG kendi POSS_3SG CASE_DAT_",
+          "needs_retrieval": true,
+          "retrieval_triggered": true,
+          "retrieved_document": "",
+          "router_experts": [
+            "pedagogy",
+            "grammar_core"
+          ],
+          "sorgu": "Magnetar SGR kavramının temel niteliği ve önemi nedir?"
+        },
+        {
+          "entropy_post": 7.5495,
+          "entropy_pre": 2.3961,
+          "epistemic_failure": false,
+          "future_train_recorded": false,
+          "is_high_similarity": false,
+          "kosullanma_teyit": false,
+          "match_score": 0.0,
+          "morpheme_output": "<ARA>",
+          "needs_retrieval": false,
+          "retrieval_triggered": false,
+          "retrieved_document": "",
+          "router_experts": [
+            "pedagogy",
+            "grammar_core"
+          ],
+          "sorgu": "Belgede Drosera ile ilgili öne çıkan fonksiyon nedir?"
+        },
+        {
+          "entropy_post": 0.1019,
+          "entropy_pre": 3.9731,
+          "epistemic_failure": false,
+          "future_train_recorded": false,
+          "is_high_similarity": false,
+          "kosullanma_teyit": true,
+          "match_score": 0.75,
+          "morpheme_output": "teknik çözüm : bu durum , parça CASE_GEN yüzey POSS_2SG CASE",
+          "needs_retrieval": true,
+          "retrieval_triggered": true,
+          "retrieved_document": "Doğal ve tarihsel kayıtlarda Kaset Tavan öne çıkar. Çünkü Ka",
+          "router_experts": [
+            "grammar_core",
+            "pedagogy"
+          ],
+          "sorgu": "Belgede Kaset Tavan ile ilgili öne çıkan fonksiyon nedir?"
+        },
+        {
+          "entropy_post": 1.0276,
+          "entropy_pre": 9.5308,
+          "epistemic_failure": false,
+          "future_train_recorded": false,
+          "is_high_similarity": false,
+          "kosullanma_teyit": false,
+          "match_score": 0.3911,
+          "morpheme_output": "cevap : bu durum , bir şey POSS_2SG kendi POSS_3SG CASE_DAT_",
+          "needs_retrieval": true,
+          "retrieval_triggered": true,
+          "retrieved_document": "",
+          "router_experts": [
+            "pedagogy",
+            "grammar_core"
+          ],
+          "sorgu": "Triglif kavramının temel niteliği ve önemi nedir?"
+        },
+        {
+          "entropy_post": 0.3231,
+          "entropy_pre": 3.7472,
+          "epistemic_failure": false,
+          "future_train_recorded": false,
+          "is_high_similarity": true,
+          "kosullanma_teyit": true,
+          "match_score": 1.0,
+          "morpheme_output": "teknik çözüm : <PROPER_NOUN> asit POSS_3SG , yağ DERIV_lI tü",
+          "needs_retrieval": true,
+          "retrieval_triggered": true,
+          "retrieved_document": "Yapısal incelemeler Diyatomit varlığını teyit eder. Diyatomi",
+          "router_experts": [
+            "grammar_core",
+            "pedagogy"
+          ],
+          "sorgu": "Metne göre Piroksenit hangi yapısal özelliğiyle tanımlanmakt"
+        },
+        {
+          "entropy_post": 0.1331,
+          "entropy_pre": 2.2804,
+          "epistemic_failure": false,
+          "future_train_recorded": false,
+          "is_high_similarity": false,
+          "kosullanma_teyit": false,
+          "match_score": 0.0,
+          "morpheme_output": "cevap : bu durum , bir şey POSS_2SG kendi POSS_3SG CASE_ACC_",
+          "needs_retrieval": false,
+          "retrieval_triggered": false,
+          "retrieved_document": "",
+          "router_experts": [
+            "pedagogy",
+            "grammar_core"
+          ],
+          "sorgu": "Kimberlit hakkında sunulan temel bilimsel açıklama nedir?"
+        },
+        {
+          "entropy_post": 0.5338,
+          "entropy_pre": 8.5273,
+          "epistemic_failure": false,
+          "future_train_recorded": false,
+          "is_high_similarity": false,
+          "kosullanma_teyit": true,
+          "match_score": 0.8,
+          "morpheme_output": "metin , <PROPER_NOUN> ( <UNK> ) ol GERUND_ArAk adlandırıl IN",
+          "needs_retrieval": true,
+          "retrieval_triggered": true,
+          "retrieved_document": "Yapısal incelemeler Hattuşa Aşağı Kent varlığını teyit eder.",
+          "router_experts": [
+            "pedagogy",
+            "grammar_core"
+          ],
+          "sorgu": "Hattuşa Aşağı Kent kavramının temel niteliği ve önemi nedir?"
+        },
+        {
+          "entropy_post": 1.0276,
+          "entropy_pre": 9.5308,
+          "epistemic_failure": false,
+          "future_train_recorded": false,
+          "is_high_similarity": false,
+          "kosullanma_teyit": false,
+          "match_score": 0.3911,
+          "morpheme_output": "cevap : bu durum , bir şey POSS_2SG kendi POSS_3SG CASE_DAT_",
+          "needs_retrieval": true,
+          "retrieval_triggered": true,
+          "retrieved_document": "",
+          "router_experts": [
+            "pedagogy",
+            "grammar_core"
+          ],
+          "sorgu": "Triglif kavramının temel niteliği ve önemi nedir?"
+        }
+      ],
+      "entropi_pre_max": 9.5308,
+      "entropi_pre_min": 2.2804,
+      "istisna_sayisi": 0,
+      "istisnalar": [],
+      "kayit_tam": 20,
+      "n": 20,
+      "tetiklenme_kirilim": {
+        "kosullanma_teyitli": 8,
+        "needs_retrieval_true": 16,
+        "retrieval_triggered_true": 16
+      }
+    },
+    "b2_rapor_karsilastirma": {
+      "birebir": 0,
+      "detay": [
+        {
+          "birebir": false,
+          "p2_skor": 0.35,
+          "p3_skor": 0.4444,
+          "sorgu": "Belgede Fomalhaut ile ilgili öne çıkan fonksiyon nedir?"
+        },
+        {
+          "birebir": false,
+          "p2_skor": 0.2933,
+          "p3_skor": 0.3911,
+          "sorgu": "Aldebaran kavramının temel niteliği ve önemi nedir?"
+        },
+        {
+          "birebir": false,
+          "p2_skor": 0.6,
+          "p3_skor": 0.8,
+          "sorgu": "Metne göre Drosera hangi yapısal özelliğiyle tanımlanmaktadı"
+        },
+        {
+          "birebir": false,
+          "p2_skor": 0.35,
+          "p3_skor": 0.3556,
+          "sorgu": "Belgede Pulsar PSR ile ilgili öne çıkan fonksiyon nedir?"
+        },
+        {
+          "birebir": false,
+          "p2_skor": 0.2933,
+          "p3_skor": 0.3911,
+          "sorgu": "Magnetar SGR kavramının temel niteliği ve önemi nedir?"
+        },
+        {
+          "birebir": false,
+          "p2_skor": 0.7,
+          "p3_skor": 0.9333,
+          "sorgu": "Metne göre Victoria Amazonica hangi yapısal özelliğiyle tanı"
+        },
+        {
+          "birebir": false,
+          "p2_skor": 0.2933,
+          "p3_skor": 0.3911,
+          "sorgu": "Triglif kavramının temel niteliği ve önemi nedir?"
+        },
+        {
+          "birebir": false,
+          "p2_skor": 0.6111,
+          "p3_skor": 0.8148,
+          "sorgu": "Belgede Alacahöyük Andezit Sfenksi ile ilgili öne çıkan fonk"
+        },
+        {
+          "birebir": false,
+          "p2_skor": 0.2933,
+          "p3_skor": 0.3911,
+          "sorgu": "Diyatomit kavramının temel niteliği ve önemi nedir?"
+        },
+        {
+          "birebir": false,
+          "p2_skor": 0.75,
+          "p3_skor": 1.0,
+          "sorgu": "Metne göre Serpantinit hangi yapısal özelliğiyle tanımlanmak"
+        },
+        {
+          "birebir": false,
+          "p2_skor": 0.2933,
+          "p3_skor": 0.3911,
+          "sorgu": "Magnetar SGR kavramının temel niteliği ve önemi nedir?"
+        },
+        {
+          "birebir": false,
+          "p2_skor": 0.5625,
+          "p3_skor": 0.75,
+          "sorgu": "Belgede Kaset Tavan ile ilgili öne çıkan fonksiyon nedir?"
+        },
+        {
+          "birebir": false,
+          "p2_skor": 0.2933,
+          "p3_skor": 0.3911,
+          "sorgu": "Triglif kavramının temel niteliği ve önemi nedir?"
+        },
+        {
+          "birebir": false,
+          "p2_skor": 0.75,
+          "p3_skor": 1.0,
+          "sorgu": "Metne göre Piroksenit hangi yapısal özelliğiyle tanımlanmakt"
+        },
+        {
+          "birebir": false,
+          "p2_skor": 0.6,
+          "p3_skor": 0.8,
+          "sorgu": "Hattuşa Aşağı Kent kavramının temel niteliği ve önemi nedir?"
+        },
+        {
+          "birebir": false,
+          "p2_skor": 0.2933,
+          "p3_skor": 0.3911,
+          "sorgu": "Triglif kavramının temel niteliği ve önemi nedir?"
+        }
+      ],
+      "triggered": 16
+    },
+    "b3_oov": {
+      "bulgu": "OOV_FAIL_CLOSED_ONARIM_KANITI — skor tavan-altı ve koşullanma kapandı",
+      "entropy_post": 0.0002,
+      "force_rag": true,
+      "istisna": false,
+      "kosullanma_teyit": false,
+      "morpheme_output_ornek": "root : hayır",
+      "retrieval_triggered": true,
+      "skor": 0.0,
+      "skor_bant_ici": false,
+      "skor_tavani_ici": true,
+      "sorgu": "zzqwxx zqxwv zqqzzq"
+    },
+    "b4_kapi_d": {
+      "gercek_kanal_once_bayt": 0,
+      "gercek_kanal_sonra_bayt": 0,
+      "is_high_similarity_beklenilen": 1,
+      "is_high_similarity_sayisi": 3,
+      "probe_agent_istisna": 0,
+      "probe_agent_tetiklenme": 0,
+      "probe_istisnalar": [],
+      "probe_once_satir": 0,
+      "probe_sema_anahtar_sayisi": 14,
+      "probe_sema_tam": true,
+      "probe_sonra_satir": 1
+    },
+    "base_ckpt": "data/anka_base_v2.pt",
+    "base_ckpt_sha256": "d0f415f3d882beb4a3dace87fc4a6024bf3c667f033790fc1e472cb60a664a50",
+    "damga": "2026-09-27T14:29:41Z",
+    "device": "cpu",
+    "dokunulmazlik": {
+      "durum": "GEÇTİ",
+      "foreign_once": {
+        "elektor_articles": 90122,
+        "octave_articles": 100,
+        "rapberry_pi_pico_all_articles": 436,
+        "rendergit_01_articles": 32,
+        "rendergit_02_articles": 100,
+        "rendergit_03_articles": 39,
+        "rp2040_articles": 106,
+        "sdr_articles": 54,
+        "türk_articles": 5
+      },
+      "foreign_sonra": {
+        "elektor_articles": 90122,
+        "octave_articles": 100,
+        "rapberry_pi_pico_all_articles": 436,
+        "rendergit_01_articles": 32,
+        "rendergit_02_articles": 100,
+        "rendergit_03_articles": 39,
+        "rp2040_articles": 106,
+        "sdr_articles": 54,
+        "türk_articles": 5
+      },
+      "kanonik_once": 36,
+      "kanonik_sonra": 36,
+      "once_digest": "fe7fc7649737ed35",
+      "sonra_digest": "fe7fc7649737ed35"
+    },
+    "envanter_once_digest": "fe7fc7649737ed35",
+    "faz_a": {
+      "esik_import_sayisi": 2,
+      "esik_import_sitesi": [
+        "src/rag/__init__.py",
+        "src/rag/epistemic_agent.py"
+      ],
+      "esik_tanim_sayisi": 1,
+      "esik_tanim_sitesi": [
+        "src/rag/rag_pipeline.py"
+      ],
+      "future_train_path_default": "data/future_train_vector.jsonl",
+      "merak_router_grep_detay": {
+        "src/llm/router.py": 0,
+        "src/rag/merak.py": 0
+      },
+      "merak_router_state_dict_yukleme": 0,
+      "merak_tau_default": 2.5,
+      "rag_match_threshold_deger": 0.4,
+      "record_baslangic_satiri": 349,
+      "recreate_satirlar_vector_memory": [
+        91,
+        131,
+        134
+      ],
+      "sessiz_none_satirlar_rag_pipeline": [
+        53
+      ],
+      "similarity_threshold_default": 0.85,
+      "tau_default": 2.5
+    },
+    "faz_a_kapi_detay": [
+      {
+        "durum": "GEÇTİ",
+        "ilanli": 0.4,
+        "olculen": 0.4,
+        "olcum": "esik_rag_match_threshold"
+      },
+      {
+        "durum": "GEÇTİ",
+        "ilanli": 2.5,
+        "olculen": 2.5,
+        "olcum": "tau_default"
+      },
+      {
+        "durum": "GEÇTİ",
+        "ilanli": 0.85,
+        "olculen": 0.85,
+        "olcum": "similarity_threshold_default"
+      },
+      {
+        "durum": "GEÇTİ",
+        "ilanli": 1,
+        "olculen": 1,
+        "olcum": "esik_tanim_sayisi"
+      },
+      {
+        "durum": "GEÇTİ",
+        "ilanli": 2,
+        "olculen": 2,
+        "olcum": "esik_import_sayisi"
+      },
+      {
+        "durum": "GEÇTİ",
+        "ilanli": 0,
+        "olculen": 0,
+        "olcum": "merak_router_state_dict_yukleme"
+      }
+    ],
+    "faz_b_envanter_once": {
+      "adlar": [
+        "elektor_articles",
+        "kristal_bellek",
+        "octave_articles",
+        "rapberry_pi_pico_all_articles",
+        "rendergit_01_articles",
+        "rendergit_02_articles",
+        "rendergit_03_articles",
+        "rp2040_articles",
+        "sdr_articles",
+        "türk_articles"
+      ],
+      "kalemler": [
+        {
+          "ad": "elektor_articles",
+          "crystal_tags": false,
+          "dense_distance": "Cosine",
+          "dense_size": 768,
+          "hibrit": false,
+          "nokta": 90122,
+          "payload_anahtar": [
+            "article_id",
+            "chunk_index",
+            "filename",
+            "text",
+            "title",
+            "year"
+          ],
+          "sparse": [],
+          "tek_dense": true
+        },
+        {
+          "ad": "kristal_bellek",
+          "crystal_tags": true,
+          "dense_distance": "Cosine",
+          "dense_size": 768,
+          "hibrit": true,
+          "nokta": 36,
+          "payload_anahtar": [
+            "crystal_tags",
+            "domain",
+            "text",
+            "token_ids"
+          ],
+          "sparse": [
+            "sparse"
+          ],
+          "tek_dense": false
+        },
+        {
+          "ad": "octave_articles",
+          "crystal_tags": false,
+          "dense_distance": "Cosine",
+          "dense_size": 768,
+          "hibrit": false,
+          "nokta": 100,
+          "payload_anahtar": [
+            "article_id",
+            "chunk_index",
+            "filename",
+            "text",
+            "title",
+            "year"
+          ],
+          "sparse": [],
+          "tek_dense": true
+        },
+        {
+          "ad": "rapberry_pi_pico_all_articles",
+          "crystal_tags": false,
+          "dense_distance": "Cosine",
+          "dense_size": 768,
+          "hibrit": false,
+          "nokta": 436,
+          "payload_anahtar": [
+            "article_id",
+            "chunk_index",
+            "filename",
+            "text",
+            "title",
+            "year"
+          ],
+          "sparse": [],
+          "tek_dense": true
+        },
+        {
+          "ad": "rendergit_01_articles",
+          "crystal_tags": false,
+          "dense_distance": "Cosine",
+          "dense_size": 768,
+          "hibrit": false,
+          "nokta": 32,
+          "payload_anahtar": [
+            "article_id",
+            "chunk_index",
+            "filename",
+            "text",
+            "title",
+            "year"
+          ],
+          "sparse": [],
+          "tek_dense": true
+        },
+        {
+          "ad": "rendergit_02_articles",
+          "crystal_tags": false,
+          "dense_distance": "Cosine",
+          "dense_size": 768,
+          "hibrit": false,
+          "nokta": 100,
+          "payload_anahtar": [
+            "article_id",
+            "chunk_index",
+            "filename",
+            "text",
+            "title",
+            "year"
+          ],
+          "sparse": [],
+          "tek_dense": true
+        },
+        {
+          "ad": "rendergit_03_articles",
+          "crystal_tags": false,
+          "dense_distance": "Cosine",
+          "dense_size": 768,
+          "hibrit": false,
+          "nokta": 39,
+          "payload_anahtar": [
+            "article_id",
+            "chunk_index",
+            "filename",
+            "text",
+            "title",
+            "year"
+          ],
+          "sparse": [],
+          "tek_dense": true
+        },
+        {
+          "ad": "rp2040_articles",
+          "crystal_tags": false,
+          "dense_distance": "Cosine",
+          "dense_size": 768,
+          "hibrit": false,
+          "nokta": 106,
+          "payload_anahtar": [
+            "article_id",
+            "chunk_index",
+            "filename",
+            "text",
+            "title",
+            "year"
+          ],
+          "sparse": [],
+          "tek_dense": true
+        },
+        {
+          "ad": "sdr_articles",
+          "crystal_tags": false,
+          "dense_distance": "Cosine",
+          "dense_size": 768,
+          "hibrit": false,
+          "nokta": 54,
+          "payload_anahtar": [
+            "article_id",
+            "chunk_index",
+            "filename",
+            "text",
+            "title",
+            "year"
+          ],
+          "sparse": [],
+          "tek_dense": true
+        },
+        {
+          "ad": "türk_articles",
+          "crystal_tags": false,
+          "dense_distance": "Cosine",
+          "dense_size": 768,
+          "hibrit": false,
+          "nokta": 5,
+          "payload_anahtar": [
+            "article_id",
+            "chunk_index",
+            "filename",
+            "text",
+            "title",
+            "year"
+          ],
+          "sparse": [],
+          "tek_dense": true
+        }
+      ]
+    },
+    "faz_b_envanter_sonra": {
+      "adlar": [
+        "elektor_articles",
+        "kristal_bellek",
+        "octave_articles",
+        "rapberry_pi_pico_all_articles",
+        "rendergit_01_articles",
+        "rendergit_02_articles",
+        "rendergit_03_articles",
+        "rp2040_articles",
+        "sdr_articles",
+        "türk_articles"
+      ],
+      "kalemler": [
+        {
+          "ad": "elektor_articles",
+          "crystal_tags": false,
+          "dense_distance": "Cosine",
+          "dense_size": 768,
+          "hibrit": false,
+          "nokta": 90122,
+          "payload_anahtar": [
+            "article_id",
+            "chunk_index",
+            "filename",
+            "text",
+            "title",
+            "year"
+          ],
+          "sparse": [],
+          "tek_dense": true
+        },
+        {
+          "ad": "kristal_bellek",
+          "crystal_tags": true,
+          "dense_distance": "Cosine",
+          "dense_size": 768,
+          "hibrit": true,
+          "nokta": 36,
+          "payload_anahtar": [
+            "crystal_tags",
+            "domain",
+            "text",
+            "token_ids"
+          ],
+          "sparse": [
+            "sparse"
+          ],
+          "tek_dense": false
+        },
+        {
+          "ad": "octave_articles",
+          "crystal_tags": false,
+          "dense_distance": "Cosine",
+          "dense_size": 768,
+          "hibrit": false,
+          "nokta": 100,
+          "payload_anahtar": [
+            "article_id",
+            "chunk_index",
+            "filename",
+            "text",
+            "title",
+            "year"
+          ],
+          "sparse": [],
+          "tek_dense": true
+        },
+        {
+          "ad": "rapberry_pi_pico_all_articles",
+          "crystal_tags": false,
+          "dense_distance": "Cosine",
+          "dense_size": 768,
+          "hibrit": false,
+          "nokta": 436,
+          "payload_anahtar": [
+            "article_id",
+            "chunk_index",
+            "filename",
+            "text",
+            "title",
+            "year"
+          ],
+          "sparse": [],
+          "tek_dense": true
+        },
+        {
+          "ad": "rendergit_01_articles",
+          "crystal_tags": false,
+          "dense_distance": "Cosine",
+          "dense_size": 768,
+          "hibrit": false,
+          "nokta": 32,
+          "payload_anahtar": [
+            "article_id",
+            "chunk_index",
+            "filename",
+            "text",
+            "title",
+            "year"
+          ],
+          "sparse": [],
+          "tek_dense": true
+        },
+        {
+          "ad": "rendergit_02_articles",
+          "crystal_tags": false,
+          "dense_distance": "Cosine",
+          "dense_size": 768,
+          "hibrit": false,
+          "nokta": 100,
+          "payload_anahtar": [
+            "article_id",
+            "chunk_index",
+            "filename",
+            "text",
+            "title",
+            "year"
+          ],
+          "sparse": [],
+          "tek_dense": true
+        },
+        {
+          "ad": "rendergit_03_articles",
+          "crystal_tags": false,
+          "dense_distance": "Cosine",
+          "dense_size": 768,
+          "hibrit": false,
+          "nokta": 39,
+          "payload_anahtar": [
+            "article_id",
+            "chunk_index",
+            "filename",
+            "text",
+            "title",
+            "year"
+          ],
+          "sparse": [],
+          "tek_dense": true
+        },
+        {
+          "ad": "rp2040_articles",
+          "crystal_tags": false,
+          "dense_distance": "Cosine",
+          "dense_size": 768,
+          "hibrit": false,
+          "nokta": 106,
+          "payload_anahtar": [
+            "article_id",
+            "chunk_index",
+            "filename",
+            "text",
+            "title",
+            "year"
+          ],
+          "sparse": [],
+          "tek_dense": true
+        },
+        {
+          "ad": "sdr_articles",
+          "crystal_tags": false,
+          "dense_distance": "Cosine",
+          "dense_size": 768,
+          "hibrit": false,
+          "nokta": 54,
+          "payload_anahtar": [
+            "article_id",
+            "chunk_index",
+            "filename",
+            "text",
+            "title",
+            "year"
+          ],
+          "sparse": [],
+          "tek_dense": true
+        },
+        {
+          "ad": "türk_articles",
+          "crystal_tags": false,
+          "dense_distance": "Cosine",
+          "dense_size": 768,
+          "hibrit": false,
+          "nokta": 5,
+          "payload_anahtar": [
+            "article_id",
+            "chunk_index",
+            "filename",
+            "text",
+            "title",
+            "year"
+          ],
+          "sparse": [],
+          "tek_dense": true
+        }
+      ]
+    },
+    "gercek_kanal_once_bayt": 0,
+    "ilan": "mimari_dogrulama_p3_ilan2_2026-09-27.md",
+    "ilan_sha256": "7d9e307eb73911dc2466b0c7ddba2e76731f633ff6a7eaa57c6b0a7ca828714d",
+    "korpus": "data/realistic_rag/test_natural_150.jsonl",
+    "korpus_sha256": "a233323011b9be23c839a6c0e4b8f9a2b769dfd8e7702130a3cb2d75041b08c2",
+    "kosum_sandbox_disi": true,
+    "kristal_bellek_nokta_agent": 36,
+    "model_yukleme": {
+      "base_ckpt": "anka_base_v2.pt",
+      "device": "cpu",
+      "kafa": 33114,
+      "sozluk": 33114
+    },
+    "p2_foreign_cipa": {
+      "elektor_articles": 90122,
+      "octave_articles": 100,
+      "rapberry_pi_pico_all_articles": 436,
+      "rendergit_01_articles": 32,
+      "rendergit_02_articles": 100,
+      "rendergit_03_articles": 39,
+      "rp2040_articles": 106,
+      "sdr_articles": 54,
+      "türk_articles": 5
+    },
+    "p2_hukum": "data/eval/mimari_dogrulama_p2_hukum_2026-09-27.json",
+    "probe_yol": "data/eval/p3_future_train_probe_t0147.jsonl",
+    "rag_match_threshold": 0.4,
+    "secili_sorgu": 20,
+    "seed": 42,
+    "sorgu_havuzu": 150,
+    "vocab": "data/rebuild/vocab_anka_r1_33114.json",
+    "vocab_sha256": "f9940a8d8e1f7cd9428d389f12ff4c5ee448e5a7bfcdcc8ecc9c616fce950984"
+  },
+  "hukum": "P3_GECTİ",
+  "kapilar": {
+    "K1_FAZ_A_ENVANTER": "GEÇTİ",
+    "K2_ARZ_KORUNDU": "GEÇTİ",
+    "K3_B1_MERAK_KAYIT_TAM": "GEÇTİ",
+    "K4_B3_OOV_SAHTE_KOSULLANMA": "GEÇTİ",
+    "K5_B4_KAPI_D": "GEÇTİ",
+    "K6_DOKUNULMAZLIK": "GEÇTİ"
+  },
+  "rc": 0
+}

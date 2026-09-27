@@ -40,13 +40,16 @@ class LexiconManager:
                 # 'değiştirme' biçimi ölçüldü ve REGRESYONDU: `Ir` lemmasının düz
                 # anahtarı `ir` erişilebilirdi, silinince `ir` yüzeyi düştü
                 # (kaybolan 1). Düzeltmenin işi ERİŞİM AÇMAK, kapatmak değil.
+                # T-0147 A-2: ikiz-kopya KAYNAK-BAYRAĞIYLA eklenir (is_case_alias)
+                # — kopya, asıl row-dict'i kirletmemek için (aynı dict iki
+                # anahtarda da paylaşılıyor).
                 lower_lemma = lemma.lower()
                 if lower_lemma != lemma:
-                    self._insert(lower_lemma, row)
+                    self._insert(lower_lemma, dict(row, is_case_alias=True))
                 # ... ve `compile`'ın aradığı Türkçe-normalize anahtar da yazılır.
                 tr_lemma = turkish_lower(lemma)
                 if tr_lemma != lemma and tr_lemma != lower_lemma:
-                    self._insert(tr_lemma, row)
+                    self._insert(tr_lemma, dict(row, is_case_alias=True))
 
     def _insert(self, word: str, data: Dict[str, Any]):
         """Inserts a word and its metadata into the Trie."""
@@ -56,7 +59,18 @@ class LexiconManager:
                 node.children[char] = TrieNode()
             node = node.children[char]
         node.is_word = True
-        node.entries.append(data)
+        # T-0147 A-2: kanonik (bayraksız) girişler özel-ad İKİZ-KOPYALARININ
+        # ÖNÜNE alınır — seçim sırası TSV-satır-sırasına değil bayrağa bağlı
+        # (deterministik); kanonik göreli sırası korunur.
+        if data.get('is_case_alias'):
+            node.entries.append(data)
+        else:
+            idx = len(node.entries)
+            for i, mevcut in enumerate(node.entries):
+                if mevcut.get('is_case_alias'):
+                    idx = i
+                    break
+            node.entries.insert(idx, data)
 
     def find_stems(self, word: str) -> List[tuple[str, Dict[str, Any]]]:
         """

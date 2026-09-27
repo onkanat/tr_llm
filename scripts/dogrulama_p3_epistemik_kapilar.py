@@ -85,9 +85,18 @@ ILANLI = {
     "elektor_articles_nokta": 90122,
     "gercek_kanal_once_bayt": 0,
     "gercek_kanal_sonra_bayt": 0,
-    "b4_is_high_similarity_beklenen": 0,    # 0/20 (0,85 > P2 bant-maks 0,75)
-    "b3_oov_skor_bandi_min": 0.6,
-    "b3_oov_skor_bandi_max": 0.8,
+    # ---- İLAN-2 (T-0147 onarım-turu; koşum-ÖNCESİ beyan) ----
+    # A-3 skor-normalizasyonu (RRF_SCORE_MAX=0,75) + OOV fail-closed:
+    # * OOV sorgu: ham 0,7 × 0,05 = 0,035 → normalize 0,0467 (tavan 0,075)
+    #   VE koşullanma FALSE — koşum-1'deki sahte-koşullanma sınıfı (skor 0,7
+    #   bandı + koşullanma TRUE) KAPANMIŞ olmalı.
+    # * Kapı-D (0,85) onarım-sonrası ERİŞİLEBİLİR: pozitif-kontrol top-1 ham
+    #   tavan 0,75 (koşum-1 P2 birebir-çıpa) → normalize 1,0 ≥ 0,85 →
+    #   is_high en az 1/20 tetiklenir (birebir-sayı RAPOR-kaydıdır —
+    #   model-entropi-tetiklenmeli kapıdan çıkarıldı; koşum-1 0/20 kapısı
+    #   "0,85 > bant-maks 0,75 ulaşılamaz" GEREKÇESİYLE onarım-sonrası GEÇERSİZ).
+    "b3_oov_skor_tavani": 0.075,
+    "b4_is_high_beklenen_min": 1,
 }
 RECORD_ANAHTARLARI = frozenset({
     "instruction", "input", "output", "model_failed_output",
@@ -554,26 +563,31 @@ def main() -> None:
         b3["morpheme_output_ornek"] = str(
             sonuc_oov.get("morpheme_output", ""))[:80]
         b3["entropy_post"] = round(float(sonuc_oov.get("entropy_post", 0.0)), 4)
-        bant = (ILANLI["b3_oov_skor_bandi_min"] <= skor_oov
-                <= ILANLI["b3_oov_skor_bandi_max"])
-        b3["skor_bant_ici"] = bant
-        b3["bulgu"] = ("OOV_SAHTE_KOSULLANMA — Kapı-B boş-roots'ta geçti ve "
-                       "Kapı-C (0,40) OOV sorguyu belgeyle koşullandı"
-                       if kosullanma and bant else "BEKLENMEDIK_DAVRANIS")
+        # İLAN-2 (T-0147 A-3): bant DEĞİL TAVAN — skor ≤ 0,075 (fail-closed
+        # onarım: ham 0,7 × 0,05 = 0,035 → normalize 0,0467) + koşullanma FALSE.
+        tavan = (skor_oov <= ILANLI["b3_oov_skor_tavani"])
+        b3["skor_tavani_ici"] = tavan
+        b3["bulgu"] = ("OOV_FAIL_CLOSED_ONARIM_KANITI — skor tavan-altı ve "
+                       "koşullanma kapandı"
+                       if (not kosullanma and tavan) else "BEKLENMEDIK_DAVRANIS")
     except Exception as e:  # noqa: BLE001 — istisna = kapı düşer
         b3["istisna"] = True
         b3["istisna_metin"] = f"{type(e).__name__}: {e}"
         b3["bulgu"] = "ISTISNA — canlı-döngü P2 davranışını yinelemedi"
     detay["b3_oov"] = b3
+    # İLAN-2 kapı: istisna-yok + skor ≤ 0,075 + koşullanma FALSE (onarım-kanıtı;
+    # koşum-1'deki "kosullanma and bant" SAHTE-koşullanma beklentisi tersine döndü).
     kapilar["K4_B3_OOV_SAHTE_KOSULLANMA"] = bool(
-        b3.get("istisna") is False and b3.get("kosullanma_teyit") and bant)
+        b3.get("istisna") is False
+        and b3.get("skor_tavani_ici")
+        and b3.get("kosullanma_teyit") is False)
 
     # ---- B4: Kapı-D ulaşılmazlık + fail-closed probe + gerçek-kanal-0
     b4: Dict[str, Any] = {}
     b4["is_high_similarity_sayisi"] = sum(1 for k in b1_kayitlar
                                           if k["is_high_similarity"])
     b4["is_high_similarity_beklenilen"] = \
-        ILANLI["b4_is_high_similarity_beklenen"]
+        ILANLI["b4_is_high_beklenen_min"]
 
     probe_yol_tam = os.path.join(REPO_ROOT, arg.probe_yol)
     probe_once_satir = 0
@@ -640,7 +654,7 @@ def main() -> None:
     detay["b4_kapi_d"] = b4
     kapilar["K5_B4_KAPI_D"] = bool(
         b4["is_high_similarity_sayisi"]
-        == ILANLI["b4_is_high_similarity_beklenen"]
+        >= ILANLI["b4_is_high_beklenen_min"]
         and b4["probe_sema_tam"]
         and kanal_once_bayt == ILANLI["gercek_kanal_once_bayt"]
         and kanal_sonra_bayt == ILANLI["gercek_kanal_sonra_bayt"])

@@ -61,11 +61,16 @@ POZITIF_N = 20
 SEED = 42
 KANONIK_ADLAR = ("kristal_bellek", "simulasyon_bellek")
 ILANLI = {
-    "koleksiyon_sayisi_once": 9,
-    "kanonik_ad_mevcut": 0,          # 0/2
-    "hibrit_koleksiyon": 0,          # 0/9
-    "tek_dense_768": 9,              # 9/9
-    "crystal_tagsli": 0,             # 0/9
+    # İLAN-2 (T-0147 onarım-turu): koşum-1'de P2 'kristal_bellek'i (36 nokta)
+    # kurdu — kalıcı arz P3/P4/P5'e geçti (fe7fc764… çıpası). Onarım-turu
+    # koşumu PROBE-koleksiyonda (--koleksiyon p2_probe_bellek_t0147);
+    # kanonik koleksiyonlar YALNIZ-OKUMA.
+    "koleksiyon_sayisi_once": 10,
+    "kanonik_ad_mevcut": 1,          # 1/2 — kristal_bellek VAR (36), simulasyon_bellek YOK
+    "hibrit_koleksiyon": 1,          # 1/10 — kristal_bellek hibrit (P2 koşum-1 artığı)
+    "tek_dense_768": 9,              # 9/10 — kristal_bellek hibrit, tek-dense sayılmaz
+    "crystal_tagsli": 1,             # 1/10
+    "kristal_bellek_nokta": 36,      # arz-çıpa (yalnız-okuma; dokunulmazlık-çıpası)
     "turk_articles_nokta": 5,
     "elektor_articles_nokta": 90122,
     "foreign_sema_anahtar": 6,
@@ -180,6 +185,7 @@ def _faz_a_kapilari(env: Dict[str, Any]) -> Tuple[bool, List[Dict[str, Any]]]:
         "hibrit_koleksiyon": hibrit,
         "tek_dense_768": tek768,
         "crystal_tagsli": ctags,
+        "kristal_bellek_nokta": nokta.get("kristal_bellek", -1),
         "turk_articles_nokta": nokta.get("türk_articles", -1),
         "elektor_articles_nokta": nokta.get("elektor_articles", -1),
     }
@@ -530,15 +536,29 @@ def main() -> None:
         b3["istisna"] = True
         b3["istisna_metin"] = f"{type(e).__name__}: {e}"
     detay["b3_negatif"] = b3
-    kapilar["K6_B3_DAVRANIS"] = b3.get("istisna") is False
+    # İLAN-2 (T-0147 A-3 onarım): OOV sorgu fail-closed — boş distinctive_roots
+    # artık ATLANMAZ; ham 0,7 × 0,05 = 0,035 → normalize 0,0467 (≤ 0,075) VE
+    # has_root_match=False. Koşum-1'deki sahte-koşullanma sınıfı (skor 0,7 +
+    # koşullanma TRUE) kapanmış OLMAALI — bu beklenti koşum-ÖNCESİ İLAN'lıdır.
+    OOV_SKOR_TAVANI = 0.075
+    kapilar["K6_B3_DAVRANIS"] = (
+        b3.get("istisna") is False
+        and b3.get("skor") is not None
+        and float(b3["skor"]) <= OOV_SKOR_TAVANI
+        and b3.get("has_root_match") is False
+    )
 
     # ---- Dokunulmazlık kapısı (koşum SONU): foreign koleksiyonlar ÖNCE==SONRA
     env_sonra = _envanter(client)
     sonra_digest = _envanter_digest(env_sonra)
+    # İLAN-2 (T-0147): onarım-turu koşumu PROBE-koleksiyonda (--koleksiyon);
+    # probe koşum-başında YOK (env_once'te derinden yok) → foreign-çıpa
+    # hesabı hedef-probe'u DIŞLAR (koşum-1 kanonik-kurulum çıpasıyla aynı
+    # foreign-9 kümesi); probe koşum-sonunda BETİKÇE silinir (aşağıda).
     foreign_once = {k["ad"]: k["nokta"] for k in env_once["kalemler"]
-                    if k["ad"] not in KANONIK_ADLAR}
+                    if k["ad"] not in KANONIK_ADLAR and k["ad"] != arg.koleksiyon}
     foreign_sonra = {k["ad"]: k["nokta"] for k in env_sonra["kalemler"]
-                     if k["ad"] not in KANONIK_ADLAR}
+                     if k["ad"] not in KANONIK_ADLAR and k["ad"] != arg.koleksiyon}
     dokunulmaz = foreign_once == foreign_sonra
     detay["dokunulmazlik"] = {
         "once_digest": once_digest,
@@ -562,6 +582,17 @@ def main() -> None:
         json.dump(hukum_json, f, ensure_ascii=False, indent=2, sort_keys=True)
     _rapor_yaz(arg.rapor, hukum_json, arg, ilan_sha, korpus_sha,
                hukum_yol, once_digest, sonra_digest)
+    # İLAN-2: koşum-sonu PROBE-temizliği (hüküm BETİKTEN çıktıktan SONRA;
+    # rc'ye DOKUNMAZ — temizlik-arızası stderr+rapor-beyanıyla görünürlü).
+    temizlik: Dict[str, Any] = {"hedef": arg.koleksiyon, "silindi": False}
+    try:
+        if client.collection_exists(arg.koleksiyon):
+            client.delete_collection(arg.koleksiyon)
+            temizlik["silindi"] = not client.collection_exists(arg.koleksiyon)
+    except Exception as e:  # noqa: BLE001 — temizlik-hatası hükme bağlanmaz, görünür
+        temizlik["hata"] = f"{type(e).__name__}: {e}"
+    detay["probe_temizlik"] = temizlik
+    _stderr(f"probe-temizlik: {temizlik}")
     _stderr(f"HÜKÜM: {hukum_json['hukum']} rc={rc} → {hukum_yol}")
     sys.exit(rc)
 

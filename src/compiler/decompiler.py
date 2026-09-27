@@ -47,15 +47,22 @@ class MorphemeDecompiler:
         self.compiler = compiler
         self.vocab = vocab
         
-        # Build mapping from affix semantic ID/tag to surface form templates & attributes
-        self.affix_info: Dict[str, Dict[str, Any]] = {}
+        # T-0147 A-1: affix_id → şablon LİSTESİ (çok-şablonlu id'ler için).
+        # Şablonlar şablon-dizgesine göre SIRALI (deterministik tie-break —
+        # graph ekleme-sırası değil); aynı (template, attributes) tekrarı
+        # tek girişte dedupe edilir (ör. CASE_INS tek-şablon re-use bit-özdeş).
+        self.affix_info: Dict[str, List[Dict[str, Any]]] = {}
         for state, transitions in compiler.graph.transitions.items():
             for trans in transitions:
-                if trans.affix_id not in self.affix_info:
-                    self.affix_info[trans.affix_id] = {
-                        "template": trans.affix_template,
-                        "attributes": trans.attributes
-                    }
+                bilgi = {
+                    "template": trans.affix_template,
+                    "attributes": trans.attributes
+                }
+                liste = self.affix_info.setdefault(trans.affix_id, [])
+                if bilgi not in liste:
+                    liste.append(bilgi)
+        for affix_id in self.affix_info:
+            self.affix_info[affix_id].sort(key=lambda b: b["template"])
 
     def is_suffix(self, tag: str) -> bool:
         """Returns True if the tag represents an affix/suffix."""
@@ -99,6 +106,10 @@ class MorphemeDecompiler:
                 
         is_placeholder = root_lemma in ("[Özel İsim]", "[sayı]", "[?]") or root_lemma.isdigit()
         is_proper_noun = bool(root_lemma and (root_lemma[0].isupper() or root_lemma.isupper()) and not root_lemma.startswith("["))
+        # T-0147 A-2: seçilen kök-entry özel-ad İKİZ-KOPYAsı ise (is_case_alias)
+        # kanonik asıl küçük-harfli lemma'dır → apostrof-dalı tetiklenmez.
+        if root_entry and root_entry.get('is_case_alias'):
+            is_proper_noun = False
         if is_placeholder:
             root_surface = root_lemma
             root_attrs = "-"
@@ -118,24 +129,54 @@ class MorphemeDecompiler:
         # 2. Iteratively attach affixes using PhonologyEngine
         for idx in range(1, len(clean_tags)):
             affix_id = clean_tags[idx]
-            info = self.affix_info.get(affix_id)
-            if info is None:
+            stem_for_phonology = "isim" if is_placeholder and idx == 1 else current_surface
+            adaylar = self.affix_info.get(affix_id)
+            on_cozum = None
+            if adaylar is None:
                 info = COMMON_FALLBACKS.get(affix_id, {"template": "", "attributes": "-"})
-                
+            elif len(adaylar) == 1:
+                # T-0147 A-1: tek-şablonlu id → mevcut davranış bit-özdeş.
+                info = adaylar[0]
+            else:
+                # T-0147 A-1 (çözümle-seç): çok-şablonlu id (ör. GERUND_KEN).
+                # Adaylar kurulumda şablon-dizgesine göre sorted; PhonologyEngine
+                # ile çözülen yüzeyi derleyicinin compile'ı KABUL EDEN ilk
+                # şablon seçilir (deterministik). Hiçbiri kabul edilmezse
+                # mevcut davranış (ilk şablon) — fail-open değil, kayıt İLAN'lı.
+                for aday in adaylar:
+                    m_stem, r_affix = PhonologyEngine.resolve_affix(
+                        stem_for_phonology, aday["template"], current_attrs
+                    )
+                    if (is_placeholder or is_proper_noun) and idx == 1:
+                        aday_yuzey = f"{root_lemma}'{r_affix}"
+                    else:
+                        aday_yuzey = m_stem + r_affix
+                    try:
+                        aday_paket = self.compiler.compile(aday_yuzey)
+                    except Exception:
+                        continue
+                    if aday_paket["analyses"]:
+                        on_cozum = (aday, m_stem, r_affix)
+                        break
+                info = on_cozum[0] if on_cozum else adaylar[0]
+
             template = info["template"]
-            
+
             # Special case for past tense person endings
             prev_affix = clean_tags[idx - 1]
             if affix_id.startswith("PERSON_") and prev_affix in ("TENSE_PAST", "COPULA_PAST"):
                 if affix_id in PAST_PERSON_TEMPLATES:
                     template = PAST_PERSON_TEMPLATES[affix_id]
-                    
-            stem_for_phonology = "isim" if is_placeholder and idx == 1 else current_surface
-            mutated_stem, resolved_affix = PhonologyEngine.resolve_affix(
-                stem_for_phonology,
-                template,
-                current_attrs
-            )
+
+            if on_cozum is not None:
+                # Çözümle-seç yolunda resolve_affix ZATEN koşuldu — tekrarlanmaz.
+                mutated_stem, resolved_affix = on_cozum[1], on_cozum[2]
+            else:
+                mutated_stem, resolved_affix = PhonologyEngine.resolve_affix(
+                    stem_for_phonology,
+                    template,
+                    current_attrs
+                )
             
             if (is_placeholder or is_proper_noun) and idx == 1:
                 current_surface = f"{root_lemma}'{resolved_affix}"

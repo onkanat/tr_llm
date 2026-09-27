@@ -55,5 +55,25 @@ class TestLexiconManager(unittest.TestCase):
         self.assertIn("ge", lemmas)
         self.assertIn("gel", lemmas)
 
+    def test_case_alias_ikiz_satiri(self):
+        # T-0147 A-2: TSV'de büyük-harfli özel-ad satırı + küçük-harfli gerçek
+        # lemma satırı aynı trie-düğümünde birleştiğinde (ikiz-satır), seçim
+        # sırası KANONİK (bayraksız) entry'den yanadır — koşum-1 P1
+        # BIT_UYUMSUZ-deseni ('Meşrutiyet'im' ≠ 'meşrutiyetim') davranış-onarımıyla
+        # kapanır; veri (TSV) değişmez, bayrak kaynak-kopyayı işaretler.
+        with open(self.test_tsv, "a", encoding="utf-8") as f:
+            f.write("Meşrutiyet\tNOUN\t-\n")
+            f.write("meşrutiyet\tNOUN\t-\n")
+        self.lexicon.load_from_tsv(self.test_tsv)
+        stems = self.lexicon.find_stems("meşrutiyet")
+        self.assertEqual(len(stems), 2)
+        # kanonik küçük-harfli satır ÖNDE (deterministik; TSV-sırasına değil
+        # bayrağa bağlı — _insert kanonik-girişi alias'ın önüne alır)
+        self.assertEqual(stems[0][1]["lemma"], "meşrutiyet")
+        self.assertFalse(stems[0][1].get("is_case_alias", False))
+        # düz-lower ikiz-KOPYASI alias-bayraklıdır (lemma'sı büyük-harfli asıldır)
+        self.assertEqual(stems[1][1]["lemma"], "Meşrutiyet")
+        self.assertTrue(stems[1][1].get("is_case_alias", False))
+
 if __name__ == '__main__':
     unittest.main()

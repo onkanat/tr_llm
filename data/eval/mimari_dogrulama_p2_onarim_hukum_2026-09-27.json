@@ -1,0 +1,702 @@
+{
+  "damga": "2026-09-27T14:29:28Z",
+  "detay": {
+    "arz": {
+      "benzersiz": 36,
+      "derleme_bos": 0,
+      "eksiksiz": true,
+      "yuklenen": 36
+    },
+    "b2_pozitif": {
+      "detay": [
+        {
+          "has_root_match": true,
+          "kendi_belge": true,
+          "skor": 0.4444,
+          "sorgu": "Belgede Fomalhaut ile ilgili öne çıkan fonksiyon nedir?"
+        },
+        {
+          "has_root_match": true,
+          "kendi_belge": true,
+          "skor": 0.3911,
+          "sorgu": "Aldebaran kavramının temel niteliği ve önemi nedir?"
+        },
+        {
+          "has_root_match": true,
+          "kendi_belge": true,
+          "skor": 0.8,
+          "sorgu": "Metne göre Drosera hangi yapısal özelliğiyle tanımlanmaktadı"
+        },
+        {
+          "has_root_match": true,
+          "kendi_belge": true,
+          "skor": 0.3556,
+          "sorgu": "Belgede Pulsar PSR ile ilgili öne çıkan fonksiyon nedir?"
+        },
+        {
+          "has_root_match": true,
+          "kendi_belge": true,
+          "skor": 0.3911,
+          "sorgu": "Magnetar SGR kavramının temel niteliği ve önemi nedir?"
+        },
+        {
+          "has_root_match": true,
+          "kendi_belge": true,
+          "skor": 0.6667,
+          "sorgu": "Belgede Drosera ile ilgili öne çıkan fonksiyon nedir?"
+        },
+        {
+          "has_root_match": true,
+          "kendi_belge": true,
+          "skor": 0.9333,
+          "sorgu": "Metne göre Victoria Amazonica hangi yapısal özelliğiyle tanı"
+        },
+        {
+          "has_root_match": true,
+          "kendi_belge": true,
+          "skor": 0.3911,
+          "sorgu": "Triglif kavramının temel niteliği ve önemi nedir?"
+        },
+        {
+          "has_root_match": true,
+          "kendi_belge": true,
+          "skor": 0.8148,
+          "sorgu": "Belgede Alacahöyük Andezit Sfenksi ile ilgili öne çıkan fonk"
+        },
+        {
+          "has_root_match": true,
+          "kendi_belge": true,
+          "skor": 0.3911,
+          "sorgu": "Diyatomit kavramının temel niteliği ve önemi nedir?"
+        },
+        {
+          "has_root_match": true,
+          "kendi_belge": true,
+          "skor": 1.0,
+          "sorgu": "Metne göre Serpantinit hangi yapısal özelliğiyle tanımlanmak"
+        },
+        {
+          "has_root_match": true,
+          "kendi_belge": true,
+          "skor": 0.3939,
+          "sorgu": "Kimberlit hakkında sunulan temel bilimsel açıklama nedir?"
+        },
+        {
+          "has_root_match": true,
+          "kendi_belge": true,
+          "skor": 0.3911,
+          "sorgu": "Magnetar SGR kavramının temel niteliği ve önemi nedir?"
+        },
+        {
+          "has_root_match": true,
+          "kendi_belge": true,
+          "skor": 0.6667,
+          "sorgu": "Belgede Drosera ile ilgili öne çıkan fonksiyon nedir?"
+        },
+        {
+          "has_root_match": true,
+          "kendi_belge": true,
+          "skor": 0.75,
+          "sorgu": "Belgede Kaset Tavan ile ilgili öne çıkan fonksiyon nedir?"
+        },
+        {
+          "has_root_match": true,
+          "kendi_belge": true,
+          "skor": 0.3911,
+          "sorgu": "Triglif kavramının temel niteliği ve önemi nedir?"
+        },
+        {
+          "has_root_match": true,
+          "kendi_belge": true,
+          "skor": 1.0,
+          "sorgu": "Metne göre Piroksenit hangi yapısal özelliğiyle tanımlanmakt"
+        },
+        {
+          "has_root_match": true,
+          "kendi_belge": true,
+          "skor": 0.3939,
+          "sorgu": "Kimberlit hakkında sunulan temel bilimsel açıklama nedir?"
+        },
+        {
+          "has_root_match": true,
+          "kendi_belge": true,
+          "skor": 0.8,
+          "sorgu": "Hattuşa Aşağı Kent kavramının temel niteliği ve önemi nedir?"
+        },
+        {
+          "has_root_match": true,
+          "kendi_belge": true,
+          "skor": 0.3911,
+          "sorgu": "Triglif kavramının temel niteliği ve önemi nedir?"
+        }
+      ],
+      "gecen": 20,
+      "kullanilabilir_esik": "10/20",
+      "n": 20,
+      "skor_max": 1.0,
+      "skor_medyan": 0.44444446666666665,
+      "skor_min": 0.3555555733333333
+    },
+    "b3_negatif": {
+      "has_root_match": false,
+      "istisna": false,
+      "skor": 0.0467,
+      "sonuc_uzunluk": 1,
+      "sorgu": "zzqwxx zqxwv zqqzzq",
+      "tags": "<BOS> <UNK> <UNK> <UNK> <EOS>"
+    },
+    "belgesiz_satir": 0,
+    "benzersiz_belge": 36,
+    "damga": "2026-09-27T14:29:28Z",
+    "dokunulmazlik": {
+      "durum": "GEÇTİ",
+      "foreign_once": {
+        "elektor_articles": 90122,
+        "octave_articles": 100,
+        "rapberry_pi_pico_all_articles": 436,
+        "rendergit_01_articles": 32,
+        "rendergit_02_articles": 100,
+        "rendergit_03_articles": 39,
+        "rp2040_articles": 106,
+        "sdr_articles": 54,
+        "türk_articles": 5
+      },
+      "foreign_sonra": {
+        "elektor_articles": 90122,
+        "octave_articles": 100,
+        "rapberry_pi_pico_all_articles": 436,
+        "rendergit_01_articles": 32,
+        "rendergit_02_articles": 100,
+        "rendergit_03_articles": 39,
+        "rp2040_articles": 106,
+        "sdr_articles": 54,
+        "türk_articles": 5
+      },
+      "once_digest": "fe7fc7649737ed35",
+      "sonra_digest": "f721db0af5133f2e",
+      "yeni_koleksiyon": [
+        "p2_probe_bellek_t0147"
+      ]
+    },
+    "envanter_once_digest": "fe7fc7649737ed35",
+    "esik_rouge_040": 0.4,
+    "faz_a_kapi_detay": [
+      {
+        "durum": "GEÇTİ",
+        "ilanli": 10,
+        "olculen": 10,
+        "olcum": "koleksiyon_sayisi_once"
+      },
+      {
+        "durum": "GEÇTİ",
+        "ilanli": 1,
+        "olculen": 1,
+        "olcum": "kanonik_ad_mevcut"
+      },
+      {
+        "durum": "GEÇTİ",
+        "ilanli": 1,
+        "olculen": 1,
+        "olcum": "hibrit_koleksiyon"
+      },
+      {
+        "durum": "GEÇTİ",
+        "ilanli": 9,
+        "olculen": 9,
+        "olcum": "tek_dense_768"
+      },
+      {
+        "durum": "GEÇTİ",
+        "ilanli": 1,
+        "olculen": 1,
+        "olcum": "crystal_tagsli"
+      },
+      {
+        "durum": "GEÇTİ",
+        "ilanli": 36,
+        "olculen": 36,
+        "olcum": "kristal_bellek_nokta"
+      },
+      {
+        "durum": "GEÇTİ",
+        "ilanli": 5,
+        "olculen": 5,
+        "olcum": "turk_articles_nokta"
+      },
+      {
+        "durum": "GEÇTİ",
+        "ilanli": 90122,
+        "olculen": 90122,
+        "olcum": "elektor_articles_nokta"
+      },
+      {
+        "durum": "GEÇTİ",
+        "ilanli": 6,
+        "olculen": 6,
+        "olcum": "foreign_sema_anahtar"
+      }
+    ],
+    "faz_a_once": {
+      "adlar": [
+        "elektor_articles",
+        "kristal_bellek",
+        "octave_articles",
+        "rapberry_pi_pico_all_articles",
+        "rendergit_01_articles",
+        "rendergit_02_articles",
+        "rendergit_03_articles",
+        "rp2040_articles",
+        "sdr_articles",
+        "türk_articles"
+      ],
+      "kalemler": [
+        {
+          "ad": "elektor_articles",
+          "crystal_tags": false,
+          "dense_distance": "Cosine",
+          "dense_size": 768,
+          "hibrit": false,
+          "nokta": 90122,
+          "payload_anahtar": [
+            "article_id",
+            "chunk_index",
+            "filename",
+            "text",
+            "title",
+            "year"
+          ],
+          "sparse": [],
+          "tek_dense": true
+        },
+        {
+          "ad": "kristal_bellek",
+          "crystal_tags": true,
+          "dense_distance": "Cosine",
+          "dense_size": 768,
+          "hibrit": true,
+          "nokta": 36,
+          "payload_anahtar": [
+            "crystal_tags",
+            "domain",
+            "text",
+            "token_ids"
+          ],
+          "sparse": [
+            "sparse"
+          ],
+          "tek_dense": false
+        },
+        {
+          "ad": "octave_articles",
+          "crystal_tags": false,
+          "dense_distance": "Cosine",
+          "dense_size": 768,
+          "hibrit": false,
+          "nokta": 100,
+          "payload_anahtar": [
+            "article_id",
+            "chunk_index",
+            "filename",
+            "text",
+            "title",
+            "year"
+          ],
+          "sparse": [],
+          "tek_dense": true
+        },
+        {
+          "ad": "rapberry_pi_pico_all_articles",
+          "crystal_tags": false,
+          "dense_distance": "Cosine",
+          "dense_size": 768,
+          "hibrit": false,
+          "nokta": 436,
+          "payload_anahtar": [
+            "article_id",
+            "chunk_index",
+            "filename",
+            "text",
+            "title",
+            "year"
+          ],
+          "sparse": [],
+          "tek_dense": true
+        },
+        {
+          "ad": "rendergit_01_articles",
+          "crystal_tags": false,
+          "dense_distance": "Cosine",
+          "dense_size": 768,
+          "hibrit": false,
+          "nokta": 32,
+          "payload_anahtar": [
+            "article_id",
+            "chunk_index",
+            "filename",
+            "text",
+            "title",
+            "year"
+          ],
+          "sparse": [],
+          "tek_dense": true
+        },
+        {
+          "ad": "rendergit_02_articles",
+          "crystal_tags": false,
+          "dense_distance": "Cosine",
+          "dense_size": 768,
+          "hibrit": false,
+          "nokta": 100,
+          "payload_anahtar": [
+            "article_id",
+            "chunk_index",
+            "filename",
+            "text",
+            "title",
+            "year"
+          ],
+          "sparse": [],
+          "tek_dense": true
+        },
+        {
+          "ad": "rendergit_03_articles",
+          "crystal_tags": false,
+          "dense_distance": "Cosine",
+          "dense_size": 768,
+          "hibrit": false,
+          "nokta": 39,
+          "payload_anahtar": [
+            "article_id",
+            "chunk_index",
+            "filename",
+            "text",
+            "title",
+            "year"
+          ],
+          "sparse": [],
+          "tek_dense": true
+        },
+        {
+          "ad": "rp2040_articles",
+          "crystal_tags": false,
+          "dense_distance": "Cosine",
+          "dense_size": 768,
+          "hibrit": false,
+          "nokta": 106,
+          "payload_anahtar": [
+            "article_id",
+            "chunk_index",
+            "filename",
+            "text",
+            "title",
+            "year"
+          ],
+          "sparse": [],
+          "tek_dense": true
+        },
+        {
+          "ad": "sdr_articles",
+          "crystal_tags": false,
+          "dense_distance": "Cosine",
+          "dense_size": 768,
+          "hibrit": false,
+          "nokta": 54,
+          "payload_anahtar": [
+            "article_id",
+            "chunk_index",
+            "filename",
+            "text",
+            "title",
+            "year"
+          ],
+          "sparse": [],
+          "tek_dense": true
+        },
+        {
+          "ad": "türk_articles",
+          "crystal_tags": false,
+          "dense_distance": "Cosine",
+          "dense_size": 768,
+          "hibrit": false,
+          "nokta": 5,
+          "payload_anahtar": [
+            "article_id",
+            "chunk_index",
+            "filename",
+            "text",
+            "title",
+            "year"
+          ],
+          "sparse": [],
+          "tek_dense": true
+        }
+      ]
+    },
+    "faz_a_sonra": {
+      "adlar": [
+        "elektor_articles",
+        "kristal_bellek",
+        "octave_articles",
+        "p2_probe_bellek_t0147",
+        "rapberry_pi_pico_all_articles",
+        "rendergit_01_articles",
+        "rendergit_02_articles",
+        "rendergit_03_articles",
+        "rp2040_articles",
+        "sdr_articles",
+        "türk_articles"
+      ],
+      "kalemler": [
+        {
+          "ad": "elektor_articles",
+          "crystal_tags": false,
+          "dense_distance": "Cosine",
+          "dense_size": 768,
+          "hibrit": false,
+          "nokta": 90122,
+          "payload_anahtar": [
+            "article_id",
+            "chunk_index",
+            "filename",
+            "text",
+            "title",
+            "year"
+          ],
+          "sparse": [],
+          "tek_dense": true
+        },
+        {
+          "ad": "kristal_bellek",
+          "crystal_tags": true,
+          "dense_distance": "Cosine",
+          "dense_size": 768,
+          "hibrit": true,
+          "nokta": 36,
+          "payload_anahtar": [
+            "crystal_tags",
+            "domain",
+            "text",
+            "token_ids"
+          ],
+          "sparse": [
+            "sparse"
+          ],
+          "tek_dense": false
+        },
+        {
+          "ad": "octave_articles",
+          "crystal_tags": false,
+          "dense_distance": "Cosine",
+          "dense_size": 768,
+          "hibrit": false,
+          "nokta": 100,
+          "payload_anahtar": [
+            "article_id",
+            "chunk_index",
+            "filename",
+            "text",
+            "title",
+            "year"
+          ],
+          "sparse": [],
+          "tek_dense": true
+        },
+        {
+          "ad": "p2_probe_bellek_t0147",
+          "crystal_tags": true,
+          "dense_distance": "Cosine",
+          "dense_size": 768,
+          "hibrit": true,
+          "nokta": 36,
+          "payload_anahtar": [
+            "crystal_tags",
+            "domain",
+            "text",
+            "token_ids"
+          ],
+          "sparse": [
+            "sparse"
+          ],
+          "tek_dense": false
+        },
+        {
+          "ad": "rapberry_pi_pico_all_articles",
+          "crystal_tags": false,
+          "dense_distance": "Cosine",
+          "dense_size": 768,
+          "hibrit": false,
+          "nokta": 436,
+          "payload_anahtar": [
+            "article_id",
+            "chunk_index",
+            "filename",
+            "text",
+            "title",
+            "year"
+          ],
+          "sparse": [],
+          "tek_dense": true
+        },
+        {
+          "ad": "rendergit_01_articles",
+          "crystal_tags": false,
+          "dense_distance": "Cosine",
+          "dense_size": 768,
+          "hibrit": false,
+          "nokta": 32,
+          "payload_anahtar": [
+            "article_id",
+            "chunk_index",
+            "filename",
+            "text",
+            "title",
+            "year"
+          ],
+          "sparse": [],
+          "tek_dense": true
+        },
+        {
+          "ad": "rendergit_02_articles",
+          "crystal_tags": false,
+          "dense_distance": "Cosine",
+          "dense_size": 768,
+          "hibrit": false,
+          "nokta": 100,
+          "payload_anahtar": [
+            "article_id",
+            "chunk_index",
+            "filename",
+            "text",
+            "title",
+            "year"
+          ],
+          "sparse": [],
+          "tek_dense": true
+        },
+        {
+          "ad": "rendergit_03_articles",
+          "crystal_tags": false,
+          "dense_distance": "Cosine",
+          "dense_size": 768,
+          "hibrit": false,
+          "nokta": 39,
+          "payload_anahtar": [
+            "article_id",
+            "chunk_index",
+            "filename",
+            "text",
+            "title",
+            "year"
+          ],
+          "sparse": [],
+          "tek_dense": true
+        },
+        {
+          "ad": "rp2040_articles",
+          "crystal_tags": false,
+          "dense_distance": "Cosine",
+          "dense_size": 768,
+          "hibrit": false,
+          "nokta": 106,
+          "payload_anahtar": [
+            "article_id",
+            "chunk_index",
+            "filename",
+            "text",
+            "title",
+            "year"
+          ],
+          "sparse": [],
+          "tek_dense": true
+        },
+        {
+          "ad": "sdr_articles",
+          "crystal_tags": false,
+          "dense_distance": "Cosine",
+          "dense_size": 768,
+          "hibrit": false,
+          "nokta": 54,
+          "payload_anahtar": [
+            "article_id",
+            "chunk_index",
+            "filename",
+            "text",
+            "title",
+            "year"
+          ],
+          "sparse": [],
+          "tek_dense": true
+        },
+        {
+          "ad": "türk_articles",
+          "crystal_tags": false,
+          "dense_distance": "Cosine",
+          "dense_size": 768,
+          "hibrit": false,
+          "nokta": 5,
+          "payload_anahtar": [
+            "article_id",
+            "chunk_index",
+            "filename",
+            "text",
+            "title",
+            "year"
+          ],
+          "sparse": [],
+          "tek_dense": true
+        }
+      ]
+    },
+    "faz_c": {
+      "esik_import_sitesi": [
+        "src/rag/__init__.py",
+        "src/rag/epistemic_agent.py"
+      ],
+      "esik_tanim_sayisi": 0,
+      "esik_tanim_sitesi": [],
+      "recreate_satirlar_vector_memory": [
+        91,
+        131,
+        134
+      ],
+      "root_filtre_blok_dosyalari": [
+        "scripts/evaluate_rag_baselines.py",
+        "scripts/evaluate_rag_pilot.py",
+        "scripts/import_examples.py",
+        "src/llm/tokenizer.py",
+        "src/rag/embedding.py",
+        "src/rag/vector_memory.py"
+      ],
+      "sessiz_none_satirlar_rag_pipeline": [
+        54
+      ]
+    },
+    "host": "192.168.1.5",
+    "ilan": "mimari_dogrulama_p2_ilan2_2026-09-27.md",
+    "ilan_mtime": 1790519010.1233232,
+    "ilan_sha256": "f9c132a78cbc80a5c070768ea6d3c07971b88d0b15734d47f7120c147552314b",
+    "koleksiyon": "p2_probe_bellek_t0147",
+    "korpus": "data/realistic_rag/test_natural_150.jsonl",
+    "korpus_sha256": "a233323011b9be23c839a6c0e4b8f9a2b769dfd8e7702130a3cb2d75041b08c2",
+    "kurulum": {
+      "dense_768_cosine": true,
+      "sparse": true,
+      "sparse_adlar": [
+        "sparse"
+      ],
+      "storage_type": "remote (192.168.1.5:6333)"
+    },
+    "port": 6333
+  },
+  "hukum": "P2_GECTİ",
+  "kapilar": {
+    "K1_FAZ_A_BIREBIR": "GEÇTİ",
+    "K2_B0_HEDEF_YOK": "GEÇTİ",
+    "K3_B1_KURULUM": "GEÇTİ",
+    "K4_B1_ARZ_EKSİKSİZ": "GEÇTİ",
+    "K5_B2_POZITIF_20_20": "GEÇTİ",
+    "K6_B3_DAVRANIS": "GEÇTİ",
+    "K7_DOKUNULMAZLIK": "GEÇTİ"
+  },
+  "rc": 0
+}

@@ -266,8 +266,10 @@ def build_from_disk(
     try:
         memory = VectorMemory(collection_name=collection_name, vector_size=vector_size, host=host, port=port)
     except Exception as e:
-        print(f"Uyarı: Qdrant sunucusuna bağlanılamadı. Geçici bellek (In-Memory) modunda çalışılıyor. Detay: {e}")
-        memory = VectorMemory(collection_name=collection_name, vector_size=vector_size)
+        print(f"Uyarı: Qdrant sunucusuna bağlanamadı. Geçici bellek (In-Memory) modunda çalışılıyor. Detay: {e}")
+        # T-0148 4B: storage_path=None açık-beyan (default "data/qdrant_db" kaldırıldı
+        # — host'suz çağrı artık repo-içi local-storage'a YAZMAZ, :memory:'ye düşer)
+        memory = VectorMemory(collection_name=collection_name, vector_size=vector_size, storage_path=None)
         is_fallback = True
 
     if is_fallback:

@@ -11,18 +11,28 @@ except ImportError:
 
 from src.rag.embedding import generate_kristal_vector, generate_sparse_vector
 
+# T-0147 A-3: RRF füzyon-skoru Qdrant sunucu-tarafında üretilir (ham bant
+# P2'de ölçüldü: 0,2933–0,75). Eşik (RAG_MATCH_THRESHOLD 0,40) ve Kapı-D
+# (0,85) ile AYNI ölçeğe geçiş için sabitançlı normalizasyon: ham skor bu
+# sabite bölünür. Tavan-kırpma YOK — bant-maks aşımı gözlenirse İLAN'da
+# beyan edilir (sessiz kırpma yok); ceza-çarpanları normalize-ÖNCESİ
+# ham-skora uygulanır (oran-korunan ölçek-değişimi; ceza-oranları aynı).
+RRF_SCORE_MAX = 0.75
+
 class VectorMemory:
     _shared_clients: Dict[str, Any] = {}
 
-    def __init__(self, collection_name: str = "kristal_bellek", vector_size: int = 768, host: str = None, port: int = 6333, storage_path: str = "data/qdrant_db", client: Optional[QdrantClient] = None):
+    def __init__(self, collection_name: str = "kristal_bellek", vector_size: int = 768, host: str = None, port: int = 6333, storage_path: Optional[str] = None, client: Optional[QdrantClient] = None):
         """
         Initializes Qdrant database connection for the Vector Rover prototype.
         Priority:
         1. Passed client instance (if provided)
         2. Shared/cached client if already connected in this process
-        3. Remote host:port if provided and accessible
-        4. Persistent local embedded storage (storage_path)
-        5. Graceful fallback to in-memory mode (:memory:)
+        3. Remote host:port if provided — T-0148 4A: bağlantı başarısızsa
+           RuntimeError (sessiz-local-düşme + cache-kirliliği KAPALI, fail-closed)
+        4. storage_path verilmişse explicit-local-beyan (host'suz çağrı)
+        5. Ne host ne storage_path verilmişse in-memory (:memory:) — default
+           data/qdrant_db KALDIRILDI (T-0148 4B; repo-içi sessiz-yazım riski)
         """
         self.collection_name = collection_name
         self.is_in_memory = False
@@ -46,15 +56,23 @@ class VectorMemory:
             if not hasattr(self, "client") or self.client is None:
                 connected = False
                 if host:
+                    # T-0148 4A fail-closed: host VERİLMİŞSE remote-bağlantı
+                    # başarısızlığı sessizce local'e DÜŞMEZ — fail-closed.
                     try:
                         self.client = QdrantClient(host=host, port=port, timeout=2.0, check_compatibility=False)
                         self.client.get_collections()
                         connected = True
                         self.storage_type = f"remote ({host}:{port})"
-                    except Exception:
-                        pass
-                        
+                    except Exception as e:
+                        raise RuntimeError(
+                            f"[VEKTOR_BELLEK_HATA] remote ({host}:{port}) bağlantısı "
+                            "kurulamadı; sessiz-local-fallback kapalıdır (T-0148 4A fail-closed). "
+                            "Local-storage isteniyorsa host=None ile açık-beyan edin."
+                        ) from e
+
                 if not connected and storage_path:
+                    # host'suz + storage_path'li çağrı = AÇIK local-beyan
+                    # (sessiz-fallback değil; cache-guard 4A ile korunur)
                     try:
                         import os
                         os.makedirs(storage_path, exist_ok=True)
@@ -63,13 +81,15 @@ class VectorMemory:
                         self.storage_type = f"local ({storage_path})"
                     except Exception:
                         pass
-                        
+
                 if not connected:
                     self.client = QdrantClient(":memory:")
                     self.is_in_memory = True
                     self.storage_type = "in-memory (:memory:)"
-                    
-                if not self.is_in_memory:
+
+                # T-0148 4A cache-guard: yalnız REMOTE bağlantı cache'e yazılır
+                # (local/:memory: fallback cache-kirliliği kapanır — P4 B6 çelişkisi)
+                if not self.is_in_memory and self.storage_type.startswith("remote"):
                     VectorMemory._shared_clients[client_key] = (self.client, self.storage_type)
             
         if not self.client.collection_exists(self.collection_name):
@@ -120,36 +140,71 @@ class VectorMemory:
             }
         )
 
-    def recreate_collection(self, vector_size: int = 768):
-        """Clears the collection by deleting and recreating it."""
+    def recreate_collection(self, vector_size: int = 768, confirm_destroy: bool = False):
+        """Clears the collection by deleting and recreating it.
+        T-0148 4E fail-closed: DOLU koleksiyonun recreate'i confirm_destroy
+        onayı ister (sessiz-yıkım YOK); boş koleksiyon recreate'i izinli
+        (probe-temizlik yolu)."""
         if self.client.collection_exists(self.collection_name):
+            count = self.client.count(collection_name=self.collection_name).count
+            if count > 0 and not confirm_destroy:
+                raise RuntimeError(
+                    f"[VEKTOR_BELLEK_HATA] '{self.collection_name}' DOLU ({count} nokta); "
+                    "recreate için confirm_destroy=True gerekir (T-0148 4E fail-closed)."
+                )
             self.client.delete_collection(self.collection_name)
-        
+
         self._create_hybrid_collection(vector_size)
         self._next_point_id = 1
-        print(f"Collection '{self.collection_name}' has been reset for Hybrid Search.")
+        if confirm_destroy:
+            print(f"[UYARI] '{self.collection_name}' confirm_destroy=True ile yıkılıp "
+                  f"{vector_size}-boyutlu hibrit koleksiyon olarak yeniden kuruldu "
+                  f"(yıkım GÖRÜNÜR — sessiz-silme kapalı, T-0148 4E).")
+
+    def delete_collection(self, collection_name: Optional[str] = None) -> bool:
+        """T-0148 4D: client-düzeyi delete_collection'ın VectorMemory-wraper'ı
+        (P5 temizlik-yüzeyi bulgusu). Default: kendi collection_name'i."""
+        hedef = collection_name or self.collection_name
+        try:
+            if not self.client.collection_exists(hedef):
+                return False
+            self.client.delete_collection(hedef)
+            return not self.client.collection_exists(hedef)
+        except Exception:
+            return False
 
     def add_document(self, text: str, dense_vector: List[float], sparse_vector: models.SparseVector, metadata: Optional[Dict[str, Any]] = None):
         """Adds a single document with its dense and sparse vectors."""
         self.add_documents_batch([text], [dense_vector], [sparse_vector], [metadata or {}])
 
-    def add_documents_batch(self, texts: List[str], dense_vectors: List[List[float]], sparse_vectors: List[models.SparseVector], metadatas: List[Dict[str, Any]]):
-        """Adds multiple documents in a single batch with both dense and sparse vectors."""
+    def add_documents_batch(self, texts: List[str], dense_vectors: List[List[float]], sparse_vectors: List[models.SparseVector], metadatas: List[Dict[str, Any]], upsert: bool = False):
+        """Adds multiple documents in a single batch with both dense and sparse vectors.
+        T-0148 4C: upsert=True point-id deterministiktir (payload-text sha256
+        ön-ekinin 2^63-mod türevi) — aynı belge yeniden-yazımı DUBLOR YARATMAZ
+        (restart-sayaç-çakışması kapalıdır). upsert=False (default) mevcut
+        monoton-sayaç davranışını bit-uyumlu korur (çağıran-kırılması yok)."""
         points = []
         for i in range(len(texts)):
             meta = metadatas[i] if i < len(metadatas) else {}
             meta["text"] = texts[i]
-            
+
+            if upsert:
+                import hashlib
+                _t = hashlib.sha256(texts[i].encode("utf-8")).hexdigest()
+                point_id = int(_t[:16], 16) % (2 ** 63)
+            else:
+                point_id = self._next_point_id
+                self._next_point_id += 1
+
             points.append(models.PointStruct(
-                id=self._next_point_id,
+                id=point_id,
                 vector={
                     "dense": dense_vectors[i],
                     "sparse": sparse_vectors[i]
                 },
                 payload=meta
             ))
-            self._next_point_id += 1
-            
+
         self.client.upsert(
             collection_name=self.collection_name,
             points=points
@@ -234,37 +289,46 @@ class VectorMemory:
                 continue
             
             # 2. Token-Type Constraint / Penalty Scoring
+            # T-0147 A-3 (OOV fail-closed): boş distinctive_query_roots artık
+            # ATLANMAZ — belge-tags doluysa has_root_match=False + ×0,05
+            # (OOV sorgunun 0,7 sahte-skorla koşullanma sınıfı kapanır).
+            # Boş doc_tags_str (belge-tagsiz) mevcut atlanma KORUNUR
+            # (sorgu-tarafı boş == bilgi-yok, ceza-yok).
             has_root_match = True
             matching_roots = set()
-            if query_tags and len(distinctive_query_roots) > 0 and doc_tags_str:
-                doc_morphemes = doc_tags_str.split()
-                doc_roots = set()
-                inflection_prefixes = ("TENSE_", "PERSON_", "POSS_", "CASE_", "COPULA_", "PART_", "INF_", "GERUND_")
-                special_tokens = ["<BOS>", "<EOS>", "<PAD>", "<UNK>", "<INSTRUCTION>", "</INSTRUCTION>", "<INPUT>", "</INPUT>", "<OUTPUT>", "</OUTPUT>", "<NUMBER>", "<SYMBOL>"]
-                
-                for dm in doc_morphemes:
-                    if dm in special_tokens or dm.startswith("DERIV_"):
-                        continue
-                    if dm.startswith(inflection_prefixes) or dm in ("PLURAL", "NEG", "POTENTIAL", "IMPOTENTIAL_NEG"):
-                        continue
-                    doc_roots.add(dm.lower())
-                
-                matching_roots = distinctive_query_roots.intersection(doc_roots)
-                match_ratio = len(matching_roots) / len(distinctive_query_roots)
-                
-                if match_ratio == 0:
-                    # No distinctive query root exists in the document: severe penalty
+            if query_tags and doc_tags_str:
+                if not distinctive_query_roots:
                     score *= 0.05
                     has_root_match = False
-                elif match_ratio < 0.5:
-                    # Partial match
-                    score *= (0.3 + 0.7 * match_ratio)
-                    has_root_match = True
                 else:
-                    has_root_match = True
-            
+                    doc_morphemes = doc_tags_str.split()
+                    doc_roots = set()
+                    inflection_prefixes = ("TENSE_", "PERSON_", "POSS_", "CASE_", "COPULA_", "PART_", "INF_", "GERUND_")
+                    special_tokens = ["<BOS>", "<EOS>", "<PAD>", "<UNK>", "<INSTRUCTION>", "</INSTRUCTION>", "<INPUT>", "</INPUT>", "<OUTPUT>", "</OUTPUT>", "<NUMBER>", "<SYMBOL>"]
+
+                    for dm in doc_morphemes:
+                        if dm in special_tokens or dm.startswith("DERIV_"):
+                            continue
+                        if dm.startswith(inflection_prefixes) or dm in ("PLURAL", "NEG", "POTENTIAL", "IMPOTENTIAL_NEG"):
+                            continue
+                        doc_roots.add(dm.lower())
+
+                    matching_roots = distinctive_query_roots.intersection(doc_roots)
+                    match_ratio = len(matching_roots) / len(distinctive_query_roots)
+
+                    if match_ratio == 0:
+                        # No distinctive query root exists in the document: severe penalty
+                        score *= 0.05
+                        has_root_match = False
+                    elif match_ratio < 0.5:
+                        # Partial match
+                        score *= (0.3 + 0.7 * match_ratio)
+                        has_root_match = True
+                    else:
+                        has_root_match = True
+
             results.append({
-                "score": score,
+                "score": score / RRF_SCORE_MAX,
                 "text": text,
                 "metadata": scored_point.payload,
                 "has_root_match": has_root_match,
