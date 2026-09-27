@@ -1,0 +1,62 @@
+{
+  "damga": "2026-09-27T11:07:24Z",
+  "hukum": "DUR",
+  "hukum_kaynagi": "BU BETİK — elle sayı YOK",
+  "ilan": "data/eval/mimari_dogrulama_p1_ilan_2026-09-27.md",
+  "ilan_sha256": "cfa4134011413f79f8b95d4e55fe9cf938b1d9fc488865ed26be9c6859958bab",
+  "kapilar": [
+    {
+      "ayrac": "FAZ-B: yüzey-bit-özdeşlik %100 (0 düşen örnek, çekimlenebilir sınıf)",
+      "gec": false,
+      "olcum": {
+        "bit_esit": 8973,
+        "dusen": {
+          "BIT_UYUMSUZ": 59,
+          "YOL_0": 156
+        },
+        "ornek": 9188
+      }
+    },
+    {
+      "ayrac": "FAZ-A: compile istisna FIRLATMAZ (istisna == 0; ilanlı davranış)",
+      "gec": true,
+      "olcum": 0
+    },
+    {
+      "ayrac": "KSUR-1: NOUN-satırı-yok ADJ == 3.627 / 6.352 ADJ + probe 50/50 0-yol",
+      "gec": false,
+      "olcum": {
+        "adj_noun_yok": 3627,
+        "adj_toplam": 6352,
+        "probe_n": 50,
+        "probe_yol0": 44
+      }
+    },
+    {
+      "ayrac": "KSUR-2: kesme-apostrof davranışı (probe %100 kesmeli + placeholder)",
+      "gec": true,
+      "olcum": {
+        "kesmeli": 20,
+        "n": 20,
+        "placeholder": "[Özel İsim]'e"
+      }
+    },
+    {
+      "ayrac": "KSUR-3: İ/I düz-lower — satır == 79 (72 İ+7 I) VE benzersiz == 70 (63+7)",
+      "gec": true,
+      "olcum": {
+        "benzersiz": 70,
+        "satir": 79
+      }
+    },
+    {
+      "ayrac": "KSUR-4: OOV → 200/200 sessiz-boş (istisna/yol YOK)",
+      "gec": true,
+      "olcum": {
+        "beklenmedik": [],
+        "sessiz_bos": 200
+      }
+    }
+  ],
+  "rc": 2
+}
