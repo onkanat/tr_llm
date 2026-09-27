@@ -1,5 +1,5 @@
 {
-  "damga": "2026-09-27T16:24:30Z",
+  "damga": "2026-09-27T16:44:50Z",
   "detay": {
     "b1_kanal_yazari": {
       "append_teyit": true,
@@ -409,7 +409,7 @@
       "meta": {
         "backlog_samples": 1,
         "block_size": 64,
-        "created_at": "2026-09-27T16:24:59.115394+00:00",
+        "created_at": "2026-09-27T16:45:18.475975+00:00",
         "oversample_factor": 20,
         "total_samples": 26,
         "total_tokens": 36160
@@ -418,11 +418,11 @@
       "uint16": true
     },
     "b5_run_training": {
-      "arsiv_beklenen": 9,
-      "arsiv_once_satir": 8,
-      "arsiv_sonra_satir": 9,
+      "arsiv_beklenen": 10,
+      "arsiv_once_satir": 9,
+      "arsiv_sonra_satir": 10,
       "arsiv_tasima_teyit": true,
-      "baslangic_kayip": 3.1524,
+      "baslangic_kayip": 3.4724,
       "default_bin_digest_once": "",
       "default_bin_digest_sonra": "",
       "default_bin_meta_mtime_once": -1.0,
@@ -430,12 +430,12 @@
       "default_bin_mtime_once": -1.0,
       "default_bin_mtime_sonra": -1.0,
       "default_bin_sonra": false,
-      "duration_sec": 13.67,
+      "duration_sec": 13.74,
       "fresh_imza_yok": true,
       "kanal_b5_bayt": 0,
-      "log_snippet": "1.65s | Toplam Süre: 1.7s\nAdım   10/10 | Kayıp (Loss): 3.2247 | Adım Süresi: 0.89s | Toplam Süre: 10.5s\n\n==================================================\n EĞİTİM BAŞARIYLA TAMAMLANDI!\n==================================================\nToplam Süre:       11.16 saniye\nBaşlangıç Kaybı:   3.1524\nBitiş Kaybı:       3.2247\nEğitilmiş model ağırlıkları '/var/folders/v0/8z_jjnds4rbdtth51qmwysnw0000gn/T/data/eval/p5_probe_anka.pt' dosyasına kaydedildi.\n==================================================\n",
+      "log_snippet": "1.63s | Toplam Süre: 1.6s\nAdım   10/10 | Kayıp (Loss): 3.3140 | Adım Süresi: 0.70s | Toplam Süre: 10.1s\n\n==================================================\n EĞİTİM BAŞARIYLA TAMAMLANDI!\n==================================================\nToplam Süre:       11.01 saniye\nBaşlangıç Kaybı:   3.4724\nBitiş Kaybı:       3.3140\nEğitilmiş model ağırlıkları '/var/folders/v0/8z_jjnds4rbdtth51qmwysnw0000gn/T/data/eval/p5_probe_anka.pt' dosyasına kaydedildi.\n==================================================\n",
       "probe_sonra_bayt": 0,
-      "resume_bant": false,
+      "resume_bant": true,
       "run_training_status": "success",
       "samples_trained": 1,
       "save_var": true,
@@ -472,7 +472,7 @@
       "inject_kod": 200,
       "inject_status": "success",
       "inject_total": 2,
-      "port": 54542,
+      "port": 54820,
       "query_anahtar_sayisi": 17,
       "query_future_train_path": "data/eval/p5_probe_future_train.jsonl",
       "query_is_high_similarity": false,
@@ -545,12 +545,12 @@
     "base_ckpt": "data/anka_base_v2.pt",
     "base_ckpt_sha256": "d0f415f3d882beb4a3dace87fc4a6024bf3c667f033790fc1e472cb60a664a50",
     "betik": "dogrulama_p5_ogrenme_kanali.py",
-    "betik_sha256": "4071e18519b5066c64499516847099a9a4453bb9b18f9112956fc881da40e73d",
-    "damga": "2026-09-27T16:24:30Z",
+    "betik_sha256": "aee7596f6074bf9e16358e98b4da4453aede44ac46960759abea409dbb5eb65a",
+    "damga": "2026-09-27T16:44:50Z",
     "device": "cpu",
     "digest_tablo": [
-      "| mimari_dogrulama_p5_ilan3_2026-09-27.md (İLAN — koşum ÖNCESİ, REVİZYON-1) | `da4a6e6def6e9cef387202c6c17e3887e9c60c9b86cad3b7c557caf53cfabf79` |",
-      "| dogrulama_p5_ogrenme_kanali.py (koşulan betik) | `4071e18519b5066c64499516847099a9a4453bb9b18f9112956fc881da40e73d` |",
+      "| mimari_dogrulama_p5_ilan4_2026-09-27.md (İLAN — koşum ÖNCESİ, REVİZYON-1) | `662bfaa346139d1fecb896e8f13399466ef767a627abd65816d3afc7f2e2fb2a` |",
+      "| dogrulama_p5_ogrenme_kanali.py (koşulan betik) | `aee7596f6074bf9e16358e98b4da4453aede44ac46960759abea409dbb5eb65a` |",
       "| data/anka_base_v2.pt (DONMUŞ taban) | `d0f415f3d882beb4a3dace87fc4a6024bf3c667f033790fc1e472cb60a664a50` |",
       "| data/rebuild/vocab_anka_r1_33114.json (DONMUŞ sözlük) | `f9940a8d8e1f7cd9428d389f12ff4c5ee448e5a7bfcdcc8ecc9c616fce950984` |",
       "| data/realistic_rag/test_natural_150.jsonl (DONMUŞ kaynak) | `a233323011b9be23c839a6c0e4b8f9a2b769dfd8e7702130a3cb2d75041b08c2` |",
@@ -1041,8 +1041,8 @@
     },
     "gercek_kanal_once_bayt": 0,
     "gercek_kanal_once_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-    "ilan": "mimari_dogrulama_p5_ilan3_2026-09-27.md",
-    "ilan_sha256": "da4a6e6def6e9cef387202c6c17e3887e9c60c9b86cad3b7c557caf53cfabf79",
+    "ilan": "mimari_dogrulama_p5_ilan4_2026-09-27.md",
+    "ilan_sha256": "662bfaa346139d1fecb896e8f13399466ef767a627abd65816d3afc7f2e2fb2a",
     "korpus": "data/realistic_rag/test_natural_150.jsonl",
     "korpus_sha256": "a233323011b9be23c839a6c0e4b8f9a2b769dfd8e7702130a3cb2d75041b08c2",
     "kosum_sandbox_disi": true,
@@ -1071,17 +1071,17 @@
     "vocab": "data/rebuild/vocab_anka_r1_33114.json",
     "vocab_sha256": "f9940a8d8e1f7cd9428d389f12ff4c5ee448e5a7bfcdcc8ecc9c616fce950984"
   },
-  "hukum": "DUR",
+  "hukum": "P5_GECTİ",
   "kapilar": {
     "K1_FAZ_A_ENVANTER": "GEÇTİ",
     "K2_ARZ_CIPA": "GEÇTİ",
     "K3_KANAL_YAZARI": "GEÇTİ",
     "K4_TUKETICI_OKUMA": "GEÇTİ",
     "K5_TUKETICI_DERLEME": "GEÇTİ",
-    "K6_RUN_TRAINING_ILKELI": "DÜŞTÜ",
+    "K6_RUN_TRAINING_ILKELI": "GEÇTİ",
     "K7_GATEWAY_YAZIM": "GEÇTİ",
     "K8_HTTP_TEYIDI": "GEÇTİ",
     "K9_DOKUNULMAZLIK": "GEÇTİ"
   },
-  "rc": 2
+  "rc": 0
 }

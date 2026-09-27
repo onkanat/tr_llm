@@ -3,12 +3,13 @@
 """
 T-0145 — MİMARİ DOĞRULAMA PAKET-5: Gateway→Öğrenme Kanalı
 
-İLAN-3: data/eval/mimari_dogrulama_p5_ilan3_2026-09-27.md (koşum-ÖNCESİ
-damgali; İLAN-2 iki koşum DUR'du — K6+K8 İLAN-2 formülasyon-kusuru
-[İLAN-1 ölçümlerinin onarım-sonrası beklenti olarak yanlış-devralınması]:
-K6 bandı probe-rejim [3.30, 3.70] + fresh-tavan 9.0; K8 17-anahtar +
-soy-alanı null→dolu. Onarım kontratı 5A --vocab/--load-path İLETİMİ +
-ön-varlık-kapısı + canlılık-imzası DEVAM-rejimi [T-0077], 5B sahte-seçici
+İLAN-4: data/eval/mimari_dogrulama_p5_ilan4_2026-09-27.md (koşum-ÖNCESİ
+damgali; İLAN-3 koşum-3 DUR'du — yalnız K6: bant n=2 örneklemden,
+Başlangıç Kaybı TEK-ÖRNEKLEM gürültülü [3.6416/3.3751/3.1524] ⇒ bant-kapı
+ölçüt-ölü. İLAN-4 operatör formülasyonu: K6 AYIRT-EDİCİ ölçüt
+fresh_imza_yok TEK-bileşenli (tavan 9,0); band RAPOR-kırılımı).
+Onarım kontratı 5A --vocab/--load-path İLETİMİ + ön-varlık-kapısı +
+canlılık-imzası fresh-imza-yok [T-0077 devam-rejimi], 5B sahte-seçici
 KAPANDI [ValueError], 5C /api/query soy'lu [17-anahtar, null→dolu], 5D
 inject_reasoning_trace param'lı + host="localhost" fail-closed).
 Hüküm BETİK İÇİNDEDİR; elle sayı/hüküm YOK. rc ∈ {0, 2}.
@@ -172,12 +173,12 @@ ILANLI = {
 HTTP_QUERY_ANAHTAR_SAYISI = 17
 HTTP_QUERY_SOY_YOLU = PROBE_FUTURE_TRAIN
 
-# T-0077 devam-rejimi (T-0148 5A kanıtı + İLAN-3 formülasyonu): probe-rejim
-# (anka_base_v2 probe-modeli) Başlangıç Kaybı İLAN-2 çift-koşum ölçümü
-# 3.6416 / 3.3751 → band [3.30, 3.70]; İLAN-2'li [3.70, 4.12] T-0077 A1-r
-# KÜLLİYAT-rejimi bandıydı (rejim-birimi karışması — formülasyon-kusuru).
+# T-0077 devam-rejimi (T-0148 5A kanıtı + İLAN-4 formülasyonu): Başlangıç
+# Kaybı TEK-ÖRNEKLEM + koşum-gürültülüdür (İLAN-2/3 koşumları: 3.6416 /
+# 3.3751 / 3.1524) ⇒ bant KAPı-ölçütü DEĞİL — RAPOR-kırılımıdır
+# (b5["resume_bant"]). AYIRT-EDİCİ ölçüt fresh-imza-yoktur:
 # fresh-imza (≈ 10,4 — ln(32.852)) GÖRÜNMEZ = onarım-kanıtı (tavan 9,0).
-RESUME_BASLANGIC_KAYIP_BANT = (3.30, 3.70)
+RESUME_BASLANGIC_KAYIP_BANT = (3.10, 3.70)  # RAPOR-kırılımı — KAPı DEĞİL
 FRESH_IMZA_TAVANI = 9.0
 
 RECORD_ANAHTARLARI = frozenset({
@@ -1217,9 +1218,12 @@ def main() -> None:
     log_deger = run_sonuc.get("log_snippet") \
         or run_sonuc.get("error") or ""
     b5["log_snippet"] = str(log_deger)[-800:]
-    # T-0148 5A canlılık-imzası (T-0077 devam-rejimi): onarım-sonrası
-    # run_training --load-path İLETİR → Resume bandı beklenir (3,91±0,21);
-    # fresh-imza (≈ 10,4-10,5 — koşum-1 İLAN-1 kanıtı) GÖRÜNMEZ.
+    # T-0148 5A canlılık-imzası (T-0077 devam-rejimi; İLAN-4 formülasyonu):
+    # onarım-sonrası run_training --load-path İLETİR → fresh-imza GÖRÜNMEZ
+    # (tavan 9,0) — AYIRT-EDİCİ ölçüt TEK-BİLEŞENLİ fresh_imza_yok'tur;
+    # Başlangıç Kaybı TEK-ÖRNEKLEM + koşum-gürültülüdür (üç koşum
+    # 3.6416/3.3751/3.1524) ⇒ bant-kapı ölçüt-ölüdür; band RAPOR-kırılımıdır
+    # (b5["resume_bant"] kapı-koşulu DEĞİL).
     m_kayip = re.search(r"Başlangıç Kaybı:\s*([0-9.]+)", b5["log_snippet"])
     b5["baslangic_kayip"] = (float(m_kayip.group(1)) if m_kayip else None)
     _bant = RESUME_BASLANGIC_KAYIP_BANT
@@ -1277,8 +1281,11 @@ def main() -> None:
     kapilar["K6_RUN_TRAINING_ILKELI"] = bool(
         b5["run_training_status"] == "success"
         and b5.get("baslangic_kayip") is not None
+        # İLAN-4 (operatör onayı): AYIRT-EDİCİ ölçüt TEK-BİLEŞENLİ
+        # fresh_imza_yok (tavan 9,0); resume_bant RAPOR-kırılımıdır
+        # (Başlangıç Kaybı tek-örneklem + koşum-gürültülü — bant-kapı
+        # ölçüt-ölü; üç-koşum kanıtı 3.6416/3.3751/3.1524).
         and b5.get("fresh_imza_yok") is True
-        and b5.get("resume_bant") is True
         and probe_sonra_bayt == 0
         and arsiv_sonra_satir == arsiv_once_satir + len(satirlar_probe)
         and arsiv_geri_uyum

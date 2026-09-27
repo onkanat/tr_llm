@@ -1,6 +1,6 @@
 # MİMARİ DOĞRULAMA PAKET-5 SONUÇ — Gateway→Öğrenme Kanalı (T-0145 İLAN-1 / T-0148 TUR-B İLAN-2 onarım-doğrulama)
 
-**Damga:** 2026-09-27T16:25:16Z · **Hüküm (BETİKTEN):** **DUR (rc=2)**
+**Damga:** 2026-09-27T16:45:35Z · **Hüküm (BETİKTEN):** **P5_GECTİ (rc=0)**
 
 | Kapı | Durum |
 |---|---|
@@ -9,7 +9,7 @@
 | K3_KANAL_YAZARI | GEÇTİ |
 | K4_TUKETICI_OKUMA | GEÇTİ |
 | K5_TUKETICI_DERLEME | GEÇTİ |
-| K6_RUN_TRAINING_ILKELI | DÜŞTÜ |
+| K6_RUN_TRAINING_ILKELI | GEÇTİ |
 | K7_GATEWAY_YAZIM | GEÇTİ |
 | K8_HTTP_TEYIDI | GEÇTİ |
 | K9_DOKUNULMAZLIK | GEÇTİ |
@@ -55,17 +55,17 @@
 - B1 probe-yazım: tetiklenme **0** (istisna 0) · satır 0→1 · şema-tam 1/1 · append-teyit=True
 - B3 tüketici-okuma: probe **1** (beklenen 1) · gerçek-yol **0**
 - B4 tüketici-derleme: .bin boyut 72320 (uint16=True) · meta backlog 1 · total 26 · oversample 20 · toplam jeton 36160 · **max-jeton-id 32831** (< 32.852: True) · geri-tokenize=True
-- B5 run_training İLKELİ: status **success** · samples 1 · süre 13.67 sn · **canlılık-imzası: Başlangıç Kaybı 3.1524** (T-0148 5A resume-bandı: fresh-imza GÖRÜNMEZ=True · bant-içi=False) · arşiv 8→9 satır (taşıma-teyit=True) · probe-future 0 bayt · save .pt=True · default-bin DOKUNULMADI (mtime/digest-çıpa öncesi==sonrası; önceden-var=False — koşum yazmadı)
+- B5 run_training İLKELİ: status **success** · samples 1 · süre 13.74 sn · **canlılık-imzası: Başlangıç Kaybı 3.4724** (T-0148 5A resume-bandı: fresh-imza GÖRÜNMEZ=True · bant-içi=True) · arşiv 9→10 satır (taşıma-teyit=True) · probe-future 0 bayt · save .pt=True · default-bin DOKUNULMADI (mtime/digest-çıpa öncesi==sonrası; önceden-var=False — koşum yazmadı)
 - B6 gateway-yazım (probe): inject p5_probe_bellek count 1 · geri-okuma skor 1.3333 · **sahte-seçici KAPANDI (5B): target 'olmayan_ad_p5_x' → istisna=True · probe-count 1 (yazım YOK) · check-sahte=True · reasoning-istisna=True · sahte-ad sunucuda YOK=True** · check top-1 skor 1.3333
-- B7 HTTP: port 54542 · 5-endpoint kodlar [200, 200, 200, 200, 200] · backlog-samples 0 · query-telemetri 17-anahtar
+- B7 HTTP: port 54820 · 5-endpoint kodlar [200, 200, 200, 200, 200] · backlog-samples 0 · query-telemetri 17-anahtar
 - B8 dokunulmazlık: GEÇTİ · kristal 36→36 · digest fe7fc7649737ed35→fe7fc7649737ed35 · kanal 0→0 bayt
 
 ## Digest tablosu
 
 | Dosya | sha256 |
 |---|---|
-| mimari_dogrulama_p5_ilan3_2026-09-27.md (İLAN — koşum ÖNCESİ, REVİZYON-1) | `da4a6e6def6e9cef387202c6c17e3887e9c60c9b86cad3b7c557caf53cfabf79` |
-| dogrulama_p5_ogrenme_kanali.py (koşulan betik) | `4071e18519b5066c64499516847099a9a4453bb9b18f9112956fc881da40e73d` |
+| mimari_dogrulama_p5_ilan4_2026-09-27.md (İLAN — koşum ÖNCESİ, REVİZYON-1) | `662bfaa346139d1fecb896e8f13399466ef767a627abd65816d3afc7f2e2fb2a` |
+| dogrulama_p5_ogrenme_kanali.py (koşulan betik) | `aee7596f6074bf9e16358e98b4da4453aede44ac46960759abea409dbb5eb65a` |
 | data/anka_base_v2.pt (DONMUŞ taban) | `d0f415f3d882beb4a3dace87fc4a6024bf3c667f033790fc1e472cb60a664a50` |
 | data/rebuild/vocab_anka_r1_33114.json (DONMUŞ sözlük) | `f9940a8d8e1f7cd9428d389f12ff4c5ee448e5a7bfcdcc8ecc9c616fce950984` |
 | data/realistic_rag/test_natural_150.jsonl (DONMUŞ kaynak) | `a233323011b9be23c839a6c0e4b8f9a2b769dfd8e7702130a3cb2d75041b08c2` |
@@ -75,5 +75,5 @@
 | data/eval/mimari_dogrulama_p2_onarim_hukum_2026-09-27.json | `4b6d183741e742a506c94fd18dc8e9321c7e30d06f001e23ce1baf619d0a9348` |
 | data/eval/mimari_dogrulama_p3_onarim_hukum_2026-09-27.json | `18384263b9895b22e1eb2dd4eb7080b77602060807c42169639fdc2be9de5da1` |
 | data/eval/mimari_dogrulama_p4_onarim_hukum_2026-09-27.json | `2a35d6c4cd9746c6fe66a310319b41d4540785ad0d855603f813d32d3810dc14` |
-| mimari_dogrulama_p5_onarim_hukum_2026-09-27.json (HÜKÜM JSON — BETİKTEN) | `897bb7c7249d4f534780e0650f4211c0615a089113cd64d3be71f999fea8712a` |
+| mimari_dogrulama_p5_onarim_hukum_2026-09-27.json (HÜKÜM JSON — BETİKTEN) | `e297a61443228bd1c8c3c4936bec714f1a545de9cfe80d52958dc3010411efa0` |
 
