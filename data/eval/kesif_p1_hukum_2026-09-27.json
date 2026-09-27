@@ -1,0 +1,84 @@
+{
+  "damga": "2026-09-27T17:52:15Z",
+  "hukum": "DUR",
+  "hukum_kaynagi": "BU BETİK — elle sayı YOK",
+  "ilan": "data/eval/kesif_p1_ilan1_2026-09-27.md",
+  "ilan_sha256": "45a98df07b2c5869b7f07d15cce1e34802fa1aed7653a1212a7210071c1cdeb5",
+  "kapilar": [
+    {
+      "ayrac": "K1 SABİT-İMZA: 5 YOL_0 yüzeyi compile() → 0 analiz (İLAN-3 çıpa 6428b180… SABİT; beklenmedik yol = çıpa-çürütme)",
+      "gec": true,
+      "olcum": {
+        "güç": 0,
+        "hacir": 0,
+        "meçhul": 0,
+        "nakil": 0,
+        "zeyrek": 0
+      }
+    },
+    {
+      "ayrac": "K2 DEC-YÜZEY-BİREBİR: decompile_tags([lemma, affix]) == koşum-2 yüzeyi ×5 birebir",
+      "gec": true,
+      "olcum": {
+        "güç": "güçüm",
+        "hacir": "hacrimiz",
+        "meçhul": "meçhlun",
+        "nakil": "naklin",
+        "zeyrek": "zeyrekin"
+      }
+    },
+    {
+      "ayrac": "K3 ENVANTER-DOLU: 5 örneğin ölçüm-alan-şeması dolu (tsv-attrs + find_stems + template + resolve-ikili + split-adaylar)",
+      "gec": false,
+      "olcum": {
+        "güç": {
+          "alanlar_dolu": false,
+          "tsv_satir_sayi": 3
+        },
+        "hacir": {
+          "alanlar_dolu": true,
+          "tsv_satir_sayi": 1
+        },
+        "meçhul": {
+          "alanlar_dolu": false,
+          "tsv_satir_sayi": 2
+        },
+        "nakil": {
+          "alanlar_dolu": true,
+          "tsv_satir_sayi": 1
+        },
+        "zeyrek": {
+          "alanlar_dolu": false,
+          "tsv_satir_sayi": 2
+        }
+      }
+    },
+    {
+      "ayrac": "K4 BILBI-KIRILIMI: compile('biler') ≥1 analiz + seçilen-yol lemma 'Bi' + geri-decompile 'Bi'ler' (İLAN-3 kanıt-birebir) + kırılım-alanları dolu",
+      "gec": true,
+      "olcum": {
+        "analiz_sayisi": 7,
+        "geri_decompile": "Bi'ler",
+        "secilen_token_vector": [
+          "Bi",
+          "PLURAL"
+        ],
+        "stems_surface_lemma_sirasi": [
+          "bi",
+          "bil",
+          "bile",
+          "bile",
+          "bile",
+          "bile"
+        ]
+      }
+    },
+    {
+      "ayrac": "K5 İSTİSNA: tanı-koşumu istisna FIRLATMAZ (istisna == 0)",
+      "gec": true,
+      "olcum": 0
+    }
+  ],
+  "rc": 2,
+  "sure_sn": 0.23
+}
