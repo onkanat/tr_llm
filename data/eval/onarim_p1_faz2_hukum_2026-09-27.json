@@ -1,0 +1,141 @@
+{
+  "damga": "2026-09-27T19:44:40Z",
+  "hukum": "P1_FAZ2_GECTI",
+  "hukum_kaynagi": "BU BETİK — elle sayı YOK",
+  "ilan": "data/eval/onarim_p1_faz2_ilan1_2026-09-27.md",
+  "ilan_sha256": "95418ec55ad288678755fd0ef13e90030678c3e74ce0b6187a95dc6e24d0844d",
+  "kapilar": [
+    {
+      "ayrac": "K1 FAZ-B ONARIM: ornek==9188 VE bit_esit==9188 VE düşen=={}",
+      "gec": true,
+      "olcum": {
+        "bit_esit": 9188,
+        "dusen": {},
+        "ornek": 9188
+      }
+    },
+    {
+      "ayrac": "K2 DEC-YÜZEY-KORUMA: kalan-6 decompile_tags ×6 birebir",
+      "gec": true,
+      "olcum": {
+        "bil": "biler",
+        "güç": "güçüm",
+        "hacir": "hacrimiz",
+        "meçhul": "meçhlun",
+        "nakil": "naklin",
+        "zeyrek": "zeyrekin"
+      }
+    },
+    {
+      "ayrac": "K3 COMPILE-YOL-ÇAPA: 6 yüzey token_vector[0]==lemma + geri==yüzey",
+      "gec": true,
+      "olcum": {
+        "bil": {
+          "geri": "biler",
+          "tv": [
+            "bil",
+            "TENSE_AORIST_VOWEL"
+          ]
+        },
+        "güç": {
+          "geri": "güçüm",
+          "tv": [
+            "güç",
+            "POSS_1SG"
+          ]
+        },
+        "hacir": {
+          "geri": "hacrimiz",
+          "tv": [
+            "hacir",
+            "POSS_1PL"
+          ]
+        },
+        "meçhul": {
+          "geri": "meçhlun",
+          "tv": [
+            "meçhul",
+            "POSS_2SG"
+          ]
+        },
+        "nakil": {
+          "geri": "naklin",
+          "tv": [
+            "nakil",
+            "POSS_2SG"
+          ]
+        },
+        "zeyrek": {
+          "geri": "zeyrekin",
+          "tv": [
+            "zeyrek",
+            "POSS_2SG"
+          ]
+        }
+      }
+    },
+    {
+      "ayrac": "K4 ROOT-ORACLE: 25/25 (koşum-öncesi baseline; başarısız == {})",
+      "gec": true,
+      "olcum": {
+        "basarili": 25,
+        "basarisiz": {}
+      }
+    },
+    {
+      "ayrac": "K5 KSUR SABİT: 3.627/6.352 + 44/50 · 20/20 · 79/70 · 200/200",
+      "gec": true,
+      "olcum": {
+        "ksur1": [
+          3627,
+          6352,
+          44,
+          50
+        ],
+        "ksur2": [
+          20,
+          20
+        ],
+        "ksur3": {
+          "benzersiz": 70,
+          "satir": 79
+        },
+        "ksur4": [
+          200,
+          0
+        ]
+      }
+    },
+    {
+      "ayrac": "K6 FAZ-A: istisna==0 VE sessiz-boş==0",
+      "gec": true,
+      "olcum": {
+        "istisna": 0,
+        "sessiz_bos": 0
+      }
+    },
+    {
+      "ayrac": "K7 ŞEMA-KORUMA: compile 6-anahtar + find_stems tuple-şema + tokenizer-yolu (bayraksız) bit-özdeş",
+      "gec": true,
+      "olcum": {
+        "compile_anahtarlar": [
+          "analyses",
+          "best_surface",
+          "input",
+          "language",
+          "needs_disambiguation",
+          "token_vector"
+        ],
+        "compile_sema_birebir": true,
+        "find_stems_sema_birebir": true,
+        "tokenizer_yol_beklenen": [
+          "POSS_1SG"
+        ],
+        "tokenizer_yol_token_vector": [
+          "POSS_1SG"
+        ]
+      }
+    }
+  ],
+  "rc": 0
+}

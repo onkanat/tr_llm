@@ -58,7 +58,19 @@ class CrystalCompiler:
             lemma = stem_data['lemma']
             pos = stem_data['pos']
             attributes = stem_data.get('attributes', '-')
-            
+
+            # A2 (T-0150): VOWEL_DROP-lookahead adayı KIRPILMIŞ gövde gelir
+            # (ör. "hacir" → "hacr"); uyum-harmonisi kırpılmış gövdenin
+            # son-ünlüsünden çözülürse düşen-ünlünün uyumu kaybolur
+            # ("hacrimiz" yerine "hacrımız"). Çözüm, guard'lı tam-lemma'dan
+            # yapılır: mutate_stem(lemma) kırpılmış adayı birebir üretiyorsa
+            # (yani düşen ünlü len-2 konumunda) resolve lemma-gövdesinden.
+            # find_stems dönüş-şekli DEĞİŞMEZ (tokenizer imza-koruma).
+            resolve_stem = matched_prefix
+            if "VOWEL_DROP" in attributes and len(matched_prefix) < len(lemma):
+                if PhonologyEngine.mutate_stem(lemma, attributes, True) == matched_prefix:
+                    resolve_stem = lemma
+
             # Determine start state based on POS
             pos_to_state = {
                 "VERB": State.VERB_ROOT,
@@ -70,20 +82,24 @@ class CrystalCompiler:
                 "POSTP": State.NOUN_ROOT,
             }
             start_state = pos_to_state.get(pos, State.NOUN_ROOT)
-            
+
             # Initial path contains the root
             initial_path = [{
                 'type': 'ROOT',
                 'id': lemma,
-                'surface': matched_prefix,
+                'surface': resolve_stem,
                 'pos': pos,
-                'attributes': attributes
+                'attributes': attributes,
+                # C (T-0150): skor-tie kanonik-önce kırılımı için kök-bayrağı.
+                # _score_paths bayraksız yolları (tokenizer) .get() ile False
+                # okur → davranış bit-özdeş kalır.
+                'is_case_alias': bool(stem_data.get('is_case_alias', False)),
             }]
-            
+
             # Recurse
             self._find_paths_recursive(
                 target_word=word,
-                current_string=matched_prefix,
+                current_string=resolve_stem,
                 current_state=start_state,
                 current_path=initial_path,
                 results=valid_paths
@@ -154,6 +170,22 @@ class CrystalCompiler:
                      if "VOICING" in transition.attributes:
                          is_valid_prefix = True
 
+            # B2 (T-0150): gövde-yanı VOICING ÇÖZÜMLE-SEÇ — yalnız düşen dalda.
+            # NOUN-gövdenin VOICING niteliği yüzeyi öldürüyorsa ("zeyrek"+gen
+            # → "zeyreğin" ✗, hedef "zeyrekin"), VOICING'i nötralize edip
+            # yeniden çöz; hedefi üreten çözüm kabul edilir. Başarılı (yumuşak-
+            # hedefli) yolda deneme YAPILMAZ → mevcut davranış bit-özdeş.
+            if not is_valid_prefix and "VOICING" in last_attrs:
+                attrs_n = ";".join(p for p in str(last_attrs).split(";")
+                                   if p != "VOICING")
+                mut_n, aff_n = PhonologyEngine.resolve_affix(
+                    current_string, transition.affix_template, attrs_n)
+                new_string_n = mut_n + aff_n
+                if target_word.startswith(new_string_n):
+                    mutated_stem, affix_surface = mut_n, aff_n
+                    new_string = new_string_n
+                    is_valid_prefix = True
+
             if not is_valid_prefix:
                 continue
                 
@@ -203,6 +235,11 @@ class CrystalCompiler:
         for path in paths:
             # Basic scoring: 10.0 - number of morphemes (favor simpler explanations)
             path['score'] = 10.0 - len(path['morphemes'])
-            
-        # Sort descending by score
-        return sorted(paths, key=lambda x: x['score'], reverse=True)
+
+        # C (T-0150): skor-tie üçüncü ölçüt — kanonik-gövde-ÖNCE (T-0147 A-2
+        # ile aynı yön; is_case_alias ikiz gölgelemez: "biler" için [bil,
+        # TENSE_AORIST_VOWEL] kanonik yol, [Bi, PLURAL] ikiz yolun ÖNÜNDE).
+        # Aynı-bayrak içinde stable-sıra birebir korunur; bayraksız yollar
+        # (tokenizer) hepsi False → davranış bit-özdeş.
+        return sorted(paths, key=lambda x: (-x['score'],
+                       bool(x['morphemes'][0].get('is_case_alias', False))))
