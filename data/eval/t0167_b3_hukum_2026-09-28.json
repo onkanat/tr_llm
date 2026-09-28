@@ -1,0 +1,141 @@
+{
+  "damga": "2026-09-28T18:27:21Z",
+  "hukum": "T0167_B3_PARAMETRE_GECTI",
+  "hukum_kaynagi": "BU BETİK — elle sayı/hüküm YOK",
+  "ilan": "data/eval/t0167_b3_ilan_2026-09-28.md",
+  "ilan_sha256": "42a45a61965995f3ab17c8b81f24ae3f8cb5ee6991c51fd5806295df2e3e8dd4",
+  "kapilar": [
+    {
+      "ayrac": "K1 KAYNAK-DİGEST & DEVİR ÇIPASI (model, router, sözlük, leksikon)",
+      "gec": true,
+      "olcum": {
+        "data/anka_base_v2.pt": "d0f415f3d882beb4a3dace87fc4a6024bf3c667f033790fc1e472cb60a664a50",
+        "data/anka_router.pt": "44a46d89f3d4260c86f1aa0aa4756b28321f4455c277ff8a8e4dea4c1e85b36a",
+        "data/lexicon/roots.tsv": "fe3005e5e2a594f09cbcfc3286e2c8812953ae6614333815ab87a7e3a6763598",
+        "data/rebuild/vocab_anka_r1_33114.json": "f9940a8d8e1f7cd9428d389f12ff4c5ee448e5a7bfcdcc8ecc9c616fce950984",
+        "sha_sapma": []
+      }
+    },
+    {
+      "ayrac": "K5 STATİK-ÖN (py_compile + AST parametre varlığı)",
+      "gec": true,
+      "olcum": {
+        "ask_args": [
+          "self",
+          "query",
+          "instruction",
+          "mode",
+          "force_rag",
+          "temperature",
+          "top_k",
+          "max_new_tokens"
+        ],
+        "generate_tokens_args": [
+          "self",
+          "prompt_tokens",
+          "max_new_tokens",
+          "repetition_penalty",
+          "repetition_window",
+          "temperature",
+          "top_k"
+        ],
+        "process_query_args": [
+          "self",
+          "query",
+          "instruction",
+          "force_rag",
+          "temperature",
+          "top_k",
+          "max_new_tokens"
+        ]
+      }
+    },
+    {
+      "ayrac": "CİHAZ (özellik ve çıkarım: MPS)",
+      "gec": true,
+      "olcum": {
+        "mps": true
+      }
+    },
+    {
+      "ayrac": "K2 DEFAULT-BAYPAS BİT-ÖZDEŞLİK (default vs temperature=0.0 bit-özdeş)",
+      "gec": true,
+      "olcum": {
+        "bit_ozdes": true,
+        "gen_default": [
+          2006,
+          13,
+          2793,
+          4937,
+          4533,
+          88,
+          46,
+          2029,
+          20,
+          696,
+          4028,
+          147,
+          25969,
+          88,
+          115,
+          32137,
+          1705
+        ],
+        "gen_zero": [
+          2006,
+          13,
+          2793,
+          4937,
+          4533,
+          88,
+          46,
+          2029,
+          20,
+          696,
+          4028,
+          147,
+          25969,
+          88,
+          115,
+          32137,
+          1705
+        ],
+        "jeton_sayisi": 17
+      }
+    },
+    {
+      "ayrac": "K3 PARAMETRELİ ÖRNEKLEME DAVRANIŞI (T=0.7, top_k=20; yapısal sızıntı=0)",
+      "gec": true,
+      "olcum": {
+        "coklu_ornekleme_toplam_sizinti": 0,
+        "tek_ornek_sizinti": [],
+        "temperature": 0.7,
+        "top_k": 20,
+        "uretilen_jeton_sayisi": 39
+      }
+    },
+    {
+      "ayrac": "K4 ŞEMA SABİTLİĞİ (ask 17-anahtar, process_query 16-anahtar)",
+      "gec": true,
+      "olcum": {
+        "ask_anahtar_sayi": 17,
+        "ask_anahtar_tam": true,
+        "pq_anahtar_sayi": 16,
+        "pq_anahtar_tam": true,
+        "response_text_mevcut": true
+      }
+    },
+    {
+      "ayrac": "K6 CANLI DOKUNULMAZLIK (canlı Qdrant'a 0 istek)",
+      "gec": true,
+      "olcum": {
+        "ag_istemcisi": "YOK",
+        "canli_192_168_1_9_istek": 0,
+        "localhost_istek": 0,
+        "vector_memory": ":memory: (storage_path=None)"
+      }
+    }
+  ],
+  "rc": 0,
+  "router_sha256": "44a46d89f3d4260c86f1aa0aa4756b28321f4455c277ff8a8e4dea4c1e85b36a"
+}

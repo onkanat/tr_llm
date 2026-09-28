@@ -28,6 +28,7 @@ from typing import Dict, Any, Optional, List, Tuple
 
 import torch
 import torch.nn as nn
+import torch.nn.functional as F
 from src.llm.prompt_contract import build_rag_input
 
 logger = logging.getLogger("EpistemicAgent")
@@ -233,10 +234,13 @@ class EpistemicCuriosityAgent:
         prompt_tokens: List[int],
         max_new_tokens: int = 45,
         repetition_penalty: float = 1.4,
-        repetition_window: int = 10
+        repetition_window: int = 10,
+        temperature: float = 0.0,
+        top_k: int = 0
     ) -> Tuple[List[int], float]:
         """
         Autoregressively generates tokens from prompt_tokens.
+        Supports greedy decoding (temperature <= 0.0 or top_k == 1) or sampling with temperature and top_k.
         Also measures post-generation average entropy or final step entropy.
         """
         self.model.eval()
@@ -256,7 +260,7 @@ class EpistemicCuriosityAgent:
         bastirma_idleri: List[int] = []
         if self.vocab:
             bastirma_idleri = [self.vocab.stoi[t] for t in YAPISAL_BASTIRMA_JETONLARI
-                               if t in self.vocab.stoi]
+                                if t in self.vocab.stoi]
             if not bastirma_idleri:
                 raise RuntimeError(
                     "DURDURULDU (T-0157): vocab dolu ama yapısal-jeton "
@@ -289,7 +293,17 @@ class EpistemicCuriosityAgent:
                     if 0 <= sid < logits_last.size(-1):
                         logits_last[sid] = -float("inf")
 
-                pred_id = torch.argmax(logits_last).item()
+                # T-0167 (B3): temperature ve top_k örneklemesi
+                if temperature > 0.0 and top_k != 1:
+                    logits_scaled = logits_last / max(temperature, 1e-5)
+                    if top_k > 1 and top_k < logits_scaled.size(-1):
+                        v, _ = torch.topk(logits_scaled, min(top_k, logits_scaled.size(-1)))
+                        logits_scaled[logits_scaled < v[-1]] = -float("inf")
+                    probs = F.softmax(logits_scaled, dim=-1)
+                    pred_id = torch.multinomial(probs, num_samples=1).item()
+                else:
+                    pred_id = torch.argmax(logits_last).item()
+
                 generated.append(pred_id)
                 
                 if pred_id in (eos_id, output_end_id):
@@ -301,7 +315,10 @@ class EpistemicCuriosityAgent:
         self,
         query: str,
         instruction: str = "Belgeye göre cevapla.",
-        force_rag: bool = False
+        force_rag: bool = False,
+        temperature: float = 0.0,
+        top_k: int = 0,
+        max_new_tokens: int = 45
     ) -> Dict[str, Any]:
         """
         Executes the full end-to-end Epistemic Curiosity Loop:
@@ -372,7 +389,12 @@ class EpistemicCuriosityAgent:
             instruction=instruction,
         )
             
-        gen_tokens, entropy_post = self.generate_tokens(eval_aug_tokens, max_new_tokens=45)
+        gen_tokens, entropy_post = self.generate_tokens(
+            eval_aug_tokens,
+            max_new_tokens=max_new_tokens,
+            temperature=temperature,
+            top_k=top_k
+        )
         
         eos_id = self.vocab.stoi.get("<EOS>", -1) if self.vocab else -1
         output_end_id = self.vocab.stoi.get("</OUTPUT>", -1) if self.vocab else -1

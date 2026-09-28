@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Kristal-Vektörel LLM | Web Chat</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card-bg: #1e293b;
+      --border: #334155;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --primary: #38bdf8;
+      --primary-hover: #0ea5e9;
+      --accent: #a855f7;
+      --badge-bg: #0f172a;
+      --badge-border: #475569;
+      --error-bg: #450a0a;
+      --error-border: #991b1b;
+      --success-bg: #064e3b;
+      --success-border: #059669;
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      padding: 24px 16px;
+    }
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    header {
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border);
+    }
+    h1 {
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 6px;
+    }
+    .subtitle {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+    .panel {
+      background-color: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 24px;
+    }
+    .form-group {
+      margin-bottom: 16px;
+    }
+    label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    textarea, input[type="text"], input[type="number"], select {
+      width: 100%;
+      background-color: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--text);
+      padding: 10px 12px;
+      font-size: 0.95rem;
+      transition: border-color 0.2s;
+    }
+    textarea:focus, input[type="text"]:focus, input[type="number"]:focus, select:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
+    textarea {
+      min-height: 90px;
+      resize: vertical;
+    }
+    .grid-params {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .btn-submit {
+      background-color: var(--primary);
+      color: #0f172a;
+      font-weight: 700;
+      font-size: 1rem;
+      border: none;
+      border-radius: 6px;
+      padding: 12px 24px;
+      cursor: pointer;
+      transition: background-color 0.2s, opacity 0.2s;
+      width: 100%;
+    }
+    .btn-submit:hover {
+      background-color: var(--primary-hover);
+    }
+    .btn-submit:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    .status-bar {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-top: 8px;
+      display: flex;
+      justify-content: space-between;
+    }
+    .results-container {
+      display: none;
+    }
+    .result-card {
+      background-color: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 16px;
+    }
+    .result-header {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 8px;
+    }
+    .response-content {
+      background-color: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 14px;
+      font-size: 1.05rem;
+      white-space: pre-wrap;
+      word-break: break-word;
+      margin-bottom: 16px;
+      color: #ffffff;
+    }
+    .metadata-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .meta-item {
+      background-color: var(--badge-bg);
+      border: 1px solid var(--badge-border);
+      border-radius: 6px;
+      padding: 8px 12px;
+    }
+    .meta-title {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+    .meta-val {
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-top: 2px;
+      word-break: break-word;
+    }
+    .pill {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+    .pill-green {
+      background-color: var(--success-bg);
+      border: 1px solid var(--success-border);
+      color: #6ee7b7;
+    }
+    .pill-red {
+      background-color: var(--error-bg);
+      border: 1px solid var(--error-border);
+      color: #fca5a5;
+    }
+    .rag-box {
+      background-color: #172554;
+      border: 1px solid #1e40af;
+      border-radius: 6px;
+      padding: 12px;
+      margin-top: 12px;
+    }
+    .rag-title {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: #93c5fd;
+      margin-bottom: 6px;
+    }
+    .rag-text {
+      font-size: 0.85rem;
+      color: #e2e8f0;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Kristal-Vektörel Mimari | Web Chat Gateway</h1>
+      <p class="subtitle">Deterministik Ontoloji, Tri-Modal Router ve Epistemik Merak Denetimi</p>
+    </header>
+
+    <div class="panel">
+      <form id="chat-form">
+        <div class="form-group">
+          <label for="query-input">Sorgu / Soru</label>
+          <textarea id="query-input" placeholder="Türkçe bir soru veya komut giriniz..." required></textarea>
+        </div>
+
+        <div class="grid-params">
+          <div>
+            <label for="instruction-input">Talimat</label>
+            <input type="text" id="instruction-input" value="Belgeye göre cevapla.">
+          </div>
+          <div>
+            <label for="mode-input">Mod</label>
+            <select id="mode-input">
+              <option value="RAG">RAG (Otonom)</option>
+              <option value="DIRECT">DIRECT (Yalın Model)</option>
+            </select>
+          </div>
+          <div>
+            <label for="temp-input">Temperature</label>
+            <input type="number" id="temp-input" step="0.1" min="0.0" max="2.0" value="0.0">
+          </div>
+          <div>
+            <label for="topk-input">Top-K</label>
+            <input type="number" id="topk-input" step="1" min="0" max="100" value="0">
+          </div>
+          <div>
+            <label for="tokens-input">Max Jeton</label>
+            <input type="number" id="tokens-input" step="1" min="5" max="200" value="45">
+          </div>
+        </div>
+
+        <button type="submit" id="btn-submit" class="btn-submit">Sorgula</button>
+      </form>
+      <div class="status-bar">
+        <span id="gateway-status">Durum: Hazır</span>
+        <span id="time-status"></span>
+      </div>
+    </div>
+
+    <div id="results" class="results-container">
+      <div class="result-card">
+        <div class="result-header">Yanıt (Model Çıktısı)</div>
+        <div id="response-text" class="response-content"></div>
+
+        <div class="metadata-grid">
+          <div class="meta-item">
+            <div class="meta-title">Router Uzman Dağılımı</div>
+            <div id="router-experts" class="meta-val">-</div>
+          </div>
+          <div class="meta-item">
+            <div class="meta-title">Seçilen Koleksiyon</div>
+            <div id="source-collection" class="meta-val">-</div>
+          </div>
+          <div class="meta-item">
+            <div class="meta-title">RAG İhtiyacı</div>
+            <div id="needs-retrieval" class="meta-val">-</div>
+          </div>
+          <div class="meta-item">
+            <div class="meta-title">Epistemik Başarısızlık</div>
+            <div id="epistemic-failure" class="meta-val">-</div>
+          </div>
+        </div>
+
+        <div class="meta-item" style="margin-bottom: 12px;">
+          <div class="meta-title">Morfem Analizi</div>
+          <div id="morphemes-val" class="meta-val" style="font-family: monospace; font-size: 0.85rem;">-</div>
+        </div>
+
+        <div id="rag-section" class="rag-box" style="display: none;">
+          <div class="rag-title">Kullanılan RAG Belgesi</div>
+          <div id="rag-doc-text" class="rag-text"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      var form = document.getElementById("chat-form");
+      var queryInput = document.getElementById("query-input");
+      var instructionInput = document.getElementById("instruction-input");
+      var modeInput = document.getElementById("mode-input");
+      var tempInput = document.getElementById("temp-input");
+      var topkInput = document.getElementById("topk-input");
+      var tokensInput = document.getElementById("tokens-input");
+      var btnSubmit = document.getElementById("btn-submit");
+      var gatewayStatus = document.getElementById("gateway-status");
+      var timeStatus = document.getElementById("time-status");
+      var resultsContainer = document.getElementById("results");
+
+      var responseTextEl = document.getElementById("response-text");
+      var routerExpertsEl = document.getElementById("router-experts");
+      var sourceCollectionEl = document.getElementById("source-collection");
+      var needsRetrievalEl = document.getElementById("needs-retrieval");
+      var epistemicFailureEl = document.getElementById("epistemic-failure");
+      var morphemesEl = document.getElementById("morphemes-val");
+      var ragSectionEl = document.getElementById("rag-section");
+      var ragDocTextEl = document.getElementById("rag-doc-text");
+
+      form.addEventListener("submit", function(ev) {
+        ev.preventDefault();
+        var q = queryInput.value.trim();
+        if (!q) return;
+
+        btnSubmit.disabled = true;
+        gatewayStatus.textContent = "İşleniyor...";
+        timeStatus.textContent = "";
+
+        var payload = {
+          query: q,
+          instruction: instructionInput.value.trim(),
+          mode: modeInput.value,
+          temperature: parseFloat(tempInput.value) || 0.0,
+          top_k: parseInt(topkInput.value, 10) || 0,
+          max_new_tokens: parseInt(tokensInput.value, 10) || 45
+        };
+
+        var startTime = Date.now();
+
+        fetch("/api/query", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        })
+        .then(function(res) {
+          if (!res.ok) {
+            throw new Error("HTTP " + res.status);
+          }
+          return res.json();
+        })
+        .then(function(data) {
+          var duration = ((Date.now() - startTime) / 1000).toFixed(2);
+          gatewayStatus.textContent = "Tamamlandı";
+          timeStatus.textContent = duration + " sn";
+          btnSubmit.disabled = false;
+
+          renderResult(data);
+        })
+        .catch(function(err) {
+          gatewayStatus.textContent = "Hata: " + err.message;
+          btnSubmit.disabled = false;
+        });
+      });
+
+      function renderResult(data) {
+        resultsContainer.style.display = "block";
+
+        // CRITICAL XSS RULE: Always use textContent, never inner-HTML (prohibited)
+        responseTextEl.textContent = data.response_text || "(Boş Yanıt)";
+
+        if (data.router_experts) {
+          var expStr = "anka: " + Number(data.router_experts.anka || 0).toFixed(2) +
+                       " | carp: " + Number(data.router_experts.carpenter || 0).toFixed(2) +
+                       " | ped: " + Number(data.router_experts.pedagogy || 0).toFixed(2);
+          routerExpertsEl.textContent = expStr;
+        } else {
+          routerExpertsEl.textContent = "-";
+        }
+
+        sourceCollectionEl.textContent = data.source_collection || "-";
+
+        needsRetrievalEl.textContent = data.needs_retrieval ? "EVET" : "HAYIR";
+        needsRetrievalEl.className = "meta-val " + (data.needs_retrieval ? "pill pill-green" : "pill");
+
+        epistemicFailureEl.textContent = data.epistemic_failure ? "TESPİT EDİLDİ" : "YOK";
+        epistemicFailureEl.className = "meta-val " + (data.epistemic_failure ? "pill pill-red" : "pill pill-green");
+
+        if (Array.isArray(data.morphemes)) {
+          morphemesEl.textContent = data.morphemes.join(" | ");
+        } else if (typeof data.morphemes === "string") {
+          morphemesEl.textContent = data.morphemes;
+        } else {
+          morphemesEl.textContent = "-";
+        }
+
+        if (data.rag_document && data.rag_document.trim()) {
+          ragSectionEl.style.display = "block";
+          ragDocTextEl.textContent = data.rag_document;
+        } else {
+          ragSectionEl.style.display = "none";
+          ragDocTextEl.textContent = "";
+        }
+      }
+    })();
+  </script>
+</body>
+</html>

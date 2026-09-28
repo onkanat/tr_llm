@@ -1,0 +1,69 @@
+{
+  "damga": "2026-09-28T18:33:21Z",
+  "hukum": "T0168_B4_WEBCHAT_GECTI",
+  "rc": 0,
+  "ilan": "data/eval/t0168_b4_ilan_2026-09-28.md",
+  "ilan_sha256": "84108d61a14f01e9f3078b94d088bf7700995f0c1875977b82bd4dad3b119810",
+  "hukum_kaynagi": "BU BETİK — elle sayı/hüküm YOK",
+  "kapilar": [
+    {
+      "ayrac": "K1 KAYNAK-DİGEST & DEVİR ÇIPASI",
+      "gec": true,
+      "olcum": {
+        "data/anka_router.pt": "44a46d89f3d4260c86f1aa0aa4756b28321f4455c277ff8a8e4dea4c1e85b36a",
+        "data/anka_base_v2.pt": "d0f415f3d882beb4a3dace87fc4a6024bf3c667f033790fc1e472cb60a664a50",
+        "data/rebuild/vocab_anka_r1_33114.json": "f9940a8d8e1f7cd9428d389f12ff4c5ee448e5a7bfcdcc8ecc9c616fce950984",
+        "src/gateway/agent_gateway.py": "d5e1d15946199b497e16d969adc84439024820ca4888818506775a4ee30efaff",
+        "src/gateway/static/index.html": "ade12afd82e2926d3d57ce666df0058e81c487fd2be11d7437d47fffa9ec2c87",
+        "sha_sapma": []
+      }
+    },
+    {
+      "ayrac": "K4 XSS GÜVENLİĞİ (innerHTML yasak, textContent zorunlu)",
+      "gec": true,
+      "olcum": {
+        "inner_html_var": false,
+        "text_content_var": true,
+        "html_byte_size": 12840
+      }
+    },
+    {
+      "ayrac": "K5 STATİK-ÖN (py_compile)",
+      "gec": true,
+      "olcum": {
+        "py_compile": true
+      }
+    },
+    {
+      "ayrac": "K2 STATİK SERVİS KOŞUMU (GET /, GET /index.html, status, traversal koruması)",
+      "gec": true,
+      "olcum": {
+        "get_root_code": 200,
+        "get_root_content_type": "text/html; charset=utf-8",
+        "get_root_contains_title": true,
+        "get_index_code": 200,
+        "get_index_content_type": "text/html; charset=utf-8",
+        "get_status_online": true,
+        "traversal_caught": true
+      }
+    },
+    {
+      "ayrac": "K3 YANIT ŞEMASI SABİTLİĞİ (POST /api/query -> 17 anahtar)",
+      "gec": true,
+      "olcum": {
+        "post_keys_sayisi": 17,
+        "post_keys_tam": true,
+        "response_text_mevcut": true,
+        "sample_response_text": "[Özel İsim]: POSS_2SG"
+      }
+    },
+    {
+      "ayrac": "K6 CANLI DOKUNULMAZLIK (Qdrant :memory: koruması, 0 canlı istek)",
+      "gec": true,
+      "olcum": {
+        "is_in_memory": true,
+        "canli_istek": 0
+      }
+    }
+  ]
+}

@@ -212,7 +212,10 @@ class AgentGateway:
         query: str,
         instruction: str = "Belgeye göre cevapla.",
         mode: str = "RAG",
-        force_rag: bool = False
+        force_rag: bool = False,
+        temperature: float = 0.0,
+        top_k: int = 0,
+        max_new_tokens: int = 45
     ) -> Dict[str, Any]:
         """
         Asks a question to the small model through the Epistemic Curiosity Loop.
@@ -225,7 +228,10 @@ class AgentGateway:
         res = self.epistemic_agent.process_query(
             query=query,
             instruction=instruction,
-            force_rag=use_rag
+            force_rag=use_rag,
+            temperature=temperature,
+            top_k=top_k,
+            max_new_tokens=max_new_tokens
         )
         
         return {
@@ -441,12 +447,49 @@ class AgentGateway:
                 self.wfile.write(json.dumps(data, ensure_ascii=False).encode("utf-8"))
 
             def do_GET(self):
-                if self.path == "/api/status":
+                # Clean path and query string
+                clean_path = self.path.split("?")[0].split("#")[0]
+                if clean_path == "/api/status":
                     self._send_json(gateway.get_status())
-                elif self.path == "/api/backlog":
+                elif clean_path == "/api/backlog":
                     self._send_json(gateway.get_epistemic_backlog())
+                elif clean_path in ("/", "/index.html"):
+                    static_dir = os.path.join(os.path.dirname(__file__), "static")
+                    index_path = os.path.join(static_dir, "index.html")
+                    if os.path.exists(index_path) and os.path.isfile(index_path):
+                        with open(index_path, "rb") as f:
+                            content = f.read()
+                        self.send_response(200)
+                        self.send_header("Content-Type", "text/html; charset=utf-8")
+                        self.send_header("Content-Length", str(len(content)))
+                        self.end_headers()
+                        self.wfile.write(content)
+                    else:
+                        self._send_json({"error": "Static index not found"}, status=404)
                 else:
-                    self._send_json({"error": "Endpoint not found"}, status=404)
+                    # Serve other files from static directory if present with strict traversal check
+                    static_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "static"))
+                    req_rel = clean_path.lstrip("/")
+                    target_file = os.path.abspath(os.path.join(static_dir, req_rel))
+                    if target_file.startswith(static_dir) and os.path.exists(target_file) and os.path.isfile(target_file):
+                        content_type = "text/plain; charset=utf-8"
+                        if target_file.endswith(".html"):
+                            content_type = "text/html; charset=utf-8"
+                        elif target_file.endswith(".css"):
+                            content_type = "text/css; charset=utf-8"
+                        elif target_file.endswith(".js"):
+                            content_type = "application/javascript; charset=utf-8"
+                        elif target_file.endswith(".json"):
+                            content_type = "application/json; charset=utf-8"
+                        with open(target_file, "rb") as f:
+                            content = f.read()
+                        self.send_response(200)
+                        self.send_header("Content-Type", content_type)
+                        self.send_header("Content-Length", str(len(content)))
+                        self.end_headers()
+                        self.wfile.write(content)
+                    else:
+                        self._send_json({"error": "Endpoint not found"}, status=404)
 
             def do_POST(self):
                 content_len = int(self.headers.get("Content-Length", 0))
@@ -461,7 +504,17 @@ class AgentGateway:
                     query_text = payload.get("query", "")
                     instruction = payload.get("instruction", "Belgeye göre cevapla.")
                     mode = payload.get("mode", "RAG")
-                    res = gateway.ask(query_text, instruction=instruction, mode=mode)
+                    temperature = float(payload.get("temperature", 0.0))
+                    top_k = int(payload.get("top_k", 0))
+                    max_new_tokens = int(payload.get("max_new_tokens", 45))
+                    res = gateway.ask(
+                        query_text,
+                        instruction=instruction,
+                        mode=mode,
+                        temperature=temperature,
+                        top_k=top_k,
+                        max_new_tokens=max_new_tokens
+                    )
                     # T-0148 5C: soy-alanı yanıtta KOŞULSUZ (T-0089 opaklık-dersinin
                     # HTTP-kardeşi; koşum-1 bulgusu: 17-anahtar ama soy-yolu null'du)
                     res["future_train_path"] = gateway.future_train_path
