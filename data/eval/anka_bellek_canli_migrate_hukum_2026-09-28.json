@@ -1,0 +1,105 @@
+{
+  "damga": "2026-09-28T06:44:43Z",
+  "hukum": "T0153_MIGRATE_GECTI",
+  "hukum_kaynagi": "BU BETİK — elle sayı/hüküm YOK",
+  "ilan": "data/eval/anka_bellek_canli_migrate_ilan_2026-09-28.md",
+  "ilan_sha256": "6b33266f07049d6349baaca6cad94bda3cd573ec2d3fbf1087442e38a7e36823",
+  "kapilar": [
+    {
+      "ayrac": "K1 B0 + ÇIPA-ŞEMA",
+      "gec": true,
+      "olcum": {
+        "anka_bellek_var": false,
+        "dense_ad": "dense",
+        "dense_distance": "Cosine",
+        "dense_size": 768,
+        "nokta": 36,
+        "on_disk_payload": true,
+        "sparse_adlar": [
+          "sparse"
+        ],
+        "sparse_modifier": "idf",
+        "status": "green"
+      }
+    },
+    {
+      "ayrac": "K2 ARŞİV",
+      "gec": true,
+      "olcum": {
+        "dosya": "data/eval/anka_bellek_canli_migrate_eski_nokta_arshivi_2026-09-28.jsonl",
+        "nokta": 36,
+        "sha256": "13c928194a1004266aed1b0436759983bf313e6db9063b2cb731cbf64268bbe4"
+      }
+    },
+    {
+      "ayrac": "K3 KOPYA-BİREBİR (36/36)",
+      "gec": true,
+      "olcum": {
+        "eski_n": 36,
+        "uyusmayan": [],
+        "yeni_n": 36
+      }
+    },
+    {
+      "ayrac": "K4 SELF-RETRIEVAL",
+      "gec": true,
+      "olcum": {
+        "sorgu_id": 1,
+        "top1": [
+          1
+        ]
+      }
+    },
+    {
+      "ayrac": "K5 DOKUNULMAZLIK (9 foreign SABİT)",
+      "gec": true,
+      "olcum": {
+        "once": {
+          "elektor_articles": 90122,
+          "octave_articles": 100,
+          "rapberry_pi_pico_all_articles": 436,
+          "rendergit_01_articles": 32,
+          "rendergit_02_articles": 100,
+          "rendergit_03_articles": 39,
+          "rp2040_articles": 106,
+          "sdr_articles": 54,
+          "türk_articles": 5
+        },
+        "sonra": {
+          "elektor_articles": 90122,
+          "octave_articles": 100,
+          "rapberry_pi_pico_all_articles": 436,
+          "rendergit_01_articles": 32,
+          "rendergit_02_articles": 100,
+          "rendergit_03_articles": 39,
+          "rp2040_articles": 106,
+          "sdr_articles": 54,
+          "türk_articles": 5
+        }
+      }
+    },
+    {
+      "ayrac": "K6 ESKİ-SİLME (wrapper; fail-closed)",
+      "gec": true,
+      "olcum": {
+        "anka_nokta": 36,
+        "anka_status": "green",
+        "kristal_bellek_yok": true,
+        "wrapper_sildi": true
+      }
+    }
+  ],
+  "rc": 0,
+  "son_envanter": {
+    "anka_bellek": 36,
+    "elektor_articles": 90122,
+    "octave_articles": 100,
+    "rapberry_pi_pico_all_articles": 436,
+    "rendergit_01_articles": 32,
+    "rendergit_02_articles": 100,
+    "rendergit_03_articles": 39,
+    "rp2040_articles": 106,
+    "sdr_articles": 54,
+    "türk_articles": 5
+  }
+}
