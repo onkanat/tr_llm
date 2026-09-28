@@ -1,6 +1,6 @@
 ---
 tags: [log]
-date: 2026-06-14
+date: 2026-09-28
 sources: [scripts/]
 status: active
 ---
@@ -12,6 +12,19 @@ Bu dosya, Kristal-Vektörel Mimarisi projesindeki kodlama adımlarını, eğitim
 ---
 
 ## 📅 Kronolojik Loglar
+
+### 2026-09-28: anka_bellek Taşınması, TriModalRouter Eğitimi, Gateway Entegrasyonu ve Soru Filtresi Şartnamesi (T-0151 .. T-0161)
+* **T-0151 (anka_bellek Yeniden Adlandırma):** `kristal_bellek` adı kod tabanında 7 dosya ve 36 geçişle `anka_bellek` olarak güncellendi; `generate_kristal_vector` fonksiyon adı korundu; `VectorMemory()` ve `_resolve_target_memory` anka_bellek varsayılanıyla hizalandı (commit `a9a5b03`, koşum-2 6/6 GEÇTİ, damga `06:33:06Z`).
+* **T-0152 (qdrant_db Temizliği):** P4 koşumundan diskte kalan 6 adet yerel sqlite ve kilit dosyası (304.437 bayt, ~304 KB) operatör onayıyla silindi; uzak sunucuda 36 nokta yeşil durum korundu (commit `256c9e5`).
+* **T-0153 (Canlı Migrate):** Uzak Qdrant sunucusunda (`192.168.1.9:6333`) nokta kopyasıyla 36 kanonik RAG belgesi `anka_bellek` koleksiyonuna taşındı (dense 768 Cosine + sparse BM25/IDF + on_disk_payload); eski koleksiyon silindi; 9 yabancı koleksiyon korundu (commit `9f509cb`, 6/6 GEÇTİ, damga `06:44:43Z`).
+* **T-0154 (TriModalRouter Eğitilmiş Ağırlıklar):** Prompt embedding (768), merak vektörü (`CuriosityEngine`, 768) ve multimodal gating üzerinden 3 sınıflı (`grammar_core`, `pedagogy`, `carpenter`) yönlendirici eğitildi (val top-1 0,93, baseline 0,2867); deterministik bit-özdeşlik sağlandı; `data/anka_router.pt` (`64527c72…`) üretildi (commit `8bab7ae`, 6/6 GEÇTİ, damga `06:58:13Z`).
+* **T-0155 (Gateway Router Entegrasyonu):** `src/rag/epistemic_agent.py` içine fail-closed `load_trained_router_state` eklendi; `agent_gateway.py` `create_default` varsayılanı `data/anka_router.pt` yapıldı; 300-val kümesinde 279/300 (0,93) doğruluk birebir yeniden üretildi (commit `a6a20ad`, koşum-2 6/6 GEÇTİ, damga `07:16:03Z`).
+* **T-0156 (Pedagogy Daraltma ve Router Yeniden Eğitimi):** Pedagoji kaynakları `parenting_canonical.jsonl` elenerek 4 dosyaya daraltıldı (7.048 tekil metin, `grammar_core` kesişimi 0). Model yeniden eğitilerek pedagogy train başarısı 416/500'den 498/500'e çıkarıldı; val top-1 1,00 oldu; `data/anka_router.pt` güncellendi (eski `64527c72…` → yeni `44a46d89…`, state_dict SHA `d369b3cd…`, commit `7eafe53`, 8/8 GEÇTİ, damga `16:19:27Z`).
+* **T-0157 (Gateway İnsan-Okunur Üretim Onarımı):** `src/rag/epistemic_agent.py` içine `YAPISAL_BASTIRMA_JETONLARI` eklendi, argmax öncesi -inf ile maskelendi; UNK korunurken yapısal etiketler temizlendi ve `decompile_sentence(…, capitalize=True)` ile tüm çıktılar büyük harfe dönüştürüldü (commit `db5858e`, koşum-2 6/6 GEÇTİ, damga `07:56:36Z`).
+* **T-0158 (Canlı Gateway Başlatma Kanıtı):** Canlı gateway `http://127.0.0.1:8080` üzerinde T-0156 router ağırlıkları (`d369b3cd…`) ve uzak Qdrant (`192.168.1.9:6333`, 36 belge) ile çalıştırıldı; 17 anahtarlı REST yanıtı ve temiz Türkçe üretim doğrulandı (`.agent-bus/notes/T-0158.md`).
+* **T-0159 (Belge Hizalaması):** `README.md` ve `USER_GUIDE.md` 307/307 test sayısı, Anka soyağacı, sözlük ayrımı (32.852 / 33.114), güncel cURL gövdesi ve fail-closed `VectorMemory` ile hizalandı (commit `9f227de`).
+* **T-0160 (TUR-X: Kalıcı Başlatıcı ve max_new_tokens):** `scripts/baslat_canli_gateway.py` oluşturuldu; `epistemic_agent.py:234` ölü varsayılan `max_new_tokens` 40'tan 45'e normalize edildi (commit `366f5a3`).
+* **T-0161 (Soru Filtresi Şartnamesi):** 4 pedagogy dosyasında soru işareti dağılımı ölçüldü (6.653 soru içeren %94,40; 395 soru içermeyen %5,60). '?' içerenleri eleme kuralının havuz yetersizliğine (395 < 600) yol açtığı kanıtlandı; soru filtresi (Kol-B: 6.653 tekil havuz) ile router eğitim koşulu test edildi (val top-1 0,9933, train 500/500/500, state_dict SHA `c8ced1f0…` bit-özdeş determinizm; commit `366f5a3`, 8/8 GEÇTİ, damga `17:23:05Z`).
 
 ### 2026-09-15: agent-bus Koordinasyonu, Sözleşme Kapanışları ve Mimari Doğrulamalar (T-0001 .. T-0030)
 * **T-0001..T-0011 (agent-bus Altyapısı):** Çift etmenli (Claude/Antigravity) koordinasyon protokolü, MCP stdio araçları, kiralama mekanizması ve `.agent-bus/frozen.json` değişmezleri devreye alındı.

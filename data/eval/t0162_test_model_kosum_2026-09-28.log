@@ -1,0 +1,143 @@
+============================================================
+ KRİSTAL-VEKTÖREL MİMARİSİ: MODEL TEST VE ÇIKARIM (INFERENCE)
+============================================================
+Çıkarım yapılacak cihaz: mps
+Sözlük Yüklendi. Kelime dağarcığı boyutu: 33114
+Eğitilmiş model 'data/anka_base_v2.pt' adresinden başarıyla yüklendi.
+============================================================
+
+--- Test Cümleleri Çıkarım Sonuçları ---
+
+[Girdi Cümle]: 'Akmayan su kımıldanmayan yer'
+  -> Morfemler: <BOS> ak NEG PART_An su kımıldan NEG PART_An yer <EOS>
+  -> Token IDs: [2, 364, 87, 69, 298, 380, 87, 69, 330, 3]
+  -> 'yer' morfeminden sonra gelen en olası morfemler (Top 5):
+     1. PLURAL               | Olasılık: 0.6273 (ID: 70)
+     2. CASE_DAT             | Olasılık: 0.0493 (ID: 20)
+     3. DERIV_lI             | Olasılık: 0.0392 (ID: 116)
+     4. ,                    | Olasılık: 0.0255 (ID: 32138)
+     5. :                    | Olasılık: 0.0211 (ID: 32142)
+  -> <EOS> (Cümle Sonu) sonrası en olası sonraki morfemler (Top 5):
+     1. <BOS>                | Olasılık: 1.0000 (ID: 2)
+     2. :                    | Olasılık: 0.0000 (ID: 32142)
+     3. ad                   | Olasılık: 0.0000 (ID: 338)
+     4. (                    | Olasılık: 0.0000 (ID: 32144)
+     5. ;                    | Olasılık: 0.0000 (ID: 32143)
+
+[Girdi Cümle]: 'Demirkır güney tepelerinin duldalarına çektiği atları'
+  -> Morfemler: <BOS> <PROPER_NOUN> güney tepe POSS_3PL CASE_GEN_N dulda POSS_3PL CASE_DAT_N çek PART_DIk POSS_3SG at POSS_3PL <EOS>
+  -> Token IDs: [2, 4, 5, 6, 7, 8, 9, 7, 10, 11, 12, 13, 14, 7, 3]
+  -> 'POSS_3PL' morfeminden sonra gelen en olası morfemler (Top 5):
+     1. ,                    | Olasılık: 0.0930 (ID: 32138)
+     2. yer                  | Olasılık: 0.0477 (ID: 330)
+     3. ve                   | Olasılık: 0.0454 (ID: 46)
+     4. <PROPER_NOUN>        | Olasılık: 0.0426 (ID: 4)
+     5. CASE_ABL_N           | Olasılık: 0.0348 (ID: 300)
+  -> <EOS> (Cümle Sonu) sonrası en olası sonraki morfemler (Top 5):
+     1. <BOS>                | Olasılık: 1.0000 (ID: 2)
+     2. ad                   | Olasılık: 0.0000 (ID: 338)
+     3. CASE_LOC             | Olasılık: 0.0000 (ID: 29)
+     4. bir                  | Olasılık: 0.0000 (ID: 40)
+     5. isim                 | Olasılık: 0.0000 (ID: 2173)
+
+[Girdi Cümle]: 'Yarın okula gideceğim'
+  -> Morfemler: <BOS> yarın okul CASE_DAT git TENSE_FUT PERSON_1SG <EOS>
+  -> Token IDs: [2, 741, 784, 20, 619, 43, 32, 3]
+  -> 'PERSON_1SG' morfeminden sonra gelen en olası morfemler (Top 5):
+     1. ,                    | Olasılık: 0.3480 (ID: 32138)
+     2. !                    | Olasılık: 0.1006 (ID: 32140)
+     3. .                    | Olasılık: 0.0897 (ID: 32137)
+     4. ?                    | Olasılık: 0.0576 (ID: 32139)
+     5. ve                   | Olasılık: 0.0278 (ID: 46)
+  -> <EOS> (Cümle Sonu) sonrası en olası sonraki morfemler (Top 5):
+     1. <BOS>                | Olasılık: 1.0000 (ID: 2)
+     2. ad                   | Olasılık: 0.0000 (ID: 338)
+     3. </OUTPUT>            | Olasılık: 0.0000 (ID: 1705)
+     4. DERIV_CI             | Olasılık: 0.0000 (ID: 102)
+     5. CASE_DAT             | Olasılık: 0.0000 (ID: 20)
+
+[Girdi Cümle]: 'Kitabı okudum ve temizledim'
+  -> Morfemler: <BOS> kitap POSS_3SG oku TENSE_PAST PERSON_1SG ve temizle TENSE_PAST PERSON_1SG <EOS>
+  -> Token IDs: [2, 249, 13, 1670, 22, 32, 46, 4451, 22, 32, 3]
+  -> 'PERSON_1SG' morfeminden sonra gelen en olası morfemler (Top 5):
+     1. ,                    | Olasılık: 0.4406 (ID: 32138)
+     2. .                    | Olasılık: 0.2821 (ID: 32137)
+     3. :                    | Olasılık: 0.0241 (ID: 32142)
+     4. !                    | Olasılık: 0.0207 (ID: 32140)
+     5. ?                    | Olasılık: 0.0175 (ID: 32139)
+  -> <EOS> (Cümle Sonu) sonrası en olası sonraki morfemler (Top 5):
+     1. <BOS>                | Olasılık: 1.0000 (ID: 2)
+     2. ad                   | Olasılık: 0.0000 (ID: 338)
+     3. DERIV_CI             | Olasılık: 0.0000 (ID: 102)
+     4. bir                  | Olasılık: 0.0000 (ID: 40)
+     5. DERIV_lIk            | Olasılık: 0.0000 (ID: 39)
+
+--- SFT (Ebeveynlik Fazı) Görev Çıkarım Sonuçları ---
+
+[SFT Görevi]: 'Kelimedeki kök morfemini bul.' | Girdi: 'kitaplarda'
+  -> Tam Akış: <BOS> <INSTRUCTION> kelime CASE_LOC REL_ki kök morfem POSS_2SG CASE_ACC bul . </INSTRUCTION> <INPUT> kitap PLURAL CASE_LOC </INPUT> <OUTPUT> </OUTPUT> <EOS>
+  -> Model Girdisi: <BOS> <INSTRUCTION> kelime CASE_LOC REL_ki kök morfem POSS_2SG CASE_ACC bul . </INSTRUCTION> <INPUT> kitap PLURAL CASE_LOC </INPUT> <OUTPUT>
+  -> Modelin <OUTPUT> sonrasındaki 1. Tahminleri (Top 5):
+     1. root                 | Olasılık: 0.9997 (ID: 16656)
+     2. <PROPER_NOUN>        | Olasılık: 0.0000 (ID: 4)
+     3. dizin                | Olasılık: 0.0000 (ID: 6155)
+     4. yat                  | Olasılık: 0.0000 (ID: 30)
+     5. TENSE                | Olasılık: 0.0000 (ID: 32156)
+  -> 'root' sonrasındaki 2. Tahminleri (Top 5):
+     1. :                    | Olasılık: 0.9987 (ID: 32142)
+     2. ,                    | Olasılık: 0.0003 (ID: 32138)
+     3. INF_mAk              | Olasılık: 0.0002 (ID: 51)
+     4. </OUTPUT>            | Olasılık: 0.0001 (ID: 1705)
+     5. (                    | Olasılık: 0.0001 (ID: 32144)
+
+[SFT Görevi]: 'Kelimedeki eylemin zamanını veya kipini tespit et.' | Girdi: 'gideceğim'
+  -> Tam Akış: <BOS> <INSTRUCTION> kelime CASE_LOC REL_ki eylem POSS_2SG zaman POSS_2SG CASE_ACC veya kip POSS_2SG CASE_ACC tespit et . </INSTRUCTION> <INPUT> git TENSE_FUT PERSON_1SG </INPUT> <OUTPUT> </OUTPUT> <EOS>
+  -> Model Girdisi: <BOS> <INSTRUCTION> kelime CASE_LOC REL_ki eylem POSS_2SG zaman POSS_2SG CASE_ACC veya kip POSS_2SG CASE_ACC tespit et . </INSTRUCTION> <INPUT> git TENSE_FUT PERSON_1SG </INPUT> <OUTPUT>
+  -> Modelin <OUTPUT> sonrasındaki 1. Tahminleri (Top 5):
+     1. TENSE                | Olasılık: 0.9970 (ID: 32156)
+     2. POTENTIAL            | Olasılık: 0.0009 (ID: 4405)
+     3. PLURAL               | Olasılık: 0.0004 (ID: 70)
+     4. Selamlar             | Olasılık: 0.0002 (ID: 32550)
+     5. <PROPER_NOUN>        | Olasılık: 0.0001 (ID: 4)
+  -> 'TENSE' sonrasındaki 2. Tahminleri (Top 5):
+     1. :                    | Olasılık: 0.9995 (ID: 32142)
+     2. TENSE                | Olasılık: 0.0001 (ID: 32156)
+     3. </OUTPUT>            | Olasılık: 0.0001 (ID: 1705)
+     4. .                    | Olasılık: 0.0001 (ID: 32137)
+     5. INF_mAk              | Olasılık: 0.0000 (ID: 51)
+
+[SFT Görevi]: 'Kelimenin aldığı durum eklerini (hâl eklerini) tespit et.' | Girdi: 'okula'
+  -> Tam Akış: <BOS> <INSTRUCTION> kelime CASE_GEN al PART_DIk POSS_3SG durum ek POSS_3PL CASE_ACC_N ( hâl ek POSS_3PL CASE_ACC_N ) tespit et . </INSTRUCTION> <INPUT> okul CASE_DAT </INPUT> <OUTPUT> </OUTPUT> <EOS>
+  -> Model Girdisi: <BOS> <INSTRUCTION> kelime CASE_GEN al PART_DIk POSS_3SG durum ek POSS_3PL CASE_ACC_N ( hâl ek POSS_3PL CASE_ACC_N ) tespit et . </INSTRUCTION> <INPUT> okul CASE_DAT </INPUT> <OUTPUT>
+  -> Modelin <OUTPUT> sonrasındaki 1. Tahminleri (Top 5):
+     1. case                 | Olasılık: 0.9991 (ID: 7559)
+     2. PLURAL               | Olasılık: 0.0005 (ID: 70)
+     3. POTENTIAL            | Olasılık: 0.0001 (ID: 4405)
+     4. TENSE                | Olasılık: 0.0001 (ID: 32156)
+     5. <PROPER_NOUN>        | Olasılık: 0.0001 (ID: 4)
+  -> 'case' sonrasındaki 2. Tahminleri (Top 5):
+     1. :                    | Olasılık: 0.9994 (ID: 32142)
+     2. ad                   | Olasılık: 0.0001 (ID: 338)
+     3. INF_mAk              | Olasılık: 0.0000 (ID: 51)
+     4. case                 | Olasılık: 0.0000 (ID: 7559)
+     5. text                 | Olasılık: 0.0000 (ID: 7075)
+
+[SFT Görevi]: 'Kelimede çoğul eki (PLURAL) olup olmadığını tespit et.' | Girdi: 'çocuklar'
+  -> Tam Akış: <BOS> <INSTRUCTION> kelime CASE_LOC çoğul ek POSS_3SG ( PLURAL ) ol GERUND_Ip ol NEG PART_DIk POSS_2SG CASE_ACC tespit et . </INSTRUCTION> <INPUT> çocuk PLURAL </INPUT> <OUTPUT> </OUTPUT> <EOS>
+  -> Model Girdisi: <BOS> <INSTRUCTION> kelime CASE_LOC çoğul ek POSS_3SG ( PLURAL ) ol GERUND_Ip ol NEG PART_DIk POSS_2SG CASE_ACC tespit et . </INSTRUCTION> <INPUT> çocuk PLURAL </INPUT> <OUTPUT>
+  -> Modelin <OUTPUT> sonrasındaki 1. Tahminleri (Top 5):
+     1. PLURAL               | Olasılık: 0.9957 (ID: 70)
+     2. POTENTIAL            | Olasılık: 0.0034 (ID: 4405)
+     3. POSS_3PL             | Olasılık: 0.0005 (ID: 7)
+     4. <PROPER_NOUN>        | Olasılık: 0.0001 (ID: 4)
+     5. DERIV_lIk            | Olasılık: 0.0001 (ID: 39)
+  -> 'PLURAL' sonrasındaki 2. Tahminleri (Top 5):
+     1. :                    | Olasılık: 0.9999 (ID: 32142)
+     2. .                    | Olasılık: 0.0000 (ID: 32137)
+     3. ,                    | Olasılık: 0.0000 (ID: 32138)
+     4. POSS_2SG             | Olasılık: 0.0000 (ID: 28)
+     5. PLURAL               | Olasılık: 0.0000 (ID: 70)
+
+============================================================
+ MODEL TEST SÜRECİ TAMAMLANDI
+============================================================

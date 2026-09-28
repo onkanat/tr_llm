@@ -4,6 +4,43 @@ Bu projedeki tüm önemli değişiklikler bu dosyada belgelenmektedir.
 
 Format [Keep a Changelog](https://keepachangelog.com/tr/1.0.0/) standardına dayanır ve bu proje [Semantic Versioning (SemVer)](https://semver.org/spec/v2.0.0.html) ilkelerini benimser.
 
+## [1.10.0] - 2026-09-28
+
+### Eklendi (Added)
+- **T-0151 — `kristal_bellek` → `anka_bellek` Koleksiyon Yeniden-Adlandırması:**
+  - Kod tabanı genelinde 7 dosyada 36 geçişle koleksiyon adı `anka_bellek` olarak güncellendi (`vector_memory.py`, `agent_gateway.py`, `pedagogical_supervisor.py`, `sanitize_vector_memory.py`, `sanitize_all_accumulated_datasets.py`, `run_agent_arena.py`, `test_agent_gateway.py`).
+  - `generate_kristal_vector` fonksiyon adı ve tokenizer/model marka adları korundu; `VectorMemory()` kurucu varsayılanı ve `_resolve_target_memory` `anka_bellek` ile hizalandı; bilinmeyen koleksiyon adında fail-closed `ValueError` doğrulandı (commit `a9a5b03`, koşum-2 6/6 GEÇTİ, damga `2026-09-28T06:33:06Z`).
+- **T-0152 — `data/qdrant_db/` Disk-Artefakt Temizliği:**
+  - T-0148 Tur-B 4B gereği kurucu varsayılan `storage_path`'in kaldırılmasının ardından diskte kalan 6 dosya (toplam 304.437 bayt, ~304 KB) operatör onayıyla silindi (`.lock`, `meta.json`, `simulasyon_bellek`, `test_temp_coll`, eski-ad `kristal_bellek`, `muhakeme_bellek`). Canlı Qdrant'ta 36-nokta yeşil durum korundu (commit `256c9e5`).
+- **T-0153 — Canlı-Migrate `kristal_bellek` → `anka_bellek`:**
+  - Uzak Qdrant sunucusunda (`192.168.1.9:6333`) nokta kopyası (verbatim migrate) yöntemiyle 36 kanonik RAG belgesi birebir taşındı; dense 768 Cosine + sparse BM25/IDF + `on_disk_payload=true` şeması kuruldu, self-retrieval doğrulandı, eski koleksiyon `delete_collection` sarmalayıcısıyla silindi; 9 yabancı koleksiyon korundu (commit `9f509cb`, 6/6 GEÇTİ, damga `2026-09-28T06:44:43Z`).
+- **T-0154 — TriModalRouter Eğitilmiş Ağırlıklar (3-Sınıf):**
+  - Prompt embedding (768), merak vektörü (`CuriosityEngine`, 768) ve multimodal gating üzerinden 3 sınıflı (`grammar_core`, `pedagogy`, `carpenter`) yönlendirici CPU AdamW ile 3 epoch eğitildi (val top-1 **0,93**, baseline **0,2867**; train kayıp 0,3604 → 0,1890 azalan). İkinci koşumda deterministik bit-özdeşlik (`state_dict` SHA `9b85f951…`) sağlandı; `data/anka_router.pt` (SHA `64527c72…`) üretildi (commit `8bab7ae`, 6/6 GEÇTİ, damga `2026-09-28T06:58:13Z`).
+- **T-0155 — Gateway TriModalRouter Eğitilmiş Ağırlık Entegrasyonu:**
+  - `src/rag/epistemic_agent.py` içine `router_state_path` parametresi ve fail-closed `load_trained_router_state` fonksiyonu (dosya yoksa/şema uymazsa `RuntimeError`) eklendi.
+  - `src/gateway/agent_gateway.py` `create_default` varsayılanı `"data/anka_router.pt"` olarak sabitlendi; 300-val kümesinde 279/300 (**0,93**) doğruluk birebir yeniden üretildi (commit `a6a20ad`, koşum-2 6/6 GEÇTİ, damga `2026-09-28T07:16:03Z`).
+- **T-0156 — Pedagogy Daraltma ve Router Yeniden-Eğitimi:**
+  - Pedagogy kaynakları 5'ten 4 dosyaya daraltıldı (`parenting_canonical.jsonl` çıplak-kelime morfolojisi ve `grammar_core` ile 1.097 örtük metin paylaştığı için elendi). 7.048 tekil metinlik havuzdan 600 örnek seçildi (`grammar_core` kesişimi 0, parenting üyeliği 0).
+  - Model yeniden eğitilerek pedagogy train başarısı **416/500 → 498/500**'e çıkarıldı; val top-1 **1,00** (baseline 0,24), val karışım matrisi köşegen 300/300 oldu.
+  - `data/anka_router.pt` operatör onayıyla güncellendi: eski SHA `64527c72…` → yeni SHA `44a46d89f3d4260c86f1aa0aa4756b28321f4455c277ff8a8e4dea4c1e85b36a` (state_dict SHA `d369b3cdd25484ab679cd61321f3ae614e932166fb8ce6bd5f9dfa4c99fb50bf`, commit `7eafe53`, 8/8 GEÇTİ, damga `2026-09-28T16:19:27Z`).
+- **T-0157 — Gateway İnsan-Okunur Üretim Onarımı:**
+  - `src/rag/epistemic_agent.py` içinde `YAPISAL_BASTIRMA_JETONLARI` (PAD, BOS, INSTRUCTION vb. 7 jeton) tanımlandı ve üretim sırasında argmax öncesi `-inf` ile maskelendi. Boş maske durumunda fail-closed `RuntimeError` konuldu.
+  - `process_query` çıktısında UNK korunurken yapısal etiketler temizlendi ve `decompile_sentence(…, capitalize=True)` ile tüm çıktılar büyük harfle başlatıldı (commit `db5858e`, koşum-2 6/6 GEÇTİ, damga `2026-09-28T07:56:36Z`).
+- **T-0158 — Canlı Gateway Başlatma Kanıtı:**
+  - Canlı gateway `http://127.0.0.1:8080` üzerinde T-0156 router ağırlıkları (`d369b3cd…`) ve uzak Qdrant (`192.168.1.9:6333`, 36 belge) köprüsüyle arka planda ayağa kaldırıldı. REST `/api/query` çağrısında 17 anahtarlı yanıt, capitalize edilmiş temiz Türkçe çıktı ve deterministik çalışma doğrulandı (`.agent-bus/notes/T-0158.md`).
+- **T-0159 — Belge Hizalaması (README.md + USER_GUIDE.md):**
+  - `README.md` ve `USER_GUIDE.md` güncel test tabanı (99/99 → **307/307**), sözlük ayrımı (taban 32.852 ≠ külliyat 33.114), model soyağacı (`anka_base_v2.pt`, `anka_router.pt`), `/api/query` JSON gövdesi (`query`, `instruction`, `mode`) ve fail-closed `VectorMemory` mimarisiyle tam senkronize edildi (commit `9f227de`).
+- **T-0160 — TUR-X: Kalıcı Başlatıcı ve Parametre Normalizasyonu:**
+  - `scripts/baslat_canli_gateway.py` oluşturuldu; fail-closed router SHA çıpası (`d369b3cd…`) ve `--port` argümanı eklendi.
+  - `src/rag/epistemic_agent.py:234` içindeki ölü varsayılan `max_new_tokens` 40'tan canlı çağrıyla uyumlu **45**'e normalize edildi (commit `366f5a3`).
+- **T-0161 — Soru Filtresi Şartnamesi ve Router Koşul Doğrulaması:**
+  - Pedagoji 4-dosya havuzunda soru işareti (`?`) dağılımı ampirik olarak ölçüldü: toplam 7.540 kayıt, 7.048 tekil (%94,40 soru içeren, %5,60 içermeyen).
+  - Soru içerenleri dışlama hipotezinin (Kol-A: 395 tekil) router için gereken 600 tekil örneği karşılayamadığı (`395 < 600`) matematiksel olarak kanıtlandı. Soru filtresi kuralıyla (Kol-B: 6.653 tekil havuz, `?` oranı %100) model eğitimi ve doğrulama koşulları test edildi (val top-1 **0,9933**, train 500/500/500, state_dict SHA `c8ced1f0…` bit-özdeş determinizm); donmuş `data/anka_router.pt` başarıyla korundu (commit `366f5a3`, 8/8 GEÇTİ, damga `2026-09-28T17:23:05Z`).
+  - **Operatör kararı (28 Eyl 2026, AskUserQuestion):** filtre **VAZGEÇİLDİ** — madde "uygulanabilir-değil" olarak kapatıldı (Kol-A kanıtı + Kol-B tanı-koşumu '?'-metinlerin eğitimde sorun çıkarmadığını gösterdi; kapanış-kaydı notes T-0161.md, damga `17:32:40Z` BETİKTEN). Şartname-yazım kusuru kaydı: kesin-çıkarma kuralı havuz-envanteri ölçülmeden sabitlenmişti (İLAN-formülasyon-kusuru dersi, şartname-yazarı tarafında).
+- **T-0162 — TUR-A: `test_model.py` Bayat-Default Onarımı + p5_probe Kaydı:**
+  - `test_model.py:25-26` bayat default'lar gündem-kanonik çıpayaya taşındı: `data/kristal_model.pt` (SİLİNMİŞ) + `data/vocab.json` (31.357) → `data/anka_base_v2.pt` (`d0f415f3…`, canlı-gateway'inki birebir) + `data/rebuild/vocab_anka_r1_33114.json` (**33.114** külliyat); CLI `--checkpoint/--vocab`, fallback zinciri ve `resize_state_dict` yolu aynen korundu. Koşum kanıtı (RC=0, MPS, sözlük `33114`, 4+4 olgu, hüküm-dışı): `data/eval/t0162_test_model_kosum_2026-09-28.log` (143 satır).
+  - `data/eval/p5_probe_archive.jsonl`'daki T-0145 probe kalıntısı (+1 satır, append-only kanıt-günlüğü) REVERT yerine kayıt-commit ile kapatıldı (İLAN `t0162_tura_ilan_20260928.md`, damga `17:35:51Z` BETİKTEN).
+
 ## [1.9.0] - 2026-09-16
 
 ### Eklendi (Added)

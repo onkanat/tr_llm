@@ -22,8 +22,11 @@ def main():
     print(f"Çıkarım yapılacak cihaz: {device}")
 
     # CLI argümanları: isteğe bağlı --checkpoint/--model ve --vocab
-    model_path = 'data/kristal_model.pt'
-    vocab_path = 'data/vocab.json'
+    # T-0162: default'lar güncel-kanonik çıpa — eski 'data/kristal_model.pt'
+    # SİLİNMİŞTİ ve 'data/vocab.json' (31.357) külliyatın (33.114) bayat
+    # öncülüydü (CLAUDE.md uyarısı). Fallback zinciri korunur.
+    model_path = 'data/anka_base_v2.pt'
+    vocab_path = 'data/rebuild/vocab_anka_r1_33114.json'
 
     for arg_idx, arg in enumerate(sys.argv):
         if arg in ("--checkpoint", "--model") and arg_idx + 1 < len(sys.argv):
