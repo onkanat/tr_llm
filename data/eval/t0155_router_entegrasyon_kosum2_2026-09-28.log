@@ -1,0 +1,12 @@
+[T-0155] İLAN sha256=fa41d0986ae4e8a1994974c0f34e8736785be80dacb2ee3d5d307f37d8a6c32d damga=2026-09-28T07:16:03Z
+[T-0155] K1 KAYNAK-ÇIPASI (4 dosya tam-digest birebir) → GEÇTİ
+[T-0155] K5 GATEWAY AST ZİNCİR-KAPISI (router_state_path açık-beyan) → GEÇTİ
+[T-0155] CİHAZ: MPS hazır
+[T-0155] taban-model yüklendi
+[T-0155] VectorMemory :memory: kuruldu (ağ YOK)
+[T-0155] K2 YÜKLEME-BİREBİR (state_dict sha bit-özdeş; 9-anahtar) → GEÇTİ
+[T-0155] K4 FAİL-CLOSED MUTASYON (olmayan-yol RuntimeError; fresh-init != eğitilmiş) → GEÇTİ
+[T-0154] özellik 300/300
+[T-0155] K3 DAVRANIŞ-ÜRETİMİ (300-val top-1 == 0,93 birebir; CPU-kopya) → GEÇTİ
+[T-0155] K6 CANLI-DOKUNULMAZLIK (ağ istemcisi kurulmadı) → GEÇTİ
+[T-0155] HÜKÜM: T0155_ENTEGRASYON_GECTI rc=0 hukum=962c9eb2b8aff1fb34fb9912b9822bba7f8cdec74d685816e67e014c1e27defe

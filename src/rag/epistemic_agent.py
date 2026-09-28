@@ -39,6 +39,31 @@ from src.rag.embedding import generate_kristal_vector, generate_sparse_vector
 from src.rag.rag_pipeline import is_context_usable, build_rag_prompt_tokens, RAG_MATCH_THRESHOLD
 
 
+def load_trained_router_state(router: TriModalRouter, router_state_path: str) -> TriModalRouter:
+    """T-0155: Egitilmis router agirliklarini fail-closed yukler.
+
+    Dosya yok → RuntimeError (fresh-init'e sessiz dusme YOK);
+    anahtar-kume uyusmazligi → RuntimeError (sema-koruma); strict=True.
+    """
+    if not os.path.exists(router_state_path):
+        raise RuntimeError(
+            f"DURDURULDU: router_state_path verildi ama dosya yok "
+            f"({router_state_path}); fresh-init'e sessiz dusme YOK (T-0155).")
+    sd = torch.load(router_state_path, map_location="cpu")
+    beklenen = set(router.state_dict().keys())
+    gelen = set(sd.keys())
+    if gelen != beklenen:
+        raise RuntimeError(
+            f"DURDURULDU: router state_dict sema uyusmazligi (T-0155): "
+            f"beklenen {len(beklenen)} anahtar, gelen {len(gelen)}; "
+            f"fark={sorted(beklenen ^ gelen)[:6]}")
+    router.load_state_dict(sd, strict=True)
+    logger.info(
+        "[ROUTER_SOYAGACI] yuklenen=%s anahtar=%d",
+        os.path.abspath(router_state_path), len(sd))
+    return router
+
+
 class EpistemicCuriosityAgent:
     def __init__(
         self,
@@ -49,6 +74,7 @@ class EpistemicCuriosityAgent:
         decompiler: Optional[Any] = None,
         curiosity_engine: Optional[CuriosityEngine] = None,
         router: Optional[TriModalRouter] = None,
+        router_state_path: Optional[str] = None,
         tau: float = 2.5,
         similarity_threshold: float = 0.85,
         future_train_path: str = "data/future_train_vector.jsonl",
@@ -76,16 +102,28 @@ class EpistemicCuriosityAgent:
             tau=tau
         )
         
-        # Initialize or assign TriModalRouter
-        self.router = router or TriModalRouter(
-            prompt_dim=n_embd,
-            merak_dim=n_embd,
-            rag_dim=n_embd,
-            router_dim=256,
-            num_experts=4,
-            top_k=2,
-            expert_names=["grammar_core", "pedagogy", "carpenter", "legal"]
-        )
+        # Initialize or assign TriModalRouter (T-0155: router VE router_state_path
+        # birlikte verilemez — ikili-belirsizlik fail-closed)
+        if router is not None and router_state_path is not None:
+            raise ValueError(
+                "Ikili-belirsizlik (T-0155): hem 'router' hem 'router_state_path' "
+                "verildi; yalniz birini secin.")
+        if router is not None:
+            self.router = router
+        else:
+            self.router = TriModalRouter(
+                prompt_dim=n_embd,
+                merak_dim=n_embd,
+                rag_dim=n_embd,
+                router_dim=256,
+                num_experts=4,
+                top_k=2,
+                expert_names=["grammar_core", "pedagogy", "carpenter", "legal"]
+            )
+            if router_state_path is not None:
+                # T-0155: egitilmis agirliklar (T-0154) — fail-closed yukleme;
+                # dosya-yok/sema-uymazlik durumunda fresh-init'e sessiz dusme YOK
+                self.router = load_trained_router_state(self.router, router_state_path)
         
         # Move helper modules to device
         self.curiosity_engine.to(self.device)

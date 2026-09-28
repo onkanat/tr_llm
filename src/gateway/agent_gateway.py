@@ -45,6 +45,7 @@ class AgentGateway:
         memory: Optional[VectorMemory] = None,
         general_memory: Optional[VectorMemory] = None,
         epistemic_agent: Optional[EpistemicCuriosityAgent] = None,
+        router_state_path: Optional[str] = None,
         future_train_path: str = "data/future_train_vector.jsonl",
         device: str = "cpu"
     ):
@@ -68,6 +69,7 @@ class AgentGateway:
                 memory=self.memory,
                 general_memory=self.general_memory,
                 decompiler=self.decompiler,
+                router_state_path=router_state_path,
                 tau=2.5,
                 similarity_threshold=0.85,
                 future_train_path=self.future_train_path,
@@ -81,6 +83,7 @@ class AgentGateway:
         vocab_path: Optional[str] = None,
         lexicon_path: str = "data/lexicon/roots.tsv",
         storage_path: Optional[str] = None,
+        router_state_path: str = "data/anka_router.pt",
         device: str = "cpu"
     ) -> "AgentGateway":
         """Factory method to load and build the complete default Gateway stack.
@@ -129,6 +132,14 @@ class AgentGateway:
         # ARKASINDA kalıp ölmez.
         if not os.path.exists(model_path):
             raise FileNotFoundError(f"Gateway model checkpoint'i bulunamadı (sessiz rastgele model engellendi): {model_path}")
+
+        # T-0155: egitilmis router agirliklari — dosya-yok erken-kapisi
+        # (model_path kalibi; fresh-init'e sessiz dusme YOK). Default bilincli-
+        # sabittir (T-0154 kanonik artefaki; T-0087 bayat-varsayilan kaldirmasi
+        # DEGIL).
+        if not os.path.exists(router_state_path):
+            raise RuntimeError(
+                f"DURDURULDU: router_state_path bulunamadi (sessiz fresh-init engellendi, T-0155): {router_state_path}")
 
         # Load Vector Memories — T-0148 4B: storage_path AÇIK-BEYANlı (default
         # "data/qdrant_db" kaldırıldı; None = :memory:/remote-beyan; repo-içi
@@ -191,6 +202,7 @@ class AgentGateway:
             decompiler=decompiler,
             memory=memory,
             general_memory=general_memory,
+            router_state_path=router_state_path,
             future_train_path="data/future_train_vector.jsonl",
             device=device
         )

@@ -1,0 +1,28 @@
+[T-0155] İLAN sha256=fa41d0986ae4e8a1994974c0f34e8736785be80dacb2ee3d5d307f37d8a6c32d damga=2026-09-28T07:14:55Z
+[T-0155] K1 KAYNAK-ÇIPASI (4 dosya tam-digest birebir) → GEÇTİ
+[T-0155] K5 GATEWAY AST ZİNCİR-KAPISI (router_state_path açık-beyan) → GEÇTİ
+[T-0155] CİHAZ: MPS hazır
+[T-0155] taban-model yüklendi
+[T-0155] VectorMemory :memory: kuruldu (ağ YOK)
+[T-0155] K2 YÜKLEME-BİREBİR (state_dict sha bit-özdeş; 9-anahtar) → GEÇTİ
+[T-0155] K4 FAİL-CLOSED MUTASYON (olmayan-yol RuntimeError; fresh-init != eğitilmiş) → GEÇTİ
+[T-0154] özellik 300/300
+Traceback (most recent call last):
+  File "/Users/hakankilicaslan/Git/tr_llm/scripts/dogrulama_t0155_router_entegrasyon.py", line 318, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "/Users/hakankilicaslan/Git/tr_llm/scripts/dogrulama_t0155_router_entegrasyon.py", line 257, in main
+    pred = _gate_logits(agent.router, Pva, Qva).argmax(dim=-1)
+           ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/hakankilicaslan/Git/tr_llm/scripts/dogrulama_t0154_router_egitim.py", line 173, in _gate_logits
+    e = router.w_p(p) + router.w_m(q)
+        ~~~~~~~~~~^^^
+  File "/Users/hakankilicaslan/Git/tr_llm/venv/lib/python3.14/site-packages/torch/nn/modules/module.py", line 1779, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/Users/hakankilicaslan/Git/tr_llm/venv/lib/python3.14/site-packages/torch/nn/modules/module.py", line 1790, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/Users/hakankilicaslan/Git/tr_llm/venv/lib/python3.14/site-packages/torch/nn/modules/linear.py", line 134, in forward
+    return F.linear(input, self.weight, self.bias)
+           ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: Tensor for argument input is on cpu but expected on mps
