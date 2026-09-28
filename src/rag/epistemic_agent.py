@@ -231,7 +231,7 @@ class EpistemicCuriosityAgent:
     def generate_tokens(
         self,
         prompt_tokens: List[int],
-        max_new_tokens: int = 40,
+        max_new_tokens: int = 45,
         repetition_penalty: float = 1.4,
         repetition_window: int = 10
     ) -> Tuple[List[int], float]:
