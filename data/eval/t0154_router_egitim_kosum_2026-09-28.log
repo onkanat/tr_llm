@@ -1,0 +1,24 @@
+[T-0154] İLAN sha256=86acf99a41f1679520838192101b16b17d089b8042ef4f79b9b32b005ea02e7a damga=2026-09-28T06:58:13Z
+[T-0154] K1 SIFIR-KILIÇ (çıktı-yok + kaynak-sha birebir) → GEÇTİ
+[T-0154] CİHAZ (özellik-çıkarımı: MPS) → GEÇTİ
+[T-0154] taban-model yüklendi: eksik=0 fazla=0
+[T-0154] K5 VERİ-ENVANTER (500/100 x 3; kesişim-0; legal-0) → GEÇTİ
+[T-0154] özellik-çıkarımı: train 1500 + val 300 (MPS)
+[T-0154] özellik 300/1500
+[T-0154] özellik 600/1500
+[T-0154] özellik 900/1500
+[T-0154] özellik 1200/1500
+[T-0154] özellik 1500/1500
+[T-0154] özellik 300/300
+[T-0154] özellik-çıkarımı tamam (31.9 sn; 4096-üstü kırpılan: 0+0)
+[T-0154] K2 BASELINE (fresh-init val top-1; kayıt-değer) → GEÇTİ
+[T-0154] epoch 1 ort-kayıp 0.3604
+[T-0154] epoch 2 ort-kayıp 0.2205
+[T-0154] epoch 3 ort-kayıp 0.1890
+[T-0154] K3 EĞİTİM (val>=0,75 VE baseline+0,15 VE kayıp-azalıyor) → GEÇTİ
+[T-0154] epoch 1 ort-kayıp 0.3604
+[T-0154] epoch 2 ort-kayıp 0.2205
+[T-0154] epoch 3 ort-kayıp 0.1890
+[T-0154] K4 DETERMİNİZM (ikinci-koşum state_dict SHA birebir) → GEÇTİ
+[T-0154] K6 ŞEMA + ÇIKTI (anahtar-küme birebir + yazım) → GEÇTİ
+[T-0154] HÜKÜM: T0154_ROUTER_GECTI rc=0 hukum=f68ae4a0c555d6474dfcdef247335c0245ca63a962a5fc3e13742d65bf53d2e2
