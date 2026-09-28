@@ -45,6 +45,11 @@ def check_bus() -> int:
                 pass
 
     if unread_messages or open_tasks:
+        # T-0175: tetikleme imzası — soğuma-kapısı bunu .son_tetik'e yazarak
+        # değişmeyen durumu tekrar tekrar tetiklemeyi engeller.
+        task_ids = ",".join(str(t[0]) for t in open_tasks) if open_tasks else "-"
+        sig = f"unread={len(unread_messages)};tasks={task_ids}"
+        print(f"[IMZA] {sig}")
         print(f"[YENİ VERİ TESPİT EDİLDİ]")
         if unread_messages:
             print(f"  * Okunmamış Mesaj Sayısı: {len(unread_messages)}")
