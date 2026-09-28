@@ -1,0 +1,53 @@
+============================= test session starts ==============================
+platform darwin -- Python 3.14.7, pytest-9.0.3, pluggy-1.6.0
+rootdir: /Users/hakankilicaslan/Git/tr_llm
+configfile: pytest.ini
+testpaths: tests
+plugins: anyio-4.13.0
+collected 307 items
+
+tests/test_agent_bus_narrative.py ...                                    [  0%]
+tests/test_agent_gateway.py .........                                    [  3%]
+tests/test_apostrophe_tokenization.py ...............                    [  8%]
+tests/test_b1_5_split_leakage.py ..                                      [  9%]
+tests/test_chat_prompt_gates.py ....                                     [ 10%]
+tests/test_compiler.py .......                                           [ 13%]
+tests/test_compiler_entrypoints.py ............                          [ 16%]
+tests/test_conditioning_score.py .......                                 [ 19%]
+tests/test_cot_sanitization_and_rag_precision.py ...                     [ 20%]
+tests/test_cot_vault_and_dual_parser.py ...........                      [ 23%]
+tests/test_curriculum.py .....                                           [ 25%]
+tests/test_dataset_compiler.py ...                                       [ 26%]
+tests/test_decompiler.py ....                                            [ 27%]
+tests/test_epistemic_agent_fallback.py .                                 [ 28%]
+tests/test_epistemic_unk_and_vocab_expansion.py ....                     [ 29%]
+tests/test_f2_producers.py .............                                 [ 33%]
+tests/test_generation_contract.py ..                                     [ 34%]
+tests/test_kesisim_lcs.py .......                                        [ 36%]
+tests/test_kristal_dataset.py .....                                      [ 38%]
+tests/test_lexicon.py ......                                             [ 40%]
+tests/test_modul.py .......                                              [ 42%]
+tests/test_modul_embedding_kapisi.py ......                              [ 44%]
+tests/test_morphology_regression.py ....                                 [ 45%]
+tests/test_morphotactics.py .....                                        [ 47%]
+tests/test_olcum_kabi_kapilari.py ...........                            [ 50%]
+tests/test_pad_loss_mask.py .......                                      [ 53%]
+tests/test_phase2.py ....                                                [ 54%]
+tests/test_phonology.py ......                                           [ 56%]
+tests/test_phonology_golden.py .........................                 [ 64%]
+tests/test_prompt_contract.py ....................                       [ 71%]
+tests/test_prompt_masking.py ..........                                  [ 74%]
+tests/test_prompt_masking_dedup.py ......                                [ 76%]
+tests/test_rag_pipeline.py ......                                        [ 78%]
+tests/test_rag_retrieval_guard.py ..                                     [ 78%]
+tests/test_rag_tool.py .....                                             [ 80%]
+tests/test_rlhf_reward.py ...                                            [ 81%]
+tests/test_router_and_merak.py ........                                  [ 84%]
+tests/test_train_args.py .......                                         [ 86%]
+tests/test_train_dpo_entrypoint.py .......                               [ 88%]
+tests/test_train_optimizer_state.py ...........                          [ 92%]
+tests/test_train_scheduler.py ......                                     [ 94%]
+tests/test_two_layer_tokenizer.py ......                                 [ 96%]
+tests/test_wiki_replay_kapilari.py ............                          [100%]
+
+======================= 307 passed in 122.66s (0:02:02) ========================

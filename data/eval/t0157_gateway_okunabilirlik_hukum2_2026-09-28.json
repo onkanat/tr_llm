@@ -1,0 +1,124 @@
+{
+  "damga": "2026-09-28T07:56:36Z",
+  "hukum": "T0157_OKUNABILIRLIK_GECTI",
+  "hukum_kaynagi": "BU BETİK — elle sayı/hüküm YOK",
+  "ilan": "data/eval/t0157_gateway_okunabilirlik_ilan_2026-09-28.md",
+  "ilan2": "data/eval/t0157_gateway_okunabilirlik_ilan2_2026-09-28.md",
+  "ilan2_sha256": "f8170578a233d9dc584cbe334d1a47c6f44d665300138e79810f4d4a57dfad1d",
+  "ilan_sha256": "79827b7589bc91bad359d06435664894b1d2b96f543a0649c4e5b3c03f0e99d5",
+  "kapilar": [
+    {
+      "ayrac": "K1 KAYNAK-ÇIPASI (3 dosya + koşullu router-çıpası)",
+      "gec": true,
+      "olcum": {
+        "data/anka_base_v2.pt": "d0f415f3d882beb4a3dace87fc4a6024bf3c667f033790fc1e472cb60a664a50",
+        "data/anka_router.pt": "64527c725f319db6b3a4d11df1ae98964fa92534e7e4011ca4857376a0ef4720",
+        "data/lexicon/roots.tsv": "fe3005e5e2a594f09cbcfc3286e2c8812953ae6614333815ab87a7e3a6763598",
+        "data/rebuild/vocab_anka_r1_33114.json": "f9940a8d8e1f7cd9428d389f12ff4c5ee448e5a7bfcdcc8ecc9c616fce950984",
+        "router_cipasi_kosulu": "T-0156-öncesi",
+        "sha_sapma": []
+      }
+    },
+    {
+      "ayrac": "K5 STATİK-ÖN (py_compile + AST + pyflakes beyaz-listeli)",
+      "gec": true,
+      "olcum": {
+        "gt_bastirma": true,
+        "gt_fail_closed": true,
+        "pq_capitalize_true": true,
+        "pq_temizlik": true,
+        "py_compile": true,
+        "pyflakes_tum_bulgu": 1,
+        "pyflakes_yeni_bulgu": [],
+        "sabit_temizlik": true,
+        "sabit_yapisal": true,
+        "yukleyici_tanimli": true
+      }
+    },
+    {
+      "ayrac": "K2 CANLI-ÜRETİM (3 sorgu; sızıntı-∅ + regex-∅ + capitalize)",
+      "gec": true,
+      "olcum": {
+        "bastirma_id_sayi": 7,
+        "sorgular": [
+          {
+            "bos_cikti": false,
+            "decompiled_ilkkarakter": "S",
+            "entropy_post": 0.4935,
+            "sorgu": "Kırlangıç kuyruğu nedir?",
+            "tag_regex_eslesme": [],
+            "uretilen_jeton": 17,
+            "yapisal_sizinti": []
+          },
+          {
+            "bos_cikti": false,
+            "decompiled_ilkkarakter": "[",
+            "entropy_post": 2.8918,
+            "sorgu": "Osmanlı Devleti ne zaman kuruldu?",
+            "tag_regex_eslesme": [],
+            "uretilen_jeton": 2,
+            "yapisal_sizinti": []
+          },
+          {
+            "bos_cikti": false,
+            "decompiled_ilkkarakter": "R",
+            "entropy_post": 0.6995,
+            "sorgu": "Meşe ağacı nedir?",
+            "tag_regex_eslesme": [],
+            "uretilen_jeton": 4,
+            "yapisal_sizinti": []
+          }
+        ]
+      }
+    },
+    {
+      "ayrac": "K3 MUTASYON-KANITI (boş→RuntimeError; zayıf→PAD VAR; tam→YOK)",
+      "gec": true,
+      "olcum": {
+        "bos_sabir_istisna": "RuntimeError: DURDURULDU (T-0157): vocab dolu ama yapısal-jeton bastırma listesi çözülemedi (boş); sessiz-bastırma",
+        "tam_cikti": [
+          1,
+          2
+        ],
+        "tam_yapisal_sizinti": [],
+        "zayif_cikti": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "zayif_sizinti": [
+          0
+        ]
+      }
+    },
+    {
+      "ayrac": "K4 DAVRANIŞ-KORUMA (ask 17-anahtar; PQ 16-anahtar; UNK sinyali)",
+      "gec": true,
+      "olcum": {
+        "ask_anahtar_kume_esit": true,
+        "ask_anahtar_sayi": 17,
+        "epistemic_failure": true,
+        "future_train_recorded": true,
+        "pq_anahtar_kume_esit": true,
+        "pq_anahtar_sayi": 16,
+        "response_text": "",
+        "response_text_str": true,
+        "unk_korunur": true
+      }
+    },
+    {
+      "ayrac": "K6 CANLI-DOKUNULMAZLIK (ağ istemcisi kurulmadı)",
+      "gec": true,
+      "olcum": {
+        "ag_istemcisi": "YOK",
+        "canli_192_168_1_9_istek": 0,
+        "create_default_cagrildi": false,
+        "localhost_istek": 0,
+        "vector_memory": ":memory: (storage_path=None)"
+      }
+    }
+  ],
+  "rc": 0
+}

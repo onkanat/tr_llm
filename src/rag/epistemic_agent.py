@@ -38,6 +38,15 @@ from src.rag.vector_memory import VectorMemory
 from src.rag.embedding import generate_kristal_vector, generate_sparse_vector
 from src.rag.rag_pipeline import is_context_usable, build_rag_prompt_tokens, RAG_MATCH_THRESHOLD
 
+# T-0157: Üretimde asla çıkarılmayacak yapısal zarf-jetonları
+# (chat_prompt.py:174-182 kalıbının gateway karşılığı). EOS/</OUTPUT>
+# bastırılmaz — meşru dur-jetonlarıdır.
+YAPISAL_BASTIRMA_JETONLARI = ("<PAD>", "<BOS>", "<INSTRUCTION>", "</INSTRUCTION>",
+                               "<INPUT>", "</INPUT>", "<OUTPUT>")
+# T-0157: Üretim-sonrası id-düzeyi temizlik (ikinci savunma hattı).
+# UNK FİLTRELENMEZ — morpheme_output'taki UNK sayımı epistemik-sinyaldir.
+TEMIZLIK_JETONLARI = YAPISAL_BASTIRMA_JETONLARI + ("<EOS>", "</OUTPUT>")
+
 
 def load_trained_router_state(router: TriModalRouter, router_state_path: str) -> TriModalRouter:
     """T-0155: Egitilmis router agirliklarini fail-closed yukler.
@@ -240,7 +249,19 @@ class EpistemicCuriosityAgent:
             
         eos_id = self.vocab.stoi.get("<EOS>", -1) if self.vocab else -1
         output_end_id = self.vocab.stoi.get("</OUTPUT>", -1) if self.vocab else -1
-        
+
+        # T-0157: çağrı-başına bir kez yapısal-jeton bastırma id'lerini çöz.
+        # vocab None → bastırma YOK (mock-güvenli); vocab dolu AMA liste boş →
+        # RuntimeError (sessiz-bastırma-düşmesi YOK; fail-closed).
+        bastirma_idleri: List[int] = []
+        if self.vocab:
+            bastirma_idleri = [self.vocab.stoi[t] for t in YAPISAL_BASTIRMA_JETONLARI
+                               if t in self.vocab.stoi]
+            if not bastirma_idleri:
+                raise RuntimeError(
+                    "DURDURULDU (T-0157): vocab dolu ama yapısal-jeton "
+                    "bastırma listesi çözülemedi (boş); sessiz-bastırma YOK.")
+
         last_step_entropy = 0.0
         
         with torch.no_grad():
@@ -263,6 +284,11 @@ class EpistemicCuriosityAgent:
                         else:
                             logits_last[token_id] *= repetition_penalty
                             
+                # T-0157: yapısal-jeton bastırması (chat_prompt.py:174-182 kalıbı)
+                for sid in bastirma_idleri:
+                    if 0 <= sid < logits_last.size(-1):
+                        logits_last[sid] = -float("inf")
+
                 pred_id = torch.argmax(logits_last).item()
                 generated.append(pred_id)
                 
@@ -350,13 +376,18 @@ class EpistemicCuriosityAgent:
         
         eos_id = self.vocab.stoi.get("<EOS>", -1) if self.vocab else -1
         output_end_id = self.vocab.stoi.get("</OUTPUT>", -1) if self.vocab else -1
-        clean_gen_tokens = [tid for tid in gen_tokens if tid not in (eos_id, output_end_id)]
+        # T-0157: id-düzeyi temizlik — yapısal jetonlar ikinci savunma hattı.
+        temizlik_idler = {eos_id, output_end_id}
+        if self.vocab:
+            temizlik_idler |= {self.vocab.stoi[t] for t in TEMIZLIK_JETONLARI
+                               if t in self.vocab.stoi}
+        clean_gen_tokens = [tid for tid in gen_tokens if tid not in temizlik_idler]
         morpheme_output = " ".join([self.vocab.decode(tid) for tid in clean_gen_tokens]) if self.vocab else ""
         
         decompiled_text = ""
         if self.decompiler and morpheme_output:
             try:
-                decompiled_text = self.decompiler.decompile_sentence(morpheme_output)
+                decompiled_text = self.decompiler.decompile_sentence(morpheme_output, capitalize=True)
             except Exception:
                 decompiled_text = morpheme_output
                 

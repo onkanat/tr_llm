@@ -1,0 +1,16 @@
+[T-0157] İLAN sha256=79827b7589bc91bad359d06435664894b1d2b96f543a0649c4e5b3c03f0e99d5 damga=2026-09-28T07:56:36Z
+[T-0157] İLAN-2 sha256=f8170578a233d9dc584cbe334d1a47c6f44d665300138e79810f4d4a57dfad1d
+[T-0157] K1 KAYNAK-ÇIPASI (3 dosya + koşullu router-çıpası) → GEÇTİ
+[T-0157] K5 STATİK-ÖN (py_compile + AST + pyflakes beyaz-listeli) → GEÇTİ
+[T-0157] CİHAZ: MPS hazır
+[T-0157] taban-model yüklendi
+[T-0157] VectorMemory :memory: kuruldu (ağ YOK)
+[T-0157] agent kuruldu (router eğitilmiş-yol: data/anka_router.pt)
+[T-0157] K2 sorgu=«Kırlangıç kuyruğu nedir?» jeton=17 sizinti=∅ metin=68-karakter
+[T-0157] K2 sorgu=«Osmanlı Devleti ne zaman kuruldu?» jeton=2 sizinti=∅ metin=11-karakter
+[T-0157] K2 sorgu=«Meşe ağacı nedir?» jeton=4 sizinti=∅ metin=14-karakter
+[T-0157] K2 CANLI-ÜRETİM (3 sorgu; sızıntı-∅ + regex-∅ + capitalize) → GEÇTİ
+[T-0157] K3 MUTASYON-KANITI (boş→RuntimeError; zayıf→PAD VAR; tam→YOK) → GEÇTİ
+[T-0157] K4 DAVRANIŞ-KORUMA (ask 17-anahtar; PQ 16-anahtar; UNK sinyali) → GEÇTİ
+[T-0157] K6 CANLI-DOKUNULMAZLIK (ağ istemcisi kurulmadı) → GEÇTİ
+[T-0157] HÜKÜM: T0157_OKUNABILIRLIK_GECTI rc=0 hukum=0ef0e085ad378556d94ef294372d62ad68e9c7dafedb71263aba00302d346d62
