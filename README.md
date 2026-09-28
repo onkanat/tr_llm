@@ -2,8 +2,8 @@
 
 [![Python 3.14](https://img.shields.io/badge/Python-3.14-blue.svg)](https://python.org)
 [![PyTorch](https://img.shields.io/badge/PyTorch-2.11-ee4c2c.svg)](https://pytorch.org)
-[![Tests Passing](https://img.shields.io/badge/Tests-99%2F99%20Passed%20(100%25)-brightgreen.svg)]()
-[![Zero-OOV](https://img.shields.io/badge/Zero--OOV-Deterministic%20Ontology%20(32.816%20Tokens)-blueviolet.svg)]()
+[![Tests Passing](https://img.shields.io/badge/Tests-307%2F307%20Passed%20(100%25)-brightgreen.svg)]()
+[![Zero-OOV](https://img.shields.io/badge/Zero--OOV-Deterministic%20Ontology%20(33.114%20Tokens)-blueviolet.svg)]()
 [![Self-RAG](https://img.shields.io/badge/RAG-Autonomous%20Vector%20Rover-orange.svg)]()
 [![CoT Vault](https://img.shields.io/badge/Reasoning-Isolated%20CoT%20Vault-gold.svg)]()
 [![1931 History SFT-DPO](https://img.shields.io/badge/Dataset-1931%20Türk%20Tarihi%20(SFT%2FChat%2FDPO)-red.svg)](https://huggingface.co/datasets/onkanat/turk-tarihi-1931-sft-dpo)
@@ -20,12 +20,12 @@ Geleneksel Büyük Dil Modelleri (LLM), devasa veri setleriyle bir kez eğitilip
 **Kristal–Vektörel Mimarisi**, bu paradigmayı üç temel ayaktan dönüştürür:
 
 1. **Kristal Derleyici (Lego İlkesi - Sıfır OOV):**
-   Türkçe gibi sondan eklemeli dillerde kelimeler rastgele BPE parçalarına bölünmez. Sonlu ve saf bir atomik kök ontolojisi ($M_k = 48.936$ tekil TDK GTS lemmması, $32.816$ aktif token) ile yönlü çizge (durum makinesi) tabanlı morfotaktik kurallar birleştirilerek sonsuz yüzey formu deterministik olarak analiz edilir ve sentezlenir:
+   Türkçe gibi sondan eklemeli dillerde kelimeler rastgele BPE parçalarına bölünmez. Sonlu ve saf bir atomik kök ontolojisi ($M_k = 48.936$ tekil TDK GTS lemması, $33.114$ aktif külliyat token'ı [`vocab_anka_r1_33114.json`]; taban sözlük: $32.852$ token [`vocab_base_32852.json`]) ile yönlü çizge (durum makinesi) tabanlı morfotaktik kurallar birleştirilerek sonsuz yüzey formu deterministik olarak analiz edilir ve sentezlenir:
    $$C = \Sigma [f(M_k \Sigma M_e)]$$
 2. **Vektörel Gezgin (Vector Rover, Self-RAG & Epistemik Döngü):**
    Model, tüm olgusal bilgileri statik ağırlıklarında ezberlemek zorunda değildir. Merak motoru ($\mathcal{H}(z) > \tau$) ve otonom `<ARA> ... </ARA>` sorgulama refleksi ile evrensel vektör veritabanında (Qdrant) gezinir; $\ge 0.85$ uyumlu kanıt metni ile yanıt üretir. Eğer model yüksek uyumlu belgeyi almasına rağmen anlayamazsa, bu örnek `future_train_vector.jsonl` kütüğüne kaydedilerek otonom yeniden eğitim döngüsünü besler.
 3. **İzole Akıl Yürütme Kasası (CoT Vault & Morphemic Reasoning):**
-   Öğretmen modellerin (Gemini, Ollama) ürettiği derin düşünce adımları çöpe atılmaz veya deklaratif belleğe bulaştırılmaz; çift çıktılı ayrıştırıcı (`extract_cot_and_card`) ile ayrıştırılır. Temiz bilgi kartları (`<BILGI_KARTI>`) doğrudan `kristal_bellek`'e aktarılırken, düşünce zincirleri (`<DUSUNCE>`) `data/pedagogy/cot_vault.jsonl` kasasında ve `muhakeme_bellek` koleksiyonunda arşivlenerek Evre 5 morfemik akıl yürütme eğitimine zemin hazırlar.
+   Öğretmen modellerin (Gemini, Ollama) ürettiği derin düşünce adımları çöpe atılmaz veya deklaratif belleğe bulaştırılmaz; çift çıktılı ayrıştırıcı (`extract_cot_and_card`) ile ayrıştırılır. Temiz bilgi kartları (`<BILGI_KARTI>`) doğrudan `anka_bellek`'e aktarılırken (T-0151 yeniden adlandırma; 36-point kanonik koleksiyon; canlı 192.168.1.9:6333), düşünce zincirleri (`<DUSUNCE>`) `data/pedagogy/cot_vault.jsonl` kasasında ve `muhakeme_bellek` koleksiyonunda arşivlenerek Evre 5 morfemik akıl yürütme eğitimine zemin hazırlar.
 
 ---
 
@@ -38,7 +38,7 @@ flowchart TD
         Lexicon[("Kök Sözlüğü - roots.tsv\n48.936 Tekil Lemma / 53.109 Satır")] --> Comp
         Graph["Morfotaktik Çizge (State Machine)"] --> Comp
         Phonology["Fonoloji Motoru (Ses Olayları)"] --> Comp
-        Comp --> Tokenizer["KristalTokenizer\n(Semantik Morfem Vektörü\n32.816 Morfem & Kontrol Belirteci)"]
+        Comp --> Tokenizer["KristalTokenizer\n(Semantik Morfem Vektörü\n33.114 Külliyat / 32.852 Taban Morfem & Belirteç)"]
     end
 
     subgraph REASONING ["2. Nöral Akıl Yürütme & Yönlendirme (KristalLM)"]
@@ -86,15 +86,15 @@ flowchart TD
 - **`decompiler.py`:** Modelin ürettiği semantik morfem dizilerini (`kitap PLURAL CASE_LOC` $\rightarrow$ `kitaplarda`) akıcı Türkçe yüzey biçimine dönüştüren ve SFT meta-etiketlerini koruyan fonetik sentezleyici.
 
 ### 2. Dil Modeli, Merak & Yönlendirici (`src/llm/`, `src/rag/`)
-- **`KristalLM`:** 6 katmanlı, 768 gizli boyutlu ($d_{\text{model}}$), 6 dikkat başlıklı, Vanilla GELU aktivasyonlu iki katmanlı MLP ($3072$ ara boyut), Rotary Position Embedding (RoPE), Causal Prompt Masking ve bağımsız giriş/çıkış projeksiyon matrislerine sahip (**Weight-Tied: False**) **92.97M parametreli** generatif dil modeli.
+- **`KristalLM`:** 6 katmanlı, 768 gizli boyutlu ($d_{\text{model}}$), 6 dikkat başlıklı, Vanilla GELU aktivasyonlu iki katmanlı MLP ($3072$ ara boyut), Rotary Position Embedding (RoPE), Causal Prompt Masking ve bağımsız giriş/çıkış projeksiyon matrislerine sahip (**Weight-Tied: False**) **92.97M parametreli** generatif dil modeli. (Güncel model soyağacı: **Anka** — `anka_a1r.pt` sha `b93cc1cd…`, güncel taban `anka_base_v2.pt` sha `d0f415f3…`, yönlendirici `anka_router.pt` sha `44a46d89…` [T-0156 devri; sd `d369b3cd…`]; eski `kristal_model.pt` zinciri 18 Eyl 2026'da operatör kararıyla silinmiştir).
 - **`CuriosityEngine` (`src/rag/merak.py`):** Modelin gizli durumundaki Shannon entropisini ($\mathcal{H}(z) = -\sum p \log p$) ölçerek belirsizlik eşiğinde ($\mathcal{H}(z) > \tau$) merak vektörü ($q_{\text{merak}}$) sentezleyen mekanizma.
-- **`TriModalRouter` (`src/llm/router.py`):** Girdi istemi ($P$), merak projeksiyonu ($q_{\text{merak}}$) ve RAG bağlamını ($ctx_{\text{rag}}$) harmanlayarak dinamik uzman seçimi yapan yönlendirici katman.
-- **`VectorMemory` (`src/rag/vector_memory.py`):** Qdrant tabanlı yoğun (KristalEmbedding) ve seyrek (BM25) hibrit arama sunan, çift koleksiyonlu (`kristal_bellek` & `simulasyon_bellek`), sunucu bağlantısı olmadığında otomatik `:memory:` moduna geçen dayanıklı bellek.
+- **`TriModalRouter` (`src/llm/router.py`):** Girdi istemi ($P$), merak projeksiyonu ($q_{\text{merak}}$) ve RAG bağlamını ($ctx_{\text{rag}}$) harmanlayarak dinamik uzman seçimi yapan yönlendirici katman (eğitilmiş ağırlıklar: `data/anka_router.pt`, T-0156 ile daraltılmış pedagoji havuzunda yeniden eğitildi; sd `d369b3cd…`).
+- **`VectorMemory` (`src/rag/vector_memory.py`):** Qdrant tabanlı yoğun (KristalEmbedding) ve seyrek (BM25) hibrit arama sunan, çift koleksiyonlu (`anka_bellek` & `simulasyon_bellek`), uzak sunucu bağlantısı başarısız olduğunda sessiz fallback yapmayan, fail-closed `RuntimeError` fırlatan dayanıklı bellek (T-0148 4A; `:memory:` modu yalnızca `host` ve `storage_path` verilmediğinde yerel bellek olarak açılır; varsayılan `data/qdrant_db` kaldırılmıştır, T-0148 4B).
 - **`EpistemicCuriosityAgent` (`src/rag/epistemic_agent.py`):** Merak, router ve hibrit arama döngüsünü işleten; $\ge 0.85$ uyumlu kanıt metinlerine rağmen modelin anlayamadığı durumları tespit edip `data/future_train_vector.jsonl` kütüğüne kaydeden otonom ajan.
 
 ### 3. Ajan Kapısı, CoT Kasası & Pedagojik Süpervizör (`src/gateway/`)
-- **`AgentGateway` (`src/gateway/agent_gateway.py`):** Büyük agent modellerinin (Antigravity Agent, Gemini API, Ollama) küçük modelle çift yönlü iletişim kurmasını sağlayan Python arayüzü, `muhakeme_bellek` akıl yürütme enjeksiyonu (`inject_reasoning_trace`) ve yerleşik HTTP REST API sunucusu (`/api/query`, `/api/inject`, `/api/status`, `/api/backlog`).
-- **`PedagogicalSupervisor` (`src/gateway/pedagogical_supervisor.py`):** Modeli sınavdan geçiren, yanıtları değerlendiren, çift çıktılı ayrıştırıcı (`extract_cot_and_card`) ile düşünce zincirlerini (`<DUSUNCE>`) `data/pedagogy/cot_vault.jsonl` kasasına ve `muhakeme_bellek`'e izole eden, saf deklaratif bilgi kartlarını (`<BILGI_KARTI>`) ise `kristal_bellek`'e enjekte eden usta-çırak denetçisi.
+- **`AgentGateway` (`src/gateway/agent_gateway.py`):** Büyük agent modellerinin (Antigravity Agent, Gemini API, Ollama) küçük modelle çift yönlü iletişim kurmasını sağlayan Python arayüzü, `muhakeme_bellek` akıl yürütme enjeksiyonu (`inject_reasoning_trace`) ve yerleşik HTTP REST API sunucusu (`/api/query`, `/api/inject`, `/api/status`, `/api/backlog`). T-0155 ile router eğitilmiş-ağırlık entegrasyonu (`create_default` varsayılan `router_state_path="data/anka_router.pt"` + fail-closed dosya-kapısı), T-0156 daraltılmış pedagoji ağırlıkları, T-0157 yapısal jeton bastırma (`YAPISAL_BASTIRMA_JETONLARI`), temizlik ve capitalize ile insan-okunur üretim ve T-0158 canlı gateway çalıştırma desteğine sahiptir.
+- **`PedagogicalSupervisor` (`src/gateway/pedagogical_supervisor.py`):** Modeli sınavdan geçiren, yanıtları değerlendiren, çift çıktılı ayrıştırıcı (`extract_cot_and_card`) ile düşünce zincirlerini (`<DUSUNCE>`) `data/pedagogy/cot_vault.jsonl` kasasına ve `muhakeme_bellek`'e izole eden, saf deklaratif bilgi kartlarını (`<BILGI_KARTI>`) ise `anka_bellek`'e enjekte eden usta-çırak denetçisi.
 - **`RetrainPipeline` (`src/gateway/retrain_pipeline.py`):** `future_train_vector.jsonl` dosyasında biriken çözülememiş epistemik açıkları derleyip modeli otonom yeniden eğiten Karpathy Continuous Learning Loop motoru ve sıfır-unutmalı sözlük cerrahisi (`expand_model_vocabulary`).
 
 ---
@@ -103,7 +103,7 @@ flowchart TD
 
 | Mimari Katman | Doğrulanan Gerçek (Mevcut Durum - v1.8) | Faz B2 ve Gelecek Yol Haritası |
 | :--- | :--- | :--- |
-| **Tokenizer** | Deterministik morfolojik etiketleyici (`kitap PLURAL CASE_LOC`). 48.936 TDK GTS kökü, 32.816 aktif token. Varlıklar `<PROPER_NOUN>`'a düşer. | **İki Katmanlı Hibrit Tokenizer:** Kapalı gramer için morfemler + açık uçlu özel isim ve sayılar için literal yüzey varlık katmanı. |
+| **Tokenizer** | Deterministik morfolojik etiketleyici (`kitap PLURAL CASE_LOC`). 48.936 TDK GTS kökü, 33.114 aktif külliyat token'ı (taban: 32.852). Varlıklar `<PROPER_NOUN>`'a düşer. | **İki Katmanlı Hibrit Tokenizer:** Kapalı gramer için morfemler + açık uçlu özel isim ve sayılar için literal yüzey varlık katmanı. |
 | **Model** | **92.97M Parametre** (42.53M Transformer gövdesi + 50.44M kelime tabloları, Untied, Vanilla GELU). Dar alanda (Ahşap) %92.67 MCQ ayırt etme. | **FSM-Kılavuzlu Çıkarım (Constrained Decoding):** Ek seçiminde biçimsel sentaks hatalarını sıfırlayan aktif FSM logit maskesi. |
 | **Veri & Ölçek** | Sıfırdan 2.5M token ile eğitildi (**Chinchilla optimalinin %0.13'ü**). Vocab'ın %85'i (27.991 token) sıfır gradyan almıştır. | **10× Veri Genişletmesi:** 25M+ token sentetik RAG-sentez ve akıcılık külliyatı ile veri açlığını kapatma. |
 | **Retrieval (RAG)** | Qdrant vektörel bellek altyapısı ve araçları hazır. Model ağırlıklarında `<ARA>` ve `<BELGE>` sentezi henüz eğitilmedi. | **Faz B2 RAG-Sentez Pilotu:** Belgeye koşullu okuma-anlama, seçici sentez ve dürüst çekinme (abstain) eğitimi. |
@@ -113,6 +113,9 @@ flowchart TD
 ---
 
 ## 🔬 Doğrulanmış Model Parametre Dökümü (KristalLM)
+
+> [!NOTE]
+> **Tarihsel Parametre Tablosu Kaydı (damgalı ölçüm: 15 Eyl 2026):** Aşağıdaki tablo 32.816 sözlük boyutlu KristalLM dönemine aittir ve tarihsel kayıt olarak korunmuştur. Güncel 33.114 külliyat sözlüğü tablosu ölçülmeden yazılmamıştır (T-0159 kuralı).
 
 ```
 Kelime Dağarcığı (Vocab): 32.816 token
@@ -160,7 +163,7 @@ Külliyat, veri sızıntılarını önlemek amacıyla normalize soru metni (`cle
 | **Toplu Üretim Ezber Oranı (Held-Out)** | **%0.00** ($N=100$) | Eğitimdeki 163.779 4-gram'dan sıfır ezber; model şablon kopyalamamaktadır. |
 | **Toplu Üretim Tutarsızlık & Sentez (Karma)** | **%39.00 / ROUGE 0.4655** | Ağırlıklı ortalama tutarsızlığın %35'i parenting kök çıktılarından kaynaklanır; ROUGE 0.4655 parenting kutupları nedeniyle yüksektir (Tarih serbest üretim ROUGE: 0.0830). |
 | **Otonom RAG & Vector Rover (Adım B2)** | *Ön-Kayıt Tamamlandı* | `pre_registration_b2_rag.md` kütüğünde operasyonel yargıçlar (`QueryRuleJudge`, `BidirectionalFaithfulnessJudge`) ve iki aşamalı fallback ön-kaydedildi. |
-| **Birim ve Entegrasyon Testleri** | **%100 (99/99)** | Kök sözlüğü, durum makinesi, fonoloji, decompiler, ses türemesi, RAG, merak, router, gateway, retrain, CoT izolasyonu ve morfoloji regresyon altın paketi. |
+| **Birim ve Entegrasyon Testleri** | **%100 (307/307)** | (Damga: 28 Eyl 2026; bağımsız test koşumu) Kök sözlüğü, durum makinesi, fonoloji, decompiler, ses türemesi, RAG, merak, router, gateway, retrain, CoT izolasyonu ve morfoloji regresyon altın paketi. |
 
 ---
 
@@ -208,6 +211,9 @@ pip install -r requirements.txt
   --model data/anka_a1r.pt --vocab data/rebuild/vocab_anka_r1_33114.json
 ```
 
+> [!TIP]
+> **Güncel Taban Model Notu (damgalı ölçüm: 28 Eyl 2026):** Çıkarım ve testler için `data/anka_a1r.pt` kullanılırken, güncel taban ağırlıkları `data/anka_base_v2.pt` (sha `d0f415f3…`) dosyasında yer almaktadır. `--model data/anka_base_v2.pt` yolu beklenen yol olarak verilebilir.
+
 ### 5. 3 Aşamalı Sıralı Model Eğitimi (SFT ➔ Chat ➔ DPO)
 ```bash
 # 0. Veri Hazırlık ve Entegrasyon Boru Hattını Çalıştırma:
@@ -230,7 +236,7 @@ cp data/kristal_model.pt data/kristal_model_sft.pt
 > - **Donmuş yola yazım operatör onayı ister:** dört eğitim girişi yazmadan önce `check_frozen_save_path` çağırır; onay `--allow-frozen-write` ile verilir ve hedef `writes[]`'te beyan edilip üst dizin kiralanmalıdır.
 > - **`<PAD>` kayıp maskesi** varsayılan olarak aktiftir ve kayıp **ölçeğini** değiştirir → maskeleme öncesi/sonrası kayıp değerleri kıyaslanmamalıdır.
 > - Eğitim koşumları sırasında makinede GPU tüketen başka iş çalıştırılmamalıdır (ölçüldü: adım süresi 0,43 → 3,45 sn/adım).
-> - **Yukarıdaki 3 aşamalı eğitim bloğu TARİHSELDİR (damgalı ölçüm: 20 Eyl 2026; güncelleme: 23 Eyl 2026):** içindeki `data/kristal_model.pt` ve `data/kristal_model_sft.pt` **artık yoktur** — Kristal checkpoint zinciri 18 Eyl 2026'da operatör kararıyla silinmiştir (diskte de git'te de yok). **23 Eyl 2026:** bayat A1 soyağacı (`anka_a1.pt`, `anka_pretrain.bin`, `anka_a1_pretrain.bin` + val'leri) operatör onayıyla silinmiştir. Bugün `data/` altında checkpoint olarak yalnız **`data/anka_a1r.pt`** (+ `anka_a1r_pretrain.bin` / `_val.bin`) vardır. Blok **o dönemin kaydı olarak korunmuştur**; güncel karşılığı **doğrulanmadığı için yazılmamıştır**.
+> - **Yukarıdaki 3 aşamalı eğitim bloğu TARİHSELDİR (damgalı ölçüm: 20 Eyl 2026; güncelleme: 23 Eyl 2026; son kontrol: 28 Eyl 2026):** içindeki `data/kristal_model.pt` ve `data/kristal_model_sft.pt` **artık yoktur** — Kristal checkpoint zinciri 18 Eyl 2026'da operatör kararıyla silinmiştir (diskte de git'te de yok). **23 Eyl 2026:** bayat A1 soyağacı (`anka_a1.pt`, `anka_pretrain.bin`, `anka_a1_pretrain.bin` + val'leri) operatör onayıyla silinmiştir. **28 Eyl 2026 itibariyle** güncel Anka soyağacı: çıkarım için **`data/anka_a1r.pt`** (sha `b93cc1cd…`), güncel taban **`data/anka_base_v2.pt`** (sha `d0f415f3…`) ve yönlendirici **`data/anka_router.pt`** (sha `44a46d89…`, T-0156 devri; sd `d369b3cd…`) modelleridir. Blok **o dönemin kaydı olarak korunmuştur**; güncel karşılığı **doğrulanmadığı için yazılmamıştır**.
 
 ---
 
@@ -244,7 +250,7 @@ cp data/kristal_model.pt data/kristal_model_sft.pt
 | `scripts/prepare_turk_tarihi_pipeline.py` | Yok | HF 1931 Türk Tarihi veri setini indirip derler, sözlüğü genişletir ve Qdrant'a indeksler. |
 | `scripts/run_agent_arena.py` | **`--model <pt>`**, **`--vocab <sozluk.json>`** (ikisi de **ZORUNLU**; T-0088), `--domain <history_1931\|carpenter\|pedagogy\|literary\|…>`, `--rounds <sayı>`, `--repetitions <sayı>`, `--device <cpu\|mps>`, `--auto-retrain`, `--server`, `--port <sayı>` | Usta-çırak pedagojik döngüsünü (Gemini/Ollama) veya HTTP REST API Gateway sunucusunu başlatır. `--model`/`--vocab` verilmezse ya da verilen yol/uyum yoksa arena **koşmadan durur**. |
 | `chat_prompt.py` | **`--vocab <sozluk.json>`**, **`--model <model.pt>`** (ikisi de **ZORUNLU**; T-0087), `mode` (SFT/Normal/RAG), `arena`, `--gateway` | Terminal üzerinden çekirdek veya uzmanlaşmış modelle gerçek zamanlı interaktif diyalog sağlar. Zorunlu iki bayraktan biri eksikse ya da verilen yol yoksa sohbet **başlamadan `rc=2` ile durur**; sözlük ile checkpoint satır sayısı uyuşmazsa da durur (T-0087/T-0090). |
-| `rag_tool.py` | `add`, `search`, `list`, `status`, `reset` | Vektörel belleğe (kristal_bellek) harici TXT, MD, PDF veya JSON belge ekler ve yönetir. |
+| `rag_tool.py` | `add`, `search`, `list`, `status`, `reset` | Vektörel belleğe (anka_bellek) harici TXT, MD, PDF veya JSON belge ekler ve yönetir (T-0151). |
 | `scripts/prepare_reasoning_dataset.py` | `--vault <yol>`, `--output <yol>`, `--min-len <sayı>` | CoT kasasındaki düşünce zincirlerini Evre 5 için `train_reasoning_cot.bin` olarak derler. |
 | `scripts/sanitize_vector_memory.py` | `--db-path <yol>`, `--clean-points`, `--seed-woods` | Qdrant vektörel belleğini CoT sızıntılarından arındırır ve saf ağaç/marangozluk kartlarını indeksler. |
 | `scripts/prepare_pedagogy_high_school_dataset.py` | Yok | Bebeklik, morfoloji, edebiyat ve 1931 Tarih SFT verisini `train_pedagogy_highschool.bin` olarak derler. |

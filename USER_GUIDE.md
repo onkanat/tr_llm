@@ -42,6 +42,10 @@ Eğitim külliyatı **hangi sözlükle** derlendiyse, çıkarım da **o sözlük
 > `size mismatch for embedding.embedding.weight: ... [33114, 768] ... current model is [31357, 768]`.
 > `strict=False` bunu **yutmaz** (o yalnız eksik/fazla *anahtarı* yutar, *şekli* değil).
 
+> [!NOTE]
+> **Güncel Taban Model ve Gateway Entegrasyonu (damgalı ölçüm: 28 Eyl 2026):**
+> Soyağacındaki güncel taban ağırlıkları **`data/anka_base_v2.pt`** (sha `d0f415f3d882beb4a3dace87fc4a6024bf3c667f033790fc1e472cb60a664a50`) dosyasında yer almaktadır. `AgentGateway.create_default(model_path=..., vocab_path=..., router_state_path=...)` arayüzü (T-0155), `router_state_path` parametresi için varsayılan olarak `data/anka_router.pt` dosyasını arar ve dosya bulunamazsa fail-closed dosya-kapısıyla `RuntimeError` verir (`agent_gateway.py:141`: "DURDURULDU: router_state_path bulunamadi (sessiz fresh-init engellendi, T-0155)") (T-0156 ile router ağırlıkları pedagogy daraltılarak güncellenmiştir; sd sha `d369b3cd…`).
+
 ### Komut
 
 ```bash
@@ -155,7 +159,7 @@ Kurulumun eksiksiz olduğunu doğrulamak için birim testlerini çalıştırın:
 ```bash
 ./venv/bin/pytest
 ```
-*Tüm 99 testin (kök sözlüğü, durum makinesi, ses olayları, fonetik sentez ve y türemesi, decompiler, merak motoru, tri-modal router, agent gateway, pedagojik supervisor, UNK merakı, sözlük cerrahisi ve morfoloji regresyon altın paketi) eksiksiz geçtiğinden emin olun.*
+*Tüm 307 testin (damgalı ölçüm: 28 Eyl 2026, 307 passed; kök sözlüğü, durum makinesi, ses olayları, fonetik sentez ve y türemesi, decompiler, merak motoru, tri-modal router, agent gateway, pedagojik supervisor, UNK merakı, sözlük cerrahisi ve morfoloji regresyon altın paketi) eksiksiz geçtiğinden emin olun.*
 
 ---
 
@@ -433,7 +437,7 @@ Bellekten getirilen metin verildiğinde model halüsinasyon görmeden belgeden �
 
 ## 7. Agent Gateway ve Pedagojik Arena (`run_agent_arena.py`)
 
-Büyük dil modellerinin (Antigravity Agent'ları, Google Gemini API, Ollama vb.) küçük KristalLM modelini otonom pedagojik denetimden geçirmesi, eksik/hatalı bilgileri RAG belleğine (`kristal_bellek`, `simulasyon_bellek`) otomatik enjekte etmesi ve modeli sürekli öğrenme döngüsüne (Karpathy Continuous Learning Loop) sokması için **Agent Gateway** ve **Pedagogical Supervisor** mimarisi geliştirilmiştir.
+Büyük dil modellerinin (Antigravity Agent'ları, Google Gemini API, Ollama vb.) küçük KristalLM modelini otonom pedagojik denetimden geçirmesi, eksik/hatalı bilgileri RAG belleğine (`anka_bellek`, `simulasyon_bellek`) otomatik enjekte etmesi ve modeli sürekli öğrenme döngüsüne (Karpathy Continuous Learning Loop) sokması için **Agent Gateway** ve **Pedagogical Supervisor** mimarisi geliştirilmiştir.
 
 ### 🌟 1. Etkileşimli Arena Testi (`run_agent_arena.py`)
 Küçük modeli çoklu branşta (1931 Türk Tarihi, Edebiyat & Şiir, Lise Fen/Sosyal, Marangozluk, Morfoloji) doğrudan sınava tabi tutmak ve anlık epistemik durumunu görmek için:
@@ -456,36 +460,56 @@ Küçük modeli çoklu branşta (1931 Türk Tarihi, Edebiyat & Şiir, Lise Fen/S
 - `--device <cpu|mps>` (Hesaplama donanımı)
 
 ### 🚪 2. HTTP REST Gateway Sunucusu
-Dış ajanların HTTP üzerinden modeli sorgulaması ve belleğe bilgi beslemesi için bağımsız REST API sunucusu çalıştırılabilir:
-```bash
-./venv/bin/python -m src.gateway.agent_gateway --host 127.0.0.1 --port 8080
-```
-veya CLI sohbeti içerisinden ağ geçidini ayağa kaldırmak için:
-```bash
-./venv/bin/python chat_prompt.py --gateway --port 8080
-```
+
+> [!WARNING]
+> **Ölçülmüş Komut Uyarısı (T-0158 keşif-ölçümü; damga: 28 Eyl 2026):**
+> `./venv/bin/python -m src.gateway.agent_gateway` komutu modülde `__main__` bloğu bulunmadığı için doğrudan ÇALIŞMAZ (modül tek başına yürütülebilir bir betik değildir).
+> Sunucuyu bağımsız Python başlatıcısıyla ayağa kaldırmak için:
+> ```bash
+> ./venv/bin/python -c "from src.gateway.agent_gateway import AgentGateway, create_http_server; gw = AgentGateway.create_default(); s = create_http_server(gw, host='127.0.0.1', port=8080); s.serve_forever()"
+> ```
+> veya doğrulanmış CLI başlatıcıları kullanılmalıdır:
+> ```bash
+> ./venv/bin/python scripts/run_agent_arena.py --server --port 8080 \
+>   --model data/anka_a1r.pt --vocab data/rebuild/vocab_anka_r1_33114.json
+> ```
+> veya CLI sohbeti içerisinden ağ geçidini ayağa kaldırmak için:
+> ```bash
+> ./venv/bin/python chat_prompt.py --gateway --port 8080 \
+>   --model data/anka_a1r.pt --vocab data/rebuild/vocab_anka_r1_33114.json
+> ```
 
 #### REST API Uç Noktaları:
 | Uç Nokta | Metod | Açıklama |
 |---|---|---|
-| `/api/query` | POST | Modele soru sorar, epistemik merak ($H(z)$) ve RAG yanıtını döndürür. |
-| `/api/inject` | POST | `kristal_bellek` veya `simulasyon_bellek` koleksiyonuna doğrudan bilgi dokümanı ekler. |
+| `/api/query` | POST | Modele soru sorar, epistemik merak ($H(z)$), uzman dağılımı ve RAG yanıtını döndürür (17 anahtarlı yanıt; `future_train_path` koşulsuz döner). |
+| `/api/inject` | POST | `anka_bellek` veya `simulasyon_bellek` koleksiyonuna doğrudan bilgi dokümanı ekler. |
 | `/api/check` | POST | Modelin verilen sorgu ile enjekte edilen bilgiyi $\ge 0.85$ alaka skoruyla bulup bulamadığını denetler. |
 | `/api/backlog` | GET | `future_train_vector.jsonl` içindeki kuyrukta bekleyen yeniden eğitim örneklerini listeler. |
 | `/api/status` | GET | Kapının ve vektör belleklerinin genel sağlık durumunu döner. |
 
 #### Örnek REST İstekleri (cURL):
 ```bash
-# Model Sorgulama
+# Model Sorgulama (Gerçek Gövde Anahtarları: query / instruction / mode; T-0158 smoke-test)
 curl -X POST http://localhost:8080/api/query \
   -H "Content-Type: application/json" \
-  -d '{"prompt": "Ahşapta zıvana birleştirme nedir?"}'
+  -d '{"query": "Kırlangıç kuyruğu nedir?", "instruction": "Belgeye göre cevapla.", "mode": "RAG"}'
+
+# Ölçülen Örnek Çıktı (HTTP 200, 17 anahtar, 1,04 sn):
+# response_text: "Sırtı daima keskin tutulmalı..." (T-0157 capitalize & temizlik)
+# router_experts: ["grammar_core", "legal"]
+# future_train_path: "data/future_train_vector.jsonl"
 
 # Belleğe Bilgi Enjeksiyonu
 curl -X POST http://localhost:8080/api/inject \
   -H "Content-Type: application/json" \
   -d '{"collection": "simulasyon_bellek", "text": "Zıvana geçme yüksek mukavemetli ahşap birleştirmedir.", "metadata": {"source": "pedagoji"}}'
+```
 
+> [!CAUTION]
+> **Canlı Bellek Yazım Uyarısı (T-0158):** Canlı Qdrant ortamında (`192.168.1.9:6333`) `anka_bellek` koleksiyonu 36-point kanonik doğrulanmış durumdadır. `/api/inject` doğrudan hedef koleksiyona kalıcı yazım yapar; testler için `simulasyon_bellek` tercih edilmelidir.
+
+```bash
 # Bulunabilirlik Denetimi (Threshold: 0.85)
 curl -X POST http://localhost:8080/api/check \
   -H "Content-Type: application/json" \
@@ -511,7 +535,7 @@ Girdiniz: arena
 
 ## 7.1 CoT Kasası ve Morfemik Akıl Yürütme (CoT Vault & Reasoning Isolation)
 
-Büyük öğretmen modeller (Google Gemini 2.5 Flash, Ollama gpt-oss:20b) tarafından üretilen iç düşünce adımları (Chain-of-Thought), modelin felsefi ve pedagojik kalitesi açısından son derece değerlidir; ancak bu adımlar deklaratif arama belleğine (`kristal_bellek`) sızdığında sahte eşleşmelere yol açar.
+Büyük öğretmen modeller (Google Gemini 2.5 Flash, Ollama gpt-oss:20b) tarafından üretilen iç düşünce adımları (Chain-of-Thought), modelin felsefi ve pedagojik kalitesi açısından son derece değerlidir; ancak bu adımlar deklaratif arama belleğine (`anka_bellek`) sızdığında sahte eşleşmelere yol açar.
 
 Bu sorunu çözmek için **Çift Çıktılı Ayrıştırma ve İzolasyon Mimarisi** uygulanmıştır:
 
@@ -521,7 +545,7 @@ Bu sorunu çözmek için **Çift Çıktılı Ayrıştırma ve İzolasyon Mimaris
            ▼
 extract_cot_and_card()
      ├──> <DUSUNCE>      ──> data/pedagogy/cot_vault.jsonl & Qdrant: muhakeme_bellek
-     └──> <BILGI_KARTI>  ──> Qdrant: kristal_bellek (Tamamen saf deklaratif Türkçe)
+     └──> <BILGI_KARTI>  ──> Qdrant: anka_bellek (Tamamen saf deklaratif Türkçe)
 ```
 
 ### 1. Akıl Yürütme Verisini İkili Eğitime Derleme (Evre 5 Hazırlığı)
@@ -556,7 +580,7 @@ from scripts.train_step_demo import KristalLM
 
 # 1. Derleyici ve Sözlüğü Hazırla
 vocab = Vocabulary()
-vocab.load('data/rebuild/vocab_base_32852.json')   # kanonik taban sözlüğü (16 Eyl 2026); eski betiklerde data/vocab.json (31.357) hâlâ geçebilir
+vocab.load('data/rebuild/vocab_base_32852.json')   # kanonik taban sözlüğü (32.852 token, train.py:66 varsayılanı); güncel çıkarım ve A1-r külliyatı için data/rebuild/vocab_anka_r1_33114.json (33.114 token, sha f9940a8d…) kullanılır (taban ve külliyat sözlükleri ayrıdır)
 
 lexicon = LexiconManager()
 lexicon.load_from_tsv('data/lexicon/roots.tsv')
@@ -584,9 +608,9 @@ print("Türkçe Karşılık:", turkce_metin)
 - **Çözüm:** Adım B1.5 ile gelen `scripts/train_step_b1_5_rigorous.py` mimarisi kullanılır. Bu mimaride veri kümesi (`train_fast_ds.pt`) ve `sign_mask` tensörleri önceden hesaplanıp MPS belleğine kilitlenir; adım süresi 0.58 saniyeye düşer.
 - **ÖLÇÜLMÜŞ EK NEDEN (16 Eyl 2026):** Aynı makinede **GPU tüketen başka iş** (tarayıcıda video/YouTube) açıkken adım süresi **0,43 → 3,45 sn/adım**'a çıktı ve 75 saniyelik tekil takılmalar görüldü (T-0052 ölçümü; neden birinci elden teyit edildi). **Koşum sırasında makinede GPU'ya başka iş bindirmeyin** ve adım süresini koşumun **başında ve sonunda** ölçün: 2-3× sapma model/kod değil **yük** sinyalidir.
 
-### 2. Qdrant Bağlantı Hatası (`ConnectionRefusedError`)
-- **Belirti:** `[VectorMemory]` başlatılırken `localhost:6333` adresine bağlanılamadı uyarısı.
-- **Çözüm:** Sistemde gömülü bir **Resilient Fallback** mekanizması bulunmaktadır. Qdrant sunucusu çalışmıyorsa sistem otomatik olarak RAM içi (`:memory:`) vektör veritabanına geçer. Qdrant sunucusunu yerelde başlatmak isterseniz:
+### 2. Qdrant Bağlantı Hatası (`ConnectionRefusedError` / `RuntimeError`)
+- **Belirti:** `[VectorMemory]` başlatılırken uzak sunucuya (`localhost:6333` veya `192.168.1.9:6333`) bağlanılamadı hatası.
+- **Davranış Gerçeği (T-0148 4A; damgalı ölçüm: 28 Eyl 2026):** "Uzak sunucuya bağlanılamadığında otomatik RAM içi :memory: moduna geçer" iddiası BAYATTIR. `VectorMemory`'ye `host` argümanı verilmişse ve sunucuya ulaşılamıyorsa sistem sessizce bellek moduna düşmez; veri bütünlüğünü korumak ve sessiz veri kaybını önlemek için fail-closed olarak doğrudan **`RuntimeError`** fırlatır. RAM içi geçici bellek (`:memory:`), yalnızca `host` ve `storage_path` parametrelerinin ikisi de `None` olarak bırakıldığında yerel testler için devreye girer (varsayılan `data/qdrant_db` yerel yolu T-0148 4B ile kaldırılmıştır). Yerelde Qdrant sunucusu başlatmak isterseniz:
   ```bash
   docker run -p 6333:6333 qdrant/qdrant
   ```
