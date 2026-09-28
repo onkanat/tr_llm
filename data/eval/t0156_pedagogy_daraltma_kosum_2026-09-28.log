@@ -1,0 +1,27 @@
+[T-0156] İLAN sha256=f1d3f2e9f061841fe4edee5bcccff8c1d2a496fc25cc85ffad9b77d31ecd2060 damga=2026-09-28T16:19:27Z
+[T-0156] K1 DEVİR-ÇIPASI + KAYNAK-DİGEST (devir==64527c72…; 4-dosya) → GEÇTİ
+[T-0156] CİHAZ (özellik-çıkarımı: MPS) → GEÇTİ
+[T-0156] taban-model yüklendi: eksik=0 fazla=0
+[T-0156] havuz-envanter: pedagogy-tekil=7048 parenting-tekil=8025 gc-tekil=13733
+[T-0156] K5 VERİ-ENVANTER (4-dosya; havuz=7.048; parenting-0; gc-0) → GEÇTİ
+[T-0156] özellik-çıkarımı: train 1500 + val 300 (MPS)
+[T-0156] özellik 300/1500
+[T-0156] özellik 600/1500
+[T-0156] özellik 900/1500
+[T-0156] özellik 1200/1500
+[T-0156] özellik 1500/1500
+[T-0156] özellik 300/300
+[T-0156] özellik-çıkarımı tamam (27.8 sn; 4096-üstü kırpılan: 0+0)
+[T-0156] K2 BASELINE (fresh-init daraltılmış-val top-1; kayıt-değer) → GEÇTİ
+[T-0156] epoch 1 ort-kayıp 0.1154
+[T-0156] epoch 2 ort-kayıp 0.0195
+[T-0156] epoch 3 ort-kayıp 0.0184
+[T-0156] K3 EĞİTİM (val>=0,75 VE baseline+0,15 VE kayıp-azalan VE >=490/500) → GEÇTİ
+[T-0156] epoch 1 ort-kayıp 0.1154
+[T-0156] epoch 2 ort-kayıp 0.0195
+[T-0156] epoch 3 ort-kayıp 0.0184
+[T-0156] K4 DETERMİNİZM (ikinci-koşum state_dict SHA birebir) → GEÇTİ
+[T-0156] K7 KARIŞIM-MATRİSİ (train+val 3×3; satır-toplamı kırılım birebir) → GEÇTİ
+[T-0156] K6 ŞEMA + ÇIKTI (anahtar-küme birebir; anka_router.pt yeniden-yazım) → GEÇTİ
+[T-0156] K8 ENTEGRASYON-ÇIPASI (dosyadan yükleme → sd-sha teyit) → GEÇTİ
+[T-0156] HÜKÜM: T0156_PEDAGOGY_DARALTMA_GECTI rc=0 hukum=2f37d573099765f06be8767e61afd92884ff7e5583aa18adb1e6b71d15993661
