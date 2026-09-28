@@ -5,11 +5,11 @@
 KRİSTAL-VEKTÖREL MİMARİSİ: VEKTÖREL BELLEK ARINDIRMA VE DÖKÜMAN GÜNCELLEME
 ==========================================================================
 Bu betik;
-1. kristal_bellek ve simulasyon_bellek koleksiyonlarını tarar.
+1. anka_bellek ve simulasyon_bellek koleksiyonlarını tarar.
 2. Öğretmen LLM'den sızan ham Chain-of-Thought (CoT) ve İngilizce meta düşünce
    metinlerini tespit eder, temizler veya tamamen siler.
 3. ahsap_ve_marangozluk_rehberi.md dosyasındaki güncel ve temiz ahşap bilgisi
-   parçalarını (Gürgen, Meşe, Çam, Ceviz, Kırlangıç vb.) kristal_bellek'e indeksler.
+   parçalarını (Gürgen, Meşe, Çam, Ceviz, Kırlangıç vb.) anka_bellek'e indeksler.
 """
 
 import os
@@ -88,7 +88,7 @@ def main():
     for client_name, client in clients:
         print(f"\n>>> İstemci İşleniyor: {client_name}")
         # 1. Purge / Sanitize Dirty Points
-        for col_name in ["kristal_bellek", "simulasyon_bellek"]:
+        for col_name in ["anka_bellek", "simulasyon_bellek"]:
             if not client.collection_exists(col_name):
                 continue
             print(f"\n[1] '{col_name}' taranıyor...")
@@ -136,9 +136,9 @@ def main():
                     payload["text"] = clean_txt
                     client.set_payload(col_name, payload=payload, points=[pid])
 
-        # 2. Re-index Knowledge Guide (Gürgen, Meşe, Çam, Ceviz vs.) into kristal_bellek
-        print(f"\n[2] Ahşap ve Marangozluk Rehberi ({client_name}) kristal_bellek'e indeksleniyor...")
-        memory = VectorMemory(collection_name="kristal_bellek", vector_size=768, client=client)
+        # 2. Re-index Knowledge Guide (Gürgen, Meşe, Çam, Ceviz vs.) into anka_bellek
+        print(f"\n[2] Ahşap ve Marangozluk Rehberi ({client_name}) anka_bellek'e indeksleniyor...")
+        memory = VectorMemory(collection_name="anka_bellek", vector_size=768, client=client)
         guide_path = "data/knowledge/ahsap_ve_marangozluk_rehberi.md"
 
         if os.path.exists(guide_path):
@@ -179,9 +179,9 @@ def main():
 
             print(f"  * Yeni indekslenen konu: {added_count} adet.")
 
-        final_kristal = client.count("kristal_bellek").count if client.collection_exists("kristal_bellek") else 0
+        final_kristal = client.count("anka_bellek").count if client.collection_exists("anka_bellek") else 0
         final_sim = client.count("simulasyon_bellek").count if client.collection_exists("simulasyon_bellek") else 0
-        print(f"  * kristal_bellek: {final_kristal} temiz döküman | simulasyon_bellek: {final_sim} temiz döküman")
+        print(f"  * anka_bellek: {final_kristal} temiz döküman | simulasyon_bellek: {final_sim} temiz döküman")
 
     print("\n" + "=" * 70)
     print(" SANITIZATION & ARCHIVING COMPLETED")

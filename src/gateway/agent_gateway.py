@@ -9,7 +9,7 @@ küçük KristalLM modelimizle çift yönlü, yapılandırılmış diyalog kurma
 
 Temel Yetenekler:
 1. `ask()`: Küçük modele soru sorma ve tüm telemetriyi (entropi, RAG skoru, morfemler) alma.
-2. `inject_knowledge()`: Eksik/hatalı alanlar için kristal_bellek veya simulasyon_bellek'e otonom belge ekleme.
+2. `inject_knowledge()`: Eksik/hatalı alanlar için anka_bellek veya simulasyon_bellek'e otonom belge ekleme.
 3. `check_memory()`: Eklenen belgenin hibrit arama ile bulunabilirliğini denetleme.
 4. `get_epistemic_backlog()`: Modelin anlayamadığı (future_train_vector.jsonl) kayıtları listeleme.
 5. `start_http_server()`: Dış agent sistemleri için sıfır bağımlılıklı standart HTTP/REST API sunucusu.
@@ -133,7 +133,7 @@ class AgentGateway:
         # Load Vector Memories — T-0148 4B: storage_path AÇIK-BEYANlı (default
         # "data/qdrant_db" kaldırıldı; None = :memory:/remote-beyan; repo-içi
         # sessiz-yazım yok — data/qdrant_db T-0144 disk-kanıtlı riskti)
-        memory = VectorMemory(collection_name="kristal_bellek", vector_size=768, host="localhost", port=6333, storage_path=storage_path)
+        memory = VectorMemory(collection_name="anka_bellek", vector_size=768, host="localhost", port=6333, storage_path=storage_path)
         general_memory = VectorMemory(collection_name="simulasyon_bellek", vector_size=768, host="localhost", port=6333, storage_path=storage_path)
 
         from scripts.train_step_b1_5_rigorous import compute_sha256
@@ -256,11 +256,11 @@ class AgentGateway:
     def inject_knowledge(
         self,
         text: str,
-        target_collection: str = "kristal_bellek",
+        target_collection: str = "anka_bellek",
         metadata: Optional[Dict[str, Any]] = None
     ) -> Dict[str, Any]:
         """
-        Ingests a new knowledge document into either kristal_bellek or simulasyon_bellek.
+        Ingests a new knowledge document into either anka_bellek or simulasyon_bellek.
         Computes hybrid Kristal dense and sparse vectors and indexes into Qdrant.
         """
         target_mem = self._resolve_target_memory(target_collection)
@@ -312,7 +312,7 @@ class AgentGateway:
     ) -> Dict[str, Any]:
         """
         Ingests a reasoning trace (CoT) into the dedicated reasoning collection,
-        completely isolating thought steps from the declarative 'kristal_bellek' space.
+        completely isolating thought steps from the declarative 'anka_bellek' space.
         T-0148 5D: koleksiyon-adı PARAMETRİK oldu (sabit "muhakeme_bellek"
         ilkel-tanımdı — param'lı çağrı başka koleksiyonu kuramaz); instance
         paylaşımlı-client'dan BAĞIMSIZdır (host/storage_path AÇIK-BEYAN —
@@ -362,7 +362,7 @@ class AgentGateway:
     def check_memory(
         self,
         query: str,
-        target_collection: str = "kristal_bellek",
+        target_collection: str = "anka_bellek",
         top_k: int = 3
     ) -> List[Dict[str, Any]]:
         """
@@ -404,7 +404,7 @@ class AgentGateway:
         return {
             "status": "online",
             "device": str(self.device),
-            "kristal_bellek_docs": kristal_count,
+            "anka_bellek_docs": kristal_count,
             "simulasyon_bellek_docs": simulasyon_count,
             "epistemic_backlog_samples": backlog_count,
             "future_train_path": self.future_train_path
@@ -456,13 +456,13 @@ class AgentGateway:
                     self._send_json(res)
                 elif self.path == "/api/inject":
                     text = payload.get("text", "")
-                    collection = payload.get("collection", "kristal_bellek")
+                    collection = payload.get("collection", "anka_bellek")
                     metadata = payload.get("metadata", {})
                     res = gateway.inject_knowledge(text, target_collection=collection, metadata=metadata)
                     self._send_json(res)
                 elif self.path == "/api/check":
                     query_text = payload.get("query", "")
-                    collection = payload.get("collection", "kristal_bellek")
+                    collection = payload.get("collection", "anka_bellek")
                     top_k = payload.get("top_k", 3)
                     res = gateway.check_memory(query_text, target_collection=collection, top_k=top_k)
                     self._send_json({"results": res})

@@ -122,7 +122,7 @@ def main():
     )
     
     status = gateway.get_status()
-    print(f"  * Bellek Durumu: {C_YELLOW}kristal_bellek{C_RESET} ({status['kristal_bellek_docs']} belge) | {C_CYAN}simulasyon_bellek{C_RESET} ({status['simulasyon_bellek_docs']} belge)")
+    print(f"  * Bellek Durumu: {C_YELLOW}anka_bellek{C_RESET} ({status['anka_bellek_docs']} belge) | {C_CYAN}simulasyon_bellek{C_RESET} ({status['simulasyon_bellek_docs']} belge)")
     print(f"  * Epistemik Kütük (future_train): {C_MAGENTA}{status['epistemic_backlog_samples']} bekleyen örnek{C_RESET}")
 
     if args.server:

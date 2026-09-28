@@ -1,0 +1,76 @@
+{
+  "damga": "2026-09-28T06:28:14Z",
+  "hukum": "DUR",
+  "hukum_kaynagi": "BU BETİK — elle sayı/hüküm YOK",
+  "ilan": "data/eval/anka_bellek_yeniden_adlandirma_ilan1_2026-09-28.md",
+  "ilan_sha256": "4e2383c3bacbf42d74206e454d4ef79269d3c991bc051f1842c1c9a1499a9cac",
+  "kapilar": [
+    {
+      "ayrac": "K1 ESKİ-AD SIFIR (İSTİSNA dogrulama_p*)",
+      "gec": false,
+      "olcum": [
+        "scripts/dogrulama_t0151_anka_bellek.py"
+      ]
+    },
+    {
+      "ayrac": "K2 YENİ-AD ENVANTER == İLAN (36 geçiş)",
+      "gec": true,
+      "olcum": {
+        "scripts/run_agent_arena.py": 2,
+        "scripts/sanitize_all_accumulated_datasets.py": 1,
+        "scripts/sanitize_vector_memory.py": 9,
+        "src/gateway/agent_gateway.py": 9,
+        "src/gateway/pedagogical_supervisor.py": 11,
+        "src/rag/vector_memory.py": 1,
+        "tests/test_agent_gateway.py": 3
+      }
+    },
+    {
+      "ayrac": "K3 STATİK-ÖN: py_compile + AST tanımsız-ad 0",
+      "gec": true,
+      "olcum": []
+    },
+    {
+      "ayrac": "K4 DAVRANIŞ: default'lar + resolve + status (:memory:, canlıya yazım YOK)",
+      "gec": true,
+      "olcum": {
+        "check_default": "anka_bellek",
+        "inject_default": "anka_bellek",
+        "is_in_memory": true,
+        "resolve_anka": "anka_bellek",
+        "resolve_bilinmeyen_istisna": "ValueError",
+        "status_anahtarlar": [
+          "anka_bellek_docs",
+          "device",
+          "epistemic_backlog_samples",
+          "future_train_path",
+          "simulasyon_bellek_docs",
+          "status"
+        ],
+        "status_anka_anahtar": true,
+        "vector_memory_default": "anka_bellek"
+      }
+    },
+    {
+      "ayrac": "K5 ÇIPA-SABİT: P2-P5 betik-shaları birebir",
+      "gec": true,
+      "olcum": {
+        "scripts/dogrulama_p2_rag_gezgini.py": "d0d0b66e0ad0612a…",
+        "scripts/dogrulama_p3_epistemik_kapilar.py": "1249a055f5162acb…",
+        "scripts/dogrulama_p4_universal_hafiza.py": "4790e79a51d2e3f3…",
+        "scripts/dogrulama_p5_ogrenme_kanali.py": "aee7596f6074bf9e…"
+      }
+    },
+    {
+      "ayrac": "K6 CANLI-DOKUNULMAZLIK: kristal_bellek 36 SABİT",
+      "gec": true,
+      "olcum": {
+        "indexed": 36,
+        "points_count": 36,
+        "status": "green",
+        "sunucu": "http://192.168.1.9:6333"
+      }
+    }
+  ],
+  "rc": 2
+}

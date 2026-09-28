@@ -11,7 +11,7 @@ döngüsüne (Teacher-Student Arena) tabi tutar.
 Döngü Adımları:
 1. Müfredat alanı (Ahşap, Morfoloji, Temel Kavram, Edebi Dil) seçilir ve soru yöneltilir.
 2. Modelin cevabı, Shannon Entropisi ve RAG skoru değerlendirilir.
-3. Modelde bilgi eksiği/hatası varsa doğru bilgi RAG belleğine (kristal_bellek veya simulasyon_bellek) enjekte edilir.
+3. Modelde bilgi eksiği/hatası varsa doğru bilgi RAG belleğine (anka_bellek veya simulasyon_bellek) enjekte edilir.
 4. Bilginin model tarafından >= 0.85 uyumla bulunup bulunamadığı kontrol edilir.
 5. Model yine de anlayamazsa `future_train_vector.jsonl` kaydı doğrulanır.
 6. Biriken kayıt eşiği aşıldığında model otomatik yeniden eğitime (retrain) alınır.
@@ -37,21 +37,21 @@ CURRICULUM_PROBES = {
         {
             "query": "Kırlangıç kuyruğu birleştirme nerelerde kullanılır?",
             "instruction": "ahşap uzmanı olarak cevapla.",
-            "target_collection": "kristal_bellek",
+            "target_collection": "anka_bellek",
             "knowledge_to_inject": "Kırlangıç kuyruğu geçme, çekme kuvvetine karşı olağanüstü mukavemet gösterdiği için özellikle çekmece kasalarında, sandık köşelerinde ve masif gövde birleştirmelerinde tercih edilir.",
             "expected_keywords": ["çekmece", "sandık", "kasa", "kuvvet", "mukavemet", "köşe"]
         },
         {
             "query": "Lamba zıvana geçme hangi ahşap yüzeylerde uygulanır?",
             "instruction": "ahşap uzmanı olarak cevapla.",
-            "target_collection": "kristal_bellek",
+            "target_collection": "anka_bellek",
             "knowledge_to_inject": "Lamba zıvana geçme tekniği, geniş masif ahşap yüzeylerde, döşeme tahtalarında, tavan kaplamalarında ve ahşap panellerde mevsimsel genleşmeyi dengelemek için uygulanır.",
             "expected_keywords": ["geniş", "yüzey", "döşeme", "tavan", "panel", "kaplama"]
         },
         {
             "query": "Ahşap kurutmada kereste nem oranı masif mobilya için yüzde kaç olmalıdır?",
             "instruction": "ahşap uzmanı olarak cevapla.",
-            "target_collection": "kristal_bellek",
+            "target_collection": "anka_bellek",
             "knowledge_to_inject": "İç mekan masif ahşap mobilya imalatında kullanılacak kerestenin nem oranı yüzde 8 ile 12 arasında dengelenmiş olmalıdır. Bu oran ahşabın çatlamasını ve dönmesini engeller.",
             "expected_keywords": ["8", "12", "yüzde", "nem", "iç mekan", "mobilya"]
         }
@@ -159,21 +159,21 @@ CURRICULUM_PROBES = {
         {
             "query": "Kırlangıç kuyruğu birleştirme nerelerde kullanılır?",
             "instruction": "ahşap uzmanı olarak cevapla.",
-            "target_collection": "kristal_bellek",
+            "target_collection": "anka_bellek",
             "knowledge_to_inject": "Kırlangıç kuyruğu geçme, çekme kuvvetine karşı olağanüstü mukavemet gösterdiği için özellikle çekmece kasalarında, sandık köşelerinde ve masif gövde birleştirmelerinde tercih edilir.",
             "expected_keywords": ["çekmece", "sandık", "kasa", "kuvvet", "mukavemet", "köşe"]
         },
         {
             "query": "Lamba zıvana geçme hangi ahşap yüzeylerde uygulanır?",
             "instruction": "ahşap uzmanı olarak cevapla.",
-            "target_collection": "kristal_bellek",
+            "target_collection": "anka_bellek",
             "knowledge_to_inject": "Lamba zıvana geçme tekniği, geniş masif ahşap yüzeylerde, döşeme tahtalarında, tavan kaplamalarında ve ahşap panellerde mevsimsel genleşmeyi dengelemek için uygulanır.",
             "expected_keywords": ["geniş", "yüzey", "döşeme", "tavan", "panel", "kaplama"]
         },
         {
             "query": "Ahşap kurutmada kereste nem oranı masif mobilya için yüzde kaç olmalıdır?",
             "instruction": "ahşap uzmanı olarak cevapla.",
-            "target_collection": "kristal_bellek",
+            "target_collection": "anka_bellek",
             "knowledge_to_inject": "İç mekan masif ahşap mobilya imalatında kullanılacak kerestenin nem oranı yüzde 8 ile 12 arasında dengelenmiş olmalıdır. Bu oran ahşabın çatlamasını ve dönmesini engeller.",
             "expected_keywords": ["8", "12", "yüzde", "nem", "iç mekan", "mobilya"]
         },
@@ -272,7 +272,7 @@ def get_curriculum_probes(domain: str = "arena_mix", count: int = 10) -> List[Di
     
     if domain in ("carpenter", "ahsap", "wood"):
         extra_sources = [
-            ("kristal_bellek", carp_path),
+            ("anka_bellek", carp_path),
         ]
     elif domain in ("highschool_genz", "highschool", "genz", "lise"):
         extra_sources = [
@@ -296,7 +296,7 @@ def get_curriculum_probes(domain: str = "arena_mix", count: int = 10) -> List[Di
             ("simulasyon_bellek", hs_path),
             ("simulasyon_bellek", chat_path),
             ("simulasyon_bellek", lit_path),
-            ("kristal_bellek", carp_path),
+            ("anka_bellek", carp_path),
         ]
     seen_queries = {p["query"].strip().lower() for p in probes}
     
@@ -353,7 +353,7 @@ def get_curriculum_probes(domain: str = "arena_mix", count: int = 10) -> List[Di
                     if not keywords:
                         continue
                         
-                    default_inst = "Ahşap ve marangozluk uzmanı olarak cevapla." if target_col == "kristal_bellek" else "Lise düzeyinde eğitim almış Z kuşağı genci olarak açıkla."
+                    default_inst = "Ahşap ve marangozluk uzmanı olarak cevapla." if target_col == "anka_bellek" else "Lise düzeyinde eğitim almış Z kuşağı genci olarak açıkla."
                     probes.append({
                         "query": q,
                         "instruction": inst if inst and ":" not in inst else default_inst,
@@ -758,7 +758,7 @@ class PedagogicalSupervisor:
         """
         query = probe["query"]
         instruction = probe.get("instruction", "Belgeye göre cevapla.")
-        target_coll = probe.get("target_collection", "kristal_bellek")
+        target_coll = probe.get("target_collection", "anka_bellek")
         knowledge_text = probe.get("knowledge_to_inject", "")
         expected_keywords = probe.get("expected_keywords", [])
         

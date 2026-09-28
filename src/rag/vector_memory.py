@@ -22,7 +22,7 @@ RRF_SCORE_MAX = 0.75
 class VectorMemory:
     _shared_clients: Dict[str, Any] = {}
 
-    def __init__(self, collection_name: str = "kristal_bellek", vector_size: int = 768, host: str = None, port: int = 6333, storage_path: Optional[str] = None, client: Optional[QdrantClient] = None):
+    def __init__(self, collection_name: str = "anka_bellek", vector_size: int = 768, host: str = None, port: int = 6333, storage_path: Optional[str] = None, client: Optional[QdrantClient] = None):
         """
         Initializes Qdrant database connection for the Vector Rover prototype.
         Priority:

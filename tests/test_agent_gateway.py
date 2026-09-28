@@ -81,7 +81,7 @@ class TestAgentGateway(unittest.TestCase):
 
     def test_gateway_inject_knowledge_and_check(self):
         # T-0148 5B: bilinmeyen target-adı artık ValueError'dur (sahte-seçici
-        # mutasyon-kanıtı kapatıldı — eski davranış: 'kristal_bellek' echo'nda
+        # mutasyon-kanıtı kapatıldı — eski davranış: 'anka_bellek' echo'nda
         # döner ama backing-instance'e yazılırdı). Bilinmeyen-ad dalı ayrıca
         # kanıtlanır: istisna + count-değişimi YOK + sahte-koleksiyon YOK.
         with self.assertRaises(ValueError):
@@ -191,10 +191,10 @@ class TestAgentGateway(unittest.TestCase):
         # Test status endpoint payload
         status_data = self.gateway.get_status()
         self.assertEqual(status_data["status"], "online")
-        self.assertIn("kristal_bellek_docs", status_data)
+        self.assertIn("anka_bellek_docs", status_data)
 
         # Test inject payload — T-0148 5B: meşru target-adı
-        # (test-kurulumunun kendi koleksiyonu) kullanılır; "kristal_bellek"
+        # (test-kurulumunun kendi koleksiyonu) kullanılır; "anka_bellek"
         # bilinmeyen-ad'dır ve artık ValueError'dur (sahte-seçici kapatıldı).
         inject_data = self.gateway.inject_knowledge(text="Test sunucu bilgisi.", target_collection=self.memory.collection_name)
         self.assertEqual(inject_data["status"], "success")

@@ -180,7 +180,7 @@ def main():
         print(f"\n{C_BOLD}Yerel Qdrant (data/qdrant_db) Arındırılıyor...{C_RESET}")
         try:
             client = QdrantClient(path="data/qdrant_db")
-            for col in ["kristal_bellek", "simulasyon_bellek"]:
+            for col in ["anka_bellek", "simulasyon_bellek"]:
                 if client.collection_exists(col):
                     res, _ = client.scroll(col, limit=2000, with_payload=True)
                     dirty_ids = []
