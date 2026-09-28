@@ -280,11 +280,14 @@ class AgentBus:
         return None
 
     def get_task_file_path(self, task_id: str) -> str:
-        """Görev dosyasının birincil yazma yolunu döner."""
+        """Görev dosyasının birincil yazma yolunu döner.
+
+        T-0164 (C5): legacy-kök (`.agent-bus/tasks/`) önceliği KALDIRILDI —
+        okuma (`get_task`) state'i öncelikliyordu ama yazma kökte eski
+        kopya varsa kökü hedefliyordu; bu okuma/yazma asimetrisi 14/24
+        görevde çift-kopya ayrışması üretti (T-0025 ölçümü, T-0164 onarımı).
+        Yazma yolu artık tek-kaynak: `state/tasks/` (okuma-sırasıyla hizalı)."""
         validate_task_id(task_id, "task_id")
-        legacy = os.path.join(self.bus_dir, "tasks", f"{task_id}.json")
-        if os.path.exists(legacy):
-            return legacy
         return os.path.join(self.tasks_dir, f"{task_id}.json")
 
     # -----------------------------------------------------------------

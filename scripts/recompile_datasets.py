@@ -35,8 +35,9 @@ def main():
             "data/pedagogy/middle_school_chat.jsonl",
             "data/pedagogy/turk_tarihi_sft.jsonl",
             "data/pedagogy/literature_poetry_dataset.jsonl",
-            "data/pedagogy/infancy_dataset.jsonl",
-            "data/pedagogy/parenting_dataset.jsonl",
+            # T-0164 (C1 operatör kararı): infancy + parenting kaynak-dışı —
+            # T-0156 parenting-dışlama kararıyla tutarlı (çıplak-kelime
+            # morfoloji verisi; grammar_core ile örtük örtüşme kanıtlı).
             "data/pedagogy/arena_base_accumulated.jsonl",
             "data/future_train_vector.jsonl"
         ],

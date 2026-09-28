@@ -1,0 +1,151 @@
+{
+  "damga_kaynak": "betik",
+  "amaç": "T-0164 C5 kök-kopya temizliği (silme-ÖNCESİ digest)",
+  "girdi_sayi": 24,
+  "dosyalar": [
+    {
+      "dosya": ".agent-bus/tasks/T-0001.json",
+      "sha256": "42fec7631c85dcd78c0900fe4ab9c44676efa79b9c6a8a48b31c3a4812be949e",
+      "status": "done",
+      "state_ikizi": false
+    },
+    {
+      "dosya": ".agent-bus/tasks/T-0002.json",
+      "sha256": "c49424b098133ac36254c5a2bc1d94edd97061a1e7bc9b8285181d84b582b2c1",
+      "status": "done",
+      "state_ikizi": false
+    },
+    {
+      "dosya": ".agent-bus/tasks/T-0003.json",
+      "sha256": "c436cdc72d5e1fda15297ca7049cec4d9986db11318458732f65439b038deb7b",
+      "status": "done",
+      "state_ikizi": false
+    },
+    {
+      "dosya": ".agent-bus/tasks/T-0004.json",
+      "sha256": "be83d35d5de5fbfe1feb4ef7777586680f6e121b55ed95c39a37c6afe2dc1d94",
+      "status": "done",
+      "state_ikizi": false
+    },
+    {
+      "dosya": ".agent-bus/tasks/T-0006.json",
+      "sha256": "6e81f35def64019303b2ae539695efd3d2007db000a75bad8740911f8a25c8f1",
+      "status": "done",
+      "state_ikizi": false
+    },
+    {
+      "dosya": ".agent-bus/tasks/T-0007.json",
+      "sha256": "7a6fb7b0fc75d98a7811f03b840aff126b7489b7dc931cc54c00eb9cb90b5b4c",
+      "status": "done",
+      "state_ikizi": false
+    },
+    {
+      "dosya": ".agent-bus/tasks/T-0008.json",
+      "sha256": "f0a30e07d2f0d0fa0975b7222badba3a06e9048c1e8baeeea5ac8426cd9f6d8a",
+      "status": "done",
+      "state_ikizi": false
+    },
+    {
+      "dosya": ".agent-bus/tasks/T-0009.json",
+      "sha256": "f48d04c2d52514938d3e9d9ef6afd0224340c69944537596685404549f913089",
+      "status": "done",
+      "state_ikizi": false
+    },
+    {
+      "dosya": ".agent-bus/tasks/T-0010.json",
+      "sha256": "8c27d272e48fdec7e6bf7b9e0f230a278376309b399067c4bdeab5f1feb6184b",
+      "status": "done",
+      "state_ikizi": false
+    },
+    {
+      "dosya": ".agent-bus/tasks/T-0011.json",
+      "sha256": "6f71d160797a024f382b1a993397ef32ea05c0d7f8130cbfa1f4a2ea58523879",
+      "status": "done",
+      "state_ikizi": false
+    },
+    {
+      "dosya": ".agent-bus/tasks/T-0012.json",
+      "sha256": "e991efa8bf1e441648befc4a7c485a4ca63b5aaff95e6d4c7084b37407076c6d",
+      "status": "done",
+      "state_ikizi": true
+    },
+    {
+      "dosya": ".agent-bus/tasks/T-0013.json",
+      "sha256": "db54b6a37d34497fe63b320d746451a0094a52782f8dc44b44a1727e1a88ec16",
+      "status": "done",
+      "state_ikizi": true
+    },
+    {
+      "dosya": ".agent-bus/tasks/T-0014.json",
+      "sha256": "5ebda4174e8f255ee21e7834dbfad9df92e8eb1d56ac3b5b8c43d8f608390509",
+      "status": "done",
+      "state_ikizi": true
+    },
+    {
+      "dosya": ".agent-bus/tasks/T-0015.json",
+      "sha256": "fcb8e543465f0bd207cb8f9919cdc41247cfab454670997ab511156ee04709f7",
+      "status": "done",
+      "state_ikizi": true
+    },
+    {
+      "dosya": ".agent-bus/tasks/T-0016.json",
+      "sha256": "51bfd96187687e5852e7b5228fbd73f5cf581a659b69bc20bcb4948966463883",
+      "status": "done",
+      "state_ikizi": true
+    },
+    {
+      "dosya": ".agent-bus/tasks/T-0017.json",
+      "sha256": "6a79c6b62f40c1942c5031fe4208061d2c35a31a4d0e01e971bbdeba2d861662",
+      "status": "done",
+      "state_ikizi": true
+    },
+    {
+      "dosya": ".agent-bus/tasks/T-0018.json",
+      "sha256": "a712ccb661c044a1b079272201f5fa870c0cfdec564ce3d566746d28e24a139e",
+      "status": "done",
+      "state_ikizi": true
+    },
+    {
+      "dosya": ".agent-bus/tasks/T-0019.json",
+      "sha256": "8a77f22c0aa1a810f59ee6e901fc0f58e3f87c92d7858a403968589a8f2ad7a9",
+      "status": "done",
+      "state_ikizi": true
+    },
+    {
+      "dosya": ".agent-bus/tasks/T-0020.json",
+      "sha256": "325e4bddb0771349886d5fa7bd3ce48fe95364dd3f78a3458ba8ab93baa24205",
+      "status": "done",
+      "state_ikizi": true
+    },
+    {
+      "dosya": ".agent-bus/tasks/T-0021.json",
+      "sha256": "a00af0fa65501f7f8cdaa22e8de8d6dc6013ff494e973c9e2c5f477ab4cdd681",
+      "status": "done",
+      "state_ikizi": true
+    },
+    {
+      "dosya": ".agent-bus/tasks/T-0022.json",
+      "sha256": "c0297dce0f25768448478a77f66d7a9296cb5881078198496ed54b835aab8c35",
+      "status": "done",
+      "state_ikizi": true
+    },
+    {
+      "dosya": ".agent-bus/tasks/T-0023.json",
+      "sha256": "0eebcfde3c6d3fa326d908d3462cb8ff5c018c011bf0af02fc7131a3a2d6a5a3",
+      "status": "done",
+      "state_ikizi": true
+    },
+    {
+      "dosya": ".agent-bus/tasks/T-0024.json",
+      "sha256": "facb75ed78c61ea7cf068c002af1a420ba37529e2b35fa8556f4fc0734941789",
+      "status": "done",
+      "state_ikizi": true
+    },
+    {
+      "dosya": ".agent-bus/tasks/T-0025.json",
+      "sha256": "ec7b1fabb7ad6834e0e6a1ce5e45a64dae480a87dec9c475e9d396bcb65ed179",
+      "status": "done",
+      "state_ikizi": true
+    }
+  ]
+}
