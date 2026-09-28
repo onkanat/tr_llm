@@ -302,7 +302,8 @@ class AgentBus:
         to: Optional[str] = None,
         from_agent: str = "claude",
         ttl_minutes: int = 120,
-        task_id: Optional[str] = None
+        task_id: Optional[str] = None,
+        status: str = "open"
     ) -> Dict[str, Any]:
         self.ensure_directories()
         validate_agent_name(from_agent, "from_agent")
@@ -310,6 +311,8 @@ class AgentBus:
             validate_agent_name(to, "to")
         if task_id is not None:
             validate_task_id(task_id, "task_id")
+        if status not in ("open", "awaiting_approval"):
+            raise ValueError(f"Geçersiz başlangıç görevi statüsü: '{status}'. 'open' veya 'awaiting_approval' olmalıdır.")
 
         clean_writes = [sanitize_rel_path(w) for w in (writes or [])]
         clean_acceptance = [str(a) for a in (acceptance or [])]
@@ -318,6 +321,15 @@ class AgentBus:
             existing_task = self.get_task(task_id)
             if existing_task:
                 # P7: Şartname güncelleme dalı — değişen alanları tespit et ve task_updated olayı yaz
+                # T-0171 (V1 onarımı): onay-kapısı baypası kapandı — awaiting_approval
+                # → open geçişi yalnız danışman (claude) kanalından; aksi halde fail-closed.
+                old_status = existing_task.get("status")
+                if old_status == "awaiting_approval" and status == "open" and from_agent != "claude":
+                    raise ValueError(
+                        f"Onay geçişi reddedildi: '{task_id}' awaiting_approval durumundadır ve "
+                        f"operatör onayı YALNIZ danışman (claude) kanalından verilebilir; "
+                        f"from_agent='{from_agent}' bu geçişi yapamaz (fail-closed)."
+                    )
                 changed_fields = {}
                 new_vals = {
                     "title": title,
@@ -325,7 +337,8 @@ class AgentBus:
                     "writes": clean_writes,
                     "acceptance": clean_acceptance,
                     "to": to,
-                    "ttl_minutes": int(ttl_minutes)
+                    "ttl_minutes": int(ttl_minutes),
+                    "status": status
                 }
                 for k, v in new_vals.items():
                     if existing_task.get(k) != v:
@@ -338,6 +351,13 @@ class AgentBus:
                     "id": task_id,
                     "changed_fields": changed_fields
                 })
+                # T-0171: onay-geçişi ayrı denetim-olayı (task_updated yanında)
+                if old_status == "awaiting_approval" and status == "open":
+                    self.log_event("task_approved", from_agent, {
+                        "id": task_id,
+                        "approved_by": from_agent,
+                        "status": {"old": "awaiting_approval", "new": "open"}
+                    })
                 return {"id": task_id}
 
         # Sonraki ID'yi belirle (T-XXXX)
@@ -361,7 +381,7 @@ class AgentBus:
             "spec": spec,
             "writes": clean_writes,
             "acceptance": clean_acceptance,
-            "status": "open",
+            "status": status,
             "claimed_by": None,
             "claimed_at": None,
             "ttl_minutes": int(ttl_minutes)
@@ -423,6 +443,10 @@ class AgentBus:
         # Tersine dönüş yok: 'done' tekrar açılamaz
         if cur_status == "done":
             return {"ok": False, "conflicts": [f"Görev '{task_id}' tamamlanmış (done) durumdadır, tekrar devralınamaz."]}
+
+        # Onay kapısı: 'awaiting_approval' durumundaki görevler onaylanmadan sahiplenilemez
+        if cur_status == "awaiting_approval":
+            return {"ok": False, "conflicts": [f"Görev '{task_id}' operatör onayı beklemektedir (awaiting_approval) ve onaylanmadan devralınamaz."]}
 
         now_dt = datetime.now(timezone.utc)
         is_expired = False
@@ -926,7 +950,8 @@ TOOL_DEFINITIONS = [
                 "to": {"type": "string", "description": "Hedef ajan (antigravity veya claude)"},
                 "from_agent": {"type": "string", "description": "Görevi açan ajan (varsayılan: claude)"},
                 "ttl_minutes": {"type": "integer", "description": "Görevin yaşam süresi (varsayılan: 120)"},
-                "task_id": {"type": "string", "description": "Güncellenecek görev ID (opsiyonel, verilirse şartname güncellenir ve task_updated olayı üretilir)"}
+                "task_id": {"type": "string", "description": "Güncellenecek görev ID (opsiyonel, verilirse şartname güncellenir ve task_updated olayı üretilir)"},
+                "status": {"type": "string", "enum": ["open", "awaiting_approval"], "description": "Görevin başlangıç durumu (varsayılan: open; operatör onayı gerekiyorsa awaiting_approval)"}
             },
             "required": ["title", "spec"]
         }
@@ -937,7 +962,7 @@ TOOL_DEFINITIONS = [
         "inputSchema": {
             "type": "object",
             "properties": {
-                "status": {"type": "string", "enum": ["open", "claimed", "done", "blocked"], "description": "Filtrelenecek durum"},
+                "status": {"type": "string", "enum": ["open", "awaiting_approval", "claimed", "done", "blocked"], "description": "Filtrelenecek durum"},
                 "to": {"type": "string", "description": "Filtrelenecek hedef ajan (belirtilen ajana veya herkese açık görevleri listeler)"}
             }
         }
@@ -1086,7 +1111,8 @@ def execute_tool_call(bus: AgentBus, name: str, args: Dict[str, Any]) -> Any:
             to=args.get("to"),
             from_agent=args.get("from_agent", "claude"),
             ttl_minutes=args.get("ttl_minutes", 120),
-            task_id=args.get("task_id")
+            task_id=args.get("task_id"),
+            status=args.get("status", "open")
         )
     elif name == "bus_list_tasks":
         return bus.list_tasks(status=args.get("status"), to=args.get("to"))

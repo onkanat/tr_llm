@@ -14,10 +14,11 @@ Bu dosya ile SPEC.md çelişirse **SPEC.md kazanır**.
 
 ## Çevrim (her turda)
 
-1. **Gelen kutusu.** `bus_inbox(who="antigravity")` çağır. Okunmamış mesaj varsa içeriğini uygula.
+1. **Gelen kutusu.** `bus_inbox(who="antigravity", unread_only=True, ack=True)` çağır. Okunmamış mesaj varsa oku, içeriğini uygula ve ack=True ile okundu (read=true) olarak işaretle.
    Bus bir *çekme* kanalıdır: mesaj kendiliğinden gelmez, yalnızca sen sorunca görünür.
 
 2. **Yokla.** `bus_list_tasks(status="open")`.
+   - `awaiting_approval` durumundaki görevler operatör onayı beklemektedir, bunlar devralınamaz (`bus_claim_task` reddeder).
    - Görev listesini `.agent-bus/tasks/` **klasörünü tarayarak ALMA.** O klasör sürümlenmiş, elle
      yazılmış görev dosyalarını tutar; çalışma zamanı kuyruğu `state/tasks/` altındadır ve
      `bus_list_tasks` ikisini birleştirir. Klasör taraması, yalnızca state'te duran görevleri

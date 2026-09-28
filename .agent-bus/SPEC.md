@@ -101,8 +101,9 @@ olarak ayrıdır ve **ikisi de okunur**: kökteki dosyalar elle yazılmış tali
   "cihaz": "mps"
 }
 ```
-`status` ∈ `open | claimed | done | blocked`. `cihaz` ∈ `"mps" | "cpu" | "none"` (varsayılan: `"mps"`).
-Tersine dönüş yok: `done` tekrar açılmaz, yeni görev açılır.
+`status` ∈ `open | awaiting_approval | claimed | done | blocked`. `cihaz` ∈ `"mps" | "cpu" | "none"` (varsayılan: `"mps"`).
+- `awaiting_approval`: Görev şartnamesi açılmıştır ancak operatör onayı beklenmektedir; bu durumdaki görevler `bus_claim_task` tarafından devralınamaz (`ok: false`). Onay-geçişi (`awaiting_approval → open`) **yalnız danışman (claude) kanalından** yapılabilir; diğer ajanlardan gelen geçiş `post_task` düzeyinde `ValueError` ile DUR (fail-closed, T-0171) ve `task_approved` olayı yazılır.
+- Tersine dönüş yok: `done` tekrar açılmaz, yeni görev açılır.
 
 ### Kiralama — `state/leases/<slug>.json`
 ```json
@@ -205,6 +206,7 @@ sorumluluğundadır ve sözleşmesi şudur:
 | **başka sahip süresi dolmuş görevi devralır** | `ok: true`, `task_claim_takeover` olayı yazılır (devralma zaman aşımı aktif) |
 | **aynı sahip kendi görevini tekrar devralır** | `ok: true` — çökme sonrası devam yolu korunur |
 | **aynı sahip başka bir aktif görevi varken 2. görevi devralır** | `ok: false`, `conflicts` dolu (P4: tek görev kuralı koda bağlandı) |
+| **`awaiting_approval` durumundaki görev devralınır** | `ok: false`, `conflicts` dolu (onay-kapısı koruması) |
 | `done` görev tekrar devralınır | `ok: false`, terminal |
 | var olmayan kimlik | temiz hata |
 
