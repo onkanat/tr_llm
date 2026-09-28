@@ -786,9 +786,18 @@ class AgentBus:
         # Görev dosyasındaki durumu da güncelle
         task = self.get_task(task_id)
         if task:
+            old_status = task.get("status")
             task["status"] = status
             target_task_file = self.get_task_file_path(task_id)
             atomic_write_json(target_task_file, task)
+            # T-0165 (B5): durum-değişimi olay-diliyle görünüyor olsun —
+            # P7 `task_updated` tipi (bus_post_task güncelleme-dalıyla aynı
+            # şema). Status değişmezse olay YOK (idempotent).
+            if old_status != status:
+                self.log_event("task_updated", task.get("claimed_by", "unknown") if task else "unknown", {
+                    "id": task_id,
+                    "changed_fields": {"status": {"old": old_status, "new": status}}
+                })
 
         self.log_event("result_reported", task.get("claimed_by", "unknown") if task else "unknown", result_data)
         return {"ok": True}
@@ -1765,6 +1774,42 @@ def run_selftest(real_repo_root: Optional[str] = None) -> bool:
             return False
 
         # -------------------------------------------------------------
+        # Adım 13: T-0165 -> P9 (report_result durum-değişimi task_updated)
+        # -------------------------------------------------------------
+        task_f_res = bus.post_task(title="P9 Görev F", spec="F şartnamesi", to="antigravity", from_agent="claude")
+        bus.claim_task(task_id=task_f_res["id"], owner="antigravity")
+
+        def _count_events(etype: str) -> int:
+            if not os.path.exists(bus.events_file):
+                return 0
+            with open(bus.events_file, "r", encoding="utf-8") as ef:
+                return sum(1 for l in ef if l.strip() and json.loads(l).get("event") == etype)
+
+        bus.report_result(task_id=task_f_res["id"], status="done", summary="F bitti")
+        tu_sonra = _count_events("task_updated")
+        bus.report_result(task_id=task_f_res["id"], status="done", summary="F tekrar (durum değişimsiz)")
+        tu_sonra2 = _count_events("task_updated")
+
+        last_tu = None
+        if os.path.exists(bus.events_file):
+            with open(bus.events_file, "r", encoding="utf-8") as ef:
+                for l in ef:
+                    e = json.loads(l)
+                    if e.get("event") == "task_updated":
+                        last_tu = e
+        cf = last_tu.get("payload", {}).get("changed_fields", {}) if last_tu else {}
+        p9_pass = (
+            (tu_sonra >= 1) and (tu_sonra2 == tu_sonra)  # değişimsiz tekrar olay-yazmaz
+            and (cf.get("status") == {"old": "claimed", "new": "done"})
+            and (last_tu.get("payload", {}).get("id") == task_f_res["id"])
+        )
+        step13_pass = p9_pass
+        print(f"[{'GEÇTİ' if step13_pass else 'KALDI'}] Adım 13: T-0165 -> P9 (report_result durum-değişimi task_updated; değişimsiz tekrar olay-yazmaz) doğrulandı", file=sys.stderr)
+        if not step13_pass:
+            sys.stderr.write(f"  Detay: p9={p9_pass}, tu_sonra={tu_sonra}, tu_sonra2={tu_sonra2}, cf={cf}\n")
+            return False
+
+        # -------------------------------------------------------------
         # EK KONTROL: Kök Çözümleme Önceliği (CLI > AGENT_BUS_ROOT > cwd)
         # -------------------------------------------------------------
         orig_env = os.environ.get("AGENT_BUS_ROOT")
@@ -1784,7 +1829,7 @@ def run_selftest(real_repo_root: Optional[str] = None) -> bool:
                 del os.environ["AGENT_BUS_ROOT"]
 
     print("=================================================================", file=sys.stderr)
-    print("   NİHAİ SONUÇ: 12 ADIMIN HEPSİ BAŞARIYLA GEÇTİ (PASSED)        ", file=sys.stderr)
+    print("   NİHAİ SONUÇ: 13 ADIMIN HEPSİ BAŞARIYLA GEÇTİ (PASSED)        ", file=sys.stderr)
     print("=================================================================", file=sys.stderr)
     return True
 
