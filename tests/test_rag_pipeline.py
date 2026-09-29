@@ -134,11 +134,14 @@ class MockDeterministicArgmaxModel(torch.nn.Module):
 
 def test_rag_pipeline_gate_low_similarity_skips_conditioning():
     """
-    Vaka (i): match_score=0.39 -> koşullama YOK (conditioned is False, prompt'ta <BELGE> geçmez).
+    Vaka (i): match_score=0.30 -> koşullama YOK (conditioned is False, prompt'ta <BELGE> geçmez).
+    T-0179 (İLAN'beyanlı davranış-güncelleme): eşik 0,40→0,33 (operatör-onaylı,
+    T-0178 ölçümü); 0,39 yeni eşikte artık pozitif-bandın İÇİNDE — negatif-vaka
+    0,30'a taşındı (0,33-altı; test-SİLME YOK).
     """
     vocab = MockVocab()
     tokenizer = MockTokenizer(vocab)
-    memory = MockMemory(return_score=0.39, doc_text="Gürgen ağacı aşırı sert ve toktur.")
+    memory = MockMemory(return_score=0.30, doc_text="Gürgen ağacı aşırı sert ve toktur.")
     model = MockDeterministicArgmaxModel()
 
     pipeline = RagPipeline(
@@ -154,7 +157,7 @@ def test_rag_pipeline_gate_low_similarity_skips_conditioning():
 
     # 1. Koşullama kapalı olmalı
     assert result["conditioned"] is False
-    assert result["match_score"] == 0.39
+    assert result["match_score"] == 0.30
 
     # 2. Prompt tokenleri içinde <BELGE> veya </BELGE> ASLA geçmemeli
     decoded_prompt = tokenizer.decode(result["prompt_tokens"])
@@ -199,14 +202,16 @@ def test_rag_pipeline_gate_high_similarity_enables_conditioning():
     assert "</BELGE>" in decoded_prompt
 
 
-def test_rag_pipeline_gate_boundary_threshold_40():
+def test_rag_pipeline_gate_boundary_threshold_33():
     """
-    Vaka (iii): Sınır durumu: tam 0.40 -> davranış bugünkü ajandan miras (>= 0.40).
-    is_context_usable(0.40) == True, is_context_usable(0.39999) == False.
+    Vaka (iii): Sınır durumu (T-0179 davranış-güncelleme): tam 0.33 -> davranış
+    is_context_usable(0.33) == True, is_context_usable(0.32999) == False.
+    0,40-regresyon satırı korunur (0,33-üstü True — T-0178 ölçüm çıpası).
     """
+    assert is_context_usable(0.33, RAG_MATCH_THRESHOLD) is True
+    assert is_context_usable(0.33001, RAG_MATCH_THRESHOLD) is True
+    assert is_context_usable(0.32999, RAG_MATCH_THRESHOLD) is False
     assert is_context_usable(0.40, RAG_MATCH_THRESHOLD) is True
-    assert is_context_usable(0.40001, RAG_MATCH_THRESHOLD) is True
-    assert is_context_usable(0.39999, RAG_MATCH_THRESHOLD) is False
 
     vocab = MockVocab()
     tokenizer = MockTokenizer(vocab)

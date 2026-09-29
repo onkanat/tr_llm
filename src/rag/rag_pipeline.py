@@ -27,7 +27,11 @@ from src.llm.prompt_contract import build_rag_input, resize_state_dict
 from src.rag.vector_memory import VectorMemory, generate_kristal_vector, generate_sparse_vector
 
 # Kanonik koşullama eşiği (tek adlandırılmış sabit)
-RAG_MATCH_THRESHOLD: float = 0.40
+# T-0179 (operatör-onaylı, T-0178 ölçüm-önerisi): 0,40 → 0,33. Ölçülmüş
+# ayırım-aralığı [0,075 ; 0,3556): eski 0,40 kendi-belgelerin %50'sini
+# (10/20) sahte-negatif yapıyordu; 0,33 pencere-ortası 20/20 yakalar,
+# OOV'den ~4,4× mesafe korur (hüküm BETİKTEN: data/eval/t0179_esik_degisim_hukum_2026-09-29.json).
+RAG_MATCH_THRESHOLD: float = 0.33
 
 
 def build_query_vectors(query: str, tokenizer: Any) -> Tuple[List[int], str, Any, Any]:

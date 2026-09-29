@@ -1,0 +1,40 @@
+{
+  "gorev": "T-0179",
+  "hukum": "ESIK_DEGISIMI_GECTI",
+  "damga": "2026-09-29T03:20:57Z",
+  "ilan": "data/eval/t0179_esik_degisim_ilan_2026-09-29.md",
+  "ilan_damga": "2026-09-29T03:16:20Z",
+  "degisim": {
+    "dosya": "src/rag/rag_pipeline.py",
+    "satir": 30,
+    "eski": "RAG_MATCH_THRESHOLD: float = 0.40",
+    "yeni": "RAG_MATCH_THRESHOLD: float = 0.33",
+    "onay": "operatör (28 Eyl AskUserQuestion: 0,33 Önerilen)"
+  },
+  "kapilar": {
+    "K1_tek_sabit": "yalnız rag_pipeline.py:30; vector_memory.py DOKUNULMAZ",
+    "K2_test_guncelleme": "vaka (i) 0,39→0,30 (negatif-vaka taşındı); vaka (iii) sınır 0,33 + 0,40-regresyon korundu; test-SİLME YOK",
+    "K3_yeniden_olcum": {
+      "betik": "scripts/dogrulama_t0178_rrf_esik_olcum.py --cikti-ek 3",
+      "mevcut_esik_geme": "20/20 (esik 0,33; hükküm BETİKTEN)",
+      "dagilim": "min 0,3556 / medyan 0,4444 / maks 1,3333 — koşum-2 ile BİREBİR (skor-yolu değişmedi teyit)",
+      "bant_disi_beyan": "3/20 yüksek-tail sparse-rank sınıfı (İLAN §4 istisna-beyanı; rc=2 K4 bilinçli-beyan)"
+    },
+    "K4_pytest": {
+      "beklenti": 317,
+      "gercek": 317,
+      "rc": 0,
+      "sure": "129,01 sn (sandbox DIŞI, ayrı koşum)"
+    },
+    "K5_canl": "Qdrant/gateway 0 istek; :memory: yalnız ölçüm-değil üretim-kabı"
+  },
+  "dosya_sha256": {
+    "src/rag/rag_pipeline.py": "d5cb61b00139aec6c8833d20e78b11695e9f5a016d79f308b571ad2394850fbe",
+    "tests/test_rag_pipeline.py": "be6c15ba63fb3beccef6dab8380c72684807f8e07f8f6db267b65452f2b6bf06",
+    "scripts/dogrulama_t0178_rrf_esik_olcum.py": "507e32277397851f9529242903931e57d6f9c0c0846291a109be4eda616af75c"
+  },
+  "notlar": [
+    "Betik K4-kapısı koşum-3'te bilinen yüksek-tail sparse-rank sınıfına tabi kaldı (hüküm2 teşhis: 15/20 sapma 0,0000 + karar-sınıflandırma birebir); İLAN §4 istisna-beyanı ile koşum-3'ün temel kapısı mevcut-eşik sınıflandırma 20/20'dir.",
+    "hukum3 yol-adında 2026-09-28 kalıbı betik-sabitinden gelir; hüküm damgası 2026-09-29T03:16Z bandı BETİKTEN."
+  ]
+}

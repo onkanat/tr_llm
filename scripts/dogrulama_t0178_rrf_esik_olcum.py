@@ -203,7 +203,8 @@ def main() -> int:
     detay["mevcut_esik_gecme"] = f"{mevcut_gecen}/{len(skorlar)}"
     k5 = True  # dağılım+tablo üretildi (koşum-çıktısı kanıt; kapı değeri DEĞİŞMEZ)
     print(f"[K5] dağılım min/med/maks {dagilim['min']:.4f}/{dagilim['medyan']:.4f}/"
-          f"{dagilim['maks']:.4f} · mevcut eşik 0,40 geçme {mevcut_gecen}/{len(skorlar)}", flush=True)
+          f"{dagilim['maks']:.4f} · mevcut eşik {RAG_MATCH_THRESHOLD:.2f} geçme "
+          f"{mevcut_gecen}/{len(skorlar)}", flush=True)
 
     # ---- hüküm (ayrı çıktı-adı: --cikti-ek; koşum-1 hükümü ezilmez)
     kapilar = {"K1_MEMORY": True, "K2_ARZ_36": k2, "K3_SORGU_20_BIREBIR": k3,

@@ -1,0 +1,287 @@
+{
+  "damga": "2026-09-29T03:17:48Z",
+  "hukum": "T0178_DUR",
+  "rc": 2,
+  "kapilar": {
+    "K1_MEMORY": true,
+    "K2_ARZ_36": true,
+    "K3_SORGU_20_BIREBIR": true,
+    "K4_CIPA_UYUM": false,
+    "K5_TARAMA": true,
+    "K6_ILAN_ONCESI": true
+  },
+  "detay": {
+    "damga": "2026-09-29T03:17:48Z",
+    "ilan": "t0178_rrf_esik_ilan_2026-09-28.md",
+    "ilan_sha256": "40a4849fa288603f74c36c82fdabb86867214e6c5f1f81b6d766f435a6e045cf",
+    "ilan2": "t0178_rrf_esik_ilan2_2026-09-28.md",
+    "ilan2_sha256": "7a096579716ecb7494bfed6b8ce3c0533b93df611c18eab686692bc780d4c089",
+    "korpus": "data/realistic_rag/test_natural_150.jsonl",
+    "korpus_sha256": "a233323011b9be23c839a6c0e4b8f9a2b769dfd8e7702130a3cb2d75041b08c2",
+    "p2_hukum": "data/eval/mimari_dogrulama_p2_onarim_hukum_2026-09-27.json",
+    "p2_hukum_sha256": "4b6d183741e742a506c94fd18dc8e9321c7e30d06f001e23ce1baf619d0a9348",
+    "vocab": "data/rebuild/vocab_anka_r1_33114.json",
+    "vocab_sha256": "f9940a8d8e1f7cd9428d389f12ff4c5ee448e5a7bfcdcc8ecc9c616fce950984",
+    "koleksiyon": "t0178_olcum",
+    "esik_canonik": 0.33,
+    "kurulum": {
+      "storage_type": "in-memory (:memory:)",
+      "is_in_memory": true
+    },
+    "arz": {
+      "yuklenen": 36,
+      "benzersiz": 36,
+      "derleme_bos": 0,
+      "belgesiz_satir": 0
+    },
+    "sorgu_kaynak": "p2_hukum.detay.b2_pozitif.detay (birebir, sıra korunur)",
+    "skor_uyum": {
+      "bant_dusuk": 0.05,
+      "bant_yuksek_tail": 0.15,
+      "esik_yuksek_tail": 0.8,
+      "bant_disi": 3,
+      "karar_uyumsuz": 0,
+      "detay": [
+        {
+          "sorgu": "Belgede Fomalhaut ile ilgili öne çıkan fonksiyon nedir?",
+          "skor": 0.4444,
+          "cipa_skor": 0.4444,
+          "sapma": 0.0,
+          "bant": 0.05,
+          "bant_ici": true,
+          "esik_040_gecer": true,
+          "cipa_esik_040_gecer": true
+        },
+        {
+          "sorgu": "Aldebaran kavramının temel niteliği ve önemi nedir?",
+          "skor": 0.3911,
+          "cipa_skor": 0.3911,
+          "sapma": 0.0,
+          "bant": 0.05,
+          "bant_ici": true,
+          "esik_040_gecer": true,
+          "cipa_esik_040_gecer": true
+        },
+        {
+          "sorgu": "Metne göre Drosera hangi yapısal özelliğiyle tanımlanmaktadı",
+          "skor": 1.3333,
+          "cipa_skor": 0.8,
+          "sapma": 0.5333,
+          "bant": 0.15,
+          "bant_ici": false,
+          "esik_040_gecer": true,
+          "cipa_esik_040_gecer": true
+        },
+        {
+          "sorgu": "Belgede Pulsar PSR ile ilgili öne çıkan fonksiyon nedir?",
+          "skor": 0.3556,
+          "cipa_skor": 0.3556,
+          "sapma": 0.0,
+          "bant": 0.05,
+          "bant_ici": true,
+          "esik_040_gecer": true,
+          "cipa_esik_040_gecer": true
+        },
+        {
+          "sorgu": "Magnetar SGR kavramının temel niteliği ve önemi nedir?",
+          "skor": 0.3911,
+          "cipa_skor": 0.3911,
+          "sapma": 0.0,
+          "bant": 0.05,
+          "bant_ici": true,
+          "esik_040_gecer": true,
+          "cipa_esik_040_gecer": true
+        },
+        {
+          "sorgu": "Belgede Drosera ile ilgili öne çıkan fonksiyon nedir?",
+          "skor": 0.6667,
+          "cipa_skor": 0.6667,
+          "sapma": 0.0,
+          "bant": 0.05,
+          "bant_ici": true,
+          "esik_040_gecer": true,
+          "cipa_esik_040_gecer": true
+        },
+        {
+          "sorgu": "Metne göre Victoria Amazonica hangi yapısal özelliğiyle tanı",
+          "skor": 1.1111,
+          "cipa_skor": 0.9333,
+          "sapma": 0.1778,
+          "bant": 0.15,
+          "bant_ici": false,
+          "esik_040_gecer": true,
+          "cipa_esik_040_gecer": true
+        },
+        {
+          "sorgu": "Triglif kavramının temel niteliği ve önemi nedir?",
+          "skor": 0.3911,
+          "cipa_skor": 0.3911,
+          "sapma": 0.0,
+          "bant": 0.05,
+          "bant_ici": true,
+          "esik_040_gecer": true,
+          "cipa_esik_040_gecer": true
+        },
+        {
+          "sorgu": "Belgede Alacahöyük Andezit Sfenksi ile ilgili öne çıkan fonk",
+          "skor": 1.3333,
+          "cipa_skor": 0.8148,
+          "sapma": 0.5185,
+          "bant": 0.15,
+          "bant_ici": false,
+          "esik_040_gecer": true,
+          "cipa_esik_040_gecer": true
+        },
+        {
+          "sorgu": "Diyatomit kavramının temel niteliği ve önemi nedir?",
+          "skor": 0.3911,
+          "cipa_skor": 0.3911,
+          "sapma": 0.0,
+          "bant": 0.05,
+          "bant_ici": true,
+          "esik_040_gecer": true,
+          "cipa_esik_040_gecer": true
+        },
+        {
+          "sorgu": "Metne göre Serpantinit hangi yapısal özelliğiyle tanımlanmak",
+          "skor": 1.1111,
+          "cipa_skor": 1.0,
+          "sapma": 0.1111,
+          "bant": 0.15,
+          "bant_ici": true,
+          "esik_040_gecer": true,
+          "cipa_esik_040_gecer": true
+        },
+        {
+          "sorgu": "Kimberlit hakkında sunulan temel bilimsel açıklama nedir?",
+          "skor": 0.3939,
+          "cipa_skor": 0.3939,
+          "sapma": 0.0,
+          "bant": 0.05,
+          "bant_ici": true,
+          "esik_040_gecer": true,
+          "cipa_esik_040_gecer": true
+        },
+        {
+          "sorgu": "Magnetar SGR kavramının temel niteliği ve önemi nedir?",
+          "skor": 0.3911,
+          "cipa_skor": 0.3911,
+          "sapma": 0.0,
+          "bant": 0.05,
+          "bant_ici": true,
+          "esik_040_gecer": true,
+          "cipa_esik_040_gecer": true
+        },
+        {
+          "sorgu": "Belgede Drosera ile ilgili öne çıkan fonksiyon nedir?",
+          "skor": 0.6667,
+          "cipa_skor": 0.6667,
+          "sapma": 0.0,
+          "bant": 0.05,
+          "bant_ici": true,
+          "esik_040_gecer": true,
+          "cipa_esik_040_gecer": true
+        },
+        {
+          "sorgu": "Belgede Kaset Tavan ile ilgili öne çıkan fonksiyon nedir?",
+          "skor": 0.75,
+          "cipa_skor": 0.75,
+          "sapma": 0.0,
+          "bant": 0.05,
+          "bant_ici": true,
+          "esik_040_gecer": true,
+          "cipa_esik_040_gecer": true
+        },
+        {
+          "sorgu": "Triglif kavramının temel niteliği ve önemi nedir?",
+          "skor": 0.3911,
+          "cipa_skor": 0.3911,
+          "sapma": 0.0,
+          "bant": 0.05,
+          "bant_ici": true,
+          "esik_040_gecer": true,
+          "cipa_esik_040_gecer": true
+        },
+        {
+          "sorgu": "Metne göre Piroksenit hangi yapısal özelliğiyle tanımlanmakt",
+          "skor": 1.1111,
+          "cipa_skor": 1.0,
+          "sapma": 0.1111,
+          "bant": 0.15,
+          "bant_ici": true,
+          "esik_040_gecer": true,
+          "cipa_esik_040_gecer": true
+        },
+        {
+          "sorgu": "Kimberlit hakkında sunulan temel bilimsel açıklama nedir?",
+          "skor": 0.3939,
+          "cipa_skor": 0.3939,
+          "sapma": 0.0,
+          "bant": 0.05,
+          "bant_ici": true,
+          "esik_040_gecer": true,
+          "cipa_esik_040_gecer": true
+        },
+        {
+          "sorgu": "Hattuşa Aşağı Kent kavramının temel niteliği ve önemi nedir?",
+          "skor": 0.8,
+          "cipa_skor": 0.8,
+          "sapma": 0.0,
+          "bant": 0.15,
+          "bant_ici": true,
+          "esik_040_gecer": true,
+          "cipa_esik_040_gecer": true
+        },
+        {
+          "sorgu": "Triglif kavramının temel niteliği ve önemi nedir?",
+          "skor": 0.3911,
+          "cipa_skor": 0.3911,
+          "sapma": 0.0,
+          "bant": 0.05,
+          "bant_ici": true,
+          "esik_040_gecer": true,
+          "cipa_esik_040_gecer": true
+        }
+      ]
+    },
+    "dagilim": {
+      "min": 0.35555555555555557,
+      "medyan": 0.4444444444444444,
+      "maks": 1.3333333333333333
+    },
+    "esik_tarama": [
+      {
+        "esik": 0.3,
+        "gecen": 20,
+        "yakalama": "20/20",
+        "yuzde": 100.0
+      },
+      {
+        "esik": 0.33,
+        "gecen": 20,
+        "yakalama": "20/20",
+        "yuzde": 100.0
+      },
+      {
+        "esik": 0.35,
+        "gecen": 20,
+        "yakalama": "20/20",
+        "yuzde": 100.0
+      },
+      {
+        "esik": 0.37,
+        "gecen": 19,
+        "yakalama": "19/20",
+        "yuzde": 95.0
+      },
+      {
+        "esik": 0.4,
+        "gecen": 10,
+        "yakalama": "10/20",
+        "yuzde": 50.0
+      }
+    ],
+    "mevcut_esik_gecme": "20/20"
+  },
+  "onari_beyani": "eşik-değişikliği önerisi OPERATÖR-ONAYINA sunulur; RAG_MATCH_THRESHOLD bu koşumda dokunulmadı"
+}
