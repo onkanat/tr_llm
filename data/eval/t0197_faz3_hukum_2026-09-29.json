@@ -1,0 +1,48 @@
+{
+  "task": "T-0197",
+  "hukum": "T0197_ONARIM_DUR",
+  "rc": 2,
+  "esikler": {
+    "ezber_max": 5.0,
+    "tutarsizlik_max": 5.0,
+    "decomp_rouge_min": 0.35
+  },
+  "olculen": {
+    "ezber_rate": 0.0,
+    "tutarsizlik_rate": 28.000000000000004,
+    "decomp_rouge": 0.11652375319385071,
+    "raw_rouge": 0.0980511323313522
+  },
+  "kapi_dersleri": {
+    "ezber_le5": true,
+    "tutarsizlik_lt5": false,
+    "decomp_ge0_35": false
+  },
+  "dil_hizali_alt_kume": {
+    "ing_hedef": {
+      "n": 16,
+      "raw_ort": 0.04667212321505235,
+      "decomp_ort": 0.058116628279257614
+    },
+    "turkce_ref": {
+      "n": 84,
+      "raw_ort": 0.10783761025826648,
+      "decomp_ort": 0.1276489198442494
+    }
+  },
+  "cipa_t0196": {
+    "tutarsizlik": 26.0,
+    "decomp_rouge": 0.1368,
+    "raw_rouge": 0.1078
+  },
+  "cipa_t0194_kol_a": {
+    "decomp": 0.1325,
+    "tutarsizlik": 22.0,
+    "raw_rouge": 0.1058
+  },
+  "egitim_hukum": "T0197_EGITIM_GECTI",
+  "egitim_sha256": "8f846023f2fb2374dd411f674b199f373198c108cd961c836c44e094948b2c10",
+  "history_path": "/Users/hakankilicaslan/Git/tr_llm/data/eval/t0197_training_history.json",
+  "damga": "2026-09-29T16:14:07Z",
+  "ilan": "data/eval/t0197_uretim_saf_ilan_2026-09-29.md"
+}

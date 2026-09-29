@@ -1,0 +1,25 @@
+{
+  "task": "T-0197",
+  "faz": "Faz-2B",
+  "betik": "onarım",
+  "damga": "2026-09-29T15:38:44Z",
+  "t0196_kaynak": "/Users/hakankilicaslan/Git/tr_llm/data/eval/t0196_kulliyat_arz_dengeli.jsonl",
+  "t0196_sha256": "73c158c88a1f16ec913a863dd31264b329c47c9de87fcfc33d6b2386cbcee77c",
+  "n_onesi": 6680,
+  "P1_dil_disla": 1188,
+  "P3_meta_atla": 1,
+  "P2_zarf_canon": {
+    "ikili_degismedi": 0,
+    "tek_usta_birlestir": 235,
+    "tek_teknik_birlestir": 70
+  },
+  "zarf_degisen": 305,
+  "n_sonrasi": 5491,
+  "P4_x20_kisa_etiket": {
+    "farkli_output": 0,
+    "satir": 0,
+    "top10": []
+  },
+  "cikti": "/Users/hakankilicaslan/Git/tr_llm/data/eval/t0197_uretim_saf.jsonl",
+  "cikti_sha256": "52fa1cc3ac08070fa9e06f232c3ddadb36a22762d592d4e290db60c81c2a2ff1"
+}
