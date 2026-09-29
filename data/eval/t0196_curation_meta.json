@@ -1,0 +1,33 @@
+{
+  "task": "T-0196",
+  "faz": "Faz-2",
+  "betik": "curation",
+  "damga": "2026-09-29T12:33:02Z",
+  "train_sha256": "c2d8480b866f9fd0b57d7e671eb091c91e5c80cca5a4f133b62e61cdafaae39e",
+  "n_onesi": 13003,
+  "adim_a_dedup": {
+    "n": 7362,
+    "silin": 5641,
+    "baki_pay": 56.61770360685996
+  },
+  "adim_ab": {
+    "predicate_siz": 1364,
+    "atlanan": 682,
+    "n": 6680
+  },
+  "predicate_onesi": {
+    "son5": 5394,
+    "orta": 604,
+    "hic": 1364,
+    "son5_pay": 81.47242597120348
+  },
+  "predicate_sonrasi": {
+    "son5": 5394,
+    "orta": 604,
+    "hic": 682,
+    "hic_pay": 10.209580838323355,
+    "predicate_pay": 89.79041916167665
+  },
+  "cikti": "/Users/hakankilicaslan/Git/tr_llm/data/eval/t0196_kulliyat_arz_dengeli.jsonl",
+  "cikti_sha256": "73c158c88a1f16ec913a863dd31264b329c47c9de87fcfc33d6b2386cbcee77c"
+}

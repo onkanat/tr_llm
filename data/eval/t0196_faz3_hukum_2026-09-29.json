@@ -1,0 +1,31 @@
+{
+  "task": "T-0196",
+  "hukum": "T0196_ONARIM_DUR",
+  "rc": 2,
+  "esikler": {
+    "ezber_max": 5.0,
+    "tutarsizlik_max": 5.0,
+    "decomp_rouge_min": 0.35
+  },
+  "olculen": {
+    "ezber_rate": 0.0,
+    "tutarsizlik_rate": 26.0,
+    "decomp_rouge": 0.13680258640707424,
+    "raw_rouge": 0.10782242240461062
+  },
+  "kapi_dersleri": {
+    "ezber_le5": true,
+    "tutarsizlik_lt5": false,
+    "decomp_ge0_35": false
+  },
+  "cipa_t0194_kol_a": {
+    "decomp": 0.1325,
+    "tutarsizlik": 22.0,
+    "raw_rouge": 0.1058
+  },
+  "egitim_hukum": "T0196_EGITIM_GECTI",
+  "egitim_sha256": "80b0fd9a5a60de90536ad4d6d3a3f8eb1de16d1474501a0eac669d2458f106fa",
+  "history_path": "/Users/hakankilicaslan/Git/tr_llm/data/eval/t0196_training_history.json",
+  "damga": "2026-09-29T13:21:14Z",
+  "ilan": "data/eval/t0196_onarim_ilan_2026-09-29.md"
+}

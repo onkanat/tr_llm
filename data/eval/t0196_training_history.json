@@ -1,0 +1,60 @@
+{
+  "damga": "2026-09-29T12:52:41Z",
+  "ilan": "data/eval/t0196_onarim_ilan_2026-09-29.md",
+  "cipe": {
+    "data/anka_b1_5_best.pt": "e5eb114e5bd71d5800ba423d844b2e2aeed6b78beaf3cba4278690a43fb51eb7",
+    "data/rebuild/vocab_anka_r1_33114.json": "f9940a8d8e1f7cd9428d389f12ff4c5ee448e5a7bfcdcc8ecc9c616fce950984",
+    "data/lexicon/roots.tsv": "fe3005e5e2a594f09cbcfc3286e2c8812953ae6614333815ab87a7e3a6763598",
+    "data/b1_5_splits/val.jsonl": "eb96241534e71ae12329de84998cfdc04aaaa50fb8cbcd6236a922d32812f6a4"
+  },
+  "curated_sha256": "73c158c88a1f16ec913a863dd31264b329c47c9de87fcfc33d6b2386cbcee77c",
+  "recepte": {
+    "epochs": 2,
+    "batch": 16,
+    "accum": 2,
+    "peak_lr": 0.0001,
+    "min_lr": 1e-05,
+    "warmup": 50,
+    "block_size": 128,
+    "val_max_batches": 50,
+    "seed": 42,
+    "load": "data/anka_b1_5_best.pt",
+    "kaynak": "T-0191 reçete birebir"
+  },
+  "init": {
+    "val_loss": 2.433384721279144,
+    "val_ppl": 11.39739386895371
+  },
+  "probe": {
+    "adim": 200,
+    "sn": 604.0,
+    "sn_adim": 3.0202,
+    "tam_kosum_tamini_min": 11.0
+  },
+  "history": [
+    {
+      "epoch": 1,
+      "train_loss": 2.7499019666151567,
+      "val_loss": 2.4162994050979614,
+      "val_ppl": 11.204319852997424,
+      "path": "/Users/hakankilicaslan/Git/tr_llm/data/anka_b1_5_arz_epoch1.pt",
+      "duration": 642.2332077026367,
+      "sha256": "4ca5e3b0f214dc2a8a692d5bb2452aeb380fc80963ba077ed19255dfe6ead204"
+    },
+    {
+      "epoch": 2,
+      "train_loss": 2.722440965438003,
+      "val_loss": 2.406820557117462,
+      "val_ppl": 11.098617567764412,
+      "path": "/Users/hakankilicaslan/Git/tr_llm/data/anka_b1_5_arz_epoch2.pt",
+      "duration": 854.3512227535248,
+      "sha256": "80b0fd9a5a60de90536ad4d6d3a3f8eb1de16d1474501a0eac669d2458f106fa"
+    }
+  ],
+  "best": {
+    "epoch": 2,
+    "val_loss": 2.406820557117462,
+    "path": "/Users/hakankilicaslan/Git/tr_llm/data/anka_b1_5_arz.pt",
+    "sha256": "80b0fd9a5a60de90536ad4d6d3a3f8eb1de16d1474501a0eac669d2458f106fa"
+  }
+}
