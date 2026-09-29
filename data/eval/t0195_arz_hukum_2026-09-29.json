@@ -1,0 +1,218 @@
+{
+  "task": "T-0195",
+  "faz": "Faz-1",
+  "hukum": "T0195_TANI_KAYDI",
+  "rc": 0,
+  "damga": "2026-09-29T12:14:43Z",
+  "M1": {
+    "erken_kesme": 13,
+    "root_sazlon": "11/13",
+    "root_test100": 11,
+    "_tablo": [
+      {
+        "idx": 5,
+        "sınıf": "tarih",
+        "soru": "Nil Nehri'nin tortusu toprak kalitesini nasıl etkilemiştir?",
+        "gen": "root : dudak",
+        "jeton": 3
+      },
+      {
+        "idx": 18,
+        "sınıf": "marangoz",
+        "soru": "Ahşap işleme teknik danışmanlığı: Marangozlukta kiraz ağacının özellikleri ve kullanım alanları nele",
+        "gen": "root : kalk",
+        "jeton": 3
+      },
+      {
+        "idx": 23,
+        "sınıf": "tarih",
+        "soru": "Bir Yunan evinin içindeki mobilya ve oturma düzeni nasıl görünürdü?",
+        "gen": "root : cinayet",
+        "jeton": 3
+      },
+      {
+        "idx": 33,
+        "sınıf": "tarih",
+        "soru": "Aruz ölçüsü nedir? Türk edebiyatına nereden geçmiştir?",
+        "gen": "root : ahbap",
+        "jeton": 3
+      },
+      {
+        "idx": 38,
+        "sınıf": "tarih",
+        "soru": "İmparator'un kişisel serveti ile devlet hazinesi arasındaki ilişki nasıldı?",
+        "gen": "<ENT> <CAP> a </ENT> .",
+        "jeton": 5
+      },
+      {
+        "idx": 41,
+        "sınıf": "marangoz",
+        "soru": "Marangoz ustasına danış: Marangozlukta freze ne işe yarar ve nasıl kullanılır?",
+        "gen": "root : nehir",
+        "jeton": 3
+      },
+      {
+        "idx": 52,
+        "sınıf": "tarih",
+        "soru": "Sümer toplumunun sosyal örgütlenmesinin hangi unsurları belirtilmiştir?",
+        "gen": "root : pelesenk",
+        "jeton": 3
+      },
+      {
+        "idx": 63,
+        "sınıf": "marangoz",
+        "soru": "Ahşap atölyesi güvenlik ve imalat rehberi: Usta marangoz olarak açıkla: şimşir ağacı ile çalışırken ",
+        "gen": "Iyiyim valla kanka ya . sen <UNK> kanka ?",
+        "jeton": 9
+      },
+      {
+        "idx": 64,
+        "sınıf": "marangoz",
+        "soru": "Masif mobilya standartlarına göre açıkla: Usta marangoz olarak açıkla: şimşir ağacı ile çalışırken n",
+        "gen": "root : kelime",
+        "jeton": 3
+      },
+      {
+        "idx": 65,
+        "sınıf": "marangoz",
+        "soru": "Marangoz ustasına danış: Usta marangoz olarak açıkla: şimşir ağacı ile çalışırken nelere dikkat edil",
+        "gen": "root : dök",
+        "jeton": 3
+      },
+      {
+        "idx": 73,
+        "sınıf": "tarih",
+        "soru": "Metinde bahsedilen Orhon-Yenisey yazısının özellikleri nelerdir?",
+        "gen": "root : var",
+        "jeton": 3
+      },
+      {
+        "idx": 75,
+        "sınıf": "tarih",
+        "soru": "Bilimsel keşiflerin, insanların gerçeklik algısı üzerindeki etkisi nedir?",
+        "gen": "root : bak",
+        "jeton": 3
+      },
+      {
+        "idx": 79,
+        "sınıf": "marangoz",
+        "soru": "Marangozlukta huş ağacının özellikleri ve kullanım alanları nelerdir?",
+        "gen": "root : gel",
+        "jeton": 3
+      }
+    ]
+  },
+  "M2": {
+    "n": 13003,
+    "son5_predicate_pay": 59.686226255479504,
+    "orta": 765,
+    "hic_yok": 4477,
+    "hic_yok_pay": 34.43051603476121,
+    "birebir_ayni_cikis_sayim": 650,
+    "top10": [
+      {
+        "x": 500,
+        "out": "PLURAL: Hayır"
+      },
+      {
+        "x": 500,
+        "out": "PLURAL: Evet"
+      },
+      {
+        "x": 376,
+        "out": "CASE: CASE_DAT"
+      },
+      {
+        "x": 223,
+        "out": "CASE: CASE_ACC"
+      },
+      {
+        "x": 204,
+        "out": "CASE: CASE_LOC"
+      },
+      {
+        "x": 171,
+        "out": "CASE: CASE_ABL"
+      },
+      {
+        "x": 167,
+        "out": "TENSE: TENSE_PAST"
+      },
+      {
+        "x": 163,
+        "out": "TENSE: TENSE_EVIDENTIAL"
+      },
+      {
+        "x": 131,
+        "out": "TENSE: TENSE_PROG"
+      },
+      {
+        "x": 130,
+        "out": "TENSE: TENSE_AORIST"
+      }
+    ]
+  },
+  "M3": [
+    {
+      "idx": 2,
+      "n_jeton": 32,
+      "predicate_sayım": 0,
+      "predicate_konum": []
+    },
+    {
+      "idx": 46,
+      "n_jeton": 72,
+      "predicate_sayım": 0,
+      "predicate_konum": []
+    },
+    {
+      "idx": 54,
+      "n_jeton": 24,
+      "predicate_sayım": 0,
+      "predicate_konum": []
+    },
+    {
+      "idx": 61,
+      "n_jeton": 128,
+      "predicate_sayım": 0,
+      "predicate_konum": []
+    },
+    {
+      "idx": 70,
+      "n_jeton": 48,
+      "predicate_sayım": 0,
+      "predicate_konum": []
+    },
+    {
+      "idx": 90,
+      "n_jeton": 128,
+      "predicate_sayım": 0,
+      "predicate_konum": []
+    },
+    {
+      "idx": 92,
+      "n_jeton": 33,
+      "predicate_sayım": 0,
+      "predicate_konum": []
+    },
+    {
+      "idx": 96,
+      "n_jeton": 90,
+      "predicate_sayım": 0,
+      "predicate_konum": []
+    },
+    {
+      "idx": 97,
+      "n_jeton": 128,
+      "predicate_sayım": 0,
+      "predicate_konum": []
+    }
+  ],
+  "cipa": {
+    "vocab": "f9940a8d8e1f7cd9428d389f12ff4c5ee448e5a7bfcdcc8ecc9c616fce950984",
+    "test": "f106e7d2c7854ea653a6039ac6fc2578ee7b8e2d36926b2763bc7ae2e2926260",
+    "train": "c2d8480b866f9fd0b57d7e671eb091c91e5c80cca5a4f133b62e61cdafaae39e",
+    "kayitlar": "56bc1e6dee9e0147b0a4992748590e73d1fda1ab1ae1e5943bcd9e64f97896dd"
+  },
+  "ilan": "data/eval/t0195_arz_ilan_2026-09-29.md"
+}
