@@ -1,0 +1,86 @@
+{
+  "task": "T-0193",
+  "hukum": "T0193_TANI_GECTİ",
+  "hiza_sinifi": "HIZA_YOK",
+  "raw_mean_rouge_l": 0.10580840870554699,
+  "decomp_mean_rouge_l": 0.13254036740301106,
+  "delta_rouge": 0.026731958697464073,
+  "esikler": {
+    "HIZA_TAM": "decomp>=0.35 ve delta>0.10",
+    "HIZA_KISMİ": "0.05<=delta<=0.10",
+    "HIZA_YOK": "delta<0.05"
+  },
+  "k1_pozitif_kontrol": {
+    "sonuc": "PASS",
+    "farklar": {
+      "n": {
+        "ölçüm": 100,
+        "beklenen": 100,
+        "fark": 0
+      },
+      "memorization_rate": {
+        "ölçüm": 0.0,
+        "beklenen": 0.0,
+        "fark": 0.0
+      },
+      "incoherence_rate": {
+        "ölçüm": 22.0,
+        "beklenen": 22.0,
+        "fark": 0.0
+      },
+      "conditioning_rate": {
+        "ölçüm": 6.0,
+        "beklenen": 6.0,
+        "fark": 0.0
+      },
+      "mean_rouge_l": {
+        "ölçüm": 0.10580840870554699,
+        "beklenen": 0.105808408705547,
+        "fark": 1.3877787807814457e-17
+      }
+    }
+  },
+  "k2_decompiler": {
+    "bos_decompile": 0,
+    "istisna": 0
+  },
+  "bileşen": {
+    "tutarsiz_sayım": 22,
+    "predicate_yok_sayım": 22,
+    "dongu_sayım": 1,
+    "idx_list": [
+      2,
+      5,
+      18,
+      23,
+      33,
+      38,
+      41,
+      46,
+      52,
+      54,
+      61,
+      63,
+      64,
+      65,
+      70,
+      73,
+      75,
+      79,
+      90,
+      92,
+      96,
+      97
+    ]
+  },
+  "format_envanter": {
+    "ort_tag_orani": 0.3234288121349433,
+    "ort_ent_blok": 1.43,
+    "ort_jeton": 34.02,
+    "bos_decompile": 0
+  },
+  "cikti_rapor": "data/eval/t0193_cikti_hiza_ornekler.json",
+  "damga": "2026-09-29T11:15:14Z",
+  "sure_sn": 64.2,
+  "ilan": "data/eval/t0193_cikti_hiza_ilan_2026-09-29.md"
+}
