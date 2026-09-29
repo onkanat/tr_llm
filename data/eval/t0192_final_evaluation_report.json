@@ -1,0 +1,59 @@
+{
+  "n": 100,
+  "memorization_rate": 0.0,
+  "incoherence_rate": 22.0,
+  "mean_rouge_l": 0.105808408705547,
+  "conditioning_rate": 6.0,
+  "decision": "BAŞARISIZ",
+  "samples": [
+    {
+      "idx": 1,
+      "input": "Yusuf'un kardeşlerinin ona karşı yaptığı eylemlerin temel motivasyonu neydi?",
+      "generated": "metin , <ENT> <CAP> m a r a n </ENT> ' POSS_2SG CASE_DAT karşı bir komplo yap TENSE_PAST . bu durum , Roma ' CASE_GEN <U",
+      "reference": "Kardeşleri Yusuf'a kıskançlık duyuyorlardı çünkü o, babalarının en sevdiği oğluydu.",
+      "rouge_l": 0.0,
+      "memorized": false,
+      "incoherent": false
+    },
+    {
+      "idx": 2,
+      "input": "Bu tarihi bağlamda \"Mousaviler\" terimi neyi ifade ediyor olabilir?",
+      "generated": "metin , <ENT> <CAP> a r a r </ENT> ' POSS_2SG CASE_DAT ait bir terim ol GERUND_ArAk tanımlan INF_mAk CASE_LOC COPULA_AOR",
+      "reference": "Burada anlatılan Spartan yönetimi bağlamında, \"Mousaviler\", Gerousia'nın üyelerinin seçildiği seçkin veya aristokrat sın",
+      "rouge_l": 0.023809523809523808,
+      "memorized": false,
+      "incoherent": false
+    },
+    {
+      "idx": 3,
+      "input": "Metiklerin, Atina'daki ikametleri karşılığında hangi yükümlülükler üstlenmeleri ",
+      "generated": "<ENT> <CAP> s e r </ENT> , <ENT> <CAP> s </ENT> ' POSS_2SG CASE_ACC <UNK> . bu durum , <ENT> <CAP> s e r i a </ENT> ' PO",
+      "reference": "Metikler üzerinde çeşitli yükümlülükler bulunmaktaydı: diğer yabancılara göre daha yüksek vergiler ödemeleri, ordu veya ",
+      "rouge_l": 0.0,
+      "memorized": false,
+      "incoherent": true
+    },
+    {
+      "idx": 4,
+      "input": "Bu imparatorlar arasındaki geçiş dönemlerinde Roma'nın genel atmosferi nasıldı?",
+      "generated": "Metinde , <ENT> <CAP> m a r a r i l e r </ENT> ' POSS_2SG CASE_DAT kadar uzan PART_An bir deniz DERIV_CI DERIV_lIk COPUL",
+      "reference": "Atmosfer, aşırı istikrarsızlıkla karakterizeydi ve ani suikastları (Caligula), iktidar devrişiminde askeri müdahaleleri ",
+      "rouge_l": 0.0,
+      "memorized": false,
+      "incoherent": false
+    },
+    {
+      "idx": 5,
+      "input": "Ahşap işleme teknik danışmanlığı: Marangozlukta iskarpela ne işe yarar ve nasıl ",
+      "generated": "teknik rapor : teknik çözüm : freze : Ahşabın lif POSS_3PL boyuna neredeyse hiç çalış TENSE_AORIST veya bıçak POSS_2SG b",
+      "reference": "Teknik Rapor: Iskarpela: Ahşapta delik, kanal veya zıvana yuvaları açmak, kenar temizlemek ve ahşabı yontmak için kullan",
+      "rouge_l": 0.1333333333333333,
+      "memorized": false,
+      "incoherent": false
+    }
+  ],
+  "damga": "2026-09-29T10:46:16Z",
+  "ilan": "data/eval/t0192_test_ilan_2026-09-29.md",
+  "model_sha256": "e5eb114e5bd71d5800ba423d844b2e2aeed6b78beaf3cba4278690a43fb51eb7",
+  "test_sha256": "f106e7d2c7854ea653a6039ac6fc2578ee7b8e2d36926b2763bc7ae2e2926260"
+}
