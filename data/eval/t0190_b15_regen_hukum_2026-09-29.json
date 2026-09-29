@@ -1,0 +1,44 @@
+{
+  "damga": "2026-09-29T06:09:47Z",
+  "damga_yontemi": "betik içi time.gmtime (BETİKTEN)",
+  "gorev": "T-0190",
+  "ilan": "data/eval/t0190_b15_regen_ilan_2026-09-29.md",
+  "bag": "T-0187 K4-4 operatör-emri (29 Eyl koşuma-başla)",
+  "hukum": "T0190_REGEN_GECTI",
+  "rc": 0,
+  "esik_uygulama": {
+    "ilan_maddesi": "5",
+    "esik": "test_in_train=0 VE val_in_train=0 (bit) VE normalize=0 VE soru-düzeyi 0",
+    "test_in_train": {"bit": 0, "normalize": 0, "soru": 0},
+    "val_in_train": {"bit": 0, "normalize": 0, "soru": 0}
+  },
+  "kosum_kayit": {
+    "betik": "scripts/dogrulama_t0190_b15_regen.py",
+    "rc": 0,
+    "pool": {"toplam": 16253, "kaynak_digestler": "İLAN-1 BETİKTEN, koşum-başı sha-çıpası PASS"},
+    "kumeleme": {"kume_sayisi": 8229, "en_buyuk": 4370, "tekli": 7530},
+    "bolme": {"train": 13003, "val": 1625, "test": 1625},
+    "oran_beyan": "val %10,0 test %10,0 — İLAN-3 ±2pp içinde"
+  },
+  "dosya-kayit": {
+    "oncedeki_dosyalar": "bak_t0190_{test,val,train}.jsonl (rename bit-birebir; sha İLAN-1 değerleriyle birebir BETİKTEN teyit: 3530de8e…/9013b0a8…/7c08c762…)",
+    "yeni_sha256": {
+      "test.jsonl": "f106e7d2c7854ea653a6039ac6fc2578ee7b8e2d36926b2763bc7ae2e2926260",
+      "val.jsonl": "eb96241534e71ae12329de84998cfdc04aaaa50fb8cbcd6236a922d32812f6a4",
+      "train.jsonl": "c2d8480b866f9fd0b57d7e671eb091c91e5c80cca5a4f133b62e61cdafaae39e"
+    },
+    "dokunulmayan": ["train_ds.pt", "train_fast_ds.pt", "val_ds.pt", "val_fast_ds.pt", "split_statistics.json", "diğer yardımcı json'lar — bilinçli-bayat (T-0155 kalıbı)"]
+  },
+  "bagimsiz_disk_teyit": {
+    "tarif": "koşum-stdout'undan bağımsız ikinci ölçüm: yeni disk-dosyaları sıfırdan yüklü (normalize + eşik birebir)",
+    "test_in_train_normalize": 0, "test_soru_kesisim": 0,
+    "val_in_train_normalize": 0, "val_soru_kesisim": 0,
+    "sonuc": "T0190_DISK_TEYIT_GECTI"
+  },
+  "ilan_sapmalari": [
+    "koşum-1 yazım-KUSURU: uzantı-sız dosya-adı (test/val/train .jsonl'sız) — BETİKTEN yakalandı; dosyalar birebir-rename ile kanonik-adlara taşındı (sha birebir BETİKTEN); betik onarıldı; koşum-2 YOK (ölçüm bellek-içi, isimden bağımsız)"
+  ],
+  "en-bol-cevap-beyan": "en-buyuk küme 4370 kayıt = normalize-cevap-birebir tek küme; küme-atomik bölme gereği İLK bölme-kuyruğunda — sızıntıcı-değil tek-bölme-üyesi",
+  "son_rapor": "data/eval/t0190_b15_regen_sonuc_2026-09-29.md",
+  "bus": {"task": "T-0190", "claim": "ok:true", "lease": "data + scripts + data/eval + .agent-bus/notes ok:true"}
+}
