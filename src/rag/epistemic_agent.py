@@ -465,6 +465,10 @@ class EpistemicCuriosityAgent:
             "retrieved_document": doc_text,
             "source_collection": source_coll,
             "match_score": match_score,
+            # T-0181 (operatör emri): T-0179 eşik-kararı (0,33) HTTP yüzeyinde
+            # görünmemişti — 'conditioned' (satır:379 is_context_usable) artık
+            # telemetriye taşınır; davranış değişmez.
+            "conditioned": conditioned,
             "is_high_similarity": is_high_similarity,
             "router_experts": expert_names,
             "entropy_post": entropy_post,

@@ -79,6 +79,44 @@ class TestAgentGateway(unittest.TestCase):
         self.assertIn("epistemic_failure", res)
         self.assertIn("future_train_recorded", res)
 
+    def test_gateway_ask_exposes_conditioned_field(self):
+        """T-0181: 'conditioned' HTTP 17-anahtar yüzeyine eklendi (T-0179 eşik-
+        kapısının görünür temsili; operatör emri). Pozitif-kontrol: skor 0,3911
+        (T-0178 hüküm-koşumu-3 çıpası; eski 0,40-eşikte False dalı) → True;
+        0,30 (0,33-altı) → False."""
+        from src.rag.rag_pipeline import RAG_MATCH_THRESHOLD
+        self.assertEqual(RAG_MATCH_THRESHOLD, 0.33)
+
+        class _StubMemory:
+            def __init__(self, skor: float):
+                self.collection_name = "stub_kond"
+                self.skor = skor
+
+            def hybrid_recall(self, dense, sparse, top_k: int = 1, query_tags: str = ""):
+                return [{
+                    "text": "Kırlangıç kuyruğu mukavemetli bir köşe birleştirmedir.",
+                    "score": self.skor,
+                    "metadata": {"crystal_tags": "kırlangıç bilgi POSS_3SG",
+                                 "token_ids": [4, 5]},
+                }]
+
+        agent = self.gateway.epistemic_agent
+        eski_memory = agent.memory
+        try:
+            agent.memory = _StubMemory(0.3911)
+            res = self.gateway.ask("Kırlangıç kuyruğu nedir?", mode="RAG")
+            self.assertIn("conditioned", res)
+            self.assertIsInstance(res["conditioned"], bool)
+            self.assertTrue(res["conditioned"])
+            self.assertGreater(res["rag_score"], 0.0)
+
+            agent.memory = _StubMemory(0.30)
+            res_low = self.gateway.ask("Kırlangıç kuyruğu nedir?", mode="RAG")
+            self.assertFalse(res_low["conditioned"])
+            self.assertGreater(res_low["rag_score"], 0.0)
+        finally:
+            agent.memory = eski_memory
+
     def test_gateway_inject_knowledge_and_check(self):
         # T-0148 5B: bilinmeyen target-adı artık ValueError'dur (sahte-seçici
         # mutasyon-kanıtı kapatıldı — eski davranış: 'anka_bellek' echo'nda

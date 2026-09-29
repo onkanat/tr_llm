@@ -246,6 +246,9 @@ class AgentGateway:
             "rag_document": res.get("retrieved_document", ""),
             "source_collection": res.get("source_collection", ""),
             "rag_score": res.get("match_score", 0.0),
+            # T-0181: 0,33-eşik kapısının HTTP yanıtındaki temsili (epistemic_agent
+            # return'ünden); is_high_similarity ayrı kapı kalmaya devam eder (Kapı-D).
+            "conditioned": res.get("conditioned", False),
             "is_high_similarity": res.get("is_high_similarity", False),
             "router_experts": res.get("router_experts", []),
             "epistemic_failure": res.get("epistemic_failure", False),

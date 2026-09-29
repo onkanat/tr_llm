@@ -1,0 +1,29 @@
+{
+  "damga": "2026-09-29T03:47:37Z",
+  "hukum": "T0181_CONDITIONED_ALAN_GECTI",
+  "rc": 0,
+  "kapilar": {
+    "K1_STATIK": true,
+    "K2_YENI_TEST_PZ_KONTROL": true,
+    "K3_PYTEST_318": true,
+    "K4_CANLI_0_ISTEK": true
+  },
+  "detay": {
+    "ilan_sha_hedef": "data/eval/t0181_conditioned_alan_ilan_2026-09-29.md",
+    "pyflakes_baslik_yeni_bulgu": 0,
+    "pre_existing": [
+      "epistemic_agent.py:335 clean_query_tags",
+      "agent_gateway.py:20 threading",
+      "agent_gateway.py:23 Tuple",
+      "agent_gateway.py:35 CuriosityEngine",
+      "agent_gateway.py:36 TriModalRouter"
+    ],
+    "hedefli": "tests/test_agent_gateway.py 10 passed (1,73 sn)",
+    "tam_pytest": "318 passed, rc=0, sandbox DIŞI (baseline 317 + 1 yeni; düşen ∅)",
+    "alan": {
+      "yuzey_kaynak": "epistemic_agent.process_query (:459-return) + agent_gateway.ask (:249-map)",
+      "is_high_similarity": "DOKUNULMAZ (Kapı-D 0,85 ayrı eksen)",
+      "canli_smoke": "ayrı koşum — restart gerekir (bu turda gateway 0 istek)"
+    }
+  }
+}
