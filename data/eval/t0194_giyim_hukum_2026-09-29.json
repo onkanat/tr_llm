@@ -1,0 +1,56 @@
+{
+  "task": "T-0194",
+  "hukum": "T0194_GIYIM_DUR",
+  "rc": 2,
+  "esik": {
+    "decomp_mean_min": 0.35,
+    "k1": "Kol-A birebir"
+  },
+  "matris": {
+    "A": {
+      "n": 100,
+      "memorization_rate": 0.0,
+      "incoherence_rate": 22.0,
+      "mean_rouge_l": 0.10580840870554699,
+      "conditioning_rate": 6.0,
+      "mean_rouge_l_decomp": 0.13254036740301106,
+      "mean_kesisim_f1": 0.020166618180181794,
+      "bos_decompile": 0,
+      "sure_sn": 64.6,
+      "decomp_istisna": 0
+    },
+    "B1": {
+      "n": 100,
+      "memorization_rate": 0.0,
+      "incoherence_rate": 25.0,
+      "mean_rouge_l": 0.10859323867576402,
+      "conditioning_rate": 10.0,
+      "mean_rouge_l_decomp": 0.14016917038953294,
+      "mean_kesisim_f1": 0.020873526001626966,
+      "bos_decompile": 0,
+      "sure_sn": 77.1,
+      "decomp_istisna": 0
+    },
+    "B2": {
+      "n": 100,
+      "memorization_rate": 0.0,
+      "incoherence_rate": 21.0,
+      "mean_rouge_l": 0.10266992291411427,
+      "conditioning_rate": 9.0,
+      "mean_rouge_l_decomp": 0.1291599200955018,
+      "mean_kesisim_f1": 0.02094203216547257,
+      "bos_decompile": 0,
+      "sure_sn": 74.7,
+      "decomp_istisna": 0
+    }
+  },
+  "sartlanma_delta": {
+    "B1_decomp_delta": 0.007628802986521882,
+    "B2_decomp_delta": -0.003380447307509249
+  },
+  "rol_zarf_metni": "[Rol] Sen marangozluk alanında uzman bir ustasın. Cevabını alan\nterminolojisiyle, uzman formatında ver.",
+  "sys_mesaj": "Cumhuriyet dönemi Türk tarihi uzmanı olarak cevapla.",
+  "b2_birebir_yineleme_sayım": 54,
+  "damga": "2026-09-29T11:45:46Z",
+  "ilan": "data/eval/t0194_giyim_ilan_2026-09-29.md"
+}
