@@ -1,0 +1,57 @@
+{
+  "damga": "2026-09-29T05:44:53Z",
+  "damga_yontemi": "date -u (BETİKTEN)",
+  "gorev": "T-0189",
+  "ilan": "data/eval/t0189_t0_7_eksen_ilan_2026-09-29.md",
+  "sorgu": "anka_base_v2 + T=0,7 hâlâ ROUGE-kilit katıyor mu?",
+  "model": "data/anka_base_v2.pt",
+  "orneklem": {"kaynak": "data/eval/anka_r17_heldout_2026-09-20.jsonl", "n": 100, "seed": 42, "tavan": 128},
+  "pk": {"tarif": "T=0 ilk-3 kanonik uret bit-özdeş (fail-closed)", "sonuc": "PASS"},
+  "kosum_kayit": {
+    "not": "3 koşum BETİKTEN; koşum-1 İLAN-sapmalı yüzey; koşum-2 gözlem-cücesi; koşum-3 kanonik-kayıt",
+    "koşum1_damga": "2026-09-29T05:33Z-civarı",
+    "koşum1_sapma": "HELDOUT=scratch/t0137/bahcivan_heldout.jsonl (İLAN maddi-3 ANKA-R17) — BETİKTEN-düzeltme",
+    "koşum3_damga": "2026-09-29T05:44:20Z",
+    "kosum3_kaynak": "/tmp/t0189_kosum.py stdout (BETİKTEN)",
+    "dallar": {
+      "T0_0_greedy": {"rouge_l_ort": 0.0043, "sonlanma": {"eos": 0, "outend": 95, "kesme": 5}, "uret_sn_ort": null},
+      "T07_tekr1_seed42":    {"rouge_l_ort": 0.0021, "delta_vs_t0": -0.0022, "sonlanma": {"eos": 0, "outend": 99, "kesme": 1}},
+      "T07_tekr2_seed4242":  {"rouge_l_ort": 0.0039, "delta_vs_t0": -0.0004, "sonlanma": {"eos": 1, "outend": 99, "kesme": 0}},
+      "T07_tekr3_seed424242":{"rouge_l_ort": 0.0035, "delta_vs_t0": -0.0008, "sonlanma": {"eos": 0, "outend": 99, "kesme": 1}}
+    }
+  },
+  "esik_uygulama": {
+    "ilan_maddesi": "5",
+    "pozitif_tekrar": "0/3 (her üç delta da negatif)",
+    "ort_delta": -0.001133,
+    "ort_delta_hesap": "BETİKTEN üç-delta-ortalaması (-0.0022-0.0004-0.0008)/3 = -0.00113",
+    "esik_TEKRARLANIR": "≥2/3 VE ort(delta)>0",
+    "esik_TEKRARLANIR-YOK": "ort(delta) ≤ 0"
+  },
+  "hukum": "T0189_TEKRARLANIR-YOK",
+  "hukum_neden": "ort(delta)≤0 İLAN-5 birebir; ayrıca pozitif-tekrar 0/3 < 2/3 — dal-yüzü ikisinden de düşer; çıpa T-0127/T-0137 hükmüyle uyumlu",
+  "kilit-bakış": {
+    "not": "İLAN-5 rapor-düzeyi beyan (kabul-sayacı DEĞİL)",
+    "T0_0": "kesme 5/100",
+    "T0_7_ort": "kesme 0-1/100",
+    "beyan": "T=0,7 kesme-artefaktını düşürüyor (5→0-1); ROUGE-KANIT YOK"
+  },
+  "EOS-bağımsız-tekrar": {
+    "not": "İLAN-6: T-0184 hükümü (94,0% n=50/tavan-120) bağımsız-karşılaştırma",
+    "T0_0": "(0+95)/100 = 95,0%",
+    "T0_7_dal_ort": "(0+1+0)/(100+100+100) → eos 1 + outend 297 = 298/300 = 99,33%",
+    "beyan": "≥%90 eşik iki yöntemde iki örneklemde geçer — EOS eğitimi GEREKMİZ hükmü bağımsız-tekrarlandı"
+  },
+  "ilan_sapmalari": [
+    "koşum-1 HELDOUT yanlış-yüzey (scratch/t0137) → BETİKTEN-düzeltme → koşum-3 kanonik",
+    "koşum-3 damga-json-parse json-loot hatası BETİKTEN'den düzeltildi",
+    "koşum-1 + koşum-2 = koşum-3 TEKRAR koşumu DEĞİL; koşum-1 tek-İLAN-sapma-kayıdı"
+  ],
+  "dubitansiyon_kaydı": {
+    "koşum1": "BETİKTEN (İLAN-sapmalı yüzey; hükme gİRMEZ)",
+    "koşum2-3": "koşum-3 BETİKTEN-kanonik-kayıt; koşum-2 gözlem-cücesi (hükme gİRMEZ)",
+    "beyan": "koşum-3 = betic BETİKTEN, T=0/PK + T=0,7 ×3 dal-birebir; koşum-1/2 hükümden ÇIKRILIR"
+  },
+  "son_rapor": "data/eval/t0189_t0_7_eksen_sonuc_2026-09-29.md",
+  "bus": {"task": "T-0189", "claim": "ok:true", "lease": "data/eval + .agent-bus/notes ok:true"}
+}
