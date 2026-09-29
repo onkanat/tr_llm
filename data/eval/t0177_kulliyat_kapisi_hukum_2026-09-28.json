@@ -1,0 +1,82 @@
+{
+  "gorev": "T-0177",
+  "hukum": "KULLIYAT_KAPISI_GECTI",
+  "damga": "2026-09-28T20:28:24Z",
+  "ilan": "data/eval/t0177_kulliyat_kapisi_ilan_2026-09-28.md",
+  "ilan_damga": "2026-09-28T20:20:27Z",
+  "sabitler": {
+    "orneklem_N": 400,
+    "seed": 1777
+  },
+  "kapilar": {
+    "K1_kosum_basi_kapi": {
+      "fonksiyon": "olc_kulliyat_egitilebilirlik (saf; train.py modul-duzeyi)",
+      "baglama": "if not pretrain: (yalniz SFT dali)",
+      "satir": "[kulliyat] satiri koşum-2/3 loglarında ölçüldü"
+    },
+    "K2_p0_dur": {
+      "kosum1": {
+        "bin": "scratch/t0177_hukum/duz_metin.bin (sentetik, duz-metin)",
+        "rc": 1,
+        "sonuc": "RuntimeError: külliyatta SFT hedefi YOK (p=0; N=400, seed=1777)"
+      },
+      "log": "scratch/t0177_hukum/kosum1_duz.log"
+    },
+    "K3_p0_ustu_devam_say_atla": {
+      "kosum2": {
+        "bin": "scratch/t0177_hukum/karisim.bin",
+        "rc": 0,
+        "kulliyat_satiri": "eğitilebilir hedef oranı = 6003/25600 · p=0.2825 (N=400, seed=1777) · vekil uyum 400/400",
+        "sonuc": "EĞİTİM BAŞARIYLA TAMAMLANDI"
+      },
+      "kosum3_say_atla": {
+        "bin": "scratch/t0177_hukum/seyrek_sft.bin",
+        "rc": 0,
+        "kulliyat_satiri": "eğitilebilir hedef oranı = 12/25600 · p=0.9950 (N=400, seed=1777) · vekil uyum 400/400",
+        "sifir_hedef_parti": "36/40 atlandı ([uyari] satırı her partide)",
+        "son_rapor": "[kulliyat] 0-hedef parti: 36/40 atlandı (gradyansız; eğitilebilir külliyat-payı kaybı tanısaldır)"
+      }
+    },
+    "K4_pad_kapi_dokunulmaz": {
+      "beyan": "PAD kapısı bloğu aynen korundu (Edit yok)",
+      "statik": "py_compile OK"
+    },
+    "K5_vekil_400_400": {
+      "kosum2": "400/400",
+      "kosum3": "400/400",
+      "birim_test": "test_vekil_uyum_tam PASSED"
+    },
+    "K6_davranis_koruma": {
+      "pretrain_dali": "kapı `if not pretrain:` altında — örneklem çağrılmaz",
+      "pytest_pretrain_kosumlari": "test_train_args (10x --pretrain) + test_train_optimizer_state (3x) + test_train_scheduler — TAMAMI GECTI",
+      "log_format": "loss-report formatı değişmedi; yeni satırlar yalnız kapı-etkin yolda"
+    },
+    "K7_pytest": {
+      "beklenti": "309 baseline + yeni",
+      "gercek": 317,
+      "yeni_test": 8,
+      "dosya": "tests/test_kulliyat_kapisi.py",
+      "rc": 0,
+      "sure": "133.78 sn (sandbox DISI, ayrı koşum)",
+      "sapma_beyani": "İLAN K7 '3 yeni test' demişti; uygulama 8 test (3 kapsam + determinizm/sabitler/pretrain-dalı/vekil-fonksiyon/parti-atlama ekleri) — kapsam-GENİŞLETME, beklenti-üstü, kapı anlamları aynen karşılandı"
+    },
+    "K8_canli_dokunulmazlik": {
+      "qdrant/gateway istek": 0,
+      "donmus data/**": "yalnız okuma",
+      "src/llm/dataset.py": "dokunulmadı",
+      "scripts/train_step_demo.py": "dokunulmadı"
+    }
+  },
+  "statik_on": {
+    "py_compile": "OK (train.py + tests/test_kulliyat_kapisi.py)",
+    "pyflakes": "temiz (KristalEmbedding unused pre-existing)"
+  },
+  "dosya_sha256": {
+    "train.py": "236732b92a1439741a6e657ba92ef93d49c036c3f207efe080965817246f5c0e",
+    "tests/test_kulliyat_kapisi.py": "9445eea5e1a01f21fde11da0c077be80b0b2585b0702619d83500e18caba6464"
+  },
+  "notlar": [
+    "Sentetik hüküm koşumları vocab_base_32852.json (train.py varsayılan) ile koştu; <OUTPUT>=1706, <EOS>=3 ölçüldü — ilk denemede sentetik id=100 kapıyı yanlış ateşledi (p=1.0000), gerçek id'lerle yeniden derlendi; bu kendisi vekil-uyum mekanizmasının canlı-pozitif-kontrolüdür.",
+    "Koşum-1 rc=1 (RuntimeError raise; _durdur rc=2 sınıfı değil) — fail-closed yüksek sesli duruş, İLAN K2 'yüksek sesle durur' ile uyumlu."
+  ]
+}

@@ -7,6 +7,7 @@ import hashlib
 import numpy as np
 import torch
 import torch.optim as optim
+from typing import Any, Dict
 
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
@@ -75,6 +76,76 @@ def maske_pad_hedefleri(targets_np: np.ndarray, pad_id: int, pad_mask_active: bo
         targets_np = targets_np.copy()
         targets_np[targets_np == pad_id] = MASKE
     return targets_np
+
+
+# KÜLLİYAT-DÜZEYİ EĞİTİLEBİLİRLİK KAPISI (T-0177; T-0075 kuralı, İLAN'da sabit).
+# Gerekçe (ÖLÇÜLDÜ): parti-başına "SFT maskelemesi 0 hedef ⇒ RuntimeError" kapısı
+# karışık külliyatta seyrek olayda ÖLÜ — P(8/8 pencere <OUTPUT>'suz) ≈ 1,5e−5
+# (wiki-replay vakası: kapı susdu, külliyatın %24,85'i sessiz eğitilemez kaldı).
+# Ters uca da ölçüldü: p=%7,23 külliyatta P(ateşleme)=(1-p)^B ≈ %57,5 — koşum ortası
+# ölüm. İlan edilen kural: KARAR KÜLLİYAT DÜZEYİNDE verilir (koşum başında örneklem;
+# p=0 ⇒ DUR; 0<p ⇒ parti-başına say+uyar+ATLA), parti-başına RuntimeError KALDIRILIR.
+EGITILEBILIRLIK_ORNEKLEM = 400
+EGITILEBILIRLIK_SEED = 1777
+
+
+def pencere_vekil_has_output(x_pencere: np.ndarray, output_start_id: int) -> bool:
+    """Vekil karar: pencerede `<OUTPUT>` jetonu VAR mı? (T-0075 vekili).
+
+    Gerçek maskeleme pahalıysa `has_output` tek başına karar veremez; burada yalnız
+    örneklemde GERÇEK maske ile UYUMU ölçülür (K5) — vekil kanıt sayılmaz."""
+    return bool(output_start_id >= 0 and bool((x_pencere == output_start_id).any()))
+
+
+def olc_kulliyat_egitilebilirlik(dataset, block_size: int, output_start_id: int,
+                                 eos_id: int, pad_id: int, pad_mask_active: bool,
+                                 n_orneklem: int = EGITILEBILIRLIK_ORNEKLEM,
+                                 seed: int = EGITILEBILIRLIK_SEED) -> Dict[str, Any]:
+    """Koşum-başı külliyat-düzeyi eğitilebilirlik ölçümü (T-0177; SAF fonksiyon).
+
+    Deterministik örneklem (seed'li `torch.Generator` + `randperm`) ile N pencere
+    seçer, her pencereye üretim-yolundaki AYNI maskeleme zincirini uygular
+    (`mask_prompt_targets` → `maske_pad_hedefleri`); vekil-uyum, maskeleme-ÖNCESİ
+    hedef sayısıyla ölçülür (PAD-maskesi vekil-uyum tanımının DIŞINDA — T-0075
+    vekil kanıtı o tabanla doğrulandı). Hiçbir yerde mutasyon yok; model/optimize
+    dokunulmaz; sadece ölçüm döner."""
+    toplam = len(dataset.data)
+    max_idx = toplam - block_size
+    generator = torch.Generator().manual_seed(seed)
+    if max_idx > 0:
+        ofsetler = torch.randperm(max_idx, generator=generator)[:n_orneklem].tolist()
+        pencereler = [(int(o), block_size) for o in ofsetler]
+    else:
+        # Çok küçük külliyat (get_batch fallback'iyle aynı sınıf): tek pencere.
+        pencereler = [(0, max(1, toplam - 1))]
+    hedef_sayi = 0
+    toplam_hedef_konum = 0
+    pencere_0 = 0
+    vekil_uyum = 0
+    vekil_toplam = 0
+    for bas, b_sz in pencereler:
+        x_np = np.asarray(dataset.data[bas:bas + b_sz], dtype=np.int64)[np.newaxis, :]
+        y_np = np.asarray(dataset.data[bas + 1:bas + 1 + b_sz], dtype=np.int64)[np.newaxis, :]
+        has_output = pencere_vekil_has_output(x_np[0], output_start_id)
+        hedefler = mask_prompt_targets(x_np, y_np, output_start_id, eos_id)
+        hedef_maske_once = int((hedefler != MASKE).sum())
+        vekil_uyum += int((hedef_maske_once > 0) == has_output)
+        vekil_toplam += 1
+        hedefler = maske_pad_hedefleri(hedefler, pad_id, pad_mask_active)
+        k = int((hedefler != MASKE).sum())
+        hedef_sayi += k
+        toplam_hedef_konum += b_sz
+        if k == 0:
+            pencere_0 += 1
+    return {
+        "n": len(pencereler),
+        "hedef_sayi": hedef_sayi,
+        "toplam_hedef_konum": toplam_hedef_konum,
+        "pencere_0": pencere_0,
+        "p": pencere_0 / len(pencereler),
+        "vekil_uyum": vekil_uyum,
+        "vekil_toplam": vekil_toplam,
+    }
 
 
 def get_lr(step: int, peak_lr: float, warmup_steps: int, toplam_adim: int, min_lr: float) -> float:
@@ -483,6 +554,23 @@ def main():
     output_start_id = vocab.stoi.get("<OUTPUT>", -1)
     eos_id = vocab.stoi.get("<EOS>", -1)
 
+    # KÜLLİYAT-DÜZEYİ KAPISI (T-0177; yalnız SFT dalı — --pretrain bit-özdeş kalır).
+    # İLAN'da sabit: N=400, seed=1777. p=0 ⇒ DUR (T-0073 sınıfı, fail-closed koşum-
+    # başına taşındı); 0<p ⇒ koşum sürer ve parti-başına say+uyar+ATLA uygulanır.
+    sifir_hedef_parti = 0
+    if not pretrain:
+        _olc = olc_kulliyat_egitilebilirlik(
+            dataset, block_size, output_start_id, eos_id, pad_id, pad_mask_active)
+        print(
+            f"[kulliyat] eğitilebilir hedef oranı = {_olc['hedef_sayi']}/{_olc['toplam_hedef_konum']}"
+            f" · 0-hedef pencere oranı p={_olc['p']:.4f} (N={_olc['n']}, seed={EGITILEBILIRLIK_SEED})"
+            f" · vekil uyum {_olc['vekil_uyum']}/{_olc['vekil_toplam']}", flush=True)
+        if _olc["pencere_0"] == _olc["n"]:
+            raise RuntimeError(
+                f"DURDURULDU: külliyatta SFT hedefi YOK (p=0; N={_olc['n']} pencere örneklemi, "
+                f"seed={EGITILEBILIRLIK_SEED}). Düz-metin külliyatta prompt maskelemesi HER "
+                f"pencerede tüm hedefleri -100 yapar (T-0073); on-egitim için --pretrain kullanın.")
+
     for step in range(1, max_steps + 1):
         step_t0 = time.time()
         # Fetch a batch and move tensors to device
@@ -497,14 +585,18 @@ def main():
         else:
             # Apply Causal Prompt Masking for SFT sequences on CPU
             targets_np = mask_prompt_targets(x_cpu, y_cpu, output_start_id, eos_id)
-            # SESSIZ NO-OP'A KARSI DUR (T-0073): hicbir hedef kalmadiysa devam etmek
-            # gradyani sifirlar ve kayip 0.0000 basar. Ayni girdi CPU'da IndexError
-            # verirken MPS 0.0 donduruyor; dogruluk cihaza bagli olamaz.
+            # 0-HEDEF PARTİSİ SAYILIR (T-0177; eski parti-başına RuntimeError KALDIRILDI):
+            # karışık külliyatta seyrek olay partiyi gradyansız bırakabilir — koşumu
+            # ortasından öldürmek yerine parti ATLANIR, [uyari] basılır, koşum sonunda
+            # toplam sayım raporlanır. Külliyat-düzeyi karar koşum başında verildi
+            # (yukarıdaki [kulliyat] kapısı); p=0 buraya gelmez.
             if int((targets_np != -100).sum()) == 0:
-                raise RuntimeError(
-                    "SFT maskelemesi bu partide HICBIR hedef birakmadi (tum pencereler -100). "
-                    "Duz-metin kulliyatinda on-egitim icin --pretrain kullanin. "
-                    "Sessizce devam etmek gradyani sifirlar ve kaybi 0.0000 gosterir (T-0073).")
+                sifir_hedef_parti += 1
+                print(
+                    f"[uyari] Adım {step}: SFT maskelemesi bu partide 0 hedef bıraktı "
+                    f"(karışık külliyatta şans olayı) — parti ATLANDI, sayılıyor (T-0075/T-0177).",
+                    flush=True)
+                continue
 
         # PAD→−100 maske deseni (P2/Aşama 1): SFT'nin -100'leriyle TEK maske değerinde
         # birleşir; ignore_index=pad_id ezberi (çakışma) bu noktada kapanır.
@@ -606,6 +698,13 @@ def main():
         print(f"                   medyan {medyan:.4f} (n={len(sirali)})", flush=True)
         print("                   NOT: 'Bitiş Kaybı' tek adımın örneklemidir; "
               "karşılaştırma için bu dağılımı kullanın.", flush=True)
+
+    # KÜLLİYAT SAYIM RAPORU (T-0177): 0-hedef partisi atlandıysa koşum sonunda görünür
+    # beyan — sessiz gradyan-kaybı yok (K3). Sayaç 0 iken hiçbir satır basılmaz =>
+    # varsayılan log bit-özdeş kalır.
+    if sifir_hedef_parti:
+        print(f"[kulliyat] 0-hedef parti: {sifir_hedef_parti}/{max_steps} atlandı "
+              f"(gradyansız; eğitilebilir külliyat-payı kaybı tanısaldır)", flush=True)
     
     # Kayit yukarida, dongunun ICINDE tek noktadan yapildi (step == max_steps VEYA periyodik
     # esik). Burada yalnizca bitis mesaji basilir. VARSAYILAN (--save-every yok) davranis
