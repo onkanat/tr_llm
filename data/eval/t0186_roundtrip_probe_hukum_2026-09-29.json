@@ -1,0 +1,64 @@
+{
+  "damga": "2026-09-29T05:05:09Z",
+  "hukum": "DUR",
+  "hukum_kaynagi": "BU BETİK — elle sayı YOK",
+  "ilan": "data/eval/mimari_dogrulama_p1_ilan_2026-09-27.md",
+  "ilan_sha256": "cfa4134011413f79f8b95d4e55fe9cf938b1d9fc488865ed26be9c6859958bab",
+  "kapilar": [
+    {
+      "ayrac": "FAZ-B: İLAN-3 birebir-çıpa — bit_esit==9182 / ornek==9188 + kalan-6 (YOL_0 5 + BIT_UYUMSUZ 1) birebir-dislamalı",
+      "gec": false,
+      "olcum": {
+        "bit_esit": 9186,
+        "dislanali_disi": {},
+        "dusen": {
+          "BIT_UYUMSUZ": 1,
+          "YOL_0": 1
+        },
+        "kalan_6_uyum": false,
+        "ornek": 9188
+      }
+    },
+    {
+      "ayrac": "FAZ-A: compile istisna FIRLATMAZ (istisna == 0; ilanlı davranış)",
+      "gec": true,
+      "olcum": 0
+    },
+    {
+      "ayrac": "KSUR-1: NOUN-satırı-yok ADJ == 3.627 / 6.352 ADJ + probe 44/50 0-yol (İLAN-2: 6 yol-bulunan meşru-alternatif-kok dislamalı)",
+      "gec": false,
+      "olcum": {
+        "adj_noun_yok": 3626,
+        "adj_toplam": 6352,
+        "probe_n": 50,
+        "probe_yol0": 44
+      }
+    },
+    {
+      "ayrac": "KSUR-2: kesme-apostrof davranışı (probe %100 kesmeli + placeholder)",
+      "gec": true,
+      "olcum": {
+        "kesmeli": 20,
+        "n": 20,
+        "placeholder": "[Özel İsim]'e"
+      }
+    },
+    {
+      "ayrac": "KSUR-3: İ/I düz-lower — satır == 79 (72 İ+7 I) VE benzersiz == 70 (63+7)",
+      "gec": false,
+      "olcum": {
+        "benzersiz": 81,
+        "satir": 90
+      }
+    },
+    {
+      "ayrac": "KSUR-4: OOV → 200/200 sessiz-boş (istisna/yol YOK)",
+      "gec": true,
+      "olcum": {
+        "beklenmedik": [],
+        "sessiz_bos": 200
+      }
+    }
+  ],
+  "rc": 2
+}

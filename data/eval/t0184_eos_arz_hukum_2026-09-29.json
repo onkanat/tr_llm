@@ -1,0 +1,27 @@
+{
+  "damga": "2026-09-29T05:21:24Z",
+  "hukum": "T0184_EOS_ARZI_GEREKMIZ",
+  "rc": 0,
+  "ilan": "data/eval/t0184_eos_arz_ilan_2026-09-29.md",
+  "ilan_damga": "2026-09-29T05:17:54Z",
+  "olcum": {
+    "n": 50,
+    "seed": 42,
+    "model": "data/anka_base_v2.pt (T-0162 kanonik çıpa; T-0185 hüküm BETİKTEN sonrası güncel-çıpa)",
+    "tavan": 120,
+    "sonlanma": {
+      "eos": 0,
+      "outend": 47,
+      "kesme": 3,
+      "eos_outend_orani_pct": 94.0,
+      "kesmes_örnek_beyan": "3/50 = T-0137 kesme-artefaktı rezidü; İLAN-4 eşiği (≥%90) ASILDI → eğitim koşum AÇILMAZ"
+    },
+    "bos_uretim": 0,
+    "rouge_l_ort": 0.0053,
+    "uret_sn_ort_sn": 0.665,
+    "toplam_sn": 35.6,
+    "pozitif_kontrol": "ilk-3 örnek kanonik-uret bit-özdeş (PK0+PK1+PK2 pass; PK-tamiri: argmax flat-index kusuru probe'da; kanonik-kodda YOK)"
+  },
+  "hukum_mantigi": "İLAN madd-4 önceden-sabit eşik: ≥%90 → eğitim-arzı GEREKMÉZ (kuyruk kapanır; eğitim-İLAN'ı açılmaz). Ölçüm 94,0 ≥ 90 — birebir dal.",
+  "kalan_bakış": "kesme 3/50 (%6) canlı-bes-test koşumunda görülmemiş değil; istenen-eğitim-bütçe-karsılığı yok — arzın halefi T-0189 (T=0,7 güncel-çapa) koşumunu beklenir durumu"
+}

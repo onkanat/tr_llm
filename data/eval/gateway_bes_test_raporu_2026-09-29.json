@@ -1,0 +1,117 @@
+[
+  {
+    "id": 1,
+    "kategori": "Astronomi / Yıldız Fiziği (Pulsar & Nötron Yıldızı)",
+    "query": "Süpernova kalıntısı olan bir nötron yıldızı veya pulsar nasıl enerji yayar?",
+    "instruction": "Bilimsel ve net açıkla.",
+    "max_new_tokens": 120,
+    "response_text": "Eğer nötrinoların kütlesini sıfıra indirir.",
+    "morphemes": "eğer nötrino PLURAL POSS_2SG kütle POSS_3SG CASE_ACC_N sıfır CASE_DAT indir TENSE_AORIST .",
+    "entropy_pre": 8.972167015075684,
+    "entropy_post": 2.7573537826538086,
+    "needs_retrieval": true,
+    "rag_score": 1.1111112,
+    "rag_document": "Pulsar PSR üzerine yapılan analizler çöken devasa bir yıldızın süpernova patlaması sonrası kalan hızla dönen nötron yıldızıdır olduğunu gösterir. Bu durum kutuplarından yaydığı periyodik radyo darbeleri kozmik bir saat gibi işler sonucunu doğurur.",
+    "source_collection": "anka_bellek",
+    "conditioned": true,
+    "is_high_similarity": true,
+    "router_experts": [
+      "pedagogy",
+      "legal"
+    ],
+    "epistemic_failure": true,
+    "timestamp": "2026-09-29T03:48:39.740108+00:00"
+  },
+  {
+    "id": 2,
+    "kategori": "Türk Tarihi / Maarif Müfredatı (Tarihsel Epistemik Alan)",
+    "query": "1931 Türk Tarih Tezi doğrultusunda Orta Asya göçlerinin temel nedenleri nelerdir?",
+    "instruction": "Tarihsel belgelere dayanarak maddeler halinde özetle.",
+    "max_new_tokens": 120,
+    "response_text": "Metin, bunun sonucu olarak kabul edilir.",
+    "morphemes": "metin , bu CASE_GEN sonuç POSS_3SG ol GERUND_ArAk kabul edil TENSE_AORIST .",
+    "entropy_pre": 3.9504966735839844,
+    "entropy_post": 4.294177055358887,
+    "needs_retrieval": true,
+    "rag_score": 0.3931624246153846,
+    "rag_document": "Fomalhaut üzerine yapılan analizler Güneş sistemine yirmi beş ışık yılı mesafede bulunan genç ve parlak ana kol yıldızıdır olduğunu gösterir. Bu durum geniş toz halkası gezegen göçlerinin yerçekimsel izlerini gözler önüne serer sonucunu doğurur.",
+    "source_collection": "anka_bellek",
+    "conditioned": true,
+    "is_high_similarity": false,
+    "router_experts": [
+      "carpenter",
+      "pedagogy"
+    ],
+    "epistemic_failure": false,
+    "timestamp": "2026-09-29T03:48:40.488022+00:00"
+  },
+  {
+    "id": 3,
+    "kategori": "Türkçe Morfoloji / Dilbilgisi (Grammar Core Uzmanı)",
+    "query": "Gözlemleyemediklerimizdenmişçesine sözcüğünün kök ve ek tahlilini yap.",
+    "instruction": "Sözcüğün morfemlerini ve işlevlerini sırasıyla belirt.",
+    "max_new_tokens": 120,
+    "response_text": "Bu durum, [?] ve suya karşı dirençli bir şekilde dönüştürür.",
+    "morphemes": "bu durum , <UNK> ve su CASE_DAT karşı direnç DERIV_lI bir şekil CASE_LOC dönüştür TENSE_AORIST .",
+    "entropy_pre": 5.624971389770508,
+    "entropy_post": 0.4283783733844757,
+    "needs_retrieval": true,
+    "rag_score": 0.7878788,
+    "rag_document": "Yapısal incelemeler Kimberlit varlığını teyit eder. Kimberlit, yerin yüz elli kilometre derinliğinden süpersonik hızla fırlayan elmas taşıyıcı volkanik bacadır. Gözlemlere göre kraton çekirdeklerinin altındaki en derin manto köklerinden parça getirir.",
+    "source_collection": "anka_bellek",
+    "conditioned": true,
+    "is_high_similarity": false,
+    "router_experts": [
+      "grammar_core",
+      "carpenter"
+    ],
+    "epistemic_failure": false,
+    "timestamp": "2026-09-29T03:48:41.113642+00:00"
+  },
+  {
+    "id": 4,
+    "kategori": "Bitki Biyolojisi / Ekoloji (Karasal Çevre & Drosera)",
+    "query": "Böcekçil bitkiler azotça fakir topraklarda hayatta kalmak için hangi morfolojik adaptasyonları geliştirmiştir?",
+    "instruction": "Biyolojik adaptasyon mekanizmasını açıkla.",
+    "max_new_tokens": 120,
+    "response_text": "[Özel İsim], bu durumda [?] olarak adlandırılır. [Özel İsim], bir türü olan [?] ( veya) ve bitkilerin ortak atası olarak tanımlanır.",
+    "morphemes": "<PROPER_NOUN> , bu durum CASE_LOC <UNK> ol GERUND_ArAk adlandırıl TENSE_AORIST . <PROPER_NOUN> , bir tür POSS_3SG o DERIV_lAn <UNK> ( veya ) ve bitki PLURAL POSS_2SG ortak ata POSS_3SG ol GERUND_ArAk tanımlan TENSE_AORIST .",
+    "entropy_pre": 6.320982456207275,
+    "entropy_post": 5.456641674041748,
+    "needs_retrieval": true,
+    "rag_score": 0.40404043636363635,
+    "rag_document": "Utricularia, su altında mikroskobik vakum kapakçıklarıyla su piresi avlayan etobur sucul bitkidir. Bilimsel araştırmalarda negatif iç basınç kapakçık açıldığında avı saniyenin binde birinde içeri çeker. Bu olgu literatürde kapsamlı şekilde incelenmiştir.",
+    "source_collection": "anka_bellek",
+    "conditioned": true,
+    "is_high_similarity": false,
+    "router_experts": [
+      "pedagogy",
+      "grammar_core"
+    ],
+    "epistemic_failure": false,
+    "timestamp": "2026-09-29T03:48:42.537801+00:00"
+  },
+  {
+    "id": 5,
+    "kategori": "Felsefe / Epistemoloji & Merak (Öz-Yansıtma)",
+    "query": "Bilinmeyen bir olgu karşısında zihnin belirsizlik taşıması ve merak dürtüsüyle kanıt araması epistemik açıdan ne ifade eder?",
+    "instruction": "Felsefi ve epistemik açıdan değerlendir.",
+    "max_new_tokens": 120,
+    "response_text": "Cevap: bu durum, insanların zihniyle ilgili olduklarını gösterir.",
+    "morphemes": "cevap : bu durum , insan PLURAL POSS_2SG zihin POSS_3SG CASE_INS ilgi DERIV_lI ol PART_DIk POSS_3PL CASE_ACC_N göster TENSE_AORIST .",
+    "entropy_pre": 7.440997123718262,
+    "entropy_post": 2.9506828784942627,
+    "needs_retrieval": true,
+    "rag_score": 0.2333333333333333,
+    "rag_document": "",
+    "source_collection": "anka_bellek",
+    "conditioned": false,
+    "is_high_similarity": false,
+    "router_experts": [
+      "grammar_core",
+      "legal"
+    ],
+    "epistemic_failure": false,
+    "timestamp": "2026-09-29T03:48:43.128842+00:00"
+  }
+]

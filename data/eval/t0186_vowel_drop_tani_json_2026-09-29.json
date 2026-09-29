@@ -1,0 +1,33 @@
+{
+  "damga": "2026-09-29T05:14:31Z",
+  "hukum": "T0186_MEKANIZMA_ACIKLANDI",
+  "rc": 0,
+  "ilan": "data/eval/t0186_vowel_drop_analiz_ilan_2026-09-29.md",
+  "yargi_siniflari": {
+    "ARZ_YETMEZ": false,
+    "TOKENIZER_KIRIK": false,
+    "DECOMPILER_KIRIK": false,
+    "BELIRSIZ_BAND": "LM-tarafı üretim-yeti ayrı yüzey; bu koşumda ölçüm yok"
+  },
+  "olcumler": {
+    "lexicon_arz": {"roots_anka_r1": 153, "roots_anka_r2": 153, "roots": 151, "kaynak": "grep -c BETİKTEN + anka_r1_lexicon_2026-09-19.json (152+1)"},
+    "roundtrip_probe_r1": {"ornek": 9188, "bit_ozdeslik": 0.999782, "dusen": {"BIT_UYUMSUZ": 1, "YOL_0": 1}, "dusen_vowel_drop_sinifi": false, "hukum_json_sa": "d8a433399207819c276544632b794bd1749a3f4ddc1330998e542378268fcd0b"},
+    "id_dokumu_probe": {
+      "koşum_damga": "2026-09-29T05:14:19Z",
+      "ornekler": {
+        "burun": ["burun"],
+        "burnu": ["burun", "POSS_3SG"],
+        "burunun": ["buru", "CASE_GEN"],
+        "ağız": ["ağız"],
+        "ağzı": ["ağız", "POSS_3SG"],
+        "hacrimiz": ["hacir", "POSS_1PL"],
+        "akıl": ["akıl"],
+        "aklı": ["ak", "DERIV_lI"]
+      },
+      "not": "token_vector lemma-formalı; ünlü-düşme phonology.mutate_stem'de çözülür; burnu/ağzı needs_disambiguation=True (POSS/AÇ ayrı ekseni)"
+    },
+    "son_hukum_jsonlar_vowel_grep": 0
+  },
+  "mekanizma_harita": ["src/compiler/lexicon.py:105-119 kırpma-adayı", "src/compiler/core.py:62-74 A2 lemma-guard (T-0150)", "src/compiler/phonology.py:53-59 mutate_stem", "src/compiler/decompiler.py:92-110 tag[0]=lemma"],
+  "onarim_onerisi": "Gerekmez — derin-mekanizma kuyruk adedi kapatilir; LM-tarafi yeti ölçümü ayrı görev-İLAN'lıdır"
+}
