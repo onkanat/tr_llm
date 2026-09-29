@@ -1,0 +1,40 @@
+{
+  "damga": "2026-09-29T13:36:50Z",
+  "damga_yontemi": "hüküm yazımı BETİKTEN (date -u ayrı ölçüm; koşum çıktı damgaları betik-içi)",
+  "gorev": "T-0191",
+  "ilan": "data/eval/t0191_b15_egitim_ilan_2026-09-29.md",
+  "betik": "scripts/train_anka_b1_5.py",
+  "hukum": "T0191_EGITIM_GECTI",
+  "rc": 0,
+  "esik_uygulama": {
+    "EK1_cipa": "6/6 BETİKTEN PASS (koşum-başı sha-çıpası; İLAN-tablo birebir)",
+    "EK2_base_cipa": "d0f415f3d882beb4… BETİKTEN",
+    "EK3_pozitif_etki": "best_val_loss 2,4334 < init_val_loss 4,0593 — PASS (delta −1,6259)"
+  },
+  "init": {"val_loss": 4.059341139793396, "val_ppl": 57.93612669285167},
+  "history": [
+    {"epoch": 1, "train_loss": 3.0673, "val_loss": 2.5813, "val_ppl": 13.21, "duration_sn": 1137.1,
+     "path": "data/anka_b1_5_epoch1.pt", "sha256": "8b6640213dead228dc63da4a0abfe1cc50586f4c9c189e52d12677cacc69963d"},
+    {"epoch": 2, "train_loss": 2.5242, "val_loss": 2.4568, "val_ppl": 11.67, "duration_sn": 2227.2,
+     "path": "data/anka_b1_5_epoch2.pt", "sha256": "03dd960c476d2d347e0aa24a3fab6d23d0ebfe07f2f2cf81c9c895dc576e652a"},
+    {"epoch": 3, "train_loss": 2.4244, "val_loss": 2.4334, "val_ppl": 11.40, "duration_sn": 2207.7,
+     "path": "data/anka_b1_5_epoch3.pt", "sha256": "e5eb114e5bd71d5800ba423d844b2e2aeed6b78beaf3cba4278690a43fb51eb7"}
+  ],
+  "best": {"epoch": 3, "val_loss": 2.4334, "path": "data/anka_b1_5_best.pt",
+           "sha256": "e5eb114e5bd71d5800ba423d844b2e2aeed6b78beaf3cba4278690a43fb51eb7",
+           "beyan": "best.pt = epoch-3 bit-birebir (copyfile; iki sha BETİKTEN-ölçümü birebir)"},
+  "bagimsiz_disk_teyit": {
+    "disk_sha_yeniden_olcum": "4 ckpt sha BETİKTEN; history-beyan sha'larıyla BİREBİR",
+    "split_dokunulmazlik": "test/val/train.jsonl sha T-0190 hüküm değerleriyle BİREBİR (koşum test'e 0 okuma)",
+    "kristal_model_pt": "YAZILMADI — veri/dizinde yok, silinmiş-ad dirilişi YOK"
+  },
+  "cache": {"yeni": ["data/b1_5_splits/anka_fast_ds_train.pt (42M)", "data/b1_5_splits/anka_fast_ds_val.pt (5,3M)"],
+            "eski_cache": "train_fast_ds.pt / val_fast_ds.pt / train_ds.pt / val_ds.pt DOKUNULMAZ (bayat)"},
+  "tema_beyan": {
+    "val_loss_egrisi": "4,0593 → 2,5813 → 2,4568 → 2,4334 (monoton-azalan; KAPI değil, gözlem-beyan)",
+    "epoch2_3_sure_yavaslama": "1137 → 2227 → 2208 sn (~2×; T-0052 kalıbı — makinede başka yük olası; koşum-sonuç etkilenmedi)",
+    "artimli_history": "data/eval/t0191_training_history.json her-epoch yeniden-yazımı kanıtı (init-sonrası ve her epoch-sonunda)"
+  },
+  "dokunulmayan": ["data/b1_5_splits/{train,val,test}.jsonl (sha birebir)", "train_ds.pt / val_ds.pt / train_fast_ds.pt / val_fast_ds.pt", "split_statistics.json", "prepare/training tarihsel betikleri", "canlı 8080 (0 istek)"],
+  "bus": {"task": "T-0191", "claim": "ok:true", "lease": "data + scripts + data/eval + .agent-bus/notes ok:true"}
+}
