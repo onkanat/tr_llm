@@ -247,11 +247,12 @@ iddia içerir. Ölçülüp **çürütülen** iddialar buraya yazılmaz (aşağı
    yazılması sağlandı. Olay listesinde 8. tip olarak tanımlıdır.
 2. **`read` bayrağı (KAPATILDI — T-0117):** T-0117 ile `bus_inbox(who=..., ack=True)`
    parametresi eklendi; okunan mesajların `read` bayrağı atomik olarak `true` yapılır ve diske işlenir.
-3. **Kök `tasks/` yüzeyi okunur ama yazılmaz.** Görev araması **iki** dizini tarar
-   (`state/tasks/` + `.agent-bus/tasks/`), fakat durum değişiklikleri **yalnız**
-   `state/tasks/` altına yazılır. Sonuç: yalnız kökte bulunan elle yazılmış bir şartname
-   **okunur ama durumu asla güncellenmez** (bayat `status`). Aynı kimlik iki yerde varsa
-   `state/tasks/` kazandığı için bu sessiz bir yanlış okuma değil, **bayat bir kopyadır**.
+3. **Kök `tasks/` yüzeyi okunur ama yazılmaz (KAPATILDI — T-0164 C5, T-0180 damgasıyla
+   işaretlendi):** Kod tek-kaynağı `get_task_file_path` artık **yalnız** `state/tasks/`
+   okur (legacy önceliği kaldırıldı, commit `7c680a7`); 24 kök-kopya digest-kayıtlı
+   migration ile taşınıp kök yüzey boşaltıldı. Ölçüm çıpası (T-0180, BETİKTEN
+   2026-09-29T03:30:24Z): `.agent-bus/tasks/` **0 dosya**. Kural olarak kök-yüzeye
+   elle şartname Yazmama şart korunur.
 4. **Devralmanın süresi dolmaz (ÇÜRÜTÜLDÜ — T-0116):** Kaynak kodda `is_expired` denetimi ve
    `task_claim_takeover` mekanizması commit 9e59830'dan beri mevcuttur. Süresi dolan devralma
    ikinci yürütücüyü süresiz kilitlemez, devralınabilir.
