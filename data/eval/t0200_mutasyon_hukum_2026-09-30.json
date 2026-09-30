@@ -1,0 +1,34 @@
+{
+  "task": "T-0200",
+  "hukum": "T0200_MUTASYON_GECTI",
+  "rc": 0,
+  "kapilar": {
+    "k1_kl_pozitif_sonlu": true,
+    "k2_kl_dusus_yon": true,
+    "k3_ds_uzunluk": true,
+    "k4_determinizm": true,
+    "k5_init_ce_birebir": true
+  },
+  "kl_seri": [
+    0.577124,
+    0.600877,
+    0.661346,
+    0.564412,
+    0.574326,
+    0.584663,
+    0.557784,
+    0.56086,
+    0.614998,
+    0.601494,
+    0.610883,
+    0.527958
+  ],
+  "kl_ilk": 0.577124,
+  "kl_son": 0.527958,
+  "beta": 1.0,
+  "peak_lr": 2e-05,
+  "pencere_ce_init": 3.9268,
+  "pencere_ce_cipa": 3.9268,
+  "ds_n": 10982,
+  "damga": "2026-09-30T03:47:56Z"
+}

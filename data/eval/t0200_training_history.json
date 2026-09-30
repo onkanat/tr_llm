@@ -1,0 +1,56 @@
+{
+  "damga": "2026-09-30T03:55:44Z",
+  "ilan": "data/eval/t0200_egitim_ilan_2026-09-30.md",
+  "mutasyon": {
+    "hukum": "T0200_MUTASYON_GECTI",
+    "kl_ilk": 0.577124,
+    "kl_son": 0.527958
+  },
+  "recete": {
+    "epochs": 1,
+    "batch": 16,
+    "accum": 2,
+    "peak_lr": 2e-05,
+    "min_lr": 5e-06,
+    "warmup": 20,
+    "beta": 1.0,
+    "kaynak": {
+      "sft": "/Users/hakankilicaslan/Git/tr_llm/data/eval/t0197_uretim_saf.jsonl",
+      "bin": "/Users/hakankilicaslan/Git/tr_llm/data/anka_a1r_pretrain.bin",
+      "hoca": "data/anka_base_v2.pt",
+      "load": "data/anka_b1_5_best.pt"
+    },
+    "ds_n": 10982,
+    "opt_steps_cipa": 344,
+    "seed": 42
+  },
+  "init": {
+    "val_loss": 2.433384721279144,
+    "val_ppl": 11.39739386895371,
+    "pencere_ce": 3.9268
+  },
+  "probe": {
+    "adim": 200,
+    "sn": 8852.3,
+    "sn_adim": 44.2616,
+    "tam_kosum_tamini_min": 106.2
+  },
+  "history": [
+    {
+      "epoch": 1,
+      "val_loss_agirliksiz": 2.4928059864044187,
+      "val_ppl": 12.095167424290437,
+      "pencere_ce": 3.4784,
+      "kl_ort": 0.3315525205892532,
+      "path": "/Users/hakankilicaslan/Git/tr_llm/data/anka_t0200_epoch1.pt",
+      "duration": 19403.876574993134,
+      "sha256": "be5c1fb47ceb5187eae51d4ef60b1d600a4b7fea721a2978ff9e99f6abd23d83"
+    }
+  ],
+  "best": {
+    "epoch": 1,
+    "val_loss_agirliksiz": 2.4928059864044187,
+    "path": "/Users/hakankilicaslan/Git/tr_llm/data/anka_t0200.pt",
+    "sha256": "be5c1fb47ceb5187eae51d4ef60b1d600a4b7fea721a2978ff9e99f6abd23d83"
+  }
+}

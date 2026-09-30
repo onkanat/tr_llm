@@ -1,0 +1,40 @@
+{
+  "task": "T-0200",
+  "hukum": "T0200_EGITIM_DUR",
+  "rc": 2,
+  "kapilar": {
+    "EK1_cipe": true,
+    "EK2_sha_triplet": true,
+    "EK3_pozitif_etki": false,
+    "EK4_mutasyon": true,
+    "EK5_pencere_akis": true,
+    "EK6_kl_faaliyet": true
+  },
+  "init": {
+    "val_loss_agirliksiz": 2.433384721279144,
+    "pencere_ce": 3.9268
+  },
+  "best": {
+    "path": "/Users/hakankilicaslan/Git/tr_llm/data/anka_t0200.pt",
+    "sha256": "be5c1fb47ceb5187eae51d4ef60b1d600a4b7fea721a2978ff9e99f6abd23d83",
+    "val_loss_agirliksiz": 2.4928059864044187,
+    "pencere_ce": 3.4784,
+    "kl_ort_epok": 0.3315525205892532
+  },
+  "kl_adim_seri_ilk_12": [
+    0.5379339456558228,
+    0.5508095622062683,
+    0.6429202854633331,
+    0.5880389511585236,
+    0.5579566061496735,
+    0.5441868603229523,
+    0.5736044049263,
+    0.588687926530838,
+    0.6431522965431213,
+    0.5602320730686188,
+    0.5657845139503479,
+    0.5805895924568176
+  ],
+  "history_path": "/Users/hakankilicaslan/Git/tr_llm/data/eval/t0200_training_history.json",
+  "damga": "2026-09-30T09:19:18Z"
+}
