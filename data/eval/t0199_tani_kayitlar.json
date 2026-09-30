@@ -1,0 +1,170 @@
+{
+  "task": "T-0199",
+  "cipa_durum": {
+    "taban": "d0f415f3d882beb4a3dace87fc4a6024bf3c667f033790fc1e472cb60a664a50",
+    "halef": "e5eb114e5bd71d5800ba423d844b2e2aeed6b78beaf3cba4278690a43fb51eb7",
+    "arz": "80b0fd9a5a60de90536ad4d6d3a3f8eb1de16d1474501a0eac669d2458f106fa",
+    "usaf": "8f846023f2fb2374dd411f674b199f373198c108cd961c836c44e094948b2c10",
+    "hiza": "05d8e4cf55a2e27e46eadab6b93f50b2cd90202b6f17e2f57958d4ac4d5727df"
+  },
+  "tekrar_sayim": {
+    "root_train": [
+      1734,
+      1734
+    ],
+    "tense_train": [
+      800,
+      800
+    ],
+    "plural_train": [
+      1000,
+      1000
+    ],
+    "t0197_sablan": [
+      622,
+      622
+    ]
+  },
+  "arz": {
+    "train": {
+      "n": 13003,
+      "sablan_toplam": 5034,
+      "kirilim": {
+        "ROOT:": 1734,
+        "TENSE:": 800,
+        "PLURAL:": 1000,
+        "CASE:": 1500,
+        "POSS:": 0,
+        "DERIV:": 0,
+        "KELDURUM:": 0
+      },
+      "pay": 38.71414289010228
+    },
+    "t0197": {
+      "n": 5491,
+      "sablan_toplam": 622,
+      "kirilim": {
+        "ROOT:": 607,
+        "TENSE:": 10,
+        "PLURAL:": 0,
+        "CASE:": 5,
+        "POSS:": 0,
+        "DERIV:": 0,
+        "KELDURUM:": 0
+      },
+      "pay": 11.327627026042615
+    }
+  },
+  "uretim_sizma": {
+    "n": 100,
+    "tutarsiz": 30,
+    "erken_kes": 17,
+    "sablan_gen_toplam": 0,
+    "sablan_gen_tutarsiz": 0,
+    "erken_kes_root_sizma": 0,
+    "yuklem_yok_uretim": 27,
+    "t0195_m1_hizalama": {
+      "erken_kesiçin_root_sizma_beyan": "11/13 (T-0195 M1)"
+    },
+    "pay": {
+      "sablan_uretim": 0.0,
+      "yuklemsiz_uretim": 27.0
+    }
+  },
+  "m5_semantik": {
+    "kural": "Adım-B: predicate-siz (TENSE_/COPULA_ hiç-yok) kayıtların %50'si atlanır (rng.sample(predicate_siz, len(predicate_siz) // 2)); ROOT/PLURAL şablan çıkışları predicate-siz sınıfındadır ve yarısı külliyatta KALIR",
+    "kanit_satirlar": [
+      {
+        "satir": 78,
+        "kod": "    atla = set(rng.sample(predicate_siz, len(predicate_siz) // 2)) if predicate_siz else set()"
+      }
+    ],
+    "sessiz_gecis_beyani": "t0197-saf şablan-payı 11.3% (622/5491) — filtre şablan-sınıfını tam-dışlamadı (yarı-atla semantiği)"
+  },
+  "m3_zarar_cipasi": {
+    "T-0192": {
+      "tutarsizlik": 22.0,
+      "veri_boyutu": null,
+      "recepte": "T-0191 anka_b1_5 eğitim-zinciri"
+    },
+    "T-0196": {
+      "tutarsizlik": 26.0,
+      "veri_boyutu": 6680,
+      "recepte": "2-epoch peak_lr 1e-4"
+    },
+    "T-0197": {
+      "tutarsizlik": 28.000000000000004,
+      "veri_boyutu": 5491,
+      "recepte": "2-epoch peak_lr 1e-4"
+    },
+    "T-0198": {
+      "tutarsizlik": 30.0,
+      "veri_boyutu": 5491,
+      "recepte": "2-epoch peak_lr 1e-4 (hiza ALFA=2,0)"
+    }
+  },
+  "m3_monoton_artis": true,
+  "m1_tablo": {
+    "taban": {
+      "model": "data/anka_base_v2.pt",
+      "ppl": 27.32,
+      "ce_ort": 3.3077,
+      "n": 25,
+      "dongu_orani": 100.0,
+      "benzersiz_4gram": 0.1555,
+      "output": "/Users/hakankilicaslan/Git/tr_llm/data/eval/t0199_m1_taban.json"
+    },
+    "halef": {
+      "model": "data/anka_b1_5_best.pt",
+      "ppl": 50.75,
+      "ce_ort": 3.9268,
+      "n": 25,
+      "dongu_orani": 100.0,
+      "benzersiz_4gram": 0.5229,
+      "output": "/Users/hakankilicaslan/Git/tr_llm/data/eval/t0199_m1_b1_5_best.json"
+    },
+    "arz": {
+      "model": "data/anka_b1_5_arz.pt",
+      "ppl": 58.81,
+      "ce_ort": 4.0743,
+      "n": 25,
+      "dongu_orani": 100.0,
+      "benzersiz_4gram": 0.4858,
+      "output": "/Users/hakankilicaslan/Git/tr_llm/data/eval/t0199_m1_b1_5_arz.json"
+    },
+    "usaf": {
+      "model": "data/anka_b1_5_usaf.pt",
+      "ppl": 57.35,
+      "ce_ort": 4.0492,
+      "n": 25,
+      "dongu_orani": 92.0,
+      "benzersiz_4gram": 0.5552,
+      "output": "/Users/hakankilicaslan/Git/tr_llm/data/eval/t0199_m1_b1_5_usaf.json"
+    },
+    "hiza": {
+      "model": "data/anka_b1_5_hiza.pt",
+      "ppl": 56.92,
+      "ce_ort": 4.0417,
+      "n": 25,
+      "dongu_orani": 96.0,
+      "benzersiz_4gram": 0.5427,
+      "output": "/Users/hakankilicaslan/Git/tr_llm/data/eval/t0199_m1_b1_5_hiza.json"
+    }
+  },
+  "a1r_referans": 33.38,
+  "beyan": {
+    "kanat_a": {
+      "zincir_ppl_ort": 55.96,
+      "oran_base_v2": 2.048,
+      "a1r_cipa_oran": 1.676,
+      "hipotez_kaydi": "kendi-kök base_v2'ye 2,0× üstü ppl-bozulma (devam-SFT zararı; tanı-kanatı — nedensellik iddiası YOK (R2)",
+      "guclu": true
+    },
+    "kanat_b": {
+      "tasma_beyani": true,
+      "hipotez_kaydi": "sızma-üretim-payı ≥ arz-payı — taşma-kanitesi"
+    },
+    "onarim_yonu": "Faz-2 optimum-zarar onarımı aday (taban-natural karışım / tek-epoch düşük-LR / KL-çıpa)"
+  },
+  "damga": "2026-09-30T02:34:41Z"
+}

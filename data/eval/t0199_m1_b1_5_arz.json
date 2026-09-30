@@ -1,0 +1,32 @@
+{
+  "model": "data/anka_b1_5_arz.pt",
+  "module": null,
+  "ce_ort": 4.0743,
+  "ppl": 58.81,
+  "benzersiz_4gram": 0.4858,
+  "dongu_orani": 100.0,
+  "n": 25,
+  "max_new": 128,
+  "device": "mps",
+  "modul_katman": 0,
+  "ornek_uretim": [
+    {
+      "benzersiz_4gram": 0.312,
+      "en_cok_tekrar": 7,
+      "uzunluk": 128,
+      "dongu": true
+    },
+    {
+      "benzersiz_4gram": 0.64,
+      "en_cok_tekrar": 5,
+      "uzunluk": 128,
+      "dongu": true
+    },
+    {
+      "benzersiz_4gram": 0.632,
+      "en_cok_tekrar": 4,
+      "uzunluk": 128,
+      "dongu": true
+    }
+  ]
+}

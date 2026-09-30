@@ -1,0 +1,32 @@
+{
+  "model": "data/anka_b1_5_best.pt",
+  "module": null,
+  "ce_ort": 3.9268,
+  "ppl": 50.75,
+  "benzersiz_4gram": 0.5229,
+  "dongu_orani": 100.0,
+  "n": 25,
+  "max_new": 128,
+  "device": "mps",
+  "modul_katman": 0,
+  "ornek_uretim": [
+    {
+      "benzersiz_4gram": 0.816,
+      "en_cok_tekrar": 3,
+      "uzunluk": 128,
+      "dongu": true
+    },
+    {
+      "benzersiz_4gram": 0.672,
+      "en_cok_tekrar": 9,
+      "uzunluk": 128,
+      "dongu": true
+    },
+    {
+      "benzersiz_4gram": 0.568,
+      "en_cok_tekrar": 8,
+      "uzunluk": 128,
+      "dongu": true
+    }
+  ]
+}

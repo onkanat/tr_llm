@@ -1,0 +1,32 @@
+{
+  "model": "data/anka_b1_5_hiza.pt",
+  "module": null,
+  "ce_ort": 4.0417,
+  "ppl": 56.92,
+  "benzersiz_4gram": 0.5427,
+  "dongu_orani": 96.0,
+  "n": 25,
+  "max_new": 128,
+  "device": "mps",
+  "modul_katman": 0,
+  "ornek_uretim": [
+    {
+      "benzersiz_4gram": 0.072,
+      "en_cok_tekrar": 21,
+      "uzunluk": 128,
+      "dongu": true
+    },
+    {
+      "benzersiz_4gram": 0.76,
+      "en_cok_tekrar": 5,
+      "uzunluk": 128,
+      "dongu": true
+    },
+    {
+      "benzersiz_4gram": 0.472,
+      "en_cok_tekrar": 6,
+      "uzunluk": 128,
+      "dongu": true
+    }
+  ]
+}

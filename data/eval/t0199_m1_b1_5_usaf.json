@@ -1,0 +1,32 @@
+{
+  "model": "data/anka_b1_5_usaf.pt",
+  "module": null,
+  "ce_ort": 4.0492,
+  "ppl": 57.35,
+  "benzersiz_4gram": 0.5552,
+  "dongu_orani": 92.0,
+  "n": 25,
+  "max_new": 128,
+  "device": "mps",
+  "modul_katman": 0,
+  "ornek_uretim": [
+    {
+      "benzersiz_4gram": 0.672,
+      "en_cok_tekrar": 4,
+      "uzunluk": 128,
+      "dongu": true
+    },
+    {
+      "benzersiz_4gram": 0.888,
+      "en_cok_tekrar": 2,
+      "uzunluk": 128,
+      "dongu": false
+    },
+    {
+      "benzersiz_4gram": 0.416,
+      "en_cok_tekrar": 8,
+      "uzunluk": 128,
+      "dongu": true
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "task": "T-0199",
+  "hukum": "T0199_TANI_KAYDI",
+  "rc": 0,
+  "kapilar": {
+    "cipalar_5_sha_b1r_ref": true,
+    "tekrar_sayim": true,
+    "m1_5_model": true,
+    "m1_base_cipa": true,
+    "m1_a1r_cipa": true,
+    "m2_sayimlar": true,
+    "m3_tablo": true
+  },
+  "beyan": {
+    "kanat_a": {
+      "zincir_ppl_ort": 55.96,
+      "oran_base_v2": 2.048,
+      "a1r_cipa_oran": 1.676,
+      "hipotez_kaydi": "kendi-kök base_v2'ye 2,0× üstü ppl-bozulma (devam-SFT zararı; tanı-kanatı — nedensellik iddiası YOK (R2)",
+      "guclu": true
+    },
+    "kanat_b": {
+      "tasma_beyani": true,
+      "hipotez_kaydi": "sızma-üretim-payı ≥ arz-payı — taşma-kanitesi"
+    },
+    "onarim_yonu": "Faz-2 optimum-zarar onarımı aday (taban-natural karışım / tek-epoch düşük-LR / KL-çıpa)"
+  },
+  "m3_seri": [
+    22.0,
+    26.0,
+    28.000000000000004,
+    30.0
+  ],
+  "m3_monoton_artis": true,
+  "ilan": "data/eval/t0199_tani_ilan2_2026-09-30.md",
+  "kayitlar": "data/eval/t0199_tani_kayitlar.json",
+  "damga": "2026-09-30T02:34:41Z"
+}
