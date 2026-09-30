@@ -1,0 +1,70 @@
+{
+  "task": "T-0198",
+  "hukum": "T0198_ONARIM_DUR",
+  "rc": 2,
+  "esikler": {
+    "ezber_max": 5.0,
+    "tutarsizlik_max": 28.0,
+    "decomp_rouge_min": 0.35,
+    "yuklemsiz_pir_max": 28.0,
+    "erken_kes_pir_max": 17.0
+  },
+  "olculen": {
+    "ezber_rate": 0.0,
+    "tutarsizlik_rate": 30.0,
+    "decomp_rouge": 0.11890013132962196,
+    "raw_rouge": 0.10052754935857271,
+    "yuklemsiz_pir": 27.0,
+    "erken_kes_pir": 17.0,
+    "dongu_pir": 4.0
+  },
+  "kapi_dersleri": {
+    "ezber_le5": true,
+    "tutarsizlik_lt28": false,
+    "decomp_ge0_35": false,
+    "yuklemsiz_pir_lt28": true,
+    "erken_kes_pir_lt17": false
+  },
+  "dil_hizali_alt_kume": {
+    "ing_hedef": {
+      "n": 16,
+      "raw_ort": 0.045311560333491915,
+      "decomp_ort": 0.052783745327476206
+    },
+    "turkce_ref": {
+      "n": 84,
+      "raw_ort": 0.11104488060144531,
+      "decomp_ort": 0.13149372866336398
+    }
+  },
+  "cipa_t0197": {
+    "tutarsizlik": 28.0,
+    "yuklemsiz": 28.0,
+    "erken_kes": 17.0,
+    "dongu": 3.0,
+    "decomp_rouge": 0.1165,
+    "raw_rouge": 0.0981,
+    "dil_hizali": {
+      "ing_hedef": {
+        "n": 16,
+        "raw_ort": 0.0467,
+        "decomp_ort": 0.0581
+      },
+      "turkce_ref": {
+        "n": 84,
+        "raw_ort": 0.1078,
+        "decomp_ort": 0.1276
+      }
+    }
+  },
+  "cipa_t0194_kol_a": {
+    "decomp": 0.1325,
+    "tutarsizlik": 22.0,
+    "raw_rouge": 0.1058
+  },
+  "egitim_hukum": "T0198_EGITIM_GECTI",
+  "egitim_sha256": "05d8e4cf55a2e27e46eadab6b93f50b2cd90202b6f17e2f57958d4ac4d5727df",
+  "history_path": "data/eval/t0198_training_history.json",
+  "damga": "2026-09-29T22:08:56Z",
+  "ilan": "data/eval/t0198_egitim_ilan_2026-09-29.md"
+}

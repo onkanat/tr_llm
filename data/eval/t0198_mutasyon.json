@@ -1,0 +1,24 @@
+{
+  "task": "T-0198",
+  "hukum": "T0198_MUTASYON_GECTI",
+  "rc": 0,
+  "alpha": 2.0,
+  "kapilar": {
+    "kopya_birebir": true,
+    "kapat_le1e9": true,
+    "acik_fark_pozitif": true
+  },
+  "kayip_std": 2.9203896522521973,
+  "kayip_kapat": 2.9203896522521973,
+  "kayip_acik": 2.9486629962921143,
+  "fark_acik": 0.028273344039916992,
+  "beklenen_k_argmax_3id": [
+    4,
+    408,
+    173
+  ],
+  "ds_n": 5491,
+  "kopya_kontrol_n": 64,
+  "hiza_cache": "/Users/hakankilicaslan/Git/tr_llm/data/eval/t0198_fast_ds_train.pt",
+  "damga": "2026-09-29T18:04:27Z"
+}

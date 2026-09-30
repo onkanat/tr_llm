@@ -1,0 +1,27 @@
+{
+  "task": "T-0198",
+  "hukum": "T0198_EGITIM_GECTI",
+  "rc": 0,
+  "kapilar": {
+    "EK1_cipe": "PASS",
+    "EK2_onarim_sha": "PASS",
+    "EK3_pozitif_etki": true,
+    "EK4_mutasyon": "PASS",
+    "init_val_loss_agirliksiz": 2.433384721279144,
+    "best_val_loss_agirliksiz": 2.4203709888458254,
+    "val_dusus": 0.013013732433318825,
+    "best_epoch": 2
+  },
+  "probe": {
+    "adim": 200,
+    "sn": 791.4,
+    "sn_adim": 3.9571,
+    "tam_kosum_tamini_min": 9.5
+  },
+  "best": {
+    "path": "/Users/hakankilicaslan/Git/tr_llm/data/anka_b1_5_hiza.pt",
+    "sha256": "05d8e4cf55a2e27e46eadab6b93f50b2cd90202b6f17e2f57958d4ac4d5727df"
+  },
+  "history_path": "/Users/hakankilicaslan/Git/tr_llm/data/eval/t0198_training_history.json",
+  "damga": "2026-09-29T20:01:30Z"
+}
