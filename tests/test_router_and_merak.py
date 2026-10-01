@@ -293,3 +293,80 @@ def test_epistemic_curiosity_loop_skips_when_model_understands():
         assert result["future_train_recorded"] is False
         assert not os.path.exists(future_file)
 
+
+def test_epistemic_agent_expert_model_selection():
+    """T-0208: Test that EpistemicCuriosityAgent correctly routes to expert model."""
+    import tempfile
+    from src.rag.epistemic_agent import EpistemicCuriosityAgent
+
+    class MockVocab:
+        stoi = {"<BOS>": 0, "<EOS>": 1, "<OUTPUT>": 2, "</OUTPUT>": 3, "domates": 4}
+        itos = {v: k for k, v in stoi.items()}
+        def decode(self, idx): return self.itos.get(idx, "domates")
+
+    class MockTokenizer:
+        vocab = MockVocab()
+        def encode(self, text): return [0, 4, 2]
+        def decode(self, ids): return "domates"
+
+    class BaseMockModel(torch.nn.Module):
+        def __init__(self):
+            super().__init__()
+            self.generation_called = False
+            self.embedding = torch.nn.Embedding(10, 64)
+        def forward(self, x, return_hidden_states=False):
+            if not return_hidden_states:
+                self.generation_called = True
+            logits = torch.ones(x.shape[0], x.shape[1], 10)
+            hidden = torch.randn(x.shape[0], x.shape[1], 64)
+            return (logits, None, hidden) if return_hidden_states else (logits, None)
+
+    class GardenerMockModel(torch.nn.Module):
+        def __init__(self):
+            super().__init__()
+            self.generation_called = False
+            self.embedding = torch.nn.Embedding(10, 64)
+        def forward(self, x, return_hidden_states=False):
+            if not return_hidden_states:
+                self.generation_called = True
+            logits = torch.ones(x.shape[0], x.shape[1], 10)
+            hidden = torch.randn(x.shape[0], x.shape[1], 64)
+            return (logits, None, hidden) if return_hidden_states else (logits, None)
+
+    base_model = BaseMockModel()
+    gardener_model = GardenerMockModel()
+
+    # Create 5-expert router where router will predict 'gardener'
+    router = TriModalRouter(
+        prompt_dim=64, merak_dim=64, rag_dim=64, router_dim=32,
+        num_experts=5, top_k=2,
+        expert_names=["grammar_core", "pedagogy", "carpenter", "gardener", "legal"]
+    )
+    # Set weights so index 3 ('gardener') has highest logit
+    with torch.no_grad():
+        router.w_p.weight.zero_()
+        router.w_p.bias.zero_()
+        router.w_p.bias[0] = 5.0
+        router.w_g.weight[3, 0] = 10.0
+        router.w_g.weight[0, 0] = -10.0
+        router.w_g.weight[1, 0] = -10.0
+        router.w_g.weight[2, 0] = -10.0
+        router.w_g.weight[4, 0] = -10.0
+
+    agent = EpistemicCuriosityAgent(
+        model=base_model,
+        expert_models={"gardener": gardener_model},
+        tokenizer=MockTokenizer(),
+        memory=None,
+        curiosity_engine=CuriosityEngine(hidden_dim=64, curiosity_dim=64, tau=1.5),
+        router=router,
+        device="cpu"
+    )
+
+    result = agent.process_query("Domates fidesi?", force_rag=False)
+    assert result["active_expert"] == "gardener"
+    assert "gardener" in result["router_experts"]
+    assert gardener_model.generation_called is True
+    assert base_model.generation_called is False
+
+

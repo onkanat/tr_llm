@@ -24,7 +24,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 import src.gateway.agent_gateway as ag  # noqa: E402
 
 CANLI_HOST = "192.168.1.9"
-BEKLENEN_ROUTER_SD_SHA = "d369b3cdd25484ab679cd61321f3ae614e932166fb8ce6bd5f9dfa4c99fb50bf"
+BEKLENEN_ROUTER_SD_SHA = "a001207058be949ba5932ada04c5058fd88d99770caff0c2e0accbb291a1c649"
 
 
 class CanliVectorMemory(ag.VectorMemory):
@@ -51,13 +51,23 @@ def main():
     ayarla.add_argument("--port", type=int, default=8080)
     ayarla.add_argument("--model", type=str, default="data/anka_t0203_polish.pt",
                         help="Yüklenecek model checkpoint yolu (varsayılan: anka_t0203_polish.pt)")
+    ayarla.add_argument("--router", type=str, default="data/anka_router_v2.pt",
+                        help="Yüklenecek router checkpoint yolu (varsayılan: anka_router_v2.pt)")
     args = ayarla.parse_args()
 
     ag.VectorMemory = CanliVectorMemory
 
+    # T-0208: Bahçıvan uzman modelini MoE sözlüğüne bağla
+    expert_model_paths = {}
+    bahcivan_path = "data/anka_bahcivan.pt"
+    if Path(bahcivan_path).exists():
+        expert_model_paths["gardener"] = bahcivan_path
+
     gw = ag.AgentGateway.create_default(
         model_path=args.model,
         vocab_path="data/rebuild/vocab_anka_r1_33114.json",
+        router_state_path=args.router,
+        expert_model_paths=expert_model_paths,
         device="mps",
     )
     # T-0158 koşum-2 düzeltmesi: router sahibi epistemic_agent (gw.router YOK,

@@ -50,10 +50,11 @@ TEMIZLIK_JETONLARI = YAPISAL_BASTIRMA_JETONLARI + ("<EOS>", "</OUTPUT>")
 
 
 def load_trained_router_state(router: TriModalRouter, router_state_path: str) -> TriModalRouter:
-    """T-0155: Egitilmis router agirliklarini fail-closed yukler.
+    """T-0155 / T-0208: Egitilmis router agirliklarini fail-closed yukler.
 
     Dosya yok → RuntimeError (fresh-init'e sessiz dusme YOK);
     anahtar-kume uyusmazligi → RuntimeError (sema-koruma); strict=True.
+    T-0208: router num_experts ile state_dict boyutu uyusmuyorsa fail-closed.
     """
     if not os.path.exists(router_state_path):
         raise RuntimeError(
@@ -67,10 +68,14 @@ def load_trained_router_state(router: TriModalRouter, router_state_path: str) ->
             f"DURDURULDU: router state_dict sema uyusmazligi (T-0155): "
             f"beklenen {len(beklenen)} anahtar, gelen {len(gelen)}; "
             f"fark={sorted(beklenen ^ gelen)[:6]}")
+    if "w_g.weight" in sd and sd["w_g.weight"].shape[0] != router.num_experts:
+        raise RuntimeError(
+            f"DURDURULDU: router num_experts uyusmazligi (T-0208): "
+            f"router.num_experts={router.num_experts} != checkpoint={sd['w_g.weight'].shape[0]}")
     router.load_state_dict(sd, strict=True)
     logger.info(
-        "[ROUTER_SOYAGACI] yuklenen=%s anahtar=%d",
-        os.path.abspath(router_state_path), len(sd))
+        "[ROUTER_SOYAGACI] yuklenen=%s anahtar=%d uzman=%d",
+        os.path.abspath(router_state_path), len(sd), router.num_experts)
     return router
 
 
@@ -85,12 +90,14 @@ class EpistemicCuriosityAgent:
         curiosity_engine: Optional[CuriosityEngine] = None,
         router: Optional[TriModalRouter] = None,
         router_state_path: Optional[str] = None,
+        expert_models: Optional[Dict[str, nn.Module]] = None,
         tau: float = 2.5,
         similarity_threshold: float = 0.85,
         future_train_path: str = "data/future_train_vector.jsonl",
         device: str = "cpu"
     ):
         self.model = model
+        self.expert_models = expert_models or {}
         self.tokenizer = tokenizer
         self.vocab = tokenizer.vocab if hasattr(tokenizer, "vocab") else None
         self.memory = memory
@@ -121,14 +128,30 @@ class EpistemicCuriosityAgent:
         if router is not None:
             self.router = router
         else:
+            num_experts = 4
+            expert_names = ["grammar_core", "pedagogy", "carpenter", "legal"]
+            if router_state_path is not None:
+                if not os.path.exists(router_state_path):
+                    raise RuntimeError(
+                        f"DURDURULDU: router_state_path bulunamadi: {router_state_path}")
+                sd_check = torch.load(router_state_path, map_location="cpu")
+                if "w_g.weight" in sd_check:
+                    ckpt_experts = sd_check["w_g.weight"].shape[0]
+                    if ckpt_experts == 5:
+                        num_experts = 5
+                        expert_names = ["grammar_core", "pedagogy", "carpenter", "gardener", "legal"]
+                    elif ckpt_experts == 4:
+                        num_experts = 4
+                        expert_names = ["grammar_core", "pedagogy", "carpenter", "legal"]
+
             self.router = TriModalRouter(
                 prompt_dim=n_embd,
                 merak_dim=n_embd,
                 rag_dim=n_embd,
                 router_dim=256,
-                num_experts=4,
+                num_experts=num_experts,
                 top_k=2,
-                expert_names=["grammar_core", "pedagogy", "carpenter", "legal"]
+                expert_names=expert_names
             )
             if router_state_path is not None:
                 # T-0155: egitilmis agirliklar (T-0154) — fail-closed yukleme;
@@ -140,6 +163,9 @@ class EpistemicCuriosityAgent:
         self.router.to(self.device)
         self.curiosity_engine.eval()
         self.router.eval()
+        for exp_name, exp_m in self.expert_models.items():
+            exp_m.to(self.device)
+            exp_m.eval()
 
     def calculate_prompt_embedding(self, token_ids: List[int]) -> torch.Tensor:
         """Computes a prompt representation vector P from the token sequence."""
@@ -206,6 +232,9 @@ class EpistemicCuriosityAgent:
         """
         Queries VectorMemory (primary + optional fallback) and returns the top match and collection name.
         """
+        if self.memory is None:
+            return None, ""
+
         dense_vec = generate_kristal_vector(query_token_ids, query_tags)
         sparse_vec = generate_sparse_vector(query_token_ids, query_tags)
         
@@ -236,17 +265,20 @@ class EpistemicCuriosityAgent:
         repetition_penalty: float = 1.4,
         repetition_window: int = 10,
         temperature: float = 0.0,
-        top_k: int = 0
+        top_k: int = 0,
+        model: Optional[nn.Module] = None
     ) -> Tuple[List[int], float]:
         """
         Autoregressively generates tokens from prompt_tokens.
         Supports greedy decoding (temperature <= 0.0 or top_k == 1) or sampling with temperature and top_k.
         Also measures post-generation average entropy or final step entropy.
+        Supports selecting active expert model if provided.
         """
-        self.model.eval()
-        vocab_size = getattr(self.model, "vocab_size", 31328)
-        if hasattr(self.model, "embedding") and hasattr(self.model.embedding, "embedding"):
-            vocab_size = self.model.embedding.embedding.weight.shape[0]
+        active_model = model or self.model
+        active_model.eval()
+        vocab_size = getattr(active_model, "vocab_size", 31328)
+        if hasattr(active_model, "embedding") and hasattr(active_model.embedding, "embedding"):
+            vocab_size = active_model.embedding.embedding.weight.shape[0]
         generated = [t for t in prompt_tokens if 0 <= t < vocab_size]
         if not generated:
             generated = [0]
@@ -271,7 +303,7 @@ class EpistemicCuriosityAgent:
         with torch.no_grad():
             for _ in range(max_new_tokens):
                 x = torch.tensor([generated], dtype=torch.long, device=self.device)
-                logits, _ = self.model(x)
+                logits, _ = active_model(x)
                 logits_last = logits[0, -1, :]
                 
                 # Measure current step entropy
@@ -361,7 +393,9 @@ class EpistemicCuriosityAgent:
                 match_score = float(retrieved_doc.get("score", 0.0))
                 
         # Step 3: Tri-Modal Routing
-        prompt_vec = self.calculate_prompt_embedding(eval_pre_tokens)
+        # T-0208: Router dogrudan sorunun ozgun semantigini temsil eden query_token_ids
+        # ile sorgulanir (JSON sablon jetonlari yonlendirmeyi saptirmamasi icin).
+        prompt_vec = self.calculate_prompt_embedding(query_token_ids)
         rag_vec = None
         if retrieved_doc:
             doc_token_ids = retrieved_doc.get("metadata", {}).get("token_ids", [])
@@ -374,6 +408,10 @@ class EpistemicCuriosityAgent:
             rag_vec=rag_vec
         )
         expert_names = self.router.get_selected_expert_names(router_indices)[0]
+        
+        # T-0208: Dinamik Uzman Model Secimi (MoE Dağıtımı)
+        primary_expert = expert_names[0] if expert_names else "grammar_core"
+        active_model = self.expert_models.get(primary_expert, self.model)
         
         # Step 4: Conditioning with Document (if retrieved) & Generating Output
         conditioned = bool(retrieved_doc and is_context_usable(match_score, RAG_MATCH_THRESHOLD))
@@ -393,7 +431,8 @@ class EpistemicCuriosityAgent:
             eval_aug_tokens,
             max_new_tokens=max_new_tokens,
             temperature=temperature,
-            top_k=top_k
+            top_k=top_k,
+            model=active_model
         )
         
         eos_id = self.vocab.stoi.get("<EOS>", -1) if self.vocab else -1
@@ -471,6 +510,7 @@ class EpistemicCuriosityAgent:
             "conditioned": conditioned,
             "is_high_similarity": is_high_similarity,
             "router_experts": expert_names,
+            "active_expert": primary_expert,
             "entropy_post": entropy_post,
             "morpheme_output": morpheme_output,
             "decompiled_text": decompiled_text,

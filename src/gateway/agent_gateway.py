@@ -46,6 +46,7 @@ class AgentGateway:
         general_memory: Optional[VectorMemory] = None,
         epistemic_agent: Optional[EpistemicCuriosityAgent] = None,
         router_state_path: Optional[str] = None,
+        expert_models: Optional[Dict[str, nn.Module]] = None,
         future_train_path: str = "data/future_train_vector.jsonl",
         device: str = "cpu"
     ):
@@ -54,6 +55,7 @@ class AgentGateway:
         
         # If components are provided directly
         self.model = model
+        self.expert_models = expert_models or {}
         self.tokenizer = tokenizer
         self.decompiler = decompiler
         self.memory = memory
@@ -70,6 +72,7 @@ class AgentGateway:
                 general_memory=self.general_memory,
                 decompiler=self.decompiler,
                 router_state_path=router_state_path,
+                expert_models=self.expert_models,
                 tau=2.5,
                 similarity_threshold=0.85,
                 future_train_path=self.future_train_path,
@@ -84,6 +87,7 @@ class AgentGateway:
         lexicon_path: str = "data/lexicon/roots.tsv",
         storage_path: Optional[str] = None,
         router_state_path: str = "data/anka_router.pt",
+        expert_model_paths: Optional[Dict[str, str]] = None,
         device: str = "cpu"
     ) -> "AgentGateway":
         """Factory method to load and build the complete default Gateway stack.
@@ -196,6 +200,24 @@ class AgentGateway:
         model.to(dev)
         model.eval()
         
+        # T-0208: Uzman modelleri yükle (MoE Dağıtımı)
+        loaded_expert_models: Dict[str, nn.Module] = {}
+        if expert_model_paths:
+            for exp_name, exp_path in expert_model_paths.items():
+                if not os.path.exists(exp_path):
+                    raise RuntimeError(f"DURDURULDU: Uzman model checkpoint'i bulunamadı: {exp_path}")
+                exp_m = KristalLM(vocab_size=vocab_size, n_embd=768, vocab=vocab, block_size=4096, n_layer=6, n_head=6)
+                exp_sd = torch.load(exp_path, map_location=dev)
+                for k in keys_to_skip:
+                    if k in exp_sd:
+                        del exp_sd[k]
+                exp_sd = resize_state_dict(exp_m, exp_sd)
+                exp_m.load_state_dict(exp_sd, strict=False)
+                exp_m.to(dev)
+                exp_m.eval()
+                loaded_expert_models[exp_name] = exp_m
+                print(f"[UZMAN_YUKLENDI] {exp_name} <- {exp_path}")
+
         return cls(
             model=model,
             tokenizer=tokenizer,
@@ -203,6 +225,7 @@ class AgentGateway:
             memory=memory,
             general_memory=general_memory,
             router_state_path=router_state_path,
+            expert_models=loaded_expert_models,
             future_train_path="data/future_train_vector.jsonl",
             device=device
         )
@@ -251,6 +274,7 @@ class AgentGateway:
             "conditioned": res.get("conditioned", False),
             "is_high_similarity": res.get("is_high_similarity", False),
             "router_experts": res.get("router_experts", []),
+            "active_expert": res.get("active_expert", None),
             "epistemic_failure": res.get("epistemic_failure", False),
             "future_train_recorded": res.get("future_train_recorded", False),
             "future_train_path": res.get("future_train_path", None),
