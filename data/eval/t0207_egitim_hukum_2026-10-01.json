@@ -1,0 +1,24 @@
+{
+  "task": "T-0207",
+  "hukum": "T0207_EGITIM_GECTI",
+  "rc": 0,
+  "kapilar": {
+    "val_loss_dustu_veya_korundu": true,
+    "pencere_ce_makul_sinirda": true,
+    "kl_finit_pozitif": true,
+    "opt_adim_tamamlandi": true
+  },
+  "init": {
+    "val_loss": 2.450311357975006,
+    "pencere_ce": 3.4988
+  },
+  "best": {
+    "path": "/Users/hakankilicaslan/Git/tr_llm/data/anka_bahcivan.pt",
+    "sha256": "2d5e5b21893bde21fe5b9d1d9de913889c9918f1f9d3c4a1dba1933b628f01f1",
+    "val_loss": 2.4703267359733583,
+    "val_ppl": 11.826310301455557,
+    "pencere_ce": 3.4852,
+    "kl_ort": 0.25646017405182814
+  },
+  "damga": "2026-10-01T15:46:32Z"
+}

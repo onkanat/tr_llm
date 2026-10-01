@@ -147,3 +147,31 @@ def test_bit_exact_regression_against_carpenter_corpus(compiler_tools):
         assert old_stats["lines_ok"] == new_stats["lines_ok"]
     finally:
         os.remove(t_path)
+
+
+def test_tokenize_specialization_soru_cevap_schema(compiler_tools, tmp_path):
+    """Kriter 4: 'soru' ve 'cevap' şemasına sahip dikey külliyatların (örn. Bahçıvan) çift-kayıt derlenmesi."""
+    vocab, tokenizer = compiler_tools
+    sample_file = tmp_path / "bahcivan_sample.jsonl"
+    records_in = [
+        {"soru": "Domates nasıl sulanır?", "cevap": "Damlama sulama yöntemiyle kök bölgesine verilmelidir.", "aile": "sulama"},
+        {"soru": "Gül ne zaman budanır?", "cevap": "İlkbahar başlangıcında sert budama yapılır.", "aile": "budama"}
+    ]
+    with open(sample_file, "w", encoding="utf-8") as f:
+        for r in records_in:
+            f.write(json.dumps(r, ensure_ascii=False) + "\n")
+
+    recs, stats = tokenize_specialization_jsonl(
+        str(sample_file),
+        tokenizer,
+        system_prompt="Bahçe ve bitki bakımı uzmanı olarak cevapla.",
+        domain_name="bahcivan"
+    )
+
+    assert stats["raw_lines"] == 2
+    assert stats["lines_ok"] == 2
+    assert stats["kept"] == 4
+    assert len(recs) == 4
+    assert stats["domain_name"] == "bahcivan"
+    assert stats["system_prompt"] == "Bahçe ve bitki bakımı uzmanı olarak cevapla."
+

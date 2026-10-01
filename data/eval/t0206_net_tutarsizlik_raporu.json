@@ -1,0 +1,220 @@
+{
+  "damga": "2026-10-01T15:06:38Z",
+  "model": "data/anka_t0203_polish.pt",
+  "toplam_ornek": 100,
+  "ham_incoherence": {
+    "adet": 28,
+    "oran": 28.0,
+    "eski_kapi_durumu": "DUR (>= 28.0)"
+  },
+  "morfoloji_sablon_gorevleri": {
+    "adet": 11,
+    "ornekler": [
+      {
+        "idx": 5,
+        "soru": "kedi",
+        "hedef_ref": "ROOT: kedi",
+        "model_cikti": "Root: dudak",
+        "aciklama": "Model soruya uygun biçimde morfolojik kök şablonuyla yanıt vermiştir; yüklem aranması geçersizdir."
+      },
+      {
+        "idx": 18,
+        "soru": "eksilmez",
+        "hedef_ref": "ROOT: eksil",
+        "model_cikti": "Root: giy",
+        "aciklama": "Model soruya uygun biçimde morfolojik kök şablonuyla yanıt vermiştir; yüklem aranması geçersizdir."
+      },
+      {
+        "idx": 23,
+        "soru": "işkence",
+        "hedef_ref": "ROOT: işkence",
+        "model_cikti": "Root: cinayet",
+        "aciklama": "Model soruya uygun biçimde morfolojik kök şablonuyla yanıt vermiştir; yüklem aranması geçersizdir."
+      },
+      {
+        "idx": 33,
+        "soru": "kasadar",
+        "hedef_ref": "ROOT: kasadar",
+        "model_cikti": "Root: giy",
+        "aciklama": "Model soruya uygun biçimde morfolojik kök şablonuyla yanıt vermiştir; yüklem aranması geçersizdir."
+      },
+      {
+        "idx": 41,
+        "soru": "çanak",
+        "hedef_ref": "ROOT: çanak",
+        "model_cikti": "Root: kemik",
+        "aciklama": "Model soruya uygun biçimde morfolojik kök şablonuyla yanıt vermiştir; yüklem aranması geçersizdir."
+      },
+      {
+        "idx": 52,
+        "soru": "kültür",
+        "hedef_ref": "ROOT: kültür",
+        "model_cikti": "Root: pelesenk",
+        "aciklama": "Model soruya uygun biçimde morfolojik kök şablonuyla yanıt vermiştir; yüklem aranması geçersizdir."
+      },
+      {
+        "idx": 64,
+        "soru": "hangisi",
+        "hedef_ref": "ROOT: hangisi",
+        "model_cikti": "Root: dök",
+        "aciklama": "Model soruya uygun biçimde morfolojik kök şablonuyla yanıt vermiştir; yüklem aranması geçersizdir."
+      },
+      {
+        "idx": 65,
+        "soru": "dolaştıran",
+        "hedef_ref": "ROOT: dolaştır",
+        "model_cikti": "Root: giy",
+        "aciklama": "Model soruya uygun biçimde morfolojik kök şablonuyla yanıt vermiştir; yüklem aranması geçersizdir."
+      },
+      {
+        "idx": 73,
+        "soru": "kökünün",
+        "hedef_ref": "ROOT: kök",
+        "model_cikti": "Root: yaprak",
+        "aciklama": "Model soruya uygun biçimde morfolojik kök şablonuyla yanıt vermiştir; yüklem aranması geçersizdir."
+      },
+      {
+        "idx": 75,
+        "soru": "yeterince",
+        "hedef_ref": "ROOT: yeterince",
+        "model_cikti": "Root: dök",
+        "aciklama": "Model soruya uygun biçimde morfolojik kök şablonuyla yanıt vermiştir; yüklem aranması geçersizdir."
+      },
+      {
+        "idx": 79,
+        "soru": "zulmetmeden",
+        "hedef_ref": "ROOT: zulmet",
+        "model_cikti": "Root: bak",
+        "aciklama": "Model soruya uygun biçimde morfolojik kök şablonuyla yanıt vermiştir; yüklem aranması geçersizdir."
+      }
+    ]
+  },
+  "net_serbest_dil_tutarsizligi": {
+    "adet": 17,
+    "oran": 17.0,
+    "eski_kapi_karsilastirma": "%17.0 < %20.0 ve %28.0 EŞİĞİ GEÇİLDİ",
+    "ornekler": [
+      {
+        "idx": 28,
+        "soru": "Askeri fetihler, Roma ahlakını nasıl etkiledi?",
+        "hedef_ref": "Askeri fetihler, Suriye ve Yunanistan gibi çeşitli kültürlerle teması sağladı. Bu, yeni yaşam tarzlarının ortaya çıkmasına neden oldu. Çağdaş gözlemciler tarafından, bu yabancı geleneklerin akışı, ahlaki çöküş, lüks ve geleneksel Roma değerlerinin aşınması olarak algılanmıştır.",
+        "model_cikti": "Metin, Roma 'ın çöküşünü ve Roma 'ın çöküşünü ve Roma 'ın çöküşünü ve Roma 'ın çöküşünü ve Roma 'ın çöküşünü ve Roma 'ın çöküşünü ve Roma 'ın yükselişini ve Roma 'ın çöküşünü ve Roma 'ın çöküşünü ve Roma 'ın çöküşünü ve Roma 'ın yükselişini ve Roma 'ın çöküşünü ve Roma 'ın çöküşünü ve Roma 'ın yükselişini ve Roma 'ın çöküşünü ve Roma 'ın çöküşünü ve Roma 'ın yükselişini ve Roma 'ın çöküşünü ve",
+        "sebep": "Yüklemsiz serbest metin veya döngü"
+      },
+      {
+        "idx": 29,
+        "soru": "belge: Dize sonlarında üç veya daha fazla ses benzerliğine dayanan kafiye türüne zengin kafiye denir. sorgu: zengin kafiye ne COPULA_AORIST",
+        "hedef_ref": "zengin kafiye uyak dize sonlarında üç veya daha fazla ses benzerliğine dayanan ve anlamdaki ses benzerliğine dayanan bir türlü",
+        "model_cikti": "Dizenin [?] ', [?] ', [?] ', [?] ', [?] ', [?] ', [?] ', [?] ', [?] ', [?] ', [?] ', [?] ', [?] ', [?] ', [?] ', [?] ', [?] ', [?] ', [?] ', [?] ', [?] ', [?] ', [?] ', [?] ', [?] ', [?] ', [?] ', [?] ', [?] ', [?] ', [?] ', [?] ', [?] ', [?] ', [?] ', [?] ', [?] ', [?] ', [?] ', [?] ', [?] ', [?] ',",
+        "sebep": "Yüklemsiz serbest metin veya döngü"
+      },
+      {
+        "idx": 34,
+        "soru": "Julius Caesar, Galya'dan ayrıldıktan sonra askeri komutanlığını sürdürmek istemesinin temel motivasyonu neydi?",
+        "hedef_ref": "Caesar'ın asıl amacı, siyasi rakiplerinden korunmaktı. Roma'ya özel bir vatandaş olarak döndüğünde, rakiplerinin kendi üzerindeki etkilerini kullanarak, daha önceki görev dönemlerindeki eylemleri nedeniyle kendisini suçlamalarını engellemekten korkuyordu. Galya'daki komutanlığını ve ordusunu sürdürerek hem yasal bağışıklık hem de askeri güç elde etti.",
+        "model_cikti": "Sezar, Roma 'ın Roma 'ın Roma 'ın çöküşünü ve Roma 'ın çöküşünü ve Roma 'ın çöküşünü ve Roma 'ın çöküşünü ve Roma 'ın çöküşünü ve Roma 'ın çöküşünü ve Roma 'ın çöküşünü ve Roma 'ın çöküşünü ve Roma 'ın çöküşünü ve Roma 'ın çöküşünü ve Roma 'ın çöküşünü ve Roma 'ın çöküşünü ve Roma 'ın çöküşünü ve Roma 'ın çöküşünü ve Roma 'ın çöküşünü ve Roma 'ın çöküşünü ve Roma 'ın çöküşünü ve Roma",
+        "sebep": "Yüklemsiz serbest metin veya döngü"
+      },
+      {
+        "idx": 38,
+        "soru": "What is the significance of item 64 in the context of Mesopotamian literature?",
+        "hedef_ref": "Item 64 refers to Gilgamesh, the legendary hero. This indicates that the journal covers not just physical artifacts but also the mythological and literary figures central to Mesopotamian identity.",
+        "model_cikti": "The text [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?]",
+        "sebep": "Yüklemsiz serbest metin veya döngü"
+      },
+      {
+        "idx": 57,
+        "soru": "Metne göre, bir kralın kişisel davranışlarının sonuçları nelerdi?",
+        "hedef_ref": "Metin, kralların da kanunlar önünde eşit olduğunu ve kişisel kusurları nedeniyle cezalandırılabileceğini vurgulamaktadır. Örneğin, bir kral, küçük yaşta bir kraliçeyle (küçük bir prenses) evlendiği için sürgüne gönderilmiştir. Bu durum, Spartalı yasaların, monarkın mutlak egemenliğinden ziyade toplumsal istikrarı ve geleneği ön planda tuttuğunu göstermektedir.",
+        "model_cikti": "Metin, bunun yerine, Roma 'ın Roma 'ın çöküşünden sonra, Marili 'ına kadar uzanan bir imparatorluk kurdu. bu durum, Roma 'ın Roma 'ın çöküşünden sonra, Roma 'ın çöküşünü ve Roma 'ın çöküşünü ve Roma 'ın yükselişini ve Roma 'ın çöküşünü ve Roma 'ın çöküşünü ve Roma 'ın çöküşünü ve Roma 'ın çöküşünü ve Roma 'ın çöküşünü ve Roma 'ın çöküşünü ve Roma 'ın çöküşünü ve Roma 'ın çöküşünü",
+        "sebep": "Yüklemsiz serbest metin veya döngü"
+      },
+      {
+        "idx": 63,
+        "soru": "Resim yapmak eğlenceli mi sence?",
+        "hedef_ref": "Evet ya, bence resim yapmak çok zevkli bir aktivite, kafa dağıtmak için birebir.",
+        "model_cikti": "Süperim kanka sen [?] kanka?",
+        "sebep": "Yüklemsiz serbest metin veya döngü"
+      },
+      {
+        "idx": 70,
+        "soru": "Skyth istilası, Nineveh kuşatmasını nasıl etkiledi?",
+        "hedef_ref": "Skyth istilası, Median ordusunun hedeflerine önemli ölçüde zarar verdi. Medler, Nineveh'i açlıkla ele geçirme noktasına gelmişken, Kuzey Rusya'dan gelen Skythlerin ani gelişi, Medleri kuşatmayı bırakmaya ve kendi topraklarını savunmaya zorlamıştır.",
+        "model_cikti": "Marar 'ını [?]. bu durum, Roma 'ın Roma 'ın çöküşünü ve Roma 'ın çöküşünü ve Roma 'ın çöküşünü ve Roma 'ın çöküşünü ve Roma 'ın çöküşünü ve Roma 'ın çöküşünü ve Roma 'ın çöküşünü ve Roma 'ın çöküşünü ve Roma 'ın çöküşünü ve Roma 'ın çöküşünü ve Roma 'ın çöküşünü ve Roma 'ın çöküşünü ve Roma 'ın çöküşünü ve Roma 'ın çöküşünü ve Roma 'ın çöküşünü ve Roma 'ın yükseliş",
+        "sebep": "Yüklemsiz serbest metin veya döngü"
+      },
+      {
+        "idx": 74,
+        "soru": "\"Ay\" (Ay/Ay) terimiyle ilgili referanslar nelerdir?",
+        "hedef_ref": "\"Ay\", hem göksel yönü hem de zamansal ölçümü ile ilgili çeşitli girişlere sahiptir, örneğin sayfa 9'da \"Ay hicri senesi\" ve aynı sayfada \"Ay senesi\" (Lunar year) gibi ifadeler yer almaktadır. Bu, kronolojik sistemlere odaklanıldığını göstermektedir.",
+        "model_cikti": "Metin, bu durum, [?] ' ( sayfa 191), [?] ( sayfa 191), [?] ( sayfa 191), [?] ( sayfa 191), [?] ( sayfa 191), [?] ( sayfa 191), [?] ( sayfa 191), [?] ( sayfa 191), [?] ( sayfa 191), [?] ( sayfa 191), [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?]",
+        "sebep": "Yüklemsiz serbest metin veya döngü"
+      },
+      {
+        "idx": 76,
+        "soru": "Metinde bahsedilen \"Antalcidas Barışı\"nın önemi neydi?",
+        "hedef_ref": "Antalcidas Barışı, Spartan elçisi Antalcidas tarafından aracılık edilen bir anlaşmaydı. Bu anlaşma uyarınca, Persler Küçük Asya'daki tüm şehirlerin kontrolünü yeniden elde ederken, diğer Yunan şehir devletlerine birbirlerinden bağımsızlık tanınarak, etkin olarak Pers hegemonyası kabul edildi.",
+        "model_cikti": "Ar 'ına göre, Saris 'ına kadar uzanan bir grup olarak tanımlanmaktadır. bu durum, bu durum, [?] ' ( Titia) ve S ( S. S. S.), Karia 'ın ( Peria), Sara ( S. Per), Sara (",
+        "sebep": "Yüklemsiz serbest metin veya döngü"
+      },
+      {
+        "idx": 89,
+        "soru": "İşgalci kabileler kast sistemini (Kast) neden benimsemişlerdir?",
+        "hedef_ref": "İşgalci kabilelerin sayısı, yerli nüfusa göre oldukça az olduğundan, var olan statülerini korumak ve çoğunluk tarafından asimile edilmekten kaçınmak için kademeli olarak kast sistemini bir sosyal mekanizma olarak uygulamışlardır.",
+        "model_cikti": "Metin, bu durum, [?] ' ( Karia), [?] ' ( Seri), Karia 'ın ( Teria), Arar ( S), [?] ' ( S. Per), [?] ' ( Ser), [?] ' ( Perin), [?] ' ( Perin), [?] ' (",
+        "sebep": "Yüklemsiz serbest metin veya döngü"
+      },
+      {
+        "idx": 90,
+        "soru": "Sone nazım biçimi nasıldır?",
+        "hedef_ref": "İtalyan edebiyatından Servet-i Fünuncularca alınan; iki dörtlük ve iki üçlükten (toplam 14 dize) oluşan Batı kökenli nazım biçimidir.",
+        "model_cikti": "Dizin, [?] ' ( [?]), [?] ' ( [?]), [?] ' ( [?]), [?] ' ( [?] [?]), [?] ' ( [?] [?]), [?] ' ( [?]), [?] ' ( [?]), [?] ' ( [?]), [?] ' ( [?] [?]), [?] ' ( [?] [?]), [?] ' ( [?] [?]), [?] ' ( [?] [?]), [?] ' ( [?] [?]), [?] ( [?]), [?] ' ( [?] [?]), [?] ( [?]), [?] ( [?]), [?] ' ( [?]), [?] ' ( [?] [?]), [?] ( [?]), [?]",
+        "sebep": "Yüklemsiz serbest metin veya döngü"
+      },
+      {
+        "idx": 92,
+        "soru": "Tiglat-Pileser III'ün seferi Median topraklarını nasıl etkiledi?",
+        "hedef_ref": "Tiglat-Pileser III (MÖ 745 yılında tahta çıktıktan sonra), Media'nın fethini temel hedef olarak belirlemiştir. İstilası, yoğun savaşlar ve önemli can kayıpları ile karakterize edilen bir \"felaket\" (catastrophe) olarak tanımlanmıştır ve binlerce esirin yanı sıra büyük miktarda ganimetin Asur'a götürülmesine neden olmuştur.",
+        "model_cikti": "Mara 'ını [?]. bu durum, Roma 'ın Roma 'ın çöküşünü ve Roma 'ın çöküşünü ve Roma 'ın çöküşünü ve Roma 'ın çöküşünü ve Roma 'ın çöküşünü ve Roma 'ın çöküşünü ve Roma 'ın çöküşünü ve Roma 'ın çöküşünü ve Roma 'ın çöküşünü ve Roma 'ın çöküşünü ve Roma 'ın çöküşünü ve Roma 'ın çöküşünü ve Roma 'ın çöküşünü ve Roma 'ın çöküşünü ve Roma 'ın çöküşünü ve Roma 'ın çöküşün",
+        "sebep": "Yüklemsiz serbest metin veya döngü"
+      },
+      {
+        "idx": 94,
+        "soru": "Metne göre, bir Roma İmparatoru hangi temel yetki alanlarına sahipti?",
+        "hedef_ref": "İmparator, birçok alanda mutlak yetkiye sahipti. Askeri alanda, orduya başkomutanlık yapıyordu ve savaş ile barış konularında karar verme yetkisine sahipti. Ekonomik olarak, devlet hazinesini kontrol ediyor ve doğrudan eyaletler üzerinde yetki kullanıyordu. Hukuki olarak, yazılı fermanları kanun gücüne sahipti. Ayrıca, kültler ve ritüeller üzerinde dini otoriteyi elinde bulundurarak, hem dünyevi hem de ilahi yönetimde merkezi bir rol oynuyordu.",
+        "model_cikti": "Metinde, Roma 'ın Roma 'ın çöküşünden sonra, Roma 'ın Roma 'ın çöküşünü ve Roma 'ın çöküşünü ve Roma 'ın çöküşünü ve Roma 'ın çöküşünü ve Roma 'ın çöküşünü ve Roma 'ın çöküşünü ve Roma 'ın çöküşünü ve Roma 'ın çöküşünü ve Roma 'ın çöküşünü ve Roma 'ın çöküşünü ve Roma 'ın yükselişini ve Roma 'ın çöküşünü ve Roma 'ın çöküşünü ve Roma 'ın çöküşünü ve Roma 'ın çöküşünü ve Roma 'ın yükselişini ve",
+        "sebep": "Yüklemsiz serbest metin veya döngü"
+      },
+      {
+        "idx": 95,
+        "soru": "Makedonya-Roma çatışmalarında yer alan temel aktörler kimlerdir?",
+        "hedef_ref": "Temel figürler ve gruplar şunlardır: Roma (genişleyen güç), Makedonya Kralı Philip, Aetolyalılar, İlliryalılar, Atinalılar, Spartalılar, Pergamon/Rodos çıkarları ve Mısır'ın Ptolemaik hanedanı.",
+        "model_cikti": "Metinde, Roma 'ın en büyük oğlu olarak kabul edilir. bu durum, Roma 'ın Roma 'ın çöküşünden sonra, Roma 'ın Roma 'ın çöküşünden sonra, Maran 'ına kadar uzanan bir [?].",
+        "sebep": "Yüklemsiz serbest metin veya döngü"
+      },
+      {
+        "idx": 96,
+        "soru": "Vercingetorix ile ilgili olan savaşın koşulları nelerdi?",
+        "hedef_ref": "Metinde, Narbonnese vilayetinin sınırlarında gerçekleşen büyük bir savaştan bahsedilmektedir. Bu çatışma sırasında Sezar, kişisel olarak yakın dövüşlere katıldı ve hatta kılıcını kaybetti. Roma ordusu, savaşın en yoğun anında Germen süvari birliklerinin müdahalesi nedeniyle yenilgiye uğrama tehlikesiyle karşılaştı.",
+        "model_cikti": "Metinde, Roma 'ın çöküşünün ardından, Roma 'ın çöküşünü ve Roma 'ın çöküşünü ve Roma 'ın çöküşünü ve Roma 'ın çöküşünü ve Roma 'ın çöküşünü ve Roma 'ın çöküşünü ve Roma 'ın çöküşünü ve Roma 'ın çöküşünü ve Roma 'ın çöküşünü ve Roma 'ın çöküşünü ve Roma 'ın çöküşünü ve Roma 'ın çöküşünü ve Roma 'ın çöküşünü ve Roma 'ın çöküşünü ve Roma 'ın çöküşünü ve Roma 'ın çöküşünü ve Roma 'ın çöküş",
+        "sebep": "Yüklemsiz serbest metin veya döngü"
+      },
+      {
+        "idx": 97,
+        "soru": "What is the significance of the '9th millennium' mention in terms of human history?",
+        "hedef_ref": "The mention of the 9th millennium BCE signifies that the Turkic homeland was a site of very early sedentary or proto-sedentary life, placing its origins at the dawn of Neolithic transitions, which challenges older, more limited views of regional history.",
+        "model_cikti": "The [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?] [?]",
+        "sebep": "Yüklemsiz serbest metin veya döngü"
+      },
+      {
+        "idx": 98,
+        "soru": "Dede Korkut Hikayeleri'nin edebi özellikleri nelerdir?",
+        "hedef_ref": "Oğuz Türklerinin kahramanlıklarını, geleneklerini ve mücadelelerini anlatan; nazım (şiir) ile nesrin (düzyazı) iç içe olduğu 12 destansı hikaye ve bir önsözden oluşur.",
+        "model_cikti": "Bu eserlerin çoğu, [?] ' ( [?] '), [?] ' ( [?] [?]), [?] ' ( [?] [?]), [?] ' ( [?] [?]), [?] ' ( [?] [?]), [?] ' ( [?] [?]), [?] ' ( [?] [?]), [?] ' ( [?] [?]), [?] ' ( [?] [?]), [?] ' ( [?] [?]), [?] ' ( [?] [?]), [?] ' ( [?] [?]), [?] ' ( [?] [?]), [?] ' ( [?] [?]), [?] ' ( [?] [?]), [?] ' ( [?]), [?] ' ( [?]), [?] ' ( [?] [?]",
+        "sebep": "Yüklemsiz serbest metin veya döngü"
+      }
+    ]
+  },
+  "hukum": "T0206_TESCIL_GECTI",
+  "rc": 0
+}

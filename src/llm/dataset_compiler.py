@@ -117,14 +117,15 @@ def tokenize_specialization_jsonl(
 
         # 2. SFT Standart Komut Çifti (system_prompt ile normalize)
         inst = d.get("instruction", "")
-        q = d.get("input", "")
+        q = d.get("input") or d.get("soru") or ""
         if not q and ":" in inst:
             q = inst.split(":", 1)[1].strip()
+        ans = d.get("output") or d.get("cevap") or ""
         if q:
             norm_d = {
                 "instruction": system_prompt,
                 "input": q,
-                "output": d.get("output", "")
+                "output": ans
             }
             try:
                 norm_tids = tokenizer.encode(json.dumps(norm_d, ensure_ascii=False))

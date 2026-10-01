@@ -1,0 +1,41 @@
+{
+  "damga": "2026-10-01T15:17:19Z",
+  "gorev": "T-0207 Bahçıvan Dikey Uzmanlık Modeli Eğitimi",
+  "recete": {
+    "epochs": 1,
+    "batch": 16,
+    "accum": 2,
+    "peak_lr": 1e-05,
+    "min_lr": 2e-06,
+    "warmup": 10,
+    "beta": 0.2,
+    "ds_n": 2749,
+    "sft_n": 2199,
+    "pencere_n": 550,
+    "opt_steps": 86
+  },
+  "init": {
+    "val_loss": 2.450311357975006,
+    "val_ppl": 11.591955405158975,
+    "pencere_ce": 3.4988
+  },
+  "history": [
+    {
+      "epoch": 1,
+      "val_loss": 2.4703267359733583,
+      "val_ppl": 11.826310301455557,
+      "pencere_ce": 3.4852,
+      "kl_ort": 0.25646017405182814,
+      "duration": 1753.581306695938,
+      "sha256": "2d5e5b21893bde21fe5b9d1d9de913889c9918f1f9d3c4a1dba1933b628f01f1"
+    }
+  ],
+  "best": {
+    "path": "/Users/hakankilicaslan/Git/tr_llm/data/anka_bahcivan.pt",
+    "sha256": "2d5e5b21893bde21fe5b9d1d9de913889c9918f1f9d3c4a1dba1933b628f01f1",
+    "val_loss": 2.4703267359733583,
+    "val_ppl": 11.826310301455557,
+    "pencere_ce": 3.4852,
+    "kl_ort": 0.25646017405182814
+  }
+}

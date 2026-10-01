@@ -49,12 +49,14 @@ def _sd_sha(sd):
 def main():
     ayarla = argparse.ArgumentParser(description="Canlı gateway başlatıcı (192.168.1.9 köprüsü)")
     ayarla.add_argument("--port", type=int, default=8080)
+    ayarla.add_argument("--model", type=str, default="data/anka_t0203_polish.pt",
+                        help="Yüklenecek model checkpoint yolu (varsayılan: anka_t0203_polish.pt)")
     args = ayarla.parse_args()
 
     ag.VectorMemory = CanliVectorMemory
 
     gw = ag.AgentGateway.create_default(
-        model_path="data/anka_base_v2.pt",
+        model_path=args.model,
         vocab_path="data/rebuild/vocab_anka_r1_33114.json",
         device="mps",
     )
