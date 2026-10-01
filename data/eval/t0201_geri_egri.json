@@ -1,0 +1,57 @@
+{
+  "damga": "2026-10-01T11:35:38Z",
+  "init_cipa": {
+    "val_loss": 2.433384721279144,
+    "pencere_ce": 3.9268
+  },
+  "noktalar": [
+    {
+      "beta": 0.5,
+      "val": 2.4811040711402894,
+      "pencere_ce": 3.5,
+      "kl_ort": 0.3475560574943936,
+      "kaynak": "T-0201-b05",
+      "sha256": "52fa2f80c2ddcced0284f10142b8bc3f4a7033dc663b6f600bc2a5929c483430",
+      "d_val": 0.04771934986114523,
+      "d_pencere_ce": -0.42680000000000007,
+      "ek3_ok": false,
+      "ek5_ok": true
+    },
+    {
+      "beta": 1.0,
+      "val": 2.4928059864044187,
+      "pencere_ce": 3.4784,
+      "kl_ort": 0.3315525205892532,
+      "kaynak": "T-0200-devral",
+      "sha256": "be5c1fb47ceb5187eae51d4ef60b1d600a4b7fea721a2978ff9e99f6abd23d83",
+      "d_val": 0.05942126512527457,
+      "d_pencere_ce": -0.4483999999999999,
+      "ek3_ok": false,
+      "ek5_ok": true
+    },
+    {
+      "beta": 2.0,
+      "val": 2.508128306865692,
+      "pencere_ce": 3.463,
+      "kl_ort": 0.3190986450848191,
+      "kaynak": "T-0201-b20",
+      "sha256": "b124ab8452159164f350d60c0d76d8ceb109cf07144fafcd14cc7470be07f563",
+      "d_val": 0.07474358558654792,
+      "d_pencere_ce": -0.4638,
+      "ek3_ok": false,
+      "ek5_ok": true
+    }
+  ],
+  "duyarliilik_birinci_fark": {
+    "d_dval": [
+      0.023404,
+      0.015322
+    ],
+    "d_dpencere": [
+      -0.0432,
+      -0.0154
+    ]
+  },
+  "ikili_beyan": "ADET-YOK",
+  "uyarilar": []
+}

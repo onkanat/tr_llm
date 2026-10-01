@@ -1,0 +1,71 @@
+{
+  "damga": "2026-10-01T08:35:22Z",
+  "ilan": "data/eval/t0201_egitim_ilan_2026-09-30.md",
+  "beta": 2.0,
+  "recete": {
+    "epochs": 1,
+    "batch": 16,
+    "accum": 2,
+    "peak_lr": 2e-05,
+    "min_lr": 5e-06,
+    "warmup": 20,
+    "kaynak": {
+      "sft": "/Users/hakankilicaslan/Git/tr_llm/data/eval/t0197_uretim_saf.jsonl",
+      "bin": "/Users/hakankilicaslan/Git/tr_llm/data/anka_a1r_pretrain.bin",
+      "hoca": "data/anka_base_v2.pt",
+      "load": "data/anka_b1_5_best.pt"
+    },
+    "ds_n": 10982,
+    "opt_steps_cipa": 344,
+    "seed": 42
+  },
+  "init": {
+    "val_loss": 2.433384721279144,
+    "val_ppl": 11.39739386895371,
+    "pencere_ce": 3.9268
+  },
+  "probe": {
+    "adim": 200,
+    "sn": 6599.0,
+    "sn_adim": 32.9951,
+    "tam_kosum_tamini_min": 79.2
+  },
+  "history": [
+    {
+      "epoch": 1,
+      "val_loss_agirliksiz": 2.508128306865692,
+      "val_ppl": 12.281920547489099,
+      "pencere_ce": 3.463,
+      "kl_ort": 0.3190986450848191,
+      "path": "/Users/hakankilicaslan/Git/tr_llm/data/anka_t0201_b20.pt",
+      "duration": 10792.714529037476,
+      "sha256": "b124ab8452159164f350d60c0d76d8ceb109cf07144fafcd14cc7470be07f563"
+    }
+  ],
+  "kosum_hukum": {
+    "hukum": "T0201_KOSUM_GECTI",
+    "rc": 0,
+    "kapilar": {
+      "init_cek_birebir": true,
+      "opt_adim_344": true,
+      "kl_finit_pozitif": true,
+      "ds_10982": true
+    },
+    "egri_nokta": {
+      "beta": 2.0,
+      "d_val": 0.07474358558654792,
+      "d_pencere_ce": -0.4638,
+      "kl_ort": 0.3190986450848191,
+      "sha256": "b124ab8452159164f350d60c0d76d8ceb109cf07144fafcd14cc7470be07f563"
+    },
+    "damga": "2026-10-01T11:35:25Z"
+  },
+  "best": {
+    "epoch": 1,
+    "val_loss_agirliksiz": 2.508128306865692,
+    "path": "/Users/hakankilicaslan/Git/tr_llm/data/anka_t0201_b20.pt",
+    "sha256": "b124ab8452159164f350d60c0d76d8ceb109cf07144fafcd14cc7470be07f563",
+    "pencere_ce": 3.463,
+    "kl_ort": 0.3190986450848191
+  }
+}

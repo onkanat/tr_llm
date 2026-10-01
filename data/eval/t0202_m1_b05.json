@@ -1,0 +1,32 @@
+{
+  "model": "/Users/hakankilicaslan/Git/tr_llm/data/anka_t0201_b05.pt",
+  "module": null,
+  "ce_ort": 3.5,
+  "ppl": 33.12,
+  "benzersiz_4gram": 0.3552,
+  "dongu_orani": 96.0,
+  "n": 25,
+  "max_new": 128,
+  "device": "mps",
+  "modul_katman": 0,
+  "ornek_uretim": [
+    {
+      "benzersiz_4gram": 0.256,
+      "en_cok_tekrar": 7,
+      "uzunluk": 128,
+      "dongu": true
+    },
+    {
+      "benzersiz_4gram": 0.216,
+      "en_cok_tekrar": 8,
+      "uzunluk": 128,
+      "dongu": true
+    },
+    {
+      "benzersiz_4gram": 0.264,
+      "en_cok_tekrar": 30,
+      "uzunluk": 128,
+      "dongu": true
+    }
+  ]
+}

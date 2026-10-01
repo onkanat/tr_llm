@@ -1,0 +1,61 @@
+{
+  "task": "T-0202",
+  "hukum": "T0202_ONARIM_DUR",
+  "rc": 2,
+  "model": "data/anka_t0201_b05.pt",
+  "sha256": "52fa2f80c2ddcced0284f10142b8bc3f4a7033dc663b6f600bc2a5929c483430",
+  "esikler": {
+    "ezber_max": 5.0,
+    "tutarsizlik_max": 28.0,
+    "decomp_rouge_min": 0.35,
+    "yuklemsiz_pir_max": 28.0,
+    "erken_kes_pir_max": 17.0
+  },
+  "olculen": {
+    "ezber_rate": 0.0,
+    "tutarsizlik_rate": 35.0,
+    "decomp_rouge": 0.14928043823750464,
+    "raw_rouge": 0.11196204409811981,
+    "yuklemsiz_pir": 35.0,
+    "erken_kes_pir": 32.0,
+    "dongu_pir": 6.0
+  },
+  "kapi_dersleri": {
+    "ezber_le5": true,
+    "tutarsizlik_lt28": false,
+    "tutarsizlik_ge30_otomatik_dur": false,
+    "decomp_ge0_35": false,
+    "yuklemsiz_pir_lt28": false,
+    "erken_kes_pir_lt17": false
+  },
+  "basari_beyani": {
+    "tutarsizlik_le22_t0192": false,
+    "beyan": "kapı DEĞİL — zincir-çıpa %22'ye dönüş-beyanı"
+  },
+  "m1_cevrim": {
+    "kayit": "/Users/hakankilicaslan/Git/tr_llm/data/eval/t0202_m1_b05.json",
+    "ppl": 33.12,
+    "ce_ort": 3.5,
+    "halef_ppl_beyan": 50.75,
+    "ppl_lt_halef": true,
+    "kayit_turu": "kapı DEĞİL — taban-akıcılık ÇEVRİM-kanıtı"
+  },
+  "cipa_tablo": {
+    "tutarsizlik_t0192": 22.0,
+    "tutarsizlik_t0197_esigi": 28.0,
+    "zincir_son_t0198": 30.0,
+    "halef_ppl_beyan": 50.75,
+    "decomp_rouge": 0.1165,
+    "dil_hizali": {
+      "ing_hedef": {
+        "n": 16,
+        "raw_ort": 0.0467
+      },
+      "turkce_ref": {
+        "n": 84,
+        "raw_ort": 0.1078
+      }
+    }
+  },
+  "damga": "2026-10-01T12:20:39Z"
+}
