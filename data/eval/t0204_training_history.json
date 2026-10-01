@@ -1,0 +1,36 @@
+{
+  "damga": "2026-10-01T13:53:40Z",
+  "ilan": "data/eval/t0204_egitim_ilan_2026-10-01.md",
+  "recete": {
+    "epochs": 1,
+    "batch": 16,
+    "accum": 4,
+    "peak_lr": 4e-06,
+    "min_lr": 1e-06,
+    "warmup": 10,
+    "ds_n": 5491,
+    "opt_steps": 86
+  },
+  "init": {
+    "val_loss": 2.450311357975006,
+    "val_ppl": 11.591955405158975,
+    "pencere_ce": 3.4988
+  },
+  "history": [
+    {
+      "epoch": 1,
+      "val_loss": 2.44349622964859,
+      "val_ppl": 11.513223330845737,
+      "pencere_ce": 3.5123,
+      "duration": 2257.6984610557556,
+      "sha256": "f7dca8b48d6197a65beeb2f99a39307f3cf44d7fee4d9ef1dede1c3882b8744f"
+    }
+  ],
+  "best": {
+    "path": "/Users/hakankilicaslan/Git/tr_llm/data/anka_t0204_pure.pt",
+    "sha256": "f7dca8b48d6197a65beeb2f99a39307f3cf44d7fee4d9ef1dede1c3882b8744f",
+    "val_loss": 2.44349622964859,
+    "val_ppl": 11.513223330845737,
+    "pencere_ce": 3.5123
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "task": "T-0203",
+  "hukum": "T0203_EGITIM_GECTI",
+  "rc": 0,
+  "kapilar": {
+    "val_loss_dustu_veya_korundu": true,
+    "pencere_ce_makul_sinirda": true,
+    "kl_finit_pozitif": true,
+    "opt_adim_tamamlandi": true
+  },
+  "init": {
+    "val_loss": 2.4811040711402894,
+    "pencere_ce": 3.5
+  },
+  "best": {
+    "path": "/Users/hakankilicaslan/Git/tr_llm/data/anka_t0203_polish.pt",
+    "sha256": "4f4183caec729f61eea4489c4faf2f14dbb7ed7b8e0843dabeeba5e97d862b2a",
+    "val_loss": 2.450311357975006,
+    "val_ppl": 11.591955405158975,
+    "pencere_ce": 3.4988,
+    "kl_ort": 0.25391543240741243
+  },
+  "damga": "2026-10-01T13:47:40Z"
+}
