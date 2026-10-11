@@ -46,13 +46,15 @@ class TriModalRouter(nn.Module):
         self,
         prompt_vec: torch.Tensor,
         merak_vec: Optional[torch.Tensor] = None,
-        rag_vec: Optional[torch.Tensor] = None
+        rag_vec: Optional[torch.Tensor] = None,
+        domain_prior: Optional[torch.Tensor] = None
     ) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
         """
         Args:
             prompt_vec: Embedding from input prompt P (batch_size, prompt_dim)
             merak_vec: Curiosity vector q_merak (batch_size, merak_dim) [Optional]
             rag_vec: Retrieved context embedding ctx_rag (batch_size, rag_dim) [Optional]
+            domain_prior: Additive logit bias vector per expert (batch_size or 1, num_experts) [Optional]
             
         Returns:
             topk_weights: Normalized softmax weights for top_k experts (batch_size, top_k)
@@ -77,6 +79,8 @@ class TriModalRouter(nn.Module):
         
         # 4. Gating logits
         gate_logits = self.w_g(e_route) # (batch_size, num_experts)
+        if domain_prior is not None:
+            gate_logits = gate_logits + domain_prior
         
         # 5. Top-K selection
         topk_logits, topk_indices = torch.topk(gate_logits, k=self.top_k, dim=-1)

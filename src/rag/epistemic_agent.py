@@ -412,10 +412,32 @@ class EpistemicCuriosityAgent:
             if doc_token_ids:
                 rag_vec = self.calculate_prompt_embedding(doc_token_ids)
                 
+        # T-0208 / T-0209: Alan-özgü önceliklendirme (Domain Prior)
+        # Uzman sınıflar: [0: grammar_core, 1: pedagogy, 2: carpenter, 3: gardener, 4: legal]
+        domain_prior = torch.zeros(1, self.router.num_experts, device=self.device)
+        query_lower = query.lower()
+        carpenter_terms = (
+            "ahşap", "marangoz", "kereste", "kırlangıç", "zıvana", "planya",
+            "testere", "zımpara", "rende", "bıçak", "meşe", "gürgen", "köknar",
+            "çam", "masif", "mobilya", "zıvanalı", "ahşabın", "tutkal"
+        )
+        gardener_terms = (
+            "domates", "patlıcan", "biber", "salatalık", "fide", "fidan", "gübre",
+            "gübreleme", "toprak", "budama", "ekim", "dikim", "hasat", "sulama",
+            "mildiyö", "külleme", "solgunluk", "yaprak lekesi", "bitki", "bahçe"
+        )
+        c_score = sum(2.5 for term in carpenter_terms if term in query_lower)
+        g_score = sum(2.5 for term in gardener_terms if term in query_lower)
+        if c_score > 0 and self.router.num_experts > 2:
+            domain_prior[0, 2] += c_score
+        if g_score > 0 and self.router.num_experts > 3:
+            domain_prior[0, 3] += g_score
+
         router_weights, router_indices, e_route = self.router(
             prompt_vec=prompt_vec,
             merak_vec=router_merak,
-            rag_vec=rag_vec
+            rag_vec=rag_vec,
+            domain_prior=domain_prior
         )
         expert_names = self.router.get_selected_expert_names(router_indices)[0]
         
