@@ -1,0 +1,71 @@
+{
+  "tur": "dis-denetim",
+  "damga": "2026-10-11",
+  "denetleyen": "aikonsol (Hermes, delinux01)",
+  "hedef": "http://192.168.1.10:8080",
+  "kaynak_commit": "aa00fd8",
+  "capalama": {
+    "statik_dosya_sha256": "ade12afd82e2926d3d57ce666df0058e81c487fd2be11d7437d47fffa9ec2c87",
+    "canli_ile_depo_ayni": true,
+    "yanit_anahtar_sayisi": 19,
+    "yontem": "servis edilen index.html sha256 + ask() cikti semasi"
+  },
+  "bulgular": [
+    {"id": "B1", "onem": "YUKSEK", "konu": "POST /api/inject kimliksiz yazma ucu", "durum": "ACIK",
+     "kanit": "agent_gateway.py:549-554; bilinmeyen koleksiyon adiyla POST -> ValueError -> yanitsiz kapanma; Qdrant belge/koleksiyon sayisi degismedi"},
+    {"id": "B2", "onem": "YUKSEK", "konu": "GET /api/backlog kimliksiz okuma ucu + erisim gunlugu yok", "durum": "ACIK",
+     "kanit": "agent_gateway.py:481-482, 564-565; canli dokum alindi (input/model_failed_output/rag_document)"},
+    {"id": "B3", "onem": "YUKSEK", "konu": "tek is parcacikli sunucu -> bir agir istek herkesi kilitliyor", "durum": "ACIK",
+     "kanit": "HTTPServer (agent_gateway.py:567); 1,2MB ucarken kucuk sorgu 53,6 sn (ogle) / 22,2 sn (aksam); 99999 ucarken 54,5 sn; kararli hal 0,49-0,86 sn"},
+    {"id": "B4", "onem": "YUKSEK", "konu": "govde ve uretim siniri yok", "durum": "ACIK (KOTULESTI)",
+     "kanit": "512 KB kabul; max_new_tokens=99999 -> 2.737-2.969 krk / 47,8-121,7 sn (ogle: 1.509 krk / 12,4 sn); temperature=9 kabul"},
+    {"id": "B5", "onem": "YUKSEK", "konu": "kullanici metni egitim dosyasina yazilabiliyor", "durum": "ACIK",
+     "kanit": "epistemic_agent.py:461-496 kosulu; kaydin input alani kullanici sorgusu; tetik boyuta bagli degil, kararsiz (False/True/True)"},
+    {"id": "B6", "onem": "ORTA", "konu": "tip dogrulamasi yok; istisna yanitsiz kapanmaya donusuyor", "durum": "ACIK",
+     "kanit": "query=null/12345/[a], mode=null, temperature=sicak, instruction=42 -> RemoteDisconnected; tokens 0/-5 -> 200 + bos yanit"},
+    {"id": "B7", "onem": "ORTA", "konu": "rag_score RRF fuzzyon skoru; 1,0'i asiyor; 0,85 esigiyle karsilastiriliyor", "durum": "ACIK",
+     "kanit": "vector_memory.py:331 score/0.75; olculen skorlar 0,4889 / 1,1111 / 1,3333"},
+    {"id": "B8", "onem": "ORTA", "konu": "needs_retrieval yaniltiyor; retrieval_triggered yanitta yok", "durum": "ACIK",
+     "kanit": "needs=true + rag_document bos (8 vaka); needs=false + belge kullanildi (mode=RAG)"},
+    {"id": "B9", "onem": "ORTA", "konu": "DIRECT etiketi fazla vaat ediyor", "durum": "ACIK (kismen)",
+     "kanit": "agent_gateway.py:250; needs=false sorguda RAG/DIRECT farkli, needs=true iken ayni"},
+    {"id": "B10", "onem": "ORTA", "konu": "arayuz telemetrisi: router paneli daima 0.00 / durum cubugu sahte", "durum": "ACIK",
+     "kanit": "API router_experts dizi donuyor; canli HTML'de api/status gecisi 0; index.html sha256 ayni"},
+    {"id": "B11", "onem": "DUSUK", "konu": "HTTP/1.0, Server surum ifsasi, Content-Length/CORS yok, 501/404", "durum": "ACIK", "kanit": "curl -D-"}
+  ],
+  "sayi_iddiasi": {
+    "ilan_sayfasi": "320/320",
+    "README": "307/307 (28 Eyl damgali)",
+    "tests_ast_def_test_": 281,
+    "data_eval_damgali_kosum": "213 passed / 1 failed (19 Eyl, sandbox soket yasagi)",
+    "panodaki_kristal_llm_status_ilani": "19/19",
+    "depoda_320_dizesi": 0,
+    "hukum": "olculemedi (testler bu makinede kosturulamadi: torch/checkpoint klonda yok)"
+  },
+  "zenginlestirme_2026_10_11_aksam": {
+    "anka_bellek": {"once": 38, "sonra": 46},
+    "bilesim": {"realistic_rag_p2_sentetik": 36, "alan_belgeleri": 8, "damgali_eski": 2},
+    "alan_belgeleri": ["gurgen", "kesici_takimlar", "kirlangic_kuyrugu", "zivana", "domates", "patlican_biber", "salatalik", "toprak_gubre"],
+    "eklenen_8_kanitlandi_mi": false,
+    "eklenen_8_not": "metadata'da damga yok; 38=36+2 ve 46=36+8+2 aritmetigi + uzman alani uyumu -> cikarim",
+    "retrieval_isabeti": "artti (alan ici 5/5 sorguda dogru belge)",
+    "belge_yanit_ortusmesi_yuzde": 0,
+    "belge_yanit_not": "conditioned=true gorunse de belgenin ayirt edici ifadeleri yanitta yok",
+    "retrieval_gerilemesi": "Mesе sorgusunda tepe belge kesici_takimlar (1,3333), dogru belge mese_agaci 2. sirada (0,8889)",
+    "ilgisiz_belge_esigi_geciyor": "Python sorusunda Fomalhaut (0,4889) > 0,33",
+    "retrieval_kararsizligi": "Kirlangic sorusu 3 kosunun 2'sinde 301 krk, 1'inde 108 krk belgeyi tepe yapti (skor ikisinde de 1,1111112)",
+    "aktif_uzman": "10+ probda hep grammar_core (marangozluk sorusunda bile)"
+  },
+  "yan_etki": {
+    "epistemic_backlog_samples": {"ogle_oncesi": 4, "ogle_sonrasi": 10, "aksam_sonrasi": 13},
+    "bu_turun_katkisi": 1,
+    "not": "14:xx-16:xx arasindaki 2 artis bu denetimden degil"
+  },
+  "olculemeyenler": [
+    "sunucu loglari ve surec listesi (MacAir'de SSH kapali)",
+    "calisan modelin kimligi (status'ta model alani yok)",
+    "data/future_train_vector.jsonl boyutu/icerigi",
+    "birim test kosumu (torch/checkpoint klonda yok)"
+  ],
+  "sinir": "Disk denetimdir; deponun calisma agaci ve hicbir kaynak dosya degistirilmedi. Dosya data/eval/ altina CLAUDE.md kural 3 istisnasiyla konuldu; .agent-bus/SPEC.md kural 1 (kiralama) operator izniyle asildi."
+}
