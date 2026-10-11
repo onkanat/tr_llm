@@ -18,7 +18,7 @@ Temel Yetenekler:
 import os
 import json
 import threading
-from http.server import HTTPServer, BaseHTTPRequestHandler
+from http.server import HTTPServer, ThreadingHTTPServer, BaseHTTPRequestHandler
 from datetime import datetime, timezone
 from typing import Dict, Any, Optional, List, Tuple
 
@@ -247,25 +247,32 @@ class AgentGateway:
         if self.epistemic_agent is None:
             raise RuntimeError("EpistemicCuriosityAgent is not initialized in AgentGateway.")
             
-        use_rag = (mode.upper() == "RAG") or force_rag
+        use_mode = mode.upper()
+        # Direct modunda force_rag kesinlikle baypas edilir
+        use_force_rag = force_rag if use_mode != "DIRECT" else False
+        # DoS ve VRAM kilitlenmesini onlemek icin guvenli max_new_tokens tavani: 200
+        safe_max_tokens = min(200, max(1, int(max_new_tokens)))
+
         res = self.epistemic_agent.process_query(
             query=query,
             instruction=instruction,
-            force_rag=use_rag,
+            mode=use_mode,
+            force_rag=use_force_rag,
             temperature=temperature,
             top_k=top_k,
-            max_new_tokens=max_new_tokens
+            max_new_tokens=safe_max_tokens
         )
         
         return {
             "query": query,
             "instruction": instruction,
-            "mode": mode,
+            "mode": use_mode,
             "response_text": res.get("decompiled_text", ""),
             "morphemes": res.get("morpheme_output", ""),
             "entropy_pre": res.get("entropy_pre", 0.0),
             "entropy_post": res.get("entropy_post", 0.0),
             "needs_retrieval": res.get("needs_retrieval", False),
+            "retrieval_triggered": res.get("retrieval_triggered", False),
             "rag_document": res.get("retrieved_document", ""),
             "source_collection": res.get("source_collection", ""),
             "rag_score": res.get("match_score", 0.0),
@@ -462,8 +469,8 @@ class AgentGateway:
         if self.general_memory and hasattr(self.general_memory, "close"):
             self.general_memory.close()
 
-    def create_http_server(self, host: str = "127.0.0.1", port: int = 8080) -> HTTPServer:
-        """Creates a zero-dependency lightweight HTTP REST server for external agents."""
+    def create_http_server(self, host: str = "127.0.0.1", port: int = 8080) -> ThreadingHTTPServer:
+        """Creates a zero-dependency lightweight multi-threaded HTTP REST server for external agents."""
         gateway = self
         
         class GatewayHTTPHandler(BaseHTTPRequestHandler):
@@ -520,6 +527,10 @@ class AgentGateway:
 
             def do_POST(self):
                 content_len = int(self.headers.get("Content-Length", 0))
+                # DoS koruması: 1MB tavanı
+                if content_len > 1_000_000:
+                    self._send_json({"error": "Payload Too Large (max 1MB)"}, status=413)
+                    return
                 body = self.rfile.read(content_len).decode("utf-8")
                 try:
                     payload = json.loads(body) if body else {}
@@ -564,4 +575,4 @@ class AgentGateway:
             def log_message(self, format, *args):
                 pass # Silent logs to keep terminal clean
 
-        return HTTPServer((host, port), GatewayHTTPHandler)
+        return ThreadingHTTPServer((host, port), GatewayHTTPHandler)

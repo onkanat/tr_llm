@@ -191,6 +191,21 @@
       border: 1px solid var(--error-border);
       color: #fca5a5;
     }
+    .pill-blue {
+      background-color: #1e3a8a;
+      border: 1px solid #3b82f6;
+      color: #93c5fd;
+    }
+    .pill-amber {
+      background-color: #78350f;
+      border: 1px solid #d97706;
+      color: #fde68a;
+    }
+    .pill-purple {
+      background-color: #4c1d95;
+      border: 1px solid #8b5cf6;
+      color: #ddd6fe;
+    }
     .rag-box {
       background-color: #172554;
       border: 1px solid #1e40af;
@@ -267,19 +282,35 @@
 
         <div class="metadata-grid">
           <div class="meta-item">
-            <div class="meta-title">Router Uzman Dağılımı</div>
+            <div class="meta-title">Aktif Uzman Ceketi</div>
+            <div id="active-expert" class="meta-val">-</div>
+          </div>
+          <div class="meta-item">
+            <div class="meta-title">Router Seçilen Uzmanlar</div>
             <div id="router-experts" class="meta-val">-</div>
+          </div>
+          <div class="meta-item">
+            <div class="meta-title">Çıkarım Modu</div>
+            <div id="query-mode" class="meta-val">-</div>
+          </div>
+          <div class="meta-item">
+            <div class="meta-title">RAG Merak İhtiyacı</div>
+            <div id="needs-retrieval" class="meta-val">-</div>
+          </div>
+          <div class="meta-item">
+            <div class="meta-title">Bellek Koşullanma (RAG)</div>
+            <div id="conditioned-val" class="meta-val">-</div>
           </div>
           <div class="meta-item">
             <div class="meta-title">Seçilen Koleksiyon</div>
             <div id="source-collection" class="meta-val">-</div>
           </div>
           <div class="meta-item">
-            <div class="meta-title">RAG İhtiyacı</div>
-            <div id="needs-retrieval" class="meta-val">-</div>
+            <div class="meta-title">Entropi (Önce → Sonra)</div>
+            <div id="entropy-val" class="meta-val">-</div>
           </div>
           <div class="meta-item">
-            <div class="meta-title">Epistemik Başarısızlık</div>
+            <div class="meta-title">Epistemik Durum</div>
             <div id="epistemic-failure" class="meta-val">-</div>
           </div>
         </div>
@@ -312,9 +343,13 @@
       var resultsContainer = document.getElementById("results");
 
       var responseTextEl = document.getElementById("response-text");
+      var activeExpertEl = document.getElementById("active-expert");
       var routerExpertsEl = document.getElementById("router-experts");
-      var sourceCollectionEl = document.getElementById("source-collection");
+      var queryModeEl = document.getElementById("query-mode");
       var needsRetrievalEl = document.getElementById("needs-retrieval");
+      var conditionedEl = document.getElementById("conditioned-val");
+      var sourceCollectionEl = document.getElementById("source-collection");
+      var entropyEl = document.getElementById("entropy-val");
       var epistemicFailureEl = document.getElementById("epistemic-failure");
       var morphemesEl = document.getElementById("morphemes-val");
       var ragSectionEl = document.getElementById("rag-section");
@@ -368,26 +403,83 @@
       function renderResult(data) {
         resultsContainer.style.display = "block";
 
-        // CRITICAL XSS RULE: Always use textContent, never inner-HTML (prohibited)
+        // CRITICAL XSS RULE: Always use textContent, never inner-HTML
         responseTextEl.textContent = data.response_text || "(Boş Yanıt)";
 
-        if (data.router_experts) {
-          var expStr = "anka: " + Number(data.router_experts.anka || 0).toFixed(2) +
-                       " | carp: " + Number(data.router_experts.carpenter || 0).toFixed(2) +
-                       " | ped: " + Number(data.router_experts.pedagogy || 0).toFixed(2);
-          routerExpertsEl.textContent = expStr;
+        // 1. Aktif Uzman Ceketi
+        var expertLabels = {
+          "carpenter": "🪵 Marangoz (carpenter)",
+          "gardener": "🌿 Bahçıvan (gardener)",
+          "grammar_core": "🏛️ Çekirdek Gramer (grammar_core)",
+          "pedagogy": "📚 Pedagoji (pedagogy)",
+          "legal": "⚖️ Hukuk (legal)"
+        };
+        var expKey = data.active_expert || (Array.isArray(data.router_experts) && data.router_experts[0]) || "grammar_core";
+        var expLabel = expertLabels[expKey] || ("⚙️ " + expKey);
+        activeExpertEl.textContent = expLabel;
+        if (expKey === "carpenter") {
+          activeExpertEl.className = "meta-val pill pill-amber";
+        } else if (expKey === "gardener") {
+          activeExpertEl.className = "meta-val pill pill-green";
+        } else if (expKey === "pedagogy") {
+          activeExpertEl.className = "meta-val pill pill-purple";
         } else {
-          routerExpertsEl.textContent = "-";
+          activeExpertEl.className = "meta-val pill pill-blue";
         }
 
-        sourceCollectionEl.textContent = data.source_collection || "-";
+        // 2. Router Uzmanları
+        if (Array.isArray(data.router_experts)) {
+          routerExpertsEl.textContent = data.router_experts.join(" → ");
+        } else if (typeof data.router_experts === "object" && data.router_experts !== null) {
+          var expStr = Object.keys(data.router_experts).map(function(k) {
+            return k + ": " + Number(data.router_experts[k] || 0).toFixed(2);
+          }).join(" | ");
+          routerExpertsEl.textContent = expStr || "-";
+        } else {
+          routerExpertsEl.textContent = String(data.router_experts || "-");
+        }
 
+        // 3. Mod
+        var curMode = data.mode || "RAG";
+        queryModeEl.textContent = curMode;
+        queryModeEl.className = "meta-val pill " + (curMode === "DIRECT" ? "pill-purple" : "pill-blue");
+
+        // 4. RAG Merak İhtiyacı
         needsRetrievalEl.textContent = data.needs_retrieval ? "EVET" : "HAYIR";
         needsRetrievalEl.className = "meta-val " + (data.needs_retrieval ? "pill pill-green" : "pill");
 
-        epistemicFailureEl.textContent = data.epistemic_failure ? "TESPİT EDİLDİ" : "YOK";
-        epistemicFailureEl.className = "meta-val " + (data.epistemic_failure ? "pill pill-red" : "pill pill-green");
+        // 5. Bellek Koşullanma (RAG)
+        if (curMode === "DIRECT") {
+          conditionedEl.textContent = "BAYPAS (DIRECT)";
+          conditionedEl.className = "meta-val pill";
+        } else if (data.conditioned) {
+          var sc = (data.rag_score !== undefined && data.rag_score !== null) ? Number(data.rag_score).toFixed(2) : "-";
+          conditionedEl.textContent = "KOŞULLANDI (Skor: " + sc + ")";
+          conditionedEl.className = "meta-val pill pill-green";
+        } else {
+          var scFail = (data.rag_score && data.rag_score > 0) ? " (Skor: " + Number(data.rag_score).toFixed(2) + ")" : "";
+          conditionedEl.textContent = "KULLANILMADI" + scFail;
+          conditionedEl.className = "meta-val pill";
+        }
 
+        // 6. Koleksiyon
+        sourceCollectionEl.textContent = data.source_collection || "-";
+
+        // 7. Entropi
+        var ePre = (data.entropy_pre !== undefined) ? Number(data.entropy_pre).toFixed(2) : "-";
+        var ePost = (data.entropy_post !== undefined) ? Number(data.entropy_post).toFixed(2) : "-";
+        entropyEl.textContent = ePre + " → " + ePost;
+
+        // 8. Epistemik Durum
+        if (data.epistemic_failure) {
+          epistemicFailureEl.textContent = "AÇIK KAYDEDİLDİ";
+          epistemicFailureEl.className = "meta-val pill pill-red";
+        } else {
+          epistemicFailureEl.textContent = "DENGELİ";
+          epistemicFailureEl.className = "meta-val pill pill-green";
+        }
+
+        // 9. Morfemler
         if (Array.isArray(data.morphemes)) {
           morphemesEl.textContent = data.morphemes.join(" | ");
         } else if (typeof data.morphemes === "string") {
@@ -396,7 +488,8 @@
           morphemesEl.textContent = "-";
         }
 
-        if (data.rag_document && data.rag_document.trim()) {
+        // 10. RAG Belgesi
+        if (data.rag_document && data.rag_document.trim() && (data.conditioned || curMode === "RAG")) {
           ragSectionEl.style.display = "block";
           ragDocTextEl.textContent = data.rag_document;
         } else {

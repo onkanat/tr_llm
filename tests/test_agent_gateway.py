@@ -117,6 +117,17 @@ class TestAgentGateway(unittest.TestCase):
         finally:
             agent.memory = eski_memory
 
+    def test_gateway_ask_direct_mode_bypasses_retrieval(self):
+        """DIRECT modunda retrieval_triggered False olmalı, bellek aranmamalı ve
+        conditioned False olmalıdır."""
+        res = self.gateway.ask("Kırlangıç kuyruğu nedir?", mode="DIRECT", force_rag=True)
+        self.assertEqual(res["mode"], "DIRECT")
+        self.assertFalse(res["retrieval_triggered"])
+        self.assertFalse(res["conditioned"])
+        self.assertEqual(res["rag_score"], 0.0)
+        self.assertEqual(res["rag_document"], "")
+        self.assertFalse(res["future_train_recorded"])
+
     def test_gateway_inject_knowledge_and_check(self):
         # T-0148 5B: bilinmeyen target-adı artık ValueError'dur (sahte-seçici
         # mutasyon-kanıtı kapatıldı — eski davranış: 'anka_bellek' echo'nda

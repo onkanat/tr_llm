@@ -327,8 +327,10 @@ class VectorMemory:
                     else:
                         has_root_match = True
 
+            # T-0147 / Kalibrasyon: RRF füzyon skorunu [0.0, 1.0] tavan aralığına normalize et
+            normalized_score = min(1.0, max(0.0, float(score / RRF_SCORE_MAX)))
             results.append({
-                "score": score / RRF_SCORE_MAX,
+                "score": normalized_score,
                 "text": text,
                 "metadata": scored_point.payload,
                 "has_root_match": has_root_match,

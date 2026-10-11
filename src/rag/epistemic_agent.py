@@ -347,6 +347,7 @@ class EpistemicCuriosityAgent:
         self,
         query: str,
         instruction: str = "Belgeye göre cevapla.",
+        mode: str = "RAG",
         force_rag: bool = False,
         temperature: float = 0.0,
         top_k: int = 0,
@@ -356,7 +357,7 @@ class EpistemicCuriosityAgent:
         Executes the full end-to-end Epistemic Curiosity Loop:
         1. Encodes query and analyzes initial uncertainty (CuriosityEngine).
         2. Routes query with TriModalRouter.
-        3. Recalls document from VectorMemory.
+        3. Recalls document from VectorMemory (bypassed in DIRECT mode).
         4. If match score >= similarity_threshold (0.85) and model fails to understand (epistemic gap remains):
            Appends sample to future_train_vector.jsonl.
         5. Returns structured telemetry and answer.
@@ -381,22 +382,34 @@ class EpistemicCuriosityAgent:
             
         entropy_pre, needs_retrieval, q_merak = self.evaluate_entropy_and_merak(eval_pre_tokens)
         
-        # Step 2: Vector Memory Search (triggered by curiosity or force_rag)
-        retrieval_triggered = needs_retrieval or force_rag
-        retrieved_doc = None
-        source_coll = None
-        match_score = 0.0
-        
-        if retrieval_triggered:
-            retrieved_doc, source_coll = self.search_memory(query_token_ids, query_tags)
-            if retrieved_doc:
-                match_score = float(retrieved_doc.get("score", 0.0))
-                
-        # Step 4: Conditioning with Document (if retrieved) & Generating Output
-        conditioned = bool(retrieved_doc and is_context_usable(match_score, RAG_MATCH_THRESHOLD))
-        doc_text = retrieved_doc.get("text", "") if conditioned else ""
-        augmented_input = build_rag_input(doc_text, query) if (conditioned and doc_text) else query
-        doc_crystal_tags = retrieved_doc.get("metadata", {}).get("crystal_tags", "") if retrieved_doc else ""
+        # Step 2: Vector Memory Search & Retrieval Control
+        is_direct = (mode.upper() == "DIRECT")
+        if is_direct:
+            # DIRECT modunda bellek erişimi ve harici belge koşullandırması kesinlikle baypas edilir
+            retrieval_triggered = False
+            retrieved_doc = None
+            source_coll = None
+            match_score = 0.0
+            conditioned = False
+            doc_text = ""
+            augmented_input = query
+            doc_crystal_tags = ""
+        else:
+            # RAG modunda içsel merak veya açık force_rag ile tetiklenir
+            retrieval_triggered = bool(needs_retrieval or force_rag)
+            retrieved_doc = None
+            source_coll = None
+            match_score = 0.0
+            
+            if retrieval_triggered:
+                retrieved_doc, source_coll = self.search_memory(query_token_ids, query_tags)
+                if retrieved_doc:
+                    match_score = float(retrieved_doc.get("score", 0.0))
+                    
+            conditioned = bool(retrieved_doc and is_context_usable(match_score, RAG_MATCH_THRESHOLD))
+            doc_text = retrieved_doc.get("text", "") if conditioned else ""
+            augmented_input = build_rag_input(doc_text, query) if (conditioned and doc_text) else query
+            doc_crystal_tags = retrieved_doc.get("metadata", {}).get("crystal_tags", "") if retrieved_doc else ""
 
         # Step 3: Tri-Modal Routing
         # T-0208 / T-0209: Router dogrudan sorunun ozgun semantigini temsil eden query_token_ids
@@ -492,7 +505,7 @@ class EpistemicCuriosityAgent:
         has_high_post_entropy = (entropy_post > self.tau)
         expresses_uncertainty = any(phrase in decompiled_text.lower() for phrase in ["bilgi yok", "bulunamaz", "bilinmiyor"]) or (morpheme_output.count("<UNK>") >= 2)
         
-        if is_high_similarity and (has_high_post_entropy or expresses_uncertainty):
+        if (not is_direct) and is_high_similarity and (has_high_post_entropy or expresses_uncertainty):
             epistemic_failure = True
             from src.gateway.pedagogical_supervisor import sanitize_teacher_card
             # Training target MUST be pure declarative knowledge from document, not CoT or raw failed output
@@ -524,6 +537,7 @@ class EpistemicCuriosityAgent:
         return {
             "query": query,
             "instruction": instruction,
+            "mode": mode.upper(),
             "entropy_pre": entropy_pre,
             "needs_retrieval": needs_retrieval,
             "retrieval_triggered": retrieval_triggered,
