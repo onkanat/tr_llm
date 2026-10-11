@@ -43,8 +43,8 @@ Eğitim külliyatı **hangi sözlükle** derlendiyse, çıkarım da **o sözlük
 > `strict=False` bunu **yutmaz** (o yalnız eksik/fazla *anahtarı* yutar, *şekli* değil).
 
 > [!NOTE]
-> **Güncel Taban Model ve Gateway Entegrasyonu (damgalı ölçüm: 28 Eyl 2026):**
-> Soyağacındaki güncel taban ağırlıkları **`data/anka_base_v2.pt`** (sha `d0f415f3d882beb4a3dace87fc4a6024bf3c667f033790fc1e472cb60a664a50`) dosyasında yer almaktadır. `AgentGateway.create_default(model_path=..., vocab_path=..., router_state_path=...)` arayüzü (T-0155), `router_state_path` parametresi için varsayılan olarak `data/anka_router.pt` dosyasını arar ve dosya bulunamazsa fail-closed dosya-kapısıyla `RuntimeError` verir (`agent_gateway.py:141`: "DURDURULDU: router_state_path bulunamadi (sessiz fresh-init engellendi, T-0155)") (T-0156 ile router ağırlıkları pedagogy daraltılarak güncellenmiştir; sd sha `d369b3cd…`).
+> **Güncel Taban Model, Ceketler ve Gateway Entegrasyonu (damgalı ölçüm: 2 Eki 2026):**
+> Soyağacındaki güncel saf taban ağırlıkları **`data/anka_taban_pure.pt`** (sha `5479a2f3…`, marangozluk sızıntılarından arındırılmış) dosyasında yer almaktadır. Uzman ceketler olarak **`data/anka_bahcivan.pt`** (bahçıvanlık dikey) ve **`data/anka_marangoz.pt`** (sha `d1eae594…`, marangozluk dikey) bulunmaktadır. `AgentGateway.create_default(model_path=..., vocab_path=..., router_state_path=..., expert_model_paths=...)` arayüzü, `router_state_path` için 5 sınıflı **`data/anka_router_v2.pt`** dosyasını arar ve dinamik olarak ilgili uzman ceketi devreye sokar. Canlı ortam başlatıcısı `scripts/baslat_canli_gateway.py` saf taban ve iki uzman ceketi ile birlikte port 8080'de canlı hizmet vermektedir.
 
 ### Komut
 

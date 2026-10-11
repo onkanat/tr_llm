@@ -1,11 +1,11 @@
-# Kristal–Vektörel Mimarisi (Crystal-Vector Engine v1.8)
+# Kristal–Vektörel Mimarisi (Crystal-Vector Engine v1.11)
 
 [![Python 3.14](https://img.shields.io/badge/Python-3.14-blue.svg)](https://python.org)
 [![PyTorch](https://img.shields.io/badge/PyTorch-2.11-ee4c2c.svg)](https://pytorch.org)
-[![Tests Passing](https://img.shields.io/badge/Tests-307%2F307%20Passed%20(100%25)-brightgreen.svg)]()
+[![Tests Passing](https://img.shields.io/badge/Tests-320%2F320%20Passed%20(100%25)-brightgreen.svg)]()
 [![Zero-OOV](https://img.shields.io/badge/Zero--OOV-Deterministic%20Ontology%20(33.114%20Tokens)-blueviolet.svg)]()
 [![Self-RAG](https://img.shields.io/badge/RAG-Autonomous%20Vector%20Rover-orange.svg)]()
-[![CoT Vault](https://img.shields.io/badge/Reasoning-Isolated%20CoT%20Vault-gold.svg)]()
+[![MoE Routing](https://img.shields.io/badge/MoE-TriModalRouter%20v2%20(5--Classes)-blue.svg)]()
 [![1931 History SFT-DPO](https://img.shields.io/badge/Dataset-1931%20Türk%20Tarihi%20(SFT%2FChat%2FDPO)-red.svg)](https://huggingface.co/datasets/onkanat/turk-tarihi-1931-sft-dpo)
 [![Agent Gateway](https://img.shields.io/badge/Agent-Gateway%20%26%20Arena-purple.svg)]()
 
@@ -86,14 +86,14 @@ flowchart TD
 - **`decompiler.py`:** Modelin ürettiği semantik morfem dizilerini (`kitap PLURAL CASE_LOC` $\rightarrow$ `kitaplarda`) akıcı Türkçe yüzey biçimine dönüştüren ve SFT meta-etiketlerini koruyan fonetik sentezleyici.
 
 ### 2. Dil Modeli, Merak & Yönlendirici (`src/llm/`, `src/rag/`)
-- **`KristalLM`:** 6 katmanlı, 768 gizli boyutlu ($d_{\text{model}}$), 6 dikkat başlıklı, Vanilla GELU aktivasyonlu iki katmanlı MLP ($3072$ ara boyut), Rotary Position Embedding (RoPE), Causal Prompt Masking ve bağımsız giriş/çıkış projeksiyon matrislerine sahip (**Weight-Tied: False**) **92.97M parametreli** generatif dil modeli. (Güncel model soyağacı: **Anka** — `anka_a1r.pt` sha `b93cc1cd…`, güncel taban `anka_base_v2.pt` sha `d0f415f3…`, yönlendirici `anka_router.pt` sha `44a46d89…` [T-0156 devri; sd `d369b3cd…`]; eski `kristal_model.pt` zinciri 18 Eyl 2026'da operatör kararıyla silinmiştir).
+- **`KristalLM`:** 6 katmanlı, 768 gizli boyutlu ($d_{\text{model}}$), 6 dikkat başlıklı, Vanilla GELU aktivasyonlu iki katmanlı MLP ($3072$ ara boyut), Rotary Position Embedding (RoPE), Causal Prompt Masking ve bağımsız giriş/çıkış projeksiyon matrislerine sahip (**Weight-Tied: False**) **92.97M parametreli** generatif dil modeli. (Güncel model soyağacı: **Anka** — saf akıcı taban `anka_taban_pure.pt` sha `5479a2f3…` [T-0209; marangozluktan arındırılmış], uzman ceketler `anka_bahcivan.pt` ve `anka_marangoz.pt` sha `d1eae594…`, güncel taban v2 `anka_base_v2.pt` sha `d0f415f3…`, yönlendirici `anka_router_v2.pt` [5 sınıflı TriModalRouter v2]; eski `kristal_model.pt` zinciri 18 Eyl 2026'da operatör kararıyla silinmiştir).
 - **`CuriosityEngine` (`src/rag/merak.py`):** Modelin gizli durumundaki Shannon entropisini ($\mathcal{H}(z) = -\sum p \log p$) ölçerek belirsizlik eşiğinde ($\mathcal{H}(z) > \tau$) merak vektörü ($q_{\text{merak}}$) sentezleyen mekanizma.
-- **`TriModalRouter` (`src/llm/router.py`):** Girdi istemi ($P$), merak projeksiyonu ($q_{\text{merak}}$) ve RAG bağlamını ($ctx_{\text{rag}}$) harmanlayarak dinamik uzman seçimi yapan yönlendirici katman (eğitilmiş ağırlıklar: `data/anka_router.pt`, T-0156 ile daraltılmış pedagoji havuzunda yeniden eğitildi; sd `d369b3cd…`).
+- **`TriModalRouter` (`src/llm/router.py`):** Girdi istemi ($P$), merak projeksiyonu ($q_{\text{merak}}$) ve RAG bağlamını ($ctx_{\text{rag}}$) harmanlayarak dinamik uzman seçimi yapan yönlendirici katman (eğitilmiş ağırlıklar: `data/anka_router_v2.pt`, 5 sınıflı: `grammar_core`, `pedagogy`, `carpenter`, `gardener`, `legal`).
 - **`VectorMemory` (`src/rag/vector_memory.py`):** Qdrant tabanlı yoğun (KristalEmbedding) ve seyrek (BM25) hibrit arama sunan, çift koleksiyonlu (`anka_bellek` & `simulasyon_bellek`), uzak sunucu bağlantısı başarısız olduğunda sessiz fallback yapmayan, fail-closed `RuntimeError` fırlatan dayanıklı bellek (T-0148 4A; `:memory:` modu yalnızca `host` ve `storage_path` verilmediğinde yerel bellek olarak açılır; varsayılan `data/qdrant_db` kaldırılmıştır, T-0148 4B).
-- **`EpistemicCuriosityAgent` (`src/rag/epistemic_agent.py`):** Merak, router ve hibrit arama döngüsünü işleten; $\ge 0.85$ uyumlu kanıt metinlerine rağmen modelin anlayamadığı durumları tespit edip `data/future_train_vector.jsonl` kütüğüne kaydeden otonom ajan.
+- **`EpistemicCuriosityAgent` (`src/rag/epistemic_agent.py`):** Merak, router ve hibrit arama döngüsünü işleten; $\ge 0.33$ uyumlu kanıt metinlerine rağmen modelin anlayamadığı durumları tespit edip `data/future_train_vector.jsonl` kütüğüne kaydeden otonom ajan.
 
 ### 3. Ajan Kapısı, CoT Kasası & Pedagojik Süpervizör (`src/gateway/`)
-- **`AgentGateway` (`src/gateway/agent_gateway.py`):** Büyük agent modellerinin (Antigravity Agent, Gemini API, Ollama) küçük modelle çift yönlü iletişim kurmasını sağlayan Python arayüzü, `muhakeme_bellek` akıl yürütme enjeksiyonu (`inject_reasoning_trace`) ve yerleşik HTTP REST API sunucusu (`/api/query`, `/api/inject`, `/api/status`, `/api/backlog`). T-0155 ile router eğitilmiş-ağırlık entegrasyonu (`create_default` varsayılan `router_state_path="data/anka_router.pt"` + fail-closed dosya-kapısı), T-0156 daraltılmış pedagoji ağırlıkları, T-0157 yapısal jeton bastırma (`YAPISAL_BASTIRMA_JETONLARI`), temizlik ve capitalize ile insan-okunur üretim ve T-0158 canlı gateway çalıştırma desteğine sahiptir.
+- **`AgentGateway` (`src/gateway/agent_gateway.py`):** Büyük agent modellerinin (Antigravity Agent, Gemini API, Ollama) küçük modelle çift yönlü iletişim kurmasını sağlayan Python arayüzü, `muhakeme_bellek` akıl yürütme enjeksiyonu (`inject_reasoning_trace`), yerleşik HTTP REST API sunucusu (`/api/query`, `/api/inject`, `/api/status`, `/api/backlog`) ve MoE dinamik uzman yönetimi (`expert_models={'gardener': ..., 'carpenter': ...}`). Canlı gateway başlatıcısı (`scripts/baslat_canli_gateway.py`) saf taban `data/anka_taban_pure.pt` ve 5-sınıflı `data/anka_router_v2.pt` ile servis vermektedir.
 - **`PedagogicalSupervisor` (`src/gateway/pedagogical_supervisor.py`):** Modeli sınavdan geçiren, yanıtları değerlendiren, çift çıktılı ayrıştırıcı (`extract_cot_and_card`) ile düşünce zincirlerini (`<DUSUNCE>`) `data/pedagogy/cot_vault.jsonl` kasasına ve `muhakeme_bellek`'e izole eden, saf deklaratif bilgi kartlarını (`<BILGI_KARTI>`) ise `anka_bellek`'e enjekte eden usta-çırak denetçisi.
 - **`RetrainPipeline` (`src/gateway/retrain_pipeline.py`):** `future_train_vector.jsonl` dosyasında biriken çözülememiş epistemik açıkları derleyip modeli otonom yeniden eğiten Karpathy Continuous Learning Loop motoru ve sıfır-unutmalı sözlük cerrahisi (`expand_model_vocabulary`).
 
@@ -212,7 +212,7 @@ pip install -r requirements.txt
 ```
 
 > [!TIP]
-> **Güncel Taban Model Notu (damgalı ölçüm: 28 Eyl 2026):** Çıkarım ve testler için `data/anka_a1r.pt` kullanılırken, güncel taban ağırlıkları `data/anka_base_v2.pt` (sha `d0f415f3…`) dosyasında yer almaktadır. `--model data/anka_base_v2.pt` yolu beklenen yol olarak verilebilir.
+> **Güncel Taban Model ve Ceketler Notu (damgalı ölçüm: 2 Eki 2026):** Çıkarım, testler ve canlı gateway için saf taban ağırlıkları **`data/anka_taban_pure.pt`** (sha `5479a2f3…`), yönlendirici **`data/anka_router_v2.pt`** ve dikey uzman ceketler **`data/anka_bahcivan.pt`** ile **`data/anka_marangoz.pt`** (sha `d1eae594…`) modelleri kullanılmaktadır. `--model data/anka_taban_pure.pt` yolu varsayılan olarak verilebilir.
 
 ### 5. 3 Aşamalı Sıralı Model Eğitimi (SFT ➔ Chat ➔ DPO)
 ```bash
@@ -236,7 +236,7 @@ cp data/kristal_model.pt data/kristal_model_sft.pt
 > - **Donmuş yola yazım operatör onayı ister:** dört eğitim girişi yazmadan önce `check_frozen_save_path` çağırır; onay `--allow-frozen-write` ile verilir ve hedef `writes[]`'te beyan edilip üst dizin kiralanmalıdır.
 > - **`<PAD>` kayıp maskesi** varsayılan olarak aktiftir ve kayıp **ölçeğini** değiştirir → maskeleme öncesi/sonrası kayıp değerleri kıyaslanmamalıdır.
 > - Eğitim koşumları sırasında makinede GPU tüketen başka iş çalıştırılmamalıdır (ölçüldü: adım süresi 0,43 → 3,45 sn/adım).
-> - **Yukarıdaki 3 aşamalı eğitim bloğu TARİHSELDİR (damgalı ölçüm: 20 Eyl 2026; güncelleme: 23 Eyl 2026; son kontrol: 28 Eyl 2026):** içindeki `data/kristal_model.pt` ve `data/kristal_model_sft.pt` **artık yoktur** — Kristal checkpoint zinciri 18 Eyl 2026'da operatör kararıyla silinmiştir (diskte de git'te de yok). **23 Eyl 2026:** bayat A1 soyağacı (`anka_a1.pt`, `anka_pretrain.bin`, `anka_a1_pretrain.bin` + val'leri) operatör onayıyla silinmiştir. **28 Eyl 2026 itibariyle** güncel Anka soyağacı: çıkarım için **`data/anka_a1r.pt`** (sha `b93cc1cd…`), güncel taban **`data/anka_base_v2.pt`** (sha `d0f415f3…`) ve yönlendirici **`data/anka_router.pt`** (sha `44a46d89…`, T-0156 devri; sd `d369b3cd…`) modelleridir. Blok **o dönemin kaydı olarak korunmuştur**; güncel karşılığı **doğrulanmadığı için yazılmamıştır**.
+> - **Yukarıdaki 3 aşamalı eğitim bloğu TARİHSELDİR (güncelleme: 2 Eki 2026):** içindeki `data/kristal_model.pt` ve `data/kristal_model_sft.pt` **artık yoktur** — Kristal checkpoint zinciri 18 Eyl 2026'da operatör kararıyla silinmiştir (diskte de git'te de yok). **2 Eki 2026 itibariyle** güncel Anka soyağacı: saf akıcı taban **`data/anka_taban_pure.pt`**, taban v2 **`data/anka_base_v2.pt`**, yönlendirici **`data/anka_router_v2.pt`** ve bağımsız dikey uzman ceketler **`data/anka_bahcivan.pt`** ve **`data/anka_marangoz.pt`** modelleridir. Blok **o dönemin kaydı olarak korunmuştur**; güncel karşılığı **doğrulanmadığı için yazılmamıştır**.
 
 ---
 

@@ -49,19 +49,23 @@ def _sd_sha(sd):
 def main():
     ayarla = argparse.ArgumentParser(description="Canlı gateway başlatıcı (192.168.1.9 köprüsü)")
     ayarla.add_argument("--port", type=int, default=8080)
-    ayarla.add_argument("--model", type=str, default="data/anka_t0203_polish.pt",
-                        help="Yüklenecek model checkpoint yolu (varsayılan: anka_t0203_polish.pt)")
+    ayarla.add_argument("--model", type=str, default="data/anka_taban_pure.pt",
+                        help="Yüklenecek saf taban model checkpoint yolu (varsayılan: anka_taban_pure.pt)")
     ayarla.add_argument("--router", type=str, default="data/anka_router_v2.pt",
                         help="Yüklenecek router checkpoint yolu (varsayılan: anka_router_v2.pt)")
     args = ayarla.parse_args()
 
     ag.VectorMemory = CanliVectorMemory
 
-    # T-0208: Bahçıvan uzman modelini MoE sözlüğüne bağla
+    # T-0209: Hem Bahçıvan hem Marangoz uzman ceketlerini MoE sözlüğüne bağla
     expert_model_paths = {}
     bahcivan_path = "data/anka_bahcivan.pt"
     if Path(bahcivan_path).exists():
         expert_model_paths["gardener"] = bahcivan_path
+
+    marangoz_path = "data/anka_marangoz.pt"
+    if Path(marangoz_path).exists():
+        expert_model_paths["carpenter"] = marangoz_path
 
     gw = ag.AgentGateway.create_default(
         model_path=args.model,

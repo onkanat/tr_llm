@@ -1,0 +1,11 @@
+{
+  "durum": "BASARILI",
+  "model_path": "/Users/hakankilicaslan/Git/tr_llm/data/anka_taban_pure.pt",
+  "sha256": "5479a2f35a88975cae3cd8e66e4aef0bb7b09bea5274828709fe2c0e1d263360",
+  "init_val_ce": 2.3408584713935854,
+  "final_val_ce": 2.304913580417633,
+  "init_pencere_ce": 3.5,
+  "final_pencere_ce": 3.4899,
+  "opt_steps": 171,
+  "sure_sn": 1725.5
+}

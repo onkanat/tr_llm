@@ -14,11 +14,11 @@ Amacın, Türkçe (ve sondan eklemeli diller) için istatistiksel tokenizasyonu 
 ## 🛠️ Temel Komutlar ve Çalışma Zamanı
 
 ### 1. Doğrulama ve Testler
-* **Birim Testlerini Çalıştır:** `venv/bin/pytest` (**28 Eyl 2026 ölçümü: 309 passed, 0 failed** — koşum `bdhb0asvx`, sandbox DIŞI, 122,19 sn. Sandbox **içinde** koşulursa `tests/test_agent_gateway.py::TestAgentGateway::test_gateway_http_server_endpoints` `socketserver` `PermissionError` ile düşebilir — sandbox soket yasağı. Sayı her koşumda yeniden ölçülür, buradaki değer **damgalıdır** ve bayatlayabilir.)
+* **Birim Testlerini Çalıştır:** `venv/bin/pytest` (**2 Eki 2026 ampirik ölçümü: 320 passed, 0 failed** — koşum `task-10205`, sandbox DIŞI, 133,83 sn. Sandbox **içinde** koşulursa `tests/test_agent_gateway.py::TestAgentGateway::test_gateway_http_server_endpoints` `socketserver` `PermissionError` ile düşebilir — sandbox soket yasağı. Sayı her koşumda yeniden ölçülür, buradaki değer **damgalıdır** ve bayatlayabilir.)
 * **Model Çıkarım Testi:** `venv/bin/python test_model.py`
   > [!NOTE]
-  > `test_model.py` default'ları T-0162 ile **güncel-kanonik çıpa** yapıldı (28 Eyl 2026 doğrulaması: RC=0, MPS, 33.114): model `data/anka_base_v2.pt`, sözlük `data/rebuild/vocab_anka_r1_33114.json`. Eski `data/vocab.json` (31.357) boyut-uyuşmazlığı uyarısı **BAYATTIR** — silinmiştir.
-  > **Kristal zinciri SİLİNDİ** (operatör kararı, 18 Eyl 2026): `kristal_model.pt` ve türevleri artık yoktur; model **Anka**'dır ve checkpoint'ler `data/anka_*.pt` altındadır (güncel: `anka_a1r.pt`, `anka_a2.pt`, `anka_base_v2.pt`, `anka_router.pt` — 28 Eyl 2026 `ls` ölçümü).
+  > `test_model.py` default'ları T-0162 ile **güncel-kanonik çıpa** yapıldı (RC=0, MPS, 33.114): model `data/anka_base_v2.pt`, sözlük `data/rebuild/vocab_anka_r1_33114.json`. Eski `data/vocab.json` (31.357) boyut-uyuşmazlığı uyarısı **BAYATTIR** — silinmiştir.
+  > **Kristal zinciri SİLİNDİ** (operatör kararı, 18 Eyl 2026): `kristal_model.pt` ve türevleri artık yoktur; model **Anka**'dır ve checkpoint'ler `data/anka_*.pt` altındadır (güncel: saf taban `anka_taban_pure.pt`, taban v2 `anka_base_v2.pt`, dikey uzman ceketler `anka_bahcivan.pt` ve `anka_marangoz.pt`, yönlendirici `anka_router_v2.pt` — Ekim 2026 `ls` ölçümü).
   > **Taban sözlük ile külliyat sözlüğü AYRI şeylerdir (ölçüldü, 19 Eyl 2026).** *Taban:* `data/rebuild/vocab_base_32852.json` = **32.852** giriş — ve `train.py`'ın **varsayılanıdır** (`train.py:153`, 28 Eyl 2026 `grep` ölçümü; `33114` bu dosyada taban-vocab bağlamında geçmez). *Külliyat:* güncel A1-r külliyatı `data/rebuild/vocab_anka_r1_33114.json` = **33.114** giriş ister ve **`--vocab` ile açıkça verilmelidir**. Sözlük külliyat için küçük kalırsa `train.py:112-116` `RuntimeError` ile **yüksek sesle durur** (bu yol sessiz DEĞİL); kardeş `<bin>.meta.json` varsa digest/giriş cross-check'i de yapılır (bayat `.bin` sınıfı). Checkpoint `resize_state_dict` ile hizalanır — uyumsuzluk `[SOZLESME_UYARI]` satırıyla **görünür** basılır, sessiz kırpma yoktur (T-0046).
 
 ### 2. Derleme ve Eğitim
@@ -69,12 +69,12 @@ Bu projenin en sert kısıtları canlı sözleşme belgesi olan [`.agent-bus/SPE
    - Fonetik Uyum Fonksiyonu ($f()$): Ünlü uyumu ve ünsüz yumuşaması/sertleşmesi ses olaylarını yöneten kural tabanlı motor.
 
 2. **Taşıyıcı Sistem (Vektörel Gezgin - Epistemoloji & Akıl Yürütme):**
-   - Kristal Katman'ın ürettiği temiz morfem dizilerini alıp akıl yürüten nöral omurga (`KristalLM`, RoPE, `data/anka_base_v2.pt`).
-   - Evrensel Vektör Bellek (RAG / Qdrant): 36-boyutlu kanonik morfemik yoğun embedding'ler (`anka_bellek` canlı `192.168.1.9:6333`).
-   - Tri-Modal Dinamik Router (`TriModalRouter`): Girdiyi `grammar_core`, `pedagogy` veya `carpenter` modlarına sevk eden karar ağı (`data/anka_router.pt`).
+   - Kristal Katman'ın ürettiği temiz morfem dizilerini alıp akıl yürüten nöral omurga (`KristalLM`, RoPE, `data/anka_taban_pure.pt`).
+   - Evrensel Vektör Bellek (RAG / Qdrant): 38-dokümanlık kanonik morfemik yoğun embedding'ler (`anka_bellek` canlı `192.168.1.9:6333`).
+   - Tri-Modal Dinamik Router (`TriModalRouter v2`): Girdiyi `grammar_core`, `pedagogy`, `carpenter`, `gardener` veya `legal` uzmanlarına sevk eden karar ağı (`data/anka_router_v2.pt`).
    - Çıkarım Döngüsü: Sorgu → Bellek Arama / Sonda → Kristal Derleyici Doğrulama → LLM Üretimi.
 
-3. **Çatı (Pedagojik Eğitim & Uzmanlaşma):**
+3. **Çatı (Pedagojik Eğitim & Uzmanlaşma - MoE):**
    - "Hafızasız devler" yerine 3 fazlı pedagojik öğrenme: Bebeklik (Keşif), Ebeveynlik (Pekiştirmeli), Sosyalleşme.
    - Sentetik Veri & Beceri Tabanlı SFT: Alpaca / Chat formatında görev bazlı mikro-öğrenme.
-   - Uzmanlaşma (Marangoz YZ / Carpenter AI): Genel ezber yerine belirli vektör alanlarında yoğunlaşmış hiper-verimli uzmanlık.
+   - Dikey Uzmanlaşma (MoE Ceketleri): Saf taban model üzerine dikey alan ceketleri (Marangozluk: `anka_marangoz.pt`, Bahçıvanlık: `anka_bahcivan.pt`). Genel ezber yerine belirli vektör alanlarında yoğunlaşmış hiper-verimli uzmanlık.

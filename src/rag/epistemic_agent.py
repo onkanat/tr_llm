@@ -392,19 +392,29 @@ class EpistemicCuriosityAgent:
             if retrieved_doc:
                 match_score = float(retrieved_doc.get("score", 0.0))
                 
+        # Step 4: Conditioning with Document (if retrieved) & Generating Output
+        conditioned = bool(retrieved_doc and is_context_usable(match_score, RAG_MATCH_THRESHOLD))
+        doc_text = retrieved_doc.get("text", "") if conditioned else ""
+        augmented_input = build_rag_input(doc_text, query) if (conditioned and doc_text) else query
+        doc_crystal_tags = retrieved_doc.get("metadata", {}).get("crystal_tags", "") if retrieved_doc else ""
+
         # Step 3: Tri-Modal Routing
-        # T-0208: Router dogrudan sorunun ozgun semantigini temsil eden query_token_ids
-        # ile sorgulanir (JSON sablon jetonlari yonlendirmeyi saptirmamasi icin).
+        # T-0208 / T-0209: Router dogrudan sorunun ozgun semantigini temsil eden query_token_ids
+        # ile sorgulanir. Egitim esnasinda (train_t0208_router_v2.py) merak vektoru de dogrudan
+        # sorgu metni uzerinden cikarilmistir; bu nedenle router_merak da query_token_ids uzerinden hesaplanir.
+        # RAG kanali (rag_vec) ise yalnizca gercekten eslesen ve kullanilabilir
+        # (conditioned=True) bir belge varsa harmanlanir (alakasiz belgelerin yonlendirmeyi saptirmasi engellenir).
         prompt_vec = self.calculate_prompt_embedding(query_token_ids)
+        _, _, router_merak = self.evaluate_entropy_and_merak(query_token_ids)
         rag_vec = None
-        if retrieved_doc:
+        if conditioned and retrieved_doc:
             doc_token_ids = retrieved_doc.get("metadata", {}).get("token_ids", [])
             if doc_token_ids:
                 rag_vec = self.calculate_prompt_embedding(doc_token_ids)
                 
         router_weights, router_indices, e_route = self.router(
             prompt_vec=prompt_vec,
-            merak_vec=q_merak,
+            merak_vec=router_merak,
             rag_vec=rag_vec
         )
         expert_names = self.router.get_selected_expert_names(router_indices)[0]
@@ -412,12 +422,6 @@ class EpistemicCuriosityAgent:
         # T-0208: Dinamik Uzman Model Secimi (MoE Dağıtımı)
         primary_expert = expert_names[0] if expert_names else "grammar_core"
         active_model = self.expert_models.get(primary_expert, self.model)
-        
-        # Step 4: Conditioning with Document (if retrieved) & Generating Output
-        conditioned = bool(retrieved_doc and is_context_usable(match_score, RAG_MATCH_THRESHOLD))
-        doc_text = retrieved_doc.get("text", "") if conditioned else ""
-        augmented_input = build_rag_input(doc_text, query) if (conditioned and doc_text) else query
-        doc_crystal_tags = retrieved_doc.get("metadata", {}).get("crystal_tags", "") if retrieved_doc else ""
 
         eval_aug_tokens = build_rag_prompt_tokens(
             tokenizer=self.tokenizer,

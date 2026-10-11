@@ -4,6 +4,25 @@ Bu projedeki tüm önemli değişiklikler bu dosyada belgelenmektedir.
 
 Format [Keep a Changelog](https://keepachangelog.com/tr/1.0.0/) standardına dayanır ve bu proje [Semantic Versioning (SemVer)](https://semver.org/spec/v2.0.0.html) ilkelerini benimser.
 
+## [1.11.0] - 2026-10-02
+
+### Eklendi (Added)
+- **T-0209 — Marangozluk Dikey Ceket Ayrışımı ve Saf Akıcı Taban Model (`anka_taban_pure.pt`):**
+  - Taban model içindeki ahşap/marangozluk sızıntıları temizlenerek `data/pedagogy/pure_base_sft.jsonl` (4.498 kayıt) veri setiyle marangozluktan arındırılmış saf taban model `data/anka_taban_pure.pt` (Val CE 2.3049, pencere-CE 3.4899) 4:1 SFT:Pretrain ve KL $\beta=0.2$ korunarak sıfırdan eğitildi.
+  - Bağımsız **Marangozluk Ceketi (`anka_marangoz.pt`)** üretildi: 6.123 kanonik marangozluk SFT kaydı (`data/pedagogy/marangoz_canonical_sft.jsonl`, meşe ağacı ontolojisi dahil) ile saf taban üzerine eğitildi (Val CE 1.0403).
+  - Canlı Gateway (`scripts/baslat_canli_gateway.py`), saf taban (`anka_taban_pure.pt`), iki bağımsız uzman ceket (`gardener`: `data/anka_bahcivan.pt`, `carpenter`: `data/anka_marangoz.pt`) ve `anka_router_v2.pt` ile MoE mimarisinde ayağa kaldırıldı.
+- **T-0208 — TriModalRouter v2 (5 Sınıf) & Dinamik Uzman Dağıtımı:**
+  - TriModalRouter 3 sınıftan 5 sınıfa genişletildi (`grammar_core`, `pedagogy`, `carpenter`, `gardener`, `legal`).
+  - Dinamik uzman seçimi: Gateway (`AgentGateway`), yönlendiricinin seçtiği birincil uzmana göre (`expert_models`) ilgili uzman ağırlıklarını (`KristalLM`) dinamik olarak devreye sokar.
+  - `data/anka_router_v2.pt` 5-sınıflı yönlendirici modeli eğitilip tescillendi.
+- **T-0205..T-0207 — Bahçıvanlık Dikey Ceketi (`anka_bahcivan.pt`) & Canlı Doğrulama:**
+  - Bahçıvanlık dikey alanı için bağımsız uzman ceket `data/anka_bahcivan.pt` eğitildi.
+  - Model tutarsızlık ve akıcılık testleri yapılarak botanik ve tarım sorgularında uzmanlaşma sağlandı.
+- **T-0167..T-0183 — Gateway Yetkinlikleri ve Bellek İyileştirmeleri:**
+  - `/api/query` arayüzüne `temperature`, `top_k`, `conditioned` alanları eklendi.
+  - Web UI (`src/gateway/static/index.html`) güncellendi.
+  - Qdrant RAG eşik değeri 0.33 olarak kalibre edildi. Test paketi 320 teste ulaştı.
+
 ## [1.10.0] - 2026-09-28
 
 ### Eklendi (Added)

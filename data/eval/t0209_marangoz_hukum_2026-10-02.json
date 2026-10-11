@@ -1,0 +1,11 @@
+{
+  "durum": "BASARILI",
+  "model_path": "/Users/hakankilicaslan/Git/tr_llm/data/anka_marangoz.pt",
+  "sha256": "d1eae59457488a17ee07107d28b8b78050015c69cd49a3327491c3fec9ec4523",
+  "init_val_ce": 1.0730385959148407,
+  "final_val_ce": 1.040373796224594,
+  "init_pencere_ce": 3.4899,
+  "final_pencere_ce": 3.4761,
+  "opt_steps": 234,
+  "sure_sn": 1956.8
+}
