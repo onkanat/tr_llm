@@ -48,6 +48,8 @@ def _sd_sha(sd):
 
 def main():
     ayarla = argparse.ArgumentParser(description="Canlı gateway başlatıcı (192.168.1.9 köprüsü)")
+    ayarla.add_argument("--host", type=str, default="0.0.0.0",
+                        help="Dinlenecek ağ arayüzü IP adresi (varsayılan: 0.0.0.0)")
     ayarla.add_argument("--port", type=int, default=8080)
     ayarla.add_argument("--model", type=str, default="data/anka_taban_pure.pt",
                         help="Yüklenecek saf taban model checkpoint yolu (varsayılan: anka_taban_pure.pt)")
@@ -86,8 +88,8 @@ def main():
         )
     print("[CANLI-GW] anka_bellek storage:", gw.memory.storage_type, "| koleksiyon:", gw.memory.collection_name, flush=True)
     print("[CANLI-GW] simulasyon_bellek storage:", gw.general_memory.storage_type, flush=True)
-    srv = gw.create_http_server("127.0.0.1", args.port)
-    print("[CANLI-GW] http://127.0.0.1:%d DINLEMEDE — serve_forever" % args.port, flush=True)
+    srv = gw.create_http_server(args.host, args.port)
+    print("[CANLI-GW] http://%s:%d DINLEMEDE — serve_forever" % (args.host, args.port), flush=True)
     srv.serve_forever()
 
 
