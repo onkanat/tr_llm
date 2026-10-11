@@ -51,7 +51,7 @@
     "retrieval_isabeti": "artti (alan ici 5/5 sorguda dogru belge)",
     "belge_yanit_ortusmesi_yuzde": 0,
     "belge_yanit_not": "conditioned=true gorunse de belgenin ayirt edici ifadeleri yanitta yok",
-    "retrieval_gerilemesi": "Mesе sorgusunda tepe belge kesici_takimlar (1,3333), dogru belge mese_agaci 2. sirada (0,8889)",
+    "retrieval_gerilemesi": "Mese sorgusunda tepe belge kesici_takimlar (1,3333), dogru belge mese_agaci 2. sirada (0,8889)",
     "ilgisiz_belge_esigi_geciyor": "Python sorusunda Fomalhaut (0,4889) > 0,33",
     "retrieval_kararsizligi": "Kirlangic sorusu 3 kosunun 2'sinde 301 krk, 1'inde 108 krk belgeyi tepe yapti (skor ikisinde de 1,1111112)",
     "aktif_uzman": "10+ probda hep grammar_core (marangozluk sorusunda bile)"
