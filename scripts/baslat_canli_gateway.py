@@ -1,7 +1,7 @@
 """Canlı gateway başlatıcı — kalıcı sürüm (T-0160/TUR-X A1; T-0158 heredoc'tan dosyalaşma).
 
 Kod-dışı köprü; üretim-kod DOKUNULMAZ. Operatör kararı: bellek CANLI Qdrant
-192.168.1.9:6333 (anka_bellek/simulasyon_bellek). ``create_default`` host'u
+delinux01.local:6333 (anka_bellek/simulasyon_bellek). ``create_default`` host'u
 ``localhost`` SABİT yazıyor (agent_gateway.py:147/:148; yerelde 6333 kapalı
 → T-0148 4A fail-closed); modül-düzeyi import olduğundan (:33) çağrı-yüzeyleri
 (:147/:148/:334) aynı global'i okur → host'u canlıya çeviren sarmalayıcı yeterli.
@@ -23,7 +23,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 import src.gateway.agent_gateway as ag  # noqa: E402
 
-CANLI_HOST = "192.168.1.9"
+CANLI_HOST = "delinux01.local"
 BEKLENEN_ROUTER_SD_SHA = "a001207058be949ba5932ada04c5058fd88d99770caff0c2e0accbb291a1c649"
 
 
@@ -47,7 +47,7 @@ def _sd_sha(sd):
 
 
 def main():
-    ayarla = argparse.ArgumentParser(description="Canlı gateway başlatıcı (192.168.1.9 köprüsü)")
+    ayarla = argparse.ArgumentParser(description="Canlı gateway başlatıcı (delinux01.local köprüsü)")
     ayarla.add_argument("--host", type=str, default="0.0.0.0",
                         help="Dinlenecek ağ arayüzü IP adresi (varsayılan: 0.0.0.0)")
     ayarla.add_argument("--port", type=int, default=8080)
