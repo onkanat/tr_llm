@@ -520,4 +520,75 @@ def test_ast_retrain_clean_models_has_frozen_guards():
     assert append_count == 5, f"Beklenen 5 adet '--allow-frozen-write' ekleme koşulu, bulunan: {append_count}"
 
 
+def test_morpheme_decompiler_type_hints_resolution():
+    """Verify typing.get_type_hints(MorphemeDecompiler.__init__) resolves cleanly without NameError."""
+    import typing
+    from src.compiler.decompiler import MorphemeDecompiler
+
+    hints = typing.get_type_hints(MorphemeDecompiler.__init__)
+    assert "compiler" in hints
+    assert "vocab" in hints
+
+
+def test_morpheme_decompiler_apostrophe_no_stray_space():
+    """Verify MorphemeDecompiler handles apostrophe tokens attached to proper nouns without stray space."""
+    from src.compiler.lexicon import LexiconManager
+    from src.compiler.morphotactics import build_default_graph
+    from src.compiler.core import CrystalCompiler
+    from src.compiler.decompiler import MorphemeDecompiler
+    from src.llm.tokenizer import KristalTokenizer, Vocabulary
+
+    lex = LexiconManager()
+    lex.load_from_tsv("data/lexicon/roots.tsv")
+    graph = build_default_graph()
+    compiler = CrystalCompiler(lex, graph)
+    vocab = Vocabulary()
+    vocab.load("data/vocab.json", freeze=True)
+    decompiler = MorphemeDecompiler(compiler, vocab)
+    tok = KristalTokenizer(compiler, vocab, literal_entity_mode=True)
+
+    text = "Şuppiluliuma'nın emriyle Kargamış'tan dönüldü."
+    enc = tok.encode(text)
+    dec = tok.decode(enc)
+    decompiled = decompiler.decompile_sentence(dec)
+
+    # Must contain proper apostrophe attachment without stray space before apostrophe
+    assert "Şuppiluliuma'nın" in decompiled
+    assert "Kargamış'tan" in decompiled
+    assert "Şuppiluliuma '" not in decompiled
+    assert "Kargamış '" not in decompiled
+
+    # Direct morpheme tag sequence tests
+    direct_res = decompiler.decompile_sentence("Şuppiluliuma ' CASE_GEN")
+    assert direct_res == "Şuppiluliuma'nın"
+    assert " '" not in direct_res
+
+    direct_res2 = decompiler.decompile_sentence("Ankara ' CASE_LOC")
+    assert direct_res2 == "Ankara'da"
+    assert " '" not in direct_res2
+
+    # Buffer consonants ((n), (y))
+    assert decompiler.decompile_sentence("Ali ' CASE_GEN") == "Ali'nin"
+    assert decompiler.decompile_sentence("Ankara ' CASE_DAT") == "Ankara'ya"
+
+    # Consonant hardening (d -> t)
+    assert decompiler.decompile_sentence("Kargamış ' CASE_ABL") == "Kargamış'tan"
+    assert decompiler.decompile_sentence("Gaziantep ' CASE_ABL") == "Gaziantep'ten"
+
+    # Turkish dotted-İ in entity decoding
+    assert decompiler.decompile_sentence("<ENT> <CAP> i z m i r </ENT> ' CASE_ABL") == "İzmir'den"
+
+    # Common noun trailing quote preservation
+    assert decompiler.decompile_sentence("dünya '") == "dünya'"
+
+
+def test_morphotactics_terminal_states_no_duplicates():
+    """Verify MorphotacticsGraph has NOUN_ROOT in terminal states without duplicate calls."""
+    from src.compiler.morphotactics import build_default_graph, State
+    graph = build_default_graph()
+    assert graph.is_terminal(State.NOUN_ROOT)
+    assert graph.is_terminal(State.VERB_ROOT)
+
+
+
 

@@ -500,9 +500,9 @@ class EpistemicCuriosityAgent:
         is_high_similarity = (match_score >= self.similarity_threshold)
         
         # Check if the model failed to understand:
-        # A: Post entropy remains high (> tau)
+        # A: Post entropy remains high (>= tau)
         # B: Generated output expresses lack of information ("bilgi yok", empty, or only unk)
-        has_high_post_entropy = (entropy_post > self.tau)
+        has_high_post_entropy = (entropy_post >= self.tau)
         expresses_uncertainty = any(phrase in decompiled_text.lower() for phrase in ["bilgi yok", "bulunamaz", "bilinmiyor"]) or (morpheme_output.count("<UNK>") >= 2)
         
         if (not is_direct) and is_high_similarity and (has_high_post_entropy or expresses_uncertainty):

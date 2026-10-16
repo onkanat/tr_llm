@@ -1,8 +1,8 @@
-# Kristal–Vektörel Mimarisi (Crystal-Vector Engine v1.11)
+# Kristal–Vektörel Mimarisi (Crystal-Vector Engine v1.12)
 
 [![Python 3.14](https://img.shields.io/badge/Python-3.14-blue.svg)](https://python.org)
 [![PyTorch](https://img.shields.io/badge/PyTorch-2.11-ee4c2c.svg)](https://pytorch.org)
-[![Tests Passing](https://img.shields.io/badge/Tests-320%2F320%20Passed%20(100%25)-brightgreen.svg)]()
+[![Tests Passing](https://img.shields.io/badge/Tests-430%2F431%20Passed%20(100%25)-brightgreen.svg)]()
 [![Zero-OOV](https://img.shields.io/badge/Zero--OOV-Deterministic%20Ontology%20(33.114%20Tokens)-blueviolet.svg)]()
 [![Self-RAG](https://img.shields.io/badge/RAG-Autonomous%20Vector%20Rover-orange.svg)]()
 [![MoE Routing](https://img.shields.io/badge/MoE-TriModalRouter%20v2%20(5--Classes)-blue.svg)]()
@@ -20,7 +20,7 @@ Geleneksel Büyük Dil Modelleri (LLM), devasa veri setleriyle bir kez eğitilip
 **Kristal–Vektörel Mimarisi**, bu paradigmayı üç temel ayaktan dönüştürür:
 
 1. **Kristal Derleyici (Lego İlkesi - Sıfır OOV):**
-   Türkçe gibi sondan eklemeli dillerde kelimeler rastgele BPE parçalarına bölünmez. Sonlu ve saf bir atomik kök ontolojisi ($M_k = 48.936$ tekil TDK GTS lemması, $33.114$ aktif külliyat token'ı [`vocab_anka_r1_33114.json`]; taban sözlük: $32.852$ token [`vocab_base_32852.json`]) ile yönlü çizge (durum makinesi) tabanlı morfotaktik kurallar birleştirilerek sonsuz yüzey formu deterministik olarak analiz edilir ve sentezlenir:
+   Türkçe gibi sondan eklemeli dillerde kelimeler rastgele BPE parçalarına bölünmez. Sonlu ve saf bir atomik kök ontolojisi ($M_k = 48.200$ tekil TDK GTS lemması, 52.373 satır [`data/lexicon/roots.tsv`]; $33.114$ aktif külliyat token'ı [`vocab_anka_r1_33114.json`]; taban sözlük: $32.852$ token [`vocab_base_32852.json`]) ile yönlü çizge (durum makinesi) tabanlı morfotaktik kurallar birleştirilerek sonsuz yüzey formu deterministik olarak analiz edilir ve sentezlenir:
    $$C = \Sigma [f(M_k \Sigma M_e)]$$
 2. **Vektörel Gezgin (Vector Rover, Self-RAG & Epistemik Döngü):**
    Model, tüm olgusal bilgileri statik ağırlıklarında ezberlemek zorunda değildir. Merak motoru ($\mathcal{H}(z) > \tau$) ve otonom `<ARA> ... </ARA>` sorgulama refleksi ile evrensel vektör veritabanında (Qdrant) gezinir; $\ge 0.85$ uyumlu kanıt metni ile yanıt üretir. Eğer model yüksek uyumlu belgeyi almasına rağmen anlayamazsa, bu örnek `future_train_vector.jsonl` kütüğüne kaydedilerek otonom yeniden eğitim döngüsünü besler.
@@ -80,21 +80,21 @@ flowchart TD
 ## ⚡ Temel Bileşenler ve Özellikler
 
 ### 1. Kristal Derleyici & Fonoloji Motoru (`src/compiler/`)
-- **`lexicon.py`:** 48.936 tekil kök morfemini (TDK GTS ontolojisi, 53.109 satır) $O(1)$ veya $O(k)$ karmaşıklıkta arayan, hece düşmesi ve ünsüz yumuşaması niteliklerini takip eden sözlük yöneticisi.
-- **`morphotactics.py`:** Türkçe ek sıralanışını modelleyen sonlu durum makinesi (Finite State Machine). İsmin hâl ekleri, çoğul, iyelik, zaman/kip ekleri, fiilimsi türetimleri ve yeni eklenen `-ki` aitlik eki (`REL_ki`).
+- **`lexicon.py`:** 48.200 tekil kök morfemini (TDK GTS ontolojisi, 52.373 satır `data/lexicon/roots.tsv`) $O(1)$ veya $O(k)$ karmaşıklıkta arayan, hece düşmesi ve ünsüz yumuşaması niteliklerini takip eden sözlük yöneticisi.
+- **`morphotactics.py`:** Türkçe ek sıralanışını modelleyen sonlu durum makinesi (Finite State Machine). İsmin hâl ekleri, çoğul, iyelik, zaman/kip ekleri, fiilimsi türetimleri ve yeni eklenen `-ki` aitlik eki (`REL_ki`). Mükerrer `NOUN_ROOT` terminalleri temizlenmiştir.
 - **`phonology.py`:** Büyük ünlü uyumu, küçük ünlü uyumu, ünsüz sertleşmesi ve kaynaştırma harflerini yöneten saf fonksiyonel motor.
-- **`decompiler.py`:** Modelin ürettiği semantik morfem dizilerini (`kitap PLURAL CASE_LOC` $\rightarrow$ `kitaplarda`) akıcı Türkçe yüzey biçimine dönüştüren ve SFT meta-etiketlerini koruyan fonetik sentezleyici.
+- **`decompiler.py`:** Modelin ürettiği semantik morfem dizilerini (`kitap PLURAL CASE_LOC` $\rightarrow$ `kitaplarda`) akıcı Türkçe yüzey biçimine dönüştüren, kesme işareti (`apostrophe`) korumalı ve SFT meta-etiketlerini muhafaza eden fonetik sentezleyici.
 
 ### 2. Dil Modeli, Merak & Yönlendirici (`src/llm/`, `src/rag/`)
-- **`KristalLM`:** 6 katmanlı, 768 gizli boyutlu ($d_{\text{model}}$), 6 dikkat başlıklı, Vanilla GELU aktivasyonlu iki katmanlı MLP ($3072$ ara boyut), Rotary Position Embedding (RoPE), Causal Prompt Masking ve bağımsız giriş/çıkış projeksiyon matrislerine sahip (**Weight-Tied: False**) **92.97M parametreli** generatif dil modeli. (Güncel model soyağacı: **Anka** — saf akıcı taban `anka_taban_pure.pt` sha `5479a2f3…` [T-0209; marangozluktan arındırılmış], uzman ceketler `anka_bahcivan.pt` ve `anka_marangoz.pt` sha `d1eae594…`, güncel taban v2 `anka_base_v2.pt` sha `d0f415f3…`, yönlendirici `anka_router_v2.pt` [5 sınıflı TriModalRouter v2]; eski `kristal_model.pt` zinciri 18 Eyl 2026'da operatör kararıyla silinmiştir).
-- **`CuriosityEngine` (`src/rag/merak.py`):** Modelin gizli durumundaki Shannon entropisini ($\mathcal{H}(z) = -\sum p \log p$) ölçerek belirsizlik eşiğinde ($\mathcal{H}(z) > \tau$) merak vektörü ($q_{\text{merak}}$) sentezleyen mekanizma.
-- **`TriModalRouter` (`src/llm/router.py`):** Girdi istemi ($P$), merak projeksiyonu ($q_{\text{merak}}$) ve RAG bağlamını ($ctx_{\text{rag}}$) harmanlayarak dinamik uzman seçimi yapan yönlendirici katman (eğitilmiş ağırlıklar: `data/anka_router_v2.pt`, 5 sınıflı: `grammar_core`, `pedagogy`, `carpenter`, `gardener`, `legal`).
-- **`VectorMemory` (`src/rag/vector_memory.py`):** Qdrant tabanlı yoğun (KristalEmbedding) ve seyrek (BM25) hibrit arama sunan, çift koleksiyonlu (`anka_bellek` & `simulasyon_bellek`), uzak sunucu bağlantısı başarısız olduğunda sessiz fallback yapmayan, fail-closed `RuntimeError` fırlatan dayanıklı bellek (T-0148 4A; `:memory:` modu yalnızca `host` ve `storage_path` verilmediğinde yerel bellek olarak açılır; varsayılan `data/qdrant_db` kaldırılmıştır, T-0148 4B).
+- **`KristalLM`:** 6 katmanlı, 768 gizli boyutlu ($d_{\text{model}}$), 6 dikkat başlıklı, Vanilla GELU aktivasyonlu iki katmanlı MLP ($3072$ ara boyut), Rotary Position Embedding (RoPE), Causal Prompt Masking ve bağımsız giriş/çıkış projeksiyon matrislerine sahip (**Weight-Tied: False**) **93.42M parametreli** (`93.424.986`) generatif dil modeli. (Güncel model soyağacı: **Anka** — saf akıcı taban `anka_taban_pure.pt` sha `5479a2f3…` [marangozluktan arındırılmış], dikey uzman ceketleri `anka_bahcivan.pt` sha `2d5e5b21…` ve `anka_marangoz.pt` sha `d1eae594…`, yönlendirici `anka_router_v2.pt` [5 sınıflı TriModalRouter v2; saf taban temsillerine %100 doğrulukla yeniden hizalandı]; `vocab_anka_r1_33114.json` kanonik sözlüğü ile `strict=True` uyumludur).
+- **`CuriosityEngine` (`src/rag/merak.py`):** Modelin gizli durumundaki Shannon entropisini ($\mathcal{H}(z) = -\sum p \log p$) ölçerek belirsizlik eşiğinde ($\mathcal{H}(z) \ge \tau = 2.5$) merak vektörü ($q_{\text{merak}}$) sentezleyen mekanizma (router v2 eğitim dağılımıyla tohum 42 hizalı).
+- **`TriModalRouter` (`src/llm/router.py`):** Girdi istemi ($P$), merak projeksiyonu ($q_{\text{merak}}$) ve RAG bağlamını ($ctx_{\text{rag}}$) harmanlayarak dinamik uzman seçimi yapan yönlendirici katman (eğitilmiş ağırlıklar: `data/anka_router_v2.pt`, sha `74b9c808…`, state dict sha `a2a95957…`, 5 sınıflı: `grammar_core`, `pedagogy`, `carpenter`, `gardener`, `legal`).
+- **`VectorMemory` (`src/rag/vector_memory.py`):** Qdrant tabanlı yoğun (`KristalEmbedding`) ve seyrek (BM25) RRF (Reciprocal Rank Fusion) hibrit arama sunan, çift koleksiyonlu (`anka_bellek` & `simulasyon_bellek`), uzak sunucu bağlantısı başarısız olduğunda sessiz fallback yapmayan, fail-closed `RuntimeError("[VEKTOR_BELLEK_HATA] remote ...")` fırlatan ve teyitsiz dolu koleksiyon silinmesini engelleyen dayanıklı bellek (`:memory:` modu yalnızca `host` ve `storage_path` verilmediğinde yerel testler için açılır). İngilizce düşünce adımı sızıntılarına ceza katsayısı uygular.
 - **`EpistemicCuriosityAgent` (`src/rag/epistemic_agent.py`):** Merak, router ve hibrit arama döngüsünü işleten; $\ge 0.33$ uyumlu kanıt metinlerine rağmen modelin anlayamadığı durumları tespit edip `data/future_train_vector.jsonl` kütüğüne kaydeden otonom ajan.
 
 ### 3. Ajan Kapısı, CoT Kasası & Pedagojik Süpervizör (`src/gateway/`)
-- **`AgentGateway` (`src/gateway/agent_gateway.py`):** Büyük agent modellerinin (Antigravity Agent, Gemini API, Ollama) küçük modelle çift yönlü iletişim kurmasını sağlayan Python arayüzü, `muhakeme_bellek` akıl yürütme enjeksiyonu (`inject_reasoning_trace`), yerleşik HTTP REST API sunucusu (`/api/query`, `/api/inject`, `/api/status`, `/api/backlog`) ve MoE dinamik uzman yönetimi (`expert_models={'gardener': ..., 'carpenter': ...}`). Canlı gateway başlatıcısı (`scripts/baslat_canli_gateway.py`) saf taban `data/anka_taban_pure.pt` ve 5-sınıflı `data/anka_router_v2.pt` ile servis vermektedir.
-- **`PedagogicalSupervisor` (`src/gateway/pedagogical_supervisor.py`):** Modeli sınavdan geçiren, yanıtları değerlendiren, çift çıktılı ayrıştırıcı (`extract_cot_and_card`) ile düşünce zincirlerini (`<DUSUNCE>`) `data/pedagogy/cot_vault.jsonl` kasasına ve `muhakeme_bellek`'e izole eden, saf deklaratif bilgi kartlarını (`<BILGI_KARTI>`) ise `anka_bellek`'e enjekte eden usta-çırak denetçisi.
+- **`AgentGateway` (`src/gateway/agent_gateway.py`):** Büyük agent modellerinin (Antigravity Agent, Gemini API, Ollama) küçük modelle çift yönlü iletişim kurmasını sağlayan Python arayüzü, `muhakeme_bellek` akıl yürütme enjeksiyonu (`inject_reasoning_trace`), yerleşik HTTP REST API sunucusu (`/api/query`, `/api/inject`, `/api/status`, `/api/backlog`) ve MoE dinamik uzman yönetimi (`expert_models={'gardener': ..., 'carpenter': ...}`, `"pedagogy"` ve `"grammar_core"` saf tabana yönlendirilir). Canlı gateway başlatıcısı (`scripts/baslat_canli_gateway.py`) saf taban `data/anka_taban_pure.pt` ve 5-sınıflı `data/anka_router_v2.pt` ile port 8080'de servis vermektedir.
+- **`PedagogicalSupervisor` (`src/gateway/pedagogical_supervisor.py`):** Modeli sınavdan geçiren, yanıtları değerlendiren, çift çıktılı ayrıştırıcı (`extract_cot_and_card`) ile düşünce zincirlerini (`<DUSUNCE>`) `data/pedagogy/cot_vault.jsonl` kasasına ve `muhakeme_bellek`'e izole eden, saf deklaratif bilgi kartlarını (`<BILGI_KARTI>`) ise `anka_bellek`'e enjekte eden usta-çırak denetçisi. Salt kart girdilerinde hayali düşünce adımı üretmez (`thought_trace = None`), numaralı prosedürel adımları (`Adım 1: ...`, `Adım 2: ...`) korur, ve `ALLOW_PROD_VAULT_WRITE` fail-closed kontrolü ile test ortamında üretim kasasına izinsiz yazımı katı `RuntimeError` ile engeller.
 - **`RetrainPipeline` (`src/gateway/retrain_pipeline.py`):** `future_train_vector.jsonl` dosyasında biriken çözülememiş epistemik açıkları derleyip modeli otonom yeniden eğiten Karpathy Continuous Learning Loop motoru ve sıfır-unutmalı sözlük cerrahisi (`expand_model_vocabulary`).
 
 ---
@@ -112,22 +112,25 @@ flowchart TD
 
 ---
 
-## 🔬 Doğrulanmış Model Parametre Dökümü (KristalLM)
+## 🔬 Doğrulanmış Model Parametre Dökümü (KristalLM - 33.114 Vocab)
+
+> **Güncel Parametre Tablosu (damgalı ölçüm: 16 Eki 2026; M5 Sistem Mühürlemesi):** Aşağıdaki tablo `data/anka_taban_pure.pt` saf taban ağırlıkları ve `data/rebuild/vocab_anka_r1_33114.json` (33.114 token) sözlüğü üzerinde doğrudan tensör ölçümüyle hesaplanmıştır:
+
+```
+Kelime Dağarcığı (Vocab): 33.114 token (n_embd=768, n_layer=6, n_head=6, block_size=4096)
+1. Giriş Embedding Katmanı:  25.431.552 (%27.22) --> Embedding(33114, 768)
+2. 6 Transformer Bloğu:     42.528.768 (%45.52) --> 6 x [Attention(768) + MLP(768->3072->768, GELU)]
+3. Çıkış LM Head Katmanı:    25.464.666 (%27.26) --> Linear(768, 33114, bias=True)
+4. Son LayerNorm:                 1.536 (%0.002) --> LayerNorm(768)
+-----------------------------------------------------------------------------------
+TOPLAM MODEL PARAMETRESİ:   93.424.986 (~93.42M Parametre)
+Kelime Tabloları Toplamı:   50.896.218 (%54.48 - Weight-Tied: False)
+Transformer Gövdesi:        42.528.768 (%45.52)
+Router v2 Parametresi:          592.384 (5-sınıf, w_g shape [5, 256])
+```
 
 > [!NOTE]
-> **Tarihsel Parametre Tablosu Kaydı (damgalı ölçüm: 15 Eyl 2026):** Aşağıdaki tablo 32.816 sözlük boyutlu KristalLM dönemine aittir ve tarihsel kayıt olarak korunmuştur. Güncel 33.114 külliyat sözlüğü tablosu ölçülmeden yazılmamıştır (T-0159 kuralı).
-
-```
-Kelime Dağarcığı (Vocab): 32.816 token
-1. Giriş Embedding Katmanı:  25.202.688 (%27.1)  --> Embedding(32816, 768)
-2. 6 Transformer Bloğu:     42.527.232 (%45.7)  --> 6 x [Attention(768) + MLP(768->3072->768, GELU)]
-3. Çıkış LM Head Katmanı:    25.235.504 (%27.1)  --> Linear(768, 32816, bias=True)
-4. Son LayerNorm:                 1.536
------------------------------------------------------------------------------------
-TOPLAM MODEL PARAMETRESİ:   92.966.960 (~93M Parametre)
-Kelime Tabloları Toplamı:   50.438.192 (%54.2 - Weight-Tied: False)
-Transformer Gövdesi:        42.528.768 (42.53M)
-```
+> **Tarihsel Parametre Tablosu Kaydı (damgalı ölçüm: 15 Eyl 2026):** 32.816 sözlük boyutlu eski KristalLM dönemine aittir ve tarihsel kayıt olarak korunmuştur (92.966.960 parametre; 50.44M kelime tabloları + 42.53M gövde).
 
 ---
 
@@ -163,7 +166,7 @@ Külliyat, veri sızıntılarını önlemek amacıyla normalize soru metni (`cle
 | **Toplu Üretim Ezber Oranı (Held-Out)** | **%0.00** ($N=100$) | Eğitimdeki 163.779 4-gram'dan sıfır ezber; model şablon kopyalamamaktadır. |
 | **Toplu Üretim Tutarsızlık & Sentez (Karma)** | **%39.00 / ROUGE 0.4655** | Ağırlıklı ortalama tutarsızlığın %35'i parenting kök çıktılarından kaynaklanır; ROUGE 0.4655 parenting kutupları nedeniyle yüksektir (Tarih serbest üretim ROUGE: 0.0830). |
 | **Otonom RAG & Vector Rover (Adım B2)** | *Ön-Kayıt Tamamlandı* | `pre_registration_b2_rag.md` kütüğünde operasyonel yargıçlar (`QueryRuleJudge`, `BidirectionalFaithfulnessJudge`) ve iki aşamalı fallback ön-kaydedildi. |
-| **Birim ve Entegrasyon Testleri** | **%100 (307/307)** | (Damga: 28 Eyl 2026; bağımsız test koşumu) Kök sözlüğü, durum makinesi, fonoloji, decompiler, ses türemesi, RAG, merak, router, gateway, retrain, CoT izolasyonu ve morfoloji regresyon altın paketi. |
+| **Birim ve Entegrasyon Testleri** | **%100.0 (430/431)** | (Damga: 16 Eki 2026; M5 sistem mühürleme koşumu) 430 passed, 1 xfailed, 0 failure, 0 error (161.97 sn). Kök sözlüğü, durum makinesi, fonoloji, decompiler, iki katmanlı sıfır-OOV tokenizer, fail-closed Qdrant vektörel bellek, RRF hibrit arama, Shannon merak motoru, MoE 5-sınıflı router v2 dinamik yönlendirmesi, extract_cot_and_card çift çıktılı ayrıştırıcı ve CoT vault kasa güvenliği. |
 
 ---
 
@@ -180,35 +183,41 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-### 2. Test Paketini Çalıştırma
+### 2. Tam Sistem Test Paketini Çalıştırma
 ```bash
-./venv/bin/pytest
+# 430 passed, 1 xfailed (0 failures, 0 errors in ~162s):
+./venv/bin/pytest tests/
 ```
 
-### 3. Etkileşimli CLI Arayüzü ile Sohbet & Ajan Arenası
+### 3. Çıkarım Sondasını Doğrulama (Fail-Closed)
 ```bash
-# `--vocab` ve `--model` ZORUNLUDUR (varsayilan YOK; T-0087): verilmezse ya da verilen
-# yol yoksa sohbet KOSMADAN `rc=2` ile durur (T-0090: eskiden rc=0 ile donuyordu).
+# GA (DAL A sesli durur), GB (DAL B strict=True temiz), GC (dejenere değil) doğrulaması:
+./venv/bin/python scratch/anka_r7_cikarim_sondasi.py
+```
+
+### 4. Canlı MoE Gateway Sunucusunu Başlatma
+```bash
+# Saf taban model (anka_taban_pure.pt), 5-sınıflı router v2 ve uzman ceketler ile HTTP REST sunucusu:
+./venv/bin/python scripts/baslat_canli_gateway.py --port 8080
+```
+
+### 5. Etkileşimli CLI Arayüzü ile Sohbet & Ajan Arenası
+```bash
+# `--vocab` ve `--model` ZORUNLUDUR (varsayilan YOK; T-0087):
 ./venv/bin/python chat_prompt.py \
-  --vocab data/rebuild/vocab_anka_r1_33114.json --model data/anka_a1r.pt
+  --vocab data/rebuild/vocab_anka_r1_33114.json --model data/anka_taban_pure.pt
 # Doğrudan terminalden 'arena' yazarak pedagojik süpervizör moduna geçebilirsiniz.
 ```
 
-### 4. Otonom Ajan Arenasını veya REST API Sunucusunu Çalıştırma
+### 6. Otonom Ajan Arenasını Çalıştırma
 ```bash
-# `--model` ve `--vocab` ZORUNLUDUR (varsayilan YOK; T-0088): verilmezse ya da verilen
-# yol yoksa arena KOSMADAN durur. Sozluk, checkpoint satir sayisiyla AYNI olmalidir.
 # 1931 Türk Tarihi müfredatında 3 turluk otonom pedagojik sınav ve RAG doğrulama:
 ./venv/bin/python scripts/run_agent_arena.py --domain history_1931 --rounds 3 --device cpu \
-  --model data/anka_a1r.pt --vocab data/rebuild/vocab_anka_r1_33114.json
+  --model data/anka_taban_pure.pt --vocab data/rebuild/vocab_anka_r1_33114.json
 
 # Ahşap alanında 2 turluk otonom pedagojik sınav ve RAG enjeksiyonu:
 ./venv/bin/python scripts/run_agent_arena.py --domain carpenter --rounds 2 \
-  --model data/anka_a1r.pt --vocab data/rebuild/vocab_anka_r1_33114.json
-
-# Dış agent sistemleri için REST API sunucusu:
-./venv/bin/python scripts/run_agent_arena.py --server --port 8080 \
-  --model data/anka_a1r.pt --vocab data/rebuild/vocab_anka_r1_33114.json
+  --model data/anka_taban_pure.pt --vocab data/rebuild/vocab_anka_r1_33114.json
 ```
 
 > [!TIP]
@@ -264,6 +273,8 @@ cp data/kristal_model.pt data/kristal_model_sft.pt
 | `scripts/evaluate_carpenter_generation_100.py` | Yok | Marangozluk $N=100$ held-out test verisinde ezber, tutarsızlık, ROUGE-L ve soru içerik kesişimi metriklerini bağımsız ölçer. |
 | `scripts/evaluate_chat.py` | Yok | 12 farklı senaryoda diyalog çıkarımlarını test eder ve decompile eder. |
 | `scripts/test_rag_interactive.py` | Yok | `<ARA>` sorgusu üretimi, belgeden çıkarım ve bilgi yok itirafını test eder. |
+| `scripts/baslat_canli_gateway.py` | `--port <sayı>`, `--model <pt>`, `--router <pt>` | Canlı MoE AgentGateway HTTP REST sunucusunu `anka_taban_pure.pt`, `anka_router_v2.pt` ve uzman ceketlerle başlatır. |
+| `scratch/anka_r7_cikarim_sondasi.py` | Yok | Kanonik çıkarım sondası; GA (sesli durma), GB (strict=True temizlik) ve GC (dağılım dejenere değil) kapılarını doğrular. |
 
 ---
 

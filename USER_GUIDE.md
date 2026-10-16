@@ -43,8 +43,8 @@ Eğitim külliyatı **hangi sözlükle** derlendiyse, çıkarım da **o sözlük
 > `strict=False` bunu **yutmaz** (o yalnız eksik/fazla *anahtarı* yutar, *şekli* değil).
 
 > [!NOTE]
-> **Güncel Taban Model, Ceketler ve Gateway Entegrasyonu (damgalı ölçüm: 2 Eki 2026):**
-> Soyağacındaki güncel saf taban ağırlıkları **`data/anka_taban_pure.pt`** (sha `5479a2f3…`, marangozluk sızıntılarından arındırılmış) dosyasında yer almaktadır. Uzman ceketler olarak **`data/anka_bahcivan.pt`** (bahçıvanlık dikey) ve **`data/anka_marangoz.pt`** (sha `d1eae594…`, marangozluk dikey) bulunmaktadır. `AgentGateway.create_default(model_path=..., vocab_path=..., router_state_path=..., expert_model_paths=...)` arayüzü, `router_state_path` için 5 sınıflı **`data/anka_router_v2.pt`** dosyasını arar ve dinamik olarak ilgili uzman ceketi devreye sokar. Canlı ortam başlatıcısı `scripts/baslat_canli_gateway.py` saf taban ve iki uzman ceketi ile birlikte port 8080'de canlı hizmet vermektedir.
+> **Güncel Taban Model, Ceketler ve Gateway Entegrasyonu (damgalı ölçüm: 16 Eki 2026; M5 Sistem Mühürlemesi):**
+> Soyağacındaki güncel saf taban ağırlıkları **`data/anka_taban_pure.pt`** (sha `5479a2f3…`, marangozluk sızıntılarından arındırılmış, 93.42M parametre) dosyasında yer almaktadır. Uzman ceketler olarak **`data/anka_bahcivan.pt`** (sha `2d5e5b21…`, bahçıvanlık dikey) ve **`data/anka_marangoz.pt`** (sha `d1eae594…`, marangozluk dikey) bulunmaktadır. `AgentGateway.create_default(model_path=..., vocab_path=..., router_state_path=..., expert_model_paths=...)` arayüzü, `router_state_path` için 5 sınıflı **`data/anka_router_v2.pt`** (sha `74b9c808…`, state dict sha `a2a95957…`; saf taban temsillerine %100 doğrulukla yeniden hizalanmıştır) dosyasını arar ve dinamik olarak ilgili uzman ceketi devreye sokar. Canlı ortam başlatıcısı `scripts/baslat_canli_gateway.py` saf taban ve iki uzman ceketi ile birlikte port 8080'de canlı hizmet vermektedir. Tüm modeller `data/rebuild/vocab_anka_r1_33114.json` sözlüğü ile `strict=True` olarak yüklenir.
 
 ### Komut
 
@@ -428,7 +428,25 @@ Bellekten getirilen metin verildiğinde model halüsinasyon görmeden belgeden �
 🤖 Model: aşırı serttir kesme tahtalarında ve marangoz mengenelerinde tercih edilir.
 ```
 
-### 3. Uçtan Uca RAG Hattı Simülasyonu
+### 3. Fail-Closed Vektörel Bellek Sözleşmesi (`VectorMemory`)
+Qdrant tabanlı vektörel bellek (`src/rag/vector_memory.py`), sessiz hataları ve veri kayıplarını engellemek için katı fail-closed kurallarla çalışır:
+- **Erişilemeyen Uzak Sunucu:** `host` parametresi verildiğinde sunucuya erişilemezse sessizce yerel RAM belleğe düşülmez; anında `RuntimeError("[VEKTOR_BELLEK_HATA] remote ...")` fırlatılır.
+- **Teyitsiz Koleksiyon Silme Koruması:** İçerisinde veri bulunan dolu koleksiyonlar teyitsiz silinemez; aksi halde `RuntimeError("[VEKTOR_BELLEK_HATA] ... DOLU")` üretilir.
+- **Koleksiyon İzolasyonu:** `anka_bellek` (kanonik 36-point saf bilgi kartları), `simulasyon_bellek` (sentetik test belleği) ve `muhakeme_bellek` (öğretmen CoT akıl yürütme adımları) kesin sınırlarla ayrılmıştır. Geçersiz hedef koleksiyonlarda `ValueError("[GATEWAY_HATA] bilinmeyen target-collection")` fırlatılır.
+- **Yerel Test Modu (`:memory:`):** Yalnızca `host` ve `storage_path` parametrelerinin ikisi de `None` bırakıldığında (veya açıkça `:memory:` istendiğinde) yerel izole bellek olarak açılır.
+
+### 4. RRF Hibrit Arama (Dense + Sparse BM25) ve Düşünce Filtresi
+Vektörel bellek, anlamsal yoğunluk ile sözcüksel kesinliği birleştiren RRF (Reciprocal Rank Fusion) kullanır:
+- Yoğun arama: `KristalEmbedding` işaret tabanlı 768 boyutlu semantik morfem vektörleri.
+- Seyrek arama: BM25 sözcüksel terim eşleşmesi.
+- **Düşünce Sızıntısı Koruması:** Gelen belgelerdeki İngilizce akıl yürütme veya meta-düşünce adımları tespit edildiğinde adım cezası uygulanır ve deklaratif bilgi kartına sızması engellenir.
+
+### 5. Epistemik Merak ve Sürekli Öğrenme Döngüsü (`CuriosityEngine`)
+Modelin gizli durumundaki Shannon entropisi ölçülür ($\mathcal{H}(z) = -\sum p \log p$):
+- **Merak Eşiği ($\tau \ge 2.5$):** Model bir kavram karşısında yüksek belirsizlik yaşadığında merak vektörü ($q_{\text{merak}}$) sentezlenir ve RAG araması tetiklenir.
+- **Sürekli Eğitim Kütüğü (`future_train_vector.jsonl`):** Yüksek uyumlu kanıt metnine ($\ge 0.33$) rağmen modelin çözemediği epistemik açıklar `{"timestamp": ..., "prompt": ..., "entropy": ..., "curiosity_vector": [...], "status": "unresolved"}` şemasıyla `data/future_train_vector.jsonl` dosyasına yazılır ve Karpathy Continuous Learning Loop döngüsünü besler.
+
+### 6. Uçtan Uca RAG Hattı Simülasyonu
 ```bash
 ./venv/bin/python src/rag/rag_pipeline.py
 ```
@@ -459,25 +477,24 @@ Küçük modeli çoklu branşta (1931 Türk Tarihi, Edebiyat & Şiir, Lise Fen/S
 - `--auto-retrain` (future_train_vector.jsonl eşiği aşıldığında otomatik eğitimi tetikler)
 - `--device <cpu|mps>` (Hesaplama donanımı)
 
-### 🚪 2. HTTP REST Gateway Sunucusu
+### 🚪 2. HTTP REST Gateway Sunucusu ve Canlı MoE Dağıtımı
 
-> [!WARNING]
-> **Ölçülmüş Komut Uyarısı (T-0158 keşif-ölçümü; damga: 28 Eyl 2026):**
-> `./venv/bin/python -m src.gateway.agent_gateway` komutu modülde `__main__` bloğu bulunmadığı için doğrudan ÇALIŞMAZ (modül tek başına yürütülebilir bir betik değildir).
-> Sunucuyu bağımsız Python başlatıcısıyla ayağa kaldırmak için:
-> ```bash
-> ./venv/bin/python -c "from src.gateway.agent_gateway import AgentGateway, create_http_server; gw = AgentGateway.create_default(); s = create_http_server(gw, host='127.0.0.1', port=8080); s.serve_forever()"
-> ```
-> veya doğrulanmış CLI başlatıcıları kullanılmalıdır:
-> ```bash
-> ./venv/bin/python scripts/run_agent_arena.py --server --port 8080 \
->   --model data/anka_a1r.pt --vocab data/rebuild/vocab_anka_r1_33114.json
-> ```
-> veya CLI sohbeti içerisinden ağ geçidini ayağa kaldırmak için:
-> ```bash
-> ./venv/bin/python chat_prompt.py --gateway --port 8080 \
->   --model data/anka_a1r.pt --vocab data/rebuild/vocab_anka_r1_33114.json
-> ```
+Ağ geçidini saf taban model (`anka_taban_pure.pt`), 5-sınıflı yönlendirici (`anka_router_v2.pt`) ve iki dikey uzman ceketi (`anka_marangoz.pt`, `anka_bahcivan.pt`) ile canlı ortamda çalıştırmanın en doğrudan ve doğrulanmış yolu:
+```bash
+# Canlı MoE Gateway sunucusunu başlatma (varsayılan port 8080):
+./venv/bin/python scripts/baslat_canli_gateway.py --port 8080 --model data/anka_taban_pure.pt --router data/anka_router_v2.pt
+```
+
+Bu başlatıcı, canlı Qdrant vektörel bellek (`delinux01.local:6333`) köprüsünü kurar, router ağırlıklarının `BEKLENEN_ROUTER_SD_SHA` (`a2a95957...`) çıpasıyla birebir eşleştiğini doğrular ve gelen sorguları otomatik olarak ilgili uzmana yönlendirir:
+- **Ahşap ve Marangozluk Sorguları:** `anka_marangoz.pt` ceketine yönlendirilir (`active_expert="carpenter"`).
+- **Bitki, Tarım ve Bahçıvanlık:** `anka_bahcivan.pt` ceketine yönlendirilir (`active_expert="gardener"`).
+- **Pedagoji, Dilbilgisi ve Genel Türkçe:** Saf taban modele yönlendirilir (`anka_taban_pure.pt`).
+
+Alternatif olarak, arena betiği üzerinden de ağ geçidi ayağa kaldırılabilir:
+```bash
+./venv/bin/python scripts/run_agent_arena.py --server --port 8080 \
+  --model data/anka_taban_pure.pt --vocab data/rebuild/vocab_anka_r1_33114.json
+```
 
 #### REST API Uç Noktaları:
 | Uç Nokta | Metod | Açıklama |
@@ -548,7 +565,19 @@ extract_cot_and_card()
      └──> <BILGI_KARTI>  ──> Qdrant: anka_bellek (Tamamen saf deklaratif Türkçe)
 ```
 
-### 1. Akıl Yürütme Verisini İkili Eğitime Derleme (Evre 5 Hazırlığı)
+### 1. Çift Çıktılı Ayrıştırıcı (`extract_cot_and_card`) ve Nötr Kart Temizliği
+Öğretmen modellerden dönen serbest metinler deterministik kurallarla ikiye ayrılır:
+- **XML Etiket Temizliği:** `<BILGI_KARTI>`, `<DUSUNCE>`, `<think>`, `<thought>`, `<reasoning>` gibi tüm XML işaretleri kayıpsız temizlenir.
+- **Sahte Düşünce (Phantom Trace) Engellemesi:** Yalnızca `<BILGI_KARTI>...</BILGI_KARTI>` içeren girdilerde veya kart gövdesi 15 karakterin altında olduğunda sahte düşünce adımı üretilmez (`thought_trace = None`).
+- **Prosedürel Adımların Korunması:** Ahşap işleme veya botanik gibi alanlarda yer alan gerçek prosedürel talimatlar (`Adım 1: Ahşap gönyeye alınır.`, `Adım 2: Zıvana testeresi kullanılır.`) korunarak bilgi kartına dahil edilir. Yalnızca öğretmenin pedagojik iç planlama adımları (`Adım 1: Soru kökünü analiz edelim...`) filtrelenerek düşünce izine aktarılır.
+
+### 2. Üretim Kasası Güvenlik Kilidi (`ALLOW_PROD_VAULT_WRITE`)
+`data/pedagogy/cot_vault.jsonl` dosyasının test veya deneme koşumları sırasında kirlenmesini önlemek amacıyla fail-closed güvenlik kapısı uygulanmıştır:
+- Test ortamında (`PYTEST_CURRENT_TEST` veya `unittest`) kanonik kasaya yazma girişiminde doğrudan `RuntimeError` fırlatılır.
+- Boolean çevre değişkeni ayrıştırması katıdır: `"0"`, `"false"`, `"no"`, `""`, `"disabled"` veya tanımsız değerler kesinlikle `False` sayılır.
+- Yalnızca `ALLOW_PROD_VAULT_WRITE=1` (veya `true`/`yes`) açıkça tanımlandığında ve canlı süpervizör hattında çalışıldığında yazıma izin verilir.
+
+### 3. Akıl Yürütme Verisini İkili Eğitime Derleme (Evre 5 Hazırlığı)
 Kasada biriken düşünce adımlarını modelin içsel akıl yürütmesini (`<DUSUNCE> ... </DUSUNCE>`) öğrenmesi için `train_reasoning_cot.bin` ikili formatına derleyebilirsiniz:
 ```bash
 ./venv/bin/python scripts/prepare_reasoning_dataset.py \
@@ -557,7 +586,7 @@ Kasada biriken düşünce adımlarını modelin içsel akıl yürütmesini (`<DU
   --min-len 15
 ```
 
-### 2. Vektörel Bellek Arındırma ve Denetim (Sanitization)
+### 4. Vektörel Bellek Arındırma ve Denetim (Sanitization)
 Bellekteki CoT sızıntılarını temizlemek ve saf bilgi kartlarını yeniden indekslemek için:
 ```bash
 ./venv/bin/python scripts/sanitize_vector_memory.py
@@ -597,6 +626,53 @@ print("Morfem Vektörü:", analiz["token_vector"])
 turkce_metin = decompiler.decompile_sentence("kitap PLURAL POSS_1PL CASE_ABL")
 print("Türkçe Karşılık:", turkce_metin)
 # Çıktı: kitaplarımızdan
+
+# 4. AgentGateway ile Canlı MoE Dinamik Yönlendirmesi
+from src.gateway.agent_gateway import AgentGateway
+
+gw = AgentGateway.create_default(
+    model_path="data/anka_taban_pure.pt",
+    vocab_path="data/rebuild/vocab_anka_r1_33114.json",
+    router_state_path="data/anka_router_v2.pt",
+    expert_model_paths={
+        "carpenter": "data/anka_marangoz.pt",
+        "gardener": "data/anka_bahcivan.pt",
+    },
+    device="cpu",
+)
+
+# Ahşap sorusu -> anka_marangoz.pt ceketine dinamik yönlendirilir:
+yanit = gw.query("Kırlangıç kuyruğu geçme ahşapta nasıl açılır?", mode="RAG")
+print("Seçilen Uzman:", yanit["active_expert"])
+print("Router Sınıfları:", yanit["router_experts"])
+
+# 5. Fail-Closed VectorMemory ve RRF Hibrit Arama
+from src.rag.vector_memory import VectorMemory
+
+# Yerel izole test belleği (:memory:):
+mem = VectorMemory(storage_path=None, host=None, collection_name="test_bellek")
+mem.add_documents([
+    {"id": "doc1", "text": "Gürgen ağacı sert yapılıdır ve marangozlukta gövde elemanı olarak kullanılır."},
+])
+sonuclar = mem.search("gürgen sert ahşap", limit=3)
+for s in sonuclar:
+    print(f"Skor: {s.score:.4f} | Metin: {s.document.text}")
+
+# 6. extract_cot_and_card ile Çift Çıktılı Ayrıştırma
+from src.gateway.pedagogical_supervisor import extract_cot_and_card
+
+ogretmen_metni = """<DUSUNCE>
+Öğrenciye gürgen ağacının mekanik mukavemetini ve mobilyacılıktaki yerini anlatmalıyız.
+</DUSUNCE>
+<BILGI_KARTI>
+Gürgen ağacı yüksek mukavemeti ve yoğun lifli sert dokusu nedeniyle mobilyacılıkta ve mengene yapımında tercih edilir.
+Adım 1: Ağaç uygun nem oranına kadar fırınlanır.
+Adım 2: Lif yönüne uygun kesim yapılır.
+</BILGI_KARTI>"""
+
+thought, card = extract_cot_and_card(ogretmen_metni)
+print("İzole Akıl Yürütme:", thought)
+print("Saf Bilgi Kartı:\n", card)
 ```
 
 ---
@@ -627,3 +703,13 @@ print("Türkçe Karşılık:", turkce_metin)
 ### 5. Toplu Üretim Değerlendirmesinde Parenting Çıktılarının Yüklemsiz Görünmesi
 - **Belirti:** `evaluate_b1_5_rigorous.py` çalıştırıldığında Tutarsızlık Oranının yüksek görünmesi.
 - **Sebep:** Test kümesindeki parenting (ebeveynlik) morfoloji talimlerinin (örn. `olmadığına`) hedef çıktısı bir cümle değil salt kök analizidir (`ROOT: ol`). Kök analizleri `TENSE_` veya `COPULA_` çekim eki içermediğinden sentaktik olarak cümlenin yüklemi sayılmaz; bu bir çöküş değil, veri formatının doğal sonucudur.
+
+### 6. Test Ortamında Kasa Güvenlik İhlali (`RuntimeError: Güvenlik İhlali: Test ortamında varsayılan üretim kasası...`)
+- **Belirti:** `record_to_cot_vault` veya `PedagogicalSupervisor` test sırasında çalıştırıldığında `RuntimeError` fırlatılması.
+- **Sebep:** `cot_vault.jsonl` dosyasının değişmezliğini (invariance) korumak için test ortamında (`PYTEST_CURRENT_TEST` tanımlı) üretim kasasına doğrudan yazma fail-closed olarak yasaklanmıştır. Boolean çevre değişkeni ayrıştırması katıdır; `"0"`, `"false"`, `"no"`, `""` gibi değerler `False` kabul edilir.
+- **Çözüm:** Testlerde `PedagogicalSupervisor(vault_path=tmp_path / "cot_vault.jsonl")` ile izole geçici dosya belirtilmelidir. Yalnızca canlı üretim süreçlerinde `ALLOW_PROD_VAULT_WRITE=1` verilerek üretim kasasına yazım açılır.
+
+### 7. Dolu Koleksiyon Silme Hatası (`RuntimeError: [VEKTOR_BELLEK_HATA] ... DOLU`)
+- **Belirti:** `VectorMemory` başlatılırken `recreate=True` verildiğinde `RuntimeError: [VEKTOR_BELLEK_HATA] koleksiyon ... DOLU (n=...); teyitsiz silme yasak` hatası.
+- **Sebep:** İçerisinde kayıt bulunan Qdrant koleksiyonlarının kazara silinmesini engelleme korumasıdır.
+- **Çözüm:** Koleksiyonu sıfırlamak istiyorsanız `rag_tool.py reset` aracını kullanın veya `recreate=True` ile birlikte `confirm_delete=True` onayını açıkça sağlayın.

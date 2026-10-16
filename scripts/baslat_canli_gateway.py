@@ -24,7 +24,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 import src.gateway.agent_gateway as ag  # noqa: E402
 
 CANLI_HOST = "delinux01.local"
-BEKLENEN_ROUTER_SD_SHA = "a001207058be949ba5932ada04c5058fd88d99770caff0c2e0accbb291a1c649"
+BEKLENEN_ROUTER_SD_SHA = "a2a95957072efbd52b097d711854c1b427132fa679ee30ac20f2c2daba45f25c"
 
 
 class CanliVectorMemory(ag.VectorMemory):

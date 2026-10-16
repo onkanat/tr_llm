@@ -38,9 +38,9 @@ class CuriosityEngine(nn.Module):
 
     def detect_epistemic_gap(self, entropy: torch.Tensor) -> torch.Tensor:
         """
-        Returns boolean mask indicating where entropy exceeds threshold tau.
+        Returns boolean mask indicating where entropy exceeds threshold tau (tau >= 2.5).
         """
-        return entropy > self.tau
+        return entropy >= self.tau
 
     def forward(
         self,

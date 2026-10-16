@@ -279,6 +279,81 @@ class TestCoTVaultAndDualParser(unittest.TestCase):
         )
         self.assertFalse(res)
 
+    def test_extract_cot_and_card_card_only_no_phantom_thought(self):
+        # Input contains ONLY <BILGI_KARTI> — must NOT produce phantom XML thought trace
+        card_only_text = (
+            "<BILGI_KARTI>\n"
+            "Gürgen ağacı yüksek mukavemeti ve sert dokusu nedeniyle mobilyacılıkta tercih edilir.\n"
+            "</BILGI_KARTI>"
+        )
+        thought, card = extract_cot_and_card(card_only_text)
+        self.assertIsNone(thought, f"Expected None for thought_trace on card-only input, got {repr(thought)}")
+        self.assertIsNotNone(card)
+        self.assertIn("Gürgen ağacı yüksek mukavemeti", card)
+        self.assertNotIn("<BILGI_KARTI>", card)
+        self.assertNotIn("</BILGI_KARTI>", card)
+
+    def test_extract_cot_and_card_thought_only(self):
+        # Input contains ONLY <DUSUNCE> — clean_card must be None
+        thought_only_text = (
+            "<DUSUNCE>\n"
+            "Kullanıcı burada yalnızca içsel bir akıl yürütme istemi yönlendirmiştir.\n"
+            "Deklaratif bir bilgi kartı üretilmemelidir.\n"
+            "</DUSUNCE>"
+        )
+        thought, card = extract_cot_and_card(thought_only_text)
+        self.assertIsNotNone(thought)
+        self.assertIn("akıl yürütme istemi", thought)
+        self.assertIsNone(card, f"Expected None for clean_card on thought-only input, got {repr(card)}")
+
+    def test_extract_cot_and_card_short_card_no_xml_leak(self):
+        # Card < 15 chars — fallback must NOT leak raw <BILGI_KARTI> tags
+        short_card_text = (
+            "<DUSUNCE>Kısa düşünce adımı burada yer alıyor.</DUSUNCE>\n"
+            "<BILGI_KARTI>Kısa metin.</BILGI_KARTI>"
+        )
+        thought, card = extract_cot_and_card(short_card_text)
+        self.assertIsNotNone(thought)
+        self.assertIsNone(card, f"Expected None for short card (<15 chars), got {repr(card)}")
+
+    def test_extract_cot_and_card_procedural_card(self):
+        # Multi-step procedural cards (Adım 1, Adım 2) must be preserved and not stripped as CoT
+        procedural_text = (
+            "<DUSUNCE>\n"
+            "Marangozlukta ahşap hazırlama adımlarını sıralıyoruz.\n"
+            "</DUSUNCE>\n"
+            "<BILGI_KARTI>\n"
+            "Adım 1: Gürgen ağacı gönyesinde hassas biçimde kesilir.\n"
+            "Adım 2: Fırınlanmış kereste rendelenerek pürüzsüz yüzey elde edilir.\n"
+            "</BILGI_KARTI>"
+        )
+        thought, card = extract_cot_and_card(procedural_text)
+        self.assertIsNotNone(thought)
+        self.assertIsNotNone(card, "clean_card must not be None for procedural card")
+        self.assertIn("Adım 1: Gürgen ağacı", card)
+        self.assertIn("Adım 2: Fırınlanmış", card)
+        self.assertNotIn("<BILGI_KARTI>", card)
+
+    def test_allow_prod_vault_write_falsy_strings_fail_closed(self):
+        # Setting ALLOW_PROD_VAULT_WRITE to '0', 'false', 'no', etc. must strictly raise RuntimeError
+        old_val = os.environ.get("ALLOW_PROD_VAULT_WRITE")
+        try:
+            for falsy_val in ["0", "false", "no", "False", "NO", "   0   ", ""]:
+                os.environ["ALLOW_PROD_VAULT_WRITE"] = falsy_val
+                with self.assertRaises(RuntimeError, msg=f"Should raise RuntimeError for ALLOW_PROD_VAULT_WRITE={repr(falsy_val)}"):
+                    record_to_cot_vault(
+                        query="Güvenlik sorgusu",
+                        instruction="Yönerge",
+                        thought_trace="Düşünce adımı güvenlik doğrulaması",
+                        final_answer="Nihai yanıt güvenlik doğrulaması",
+                        vault_path=_CANONICAL_PROD_VAULT
+                    )
+        finally:
+            if old_val is not None:
+                os.environ["ALLOW_PROD_VAULT_WRITE"] = old_val
+            else:
+                os.environ.pop("ALLOW_PROD_VAULT_WRITE", None)
+
 
 if __name__ == "__main__":
     unittest.main()

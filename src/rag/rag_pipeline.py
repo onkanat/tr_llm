@@ -230,17 +230,19 @@ def build_from_disk(
     model_path: Optional[str] = None,
     collection_name: str = "simulasyon_bellek",
     vector_size: int = 768,
-    host: str = "localhost",
+    host: Optional[str] = "localhost",
     port: int = 6333,
     device: Optional[torch.device] = None,
     threshold: float = RAG_MATCH_THRESHOLD,
+    allow_fallback: bool = False,
+    location: Optional[str] = None,
 ) -> RagPipeline:
     """Bileşenleri diskten yükler ve RagPipeline örneği döndürür.
 
-    FAIL-CLOSED (T-0087): `vocab_path` ve `model_path` VARSAYILANI KALDIRILDI.
-    Gerekce (olculdu): eski varsayilanlar (a) SILINMIS bir checkpoint adini tasiyordu,
-    (b) BAYAT bir sozluge (data/vocab.json, 31.357) isaret ediyordu ve checkpoint'i
-    SESSIZCE kirpiyordu. Ikisi de ACIKCA verilmelidir.
+    FAIL-CLOSED (T-0087 & M3): `vocab_path` ve `model_path` VARSAYILANI KALDIRILDI.
+    Qdrant sunucusuna erişilemediğinde allow_fallback=False (varsayılan) ise
+    sessizce :memory:'ye düşülmez, sesli RuntimeError fırlatılır. Yalnızca
+    allow_fallback=True açıkça belirtildiğinde geçici belleğe düşülür.
     """
     if not model_path:
         raise RuntimeError(
@@ -268,12 +270,27 @@ def build_from_disk(
     # 3. Connect to Qdrant VectorMemory
     is_fallback = False
     try:
-        memory = VectorMemory(collection_name=collection_name, vector_size=vector_size, host=host, port=port)
+        memory = VectorMemory(
+            collection_name=collection_name,
+            vector_size=vector_size,
+            host=host,
+            port=port,
+            allow_fallback=allow_fallback,
+            location=location,
+        )
+        if host and memory.is_in_memory:
+            is_fallback = True
     except Exception as e:
+        if not allow_fallback:
+            raise
         print(f"Uyarı: Qdrant sunucusuna bağlanamadı. Geçici bellek (In-Memory) modunda çalışılıyor. Detay: {e}")
-        # T-0148 4B: storage_path=None açık-beyan (default "data/qdrant_db" kaldırıldı
-        # — host'suz çağrı artık repo-içi local-storage'a YAZMAZ, :memory:'ye düşer)
-        memory = VectorMemory(collection_name=collection_name, vector_size=vector_size, storage_path=None)
+        memory = VectorMemory(
+            collection_name=collection_name,
+            vector_size=vector_size,
+            storage_path=None,
+            allow_fallback=True,
+            location=":memory:",
+        )
         is_fallback = True
 
     if is_fallback:
@@ -357,6 +374,8 @@ def main():
     model_path: Optional[str] = None
     vocab_path: Optional[str] = None
     query: str = "okul"
+    allow_fallback: bool = False
+    location: Optional[str] = None
     argv = sys.argv[1:]
     i = 0
     while i < len(argv):
@@ -368,12 +387,25 @@ def main():
             vocab_path = argv[i + 1]
             i += 2
             continue
+        if argv[i] in ("--allow-fallback", "--fallback"):
+            allow_fallback = True
+            i += 1
+            continue
+        if argv[i] == "--location" and i + 1 < len(argv):
+            location = argv[i + 1]
+            i += 2
+            continue
         if not argv[i].startswith("--"):
             query = argv[i]
         i += 1
 
     print("\n[1] Qdrant vektörel belleğe bağlanılıyor...")
-    pipeline = build_from_disk(model_path=model_path, vocab_path=vocab_path)
+    pipeline = build_from_disk(
+        model_path=model_path,
+        vocab_path=vocab_path,
+        allow_fallback=allow_fallback,
+        location=location,
+    )
 
     print(f"\n[Girdi Sorgu]: '{query}'")
 

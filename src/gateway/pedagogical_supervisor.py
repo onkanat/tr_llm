@@ -384,6 +384,9 @@ def sanitize_teacher_card(raw_text: Optional[str]) -> Optional[str]:
     text = re.sub(r'<thought>.*?</thought>', '', text, flags=re.DOTALL | re.IGNORECASE)
     text = re.sub(r'<reasoning>.*?</reasoning>', '', text, flags=re.DOTALL | re.IGNORECASE)
     text = re.sub(r'<dusunce>.*?</dusunce>', '', text, flags=re.DOTALL | re.IGNORECASE)
+    text = re.sub(r'<düşünce>.*?</düşünce>', '', text, flags=re.DOTALL | re.IGNORECASE)
+    # Strip any residual XML tags (<BILGI_KARTI>, </BILGI_KARTI>, unclosed <think>, etc.)
+    text = re.sub(r'</?(?:BILGI_KARTI|BİLGİ_KARTI|DUSUNCE|DÜŞÜNCE|think|thought|reasoning)>', '', text, flags=re.IGNORECASE)
     
     # 2. Filter out meta-reasoning, role declarations, and CoT preambles line by line
     cot_patterns = [
@@ -411,7 +414,7 @@ def sanitize_teacher_card(raw_text: Optional[str]) -> Optional[str]:
         r'^\s*hedef(?:im|imiz| kitlem| kitlemiz)\b',
         r'^\s*soru\s+(?:iki|üç|\d+|ana|marangozluk|türk).*?(?:oluşuyor|soruyor|istiyor|cevaplamak)',
         r'^\s*temel\s+kavram(?:lar)?(?:\s+da)?\s+(?:verilmiş|kullanarak|bağlamında)',
-        r'^\s*(?:adım|step)\s*\d+[:\.]?',
+        r'^\s*(?:adım|step)\s*\d+[:\.]?\s*(?:soru|analiz|düşün|taslak|hedef|pedagojik|kontrol|kavram|incele|belirle|öğretmen|role|we|the|let|first)',
         r'^\s*derinlemesine\s+düşünce',
         r'^\s*pedagojik\s+(?:kontrol|olarak)',
         r'^\s*(?:ilk\s+)?taslak\b',
@@ -420,7 +423,7 @@ def sanitize_teacher_card(raw_text: Optional[str]) -> Optional[str]:
         r'^\s*(?:net\s+mi|öz\s+mü|doğru\s+mu)\b',
         r'^\s*öğrencinin\s+anlayacağı\b',
         r'^\s*\d+[-–]\d+\s*cümle\s+sınır',
-        r'^\s*(?:madde|bölüm)\s*\d+[:\.]',
+        r'^\s*(?:madde|bölüm)\s*\d+[:\.]\s*(?:soru|analiz|düşün|taslak|hedef|pedagojik|kontrol)',
         r'^\s*öğrenciye\s+net[,\s]+öz\b',
         r'^\s*bilgi\s+kartı\s+örnek',
         r'^\s*cevap\s+nasıl\s+bir\s+format',
@@ -463,7 +466,7 @@ def sanitize_teacher_card(raw_text: Optional[str]) -> Optional[str]:
     candidate = candidate.strip(' "\'“’*')
     
     # 5. Remove any trailing meta notes
-    candidate = re.sub(r'\n+(?:Pedagojik Not|Açıklama|Kaynak|Adım \d+).*$', '', candidate, flags=re.IGNORECASE | re.DOTALL)
+    candidate = re.sub(r'\n+(?:Pedagojik Not|Açıklama|Kaynak|Düşünce Adımı \d+).*$', '', candidate, flags=re.IGNORECASE | re.DOTALL)
     candidate = candidate.strip(' "\'“’*')
     
     if len(candidate) < 15:
@@ -503,6 +506,7 @@ def extract_cot_and_card(raw_text: Optional[str]) -> Tuple[Optional[str], Option
     if card_match:
         cand = card_match.group(1).strip()
         cand = re.sub(r'^(?:\[?(?:Bilgi Kartı|Öğretmen Açıklaması|Özet|Cevap|Teknik Çözüm)\]?)\s*:\s*', '', cand, flags=re.IGNORECASE)
+        cand = re.sub(r'</?(?:BILGI_KARTI|BİLGİ_KARTI)>', '', cand, flags=re.IGNORECASE)
         cand = cand.strip(' "\'“’*')
         if len(cand) >= 15:
             clean_card = sanitize_teacher_card(cand)
@@ -527,13 +531,21 @@ def extract_cot_and_card(raw_text: Optional[str]) -> Tuple[Optional[str], Option
         rem = text
         rem = re.sub(r'<DUSUNCE>.*?</DUSUNCE>', '', rem, flags=re.DOTALL | re.IGNORECASE)
         rem = re.sub(r'<(think|thought|reasoning)>.*?</\1>', '', rem, flags=re.DOTALL | re.IGNORECASE)
+        rem = re.sub(r'</?(?:BILGI_KARTI|BİLGİ_KARTI|DUSUNCE|DÜŞÜNCE|think|thought|reasoning)>', '', rem, flags=re.IGNORECASE)
         clean_card = sanitize_teacher_card(rem)
 
     # 4. If thought_trace not found yet, extract any lines filtered out by sanitizer
     if not thought_trace and clean_card and clean_card != text:
-        diff_lines = [l.strip() for l in text.split('\n') if l.strip() and l.strip() not in clean_card]
+        tag_regex = re.compile(r'</?(?:BILGI_KARTI|BİLGİ_KARTI|DUSUNCE|DÜŞÜNCE|think|thought|reasoning)>', re.IGNORECASE)
+        diff_lines = [
+            l.strip() for l in text.split('\n')
+            if l.strip() and l.strip() not in clean_card and not tag_regex.search(l)
+        ]
         if diff_lines:
-            thought_trace = '\n'.join(diff_lines).strip()
+            thought_cand = '\n'.join(diff_lines).strip()
+            substantive_cand = tag_regex.sub('', thought_cand).strip()
+            if len(substantive_cand) >= 15:
+                thought_trace = thought_cand
 
     return thought_trace, clean_card
 
@@ -583,7 +595,8 @@ def record_to_cot_vault(
 
     # Güvenlik Kapısı: Test ortamında varsayılan üretim kasasına sessizce yazmayı engelle.
     is_test_env = "PYTEST_CURRENT_TEST" in os.environ or ("unittest" in sys.modules and any("test" in arg.lower() for arg in sys.argv))
-    if is_test_env and target_vault_real == _CANONICAL_PROD_VAULT and not os.environ.get("ALLOW_PROD_VAULT_WRITE"):
+    allow_prod_write = os.environ.get("ALLOW_PROD_VAULT_WRITE", "").strip().lower() in ("1", "true", "yes")
+    if is_test_env and target_vault_real == _CANONICAL_PROD_VAULT and not allow_prod_write:
         raise RuntimeError(
             f"Güvenlik İhlali: Test ortamında varsayılan üretim kasası '{_CANONICAL_PROD_VAULT}' dosyasına "
             "doğrudan yazma engellendi. Test izolasyonu için PedagogicalSupervisor(vault_path=...) "
@@ -819,7 +832,8 @@ class PedagogicalSupervisor:
                     teacher_card = clean_card
 
                     # Record reasoning trace to CoT Vault and muhakeme_bellek
-                    if thought_trace and len(thought_trace.strip()) >= 15:
+                    substantive_thought = re.sub(r'</?[^>]+>', '', thought_trace).strip() if thought_trace else ""
+                    if substantive_thought and len(substantive_thought) >= 15:
                         step_log["thought_trace"] = thought_trace
                         record_to_cot_vault(
                             query=query,

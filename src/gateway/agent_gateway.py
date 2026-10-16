@@ -56,6 +56,11 @@ class AgentGateway:
         # If components are provided directly
         self.model = model
         self.expert_models = expert_models or {}
+        if self.model is not None:
+            if "pedagogy" not in self.expert_models:
+                self.expert_models["pedagogy"] = self.model
+            if "grammar_core" not in self.expert_models:
+                self.expert_models["grammar_core"] = self.model
         self.tokenizer = tokenizer
         self.decompiler = decompiler
         self.memory = memory
@@ -65,12 +70,20 @@ class AgentGateway:
         
         # If epistemic_agent not provided, build from components if available
         if self.epistemic_agent is None and self.model is not None and self.tokenizer is not None and self.memory is not None:
+            # Deterministic CuriosityEngine seed alignment (T-0210 / router v2 training anchor)
+            torch.manual_seed(42)
+            c_engine = CuriosityEngine(
+                hidden_dim=768,
+                curiosity_dim=768,
+                tau=2.5
+            )
             self.epistemic_agent = EpistemicCuriosityAgent(
                 model=self.model,
                 tokenizer=self.tokenizer,
                 memory=self.memory,
                 general_memory=self.general_memory,
                 decompiler=self.decompiler,
+                curiosity_engine=c_engine,
                 router_state_path=router_state_path,
                 expert_models=self.expert_models,
                 tau=2.5,
@@ -86,9 +99,11 @@ class AgentGateway:
         vocab_path: Optional[str] = None,
         lexicon_path: str = "data/lexicon/roots.tsv",
         storage_path: Optional[str] = None,
-        router_state_path: str = "data/anka_router.pt",
+        router_state_path: str = "data/anka_router_v2.pt",
         expert_model_paths: Optional[Dict[str, str]] = None,
-        device: str = "cpu"
+        device: str = "cpu",
+        host: Optional[str] = "localhost",
+        port: int = 6333
     ) -> "AgentGateway":
         """Factory method to load and build the complete default Gateway stack.
 
@@ -148,8 +163,8 @@ class AgentGateway:
         # Load Vector Memories — T-0148 4B: storage_path AÇIK-BEYANlı (default
         # "data/qdrant_db" kaldırıldı; None = :memory:/remote-beyan; repo-içi
         # sessiz-yazım yok — data/qdrant_db T-0144 disk-kanıtlı riskti)
-        memory = VectorMemory(collection_name="anka_bellek", vector_size=768, host="localhost", port=6333, storage_path=storage_path)
-        general_memory = VectorMemory(collection_name="simulasyon_bellek", vector_size=768, host="localhost", port=6333, storage_path=storage_path)
+        memory = VectorMemory(collection_name="anka_bellek", vector_size=768, host=host, port=port, storage_path=storage_path)
+        general_memory = VectorMemory(collection_name="simulasyon_bellek", vector_size=768, host=host, port=port, storage_path=storage_path)
 
         from scripts.train_step_b1_5_rigorous import compute_sha256
 

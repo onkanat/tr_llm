@@ -10,28 +10,39 @@ except ImportError:
     portalocker = None
 
 from src.rag.embedding import generate_kristal_vector, generate_sparse_vector
-
-# T-0147 A-3: RRF füzyon-skoru Qdrant sunucu-tarafında üretilir (ham bant
-# P2'de ölçüldü: 0,2933–0,75). Eşik (RAG_MATCH_THRESHOLD 0,40) ve Kapı-D
-# (0,85) ile AYNI ölçeğe geçiş için sabitançlı normalizasyon: ham skor bu
-# sabite bölünür. Tavan-kırpma YOK — bant-maks aşımı gözlenirse İLAN'da
-# beyan edilir (sessiz kırpma yok); ceza-çarpanları normalize-ÖNCESİ
-# ham-skora uygulanır (oran-korunan ölçek-değişimi; ceza-oranları aynı).
-RRF_SCORE_MAX = 0.75
+from src.rag.hybrid_search import (
+    RRF_SCORE_MAX,
+    filter_and_rank_candidates,
+    filter_thought_steps,
+    extract_distinctive_roots,
+    normalize_rrf_score,
+    reciprocal_rank_fusion,
+)
 
 class VectorMemory:
     _shared_clients: Dict[str, Any] = {}
 
-    def __init__(self, collection_name: str = "anka_bellek", vector_size: int = 768, host: str = None, port: int = 6333, storage_path: Optional[str] = None, client: Optional[QdrantClient] = None):
+    def __init__(
+        self,
+        collection_name: str = "anka_bellek",
+        vector_size: int = 768,
+        host: Optional[str] = None,
+        port: int = 6333,
+        storage_path: Optional[str] = None,
+        client: Optional[QdrantClient] = None,
+        allow_fallback: bool = False,
+        location: Optional[str] = None,
+    ):
         """
         Initializes Qdrant database connection for the Vector Rover prototype.
         Priority:
         1. Passed client instance (if provided)
-        2. Shared/cached client if already connected in this process
-        3. Remote host:port if provided — T-0148 4A: bağlantı başarısızsa
-           RuntimeError (sessiz-local-düşme + cache-kirliliği KAPALI, fail-closed)
-        4. storage_path verilmişse explicit-local-beyan (host'suz çağrı)
-        5. Ne host ne storage_path verilmişse in-memory (:memory:) — default
+        2. Explicit location (e.g. location=":memory:", remote url, or custom path)
+        3. Shared/cached client if already connected in this process
+        4. Remote host:port if provided — T-0148 4A fail-closed: bağlantı başarısızsa
+           RuntimeError (allow_fallback=False ise sessiz-local-düşme KAPALI, fail-closed)
+        5. storage_path verilmişse explicit-local-beyan (host'suz çağrı)
+        6. Ne host ne storage_path ne location verilmişse in-memory (:memory:) — default
            data/qdrant_db KALDIRILDI (T-0148 4B; repo-içi sessiz-yazım riski)
         """
         self.collection_name = collection_name
@@ -41,6 +52,26 @@ class VectorMemory:
         if client is not None:
             self.client = client
             self.storage_type = "shared_client"
+        elif location is not None:
+            if location == ":memory:":
+                self.client = QdrantClient(":memory:")
+                self.is_in_memory = True
+                self.storage_type = "in-memory (:memory:)"
+            else:
+                try:
+                    self.client = QdrantClient(location=location)
+                    self.client.get_collections()
+                    self.storage_type = f"location ({location})"
+                except Exception as e:
+                    if allow_fallback:
+                        self.client = QdrantClient(":memory:")
+                        self.is_in_memory = True
+                        self.storage_type = "in-memory (:memory:)"
+                    else:
+                        raise RuntimeError(
+                            f"[VEKTOR_BELLEK_HATA] remote location ({location}) bağlantısı "
+                            "kurulamadı; sessiz-local-fallback kapalıdır (T-0148 4A fail-closed)."
+                        ) from e
         else:
             client_key = f"remote:{host}:{port}" if host else f"local:{storage_path}"
             if client_key in VectorMemory._shared_clients:
@@ -64,23 +95,44 @@ class VectorMemory:
                         connected = True
                         self.storage_type = f"remote ({host}:{port})"
                     except Exception as e:
-                        raise RuntimeError(
-                            f"[VEKTOR_BELLEK_HATA] remote ({host}:{port}) bağlantısı "
-                            "kurulamadı; sessiz-local-fallback kapalıdır (T-0148 4A fail-closed). "
-                            "Local-storage isteniyorsa host=None ile açık-beyan edin."
-                        ) from e
+                        if allow_fallback:
+                            self.client = QdrantClient(":memory:")
+                            self.is_in_memory = True
+                            self.storage_type = "in-memory (:memory:)"
+                            connected = True
+                        else:
+                            raise RuntimeError(
+                                f"[VEKTOR_BELLEK_HATA] remote ({host}:{port}) bağlantısı "
+                                "kurulamadı; sessiz-local-fallback kapalıdır (T-0148 4A fail-closed). "
+                                "Local-storage isteniyorsa host=None ile açık-beyan edin."
+                            ) from e
 
                 if not connected and storage_path:
                     # host'suz + storage_path'li çağrı = AÇIK local-beyan
                     # (sessiz-fallback değil; cache-guard 4A ile korunur)
-                    try:
-                        import os
-                        os.makedirs(storage_path, exist_ok=True)
-                        self.client = QdrantClient(path=storage_path)
+                    if storage_path == ":memory:":
+                        self.client = QdrantClient(":memory:")
+                        self.is_in_memory = True
+                        self.storage_type = "in-memory (:memory:)"
                         connected = True
-                        self.storage_type = f"local ({storage_path})"
-                    except Exception:
-                        pass
+                    else:
+                        try:
+                            import os
+                            os.makedirs(storage_path, exist_ok=True)
+                            self.client = QdrantClient(path=storage_path)
+                            connected = True
+                            self.storage_type = f"local ({storage_path})"
+                        except Exception as e:
+                            if allow_fallback:
+                                self.client = QdrantClient(":memory:")
+                                self.is_in_memory = True
+                                self.storage_type = "in-memory (:memory:)"
+                                connected = True
+                            else:
+                                raise RuntimeError(
+                                    f"[VEKTOR_BELLEK_HATA] local storage ({storage_path}) "
+                                    "açılamadı; sessiz-fallback kapalıdır."
+                                ) from e
 
                 if not connected:
                     self.client = QdrantClient(":memory:")
@@ -92,21 +144,33 @@ class VectorMemory:
                 if not self.is_in_memory and self.storage_type.startswith("remote"):
                     VectorMemory._shared_clients[client_key] = (self.client, self.storage_type)
             
-        if not self.client.collection_exists(self.collection_name):
-            self._create_hybrid_collection(vector_size)
-            self._next_point_id = 1
-        else:
-            try:
+        try:
+            if not self.client.collection_exists(self.collection_name):
+                self._create_hybrid_collection(vector_size)
+                self._next_point_id = 1
+            else:
                 coll_info = self.client.get_collection(self.collection_name)
-                existing_size = coll_info.config.params.vectors["dense"].size
-                if existing_size != vector_size:
-                    self.recreate_collection(vector_size)
+                existing_size = None
+                try:
+                    existing_size = coll_info.config.params.vectors["dense"].size
+                except Exception:
+                    pass
+
+                if existing_size is not None and existing_size != vector_size:
+                    # T-0148 4E fail-closed: if non-empty, recreate_collection will raise
+                    # RuntimeError; do NOT swallow it!
+                    self.recreate_collection(vector_size, confirm_destroy=False)
                 else:
                     count_result = self.client.count(collection_name=self.collection_name)
                     self._next_point_id = count_result.count + 1
-            except Exception:
-                count_result = self.client.count(collection_name=self.collection_name)
-                self._next_point_id = count_result.count + 1
+        except Exception:
+            if hasattr(self, "client") and self.client is not None:
+                try:
+                    self.client.close()
+                except Exception:
+                    pass
+                self.client = None
+            raise
 
     def get_document_count(self) -> int:
         """Returns total number of documents in the collection."""
@@ -251,95 +315,12 @@ class VectorMemory:
             limit=candidate_limit
         )
         
-        # 1. Extract distinctive query roots if query_tags is provided
-        distinctive_query_roots = set()
-        if query_tags:
-            common_roots = {
-                "su", "bir", "ve", "de", "da", "ki", "o", "bu", "şu", "ama", "ile", 
-                "en", "daha", "her", "şey", "için", "ol", "et", "yap",
-                "ne", "kim", "nasıl", "neden", "niçin", "hangi", "nere", "kaç", "mı", "mi", "mu", "mü"
-            }
-            inflection_prefixes = ("TENSE_", "PERSON_", "POSS_", "CASE_", "COPULA_", "PART_", "INF_", "GERUND_")
-            special_tokens = ["<BOS>", "<EOS>", "<PAD>", "<UNK>", "<INSTRUCTION>", "</INSTRUCTION>", "<INPUT>", "</INPUT>", "<OUTPUT>", "</OUTPUT>", "<NUMBER>", "<SYMBOL>"]
-            
-            for m in query_tags.split():
-                if m in special_tokens or m.startswith("DERIV_"):
-                    continue
-                if m.startswith(inflection_prefixes) or m in ("PLURAL", "NEG", "POTENTIAL", "IMPOTENTIAL_NEG"):
-                    continue
-                root = m.lower()
-                if root not in common_roots:
-                    distinctive_query_roots.add(root)
-
-        results = []
-        cot_filter_patterns = [
-            r'\bthe user\b', r'\bwe need to\b', r'\bthey want\b', r'\blet\'s produce\b',
-            r'\bhere is\b', r'\bso that should\b', r'\bmake it\b', r'\bfirst, let\b',
-            r'\bin this case\b', r'\bconcise, pedagogically\b', r'<think>', r'<thought>'
-        ]
-        cot_regex = re.compile('|'.join(cot_filter_patterns), re.IGNORECASE)
-
-        for scored_point in search_result.points:
-            score = scored_point.score
-            text = scored_point.payload.get("text", "")
-            doc_tags_str = scored_point.payload.get("crystal_tags", "")
-            
-            # Purity Filter: reject English CoT leaks
-            if cot_regex.search(text):
-                continue
-            
-            # 2. Token-Type Constraint / Penalty Scoring
-            # T-0147 A-3 (OOV fail-closed): boş distinctive_query_roots artık
-            # ATLANMAZ — belge-tags doluysa has_root_match=False + ×0,05
-            # (OOV sorgunun 0,7 sahte-skorla koşullanma sınıfı kapanır).
-            # Boş doc_tags_str (belge-tagsiz) mevcut atlanma KORUNUR
-            # (sorgu-tarafı boş == bilgi-yok, ceza-yok).
-            has_root_match = True
-            matching_roots = set()
-            if query_tags and doc_tags_str:
-                if not distinctive_query_roots:
-                    score *= 0.05
-                    has_root_match = False
-                else:
-                    doc_morphemes = doc_tags_str.split()
-                    doc_roots = set()
-                    inflection_prefixes = ("TENSE_", "PERSON_", "POSS_", "CASE_", "COPULA_", "PART_", "INF_", "GERUND_")
-                    special_tokens = ["<BOS>", "<EOS>", "<PAD>", "<UNK>", "<INSTRUCTION>", "</INSTRUCTION>", "<INPUT>", "</INPUT>", "<OUTPUT>", "</OUTPUT>", "<NUMBER>", "<SYMBOL>"]
-
-                    for dm in doc_morphemes:
-                        if dm in special_tokens or dm.startswith("DERIV_"):
-                            continue
-                        if dm.startswith(inflection_prefixes) or dm in ("PLURAL", "NEG", "POTENTIAL", "IMPOTENTIAL_NEG"):
-                            continue
-                        doc_roots.add(dm.lower())
-
-                    matching_roots = distinctive_query_roots.intersection(doc_roots)
-                    match_ratio = len(matching_roots) / len(distinctive_query_roots)
-
-                    if match_ratio == 0:
-                        # No distinctive query root exists in the document: severe penalty
-                        score *= 0.05
-                        has_root_match = False
-                    elif match_ratio < 0.5:
-                        # Partial match
-                        score *= (0.3 + 0.7 * match_ratio)
-                        has_root_match = True
-                    else:
-                        has_root_match = True
-
-            # T-0147 / Kalibrasyon: RRF füzyon skorunu [0.0, 1.0] tavan aralığına normalize et
-            normalized_score = min(1.0, max(0.0, float(score / RRF_SCORE_MAX)))
-            results.append({
-                "score": normalized_score,
-                "text": text,
-                "metadata": scored_point.payload,
-                "has_root_match": has_root_match,
-                "matching_roots": list(matching_roots)
-            })
-            
-        # 3. Re-sort and return top_k
-        results.sort(key=lambda x: x["score"], reverse=True)
-        return results[:top_k]
+        return filter_and_rank_candidates(
+            scored_points=search_result.points,
+            query_tags=query_tags,
+            top_k=top_k,
+            rrf_score_max=RRF_SCORE_MAX,
+        )
 
     def close(self):
         """Cleanly closes this VectorMemory's client connection."""
@@ -351,6 +332,7 @@ class VectorMemory:
                 self.client.close()
             except Exception:
                 pass
+            self.client = None
 
     @classmethod
     def close_all(cls):

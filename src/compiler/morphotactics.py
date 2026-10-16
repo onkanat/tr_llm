@@ -252,7 +252,6 @@ def build_default_graph() -> MorphotacticsGraph:
     graph.mark_terminal(State.VERB_VOICE_PASSIVE)
     graph.mark_terminal(State.VERB_ROOT)
     graph.mark_terminal(State.NOUN_ROOT)
-    graph.mark_terminal(State.NOUN_ROOT)
     graph.mark_terminal(State.ADJ_ROOT)
     graph.mark_terminal(State.ADV_ROOT)
     graph.mark_terminal(State.VERB_POST_TENSE)

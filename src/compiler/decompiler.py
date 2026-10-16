@@ -37,13 +37,20 @@ COMMON_FALLBACKS = {
     "COPULA_AORIST": {"template": "DIr", "attributes": "-"},
 }
 
+_TR_UPPER_MAP = str.maketrans({"i": "İ", "ı": "I"})
+
+
+def _turkish_upper(s: str) -> str:
+    return s.translate(_TR_UPPER_MAP).upper()
+
+
 class MorphemeDecompiler:
     """
     decomp0 (Crystal Decompiler / Phonetic Synthesizer):
     Applies the phonetic harmony function f(·) (vowel harmony, consonant mutation,
     buffer letters) to generated morpheme sequences to reconstruct fluent Turkish surface text.
     """
-    def __init__(self, compiler: CrystalCompiler, vocab: Optional[Vocabulary] = None):
+    def __init__(self, compiler: CrystalCompiler, vocab: Optional[Any] = None):
         self.compiler = compiler
         self.vocab = vocab
         
@@ -123,13 +130,26 @@ class MorphemeDecompiler:
             root_surface = root_lemma
             root_attrs = root_entry.get('attributes', '-')
             
+        has_apostrophe_token = ("'" in clean_tags[1:])
+        affix_tags = [t for t in clean_tags[1:] if t != "'"]
+        use_apostrophe = is_placeholder or is_proper_noun or has_apostrophe_token
+
+        if not affix_tags:
+            if has_apostrophe_token:
+                return f"{root_lemma}'"
+            return root_lemma
+
         current_surface = root_surface
         current_attrs = root_attrs
         
         # 2. Iteratively attach affixes using PhonologyEngine
-        for idx in range(1, len(clean_tags)):
-            affix_id = clean_tags[idx]
-            stem_for_phonology = "isim" if is_placeholder and idx == 1 else current_surface
+        for idx, affix_id in enumerate(affix_tags):
+            if is_placeholder and idx == 0:
+                stem_for_phonology = "isim"
+            elif idx == 0:
+                stem_for_phonology = root_lemma
+            else:
+                stem_for_phonology = current_surface.replace("'", "")
             adaylar = self.affix_info.get(affix_id)
             on_cozum = None
             if adaylar is None:
@@ -147,8 +167,10 @@ class MorphemeDecompiler:
                     m_stem, r_affix = PhonologyEngine.resolve_affix(
                         stem_for_phonology, aday["template"], current_attrs
                     )
-                    if (is_placeholder or is_proper_noun) and idx == 1:
+                    if use_apostrophe and idx == 0:
                         aday_yuzey = f"{root_lemma}'{r_affix}"
+                    elif use_apostrophe:
+                        aday_yuzey = current_surface + r_affix
                     else:
                         aday_yuzey = m_stem + r_affix
                     try:
@@ -163,7 +185,7 @@ class MorphemeDecompiler:
             template = info["template"]
 
             # Special case for past tense person endings
-            prev_affix = clean_tags[idx - 1]
+            prev_affix = affix_tags[idx - 1] if idx > 0 else root_lemma
             if affix_id.startswith("PERSON_") and prev_affix in ("TENSE_PAST", "COPULA_PAST"):
                 if affix_id in PAST_PERSON_TEMPLATES:
                     template = PAST_PERSON_TEMPLATES[affix_id]
@@ -178,8 +200,11 @@ class MorphemeDecompiler:
                     current_attrs
                 )
             
-            if (is_placeholder or is_proper_noun) and idx == 1:
-                current_surface = f"{root_lemma}'{resolved_affix}"
+            if use_apostrophe:
+                if idx == 0:
+                    current_surface = f"{root_lemma}'{resolved_affix}"
+                else:
+                    current_surface = current_surface + resolved_affix
             else:
                 current_surface = mutated_stem + resolved_affix
             current_attrs = info.get("attributes", "-")
@@ -198,6 +223,21 @@ class MorphemeDecompiler:
         reconstructed_words = []
         current_word_tags = []
 
+        def _emit_current_word():
+            nonlocal current_word_tags
+            if current_word_tags:
+                word_decomp = self.decompile_tags(current_word_tags)
+                if word_decomp:
+                    is_quoted_word = len(word_decomp) > 1 and word_decomp.startswith("'") and word_decomp.endswith("'")
+                    if word_decomp.startswith("'") and reconstructed_words and not is_quoted_word:
+                        if reconstructed_words[-1].endswith("'"):
+                            reconstructed_words[-1] = reconstructed_words[-1] + word_decomp[1:]
+                        else:
+                            reconstructed_words[-1] = reconstructed_words[-1] + word_decomp
+                    else:
+                        reconstructed_words.append(word_decomp)
+                current_word_tags = []
+
         in_entity = False
         entity_chars = []
         all_caps = False
@@ -205,9 +245,7 @@ class MorphemeDecompiler:
 
         for tag_i, tag in enumerate(tokens):
             if tag == "<ENT>":
-                if current_word_tags:
-                    reconstructed_words.append(self.decompile_tags(current_word_tags))
-                    current_word_tags = []
+                _emit_current_word()
                 in_entity = True
                 entity_chars = []
                 all_caps = False
@@ -229,31 +267,25 @@ class MorphemeDecompiler:
                 
                 char_str = tag
                 if all_caps:
-                    char_str = char_str.upper()
+                    char_str = _turkish_upper(char_str)
                 elif cap_next:
-                    char_str = char_str.upper()
+                    char_str = _turkish_upper(char_str)
                     cap_next = False
                 entity_chars.append(char_str)
                 continue
 
             if tag == "<PROPER_NOUN>":
-                if current_word_tags:
-                    reconstructed_words.append(self.decompile_tags(current_word_tags))
-                    current_word_tags = []
+                _emit_current_word()
                 current_word_tags.append("[Özel İsim]")
                 continue
 
             if tag == "<UNK>":
-                if current_word_tags:
-                    reconstructed_words.append(self.decompile_tags(current_word_tags))
-                    current_word_tags = []
+                _emit_current_word()
                 current_word_tags.append("[?]")
                 continue
 
             if tag == "<NUMBER>":
-                if current_word_tags:
-                    reconstructed_words.append(self.decompile_tags(current_word_tags))
-                    current_word_tags = []
+                _emit_current_word()
                 current_word_tags.append("[sayı]")
                 continue
 
@@ -268,8 +300,7 @@ class MorphemeDecompiler:
                         current_word_tags[0] += tag
                         continue
                     else:
-                        reconstructed_words.append(self.decompile_tags(current_word_tags))
-                        current_word_tags = []
+                        _emit_current_word()
                 if reconstructed_words and (reconstructed_words[-1][-1].isdigit() or reconstructed_words[-1].endswith("-")):
                     reconstructed_words[-1] = reconstructed_words[-1] + tag
                 else:
@@ -278,9 +309,7 @@ class MorphemeDecompiler:
 
             # Punctuation handling
             if tag in {".", ",", "?", "!", ":", ";", ")"}:
-                if current_word_tags:
-                    reconstructed_words.append(self.decompile_tags(current_word_tags))
-                    current_word_tags = []
+                _emit_current_word()
                 if reconstructed_words:
                     reconstructed_words[-1] = reconstructed_words[-1] + tag
                 else:
@@ -288,9 +317,7 @@ class MorphemeDecompiler:
                 continue
 
             if tag == "-":
-                if current_word_tags:
-                    reconstructed_words.append(self.decompile_tags(current_word_tags))
-                    current_word_tags = []
+                _emit_current_word()
                 if reconstructed_words:
                     reconstructed_words[-1] = reconstructed_words[-1] + "-"
                 else:
@@ -298,9 +325,7 @@ class MorphemeDecompiler:
                 continue
 
             if tag == "(":
-                if current_word_tags:
-                    reconstructed_words.append(self.decompile_tags(current_word_tags))
-                    current_word_tags = []
+                _emit_current_word()
                 reconstructed_words.append(tag)
                 continue
                 
@@ -314,16 +339,16 @@ class MorphemeDecompiler:
                 # dalına düşer; değilse eski davranış (tek başına marker).
                 sonraki = tokens[tag_i + 1] if tag_i + 1 < len(tokens) else ""
                 if not self.is_suffix(sonraki):
-                    if current_word_tags:
-                        reconstructed_words.append(self.decompile_tags(current_word_tags))
-                        current_word_tags = []
+                    _emit_current_word()
                     reconstructed_words.append(tag)
                     continue
                 
+            if tag == "'":
+                current_word_tags.append(tag)
+                continue
+
             if not is_suf:
-                if current_word_tags:
-                    reconstructed_words.append(self.decompile_tags(current_word_tags))
-                    current_word_tags = []
+                _emit_current_word()
                 current_word_tags.append(tag)
             else:
                 if not current_word_tags:
@@ -332,19 +357,11 @@ class MorphemeDecompiler:
                 else:
                     current_word_tags.append(tag)
                     
-        if current_word_tags:
-            reconstructed_words.append(self.decompile_tags(current_word_tags))
+        _emit_current_word()
             
         text = " ".join(reconstructed_words).strip()
         if text and capitalize:
             # Capitalize first character respecting Turkish dotted/undotted I
-            first_ch = text[0]
-            if first_ch == 'i':
-                first_ch_upper = 'İ'
-            elif first_ch == 'ı':
-                first_ch_upper = 'I'
-            else:
-                first_ch_upper = first_ch.upper()
-            text = first_ch_upper + text[1:]
+            text = _turkish_upper(text[0]) + text[1:]
             
         return text
