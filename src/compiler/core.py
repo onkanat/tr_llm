@@ -146,6 +146,10 @@ class CrystalCompiler:
         
         # Recursive step
         transitions = self.graph.get_valid_transitions(current_state)
+        # T2.2: kökün (lemma) nitelikleri — DFS yolunun İLK morfemi köktür ve
+        # 'attributes' alanı lexicon girdisinden (entry.get('attributes'))
+        # taşınır; derinliğe bağlı olmadan her resolve_affix çağrısına verilir.
+        lemma_attrs = current_path[0].get('attributes', '-')
         for transition in transitions:
             # Attributes for stem mutation logic
             last_morpheme = current_path[-1]
@@ -154,7 +158,8 @@ class CrystalCompiler:
             mutated_stem, affix_surface = PhonologyEngine.resolve_affix(
                 current_string, 
                 transition.affix_template,
-                last_attrs
+                last_attrs,
+                lemma_attrs
             )
             
             new_string = mutated_stem + affix_surface
@@ -179,12 +184,27 @@ class CrystalCompiler:
                 attrs_n = ";".join(p for p in str(last_attrs).split(";")
                                    if p != "VOICING")
                 mut_n, aff_n = PhonologyEngine.resolve_affix(
-                    current_string, transition.affix_template, attrs_n)
+                    current_string, transition.affix_template, attrs_n, lemma_attrs)
                 new_string_n = mut_n + aff_n
                 if target_word.startswith(new_string_n):
                     mutated_stem, affix_surface = mut_n, aff_n
                     new_string = new_string_n
                     is_valid_prefix = True
+
+            # K2 (Faz-2): NEG+(I)yor kaynaşmasında budama yolu öldürüyor —
+            # 'anla'+NEG → 'anlama', ama 'anlamıyor'.startswith('anlama')
+            # False (hedefin aynı konumunda NEG ünlüsü düşmüş 'ı' durur).
+            # new_string düz-ünsüz ünlüyle (a/e) bitiyorsa ve hedef son
+            # ünlüsü atılmış haliyle örtüşüyorsa dal KABUL edilir: bir
+            # sonraki adımda (y)Iyor ya kırpıp birebir eşleşir ya yol ölür
+            # (ölü dal zararsızdır; tamamlanabilen tek gevşetilmiş sınıf
+            # NEG / IMPOTENTIAL_NEG + (y)Iyor'dur — gövdeyi kısaltan başka
+            # şablon yoktur, TENSE_PROG dışındaki geçişler startswith'te
+            # takılıp elenir).
+            if (not is_valid_prefix and new_string
+                    and new_string[-1] in ("a", "e")
+                    and target_word.startswith(new_string[:-1])):
+                is_valid_prefix = True
 
             if not is_valid_prefix:
                 continue

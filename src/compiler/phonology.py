@@ -82,10 +82,19 @@ class PhonologyEngine:
         return mutated
 
     @classmethod
-    def resolve_affix(cls, stem: str, template: str, attributes: str = "-") -> tuple[str, str]:
+    def resolve_affix(cls, stem: str, template: str, attributes: str = "-",
+                       lemma_attributes: str = "-") -> tuple[str, str]:
         """
         Resolves an abstract affix template into its surface form based on the stem.
         Returns a tuple: (mutated_stem, resolved_affix)
+
+        `attributes`: bir ÖNCEKİ morfemin (çoğunlukla gövdenin) işlemsel
+        nitelikleri (VOWEL_DROP/VOICING/GEMINATION...) — mutate_stem'ı sürer.
+        `lemma_attributes`: KÖKÜN sözleşme nitelikleri (T2.2). Yalnız uyum
+        eksenini (is_back) etkiler: FRONT_HARMONY/BACK_HARMONY, ödünçleme
+        gövdesinin son ünlüsünün YALNITTIĞI uyumu veriyle düzeltir
+        ('ihtimal'→'ihtimali', 'hâl'→'hâli' sınıfı; kural hard-code edilmez).
+        Nitelik yoksa ('-') davranış bit-özdeş kalır.
         """
         if not template:
             return stem, ""
@@ -93,6 +102,43 @@ class PhonologyEngine:
         last_vowel = cls._get_last_vowel(stem)
         is_back = last_vowel in cls.BACK_VOWELS
         is_rounded = last_vowel in cls.ROUNDED_VOWELS
+
+        # T2.3 — -(I)yor ünlü kaynaşması (yalnız bu şablonda VE ünlü-sonlu
+        # gövdede): gövdenin son ünlüsü DÜZ (a/e/ı/i) ise ünlü düşer, tampon-y
+        # kalkar (anla→anl+"Iyor"→anlıyor); YUVARLAK (o/ö/u/ü) ise I düşer,
+        # tampon-y kalır (oku→oku+"(y)or"→okuyor). Uyum, KALAN gövdenin son
+        # ünlüsünden YENİDEN hesaplanır: 'oyna'→'oyn' dönüşünde uyum taşıyıcısı
+        # düşen 'a' değil kalan 'o'dur (-ıyor değil -uyor).
+        #
+        # K1 (Faz-2) — ünlüsüz-kalan gövde kaynaşması: 2-karakter gövde
+        # ('de', 'ye') kırpılınca ÜNLÜ KALMAZ ('d', 'y'); yeniden hesap
+        # _get_last_vowel'in 'a' fallback'ına düşer ve olmayan art-uyumlu
+        # yüzey üretir ('dıyor'/'yıyor'). Kırpma sonrası gövdede ünlü
+        # KALMADIYSA kırpma ÖNCESİ is_back/is_rounded KORUNUR (yeniden hesap
+        # yapılmaz); ünlü kaldıysa mevcut yeniden hesap sürer.
+        if template == "(y)Iyor" and cls._ends_with_vowel(stem) and len(stem) >= 2:
+            if last_vowel in cls.UNROUNDED_VOWELS:
+                stem = stem[:-1]
+                template = "Iyor"
+                if any(ch in cls.HARMONY_VOWELS for ch in stem):
+                    last_vowel = cls._get_last_vowel(stem)
+                    is_back = last_vowel in cls.BACK_VOWELS
+                    is_rounded = last_vowel in cls.ROUNDED_VOWELS
+                # else: gövde ünlüsüz kaldı (de→d, ye→y) — kırpma öncesi
+                # is_back/is_rounded korunur ('e'→ön→'i' → 'diyor'/'yiyor').
+            else:
+                template = "(y)or"
+                last_vowel = cls._get_last_vowel(stem)
+                is_back = last_vowel in cls.BACK_VOWELS
+                is_rounded = last_vowel in cls.ROUNDED_VOWELS
+
+        # T2.2 — lemma niteliği uyum eksenini ÇEVİRİR (gövde ünlüsünden sonra).
+        # Basit tutulur: yalnız is_back döner; is_rounded gövdenin son ünlüsünden
+        # kalır (FRONT_HARMONY + yuvarlak-son-ünlü birleşimi sözlükte yok).
+        if "FRONT_HARMONY" in lemma_attributes:
+            is_back = False
+        elif "BACK_HARMONY" in lemma_attributes:
+            is_back = True
         
         # Determine current state for hardening/buffer
         current_ends_unvoiced = cls._ends_with_unvoiced(stem)

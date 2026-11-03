@@ -115,6 +115,25 @@ class LexiconManager:
                                             continue
                                         stems.append((matched_prefix + char, entry))
 
+            # T2.3 — -(I)yor ünlü kaynaşması geri-bakışı: yüzey, kırpılmış
+            # gövdeyle (anl/oyn/söyl) yürüyüp bir I-sınıfı ünlüsü ('ı/i/u/ü')
+            # gördüğünde, tam lemma (anla/oyna/söyle, VERB) kök adayıdır; yüzey
+            # gövdesi matched_prefix'tir, kalan ek DFS'te (y)Iyor şablonunun
+            # çözümüyle birebir eşleşir. Tıkanma ünlüsünün RENGİ kalan gövdenin
+            # son ünlüsünden gelir ('oyna'→'oyn'+'u'yor: taşıyıcı düşen 'a'
+            # değil kalan 'o'), bu yüzden DÖRT I-variantının hepsi denenir.
+            # Her konumda denenir (yalnız tıkanmada değil): 'arıyor' yüzeyinde
+            # yürüyüş 'arı' lemma'sı üzerinden DEVAM eder, tıkanma 'y'de olur —
+            # aday kök ise 'ar'dır. pos=VERB süzgeci NOUN/ADJ homograflarını
+            # eler ('arı', 'gele', 'sapa', 'kapa' sınıfı).
+            if char in ('ı', 'i', 'u', 'ü'):
+                for v in ('a', 'e'):
+                    v_node = node.children.get(v)
+                    if v_node and v_node.is_word:
+                        for entry in v_node.entries:
+                            if entry.get('pos') == 'VERB':
+                                stems.append((matched_prefix, entry))
+
             # Advance node based on direct match
             if char in node.children:
                 matched_prefix += char
