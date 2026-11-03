@@ -1,0 +1,13 @@
+{
+  "gorev": "T3.3_kulliyat_v2_kapsam",
+  "bin": "data/kulliyat_v2/kulliyat_v2.bin",
+  "toplam_token": 29135254,
+  "vocab_boyut": 33114,
+  "gorulen_id": 31649,
+  "sifir_id": 1465,
+  "kapsam_yuzde": 95.5759,
+  "esik_yuzde": 50.0,
+  "esik_saglandi": true,
+  "zero_ids_json": "data/kulliyat_v2/zero_gradient_ids.json",
+  "sure_sn": 0.2
+}

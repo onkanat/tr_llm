@@ -1,0 +1,40 @@
+{
+  "gorev": "T3.3_kulliyat_v2_birlesme",
+  "kaynaklar": {
+    "raw_corpus_txt": {
+      "yol": "data/raw_corpus.txt",
+      "bayt": 3093507,
+      "read": 27162,
+      "kept": 15862,
+      "dup": 1816,
+      "blank": 9484,
+      "tokens": 679246
+    },
+    "gts_definitions_txt": {
+      "yol": "data/kulliyat_v2/gts_definitions.txt",
+      "bayt": 7446794,
+      "read": 128327,
+      "no_tab": 0,
+      "kept": 116415,
+      "dup": 11912,
+      "blank": 0,
+      "tokens": 1442381
+    },
+    "train_wiki_bin": {
+      "yol": "data/train_wiki.bin",
+      "bayt": 54027254,
+      "token": 27013627
+    }
+  },
+  "text_token": 2121627,
+  "wiki_token": 27013627,
+  "toplam_token": 29135254,
+  "cikti": {
+    "yol": "data/kulliyat_v2/kulliyat_v2.bin",
+    "bayt": 58270508,
+    "duzen": "text ++ wiki (uint16, boyut = token x 2)"
+  },
+  "vocab": "data/rebuild/vocab_anka_r1_33114.json",
+  "vocab_boyut": 33114,
+  "sure_sn": 172.2
+}
