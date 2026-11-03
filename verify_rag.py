@@ -19,7 +19,7 @@ def main():
 
     # 1. Load Vocab, Compiler, Tokenizer
     vocab = Vocabulary()
-    vocab.load('data/vocab.json')
+    vocab.load('data/rebuild/vocab_anka_r1_33114.json')
     lexicon = LexiconManager()
     lexicon.load_from_tsv('data/lexicon/roots.tsv')
     compiler = CrystalCompiler(lexicon, build_default_graph())
@@ -43,7 +43,7 @@ def main():
     # 3. Load Model
     model = KristalLM(vocab_size=len(vocab.stoi), n_embd=768, vocab=vocab, block_size=1024, n_layer=6, n_head=6)
     
-    state_dict = torch.load('data/kristal_model.pt', map_location=device)
+    state_dict = torch.load('data/anka_taban_pure.pt', map_location=device)
     keys_to_skip = [k for k in state_dict.keys() if "cos_cached" in k or "sin_cached" in k or "mask" in k]
     for k in keys_to_skip:
         del state_dict[k]
