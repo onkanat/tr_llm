@@ -41,11 +41,11 @@ class DocumentIngestionEngine:
 
     def __init__(
         self,
-        collection_name: str = "kristal_bellek",
-        storage_path: str = "data/qdrant_db",
+        collection_name: str = "anka_bellek",
+        storage_path: Optional[str] = None,
         host: Optional[str] = None,
         port: int = 6333,
-        vocab_path: str = "data/vocab.json",
+        vocab_path: str = "data/rebuild/vocab_anka_r1_33114.json",
         lexicon_path: str = "data/lexicon/roots.tsv"
     ):
         self.collection_name = collection_name
@@ -389,8 +389,8 @@ def main():
     subparsers = parser.add_subparsers(dest="command", help="Çalıştırılacak komut")
 
     # Genel Parametreler
-    parser.add_argument("--collection", default="kristal_bellek", help="Qdrant koleksiyon adı")
-    parser.add_argument("--storage", default="data/qdrant_db", help="Yerel gömülü Qdrant veritabanı dizini")
+    parser.add_argument("--collection", default="anka_bellek", help="Qdrant koleksiyon adı")
+    parser.add_argument("--storage", default=None, help="Yerel gömülü Qdrant veritabanı dizini (varsayılan: None — verilmezse host'a göre remote veya bellek-içi)")
     parser.add_argument("--host", default=None, help="Harici Qdrant sunucu adresi (örn. localhost)")
     parser.add_argument("--port", type=int, default=6333, help="Harici Qdrant portu")
 
