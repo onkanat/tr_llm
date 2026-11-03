@@ -190,6 +190,31 @@ def build_default_graph() -> MorphotacticsGraph:
         graph.add_transition(from_state, State.VERB_POST_COPULA, "COPULA_EVIDENTIAL", "(y)mIş", "-")
         graph.add_transition(from_state, State.VERB_POST_COPULA, "COPULA_COND", "(y)sA", "-")
 
+    # İsim-soylu + ek-fiil şahsı (iyiyim/nasılsın/evdeyim) — PERSON_* kimlikleri fiil
+    # yolundakiyle AYNIDIR (sözlük donmuş, yeni jeton yok); (y) tamponu ünlü-sonlu
+    # gövdeyi taşır (iyi→iyi-y-im). Çıplak NOUN_ROOT'a BİLİNÇLİ olarak eklenmedi:
+    # 'evim' iyelik/şahıs ikilemesine düşmesin.
+    # 2SG/2PL şablonları fiil yolundakiyle BİREBİR ('sIn'/'sInIz', '(y)' YOK):
+    # (1) y-tamponu s-ile başlayan eklerden önce asla görünmez (iyi→'iyisin',
+    # '(y)sIn' yanlış 'iyiysin' üretirdi); (2) decompiler affix_info'su (T-0147
+    # A-1) id→şablon LİSTESİ kurar — ikinci şablon PERSON_2SG/2PL'yi çok-şablonlu
+    # dala düşürüp PAST_PERSON_TEMPLATES ('n'/'nIz') ezilmesini sağlardı
+    # ('gelmedin'→'gelmedisin' ölçüldü). 1SG/1PL'de '(y)' zorunlu (iyiyim/iyiyiz);
+    # bunların geç-zaman kurulumları güvenlidir ('(I)m' ünlü-sonlu gövdede zaten
+    # 'm' verir; '(I)z' çözüm bulamaz, override 'k' devreye girer).
+    adj_person_states = [State.ADJ_ROOT, State.NOUN_POST_CASE]
+    for from_state in adj_person_states:
+        graph.add_transition(from_state, State.STOP, "PERSON_1SG", "(y)Im", "-")
+        graph.add_transition(from_state, State.STOP, "PERSON_2SG", "sIn", "-")
+        graph.add_transition(from_state, State.STOP, "PERSON_1PL", "(y)Iz", "-")
+        graph.add_transition(from_state, State.STOP, "PERSON_2PL", "sInIz", "-")
+
+    # ADJ → isim yapım ekleri (hayranlık, güzellik, güzelsiz) — DERIV_* kimlikleri
+    # isim yolundakiyle AYNIDIR.
+    for tid, tpl, attr in [("DERIV_lIk", "lIk", "VOICING"), ("DERIV_lI", "lI", "-"),
+                           ("DERIV_sIz", "sIz", "-"), ("DERIV_CI", "CI", "-")]:
+        graph.add_transition(State.ADJ_ROOT, State.NOUN_ROOT, tid, tpl, attr)
+
     # --- DERIVATION (TÜRETİM) ---
     
     # Verb to Noun/Stop (Fiilimsi ve İsim Yapım)
