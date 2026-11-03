@@ -3,7 +3,7 @@
 [![Python 3.14](https://img.shields.io/badge/Python-3.14-blue.svg)](https://python.org)
 [![PyTorch](https://img.shields.io/badge/PyTorch-2.11-ee4c2c.svg)](https://pytorch.org)
 [![Tests Passing](https://img.shields.io/badge/Tests-430%2F431%20Passed%20(100%25)-brightgreen.svg)]()
-[![Zero-OOV](https://img.shields.io/badge/Zero--OOV-Deterministic%20Ontology%20(33.114%20Tokens)-blueviolet.svg)]()
+[![Zero-NEW-ID (UNK %4–11 ölçüldü)](https://img.shields.io/badge/Zero--NEW--ID-UNK%20%254%E2%80%9311%20%C3%B6l%C3%A7%C3%BCld%C3%BC-blueviolet.svg)]()
 [![Self-RAG](https://img.shields.io/badge/RAG-Autonomous%20Vector%20Rover-orange.svg)]()
 [![MoE Routing](https://img.shields.io/badge/MoE-TriModalRouter%20v2%20(5--Classes)-blue.svg)]()
 [![1931 History SFT-DPO](https://img.shields.io/badge/Dataset-1931%20Türk%20Tarihi%20(SFT%2FChat%2FDPO)-red.svg)](https://huggingface.co/datasets/onkanat/turk-tarihi-1931-sft-dpo)
@@ -25,7 +25,7 @@ Geleneksel Büyük Dil Modelleri (LLM), devasa veri setleriyle bir kez eğitilip
 2. **Vektörel Gezgin (Vector Rover, Self-RAG & Epistemik Döngü):**
    Model, tüm olgusal bilgileri statik ağırlıklarında ezberlemek zorunda değildir. Merak motoru ($\mathcal{H}(z) > \tau$) ve otonom `<ARA> ... </ARA>` sorgulama refleksi ile evrensel vektör veritabanında (Qdrant) gezinir; $\ge 0.85$ uyumlu kanıt metni ile yanıt üretir. Eğer model yüksek uyumlu belgeyi almasına rağmen anlayamazsa, bu örnek `future_train_vector.jsonl` kütüğüne kaydedilerek otonom yeniden eğitim döngüsünü besler.
 3. **İzole Akıl Yürütme Kasası (CoT Vault & Morphemic Reasoning):**
-   Öğretmen modellerin (Gemini, Ollama) ürettiği derin düşünce adımları çöpe atılmaz veya deklaratif belleğe bulaştırılmaz; çift çıktılı ayrıştırıcı (`extract_cot_and_card`) ile ayrıştırılır. Temiz bilgi kartları (`<BILGI_KARTI>`) doğrudan `anka_bellek`'e aktarılırken (T-0151 yeniden adlandırma; 36-point kanonik koleksiyon; canlı 192.168.1.9:6333), düşünce zincirleri (`<DUSUNCE>`) `data/pedagogy/cot_vault.jsonl` kasasında ve `muhakeme_bellek` koleksiyonunda arşivlenerek Evre 5 morfemik akıl yürütme eğitimine zemin hazırlar.
+   Öğretmen modellerin (Gemini, Ollama) ürettiği derin düşünce adımları çöpe atılmaz veya deklaratif belleğe bulaştırılmaz; çift çıktılı ayrıştırıcı (`extract_cot_and_card`) ile ayrıştırılır. Temiz bilgi kartları (`<BILGI_KARTI>`) doğrudan `anka_bellek`'e aktarılırken (T-0151 yeniden adlandırma; 46 nokta: 36 kanonik + 10 canlı enjeksiyon; canlı 192.168.1.9:6333), düşünce zincirleri (`<DUSUNCE>`) `data/pedagogy/cot_vault.jsonl` kasasında ve `muhakeme_bellek` koleksiyonunda arşivlenerek Evre 5 morfemik akıl yürütme eğitimine zemin hazırlar.
 
 ---
 
@@ -35,7 +35,7 @@ Geleneksel Büyük Dil Modelleri (LLM), devasa veri setleriyle bir kez eğitilip
 flowchart TD
     subgraph INGESTION ["1. Girdi ve Morfolojik Ayrıştırma"]
         RawText["Kullanıcı / Agent Girdisi"] --> Comp["Kristal Derleyici (comp0)"]
-        Lexicon[("Kök Sözlüğü - roots.tsv\n48.936 Tekil Lemma / 53.109 Satır")] --> Comp
+        Lexicon[("Kök Sözlüğü - roots.tsv\n48.200 Tekil Lemma / 52.373 Satır")] --> Comp
         Graph["Morfotaktik Çizge (State Machine)"] --> Comp
         Phonology["Fonoloji Motoru (Ses Olayları)"] --> Comp
         Comp --> Tokenizer["KristalTokenizer\n(Semantik Morfem Vektörü\n33.114 Külliyat / 32.852 Taban Morfem & Belirteç)"]
@@ -103,7 +103,7 @@ flowchart TD
 
 | Mimari Katman | Doğrulanan Gerçek (Mevcut Durum - v1.8) | Faz B2 ve Gelecek Yol Haritası |
 | :--- | :--- | :--- |
-| **Tokenizer** | Deterministik morfolojik etiketleyici (`kitap PLURAL CASE_LOC`). 48.936 TDK GTS kökü, 33.114 aktif külliyat token'ı (taban: 32.852). Varlıklar `<PROPER_NOUN>`'a düşer. | **İki Katmanlı Hibrit Tokenizer:** Kapalı gramer için morfemler + açık uçlu özel isim ve sayılar için literal yüzey varlık katmanı. |
+| **Tokenizer** | Deterministik morfolojik etiketleyici (`kitap PLURAL CASE_LOC`). 48.200 TDK GTS kökü, 33.114 aktif külliyat token'ı (taban: 32.852). Varlıklar `<PROPER_NOUN>`'a düşer. | **İki Katmanlı Hibrit Tokenizer:** Kapalı gramer için morfemler + açık uçlu özel isim ve sayılar için literal yüzey varlık katmanı. |
 | **Model** | **92.97M Parametre** (42.53M Transformer gövdesi + 50.44M kelime tabloları, Untied, Vanilla GELU). Dar alanda (Ahşap) %92.67 MCQ ayırt etme. | **FSM-Kılavuzlu Çıkarım (Constrained Decoding):** Ek seçiminde biçimsel sentaks hatalarını sıfırlayan aktif FSM logit maskesi. |
 | **Veri & Ölçek** | Sıfırdan 2.5M token ile eğitildi (**Chinchilla optimalinin %0.13'ü**). Vocab'ın %85'i (27.991 token) sıfır gradyan almıştır. | **10× Veri Genişletmesi:** 25M+ token sentetik RAG-sentez ve akıcılık külliyatı ile veri açlığını kapatma. |
 | **Retrieval (RAG)** | Qdrant vektörel bellek altyapısı ve araçları hazır. Model ağırlıklarında `<ARA>` ve `<BELGE>` sentezi henüz eğitilmedi. | **Faz B2 RAG-Sentez Pilotu:** Belgeye koşullu okuma-anlama, seçici sentez ve dürüst çekinme (abstain) eğitimi. |

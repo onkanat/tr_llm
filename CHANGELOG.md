@@ -4,6 +4,15 @@ Bu projedeki tüm önemli değişiklikler bu dosyada belgelenmektedir.
 
 Format [Keep a Changelog](https://keepachangelog.com/tr/1.0.0/) standardına dayanır ve bu proje [Semantic Versioning (SemVer)](https://semver.org/spec/v2.0.0.html) ilkelerini benimser.
 
+## [1.12.0] - 2026-11-04
+
+### Değişti (Changed)
+- Ölçüm-kanıtlı doküman senkronu (inceleme: trllm-inceleme-sentez-20261103): Zero-OOV rozeti dürüstleştirildi (UNK %4–11), Mermaid lemma sayıları düzeltildi (48.200/52.373), anka_bellek nokta sayısı 36→46.
+- **Faz-1 kod düzeltmeleri** (kalite-inceleme bulguları, TDD ile kapatıldı):
+  - `src/llm/tokenizer.py` — U+2019 (tipografik kesme) encode regex sınıfına alındı; apostrof dalına boş-gövde koruması eklendi: kesme kelimeyi çerçeveliyorsa (ör. `’Merhaba’`) inflection dalına girilmez, kelime kesmeler soyularak genel derleme yoluna düşer — `<UNK>`/kelime kaybı (`'[?]'`) yaşanmaz (`tests/test_u2019_typographic.py`).
+  - `src/compiler/decompiler.py` — ondalık birleştirme lookahead'i Türkçe virgüle genişletildi (`"3,14"` artık `"3, 14"` değil `"3,14"`); `'.'` ve `','` için ortak bilinçli sınırlama (etiket akışında `rakam . rakam` / `rakam , rakam` görünümü cümle/listeden ayırt edilemez) kod yorumunda belgelendi ve kasıtlı-takas pin testleriyle sabitlendi (`tests/test_decimal_roundtrip.py`).
+  - Bayat varsayılanlar temizlendi: `verify_rag.py` taban modeli `data/anka_taban_pure.pt`'ye bağlandı; `rag_tool.py` koleksiyon varsayılanı `anka_bellek`, `storage_path=None` (remote/bellek-içi), sözlük yolu kanonik `data/rebuild/vocab_anka_r1_33114.json`; `scripts/prepare_wiki_dataset.py` aynı kanonik sözlüğe hizalandı.
+
 ## [1.11.0] - 2026-10-02
 
 ### Eklendi (Added)
