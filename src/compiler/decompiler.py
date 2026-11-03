@@ -242,8 +242,12 @@ class MorphemeDecompiler:
         entity_chars = []
         all_caps = False
         cap_next = False
+        # Faz-1 T1.2: ondalık birleştirmede tüketilen etiketler ('.' + rakam)
+        skip_until = 0
 
         for tag_i, tag in enumerate(tokens):
+            if tag_i < skip_until:
+                continue
             if tag == "<ENT>":
                 _emit_current_word()
                 in_entity = True
@@ -295,16 +299,48 @@ class MorphemeDecompiler:
 
             # Digit handling
             if tag.isdigit():
+                # Faz-1 T1.2 — Ondalık birleştirme: 'rakam . rakam' görünümü
+                # (ör. "3 . 1 4") cari sayı kelimesine iliştirilir ("3.1").
+                # Faz-1 kalite-inceleme: aynı lookahead Türkçe ondalık VİRGÜL
+                # için de genişletildi ("3 , 1 4" → "3,1" + "4" → "3,14").
+                # '.' ve nokta/virgül sonrası ilk rakam etiketi tüketilir;
+                # sayının kalan haneleri sondaki rakam üzerinden aşağıdaki
+                # mevcut birleştirme kalıbından geçer ("3.1" + "4" → "3.14").
+                #
+                # BİLİNÇLİ SINIRLAMA ('.' ve ',' için ORTAK): etiket akışında
+                # 'rakam . rakam' ve 'rakam , rakam' görünümü, gerçek bir
+                # ondalık sayı ile (a) cümle içinde noktayla biten sayının
+                # ardındaki yeni sayıyı ve (b) virgülle ayrılmış rakam
+                # listesini AYIRT EDEMEZ — tokenizer tüm rakamları tek-hane,
+                # nokta/virgülü bağımsız token olarak yayar; "sayı mı, liste
+                # mi/cümle mi" bağlamı etiket akışında hiç yoktur. Bu takas
+                # bilinçli olarak kabul edilmiştir: birleşme veri KAYBI
+                # yapmaz ("1, 2 ve 3" → "1,2 ve 3"; "3.14. 5 saniye geçti."
+                # → "3.14.5 saniye geçti."), bölünme ise sayıyı okunmaz
+                # kılar ("3,14" → "3, 14"). Zincir beklenen kalıpta
+                # ilerlemezse ara boşluk girebilir ("192.168.1.9" →
+                # "192.168.1. 9") — yine veri kaybı yoktur. Bu davranış
+                # test_decimal_roundtrip.py::test_digit_birlestirme_kasitli_
+                # takaslar ile sabitlenmiştir (pin): değiştirilmesi yorum
+                # bloğu + pin testleriyle birlikte bilinçli karardır.
+                chunk = tag
+                if (
+                    tag_i + 2 < len(tokens)
+                    and tokens[tag_i + 1] in {".", ","}
+                    and tokens[tag_i + 2].isdigit()
+                ):
+                    chunk = tag + tokens[tag_i + 1] + tokens[tag_i + 2]
+                    skip_until = tag_i + 3
                 if current_word_tags:
                     if current_word_tags[0].isdigit():
-                        current_word_tags[0] += tag
+                        current_word_tags[0] += chunk
                         continue
                     else:
                         _emit_current_word()
                 if reconstructed_words and (reconstructed_words[-1][-1].isdigit() or reconstructed_words[-1].endswith("-")):
-                    reconstructed_words[-1] = reconstructed_words[-1] + tag
+                    reconstructed_words[-1] = reconstructed_words[-1] + chunk
                 else:
-                    reconstructed_words.append(tag)
+                    reconstructed_words.append(chunk)
                 continue
 
             # Punctuation handling
