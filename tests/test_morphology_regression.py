@@ -14,7 +14,8 @@ from src.compiler.core import CrystalCompiler
 # BİLİNÇLİ OLARAK sabit-kodlu: roots.tsv sessizce değişemesin. Faz 1 yeni bir
 # dosya üretecek (data/lexicon/roots_anka_r1.tsv) ve roots.tsv YERİNDE
 # DEĞİŞMEYECEK; sözleşme değişirse bu sabitler BEYAN EDİLEREK güncellenir.
-LEXICON_SHA256 = "fe3005e5e2a594f09cbcfc3286e2c8812953ae6614333815ab87a7e3a6763598"
+# 04.11.2026: et/fehmet VERB satırlarına VOICING niteliği (Plan-1 Faz 2 T2.1) — satır/lemma sayısı değişmedi.
+LEXICON_SHA256 = "b0a5a0fc523d348d860b28c87d634c90b20c5260f3ffb5d26f462ff0f486a3ce"
 LEXICON_SATIR = 52373
 LEXICON_BENZERSIZ_LEMMA = 48200
 LEXICON_KUYRUK_BASI = 50475   # sırasız `NOUN\t-` kuyruk bloğunun ilk satırı
