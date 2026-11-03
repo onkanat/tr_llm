@@ -15,7 +15,9 @@ from src.compiler.core import CrystalCompiler
 # dosya üretecek (data/lexicon/roots_anka_r1.tsv) ve roots.tsv YERİNDE
 # DEĞİŞMEYECEK; sözleşme değişirse bu sabitler BEYAN EDİLEREK güncellenir.
 # 04.11.2026: et/fehmet VERB satırlarına VOICING niteliği (Plan-1 Faz 2 T2.1) — satır/lemma sayısı değişmedi.
-LEXICON_SHA256 = "b0a5a0fc523d348d860b28c87d634c90b20c5260f3ffb5d26f462ff0f486a3ce"
+# 04.11.2026: imkân/hâl/ihtimal uyum nitelikleri (Plan-1 Faz 2 T2.5) — satır/lemma sayısı değişmedi.
+# 04.11.2026: de/ye fiillerine FRONT_HARMONY — ünlüsüz-kalan gövde kaynaşması (Faz-2 K1)
+LEXICON_SHA256 = "e32677b2a80bd611f7da17b815b3891d0831a0f45d065f1e7de76acd1321630d"
 LEXICON_SATIR = 52373
 LEXICON_BENZERSIZ_LEMMA = 48200
 LEXICON_KUYRUK_BASI = 50475   # sırasız `NOUN\t-` kuyruk bloğunun ilk satırı

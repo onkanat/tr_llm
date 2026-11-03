@@ -10694,7 +10694,7 @@ dağıtıver	VERB	-
 dağıtıverme	NOUN	-
 dağıtış	NOUN	-
 de	NOUN	-
-de	VERB	-
+de	VERB	FRONT_HARMONY
 deadline	NOUN	-
 dealer	NOUN	-
 dealing	NOUN	-
@@ -19765,7 +19765,7 @@ hâkimiyet	NOUN	-
 hâkimiyetimilliye	NOUN	-
 hâkî	ADJ	-
 hâkî	NOUN	-
-hâl	NOUN	-
+hâl	NOUN	FRONT_HARMONY
 hâlbuki	CONJ	-
 hâlen	ADV	-
 hâlen	NOUN	-
@@ -20174,7 +20174,7 @@ ihtilas	NOUN	-
 ihtilat	NOUN	-
 ihtilaç	NOUN	VOICING
 ihtimal	ADV	-
-ihtimal	NOUN	-
+ihtimal	NOUN	FRONT_HARMONY
 ihtimalen	ADV	-
 ihtimalî	ADJ	-
 ihtimalî	NOUN	-
@@ -20526,7 +20526,7 @@ imha	NOUN	-
 imik	NOUN	VOICING
 imitasyon	NOUN	-
 imişçesine	POSTP	-
-imkân	NOUN	-
+imkân	NOUN	BACK_HARMONY
 imkânsızca	ADV	-
 imkânsızlaş	VERB	-
 imkânsızlaştır	VERB	-
@@ -44410,7 +44410,7 @@ yaşça	ADV	-
 yaşında	NOUN	-
 yaşıt	NOUN	-
 ye	NOUN	-
-ye	VERB	-
+ye	VERB	FRONT_HARMONY
 yed	VERB	-
 yedek	ADJ	VOICING
 yedek	NOUN	VOICING

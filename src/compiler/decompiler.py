@@ -150,10 +150,31 @@ class MorphemeDecompiler:
                 stem_for_phonology = root_lemma
             else:
                 stem_for_phonology = current_surface.replace("'", "")
+
+            # K3 (Faz-2): PAST_PERSON override, çok-şablonlu çözümle-seç
+            # dalından ÖNCE hesaplanır; aktifken (önceki ek TENSE_PAST /
+            # COPULA_PAST bağlamı) bu affix için çözümle-seçe HİÇ girilmez —
+            # override şablonu ('m'/'n'/'k'/'nIz'...) zorunludur. Eski
+            # sıralamada dal 'geldi'+'(I)z' → 'geldiz' adayını compile
+            # kabul ediyor (donmuş grafta [gel,TENSE_PAST,PERSON_1PL]
+            # çözümünün yüzeyi 'geldiz'dir) ve on_cozum yolunu override
+            # sonradan değiştiremiyordu: 'geldik' → 'geldiz' ölçüldü.
+            prev_affix = affix_tags[idx - 1] if idx > 0 else root_lemma
+            past_person_override = (
+                affix_id.startswith("PERSON_")
+                and prev_affix in ("TENSE_PAST", "COPULA_PAST")
+                and affix_id in PAST_PERSON_TEMPLATES
+            )
+
             adaylar = self.affix_info.get(affix_id)
             on_cozum = None
             if adaylar is None:
                 info = COMMON_FALLBACKS.get(affix_id, {"template": "", "attributes": "-"})
+            elif past_person_override:
+                info = {
+                    "template": PAST_PERSON_TEMPLATES[affix_id],
+                    "attributes": adaylar[0].get("attributes", "-"),
+                }
             elif len(adaylar) == 1:
                 # T-0147 A-1: tek-şablonlu id → mevcut davranış bit-özdeş.
                 info = adaylar[0]
@@ -163,9 +184,21 @@ class MorphemeDecompiler:
                 # ile çözülen yüzeyi derleyicinin compile'ı KABUL EDEN ilk
                 # şablon seçilir (deterministik). Hiçbiri kabul edilmezse
                 # mevcut davranış (ilk şablon) — fail-open değil, kayıt İLAN'lı.
+                #
+                # Ö1 (Faz-2): ilk kabul yeterli DEĞİL — adayın çözüm zinciri
+                # root_lemma'dan başlayıp şimdiye kadarki etiket dizisiyle
+                # birebir eşleşen analiz TAŞIYORSA o aday TERCİH edilir.
+                # Ölçülen kusur: ['iyi','PERSON_1SG']'de ilk aday '(I)m' →
+                # 'iyim', compile oluyor ama [iyi, POSS_1SG] olarak (iyelik
+                # kökü, PERSON değil) — kabul ediliyor ve 'iyim' üretiliyordu.
+                # Doğru aday '(y)Im' → 'iyiyim' → [iyi, PERSON_1SG].
+                beklenen_zincir = [root_lemma] + affix_tags[:idx + 1]
+                ilk_kabul = None
+                zincir_eslesen = None
                 for aday in adaylar:
                     m_stem, r_affix = PhonologyEngine.resolve_affix(
-                        stem_for_phonology, aday["template"], current_attrs
+                        stem_for_phonology, aday["template"], current_attrs,
+                        root_attrs
                     )
                     if use_apostrophe and idx == 0:
                         aday_yuzey = f"{root_lemma}'{r_affix}"
@@ -177,18 +210,20 @@ class MorphemeDecompiler:
                         aday_paket = self.compiler.compile(aday_yuzey)
                     except Exception:
                         continue
-                    if aday_paket["analyses"]:
-                        on_cozum = (aday, m_stem, r_affix)
+                    if not aday_paket["analyses"]:
+                        continue
+                    if ilk_kabul is None:
+                        ilk_kabul = (aday, m_stem, r_affix)
+                    for analiz in aday_paket["analyses"]:
+                        if [m["id"] for m in analiz["morphemes"]] == beklenen_zincir:
+                            zincir_eslesen = (aday, m_stem, r_affix)
+                            break
+                    if zincir_eslesen is not None:
                         break
+                on_cozum = zincir_eslesen or ilk_kabul
                 info = on_cozum[0] if on_cozum else adaylar[0]
 
             template = info["template"]
-
-            # Special case for past tense person endings
-            prev_affix = affix_tags[idx - 1] if idx > 0 else root_lemma
-            if affix_id.startswith("PERSON_") and prev_affix in ("TENSE_PAST", "COPULA_PAST"):
-                if affix_id in PAST_PERSON_TEMPLATES:
-                    template = PAST_PERSON_TEMPLATES[affix_id]
 
             if on_cozum is not None:
                 # Çözümle-seç yolunda resolve_affix ZATEN koşuldu — tekrarlanmaz.
@@ -197,7 +232,8 @@ class MorphemeDecompiler:
                 mutated_stem, resolved_affix = PhonologyEngine.resolve_affix(
                     stem_for_phonology,
                     template,
-                    current_attrs
+                    current_attrs,
+                    root_attrs
                 )
             
             if use_apostrophe:
