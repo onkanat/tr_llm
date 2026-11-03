@@ -1,0 +1,8 @@
+{
+  "block_size": 128,
+  "sozluk_giris": 33114,
+  "sozluk": "data/rebuild/vocab_anka_r1_33114.json",
+  "sozluk_sha256": "f9940a8d8e1f7cd9428d389f12ff4c5ee448e5a7bfcdcc8ecc9c616fce950984",
+  "val_dosya": "kulliyat_v2_val.bin",
+  "val_notu": "katmanli %2, train'de %2 sizinti bilinçli"
+}

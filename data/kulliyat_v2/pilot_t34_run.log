@@ -1,0 +1,45 @@
+============================================================
+ KRİSTAL-VEKTÖREL MİMARİSİ: MODEL EĞİTİM DÖNGÜSÜ
+============================================================
+Metal GPU (MPS) seçildi.
+Tohum (seed) kuruldu: 34
+Sözlük Yüklendi (data/rebuild/vocab_anka_r1_33114.json). Kelime dağarcığı boyutu: 33114
+<PAD> kayıp maskesi aktif (PAD hedefleri -100'e yazılır; pad_id=1).
+Veri kümesi yüklendi: data/kulliyat_v2/kulliyat_v2.bin (Blok boyutu: 128). Toplam morfem token sayısı: 29,135,254
+[sinir] en buyuk jeton id=33,113 < vocab_size=33,114 (guvenli)
+[meta] sozluk/kulliyat provenance: BIREBIR (sozluk_sha256=f9940a8d8e1f7cd9… · giris=33114)
+Mevcut model ağırlıkları 'data/anka_taban_pure.pt' tespit edildi, eğitim devam ettiriliyor (Resume)...
+Model mimarisi kuruldu ve cihaza taşındı. (Öğrenme Oranı: 0.0002, weight_decay: 0.01)
+[OPTIMIZER] BEYAN: Yan dosya yok ('data/anka_taban_pure.pt.opt.pt'). Optimizer sıfırdan başlatılıyor.
+UYARI: AdamW momenti bulunamadi ('data/anka_taban_pure.pt.opt.pt' yok) => optimizer SIFIRDAN basliyor. Ilk guncelleme, momentli bir devam kosumuna gore DAHA BUYUK olur (olculdu: 1,73x; T-0092).
+
+Eğitim Başlatılıyor -> Adım Sayısı: 50, Batch Boyutu: 16, Block Boyutu: 128, Hedef: ON-EGITIM (duz sonraki-jeton)
+Periyodik kayıt: her 50 adımda -> 'data/kulliyat_v2/pilot_t34.pt' ('.tmp' üzerinden atomik)
+Scheduler AKTİF: warmup 10 + cosine (toplam_adim=50), min_lr 2e-05
+Grad clip: 1.0
+Adım    1/50 | Kayıp (Loss): 3.5928 | Adım Süresi: 3.52s | Toplam Süre: 3.5s | LR: 0.000020
+  [MASKE] Adım    1 | Maskesiz Hedef Oranı: %100.00
+Adım   10/50 | Kayıp (Loss): 3.3588 | Adım Süresi: 0.77s | Toplam Süre: 10.9s | LR: 0.000200
+  [MASKE] Adım   10 | Maskesiz Hedef Oranı: %100.00
+Adım   20/50 | Kayıp (Loss): 3.8391 | Adım Süresi: 1.00s | Toplam Süre: 19.3s | LR: 0.000174
+  [MASKE] Adım   20 | Maskesiz Hedef Oranı: %100.00
+Adım   30/50 | Kayıp (Loss): 3.5454 | Adım Süresi: 1.14s | Toplam Süre: 31.6s | LR: 0.000110
+  [MASKE] Adım   30 | Maskesiz Hedef Oranı: %100.00
+Adım   40/50 | Kayıp (Loss): 3.8359 | Adım Süresi: 0.79s | Toplam Süre: 50.2s | LR: 0.000046
+  [MASKE] Adım   40 | Maskesiz Hedef Oranı: %100.00
+Adım   50/50 | Kayıp (Loss): 3.7833 | Adım Süresi: 0.73s | Toplam Süre: 57.9s | LR: 0.000020
+  [MASKE] Adım   50 | Maskesiz Hedef Oranı: %100.00
+  [ckpt] adım 50: 'data/kulliyat_v2/pilot_t34.pt' güncellendi (son kayıt, atomik)
+
+==================================================
+ EĞİTİM BAŞARIYLA TAMAMLANDI!
+==================================================
+Toplam Süre:       59.05 saniye
+Başlangıç Kaybı:   3.5928
+Bitiş Kaybı:       3.7833
+Kayıp Dağılımı:    son60 3.7409 ± 0.2142 (n=50)
+                   son200 3.7409 ± 0.2142 (n=50)
+                   medyan 3.7740 (n=50)
+                   NOT: 'Bitiş Kaybı' tek adımın örneklemidir; karşılaştırma için bu dağılımı kullanın.
+Eğitilmiş model ağırlıkları 'data/kulliyat_v2/pilot_t34.pt' dosyasına kaydedildi.
+==================================================
