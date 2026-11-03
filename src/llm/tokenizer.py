@@ -236,7 +236,7 @@ class KristalTokenizer:
         token_ids = [self.vocab.encode("<BOS>")]
 
         PUNCT_SET = {".", ",", "?", "!", "-", ":", ";", "(", ")"}
-        tokens = re.findall(r"<[^>]+>|[\w\']+|[.,!?;:()\"—–-]", text, flags=re.UNICODE)
+        tokens = re.findall(r"<[^>]+>|[\w'’]+|[.,!?;:()\"—–-]", text, flags=re.UNICODE)
         for token in tokens:
             if token in self.CONTROL_TOKENS:
                 token_ids.append(self.vocab.encode(token))
@@ -263,7 +263,15 @@ class KristalTokenizer:
             # Check for apostrophe (proper noun inflection)
             # Tipografik kesme (U+2019) → düz kesme (U+0027) normalize (yalnızca bu dal; mode=False yolu etkilenmez)
             has_apostrophe = ("'" in clean_word or "\u2019" in clean_word)
-            if self.literal_entity_mode and has_apostrophe:
+            # Boş gövde koruması (Faz-1 kalite-inceleme): kesme kelimeyi
+            # çerçeveliyorsa (ör. ’Merhaba’ — alıntı/tırnak) inflection dalı
+            # anlamsızdır; girilirse gövde <UNK> olur ve kelime içeriği kaybolur.
+            # Stem boşsa dalı hiç girme: kelime aşağıdaki genel derleme yoluna
+            # düşer (kesmeler soyulup compiler.compile), içerik korunur.
+            stem = ""
+            if has_apostrophe:
+                stem = re.split(r"['\u2019]", clean_word.replace("\u2019", "'"), maxsplit=1)[0]
+            if self.literal_entity_mode and has_apostrophe and stem:
                 # U+2019 → U+0027 normalize: sözlük tek kesme tokeni tanıdığından
                 normalized_word = clean_word.replace("\u2019", "'")
                 parts = re.split(r"['\u2019]", normalized_word, maxsplit=1)
