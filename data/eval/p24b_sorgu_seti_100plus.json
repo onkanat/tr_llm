@@ -1,0 +1,570 @@
+{
+  "gorev": "P2.4b — ΔH kalibrasyonu için genişletilmiş eşik ölçüm seti (p24 tabanı korunur)",
+  "tarih": "2026-11-04",
+  "olcek": "107 sorgu (28 alan + 28 nötr + 28 belirsiz + 23 kenar)",
+  "taban_korunumu": "ID 1-36, data/eval/p24_sorgu_seti.json'dan BİREBİR kopyalanmıştır (byte-byte aynı soru/kategori; karşılaştırılabilirlik için). Yeni sorgular ID 37-107.",
+  "uretim_disiplini": "Gerçekçi kullanıcı soruları (canlı /api/ask kullanım profili), talimat-kalıplarından arınmış; p24 ile aynı disiplin. Yeni kenar sorguları: çok kısa/tek kelimelik, yazım hatalı, yinelenmiş, bitişik-yazılmış, ~100-jeton uzun nötr ve ~100-jeton uzun alan ramble'ı.",
+  "amaca_ait_degil_notu": "Bu dosya yalnız ölçüm girdisidir; hiçbir izlenen dosya bu görevde DÜZENLENMEDİ. Ölçüm betikleri scratch'tedir, Qdrant erişimi salt-okunur (anka_bellek @ 192.168.1.9:6333). Eşik dondurma denetleyicidedir.",
+  "sabithatlar": {
+    "tau": 2.5,
+    "tau_kaynak": "src/rag/merak.py:21 (CuriosityEngine varsayılan; trigger_signal='entropy' donmuş varsayılan)",
+    "rag_esik": 0.33,
+    "rag_esik_kaynak": "src/rag/rag_pipeline.py:34 (RAG_MATCH_THRESHOLD; T-0179)",
+    "optin_sinyaller": "merak.py trigger_signal='delta_h' (ΔH = H_post − H_pre ≥ τ) ve 'post_h' (H_post ≥ τ) — P2.6 opt-in, canlıda kapalı"
+  },
+  "sorgular": [
+    {
+      "id": 1,
+      "kategori": "alan",
+      "soru": "Meşe kereste neden kurutulmadan işlenmez?"
+    },
+    {
+      "id": 2,
+      "kategori": "alan",
+      "soru": "Kırlangıç kuyruk birleştirmesi nasıl yapılır?"
+    },
+    {
+      "id": 3,
+      "kategori": "alan",
+      "soru": "Zımpara grit numarası nasıl seçilir?"
+    },
+    {
+      "id": 4,
+      "kategori": "alan",
+      "soru": "Gürgen ile meşe arasındaki sertlik farkı nedir?"
+    },
+    {
+      "id": 5,
+      "kategori": "alan",
+      "soru": "Ahşap tutkalı uygulandıktan sonra ne kadar beklenmeli?"
+    },
+    {
+      "id": 6,
+      "kategori": "alan",
+      "soru": "Zıvana yuvası nasıl açılır?"
+    },
+    {
+      "id": 7,
+      "kategori": "alan",
+      "soru": "Domates fidesi ekim derinliği kaç santimetre olmalı?"
+    },
+    {
+      "id": 8,
+      "kategori": "alan",
+      "soru": "Mildiyö hastalığına karşı ne yapılmalı?"
+    },
+    {
+      "id": 9,
+      "kategori": "alan",
+      "soru": "Gübreleme ne zaman yapılır?"
+    },
+    {
+      "id": 10,
+      "kategori": "alan",
+      "soru": "Salatalık fideleri neden sararır?"
+    },
+    {
+      "id": 11,
+      "kategori": "notr",
+      "soru": "Türkiye'nin başkenti neresidir?"
+    },
+    {
+      "id": 12,
+      "kategori": "notr",
+      "soru": "Su molekülü hangi atomlardan oluşur?"
+    },
+    {
+      "id": 13,
+      "kategori": "notr",
+      "soru": "Ay tutulması nasıl gerçekleşir?"
+    },
+    {
+      "id": 14,
+      "kategori": "notr",
+      "soru": "Kitap okumak insanı nasıl geliştirir?"
+    },
+    {
+      "id": 15,
+      "kategori": "notr",
+      "soru": "İstanbul hangi yıl fethedildi?"
+    },
+    {
+      "id": 16,
+      "kategori": "notr",
+      "soru": "Dünya'nın tek doğal uydusu hangisidir?"
+    },
+    {
+      "id": 17,
+      "kategori": "notr",
+      "soru": "Demir elementinin simgesi nedir?"
+    },
+    {
+      "id": 18,
+      "kategori": "notr",
+      "soru": "Uçaklar havada nasıl kalır?"
+    },
+    {
+      "id": 19,
+      "kategori": "notr",
+      "soru": "İnsan vücudunda kaç kemik vardır?"
+    },
+    {
+      "id": 20,
+      "kategori": "notr",
+      "soru": "Okul müdürü ne iş yapar?"
+    },
+    {
+      "id": 21,
+      "kategori": "belirsiz",
+      "soru": "Nasıl yapılır?"
+    },
+    {
+      "id": 22,
+      "kategori": "belirsiz",
+      "soru": "Kaç tane gerekli?"
+    },
+    {
+      "id": 23,
+      "kategori": "belirsiz",
+      "soru": "Hangisi daha iyi olur?"
+    },
+    {
+      "id": 24,
+      "kategori": "belirsiz",
+      "soru": "Neden böyle oluyor?"
+    },
+    {
+      "id": 25,
+      "kategori": "belirsiz",
+      "soru": "Ne zaman yapılmalı?"
+    },
+    {
+      "id": 26,
+      "kategori": "belirsiz",
+      "soru": "Onu bana biraz anlat."
+    },
+    {
+      "id": 27,
+      "kategori": "belirsiz",
+      "soru": "Fiyatı ne kadar şimdi?"
+    },
+    {
+      "id": 28,
+      "kategori": "belirsiz",
+      "soru": "Bu konuda bilgi ver."
+    },
+    {
+      "id": 29,
+      "kategori": "belirsiz",
+      "soru": "Nereden bulunur?"
+    },
+    {
+      "id": 30,
+      "kategori": "belirsiz",
+      "soru": "Öyle bir şey gerçekten var mı?"
+    },
+    {
+      "id": 31,
+      "kategori": "kenar",
+      "soru": "a"
+    },
+    {
+      "id": 32,
+      "kategori": "kenar",
+      "soru": "okul"
+    },
+    {
+      "id": 33,
+      "kategori": "kenar",
+      "soru": "zıvana"
+    },
+    {
+      "id": 34,
+      "kategori": "kenar",
+      "soru": "xdfkqlvmn"
+    },
+    {
+      "id": 35,
+      "kategori": "kenar",
+      "soru": "Ahşap kurutma sürecinde kerestenin rutubet oranının çevredeki nem seviyesine göre dengelenmesi için levhaların arasında havalandırma çubukları bırakılır ve yığın üstü yağmurdan korunmak amacıyla örtülür bu süreç yaz aylarında kaç hafta sürer kışın kapalı alanda kurutma yapılır mı ve hangi ağaç türleri bu yöntemle daha çabuk kurur?"
+    },
+    {
+      "id": 36,
+      "kategori": "kenar",
+      "soru": ""
+    },
+    {
+      "id": 37,
+      "kategori": "alan",
+      "soru": "Zıvana ile kama arasındaki fark nedir?",
+      "alt_kategori": "marangozluk"
+    },
+    {
+      "id": 38,
+      "kategori": "alan",
+      "soru": "Ahşap neden çatlar?",
+      "alt_kategori": "marangozluk"
+    },
+    {
+      "id": 39,
+      "kategori": "alan",
+      "soru": "Vida sürmeden önce neden ön delik açılır?",
+      "alt_kategori": "marangozluk"
+    },
+    {
+      "id": 40,
+      "kategori": "alan",
+      "soru": "Rende bıçağı nasıl bilenir?",
+      "alt_kategori": "marangozluk"
+    },
+    {
+      "id": 41,
+      "kategori": "alan",
+      "soru": "Kontrplak ile sunta arasındaki fark nedir?",
+      "alt_kategori": "marangozluk"
+    },
+    {
+      "id": 42,
+      "kategori": "alan",
+      "soru": "Ahşap masa yüzeyi nasıl yağlanır?",
+      "alt_kategori": "marangozluk"
+    },
+    {
+      "id": 43,
+      "kategori": "alan",
+      "soru": "Pah kırma ne için yapılır?",
+      "alt_kategori": "marangozluk"
+    },
+    {
+      "id": 44,
+      "kategori": "alan",
+      "soru": "Ceviz kerestesi neden değerlidir?",
+      "alt_kategori": "marangozluk"
+    },
+    {
+      "id": 45,
+      "kategori": "alan",
+      "soru": "Rögro nasıl açılır?",
+      "alt_kategori": "marangozluk"
+    },
+    {
+      "id": 46,
+      "kategori": "alan",
+      "soru": "Fide dikmeden önce toprak neden sulanır?",
+      "alt_kategori": "bahçıvanlık"
+    },
+    {
+      "id": 47,
+      "kategori": "alan",
+      "soru": "Güller ne zaman budanır?",
+      "alt_kategori": "bahçıvanlık"
+    },
+    {
+      "id": 48,
+      "kategori": "alan",
+      "soru": "Kompost ne kadar sürede olgunlaşır?",
+      "alt_kategori": "bahçıvanlık"
+    },
+    {
+      "id": 49,
+      "kategori": "alan",
+      "soru": "Domates yaprakları neden kıvrılır?",
+      "alt_kategori": "bahçıvanlık"
+    },
+    {
+      "id": 50,
+      "kategori": "alan",
+      "soru": "Fidelerde küf neden oluşur?",
+      "alt_kategori": "bahçıvanlık"
+    },
+    {
+      "id": 51,
+      "kategori": "alan",
+      "soru": "Kışlık soğan ne zaman ekilir?",
+      "alt_kategori": "bahçıvanlık"
+    },
+    {
+      "id": 52,
+      "kategori": "alan",
+      "soru": "Sıcakta bitkiler neden solar?",
+      "alt_kategori": "bahçıvanlık"
+    },
+    {
+      "id": 53,
+      "kategori": "alan",
+      "soru": "Toprak analizi nasıl yaptırılır?",
+      "alt_kategori": "bahçıvanlık"
+    },
+    {
+      "id": 54,
+      "kategori": "alan",
+      "soru": "Saksı değişimi ne zaman yapılmalı?",
+      "alt_kategori": "bahçıvanlık"
+    },
+    {
+      "id": 55,
+      "kategori": "notr",
+      "soru": "Fotoğraf makinesi nasıl çalışır?"
+    },
+    {
+      "id": 56,
+      "kategori": "notr",
+      "soru": "Gökkuşağı neden oluşur?"
+    },
+    {
+      "id": 57,
+      "kategori": "notr",
+      "soru": "Arılar nektarı bala nasıl dönüştürür?"
+    },
+    {
+      "id": 58,
+      "kategori": "notr",
+      "soru": "Kağıt neden zamanla sararır?"
+    },
+    {
+      "id": 59,
+      "kategori": "notr",
+      "soru": "Eyfel Kulesi hangi ülkededir?"
+    },
+    {
+      "id": 60,
+      "kategori": "notr",
+      "soru": "Dünya'nın çevresi kaç kilometredir?"
+    },
+    {
+      "id": 61,
+      "kategori": "notr",
+      "soru": "Penguenler neden uçamaz?"
+    },
+    {
+      "id": 62,
+      "kategori": "notr",
+      "soru": "Radyo dalgaları nasıl yayılır?"
+    },
+    {
+      "id": 63,
+      "kategori": "notr",
+      "soru": "Ay neden hep aynı yüzünü gösterir?"
+    },
+    {
+      "id": 64,
+      "kategori": "notr",
+      "soru": "Termometre nasıl çalışır?"
+    },
+    {
+      "id": 65,
+      "kategori": "notr",
+      "soru": "Kahve hangi iklimde yetişir?"
+    },
+    {
+      "id": 66,
+      "kategori": "notr",
+      "soru": "İnsanlar neden uyumak zorundadır?"
+    },
+    {
+      "id": 67,
+      "kategori": "notr",
+      "soru": "Volkanlar neden patlar?"
+    },
+    {
+      "id": 68,
+      "kategori": "notr",
+      "soru": "Deniz suyu neden tuzludur?"
+    },
+    {
+      "id": 69,
+      "kategori": "notr",
+      "soru": "Yıldırım nasıl oluşur?"
+    },
+    {
+      "id": 70,
+      "kategori": "notr",
+      "soru": "Buz neden suda yüzer?"
+    },
+    {
+      "id": 71,
+      "kategori": "notr",
+      "soru": "Osmanlı Devleti ne zaman kuruldu?"
+    },
+    {
+      "id": 72,
+      "kategori": "notr",
+      "soru": "Mozart kaç yaşında öldü?"
+    },
+    {
+      "id": 73,
+      "kategori": "belirsiz",
+      "soru": "Peki ya diğeri?"
+    },
+    {
+      "id": 74,
+      "kategori": "belirsiz",
+      "soru": "Biraz daha açar mısın?"
+    },
+    {
+      "id": 75,
+      "kategori": "belirsiz",
+      "soru": "Ya sonra ne olacak?"
+    },
+    {
+      "id": 76,
+      "kategori": "belirsiz",
+      "soru": "Kaç yaşında olabilir?"
+    },
+    {
+      "id": 77,
+      "kategori": "belirsiz",
+      "soru": "Hangisini seçmeliyim?"
+    },
+    {
+      "id": 78,
+      "kategori": "belirsiz",
+      "soru": "Peki nereden başlamalıyım?"
+    },
+    {
+      "id": 79,
+      "kategori": "belirsiz",
+      "soru": "Devam et."
+    },
+    {
+      "id": 80,
+      "kategori": "belirsiz",
+      "soru": "Bu konu gerçekten çok karışık."
+    },
+    {
+      "id": 81,
+      "kategori": "belirsiz",
+      "soru": "Bir örnek verir misin?"
+    },
+    {
+      "id": 82,
+      "kategori": "belirsiz",
+      "soru": "O kadar mı yani?"
+    },
+    {
+      "id": 83,
+      "kategori": "belirsiz",
+      "soru": "Tam olarak ne demek istiyorsun?"
+    },
+    {
+      "id": 84,
+      "kategori": "belirsiz",
+      "soru": "Yarın mıydı?"
+    },
+    {
+      "id": 85,
+      "kategori": "belirsiz",
+      "soru": "Nasıl bir şeydi?"
+    },
+    {
+      "id": 86,
+      "kategori": "belirsiz",
+      "soru": "Bir de onun fiyatı ne durumda?"
+    },
+    {
+      "id": 87,
+      "kategori": "belirsiz",
+      "soru": "O iş sanırım başka yerde oluyordu."
+    },
+    {
+      "id": 88,
+      "kategori": "belirsiz",
+      "soru": "İkincisi hangisiydi?"
+    },
+    {
+      "id": 89,
+      "kategori": "belirsiz",
+      "soru": "Onu sonra konuşur muyuz?"
+    },
+    {
+      "id": 90,
+      "kategori": "belirsiz",
+      "soru": "Nedenini hiç anlayamadım."
+    },
+    {
+      "id": 91,
+      "kategori": "kenar",
+      "soru": "?"
+    },
+    {
+      "id": 92,
+      "kategori": "kenar",
+      "soru": "123"
+    },
+    {
+      "id": 93,
+      "kategori": "kenar",
+      "soru": "1+1"
+    },
+    {
+      "id": 94,
+      "kategori": "kenar",
+      "soru": "ev"
+    },
+    {
+      "id": 95,
+      "kategori": "kenar",
+      "soru": "MERMER"
+    },
+    {
+      "id": 96,
+      "kategori": "kenar",
+      "soru": "aaaaaa"
+    },
+    {
+      "id": 97,
+      "kategori": "kenar",
+      "soru": "neden"
+    },
+    {
+      "id": 98,
+      "kategori": "kenar",
+      "soru": "kaç"
+    },
+    {
+      "id": 99,
+      "kategori": "kenar",
+      "soru": "ahşap mı"
+    },
+    {
+      "id": 100,
+      "kategori": "kenar",
+      "soru": "ahşabı nassıl kurutabilirim acaba"
+    },
+    {
+      "id": 101,
+      "kategori": "kenar",
+      "soru": "gübre 🌱"
+    },
+    {
+      "id": 102,
+      "kategori": "kenar",
+      "soru": "ahşap ahşap ahşap"
+    },
+    {
+      "id": 103,
+      "kategori": "kenar",
+      "soru": "ahşapkurutmayöntemleriveuygulamaları"
+    },
+    {
+      "id": 104,
+      "kategori": "kenar",
+      "soru": "!!!"
+    },
+    {
+      "id": 105,
+      "kategori": "kenar",
+      "soru": "Merhaba!"
+    },
+    {
+      "id": 106,
+      "kategori": "kenar",
+      "soru": "Güneş sisteminde gezegenler güneşin etrafında farklı hızlarda dönerler iç gezegenler daha hızlı dış gezegenler daha yavaştır bu yüzden mars ile dünya arasındaki mesafe sürekli değişir bazen çok yaklaşır bazen çok uzaklaşır bu yaklaşmalarda mars gökyüzünde parlak görünür ve teleskoplarla yüzeyi izlenebilir jüpiter en büyük gezegendir ve birçok uydusu vardır saturnun halkaları buz ve kaya parçalarından oluşur uranüs yana yatık döner neptün ise rüzgarlarıyla bilinir plüton artık gezegen sayılmıyor peki bu gezegenlerde yaşam olabilir mi ve uzayda kaç gezegen daha var bilim insanları bunu nasıl araştırıyor"
+    },
+    {
+      "id": 107,
+      "kategori": "kenar",
+      "soru": "Domates yetiştirmek istiyorum balkonda saksıda yerim sınırlı güneş günde dört beş saat alıyor geçen yıl fideleri söktüm bu yıl daha erken başladım toprağı hangi markadan almalıyım gübre olarak ne kullanılır saksı kaç litre olmalı sulamayı kaç günde bir yapmalıyım fideler neden sararır ve incelir bunun sebebi ışık mı su mu yoksa besin mi ayrıca domateslerin çatlaması neden olur ve salatalık ile biber yanına eklersem bir sorun olur mu zararlılar için ilaç kullanmak istemiyorum organik çözüm var mı hasadı ne zaman yapmalıyım"
+    }
+  ]
+}
