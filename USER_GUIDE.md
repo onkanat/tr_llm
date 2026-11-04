@@ -580,11 +580,14 @@ extract_cot_and_card()
 ### 3. Akıl Yürütme Verisini İkili Eğitime Derleme (Evre 5 Hazırlığı)
 Kasada biriken düşünce adımlarını modelin içsel akıl yürütmesini (`<DUSUNCE> ... </DUSUNCE>`) öğrenmesi için `train_reasoning_cot.bin` ikili formatına derleyebilirsiniz:
 ```bash
-./venv/bin/python scripts/prepare_reasoning_dataset.py \
+./venv/bin/python scripts/prepare_reasoning_dataset_p22.py \
   --vault data/pedagogy/cot_vault.jsonl \
-  --output data/train_reasoning_cot.bin \
-  --min-len 15
+  --output data/train_reasoning_cot.bin
 ```
+
+> Not: v1.5.0 öncülü `prepare_reasoning_dataset.py` bayat sözlüğe (data/vocab.json, 31.357) derlediği
+> ve meta'sı train.py sınır kapısıyla uyumsuz olduğu için `scripts/_legacy/prepare_reasoning_dataset_v150.py`
+> yoluna emekliye ayrıldı (P2.2 kanıtı, P2.3 kararı); kanonik betik `_p22` uzantılıdır.
 
 ### 4. Vektörel Bellek Arındırma ve Denetim (Sanitization)
 Bellekteki CoT sızıntılarını temizlemek ve saf bilgi kartlarını yeniden indekslemek için:

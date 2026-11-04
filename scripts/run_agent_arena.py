@@ -32,8 +32,11 @@ import time
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from src.gateway.agent_gateway import AgentGateway
-from src.gateway.retrain_pipeline import RetrainPipeline
-from src.gateway.pedagogical_supervisor import PedagogicalSupervisor, CURRICULUM_PROBES, get_curriculum_probes
+from src.gateway.pedagogical_supervisor import (
+    PedagogicalSupervisor, CURRICULUM_PROBES, get_curriculum_probes,
+    varsayilan_otonom_retrain_pipeline,
+    OTONOM_RETRAIN_MODEL_PATH, OTONOM_RETRAIN_SAVE_PATH, OTONOM_RETRAIN_VOCAB_PATH,
+)
 
 # Renk Kodları
 C_RESET = "\033[0m"
@@ -56,6 +59,11 @@ def main():
     parser.add_argument("--vocab", type=str, default=None, help="Külliyat sözlüğü — ZORUNLU; checkpoint satır sayısıyla AYNI olmalı (T-0088)")
     parser.add_argument("--auto-retrain", action="store_true", help="future_train eşiği aşıldığında modeli otomatik yeniden eğit")
     parser.add_argument("--retrain-threshold", type=int, default=5, help="Otomatik eğitim için biriken kayıt eşiği")
+    # P2.3 ONARIM-1: --auto-retrain T-0087 gereği AÇIK yollar ister; varsayılanlar
+    # kanoniktir ve süpervizörün varsayılan_otonom_retrain_pipeline'ıyla AYNI sabittir.
+    parser.add_argument("--retrain-model", type=str, default=OTONOM_RETRAIN_MODEL_PATH, help="Otonom retrain --load-path tabanı (varsayılan: kanonik anka tabanı; üzerine YAZILMAZ)")
+    parser.add_argument("--retrain-save", type=str, default=OTONOM_RETRAIN_SAVE_PATH, help="Otonom retrain çıktı checkpoint'i — tabandan AYRI dosyaya yazar")
+    parser.add_argument("--retrain-vocab", type=str, default=OTONOM_RETRAIN_VOCAB_PATH, help="Otonom retrain derleme sözlüğü (kanonik anka_r1_33114)")
     parser.add_argument("--device", type=str, default="cpu", help="Hesaplama cihazı (cpu / mps)")
     parser.add_argument("--server", action="store_true", help="HTTP REST API sunucusu olarak başlat")
     parser.add_argument("--host", type=str, default="127.0.0.1", help="Sunucu adresi")
@@ -109,7 +117,15 @@ def main():
 
     print(f"{C_BLUE}[1/3] Ajan Kapısı ve Bileşenler Yükleniyor...{C_RESET}")
     gateway = AgentGateway.create_default(model_path=args.model, vocab_path=args.vocab, device=args.device)
-    retrain_pipeline = RetrainPipeline(device=args.device)
+    # P2.3 ONARIM-1: eski `RetrainPipeline(device=...)` yolsuz kuruluyordu ve
+    # --auto-retrain eşikte `run_training` RuntimeError ile ölüyordu (T-0087).
+    # Kanonik yollar CLI/env üzerinden geçer; save==model fabrika kapısında durur.
+    retrain_pipeline = varsayilan_otonom_retrain_pipeline(
+        model_path=args.retrain_model,
+        save_path=args.retrain_save,
+        vocab_path=args.retrain_vocab,
+        device=args.device,
+    )
     supervisor = PedagogicalSupervisor(
         gateway=gateway,
         retrain_pipeline=retrain_pipeline,

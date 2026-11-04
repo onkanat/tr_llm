@@ -17,7 +17,7 @@ from src.gateway.pedagogical_supervisor import (
     PedagogicalSupervisor,
     _CANONICAL_PROD_VAULT
 )
-from scripts.prepare_reasoning_dataset import format_reasoning_sample
+from scripts.prepare_reasoning_dataset_p22 import format_reasoning_sample
 
 
 class TestCoTVaultAndDualParser(unittest.TestCase):
@@ -104,11 +104,13 @@ class TestCoTVaultAndDualParser(unittest.TestCase):
                 self.assertEqual(data["source"], "test_teacher")
 
     def test_format_reasoning_sample(self):
+        # P2.2/P2.3: v1.5.0 betiği emekliye ayrıldı (scripts/_legacy/..._v150.py);
+        # kalıbın kanonik sahibi artık _p22 betiğinin format_reasoning_sample'ıdır.
         item = {
             "instruction": "Akıl yürüterek cevapla.",
             "query": "Açık istiare nedir?",
-            "thought_trace": "İstiare teşbihin tek ögeyle yapılmasıdır.",
-            "final_answer": "Açık istiare sadece kendisine benzetilenle yapılır."
+            "thought": "İstiare teşbihin tek ögeyle yapılmasıdır.",
+            "answer": "Açık istiare sadece kendisine benzetilenle yapılır."
         }
 
         formatted = format_reasoning_sample(item)

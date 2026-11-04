@@ -554,6 +554,60 @@ _REPO_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__f
 _CANONICAL_PROD_VAULT = os.path.realpath(os.path.join(_REPO_ROOT, "data", "pedagogy", "cot_vault.jsonl"))
 
 
+# --- P2.3 ONARIM-1: Otonom retrain kanonik yolları (T-0087 ile uyumlu) ---------
+# T-0087'den bu yana `RetrainPipeline()` argümansız kurulamaz (model_path/save_path/
+# vocab_path fail-closed kaldırıldı). Süpervizörün `--auto-retrain` akışı bunu
+# atlıyordu: eşik aşıldığında `run_training` RuntimeError ile ölüyordu (P2.3'te
+# ölçüldü). Varsayılan boru hattı artık AÇIK kanonik yollarla kurulur; yollar env
+# (RETRAIN_*_PATH) veya CLI (scripts/run_agent_arena.py --retrain-*) ile geçilebilir.
+OTONOM_RETRAIN_MODEL_PATH = "data/anka_taban_pure.pt"       # yüklenen taban (yalnızca okunur)
+OTONOM_RETRAIN_SAVE_PATH = "data/anka_otonom_retrain_out.pt"  # AYRI çıktı — tabanın ÜZERİNE YAZMAZ
+OTONOM_RETRAIN_VOCAB_PATH = "data/rebuild/vocab_anka_r1_33114.json"
+
+
+def varsayilan_otonom_retrain_pipeline(
+    model_path: Optional[str] = None,
+    save_path: Optional[str] = None,
+    vocab_path: Optional[str] = None,
+    future_train_path: Optional[str] = None,
+    archive_path: Optional[str] = None,
+    output_bin_path: Optional[str] = None,
+    device: str = "cpu",
+) -> RetrainPipeline:
+    """Süpervizörün otonom retrain boru hattını KONFİGÜRE kurar (T-0087 uyumlu).
+
+    Öncelik: açık argüman > RETRAIN_*_PATH ortam değişkeni > kanonik sabit.
+    `save_path` daima `model_path`'ten AYRI olmalıdır: taban checkpoint'in
+    üzerine yazma kapısıdır. `data/*.pt` donmuş desen olduğundan ayrı çıktıya
+    yazış `--allow-frozen-write` eşdeğeri (`allow_frozen_write=True`) ile açılır.
+    """
+    model_path = model_path or os.environ.get("RETRAIN_MODEL_PATH", OTONOM_RETRAIN_MODEL_PATH)
+    save_path = save_path or os.environ.get("RETRAIN_SAVE_PATH", OTONOM_RETRAIN_SAVE_PATH)
+    vocab_path = vocab_path or os.environ.get("RETRAIN_VOCAB_PATH", OTONOM_RETRAIN_VOCAB_PATH)
+    future_train_path = future_train_path or os.environ.get(
+        "RETRAIN_FUTURE_PATH", "data/future_train_vector.jsonl")
+    archive_path = archive_path or os.environ.get(
+        "RETRAIN_ARCHIVE_PATH", "data/future_train_archive.jsonl")
+    output_bin_path = output_bin_path or os.environ.get(
+        "RETRAIN_BIN_PATH", "data/train_future_finetune.bin")
+    if os.path.realpath(save_path) == os.path.realpath(model_path):
+        raise RuntimeError(
+            f"DURDURULDU (P2.3): otonom retrain save_path '{save_path}' ile model_path "
+            f"'{model_path}' AYNI dosyadır — taban checkpoint'in üzerine yazılamaz. "
+            "Ayrı bir çıktı yolu verin (ör. RETRAIN_SAVE_PATH=data/anka_otonom_retrain_out.pt)."
+        )
+    return RetrainPipeline(
+        future_train_path=future_train_path,
+        archive_path=archive_path,
+        vocab_path=vocab_path,
+        model_path=model_path,
+        output_bin_path=output_bin_path,
+        save_path=save_path,
+        allow_frozen_write=True,  # --allow-frozen-write eşdeğeri (data/*.pt donmuş)
+        device=device,
+    )
+
+
 def record_to_cot_vault(
     query: str,
     instruction: str,
@@ -641,7 +695,7 @@ class PedagogicalSupervisor:
         vault_path: Optional[str] = None
     ):
         self.gateway = gateway
-        self.retrain_pipeline = retrain_pipeline or RetrainPipeline()
+        self.retrain_pipeline = retrain_pipeline or varsayilan_otonom_retrain_pipeline()
         self.retrain_threshold = retrain_threshold
         self.gemini_api_key = gemini_api_key or os.environ.get("GEMINI_API_KEY")
         self.ollama_url = ollama_url or os.environ.get("OLLAMA_URL")

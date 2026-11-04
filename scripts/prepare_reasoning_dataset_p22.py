@@ -112,6 +112,22 @@ def kart_kalitesi(a: str) -> Tuple[bool, str]:
     return True, "temiz"
 
 
+def format_reasoning_sample(rec: dict) -> dict:
+    """CoT kasa kaydı → SFT kaydı (v1.5.0 format_reasoning_sample kalıbı; uyarlama YOK).
+
+    Süreç şeması `load_vault` kaydıdır (instruction/query/thought/answer). Emeklilik
+    notu (P2.2/P2.3): v1.5.0 betiği `scripts/_legacy/prepare_reasoning_dataset_v150.py`'ye
+    taşındı; bu kalıp artık kanonik betikte sahiplendirildi ve birim testlidir
+    (tests/test_cot_vault_and_dual_parser.py).
+    """
+    out_text = f"<DUSUNCE> {(rec.get('thought') or '').strip()} </DUSUNCE> {(rec.get('answer') or '').strip()}".strip()
+    return {
+        "instruction": (rec.get("instruction") or "").strip() or "Soruyu derinlemesine akıl yürüterek açıkla.",
+        "input": (rec.get("query") or "").strip(),
+        "output": out_text,
+    }
+
+
 def load_vault(
     vault_path: str,
     dedup: bool,
@@ -236,15 +252,8 @@ def main() -> int:
               "--kalite-kapisi-yok ile teşhis koşabilirsiniz.")
         return 1
 
-    # ---- SFT kayıtları (kalıbı kaynaktan: v1.5.0 format_reasoning_sample) ------
-    sft_records = []
-    for r in kept:
-        out_text = f"<DUSUNCE> {r['thought']} </DUSUNCE> {r['answer']}".strip()
-        sft_records.append({
-            "instruction": r["instruction"] or "Soruyu derinlemesine akıl yürüterek açıkla.",
-            "input": r["query"],
-            "output": out_text,
-        })
+    # ---- SFT kayıtları (v1.5.0 format_reasoning_sample kalıbı — artık fonksiyon) --
+    sft_records = [format_reasoning_sample(r) for r in kept]
 
     # ---- Kanonik tokenizasyon --------------------------------------------------
     seqs: List[List[int]] = []
