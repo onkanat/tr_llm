@@ -1,0 +1,94 @@
+{
+ "uretim_tarihi": "2026-11-04 21:01",
+ "gorev": "P2.5 KALEM-3 — legal SFT v3 (kart-kimliği dozu; K2 hedefli)",
+ "kaynak_korpus": "data/legal_korpus/ (17 kanun, mevzuat.gov.tr)",
+ "taban_v2": {
+  "dosya": "data/pedagogy/legal_canonical_sft_v2.jsonl",
+  "sha256": "1c822c9f41bd0896f65ed85ff24f59d883346b46f26f8ba6c58922ad2bf6524f",
+  "kayit": 4813,
+  "dokunulmaz": true
+ },
+ "vocab": "vocab_anka_r1_33114.json",
+ "literal_entity_mode": true,
+ "kayit_sayisi": 5346,
+ "yeni_kayit": 533,
+ "v2_kayit": 4813,
+ "val_sozlesmesi": "v2 son-50 (2A val avlusu) dosya sonunda BAYT-BİREBİR; yeni kayıtlar tohum-42 ile v2-train bloğuna KARIŞTIRILDI",
+ "desenler": {
+  "a_madde_bulma": "konu→madde numarası (Mevzuat Yanıtı kartı); konu başlık (%60) veya gövdeden birebir öbek (%40)",
+  "b_ters_kimlik": "madde numarası→metin (Mevzuat Hükmü kartı + kısa öz); havuz ~%25 başlıksız/Geçici-Ek",
+  "c_kart_iskelet": "c1 Hükmü/c2 Yanıtı/c3 Tanımı/c4 Ayrımı/c5 Dizisi — çıktı kalıbı FAZ-1/v2 kurucularından birebir; talimatlar YENİ şablonlar; tip-dengeli doz"
+ },
+ "tip_dagilimi_yeni": {
+  "a_madde_bulma": 150,
+  "b_ters_kimlik": 150,
+  "c1_kart_hukum": 60,
+  "c2_kart_yanit": 50,
+  "c3_kart_tanim": 50,
+  "c4_kart_ayrim": 50,
+  "c5_kart_dizi": 30
+ },
+ "dedupe_v2_ortusme": 7,
+ "alinti_birebir": {
+  "gecen": 629,
+  "toplam": 629
+ },
+ "token_olcumu": {
+  "yeni_blok": {
+   "toplam_token": 105842,
+   "unk_token": 1307,
+   "unk_yuzde": 1.235,
+   "unklu_kayit": 419,
+   "talimatinda_unk_kayit": 88,
+   "kayit": 533,
+   "maks_kayit_unk": 15
+  },
+  "tam_v3": {
+   "toplam_token": 983563,
+   "unk_token": 17356,
+   "unk_yuzde": 1.765,
+   "ortalama_kayit_token": 184.0
+  }
+ },
+ "kanonik20_onizleme": {
+  "tohum": 42,
+  "nufus": 5346,
+  "orneklem_idx": [
+   204,
+   217,
+   244,
+   260,
+   712,
+   767,
+   839,
+   912,
+   1143,
+   1791,
+   1828,
+   1905,
+   2006,
+   2253,
+   3456,
+   4139,
+   4467,
+   4837,
+   4931,
+   5238
+  ],
+  "kart_dagilimi": {
+   "Mevzuat Hükmü": 15,
+   "Mevzuat Yanıtı": 1,
+   "Kanun Tanımı": 4
+  }
+ },
+ "dogrulamalar": {
+  "son50_ozdes": true,
+  "orta_cokluk_ozdes": true,
+  "sema_ok": true,
+  "satir_sayisi": 5346
+ },
+ "dusenler": [],
+ "montaj_toz": 42,
+ "sha256_v3": "3b9ca7d92ea77f47dcd60527543355cbdea5a9190a1ed399da5d69039e6a0325",
+ "sha256_uretici": "095cfb3dee0f8a599f79fa14ef7997d5b24f81974856d29cab5819fca83ee1f9"
+}
