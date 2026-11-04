@@ -25,7 +25,13 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 import src.gateway.agent_gateway as ag  # noqa: E402
 
 CANLI_HOST = "delinux01.local"
-BEKLENEN_ROUTER_SD_SHA = "a2a95957072efbd52b097d711854c1b427132fa679ee30ac20f2c2daba45f25c"
+# P25 TERFİ (2026-11-04, kullanıcı talimatı): router v2 → v3 (legal sınıfı
+# 0→60 örnek; hukuk probunda 0/10 → 8/10 legal; diğer 4 sınıf v2-paritesi 1,0;
+# hüküm: data/eval/p25_router_v3_hukum_2026-11-04.json — P25_ROUTER_V3_LEGAL_GECTI).
+DEFAULT_ROUTER_PATH = "data/anka_router_v3.pt"
+# K8-tarifi state_dict SHA çıpası (K4 determinizm kapısındaki değerle birebir):
+# 4016b210f5a777b0d2daf5ffe4be92d91019b78eaa3709f9c877e2468f1701b5
+BEKLENEN_ROUTER_SD_SHA = "4016b210f5a777b0d2daf5ffe4be92d91019b78eaa3709f9c877e2468f1701b5"
 
 
 class CanliVectorMemory(ag.VectorMemory):
@@ -47,6 +53,34 @@ def _sd_sha(sd):
     return h.hexdigest()
 
 
+def build_expert_model_paths() -> dict:
+    """Canlı yığın uzman-çözümü (MoE sözlüğü): gardener + carpenter (T-0209,
+    DEĞİŞMEZ) + legal (P25 terfi, 2026-11-04 kullanıcı talimatı).
+
+    AÇIK UYARI (hüküm — bu uyarı KAPANMAZ): legal ceketi anka_legal_replay.pt
+    P2.5 değerlendirme kapılarından GEÇMEDİ — KALDI 0/3 (ΔCE −0,306/−0,50;
+    kanonik-20 0/20; OOD 0,365/0,40; bkz. data/eval/p25_router_v3_hukum_2026-11-04.json
+    ve CHANGELOG 1.17.0). Yığına bağlanması KULLANICI TALİMATIDIR; router v3
+    kendisi GEÇTİ (8/10 legal, 4 sınıf v2-paritesi 1,0). Ölçülen tuzak: bu
+    anahtar olmasa v3 router 'legal'i seçer ama üretim sessizce TABANA düşer
+    (epistemic_agent.py:459) — anahtar burada EKLENİR, sessiz düşüş kapanır.
+    """
+    expert_model_paths = {}
+    bahcivan_path = "data/anka_bahcivan.pt"
+    if Path(bahcivan_path).exists():
+        expert_model_paths["gardener"] = bahcivan_path
+
+    marangoz_path = "data/anka_marangoz.pt"
+    if Path(marangoz_path).exists():
+        expert_model_paths["carpenter"] = marangoz_path
+
+    legal_path = "data/anka_legal_replay.pt"
+    if Path(legal_path).exists():
+        expert_model_paths["legal"] = legal_path
+
+    return expert_model_paths
+
+
 def main():
     ayarla = argparse.ArgumentParser(description="Canlı gateway başlatıcı (delinux01.local köprüsü)")
     ayarla.add_argument("--host", type=str, default="0.0.0.0",
@@ -54,8 +88,8 @@ def main():
     ayarla.add_argument("--port", type=int, default=8080)
     ayarla.add_argument("--model", type=str, default="data/anka_taban_pure.pt",
                         help="Yüklenecek saf taban model checkpoint yolu (varsayılan: anka_taban_pure.pt)")
-    ayarla.add_argument("--router", type=str, default="data/anka_router_v2.pt",
-                        help="Yüklenecek router checkpoint yolu (varsayılan: anka_router_v2.pt)")
+    ayarla.add_argument("--router", type=str, default=DEFAULT_ROUTER_PATH,
+                        help="Yüklenecek router checkpoint yolu (varsayılan: anka_router_v3.pt — P25 terfi)")
     ayarla.add_argument("--qdrant-url", type=str, default=None,
                         help="Qdrant URL'i (ör. http://192.168.1.9:6333); yoksa QDRANT_URL env, "
                              "o da yoksa eski CanliVectorMemory köprüsü (delinux01.local) geçerli")
@@ -67,15 +101,10 @@ def main():
     if not cozulen_url:
         ag.VectorMemory = CanliVectorMemory
 
-    # T-0209: Hem Bahçıvan hem Marangoz uzman ceketlerini MoE sözlüğüne bağla
-    expert_model_paths = {}
-    bahcivan_path = "data/anka_bahcivan.pt"
-    if Path(bahcivan_path).exists():
-        expert_model_paths["gardener"] = bahcivan_path
-
-    marangoz_path = "data/anka_marangoz.pt"
-    if Path(marangoz_path).exists():
-        expert_model_paths["carpenter"] = marangoz_path
+    # T-0209: Bahçıvan + Marangoz uzman ceketleri (DEĞİŞMEZ) VE P25 terfi:
+    # legal uzmanı (anka_legal_replay.pt) MoE sözlüğüne bağlanır — uyarı ve
+    # gerekçe build_expert_model_paths() docstring'inde AÇIK tutulur.
+    expert_model_paths = build_expert_model_paths()
 
     gw = ag.AgentGateway.create_default(
         model_path=args.model,

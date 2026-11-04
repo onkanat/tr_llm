@@ -106,7 +106,15 @@ class AgentGateway:
         vocab_path: Optional[str] = None,
         lexicon_path: str = "data/lexicon/roots.tsv",
         storage_path: Optional[str] = None,
-        router_state_path: str = "data/anka_router_v2.pt",
+        # P25 TERFİ (2026-11-04, kullanıcı talimatı): default router v2 → v3.
+        # Gerekçe (ölçülmüş): v3'te legal sınıfı 0→60 örnek; 10 hukuk sorgusunda
+        # 0/10 → 8/10 legal; diğer 4 sınıf v2-paritesi 1,0 (T-0210 çıpası birebir;
+        # hüküm: data/eval/p25_router_v3_hukum_2026-11-04.json, K7 geçti).
+        # AÇIK UYARI: legal CEKETİ (replay) P2.5 kapılarından GEÇMEDİ (KALDI 0/3:
+        # ΔCE −0,306/−0,50; kanonik-20 0/20; OOD 0,365/0,40) — yine de kullanıcı
+        # talimatıyla canlı yığına bağlanır (bkz. baslat_canli_gateway.py).
+        # v2 DISKTE DEĞİŞMEZ (devir çıpası); isteyen açıkça verebilir.
+        router_state_path: str = "data/anka_router_v3.pt",
         expert_model_paths: Optional[Dict[str, str]] = None,
         device: str = "cpu",
         host: Optional[str] = "localhost",
