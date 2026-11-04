@@ -1,0 +1,82 @@
+=== P2.6 SFT-REPLAY (T-0209 kalıbı) | cihaz=mps | pilot=False ===
+[MPS] önerilen çalışma-seti sınırı: 5.33 GB
+[PROVENANS] init sha256: 5479a2f35a88975cae3cd8e66e4aef0bb7b09bea5274828709fe2c0e1d263360
+[PROVENANS] öğretmen sha256: 5479a2f35a88975cae3cd8e66e4aef0bb7b09bea5274828709fe2c0e1d263360
+[PROVENANS] pencere bin sha256: 7f91317aa58b17e777304b70619dc48b912c47ad563a478f5ca89cd95b57745c
+UYARI: SFT kayıt sayısı 5346 != 4498 (T-0209 sabiti)
+SFT train: 5196 | pencere: 1854 | toplam 7050 -> 221 opt-adım/epok, 663 toplam
+[BAŞLANGIÇ] masked SFT val CE: 4.740863 | pencere-CE (kulliyat_v2): 3.9633
+[ÖN-HESAP] sözlük+model/öğretmen yükleme+tokenizasyon+başlangıç değerlendirmeleri: 114.5 sn
+Adım 1/663 | Loss 4.0674 | LR 2.50e-06 | adım-süresi ort 2.60s (son 1) | MPS 1.78GB | KL-aktif 2/2 mikro-parti
+Adım 10/663 | Loss 3.9234 | LR 2.50e-05 | adım-süresi ort 4.98s (son 10) | MPS 1.78GB | KL-aktif 20/20 mikro-parti
+Adım 20/663 | Loss 3.9844 | LR 5.00e-05 | adım-süresi ort 5.13s (son 10) | MPS 1.78GB | KL-aktif 40/40 mikro-parti
+Adım 30/663 | Loss 4.1973 | LR 5.00e-05 | adım-süresi ort 4.73s (son 10) | MPS 1.78GB | KL-aktif 60/60 mikro-parti
+Adım 40/663 | Loss 3.8865 | LR 4.99e-05 | adım-süresi ort 2.22s (son 10) | MPS 1.78GB | KL-aktif 79/80 mikro-parti
+Adım 50/663 | Loss 4.0195 | LR 4.98e-05 | adım-süresi ort 2.16s (son 10) | MPS 1.78GB | KL-aktif 99/100 mikro-parti
+Adım 60/663 | Loss 3.6144 | LR 4.96e-05 | adım-süresi ort 2.05s (son 10) | MPS 1.78GB | KL-aktif 119/120 mikro-parti
+Adım 70/663 | Loss 3.7352 | LR 4.94e-05 | adım-süresi ort 1.92s (son 10) | MPS 1.78GB | KL-aktif 139/140 mikro-parti
+Adım 80/663 | Loss 3.8630 | LR 4.92e-05 | adım-süresi ort 2.31s (son 10) | MPS 1.78GB | KL-aktif 159/160 mikro-parti
+Adım 90/663 | Loss 3.9448 | LR 4.89e-05 | adım-süresi ort 3.66s (son 10) | MPS 1.78GB | KL-aktif 179/180 mikro-parti
+Adım 100/663 | Loss 3.7368 | LR 4.85e-05 | adım-süresi ort 3.52s (son 10) | MPS 1.78GB | KL-aktif 198/200 mikro-parti
+Adım 110/663 | Loss 3.4869 | LR 4.81e-05 | adım-süresi ort 2.10s (son 10) | MPS 1.78GB | KL-aktif 218/220 mikro-parti
+Adım 120/663 | Loss 3.8657 | LR 4.77e-05 | adım-süresi ort 2.23s (son 10) | MPS 1.78GB | KL-aktif 237/240 mikro-parti
+Adım 130/663 | Loss 3.7160 | LR 4.72e-05 | adım-süresi ort 2.35s (son 10) | MPS 1.78GB | KL-aktif 256/260 mikro-parti
+Adım 140/663 | Loss 3.6365 | LR 4.67e-05 | adım-süresi ort 2.20s (son 10) | MPS 1.78GB | KL-aktif 275/280 mikro-parti
+Adım 150/663 | Loss 3.8499 | LR 4.62e-05 | adım-süresi ort 2.35s (son 10) | MPS 1.78GB | KL-aktif 295/300 mikro-parti
+Adım 160/663 | Loss 3.2490 | LR 4.56e-05 | adım-süresi ort 2.26s (son 10) | MPS 1.78GB | KL-aktif 315/320 mikro-parti
+Adım 170/663 | Loss 3.7478 | LR 4.49e-05 | adım-süresi ort 2.18s (son 10) | MPS 1.78GB | KL-aktif 334/340 mikro-parti
+Adım 180/663 | Loss 3.7982 | LR 4.43e-05 | adım-süresi ort 2.45s (son 10) | MPS 1.78GB | KL-aktif 354/360 mikro-parti
+Adım 190/663 | Loss 3.7965 | LR 4.36e-05 | adım-süresi ort 2.69s (son 10) | MPS 1.78GB | KL-aktif 374/380 mikro-parti
+Adım 200/663 | Loss 3.6091 | LR 4.28e-05 | adım-süresi ort 2.28s (son 10) | MPS 1.78GB | KL-aktif 394/400 mikro-parti
+Adım 210/663 | Loss 3.5659 | LR 4.21e-05 | adım-süresi ort 2.40s (son 10) | MPS 1.78GB | KL-aktif 414/420 mikro-parti
+Adım 220/663 | Loss 3.8787 | LR 4.13e-05 | adım-süresi ort 2.50s (son 10) | MPS 1.78GB | KL-aktif 434/440 mikro-parti
+  [ckpt] epok 1 sonu: 'data/anka_legal_v4.pt_e1.pt' (NOT: cosine ortası — tam anneal edilmedi)
+Adım 230/663 | Loss 3.8755 | LR 4.04e-05 | adım-süresi ort 2.65s (son 10) | MPS 1.78GB | KL-aktif 454/460 mikro-parti
+Adım 240/663 | Loss 3.5635 | LR 3.96e-05 | adım-süresi ort 2.53s (son 10) | MPS 1.78GB | KL-aktif 472/480 mikro-parti
+Adım 250/663 | Loss 3.6274 | LR 3.87e-05 | adım-süresi ort 2.88s (son 10) | MPS 1.78GB | KL-aktif 492/500 mikro-parti
+Adım 260/663 | Loss 3.6709 | LR 3.78e-05 | adım-süresi ort 3.15s (son 10) | MPS 1.78GB | KL-aktif 512/520 mikro-parti
+Adım 270/663 | Loss 3.5590 | LR 3.69e-05 | adım-süresi ort 2.53s (son 10) | MPS 1.78GB | KL-aktif 532/540 mikro-parti
+Adım 280/663 | Loss 3.6806 | LR 3.60e-05 | adım-süresi ort 3.10s (son 10) | MPS 1.78GB | KL-aktif 552/560 mikro-parti
+Adım 290/663 | Loss 3.6902 | LR 3.51e-05 | adım-süresi ort 18.03s (son 10) | MPS 1.78GB | KL-aktif 572/580 mikro-parti
+Adım 300/663 | Loss 3.6559 | LR 3.41e-05 | adım-süresi ort 11.33s (son 10) | MPS 1.78GB | KL-aktif 591/600 mikro-parti
+Adım 310/663 | Loss 3.4203 | LR 3.32e-05 | adım-süresi ort 18.15s (son 10) | MPS 1.78GB | KL-aktif 611/620 mikro-parti
+Adım 320/663 | Loss 3.1529 | LR 3.22e-05 | adım-süresi ort 11.93s (son 10) | MPS 1.78GB | KL-aktif 631/640 mikro-parti
+Adım 330/663 | Loss 3.5386 | LR 3.12e-05 | adım-süresi ort 16.39s (son 10) | MPS 1.78GB | KL-aktif 651/660 mikro-parti
+Adım 340/663 | Loss 3.4535 | LR 3.02e-05 | adım-süresi ort 14.54s (son 10) | MPS 1.78GB | KL-aktif 671/680 mikro-parti
+Adım 350/663 | Loss 3.6391 | LR 2.93e-05 | adım-süresi ort 14.09s (son 10) | MPS 1.78GB | KL-aktif 691/700 mikro-parti
+Adım 360/663 | Loss 3.6195 | LR 2.83e-05 | adım-süresi ort 16.37s (son 10) | MPS 1.78GB | KL-aktif 711/720 mikro-parti
+Adım 370/663 | Loss 3.4003 | LR 2.73e-05 | adım-süresi ort 15.32s (son 10) | MPS 1.78GB | KL-aktif 731/740 mikro-parti
+Adım 380/663 | Loss 3.4882 | LR 2.64e-05 | adım-süresi ort 15.02s (son 10) | MPS 1.78GB | KL-aktif 750/760 mikro-parti
+Adım 390/663 | Loss 3.4274 | LR 2.54e-05 | adım-süresi ort 11.59s (son 10) | MPS 1.78GB | KL-aktif 770/780 mikro-parti
+Adım 400/663 | Loss 3.3132 | LR 2.45e-05 | adım-süresi ort 12.55s (son 10) | MPS 1.78GB | KL-aktif 789/800 mikro-parti
+Adım 410/663 | Loss 3.4810 | LR 2.35e-05 | adım-süresi ort 11.17s (son 10) | MPS 1.78GB | KL-aktif 809/820 mikro-parti
+Adım 420/663 | Loss 3.5270 | LR 2.26e-05 | adım-süresi ort 16.31s (son 10) | MPS 1.78GB | KL-aktif 829/840 mikro-parti
+Adım 430/663 | Loss 3.7086 | LR 2.17e-05 | adım-süresi ort 16.60s (son 10) | MPS 1.78GB | KL-aktif 849/860 mikro-parti
+Adım 440/663 | Loss 3.6514 | LR 2.08e-05 | adım-süresi ort 4.14s (son 10) | MPS 1.78GB | KL-aktif 869/880 mikro-parti
+  [ckpt] epok 2 sonu: 'data/anka_legal_v4.pt_e2.pt' (NOT: cosine ortası — tam anneal edilmedi)
+Adım 450/663 | Loss 3.4111 | LR 2.00e-05 | adım-süresi ort 2.71s (son 10) | MPS 1.78GB | KL-aktif 889/900 mikro-parti
+Adım 460/663 | Loss 3.5150 | LR 1.91e-05 | adım-süresi ort 3.24s (son 10) | MPS 1.78GB | KL-aktif 909/920 mikro-parti
+Adım 470/663 | Loss 3.4134 | LR 1.83e-05 | adım-süresi ort 2.89s (son 10) | MPS 1.78GB | KL-aktif 927/940 mikro-parti
+Adım 480/663 | Loss 3.6933 | LR 1.76e-05 | adım-süresi ort 2.50s (son 10) | MPS 1.78GB | KL-aktif 947/960 mikro-parti
+Adım 490/663 | Loss 3.2141 | LR 1.68e-05 | adım-süresi ort 5.50s (son 10) | MPS 1.78GB | KL-aktif 966/980 mikro-parti
+Adım 500/663 | Loss 3.2360 | LR 1.61e-05 | adım-süresi ort 14.53s (son 10) | MPS 1.78GB | KL-aktif 984/1000 mikro-parti
+Adım 510/663 | Loss 3.6014 | LR 1.54e-05 | adım-süresi ort 14.90s (son 10) | MPS 1.78GB | KL-aktif 1004/1020 mikro-parti
+Adım 520/663 | Loss 3.3467 | LR 1.47e-05 | adım-süresi ort 13.97s (son 10) | MPS 1.78GB | KL-aktif 1024/1040 mikro-parti
+Adım 530/663 | Loss 3.4775 | LR 1.41e-05 | adım-süresi ort 11.55s (son 10) | MPS 1.78GB | KL-aktif 1044/1060 mikro-parti
+Adım 540/663 | Loss 3.2604 | LR 1.36e-05 | adım-süresi ort 12.72s (son 10) | MPS 1.78GB | KL-aktif 1064/1080 mikro-parti
+Adım 550/663 | Loss 3.2856 | LR 1.30e-05 | adım-süresi ort 5.76s (son 10) | MPS 1.78GB | KL-aktif 1084/1100 mikro-parti
+Adım 560/663 | Loss 3.3317 | LR 1.25e-05 | adım-süresi ort 2.74s (son 10) | MPS 1.78GB | KL-aktif 1104/1120 mikro-parti
+Adım 570/663 | Loss 3.5212 | LR 1.21e-05 | adım-süresi ort 2.69s (son 10) | MPS 1.78GB | KL-aktif 1124/1140 mikro-parti
+Adım 580/663 | Loss 3.3230 | LR 1.17e-05 | adım-süresi ort 3.10s (son 10) | MPS 1.78GB | KL-aktif 1144/1160 mikro-parti
+Adım 590/663 | Loss 3.5941 | LR 1.13e-05 | adım-süresi ort 3.06s (son 10) | MPS 1.78GB | KL-aktif 1164/1180 mikro-parti
+Adım 600/663 | Loss 3.3686 | LR 1.10e-05 | adım-süresi ort 2.50s (son 10) | MPS 1.78GB | KL-aktif 1184/1200 mikro-parti
+Adım 610/663 | Loss 3.3619 | LR 1.07e-05 | adım-süresi ort 2.58s (son 10) | MPS 1.78GB | KL-aktif 1204/1220 mikro-parti
+Adım 620/663 | Loss 3.2778 | LR 1.05e-05 | adım-süresi ort 2.60s (son 10) | MPS 1.78GB | KL-aktif 1224/1240 mikro-parti
+Adım 630/663 | Loss 3.5727 | LR 1.03e-05 | adım-süresi ort 2.68s (son 10) | MPS 1.78GB | KL-aktif 1244/1260 mikro-parti
+Adım 640/663 | Loss 3.4582 | LR 1.01e-05 | adım-süresi ort 3.13s (son 10) | MPS 1.78GB | KL-aktif 1264/1280 mikro-parti
+Adım 650/663 | Loss 3.4384 | LR 1.00e-05 | adım-süresi ort 2.40s (son 10) | MPS 1.78GB | KL-aktif 1284/1300 mikro-parti
+Adım 660/663 | Loss 3.5229 | LR 1.00e-05 | adım-süresi ort 2.72s (son 10) | MPS 1.78GB | KL-aktif 1304/1320 mikro-parti
+
+[BİTİŞ] masked SFT val CE: 4.740863 -> 3.909319 | pencere-CE: 3.9633 -> 3.7886 | Süre: 4237.5 sn
+[KL-KANIT] KL dalı 1307/1323 mikro-partide ateşlendi | tüm-koşum KL ort 0.173522 (öz-çapa: öğretmen==init → adım-0'da KL≈0 beklenir)
+[MODEL_KAYDEDİLDİ] data/anka_legal_v4.pt (sha256: 9c244acf598c350692bdee834de22de14316843e9e0e291c4574d4de19465bb5)

@@ -4,6 +4,14 @@ Bu projedeki tüm önemli değişiklikler bu dosyada belgelenmektedir.
 
 Format [Keep a Changelog](https://keepachangelog.com/tr/1.0.0/) standardına dayanır ve bu proje [Semantic Versioning (SemVer)](https://semver.org/spec/v2.0.0.html) ilkelerini benimser.
 
+## [1.20.0] - 2026-11-04
+
+### Eklendi (Added)
+- **P2.6 tur-5 (uzun-yanıt hipotezinin çürütülmesi):** `pure_base_sft_v4.jsonl` (+526 nötr kayıt: 344 uzun [81-140 morfem, ort 105,8] + 182 format-çeşitliliği; UNK %0; val-150 bayt-özdeş) + `anka_taban_v3r5.pt` — görev ekseni korundu ve güçlendi (`gideceğim`→TENSE **0,9868**, 4/4 top-1) ama üretim-uzunluğu 8,6× doza rağmen dönmedi (sonda 58; kontrol 24→16): **erken-EOS dozdan değil talimat-bağlamdan** — sonda önekleri eğitim dağıtımında bilinçli yok, uzun davranış oraya transfer olmuyor. KAPI-1 **2,4271** (kapanış −0,012/tur — doygun). Ölçülen sıradaki kaldıraç: talimat-aile kapsamlı uzun kart.
+- **Kalem 3 — legal kart-kimliği verisi:** `legal_canonical_sft_v3.jsonl` 5.346 kayıt (+533 hedefli: madde-bulma 150 / ters-kimlik 150 / kart-iskelet 233; birebir kapı 629/629; UNK %1,24) — kanonik-20 rig'inin 4 boşluğu teşhisli: sabit 9-jeton iskelet, talimat→kart-tip haritası, kanun-adı↔numara bağı, yönlü eşleme deseni.
+- **Kalem 4 — ΔH kalibrasyonu 36→107 sorgu:** en iyi `delta_h @ −0,85` (J +0,23, CI95 [+0,02;+0,45] — 0'ı dışlayan tek aday; tetik %100→%18,7). Konfandör ölçüldü: `simulasyon_bellek` 0→4.073 tohumlaması J'yi 0,27→0,17 oynattı → **ΔH eşiği bellek-envanterine duyarlı; dondurma envanter çıpalaması gerektirir — öneri olarak belgelendi, dondurulmadı.**
+- **Kalem 5 — ceket v4 (iki tedavi, 8-koşum haritası bitti):** kart-kimlik verisi + pencere %35 (%26,3 karışım) + KL β 0,25, 3 epok → `anka_legal_v4.pt`: **K1 seri rekoruyla GEÇTİ** (ΔCE **−0,573**; pencere drag'i %31 büyürken net itki kart verisinden) ama K2 0/20 (doz teşhisi kesinleşti: kanonik-20 örneklemine tek yeni-tip kayıt düştü — 533 kayıt dozu yetersiz) ve **K3 0,000** (pencere-doz/β ekseni K3 için TÜKENDİ: 3 alandışı sorgunun üçünde de ilk jetondan legal-kart stili). Ölçülen sıradaki eksenler: **K3** için pencere bin'lerinin hukuk-ağırlıklı seçimi veya KL satır-seçiminin genişletilmesi; **K2** için kart dozunun 5-10×'i. Hüküm kayıtları: `data/eval/p25e_*`.
+
 ## [1.19.0] - 2026-11-04
 
 ### Eklendi (Added)
