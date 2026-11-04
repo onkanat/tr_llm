@@ -4,6 +4,17 @@ Bu projedeki tüm önemli değişiklikler bu dosyada belgelenmektedir.
 
 Format [Keep a Changelog](https://keepachangelog.com/tr/1.0.0/) standardına dayanır ve bu proje [Semantic Versioning (SemVer)](https://semver.org/spec/v2.0.0.html) ilkelerini benimser.
 
+## [1.18.0] - 2026-11-04
+
+### Eklendi (Added)
+- **P2.9 faz-1 arşiv uygulaması (kullanıcı onayı):** 20 checkpoint / **6,616 GiB** → `data/_archive/p29-faz1-20261104/` (mv-only — silme yok; 20/20 sha önce=sonra; A/B tam paket **542 passed** her iki durumda; canlı soyağacı ve v3 ailesi dokunulmadı; `data/` kökü .pt hacmi 21,6→15,0 GiB). Faz-2 (C1 + `test_model.py:28` referans düzeltmesi) ayrı onay bekler.
+- **Canlı gateway terfisi (kullanıcı talimatı):** router varsayılanı `anka_router_v2.pt` → **`anka_router_v3.pt`** (sd-sha çıpası `4016b210…`) + `legal` uzmanı `anka_legal_replay.pt` (marangoz+bahçıvan aynen; taban pure). Canlı 3-sorgu probe: hukuk→**legal**, marangozluk→carpenter, nötr→gardener; temiz kapanış kanıtlı. **Açık uyarı:** legal ceketi P2.5 kapılarından geçmedi — terfi kullanıcı kararı; uzmanı olmayan 'legal' sorgusunun sessizce tabana düştüğü tuzak (`epistemic_agent.py:459` `.get(primary_expert, self.model)`) terfiyle kapatıldı.
+- **Legal ceket v3 (10× veri ölçeği):** `legal_canonical_sft_v2.jsonl` 463 → **4.813 kayıt / 877.721 token** (b1∪b3 = 4.052/4.053 non-mülga madde tam kapsamı; val-50 bayt-özdeş). Koşum: 547 adım, pencere %20 + KL β=0,2. Kapılar: **K1 İLK KEZ GEÇTİ** (ΔCE **−0,523** vs bar −0,50) fakat K2 0/20 (kart kimliği kurulmadı; madde numarası halüsinasyonu) ve K3 OOD **0,083** (KL öğretmeni 4,5× maruziyet altında tutamadı) → **KALDI 1/3**. Altı koşumun haritası: üç kapı bu tarif uzayında bir arada kapanmıyor — legal ceketi deneysel kalır, canlı uzman `anka_legal_replay.pt` (OOD 0,365 — v3'ten üstün) olarak kalır.
+- **Kod hijyeni:** supervisor `--auto-retrain` KIRIKLIĞI onarıldı — `varsayilan_otonom_retrain_pipeline()` fabrikası (kanonik yollar, `save≠model` fail-closed kapısı, `RETRAIN_*_PATH` env geçilebilir; TDD 4/4) + `run_agent_arena.py` fabrikaya bağlandı. Bayat `prepare_reasoning_dataset.py` (v1.5.0, ölü 31.357 sözlüğü) `scripts/_legacy/prepare_reasoning_dataset_v150.py`'ye emekli; tek aktif test referansı + README/USER_GUIDE `_p22`'ye yönlendirildi (16/16 GREEN).
+- **`simulasyon_bellek` canlı tohumlandı:** **4.073 nokta** (`data/simulasyon_bellek_export.jsonl` aynen; idempotent upsert 4.073→4.073; read-back birebir; `anka_bellek` 46 / `muhakeme_bellek` 91 değişmedi) — uzak fallback dalı artık ölü değil. Betik: `scripts/seed_simulasyon_bellek.py`.
+- **ΔH sinyel seçeneği (opt-in):** `src/rag/merak.py`'ye `trigger_signal='entropy' (DEFAULT) | 'delta_h' | 'post_h'` — donmuş τ=2,5 varsayılanı bit-düzeyinde aynı (TDD 8/8; tam süit **542 passed**). Çevrimdışı kalibrasyon (P2.4'ün 36 sorguluk kayıtları, model koşmadan): en iyi ayrım `delta_h @ −1,50` (J +0,27; tetik %100→%31), hatırlama-öncelikli `post_h @ +2,50` (J +0,24; belirsiz TPR 0,70) — **öneri olarak belgelendi; eşik dondurulmadı (n=36 ince)**.
+- **Zaman/kip doz verisi (tur-4 girdisi):** `data/pedagogy/pure_base_sft_v3.jsonl` — **+446 ölçümlü kayıt** (40 fiil × 30 biçim ızgarası; 467 çakışan/UNK aday tokenizer ölçümüyle elendi; zaman/kip kaydı 204→**650**; val-150 bayt-özdeş; UNK %0,00). Tur-4 komutu (`v3r3`→`v3r4`, pencere %20, KL β=0,2) hazır — donmuş kapılar aynı dörtlü.
+
 ## [1.17.0] - 2026-11-04
 
 ### Eklendi (Added)

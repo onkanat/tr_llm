@@ -12,12 +12,23 @@ class CuriosityEngine(nn.Module):
     Quantifies internal model uncertainty (Shannon Entropy H(z)).
     When uncertainty exceeds threshold tau (H(z) > tau), synthesizes a targeted
     Curiosity Vector (q_merak) to guide RAG ocean navigation and resolve ambiguity.
+    OPT-IN trigger signals (P2.6): trigger_signal='entropy' (DEFAULT, frozen
+    absolute-entropy trigger, bit-identical to previous behavior) | 'delta_h'
+    (entropy gain: (H(z) - entropy_pre) >= tau, entropy_pre REQUIRED) |
+    'post_h' (absolute threshold on the POST-retrieval entropy the caller
+    passes in). The frozen tau=2.5 default is NOT changed by this parameter.
     """
-    def __init__(self, hidden_dim: int = 768, curiosity_dim: int = 768, tau: float = 2.5):
+    def __init__(self, hidden_dim: int = 768, curiosity_dim: int = 768, tau: float = 2.5,
+                 trigger_signal: str = 'entropy'):
         super().__init__()
+        if trigger_signal not in ('entropy', 'delta_h', 'post_h'):
+            raise ValueError(
+                f"Geçersiz trigger_signal: {trigger_signal!r}; "
+                "geçerli değerler: 'entropy' | 'delta_h' | 'post_h'")
         self.hidden_dim = hidden_dim
         self.curiosity_dim = curiosity_dim
         self.tau = tau
+        self.trigger_signal = trigger_signal
         
         # Linear projection to synthesize curiosity vector from hidden state z
         self.q_proj = nn.Linear(hidden_dim, curiosity_dim)
@@ -36,10 +47,25 @@ class CuriosityEngine(nn.Module):
         entropy = -torch.sum(probs * log_probs, dim=-1)
         return entropy
 
-    def detect_epistemic_gap(self, entropy: torch.Tensor) -> torch.Tensor:
+    def detect_epistemic_gap(self, entropy: torch.Tensor,
+                            entropy_pre: Optional[torch.Tensor] = None) -> torch.Tensor:
         """
-        Returns boolean mask indicating where entropy exceeds threshold tau (tau >= 2.5).
+        Returns boolean mask indicating where the trigger signal exceeds
+        threshold tau (tau >= 2.5).
+
+        trigger_signal modes (P2.6 opt-in):
+          'entropy' (DEFAULT) — absolute H(z) >= tau; entropy_pre is IGNORED.
+          'delta_h' — entropy gain (H(z) - entropy_pre) >= tau; entropy_pre is
+          REQUIRED (ValueError when absent).
+          'post_h' — absolute H(z) >= tau where the caller passes the
+          POST-retrieval entropy; entropy_pre is IGNORED.
         """
+        if self.trigger_signal == 'delta_h':
+            if entropy_pre is None:
+                raise ValueError(
+                    "trigger_signal='delta_h' entropy_pre gerektirir: "
+                    "H(z)_pre olmaksızın ΔH tanımsızdır")
+            return (entropy - entropy_pre) >= self.tau
         return entropy >= self.tau
 
     def forward(
@@ -47,21 +73,24 @@ class CuriosityEngine(nn.Module):
         hidden_states: torch.Tensor,
         logits: torch.Tensor,
         has_unk: bool = False,
-        unk_token_id: Optional[int] = 1
+        unk_token_id: Optional[int] = 1,
+        entropy_pre: Optional[torch.Tensor] = None
     ) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
         """
         Args:
             hidden_states: Last layer hidden states z (batch_size, hidden_dim)
             logits: Next token prediction logits (batch_size, vocab_size)
-            has_unk: Boolean flag indicating presence of <UNK> in input context
+            has_unk: Boolean flag indicating presence of <UNK> morpheme in input context
             unk_token_id: Token ID for <UNK> to detect predictive epistemic gap
+            entropy_pre: Optional pre-retrieval entropy H(z)_pre; consumed only by
+            trigger_signal='delta_h' (P2.6 opt-in), ignored otherwise
         Returns:
             entropy: Calculated Shannon entropy H(z)
-            needs_retrieval: Boolean tensor (H(z) > tau or has_unk)
+            needs_retrieval: Boolean tensor (signal >= tau or has_unk)
             q_merak: Synthesized curiosity vector (batch_size, curiosity_dim)
         """
         entropy = self.calculate_entropy(logits)
-        needs_retrieval = self.detect_epistemic_gap(entropy)
+        needs_retrieval = self.detect_epistemic_gap(entropy, entropy_pre=entropy_pre)
         
         # Epistemic trigger 1: Context contains <UNK> morpheme
         if has_unk:
