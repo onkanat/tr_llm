@@ -1,8 +1,10 @@
 import atexit
+import os
 import re
+from urllib.parse import urlparse
 from qdrant_client import QdrantClient
 from qdrant_client.http import models
-from typing import List, Dict, Any, Optional
+from typing import List, Dict, Any, Optional, Tuple
 
 try:
     import portalocker  # Pre-import to ensure available in sys.modules during shutdown
@@ -19,6 +21,52 @@ from src.rag.hybrid_search import (
     reciprocal_rank_fusion,
 )
 
+# --- P2.1: QDRANT_URL parametreleşmesi ---------------------------------------
+# Gateway/başlatıcı katmanı localhost:6333 sabitini arg/env ile değiştirir;
+# varsayılan (localhost:6333) birebir korunur. VectorMemory env'i AÇIK `url`
+# arg'ı olmaksızın OKUMAZ (host'suz çağrının :memory: varsayılanı bozulmaz).
+
+DEFAULT_QDRANT_PORT = 6333
+
+
+def parse_qdrant_url(url: str) -> Tuple[str, int]:
+    """Qdrant URL'ini (host, port) çözer — BAĞLANTI KURMAZ.
+
+    Kabul: 'http://192.168.1.9:6333', '192.168.1.9:6333', '192.168.1.9'
+    (şema'sızda port yoksa varsayılan 6333). Geçersiz girdi ValueError.
+    """
+    u = (url or "").strip()
+    if not u:
+        raise ValueError("[QDRANT_URL_HATA] boş URL")
+    try:
+        if "://" in u:
+            parsed = urlparse(u)
+            host = parsed.hostname
+            port = parsed.port
+        else:
+            if ":" in u:
+                host, _, port_s = u.rpartition(":")
+                port = int(port_s) if port_s else None
+            else:
+                host, port = u, None
+    except ValueError as e:
+        raise ValueError(f"[QDRANT_URL_HATA] geçersiz Qdrant URL'i: '{url}' ({e})") from e
+    if not host:
+        raise ValueError(f"[QDRANT_URL_HATA] geçersiz Qdrant URL'i: '{url}' (host çözülemedi)")
+    return host, (port if port else DEFAULT_QDRANT_PORT)
+
+
+def resolve_qdrant_url(explicit_url: Optional[str] = None, env_var: str = "QDRANT_URL") -> Optional[Tuple[str, int]]:
+    """Açık arg > QDRANT_URL env; ikisi de yoksa None.
+
+    None dönerse çağıran KENDİ varsayılanını uygular (gateway: localhost:6333).
+    """
+    u = (explicit_url or os.environ.get(env_var) or "").strip()
+    if not u:
+        return None
+    return parse_qdrant_url(u)
+
+
 class VectorMemory:
     _shared_clients: Dict[str, Any] = {}
 
@@ -32,6 +80,8 @@ class VectorMemory:
         client: Optional[QdrantClient] = None,
         allow_fallback: bool = False,
         location: Optional[str] = None,
+        url: Optional[str] = None,
+        timeout: float = 2.0,
     ):
         """
         Initializes Qdrant database connection for the Vector Rover prototype.
@@ -44,7 +94,18 @@ class VectorMemory:
         5. storage_path verilmişse explicit-local-beyan (host'suz çağrı)
         6. Ne host ne storage_path ne location verilmişse in-memory (:memory:) — default
            data/qdrant_db KALDIRILDI (T-0148 4B; repo-içi sessiz-yazım riski)
+
+        P2.1: `url` ('http://192.168.1.9:6333' gibi) verilirse host/port'u EZEK
+        çözer (parse_qdrant_url). Varsayılan davranış DEĞİŞMEZ (url'siz çağrıda
+        host/port/storage_path önceki gibidir; env OKUNMAZ — env-okuma
+        gateway/başlatıcı katmanındadır, resolve_qdrant_url).
+        P2.1: `timeout` uzak istemci zaman aşımıdır (varsayılan 2.0 KORUNUR);
+        LAN ekimi için çağılan daha uzun süre verebilir (ölçüldü: sunucuda
+        başarılı bir create_collection yanıtı 2.0s'yi aşabiliyor).
         """
+        if url is not None and url.strip():
+            host, port = parse_qdrant_url(url)
+
         self.collection_name = collection_name
         self.is_in_memory = False
         self.storage_type = "remote"
@@ -90,7 +151,7 @@ class VectorMemory:
                     # T-0148 4A fail-closed: host VERİLMİŞSE remote-bağlantı
                     # başarısızlığı sessizce local'e DÜŞMEZ — fail-closed.
                     try:
-                        self.client = QdrantClient(host=host, port=port, timeout=2.0, check_compatibility=False)
+                        self.client = QdrantClient(host=host, port=port, timeout=timeout, check_compatibility=False)
                         self.client.get_collections()
                         connected = True
                         self.storage_type = f"remote ({host}:{port})"
@@ -241,18 +302,30 @@ class VectorMemory:
         """Adds a single document with its dense and sparse vectors."""
         self.add_documents_batch([text], [dense_vector], [sparse_vector], [metadata or {}])
 
-    def add_documents_batch(self, texts: List[str], dense_vectors: List[List[float]], sparse_vectors: List[models.SparseVector], metadatas: List[Dict[str, Any]], upsert: bool = False):
+    def add_documents_batch(self, texts: List[str], dense_vectors: List[List[float]], sparse_vectors: List[models.SparseVector], metadatas: List[Dict[str, Any]], upsert: bool = False, point_ids: Optional[List[int]] = None):
         """Adds multiple documents in a single batch with both dense and sparse vectors.
         T-0148 4C: upsert=True point-id deterministiktir (payload-text sha256
         ön-ekinin 2^63-mod türevi) — aynı belge yeniden-yazımı DUBLOR YARATMAZ
         (restart-sayaç-çakışması kapalıdır). upsert=False (default) mevcut
-        monoton-sayaç davranışını bit-uyumlu korur (çağıran-kırılması yok)."""
+        monoton-sayaç davranışını bit-uyumlu korur (çağıran-kırılması yok).
+        P2.1: point_ids verilirse id'ler ÇAĞIRAN tarafından belirtilir (kayıt-
+        kimliği; ekim betiği tam-kayıt sha256'i ile 91 ayrı süpervizyon olayını
+        ayrı noktalara yazar, tekrar koşumda çiftlemez). point_ids > upsert >
+        monoton-sayaç önceliği; uzunluk uyumsuzsa ValueError (sessiz kesme yok).
+        """
+        if point_ids is not None and len(point_ids) != len(texts):
+            raise ValueError(
+                f"[VEKTOR_BELLEK_HATA] point_ids uzunluğu ({len(point_ids)}) metin "
+                f"sayısıyla ({len(texts)}) uyuşmuyor (P2.1 ekim sözleşmesi)."
+            )
         points = []
         for i in range(len(texts)):
             meta = metadatas[i] if i < len(metadatas) else {}
             meta["text"] = texts[i]
 
-            if upsert:
+            if point_ids is not None:
+                point_id = point_ids[i]
+            elif upsert:
                 import hashlib
                 _t = hashlib.sha256(texts[i].encode("utf-8")).hexdigest()
                 point_id = int(_t[:16], 16) % (2 ** 63)

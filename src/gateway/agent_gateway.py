@@ -30,7 +30,7 @@ from src.compiler.morphotactics import build_default_graph
 from src.compiler.core import CrystalCompiler
 from src.llm.tokenizer import KristalTokenizer, Vocabulary
 from src.compiler.decompiler import MorphemeDecompiler
-from src.rag.vector_memory import VectorMemory, generate_kristal_vector, generate_sparse_vector
+from src.rag.vector_memory import VectorMemory, generate_kristal_vector, generate_sparse_vector, resolve_qdrant_url
 from src.rag.epistemic_agent import EpistemicCuriosityAgent
 from src.rag.merak import CuriosityEngine
 from src.llm.router import TriModalRouter
@@ -48,10 +48,17 @@ class AgentGateway:
         router_state_path: Optional[str] = None,
         expert_models: Optional[Dict[str, nn.Module]] = None,
         future_train_path: str = "data/future_train_vector.jsonl",
-        device: str = "cpu"
+        device: str = "cpu",
+        qdrant_host: Optional[str] = None,
+        qdrant_port: Optional[int] = None
     ):
         self.device = torch.device(device)
         self.future_train_path = future_train_path
+        # P2.1: muhakeme_bellek (inject_reasoning_trace) bağlantı hedefi —
+        # eski localhost:6333 SABİTİNİN parametreli hali. Param yoksa
+        # varsayılan birebir korunur (localhost:6333).
+        self._qdrant_host = qdrant_host if qdrant_host is not None else "localhost"
+        self._qdrant_port = qdrant_port if qdrant_port is not None else 6333
         
         # If components are provided directly
         self.model = model
@@ -103,7 +110,8 @@ class AgentGateway:
         expert_model_paths: Optional[Dict[str, str]] = None,
         device: str = "cpu",
         host: Optional[str] = "localhost",
-        port: int = 6333
+        port: int = 6333,
+        qdrant_url: Optional[str] = None
     ) -> "AgentGateway":
         """Factory method to load and build the complete default Gateway stack.
 
@@ -116,7 +124,15 @@ class AgentGateway:
         T-0148 4B: `storage_path` varsayilani ("data/qdrant_db") KALDIRILDI —
         host'lu cagri remote'a baglanamazsa vector_memory zaten RuntimeError
         firlatir (fail-closed); storage_path=None explicit :memory:/remote-beyan.
+
+        P2.1: `qdrant_url` > QDRANT_URL env'i > host/port arg'lari (varsayilan
+        localhost:6333 KORUNUR). Uzak Qdrant (orn. http://192.168.1.9:6333)
+        artik env/arg ile verilir; baslat_canli_gateway.py sarmalayicisina
+        gerek kalmadan cozulur.
         """
+        resolved_target = resolve_qdrant_url(qdrant_url)
+        if resolved_target is not None:
+            host, port = resolved_target
         from scripts.train_step_demo import KristalLM
         from src.llm.prompt_contract import resize_state_dict
 
@@ -242,7 +258,9 @@ class AgentGateway:
             router_state_path=router_state_path,
             expert_models=loaded_expert_models,
             future_train_path="data/future_train_vector.jsonl",
-            device=device
+            device=device,
+            qdrant_host=host,
+            qdrant_port=port
         )
 
     def ask(
@@ -386,11 +404,14 @@ class AgentGateway:
         sessiz-merdiven değil; 4A fail-closed bağlantı-kuralına tabi).
         """
         if self.reasoning_memory is None or self.reasoning_memory.collection_name != collection_name:
+            # P2.1: eski localhost:6333 SABİTİ çözülen hedefe döndü (gateway'in
+            # kendi host/port'undan — create_default QDRANT_URL/env çözümü).
+            # Varsayılan davranış birebir korunur (host yoksa localhost:6333).
             self.reasoning_memory = VectorMemory(
                 collection_name=collection_name,
                 vector_size=768,
-                host="localhost",
-                port=6333,
+                host=self._qdrant_host,
+                port=self._qdrant_port,
                 storage_path=None
             )
 

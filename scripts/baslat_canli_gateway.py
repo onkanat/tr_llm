@@ -14,6 +14,7 @@ koleksiyon) — smoke-test'te kullanılmamalıdır (T-0158).
 """
 import argparse
 import hashlib
+import os
 import sys
 from pathlib import Path
 
@@ -55,9 +56,16 @@ def main():
                         help="Yüklenecek saf taban model checkpoint yolu (varsayılan: anka_taban_pure.pt)")
     ayarla.add_argument("--router", type=str, default="data/anka_router_v2.pt",
                         help="Yüklenecek router checkpoint yolu (varsayılan: anka_router_v2.pt)")
+    ayarla.add_argument("--qdrant-url", type=str, default=None,
+                        help="Qdrant URL'i (ör. http://192.168.1.9:6333); yoksa QDRANT_URL env, "
+                             "o da yoksa eski CanliVectorMemory köprüsü (delinux01.local) geçerli")
     args = ayarla.parse_args()
 
-    ag.VectorMemory = CanliVectorMemory
+    # P2.1: create_default artık QDRANT_URL arg/env'ini çözer — sabit-köprü
+    # (CanliVectorMemory) yalnız URL verilmediğinde devrede kalır (geriye-uyum).
+    cozulen_url = args.qdrant_url or os.environ.get("QDRANT_URL")
+    if not cozulen_url:
+        ag.VectorMemory = CanliVectorMemory
 
     # T-0209: Hem Bahçıvan hem Marangoz uzman ceketlerini MoE sözlüğüne bağla
     expert_model_paths = {}
@@ -75,6 +83,7 @@ def main():
         router_state_path=args.router,
         expert_model_paths=expert_model_paths,
         device="mps",
+        qdrant_url=cozulen_url,
     )
     # T-0158 koşum-2 düzeltmesi: router sahibi epistemic_agent (gw.router YOK,
     # agent_gateway.py:62 yalnız self.epistemic_agent).
