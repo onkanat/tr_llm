@@ -1,0 +1,138 @@
+{
+  "gorev": "Plan-2 P2.3 — İlk GERÇEK otonom retrain hükmü (şema + tetik döngüsü)",
+  "tarih": "2026-11-04",
+  "vaka": {
+    "sorgu": "Pulsarlar neden bu kadar düzenli radyo darbeleri yayar?",
+    "talimat": "Bilimsel ve net açıkla.",
+    "mod": "RAG (force_rag=True)",
+    "model": "data/anka_taban_pure.pt",
+    "bellek": "anka_bellek @ http://192.168.1.9:6333 (salt-okunur)",
+    "rag_skoru": 1.0,
+    "entropy_pre": 5.4633,
+    "entropy_post": 6.0203,
+    "tau": 2.5,
+    "model_yaniti": "[Özel İsim], bunun yerine bir yapay zeka olarak kabul edilir.",
+    "epistemik_basarisizlik": true,
+    "kayit_yazildi": true,
+    "kayit_timestamp": "2026-11-04T14:00:49.628117+00:00",
+    "yazan_kod": "src/rag/epistemic_agent.py:494-535 (process_query Step-5, record_to_future_train)",
+    "kucuk_dosya_5ten_6ya": true,
+    "canli_sorgu_sure_sn": 2.32
+  },
+  "sema_goc": {
+    "yazar_semasi_14_alan": [
+      "instruction",
+      "input",
+      "output",
+      "model_failed_output",
+      "decompiled_output",
+      "rag_document",
+      "retrieval_collection",
+      "similarity_score",
+      "similarity_threshold",
+      "entropy_pre",
+      "entropy_post",
+      "tau",
+      "reason",
+      "timestamp"
+    ],
+    "sema_kaynagi": "src/rag/epistemic_agent.py:518-533",
+    "eski_sema_kaniti": {
+      "not": "Repoda 'eski-şema' kayıt HİÇ var olmadı — git kanıtı:",
+      "121c82a": "dosya 0 kayıt; yazıcı record sözlüğü de aynı 14 alan",
+      "ccd552c": "1 kayıt, 14 alan (timestamp+similarity_score dahil)",
+      "90d669d": "5 kayıt, 14 alan (güncel kayıtlar bu committe girdi)"
+    },
+    "sonuc": "5 kayıt zaten yeni şemada; göç NO-OP — içerik ve baytlar değişmedi (sha önce=sonra)",
+    "tdd": {
+      "test_dosyasi": "tests/test_future_train_vector_schema.py",
+      "red": "eski-şema fikstüründe (timestamp+similarity_score silinmiş) 1 test DÜŞTÜ: eksik alanlar [similarity_score, timestamp]",
+      "green": "gerçek dosyada 7 test GEÇTİ",
+      "disler": "doğrulayıcı sentetik eski-şema kayıtlarını reddeder (4 negatif test)"
+    },
+    "goc_betigi": "scratch/p23_sema_goc_betigi.py — 5/5 kayıt uyumlu, 0 alan eklendi",
+    "sigorta_kopyasi": {
+      "yol": "data/future_train_vector_legacy.bak.jsonl",
+      "sha256": "7c946108304d8d55a7d6800f894bd0630c75302becb543c8cf00d0671736a474",
+      "kayit_sayisi": 5,
+      "bayt_ozdes_kaynakla": true
+    },
+    "diff": "BOŞ — hiçbir kayıtta alan eklenmedi/düzeltildi (önerme: eski şema, repoda mevcut değildi)"
+  },
+  "tetik_kaniti": {
+    "esik": {
+      "backlog": 6,
+      "esik_degeri": 5,
+      "esik_kaynagi": "src/gateway/pedagogical_supervisor.py:635 (varsayılan), kapı: satır 886-893"
+    },
+    "komut": [
+      "/Users/hakankilicaslan/Git/tr_llm/venv/bin/python",
+      "/Users/hakankilicaslan/Git/tr_llm/train.py",
+      "--data",
+      "/Users/hakankilicaslan/.hermes/cache/scratch/p23_minirun/train_future_finetune_p23.bin",
+      "--steps",
+      "12",
+      "--batch-size",
+      "16",
+      "--lr",
+      "5e-05",
+      "--device",
+      "mps",
+      "--save-path",
+      "/Users/hakankilicaslan/.hermes/cache/scratch/p23_minirun/anka_p23_minirun.pt",
+      "--vocab",
+      "data/rebuild/vocab_anka_r1_33114.json",
+      "--load-path",
+      "data/anka_taban_pure.pt"
+    ],
+    "exit": 0,
+    "durum": "success",
+    "adim_sayisi": 12,
+    "batch_size": 16,
+    "ogrenme_orani": 5e-05,
+    "cihaz": "mps",
+    "süre_sn": 8.98,
+    "toplam_sure_sn": 9.41,
+    "kaynak_mekanizma": "src/gateway/retrain_pipeline.py:231-313 run_training (supervisor'ın eşik sonrası çağırdığı AYNI metot)",
+    "bin": {
+      "yol": "/Users/hakankilicaslan/.hermes/cache/scratch/p23_minirun/train_future_finetune_p23.bin",
+      "backlog_samples": 6,
+      "total_tokens": 52060,
+      "oversample": 20,
+      "replay_ornek": 25
+    },
+    "arsiv": {
+      "dosya": "data/future_train_archive.jsonl",
+      "satir_once": 358,
+      "satir_sonra": 364,
+      "artis": 6,
+      "canli_vaka_arshivde": true
+    },
+    "aktif_dosya_kayit_sonrasi": 0,
+    "mini_checkpoint": {
+      "yol": "/Users/hakankilicaslan/.hermes/cache/scratch/p23_minirun/anka_p23_minirun.pt",
+      "boyut_bayt": 373735993
+    }
+  },
+  "mini_kosum": {
+    "train_loss_baslangic": 3.6084,
+    "train_loss_bitis": 3.1731,
+    "not": "TAM EĞİTİM YOK — tetik mekanizması kanıtı; model ağırlıkları DEĞİŞMEDİ",
+    "log": "data/eval/p23_minikosum_train_log_2026-11-04.log"
+  },
+  "model_degismedi": {
+    "sha256_once": "5479a2f35a88975cae3cd8e66e4aef0bb7b09bea5274828709fe2c0e1d263360",
+    "sha256_sonra": "5479a2f35a88975cae3cd8e66e4aef0bb7b09bea5274828709fe2c0e1d263360",
+    "ayni": true,
+    "basalin_beyani": "5479a2f35a88975cae3cd8e66e4aef0bb7b09bea5274828709fe2c0e1d263360"
+  },
+  "degisen_dosyalar": [
+    "tests/test_future_train_vector_schema.py (YENİ)",
+    "data/future_train_vector_legacy.bak.jsonl (YENİ — sigorta kopyası, 5 kayıt)",
+    "data/future_train_vector.jsonl (İZLENLİ — +1 canlı vaka; retrain arşivlemesiyle temizlendi: 5→6→0 aktif)",
+    "data/future_train_archive.jsonl (İZLENLİ — +6 satır: 5 tarihsel + 1 canlı vaka)",
+    "data/eval/p23_minikosum_train_log_2026-11-04.log (YENİ)",
+    "data/eval/p23_otonom_retrain_hukum_2026-11-04.json (YENİ — bu dosya)"
+  ],
+  "src_degisikligi": "YOK — src/ ve train.py dokunulmadı"
+}

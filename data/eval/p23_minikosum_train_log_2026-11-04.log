@@ -1,0 +1,32 @@
+# P2.3 mini-koşum train.py stdout (12 adım, tam eğitim DEĞİL)
+# komut: /Users/hakankilicaslan/Git/tr_llm/venv/bin/python /Users/hakankilicaslan/Git/tr_llm/train.py --data /Users/hakankilicaslan/.hermes/cache/scratch/p23_minirun/train_future_finetune_p23.bin --steps 12 --batch-size 16 --lr 5e-05 --device mps --save-path /Users/hakankilicaslan/.hermes/cache/scratch/p23_minirun/anka_p23_minirun.pt --vocab data/rebuild/vocab_anka_r1_33114.json --load-path data/anka_taban_pure.pt
+
+============================================================
+ KRİSTAL-VEKTÖREL MİMARİSİ: MODEL EĞİTİM DÖNGÜSÜ
+============================================================
+Metal GPU (MPS) seçildi.
+Sözlük Yüklendi (data/rebuild/vocab_anka_r1_33114.json). Kelime dağarcığı boyutu: 33114
+<PAD> kayıp maskesi aktif (PAD hedefleri -100'e yazılır; pad_id=1).
+Veri kümesi yüklendi: /Users/hakankilicaslan/.hermes/cache/scratch/p23_minirun/train_future_finetune_p23.bin (Blok boyutu: 64). Toplam morfem token sayısı: 52,060
+[sinir] en buyuk jeton id=32,831 < vocab_size=33,114 (guvenli)
+[meta] sozluk/kulliyat provenance: ATLANDI: meta'da sozluk_giris/sozluk_sha256 alani yok (anahtarlar: ['backlog_samples', 'block_size', 'created_at', 'oversample_factor', 'total_samples', 'total_tokens'])
+Mevcut model ağırlıkları 'data/anka_taban_pure.pt' tespit edildi, eğitim devam ettiriliyor (Resume)...
+Model mimarisi kuruldu ve cihaza taşındı. (Öğrenme Oranı: 5e-05, weight_decay: 0.01)
+[OPTIMIZER] BEYAN: Yan dosya yok ('data/anka_taban_pure.pt.opt.pt'). Optimizer sıfırdan başlatılıyor.
+UYARI: AdamW momenti bulunamadi ('data/anka_taban_pure.pt.opt.pt' yok) => optimizer SIFIRDAN basliyor. Ilk guncelleme, momentli bir devam kosumuna gore DAHA BUYUK olur (olculdu: 1,73x; T-0092).
+
+Eğitim Başlatılıyor -> Adım Sayısı: 12, Batch Boyutu: 16, Block Boyutu: 64, Hedef: SFT (prompt maskeli)
+Periyodik kayıt: KAPALI (yalnız koşum sonunda kaydedilir)
+Grad clip: 1.0
+[kulliyat] eğitilebilir hedef oranı = 9037/25600 · 0-hedef pencere oranı p=0.2650 (N=400, seed=1777) · vekil uyum 400/400
+Adım    1/12 | Kayıp (Loss): 3.6084 | Adım Süresi: 1.29s | Toplam Süre: 1.3s
+Adım   10/12 | Kayıp (Loss): 3.1556 | Adım Süresi: 0.41s | Toplam Süre: 5.0s
+
+==================================================
+ EĞİTİM BAŞARIYLA TAMAMLANDI!
+==================================================
+Toplam Süre:       6.56 saniye
+Başlangıç Kaybı:   3.6084
+Bitiş Kaybı:       3.1731
+Eğitilmiş model ağırlıkları '/Users/hakankilicaslan/.hermes/cache/scratch/p23_minirun/anka_p23_minirun.pt' dosyasına kaydedildi.
+==================================================
