@@ -4,6 +4,14 @@ Bu projedeki tüm önemli değişiklikler bu dosyada belgelenmektedir.
 
 Format [Keep a Changelog](https://keepachangelog.com/tr/1.0.0/) standardına dayanır ve bu proje [Semantic Versioning (SemVer)](https://semver.org/spec/v2.0.0.html) ilkelerini benimser.
 
+## [1.17.0] - 2026-11-04
+
+### Eklendi (Added)
+- **P2.5 — legal ceketi hattı (FAZ-1/2A/2B/2C, ölçümlü hükümler):** Hukuk korpusu: 17 kanun / 4.151.408 karakter (mevzuat.gov.tr metin ucu kanıtlı; UTF-8/cp1254 meta tuzağı ve İ-harf indeks kayması ölçülerek aşıldı; UNK **%1,34** — donmuş 33.114 sözlükte genişletme gerekmedi) + `data/pedagogy/legal_canonical_sft.jsonl` (463 kayıt; **%99,7 birebir-alıntı** bağımsız denetimi). Ceket v1 (T-0209 tarifi, lr 1e-5, 3 epok): **KALDI 1/3** — ölçülen kök neden: biçim EDİNİMİ gerekiyor (init val CE 4,78; marangoz ceketi biçim-içi 1,07'den ince-ayar yapmıştı). Router v3 (`data/anka_router_v3.pt`, v2'ye yazılmadı): legal sınıfı **0→60 örnek**; 10 hukuk sorgusunda **0/10 → 8/10 legal**; diğer 4 sınıf v2-paritesi 1,0 (T-0210 çıpası birebir). Ceket replay karışımı (P2.6 tarifi: SFT + %19,95 pencere + KL β=0,2, 10 epok, 125 adım): **KALDI 0/3** (ΔCE −0,306/−0,50; kanonik-20 0/20; OOD 0,365/0,40) — ters-korelasyon (alan-öğrenim ↔ OOD sadakati) yumuşadı ama kalkmadı. **Toplam hüküm: kart şablonu edinimi VERİ ölçeğine bağlı** (legal 413 train vs marangoz 6.123) — yeni kalem: legal SFT setinin ~3-6K kayda büyütülmesi.
+- **P2.7 — BPE-baseline benchmark repoda (tek komut, tekrarlanabilir):** `scripts/benchmark_bpe_baseline.py` — Kristal **2,065 tok/kelime** (UNK %1,18) vs BPE-32k 2,101 (in-domain); dağıtım-dışı benzersiz-kelime örnekleminde **1,70× üstünlük**; kaynak BPE eğiticisindeki PYTHONHASHSEED-nondeterministik merge sırası ölçülüp onarıldı (3 bağımsız süreç bayt-özdeş).
+- **P2.8 — router ablasyonu (q_merak kanal katkısı):** kanal val top-1 doğruluğuna **+24,75 puan** katıyor (1,000 → 0,7525 sıfırlanınca; sınıf kırılımı: pedagogy 0,32, carpenter 0,70); 'kanal verilmmez' P-only yolu bit-özdeş kanıtlandı; diskte hiçbir ağırlık değişmedi.
+- **P2.9 — checkpoint envanteri + arşiv politika taslağı:** 32 dosya / 10,8 GiB, sha-kanıtlı; **5 bayt-özdeş yinelenik çift = 1,74 GiB** saf tekrar; canlı soyağacı (pure + marangoz + bahcivan + router_v2) 1,05 GiB **DOKUNULMAZ** (kod düzeyinde teyitli); faz-1 arşiv önerisi 20 dosya / 6,6 GiB — mv listeleri YALNIZ TASLAK, uygulama `test_model.py:28` referans düzeltmesi önkoşuluyla kullanıcı onayına bağlı.
+
 ## [1.16.0] - 2026-11-04
 
 ### Eklendi (Added)

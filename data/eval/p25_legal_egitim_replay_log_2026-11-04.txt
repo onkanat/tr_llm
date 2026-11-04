@@ -1,0 +1,35 @@
+=== P2.6 SFT-REPLAY (T-0209 kalıbı) | cihaz=mps | pilot=False ===
+[MPS] önerilen çalışma-seti sınırı: 5.33 GB
+[PROVENANS] init sha256: 5479a2f35a88975cae3cd8e66e4aef0bb7b09bea5274828709fe2c0e1d263360
+[PROVENANS] öğretmen sha256: 5479a2f35a88975cae3cd8e66e4aef0bb7b09bea5274828709fe2c0e1d263360
+[PROVENANS] pencere bin sha256: 7f91317aa58b17e777304b70619dc48b912c47ad563a478f5ca89cd95b57745c
+UYARI: SFT kayıt sayısı 463 != 4498 (T-0209 sabiti)
+SFT train: 313 | pencere: 78 | toplam 391 -> 13 opt-adım/epok, 130 toplam
+[BAŞLANGIÇ] masked SFT val CE: 4.641116 | pencere-CE (kulliyat_v2): 3.9633
+[ÖN-HESAP] sözlük+model/öğretmen yükleme+tokenizasyon+başlangıç değerlendirmeleri: 14.1 sn
+Adım 1/130 | Loss 3.8371 | LR 2.50e-06 | adım-süresi ort 1.99s (son 1) | MPS 1.83GB | KL-aktif 2/2 mikro-parti
+Adım 10/130 | Loss 3.7255 | LR 2.50e-05 | adım-süresi ort 1.84s (son 10) | MPS 1.83GB | KL-aktif 20/20 mikro-parti
+  [ckpt] epok 1 sonu: 'data/anka_legal_replay.pt_e1.pt' (NOT: cosine ortası — tam anneal edilmedi)
+Adım 20/130 | Loss 3.2345 | LR 5.00e-05 | adım-süresi ort 2.05s (son 10) | MPS 1.83GB | KL-aktif 39/40 mikro-parti
+  [ckpt] epok 2 sonu: 'data/anka_legal_replay.pt_e2.pt' (NOT: cosine ortası — tam anneal edilmedi)
+Adım 30/130 | Loss 3.5367 | LR 4.93e-05 | adım-süresi ort 1.82s (son 10) | MPS 1.83GB | KL-aktif 58/60 mikro-parti
+  [ckpt] epok 3 sonu: 'data/anka_legal_replay.pt_e3.pt' (NOT: cosine ortası — tam anneal edilmedi)
+Adım 40/130 | Loss 3.2851 | LR 4.71e-05 | adım-süresi ort 1.86s (son 10) | MPS 1.83GB | KL-aktif 78/80 mikro-parti
+Adım 50/130 | Loss 3.3897 | LR 4.35e-05 | adım-süresi ort 1.89s (son 10) | MPS 1.83GB | KL-aktif 97/100 mikro-parti
+  [ckpt] epok 4 sonu: 'data/anka_legal_replay.pt_e4.pt' (NOT: cosine ortası — tam anneal edilmedi)
+Adım 60/130 | Loss 3.1861 | LR 3.88e-05 | adım-süresi ort 1.87s (son 10) | MPS 1.83GB | KL-aktif 117/120 mikro-parti
+  [ckpt] epok 5 sonu: 'data/anka_legal_replay.pt_e5.pt' (NOT: cosine ortası — tam anneal edilmedi)
+Adım 70/130 | Loss 3.2657 | LR 3.34e-05 | adım-süresi ort 2.06s (son 10) | MPS 1.83GB | KL-aktif 137/140 mikro-parti
+  [ckpt] epok 6 sonu: 'data/anka_legal_replay.pt_e6.pt' (NOT: cosine ortası — tam anneal edilmedi)
+Adım 80/130 | Loss 3.1841 | LR 2.77e-05 | adım-süresi ort 1.96s (son 10) | MPS 1.83GB | KL-aktif 157/160 mikro-parti
+  [ckpt] epok 7 sonu: 'data/anka_legal_replay.pt_e7.pt' (NOT: cosine ortası — tam anneal edilmedi)
+Adım 90/130 | Loss 3.2744 | LR 2.22e-05 | adım-süresi ort 1.93s (son 10) | MPS 1.83GB | KL-aktif 176/180 mikro-parti
+Adım 100/130 | Loss 3.2156 | LR 1.73e-05 | adım-süresi ort 1.86s (son 10) | MPS 1.83GB | KL-aktif 195/200 mikro-parti
+  [ckpt] epok 8 sonu: 'data/anka_legal_replay.pt_e8.pt' (NOT: cosine ortası — tam anneal edilmedi)
+Adım 110/130 | Loss 3.4212 | LR 1.35e-05 | adım-süresi ort 1.98s (son 10) | MPS 1.83GB | KL-aktif 215/220 mikro-parti
+  [ckpt] epok 9 sonu: 'data/anka_legal_replay.pt_e9.pt' (NOT: cosine ortası — tam anneal edilmedi)
+Adım 120/130 | Loss 3.4279 | LR 1.10e-05 | adım-süresi ort 2.35s (son 10) | MPS 1.83GB | KL-aktif 235/240 mikro-parti
+
+[BİTİŞ] masked SFT val CE: 4.641116 -> 4.312275 | pencere-CE: 3.9633 -> 3.8780 | Süre: 248.2 sn
+[KL-KANIT] KL dalı 245/250 mikro-partide ateşlendi | tüm-koşum KL ort 0.134410 (öz-çapa: öğretmen==init → adım-0'da KL≈0 beklenir)
+[MODEL_KAYDEDİLDİ] data/anka_legal_replay.pt (sha256: 457e3bb1c7a2d7876a3bd34285a124aa3c41e6c613be09f696b3b38c2c747270)
