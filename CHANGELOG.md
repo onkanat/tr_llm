@@ -4,6 +4,12 @@ Bu projedeki tüm önemli değişiklikler bu dosyada belgelenmektedir.
 
 Format [Keep a Changelog](https://keepachangelog.com/tr/1.0.0/) standardına dayanır ve bu proje [Semantic Versioning (SemVer)](https://semver.org/spec/v2.0.0.html) ilkelerini benimser.
 
+## [1.15.0] - 2026-11-04
+
+### Eklendi (Added)
+- **P2.1 — Qdrant parametreleşmesi + `muhakeme_bellek` canlı:** `VectorMemory`/gateway'deki `localhost:6333` sabitleri `QDRANT_URL` env/arg akışına bağlandı (varsayılan birebir korunur; mevcut testlerin `:memory:` sözleşmesi bozulmaz); `inject_reasoning_trace` gateway'in çözdüğü adrese yazar. `scripts/seed_muhakeme_bellek.py`: 91 CoT kaydını tam-kayıt-sha256 nokta kimliğiyle upsert eder (içerik-bazında yalnız 22 benzersiz — kimlik kayıt-bazlı seçilmeseydi ≥91 kabul düşerdi), idempotent (tekrar koşum 91→91). Canlı doğrulama: `QDRANT_URL=http://192.168.1.9:6333` → 91 nokta read-back, `anka_bellek` dokunulmadı. İstemci `timeout` parametresi (varsayılan 2,0s korundu — LAN'da create_collection yanıtı 2s'yi aşabiliyor, ölçüldü). Tam paket **517 passed + 1 xfailed**.
+- **P2.6 tur-3 + SFT veri zenginleştirme:** `data/pedagogy/pure_base_sft_v2.jsonl` (+265 ölçümlü kayıt: 194 zaman/kip ızgarası — kristal tokenizer ile doğrulanmış, sözlüksel çakışan 106/300 aday elendi; 40 uzun nötr 'nedir ve nasıl' kaydı, 85-113 morfem; 17 durum + 14 çoğul; val-150 kuyruğu bayt-özdeş korunur, yeni kayıtlarda 0 UNK). Tur-3 `data/anka_taban_v3r3.pt`: masked SFT val CE **2,5848 → 2,4827**. Dört eksik aksın hepsinde ölçülebilir ilerleme (TENSE ilk kez top-5'te 2. sıra; UNK %3,00 → **%2,33** ilk kez eşik altı; görev-3/4 güvenleri 0,92/0,83; zımpara erken-EOS 14→30) ama donmuş kapılar çevrilmedi: **1/4** (yalnız pencere-CE ≤3,35) → **v3r3 ceket tabanı DEĞİL**; merdiven kapanış hızı −0,74 → −0,15 → −0,10 nat/tur ile protokolle durduruldu. Ceketler `anka_taban_pure` üzerinde kalır; hüküm kayıtları: `data/eval/p26_tur3_kapi_olcum_2026-11-04.md`.
+
 ## [1.14.0] - 2026-11-04
 
 ### Eklendi (Added)
