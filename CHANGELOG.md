@@ -4,6 +4,20 @@ Bu projedeki tüm önemli değişiklikler bu dosyada belgelenmektedir.
 
 Format [Keep a Changelog](https://keepachangelog.com/tr/1.0.0/) standardına dayanır ve bu proje [Semantic Versioning (SemVer)](https://semver.org/spec/v2.0.0.html) ilkelerini benimser.
 
+## [1.14.0] - 2026-11-04
+
+### Eklendi (Added)
+- **P2.6 — SFT-replay merdiveni (`scripts/train_p26_sft_replay.py`):** `anka_taban_v3.pt`'ü ceket-uygun tabana çevirmek için T-0209 kalıbının ölçümlü uyarlaması: SFT jsonl + külliyat pencere karışımı (T-0209'un 4:1'i; 4.348 SFT + 1.087 pencere, %20), kaynak-seçimli GERÇEK KL çapası (β=0,2, öğretmen v3; MPS mikro-parti OOM onarımı — kayıp/gradyan birebir), lr 5e-5→1e-5, 170 opt-adım/epok (~6 dk/epok), atomik kayıtlar.
+- Tur-1 `data/anka_taban_v3r.pt` + tur-2 `data/anka_taban_v3r2.pt`: masked SFT val CE **3,4789 → 2,7380 → 2,5848** (aşırı-eğitim sinyali yok; külliyat pencere-CE 3,2118 → 3,2181 — KL ödünü ~0,02 nat'ta sınırlı). 4 donmuş kapıdan yalnız pencere-CE (≤3,35) geçti; SFT bandı (≤2,32), paket 4/4 top-1 ve UNK ≤%2,5 kapanmadı → **ceket hattı açılmaz**; ceketler `anka_taban_pure` üzerinde kalır.
+- Kapı ölçüm kayıtları: `data/eval/p26_kapı_olcum_2026-11-04.md`, `data/eval/p26_tur2_kapi_olcum_2026-11-04.md`, `data/eval/p26_replay_hukum_2026-11-04.json`.
+
+### Düzeltildi (Fixed)
+- **T-0209 KL beyanı düzeltmesi (ölçülmüş):** `scripts/train_t0209_taban_pure.py:163-169`'daki `len(batch) == 4` her iki veri dalında da doğruydu → `is_pencere` hep False → KL β=0,2 dalı **hiç koşmamış**; [1.11.0]'daki "KL β=0.2 korunarak" beyanı kod düzeyinde geçersizdir — T-0209'un ölçülen sonucu yalnız 4:1 karışımla alındı. P2.6 betiği kaynak tensorüyle satır-seçim yaparak KL'yi gerçekten ateşler (kanıt: 325/340 mikro-parti, tüm-koşum KL ort 0,09).
+
+### Bilinen sınırlar (P2.6 hükmü)
+- Görev-2 ('gideceğim' → TENSE) iki replay turunda da `root`'a yığıldı (TENSE top-5'te yok) → sorun epok değil `pure_base_sft.jsonl` veri bileşimi: zaman/kip tespiti örnekleri ve uzun alan yanıtları ('nedir ve nasıl kullanılır' kalıbı) eklenmeden KAPI-1/3 kapanmaz — yeni iş kalemi.
+- UNK üretimi replay-bağışık (sorgu-başı 1'er sabit) → sözlük kapsamı ayrı kalem; erken-EOS 'zımpara' kartında sürüyor.
+
 ## [1.13.0] - 2026-11-04
 
 ### Eklendi (Added)
