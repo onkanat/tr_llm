@@ -1,0 +1,40 @@
+{
+ "uretim_tarihi": "2026-11-04 18:45",
+ "gorev": "P2.5 FAZ-2C — legal SFT v2 (463 -> ~5K; FAZ-1 kapıları aynen)",
+ "kaynak_korpus": "data/legal_korpus/ (17 kanun, mevzuat.gov.tr)",
+ "vocab": "vocab_anka_r1_33114.json",
+ "literal_entity_mode": true,
+ "kayit_sayisi": 4813,
+ "yeni_kayit": 4350,
+ "eski_463_kuyruk": 463,
+ "olcek_degisiklikleri": {
+  "a_kavram_tanimi": "28/kanun dengesi KALDIRILDI (kapılar aynen)",
+  "b_madde_sorusu": "PER_LAW_CAP KALDIRILDI (FAZ-1 filtre seti aynen)",
+  "b3_tum_madde": "YENİ: b1 dışı tüm madde satırları (başlıksız+Geçici/Ek)",
+  "c_kavram_ayrimi": "YENİ otomatik aynı-kanun bent çiftleri (yapısal ayrım cümlesi)",
+  "d_madde_dizisi": "YENİ ardışık-madde dizileri (usul iddiası yok; pencere 3, kanun tavanı 12)"
+ },
+ "val_sozlesmesi": "eski 463'ün son-50'si dosya sonunda BİREBİR (2A val avlusu); yeni kayıtlar başta; eski satırlar yeniden serileştirilmez",
+ "tip_dagilimi_yeni": {
+  "a_kavram_tanimi": 154,
+  "b_madde_sorusu": 3244,
+  "b3_tum_madde": 808,
+  "c_kavram_ayrimi": 145,
+  "d_madde_dizisi": 157
+ },
+ "tip_dagilimi_eski463": {
+  "a_kavram_tanimi": 117,
+  "b_madde_sorusu": 291,
+  "b_hedefli_soru": 35,
+  "c_kavram_ayrimi": 11,
+  "d_prosedur": 9
+ },
+ "token_olcumu": {
+  "toplam_token": 877721,
+  "unk_token": 16049,
+  "unk_yuzde": 1.828,
+  "ortalama_kayit_token": 182.4,
+  "maks_kayit_token": 444
+ },
+ "dusenler": []
+}
