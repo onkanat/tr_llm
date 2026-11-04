@@ -1,0 +1,538 @@
+{
+  "cikti": "data/anka_router_v3.pt",
+  "cikti_sha256": "5e1c32b5203d25caf6cb1c2159e51e8f3566b08441c3c2a67335186a568190fa",
+  "damga": "2026-11-04T14:36:38Z",
+  "hukum": "P25_ROUTER_V3_LEGAL_GECTI",
+  "hukum_kaynagi": "scripts/train_router_v3_legal.py — deterministik ölçüm",
+  "ilan": "data/eval/p25_router_v3_ilan_2026-11-04.md",
+  "ilan_sha256": "1be2d4160bef69928fd411911922ebc010b072f4152ce5719d8e0296de0e6aa4",
+  "kapilar": [
+    {
+      "ayrac": "K1 SIFIR-KILIÇ (güncel kaynak-sha birebir eşleşme)",
+      "gec": true,
+      "olcum": {
+        "data/anka_taban_pure.pt": "5479a2f35a88975cae3cd8e66e4aef0bb7b09bea5274828709fe2c0e1d263360",
+        "data/lexicon/roots.tsv": "e32677b2a80bd611f7da17b815b3891d0831a0f45d065f1e7de76acd1321630d",
+        "data/pedagogy/bahcivan_arena.jsonl": "9fa356b44ebfc7f6d48e387d7dceb12330b36287c94d95d0e8c15b66646baa13",
+        "data/pedagogy/legal_canonical_sft.jsonl": "69670bc6ddbc033cff4a38a044ef0ccd5a82c278cfd8f564755ea70634734e9c",
+        "data/pedagogy/legal_router_v3_dataset.jsonl": "713719ab8eac57e70851d2a34dbe1ce8b024ae61df1e182c0d8be5284c0d4e8b",
+        "data/rebuild/vocab_anka_r1_33114.json": "f9940a8d8e1f7cd9428d389f12ff4c5ee448e5a7bfcdcc8ecc9c616fce950984",
+        "sha_sapma": []
+      }
+    },
+    {
+      "ayrac": "CİHAZ (özellik-çıkarımı: MPS)",
+      "gec": true,
+      "olcum": {
+        "cihaz": "mps"
+      }
+    },
+    {
+      "ayrac": "K5 VERİ-ENVANTER (4×500/100 + legal 50/10; kesişim-0; legal>0)",
+      "gec": true,
+      "olcum": {
+        "legal_distinct_train": 50,
+        "legal_ornek": 60,
+        "legal_oversample": 10,
+        "train_kirilim": {
+          "carpenter": 500,
+          "gardener": 500,
+          "grammar_core": 500,
+          "legal": 50,
+          "pedagogy": 500
+        },
+        "val_kirilim": {
+          "carpenter": 100,
+          "gardener": 100,
+          "grammar_core": 100,
+          "legal": 10,
+          "pedagogy": 100
+        },
+        "val_train_kesisim": 0
+      }
+    },
+    {
+      "ayrac": "K2 BASELINE (fresh-init eski-4-sınıf val top-1; kayıt-değer)",
+      "gec": true,
+      "olcum": {
+        "baseline_val_top1": 0.0,
+        "rastgele_taban_5sinif": 0.2
+      }
+    },
+    {
+      "ayrac": "K3 EĞİTİM (eski-400 top-1>=0,95 VE baseline+0,50 VE kayıp-azalıyor)",
+      "gec": true,
+      "olcum": {
+        "baseline": 0.0,
+        "epoch_kayiplar": [
+          0.2859,
+          0.0478,
+          0.0269,
+          0.0217,
+          0.0208,
+          0.0112,
+          0.0435,
+          0.0124,
+          0.0099,
+          0.0112
+        ],
+        "kirpilan_4096_ustu": 0,
+        "ozellik_sure_sn": 60.7,
+        "train_per_sinif_dogru": {
+          "carpenter": 500,
+          "gardener": 499,
+          "grammar_core": 500,
+          "legal": 500,
+          "pedagogy": 499
+        },
+        "val_per_sinif": {
+          "carpenter": {
+            "acc": 1.0,
+            "correct": 100,
+            "f1": 1.0,
+            "precision": 1.0,
+            "recall": 1.0,
+            "top2": true,
+            "total": 100
+          },
+          "gardener": {
+            "acc": 1.0,
+            "correct": 100,
+            "f1": 1.0,
+            "precision": 1.0,
+            "recall": 1.0,
+            "top2": true,
+            "total": 100
+          },
+          "grammar_core": {
+            "acc": 1.0,
+            "correct": 100,
+            "f1": 1.0,
+            "precision": 1.0,
+            "recall": 1.0,
+            "top2": true,
+            "total": 100
+          },
+          "legal": {
+            "acc": 1.0,
+            "correct": 10,
+            "f1": 1.0,
+            "precision": 1.0,
+            "recall": 1.0,
+            "top2": true,
+            "total": 10
+          },
+          "pedagogy": {
+            "acc": 1.0,
+            "correct": 100,
+            "f1": 1.0,
+            "precision": 1.0,
+            "recall": 1.0,
+            "top2": true,
+            "total": 100
+          }
+        },
+        "val_top1_400": 1.0,
+        "val_top1_410": 1.0
+      }
+    },
+    {
+      "ayrac": "K7 REGRESYON NÖBETİ (v3 eski-sınıf doğruluğu v2'den düşük değil)",
+      "gec": true,
+      "olcum": {
+        "t0210_hukum_cipasi_v2": 1.0,
+        "v2_val_per_sinif": {
+          "carpenter": {
+            "acc": 1.0,
+            "correct": 100,
+            "f1": 1.0,
+            "precision": 1.0,
+            "recall": 1.0,
+            "top2": true,
+            "total": 100
+          },
+          "gardener": {
+            "acc": 1.0,
+            "correct": 100,
+            "f1": 1.0,
+            "precision": 1.0,
+            "recall": 1.0,
+            "top2": true,
+            "total": 100
+          },
+          "grammar_core": {
+            "acc": 1.0,
+            "correct": 100,
+            "f1": 1.0,
+            "precision": 1.0,
+            "recall": 1.0,
+            "top2": true,
+            "total": 100
+          },
+          "pedagogy": {
+            "acc": 1.0,
+            "correct": 100,
+            "f1": 0.9524,
+            "precision": 0.9091,
+            "recall": 1.0,
+            "top2": true,
+            "total": 100
+          }
+        },
+        "v2_val_top1_400": 1.0,
+        "v3_val_per_sinif_eski": {
+          "carpenter": {
+            "acc": 1.0,
+            "correct": 100,
+            "f1": 1.0,
+            "precision": 1.0,
+            "recall": 1.0,
+            "top2": true,
+            "total": 100
+          },
+          "gardener": {
+            "acc": 1.0,
+            "correct": 100,
+            "f1": 1.0,
+            "precision": 1.0,
+            "recall": 1.0,
+            "top2": true,
+            "total": 100
+          },
+          "grammar_core": {
+            "acc": 1.0,
+            "correct": 100,
+            "f1": 1.0,
+            "precision": 1.0,
+            "recall": 1.0,
+            "top2": true,
+            "total": 100
+          },
+          "pedagogy": {
+            "acc": 1.0,
+            "correct": 100,
+            "f1": 1.0,
+            "precision": 1.0,
+            "recall": 1.0,
+            "top2": true,
+            "total": 100
+          }
+        },
+        "v3_val_top1_400": 1.0
+      }
+    },
+    {
+      "ayrac": "K8 LEGAL PROBE (v3 isabet>=8/10 VE >v2; probe∩veri=0)",
+      "gec": true,
+      "olcum": {
+        "n_sorgu": 10,
+        "probe_veri_kesisim": 0,
+        "v2_legal_isabet": 0,
+        "v3_legal_isabet": 8
+      }
+    },
+    {
+      "ayrac": "K4 DETERMİNİZM (ikinci-koşum state_dict SHA birebir)",
+      "gec": true,
+      "olcum": {
+        "sha_1": "4016b210f5a777b0d2daf5ffe4be92d91019b78eaa3709f9c877e2468f1701b5",
+        "sha_2": "4016b210f5a777b0d2daf5ffe4be92d91019b78eaa3709f9c877e2468f1701b5"
+      }
+    },
+    {
+      "ayrac": "K6 ŞEMA + ÇIKTI (5x256 + birebir anahtarlar + v3 yazımı + v2 değişmedi)",
+      "gec": true,
+      "olcum": {
+        "anahtar_sayi": 9,
+        "cikti": "data/anka_router_v3.pt",
+        "cikti_sha256": "5e1c32b5203d25caf6cb1c2159e51e8f3566b08441c3c2a67335186a568190fa",
+        "v2_sha_once": "74b9c808425cac4161b01641d4ec3aec3472ded0a65b4fd69e211b45b72e2ab2",
+        "v2_sha_sonra": "74b9c808425cac4161b01641d4ec3aec3472ded0a65b4fd69e211b45b72e2ab2",
+        "w_g_shape": [
+          5,
+          256
+        ]
+      }
+    }
+  ],
+  "meta": {
+    "epoch_kayiplar": [
+      0.2859154585984689,
+      0.04777853544860418,
+      0.026897025962148,
+      0.021668655194395186,
+      0.020751443777757967,
+      0.011201789760866344,
+      0.04353838300522523,
+      0.012380254170872107,
+      0.009914526730610789,
+      0.011178850151540983
+    ],
+    "legal_ornek": 60,
+    "probe_v2": {
+      "legal_isabet": 0,
+      "n": 10,
+      "router": "anka_router_v2.pt",
+      "satirlar": [
+        {
+          "legal_logit": -3.937,
+          "sorgu": "Türk Ceza Kanunu'nda hırsızlık suçunun cezası kaç yıldır?",
+          "top1": "pedagogy",
+          "top1_agirlik": 0.9998,
+          "top2": "gardener",
+          "top2_agirlik": 0.0002
+        },
+        {
+          "legal_logit": -4.594,
+          "sorgu": "İş kanununa göre kıdem tazminatı hangi hallerde ödenir?",
+          "top1": "pedagogy",
+          "top1_agirlik": 0.9911,
+          "top2": "carpenter",
+          "top2_agirlik": 0.0089
+        },
+        {
+          "legal_logit": -5.289,
+          "sorgu": "Kira sözleşmesinde fesih için bildirim süresi ne kadardır?",
+          "top1": "carpenter",
+          "top1_agirlik": 0.5804,
+          "top2": "pedagogy",
+          "top2_agirlik": 0.4196
+        },
+        {
+          "legal_logit": -3.743,
+          "sorgu": "Miras hukukunda yasal mirasçıların payları nasıl belirlenir?",
+          "top1": "pedagogy",
+          "top1_agirlik": 0.9998,
+          "top2": "carpenter",
+          "top2_agirlik": 0.0002
+        },
+        {
+          "legal_logit": -4.903,
+          "sorgu": "Vergi Usul Kanunu'na göre gecikme faizi nasıl hesaplanır?",
+          "top1": "pedagogy",
+          "top1_agirlik": 0.9926,
+          "top2": "carpenter",
+          "top2_agirlik": 0.0074
+        },
+        {
+          "legal_logit": -4.027,
+          "sorgu": "Boşanma davasında velayet kararını hangi mahkeme verir?",
+          "top1": "pedagogy",
+          "top1_agirlik": 0.9997,
+          "top2": "carpenter",
+          "top2_agirlik": 0.0003
+        },
+        {
+          "legal_logit": -4.044,
+          "sorgu": "Türk Ticaret Kanunu'nda limited şirket kuruluşu için gereken sermaye nedir?",
+          "top1": "pedagogy",
+          "top1_agirlik": 0.9982,
+          "top2": "carpenter",
+          "top2_agirlik": 0.0018
+        },
+        {
+          "legal_logit": -3.142,
+          "sorgu": "İdare hukukunda iptal davası açma süresi ne kadardır?",
+          "top1": "pedagogy",
+          "top1_agirlik": 1.0,
+          "top2": "carpenter",
+          "top2_agirlik": 0.0
+        },
+        {
+          "legal_logit": -4.304,
+          "sorgu": "Tüketicinin ayıplı mal satın alması halindeki hakları nelerdir?",
+          "top1": "pedagogy",
+          "top1_agirlik": 0.999,
+          "top2": "carpenter",
+          "top2_agirlik": 0.001
+        },
+        {
+          "legal_logit": -4.104,
+          "sorgu": "Ceza soruşturmasında şüphelinin ifade hakkı hangi kurallara tabidir?",
+          "top1": "pedagogy",
+          "top1_agirlik": 0.9945,
+          "top2": "carpenter",
+          "top2_agirlik": 0.0055
+        }
+      ]
+    },
+    "probe_v3": {
+      "legal_isabet": 8,
+      "n": 10,
+      "router": "anka_router_v3.pt",
+      "satirlar": [
+        {
+          "legal_logit": 8.459,
+          "sorgu": "Türk Ceza Kanunu'nda hırsızlık suçunun cezası kaç yıldır?",
+          "top1": "legal",
+          "top1_agirlik": 0.9919,
+          "top2": "pedagogy",
+          "top2_agirlik": 0.0081
+        },
+        {
+          "legal_logit": 10.902,
+          "sorgu": "İş kanununa göre kıdem tazminatı hangi hallerde ödenir?",
+          "top1": "legal",
+          "top1_agirlik": 1.0,
+          "top2": "grammar_core",
+          "top2_agirlik": 0.0
+        },
+        {
+          "legal_logit": 9.516,
+          "sorgu": "Kira sözleşmesinde fesih için bildirim süresi ne kadardır?",
+          "top1": "legal",
+          "top1_agirlik": 1.0,
+          "top2": "carpenter",
+          "top2_agirlik": 0.0
+        },
+        {
+          "legal_logit": 9.202,
+          "sorgu": "Miras hukukunda yasal mirasçıların payları nasıl belirlenir?",
+          "top1": "legal",
+          "top1_agirlik": 0.9989,
+          "top2": "pedagogy",
+          "top2_agirlik": 0.0011
+        },
+        {
+          "legal_logit": 10.356,
+          "sorgu": "Vergi Usul Kanunu'na göre gecikme faizi nasıl hesaplanır?",
+          "top1": "legal",
+          "top1_agirlik": 1.0,
+          "top2": "pedagogy",
+          "top2_agirlik": 0.0
+        },
+        {
+          "legal_logit": 9.866,
+          "sorgu": "Boşanma davasında velayet kararını hangi mahkeme verir?",
+          "top1": "legal",
+          "top1_agirlik": 0.9999,
+          "top2": "pedagogy",
+          "top2_agirlik": 0.0001
+        },
+        {
+          "legal_logit": 5.304,
+          "sorgu": "Türk Ticaret Kanunu'nda limited şirket kuruluşu için gereken sermaye nedir?",
+          "top1": "pedagogy",
+          "top1_agirlik": 0.7645,
+          "top2": "legal",
+          "top2_agirlik": 0.2355
+        },
+        {
+          "legal_logit": 9.776,
+          "sorgu": "İdare hukukunda iptal davası açma süresi ne kadardır?",
+          "top1": "legal",
+          "top1_agirlik": 0.9998,
+          "top2": "pedagogy",
+          "top2_agirlik": 0.0002
+        },
+        {
+          "legal_logit": 5.39,
+          "sorgu": "Tüketicinin ayıplı mal satın alması halindeki hakları nelerdir?",
+          "top1": "pedagogy",
+          "top1_agirlik": 0.8263,
+          "top2": "legal",
+          "top2_agirlik": 0.1737
+        },
+        {
+          "legal_logit": 10.66,
+          "sorgu": "Ceza soruşturmasında şüphelinin ifade hakkı hangi kurallara tabidir?",
+          "top1": "legal",
+          "top1_agirlik": 1.0,
+          "top2": "pedagogy",
+          "top2_agirlik": 0.0
+        }
+      ]
+    },
+    "v2_val_per_sinif": {
+      "carpenter": {
+        "acc": 1.0,
+        "correct": 100,
+        "f1": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "top2": true,
+        "total": 100
+      },
+      "gardener": {
+        "acc": 1.0,
+        "correct": 100,
+        "f1": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "top2": true,
+        "total": 100
+      },
+      "grammar_core": {
+        "acc": 1.0,
+        "correct": 100,
+        "f1": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "top2": true,
+        "total": 100
+      },
+      "pedagogy": {
+        "acc": 1.0,
+        "correct": 100,
+        "f1": 0.9524,
+        "precision": 0.9091,
+        "recall": 1.0,
+        "top2": true,
+        "total": 100
+      }
+    },
+    "v2_val_top1_400": 1.0,
+    "v3_val_per_sinif": {
+      "carpenter": {
+        "acc": 1.0,
+        "correct": 100,
+        "f1": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "top2": true,
+        "total": 100
+      },
+      "gardener": {
+        "acc": 1.0,
+        "correct": 100,
+        "f1": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "top2": true,
+        "total": 100
+      },
+      "grammar_core": {
+        "acc": 1.0,
+        "correct": 100,
+        "f1": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "top2": true,
+        "total": 100
+      },
+      "legal": {
+        "acc": 1.0,
+        "correct": 10,
+        "f1": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "top2": true,
+        "total": 10
+      },
+      "pedagogy": {
+        "acc": 1.0,
+        "correct": 100,
+        "f1": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "top2": true,
+        "total": 100
+      }
+    },
+    "v3_val_top1_400": 1.0,
+    "v3_val_top1_410": 1.0
+  },
+  "rc": 0,
+  "state_dict_sha256": "4016b210f5a777b0d2daf5ffe4be92d91019b78eaa3709f9c877e2468f1701b5",
+  "v2_devir_sha256": "74b9c808425cac4161b01641d4ec3aec3472ded0a65b4fd69e211b45b72e2ab2"
+}
