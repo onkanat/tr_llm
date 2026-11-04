@@ -4,6 +4,11 @@ Bu projedeki tüm önemli değişiklikler bu dosyada belgelenmektedir.
 
 Format [Keep a Changelog](https://keepachangelog.com/tr/1.0.0/) standardına dayanır ve bu proje [Semantic Versioning (SemVer)](https://semver.org/spec/v2.0.0.html) ilkelerini benimser.
 
+## [1.19.0] - 2026-11-04
+
+### Eklendi (Added)
+- **P2.6 tur-4 (zaman/kip dozu hükmü):** `anka_taban_v3r4.pt` (5.059 SFT + 1.265 pencere, 198 adım) — **'gideceğim'→TENSE top-1 çevrildi (0,9325**; tur-2'de top-5 dışı, tur-3'te top-2 0,056): merdivende TABAN dışında **ilk 4/4 top-1** (güvenler 0,9988/0,9325/0,9807/0,9218). Buna karşılık kapılar 1/4: KAPI-1 **2,4390** (açık 0,119; kapanış hızı −0,741→−0,153→−0,102→−0,044 nat/tur — doygun) ve sonda ödün verdi (72 morfem; kontrol sorgusu 45→24 erken-EOS; UNK %2,78). **Hüküm: v3r4 ceket tabanı DEĞİL**; ölçülen sıradaki kalem uzun-yanıt alan kartı (iki eksen — görev doğruluğu + üretim uzunluğu — artık aynı veri kalemiyle aynı anda dönmüyor). Merdiven tablosu (6 basamak) + kanıtlar: `data/eval/p26_tur4_kapi_olcum_2026-11-04.md`.
+
 ## [1.18.0] - 2026-11-04
 
 ### Eklendi (Added)
