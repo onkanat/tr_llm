@@ -1,0 +1,649 @@
+{
+ "olcum_tarihi": "2026-11-04 17:26",
+ "vocab": "vocab_anka_r1_33114.json",
+ "vocab_boyut": 33114,
+ "literal_entity_mode": true,
+ "orneklem": {
+  "karakter": 156056,
+  "dilim_sayisi": 51,
+  "kanun_sayisi": 17,
+  "hedef_alt_sinir": 100000
+ },
+ "olcumler": {
+  "toplam_token": 44395,
+  "toplam_karakter": 156056,
+  "unk_token": 595,
+  "unk_yuzde_token": 1.34,
+  "proper_noun_token": 0,
+  "rakam_token": 6534,
+  "rakam_yuzde": 14.72,
+  "kelime_sayisi": 21666,
+  "token_basina_karakter": 3.515,
+  "kelime_basina_token": 2.049,
+  "unk_kelime_cesidi": 300,
+  "unk_kelime_ornegi": 588,
+  "unk_kelime_yuzde": 2.714
+ },
+ "sozlukte_mi_sorgusu": {
+  "fıkra": {
+   "sozlukte_var": true,
+   "derlenebiliyor": true,
+   "token_vector": [
+    "fıkra"
+   ],
+   "unk_olur_mu": false
+  },
+  "hükmün": {
+   "sozlukte_var": false,
+   "derlenebiliyor": false,
+   "token_vector": [],
+   "unk_olur_mu": true
+  },
+  "taraflarca": {
+   "sozlukte_var": false,
+   "derlenebiliyor": true,
+   "token_vector": [
+    "taraf",
+    "PLURAL",
+    "CASE_EQU"
+   ],
+   "unk_olur_mu": false
+  },
+  "kanunen": {
+   "sozlukte_var": true,
+   "derlenebiliyor": true,
+   "token_vector": [
+    "kanunen"
+   ],
+   "unk_olur_mu": false
+  },
+  "mevzuat": {
+   "sozlukte_var": true,
+   "derlenebiliyor": true,
+   "token_vector": [
+    "mevzuat"
+   ],
+   "unk_olur_mu": false
+  },
+  "yargı": {
+   "sozlukte_var": true,
+   "derlenebiliyor": true,
+   "token_vector": [
+    "yargı"
+   ],
+   "unk_olur_mu": false
+  },
+  "mahkeme": {
+   "sozlukte_var": true,
+   "derlenebiliyor": true,
+   "token_vector": [
+    "mahkeme"
+   ],
+   "unk_olur_mu": false
+  },
+  "hâkim": {
+   "sozlukte_var": true,
+   "derlenebiliyor": true,
+   "token_vector": [
+    "hâkim"
+   ],
+   "unk_olur_mu": false
+  },
+  "tazminat": {
+   "sozlukte_var": true,
+   "derlenebiliyor": true,
+   "token_vector": [
+    "tazminat"
+   ],
+   "unk_olur_mu": false
+  },
+  "zamanaşımı": {
+   "sozlukte_var": false,
+   "derlenebiliyor": false,
+   "token_vector": [],
+   "unk_olur_mu": true
+  },
+  "sözleşme": {
+   "sozlukte_var": false,
+   "derlenebiliyor": true,
+   "token_vector": [
+    "sözleş",
+    "INF_mA"
+   ],
+   "unk_olur_mu": false
+  },
+  "taraflarınca": {
+   "sozlukte_var": false,
+   "derlenebiliyor": true,
+   "token_vector": [
+    "taraf",
+    "POSS_3PL",
+    "CASE_EQU_N"
+   ],
+   "unk_olur_mu": false
+  },
+  "işveren": {
+   "sozlukte_var": true,
+   "derlenebiliyor": true,
+   "token_vector": [
+    "işveren"
+   ],
+   "unk_olur_mu": false
+  },
+  "işçi": {
+   "sozlukte_var": true,
+   "derlenebiliyor": true,
+   "token_vector": [
+    "işçi"
+   ],
+   "unk_olur_mu": false
+  },
+  "kanunu": {
+   "sozlukte_var": false,
+   "derlenebiliyor": true,
+   "token_vector": [
+    "kanun",
+    "POSS_3SG"
+   ],
+   "unk_olur_mu": false
+  },
+  "yürürlükten": {
+   "sozlukte_var": false,
+   "derlenebiliyor": false,
+   "token_vector": [],
+   "unk_olur_mu": true
+  },
+  "kaldırılan": {
+   "sozlukte_var": false,
+   "derlenebiliyor": true,
+   "token_vector": [
+    "kaldırıl",
+    "PART_An"
+   ],
+   "unk_olur_mu": false
+  },
+  "tüzüğün": {
+   "sozlukte_var": false,
+   "derlenebiliyor": true,
+   "token_vector": [
+    "tüzük",
+    "POSS_2SG"
+   ],
+   "unk_olur_mu": false
+  },
+  "resmî": {
+   "sozlukte_var": true,
+   "derlenebiliyor": true,
+   "token_vector": [
+    "resmî"
+   ],
+   "unk_olur_mu": false
+  },
+  "soruşturma": {
+   "sozlukte_var": true,
+   "derlenebiliyor": true,
+   "token_vector": [
+    "soruşturma"
+   ],
+   "unk_olur_mu": false
+  },
+  "kovuşturma": {
+   "sozlukte_var": true,
+   "derlenebiliyor": true,
+   "token_vector": [
+    "kovuşturma"
+   ],
+   "unk_olur_mu": false
+  },
+  "icra": {
+   "sozlukte_var": true,
+   "derlenebiliyor": true,
+   "token_vector": [
+    "icra"
+   ],
+   "unk_olur_mu": false
+  },
+  "iflas": {
+   "sozlukte_var": true,
+   "derlenebiliyor": true,
+   "token_vector": [
+    "iflas"
+   ],
+   "unk_olur_mu": false
+  },
+  "rehin": {
+   "sozlukte_var": true,
+   "derlenebiliyor": true,
+   "token_vector": [
+    "rehin"
+   ],
+   "unk_olur_mu": false
+  },
+  "kabul": {
+   "sozlukte_var": true,
+   "derlenebiliyor": true,
+   "token_vector": [
+    "kabul"
+   ],
+   "unk_olur_mu": false
+  },
+  "red": {
+   "sozlukte_var": false,
+   "derlenebiliyor": true,
+   "token_vector": [
+    "ret"
+   ],
+   "unk_olur_mu": false
+  },
+  "istinaf": {
+   "sozlukte_var": true,
+   "derlenebiliyor": true,
+   "token_vector": [
+    "istinaf"
+   ],
+   "unk_olur_mu": false
+  },
+  "temyiz": {
+   "sozlukte_var": true,
+   "derlenebiliyor": true,
+   "token_vector": [
+    "temyiz"
+   ],
+   "unk_olur_mu": false
+  },
+  "kanunoylarıyla": {
+   "sozlukte_var": false,
+   "derlenebiliyor": false,
+   "token_vector": [],
+   "unk_olur_mu": true
+  },
+  "vekalet": {
+   "sozlukte_var": false,
+   "derlenebiliyor": false,
+   "token_vector": [],
+   "unk_olur_mu": true
+  },
+  "vekâlet": {
+   "sozlukte_var": true,
+   "derlenebiliyor": true,
+   "token_vector": [
+    "vekâlet"
+   ],
+   "unk_olur_mu": false
+  },
+  "taraftara": {
+   "sozlukte_var": false,
+   "derlenebiliyor": true,
+   "token_vector": [
+    "taraftar",
+    "CASE_DAT"
+   ],
+   "unk_olur_mu": false
+  },
+  "konusunda": {
+   "sozlukte_var": false,
+   "derlenebiliyor": true,
+   "token_vector": [
+    "konu",
+    "POSS_3SG",
+    "CASE_LOC_N"
+   ],
+   "unk_olur_mu": false
+  },
+  "aykırı": {
+   "sozlukte_var": true,
+   "derlenebiliyor": true,
+   "token_vector": [
+    "aykırı"
+   ],
+   "unk_olur_mu": false
+  },
+  "aykırılık": {
+   "sozlukte_var": false,
+   "derlenebiliyor": true,
+   "token_vector": [
+    "aykırı",
+    "DERIV_lIk"
+   ],
+   "unk_olur_mu": false
+  },
+  "tâbi": {
+   "sozlukte_var": false,
+   "derlenebiliyor": false,
+   "token_vector": [],
+   "unk_olur_mu": true
+  },
+  "mücbir": {
+   "sozlukte_var": true,
+   "derlenebiliyor": true,
+   "token_vector": [
+    "mücbir"
+   ],
+   "unk_olur_mu": false
+  },
+  "katıksız": {
+   "sozlukte_var": false,
+   "derlenebiliyor": true,
+   "token_vector": [
+    "katık",
+    "DERIV_sIz"
+   ],
+   "unk_olur_mu": false
+  }
+ },
+ "sozlukte_olmayan_hukuk_kelimeleri": [
+  "hükmün",
+  "zamanaşımı",
+  "yürürlükten",
+  "kanunoylarıyla",
+  "vekalet",
+  "tâbi"
+ ],
+ "en_sik_unk_kelimeler": [
+  {
+   "kelime": "nci",
+   "sayi": 48
+  },
+  {
+   "kelime": "ncı",
+   "sayi": 24
+  },
+  {
+   "kelime": "yürürlüğe",
+   "sayi": 13
+  },
+  {
+   "kelime": "tüketici",
+   "sayi": 9
+  },
+  {
+   "kelime": "hükme",
+   "sayi": 8
+  },
+  {
+   "kelime": "işyeri",
+   "sayi": 8
+  },
+  {
+   "kelime": "kaydıyla",
+   "sayi": 7
+  },
+  {
+   "kelime": "teselsül",
+   "sayi": 7
+  },
+  {
+   "kelime": "uyuşturucu",
+   "sayi": 7
+  },
+  {
+   "kelime": "keseneğine",
+   "sayi": 7
+  },
+  {
+   "kelime": "mali",
+   "sayi": 6
+  },
+  {
+   "kelime": "hükmü",
+   "sayi": 6
+  },
+  {
+   "kelime": "usulü",
+   "sayi": 6
+  },
+  {
+   "kelime": "hakkı",
+   "sayi": 6
+  },
+  {
+   "kelime": "adlî",
+   "sayi": 6
+  },
+  {
+   "kelime": "hükmün",
+   "sayi": 6
+  },
+  {
+   "kelime": "hallerde",
+   "sayi": 5
+  },
+  {
+   "kelime": "mirasbırakanın",
+   "sayi": 5
+  },
+  {
+   "kelime": "tüketiciye",
+   "sayi": 5
+  },
+  {
+   "kelime": "unvanlı",
+   "sayi": 4
+  },
+  {
+   "kelime": "yürürlükten",
+   "sayi": 4
+  },
+  {
+   "kelime": "iptaline",
+   "sayi": 4
+  },
+  {
+   "kelime": "işyerinin",
+   "sayi": 4
+  },
+  {
+   "kelime": "işyerlerinde",
+   "sayi": 4
+  },
+  {
+   "kelime": "uyuşmazlık",
+   "sayi": 4
+  },
+  {
+   "kelime": "malûllüğü",
+   "sayi": 4
+  },
+  {
+   "kelime": "kabulün",
+   "sayi": 4
+  },
+  {
+   "kelime": "idarî",
+   "sayi": 3
+  },
+  {
+   "kelime": "akdi",
+   "sayi": 3
+  },
+  {
+   "kelime": "hukukî",
+   "sayi": 3
+  },
+  {
+   "kelime": "nitelikli",
+   "sayi": 3
+  },
+  {
+   "kelime": "onbeş",
+   "sayi": 3
+  },
+  {
+   "kelime": "işyerlerinin",
+   "sayi": 3
+  },
+  {
+   "kelime": "işyerinde",
+   "sayi": 3
+  },
+  {
+   "kelime": "niteliğini",
+   "sayi": 3
+  },
+  {
+   "kelime": "göremezlik",
+   "sayi": 3
+  },
+  {
+   "kelime": "ilâ",
+   "sayi": 3
+  },
+  {
+   "kelime": "malullük",
+   "sayi": 3
+  },
+  {
+   "kelime": "kesenek",
+   "sayi": 3
+  },
+  {
+   "kelime": "yürürlük",
+   "sayi": 3
+  },
+  {
+   "kelime": "ecrimisil",
+   "sayi": 3
+  },
+  {
+   "kelime": "erdirebilir",
+   "sayi": 3
+  },
+  {
+   "kelime": "oniki",
+   "sayi": 3
+  },
+  {
+   "kelime": "üretici",
+   "sayi": 3
+  },
+  {
+   "kelime": "malvarlığı",
+   "sayi": 3
+  },
+  {
+   "kelime": "rücu",
+   "sayi": 3
+  },
+  {
+   "kelime": "tüketicilerin",
+   "sayi": 3
+  },
+  {
+   "kelime": "tüketicilere",
+   "sayi": 3
+  },
+  {
+   "kelime": "mensupları",
+   "sayi": 2
+  },
+  {
+   "kelime": "tâbi",
+   "sayi": 2
+  }
+ ],
+ "kanun_bazli_unk": {
+  "0657_devlet_memurlari_kanunu.txt": {
+   "karakter": 6614,
+   "token": 2087,
+   "unk": 18,
+   "unk_yuzde": 0.86
+  },
+  "2577_idari_yargilama_usulu_kanunu.txt": {
+   "karakter": 1329,
+   "token": 387,
+   "unk": 5,
+   "unk_yuzde": 1.29
+  },
+  "2872_cevre_kanunu.txt": {
+   "karakter": 1040,
+   "token": 352,
+   "unk": 0,
+   "unk_yuzde": 0.0
+  },
+  "3194_imar_kanunu.txt": {
+   "karakter": 2082,
+   "token": 633,
+   "unk": 6,
+   "unk_yuzde": 0.95
+  },
+  "4708_yapi_denetimi_hakkinda_kanun.txt": {
+   "karakter": 1036,
+   "token": 288,
+   "unk": 2,
+   "unk_yuzde": 0.69
+  },
+  "4721_turk_medeni_kanunu.txt": {
+   "karakter": 4954,
+   "token": 1649,
+   "unk": 1,
+   "unk_yuzde": 0.06
+  },
+  "4857_is_kanunu.txt": {
+   "karakter": 1753,
+   "token": 557,
+   "unk": 5,
+   "unk_yuzde": 0.9
+  },
+  "5237_turk_ceza_kanunu.txt": {
+   "karakter": 3583,
+   "token": 1158,
+   "unk": 8,
+   "unk_yuzde": 0.69
+  },
+  "5271_ceza_muhakemeleri_kanunu.txt": {
+   "karakter": 4417,
+   "token": 1409,
+   "unk": 24,
+   "unk_yuzde": 1.7
+  },
+  "5378_engelliler_hakkinda_kanun.txt": {
+   "karakter": 1159,
+   "token": 319,
+   "unk": 1,
+   "unk_yuzde": 0.31
+  },
+  "5510_sosyal_sigortalar_ve_genel_saglik_sigortasi_kanunu.txt": {
+   "karakter": 9211,
+   "token": 2857,
+   "unk": 32,
+   "unk_yuzde": 1.12
+  },
+  "6098_turk_borclar_kanunu.txt": {
+   "karakter": 3759,
+   "token": 1163,
+   "unk": 20,
+   "unk_yuzde": 1.72
+  },
+  "6100_hukuk_muhakemeleri_kanunu.txt": {
+   "karakter": 3563,
+   "token": 1090,
+   "unk": 10,
+   "unk_yuzde": 0.92
+  },
+  "6331_is_sagligi_ve_guvenligi_kanunu.txt": {
+   "karakter": 1275,
+   "token": 436,
+   "unk": 3,
+   "unk_yuzde": 0.69
+  },
+  "6446_elektrik_piyasasi_kanunu.txt": {
+   "karakter": 2019,
+   "token": 696,
+   "unk": 0,
+   "unk_yuzde": 0.0
+  },
+  "6502_tuketicinin_korunmasi_hakkinda_kanun.txt": {
+   "karakter": 1553,
+   "token": 454,
+   "unk": 4,
+   "unk_yuzde": 0.88
+  },
+  "6698_kisisel_verilerin_korunmasi_kanunu.txt": {
+   "karakter": 1293,
+   "token": 408,
+   "unk": 4,
+   "unk_yuzde": 0.98
+  }
+ },
+ "sozluk_gelistirme_kalemi": "Gerek yok: UNK oranı %10 altında (sözlük donmuş 33.114)"
+}

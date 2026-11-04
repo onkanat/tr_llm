@@ -1,0 +1,22 @@
+{
+ "uretim_tarihi": "2026-11-04 17:26",
+ "kaynak_korpus": "data/legal_korpus/ (17 kanun, mevzuat.gov.tr)",
+ "vocab": "vocab_anka_r1_33114.json",
+ "literal_entity_mode": true,
+ "kayit_sayisi": 463,
+ "tip_dagilimi": {
+  "a_kavram_tanimi": 117,
+  "b_madde_sorusu": 291,
+  "b_hedefli_soru": 35,
+  "c_kavram_ayrimi": 11,
+  "d_prosedur": 9
+ },
+ "token_olcumu": {
+  "toplam_token": 80455,
+  "unk_token": 1304,
+  "unk_yuzde": 1.621,
+  "ortalama_kayit_token": 173.8,
+  "maks_kayit_token": 444
+ },
+ "dusenler": []
+}
