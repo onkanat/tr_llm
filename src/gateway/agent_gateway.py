@@ -31,9 +31,21 @@ from src.compiler.core import CrystalCompiler
 from src.llm.tokenizer import KristalTokenizer, Vocabulary
 from src.compiler.decompiler import MorphemeDecompiler
 from src.rag.vector_memory import VectorMemory, generate_kristal_vector, generate_sparse_vector, resolve_qdrant_url
+from src.rag.yetenek_agi import KANCA_TOP_K  # VG-2 gözlem kancası (opsiyonel; davranış değişikliği YOK)
 from src.rag.epistemic_agent import EpistemicCuriosityAgent
 from src.rag.merak import CuriosityEngine
 from src.llm.router import TriModalRouter
+
+
+def parse_aux_collection_names(raw: Optional[str]) -> List[str]:
+    """VG-1: QDRANT_EXTRA_COLLECTIONS / aux_collections arg ayrıştırıcısı.
+
+    'gts_bellek,kanun_madde' → ['gts_bellek', 'kanun_madde']; boş/None → [].
+    Sıra korunur; boş parçalar düşürülür. Saf fonksiyon (test edilebilir).
+    """
+    if not raw:
+        return []
+    return [p.strip() for p in raw.split(",") if p.strip()]
 
 
 class AgentGateway:
@@ -50,7 +62,9 @@ class AgentGateway:
         future_train_path: str = "data/future_train_vector.jsonl",
         device: str = "cpu",
         qdrant_host: Optional[str] = None,
-        qdrant_port: Optional[int] = None
+        qdrant_port: Optional[int] = None,
+        yetenek_agi: Optional[Any] = None,
+        auxiliary_memories: Optional[List[VectorMemory]] = None
     ):
         self.device = torch.device(device)
         self.future_train_path = future_train_path
@@ -59,6 +73,15 @@ class AgentGateway:
         # varsayılan birebir korunur (localhost:6333).
         self._qdrant_host = qdrant_host if qdrant_host is not None else "localhost"
         self._qdrant_port = qdrant_port if qdrant_port is not None else 6333
+        # VG-2 (2026-11-04): opsiyonel yetenek-ağı gözlem kancası. None →
+        # davranış bugünküyle birebir (yanıtta 'yetenek_aktivasyonu' anahtarı
+        # HİÇ eklenmez). Verilirse ask() sorgu-başına aktif yetenekleri
+        # gözlem alanına yazar — yalnız GÖZLEM, yönlendirme/üretim DEĞİŞMEZ.
+        self.yetenek_agi = yetenek_agi
+        # VG-1 (2026-11-04): canlı retrieval zincirine env/arg ile eklenen aux
+        # koleksiyonlar (ör. gts_bellek, kanun_madde). None/boş → davranış
+        # bugünküyle birebir. Kurulu epistemic_agent'a taşınır (search_memory).
+        self.auxiliary_memories = list(auxiliary_memories) if auxiliary_memories else []
         
         # If components are provided directly
         self.model = model
@@ -96,7 +119,8 @@ class AgentGateway:
                 tau=2.5,
                 similarity_threshold=0.85,
                 future_train_path=self.future_train_path,
-                device=device
+                device=device,
+                auxiliary_memories=self.auxiliary_memories
             )
 
     @classmethod
@@ -119,7 +143,8 @@ class AgentGateway:
         device: str = "cpu",
         host: Optional[str] = "localhost",
         port: int = 6333,
-        qdrant_url: Optional[str] = None
+        qdrant_url: Optional[str] = None,
+        aux_collections: Optional[List[str]] = None
     ) -> "AgentGateway":
         """Factory method to load and build the complete default Gateway stack.
 
@@ -189,6 +214,20 @@ class AgentGateway:
         # sessiz-yazım yok — data/qdrant_db T-0144 disk-kanıtlı riskti)
         memory = VectorMemory(collection_name="anka_bellek", vector_size=768, host=host, port=port, storage_path=storage_path)
         general_memory = VectorMemory(collection_name="simulasyon_bellek", vector_size=768, host=host, port=port, storage_path=storage_path)
+
+        # VG-1 (2026-11-04): aux koleksiyonları — açık arg > QDRANT_EXTRA_COLLECTIONS
+        # env'i (virgülle ayrılmış; örn. 'gts_bellek,kanun_madde'). İkisi de yoksa
+        # liste BOŞ → canlı sorgu zinciri bugünküyle birebir (fail-closed aynı
+        # host/port üzerinden; koleksiyon sunucuda yoksa VectorMemory YARATIR —
+        # ekim betikleri koleksiyonu ÖNCE kurar, gateway yalnız BAĞLANIR).
+        aux_names = list(aux_collections) if aux_collections else parse_aux_collection_names(
+            os.environ.get("QDRANT_EXTRA_COLLECTIONS", ""))
+        aux_memories: List[VectorMemory] = []
+        for aux_ad in aux_names:
+            aux_memories.append(VectorMemory(
+                collection_name=aux_ad, vector_size=768,
+                host=host, port=port, storage_path=storage_path))
+            print(f"[AUX] canlı retrieval zincirine bağlandı: {aux_ad}")
 
         from scripts.train_step_b1_5_rigorous import compute_sha256
 
@@ -268,7 +307,8 @@ class AgentGateway:
             future_train_path="data/future_train_vector.jsonl",
             device=device,
             qdrant_host=host,
-            qdrant_port=port
+            qdrant_port=port,
+            auxiliary_memories=aux_memories
         )
 
     def ask(
@@ -304,7 +344,7 @@ class AgentGateway:
             max_new_tokens=safe_max_tokens
         )
         
-        return {
+        sonuc = {
             "query": query,
             "instruction": instruction,
             "mode": use_mode,
@@ -328,6 +368,20 @@ class AgentGateway:
             "future_train_path": res.get("future_train_path", None),
             "timestamp": datetime.now(timezone.utc).isoformat()
         }
+        # VG-2 GÖZLEM KANCASI (2026-11-04): sorgu-başına aktif yetenek kaydı —
+        # davranış DEĞİŞİMİ YOK. yetenek_agi verilmedikçe anahtar eklenmez
+        # (mevcut sözleşmeler birebir korunur); verilirse aktivasyon sonucu
+        # gözlem alanına yazılır. Aktivasyon hatası ask'i BOZMAZ: dürüst None
+        # raporlanır (kanca yalnız gözlemler, karar vermez).
+        if self.yetenek_agi is not None:
+            try:
+                sonuc["yetenek_aktivasyonu"] = self.yetenek_agi.aktivasyon(
+                    sorgu=query, top_k=KANCA_TOP_K
+                )
+            except Exception as e:  # noqa: BLE001 — gözlem hatası ask'i durduramaz
+                print(f"[VG2_KANCA] yetenek-aktivasyon gözlemi başarısız: {type(e).__name__}: {e}")
+                sonuc["yetenek_aktivasyonu"] = None
+        return sonuc
 
     def _resolve_target_memory(self, target_collection: str) -> "VectorMemory":
         """T-0148 5B: üç-dallı fail-closed ad-çözümü. Koşum-1 kanıtı: eski

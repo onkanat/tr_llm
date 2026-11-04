@@ -94,8 +94,13 @@ class EpistemicCuriosityAgent:
         tau: float = 2.5,
         similarity_threshold: float = 0.85,
         future_train_path: str = "data/future_train_vector.jsonl",
-        device: str = "cpu"
-    ):
+        device: str = "cpu",
+        auxiliary_memories: Optional[List["VectorMemory"]] = None,
+    ) -> None:
+        # VG-1 (2026-11-04): env/arg ile genişletilebilir AUX koleksiyonları
+        # (gts_bellek, kanun_madde). None/boş → davranış bugünküyle BİREBİR
+        # (test_vg1_aux_collections.py kapıları).
+        self.auxiliary_memories = list(auxiliary_memories) if auxiliary_memories else []
         self.model = model
         self.expert_models = expert_models or {}
         self.tokenizer = tokenizer
@@ -246,10 +251,39 @@ class EpistemicCuriosityAgent:
             if gen_results and gen_results[0].get("has_root_match", True):
                 results = gen_results
                 source = self.general_memory.collection_name
-                
+
         if results and results[0].get("has_root_match", True):
-            return results[0], source
-            
+            pick = results[0]
+        else:
+            pick = None
+
+        # VG-1 (2026-11-04): AUX koleksiyon yükseltmesi — YALNIZ zincirin seçtiği
+        # belge 0,33 koşullanma kapısını GEÇEMİYORSA devreye girer (aux boşsa bu
+        # blok hiç işlemez; bugünkü davranış birebir — test_vg1_aux_collections).
+        # Zincir belgesi kullanılabilirse aux HİÇ sorgulanmaz. Aux adayı ancak
+        # kök-eşleşmeli VE 0,33+ skorluysa yükseltilir (koşullanma False→True
+        # değişiminde); birden çok aux geçiyorsa en yüksek skor kazanır.
+        if self.auxiliary_memories and not is_context_usable(
+            float(pick.get("score", 0.0)) if pick else 0.0
+        ):
+            best_aux, best_aux_source, best_aux_score = None, None, -1.0
+            for aux_memory in self.auxiliary_memories:
+                aux_results = aux_memory.hybrid_recall(
+                    dense_vec, sparse_vec, top_k=1, query_tags=query_tags
+                )
+                if not (aux_results and aux_results[0].get("has_root_match", True)):
+                    continue
+                aux_score = float(aux_results[0].get("score", 0.0))
+                if is_context_usable(aux_score) and aux_score > best_aux_score:
+                    best_aux = aux_results[0]
+                    best_aux_source = aux_memory.collection_name
+                    best_aux_score = aux_score
+            if best_aux is not None and best_aux_source is not None:
+                return best_aux, best_aux_source
+
+        if pick is not None:
+            return pick, source
+
         return None, source
 
     def record_to_future_train(self, record: Dict[str, Any]) -> None:

@@ -126,6 +126,21 @@ def main():
         )
     print("[CANLI-GW] anka_bellek storage:", gw.memory.storage_type, "| koleksiyon:", gw.memory.collection_name, flush=True)
     print("[CANLI-GW] simulasyon_bellek storage:", gw.general_memory.storage_type, flush=True)
+    # VG-2 gözlem kancası (2026-11-04): YALNIZ gözlern — ask() yanıtlarına
+    # sorgu-başına aktif yetenekleri yazar; yönlendirme/üretim DEĞİŞMEZ.
+    # Yalnız çözülmüş QDRANT_URL'de denenir (köprü modunda kapalı kalır);
+    # yetenek_agi tohumlanmamışsa/sunucu yanıt vermezse KAPALI raporlanır.
+    if cozulen_url:
+        try:
+            from src.rag.yetenek_agi import YetenekAgi
+            vg2_hedef = ag.resolve_qdrant_url(cozulen_url) or ("localhost", 6333)
+            gw.yetenek_agi = YetenekAgi(host=vg2_hedef[0], port=vg2_hedef[1],
+                                        timeout=30.0, tokenizer=gw.tokenizer)
+            print(f"[VG2] yetenek-ağı gözlemi AÇIK: {gw.yetenek_agi.kart_sayisi()} kart", flush=True)
+        except Exception as e:  # noqa: BLE001 — gözlem kancası başlatmayı DURDURMAZ
+            print(f"[VG2] yetenek-ağı gözlemi KAPALI: {type(e).__name__}: {e}", flush=True)
+    else:
+        print("[VG2] yetenek-ağı gözlemi KAPALI (köprü modunda denenmez)", flush=True)
     srv = gw.create_http_server(args.host, args.port)
     print("[CANLI-GW] http://%s:%d DINLEMEDE — serve_forever" % (args.host, args.port), flush=True)
     srv.serve_forever()

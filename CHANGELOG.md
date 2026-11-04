@@ -4,6 +4,13 @@ Bu projedeki tüm önemli değişiklikler bu dosyada belgelenmektedir.
 
 Format [Keep a Changelog](https://keepachangelog.com/tr/1.0.0/) standardına dayanır ve bu proje [Semantic Versioning (SemVer)](https://semver.org/spec/v2.0.0.html) ilkelerini benimser.
 
+## [1.21.0] - 2026-11-04
+
+### Eklendi (Added)
+- **VG-1 — RAG'ı anlamla doldurma (kullanıcı onayı):** Canlı retrieval zinciri sabit iki koleksiyonlu ve genişletilemezdi; `search_memory`'ye **aux zinciri** eklendi (TDD 8: ana belge 0,33 altındaysa aux'lar sorgulanır, en iyi 0,33+ aday yükseltilir; ana yeterliyse aux HİÇ sorgulanmaz; aux boşken davranış birebir) — `QDRANT_EXTRA_COLLECTIONS` env / `aux_collections` arg. Ekim: **`gts_bellek` 128.327 nokta** (371 nokta/s, RSS 772 MB, read-back 3/3) + **`kanun_madde` 4.068 madde/17 kanun** (129 mülga elendi); her ikisi idempotent (tam-satır sha256 + skip-existing); `anka 46 / muhakeme 91 / simulasyon 4.073` önce=sonra. **Grounding farkı (donmuş sorgular):** İHBAR — öncesi 0,29 skorla koşullanma YOK → halüsinasyon; sonrası **4857 Madde 8 gerçek metni 0,70 ile enjekte**. 4857 süre sorusu — öncesi 0,08 (koşullanma yok) → sonrası **Madde 41 @ 0,833** (hedef m.63 top-3'te). Dürüst sınır: retrieval katmanı düzeldi ama model enjekte edilen metni çıktıya **taşımıyor** (0 4-gram örtüşme) — sıradaki kalem: RAG-koşullanmalı SFT (alıntı davranışı öğretilmeli).
+- **VG-2 — Vektörel Gezgin v1 (özgün vizyonun ilk işleyen adımı):** `src/rag/yetenek_agi.py` — yetenekler VEKTÖRDE (36 gerçek kart, her kartın `kanit` yolu repoda var — uydurma kart testle imkânsız), **kosinüs-yakınlığı aktivasyon** + **ağırlıklı etki** (demo kanıtı: 'zımpara'da marangoz ham skorda 2. ama 1,25 ağırlığı etkiyi zirveye taşır — ağırlıklı etki ≠ ham benzerlik), `yetenek_agi` Qdrant koleksiyonu (read-back 36, idempotent), eşik kalibre (DEFAULT_ESIK=0,02, gürültü kuyruğu 0,005-0,024), determinizm kanıtlı. Demo: 5 sorgu → hit@1 **5/5**. Gateway kancası yalnız-GÖZLEM (kapalıyken davranış birebir; açıkken sorgu başına aktif yetenekler kaydı). Testler 34/34; yalnız roots.tsv statik ✓. V2 eksikleri dürüstçe listeli: ağırlık evrimi (telemetri-tabanlı), aktivasyon→router kararına geçiş, kısıt kartları, hibrit RRF.
+- **Operasyonel not:** canlı gateway başlatılırken `QDRANT_EXTRA_COLLECTIONS=gts_bellek,kanun_madde` verilmeli (yoksa aux zinciri boş çalışır).
+
 ## [1.20.0] - 2026-11-04
 
 ### Eklendi (Added)

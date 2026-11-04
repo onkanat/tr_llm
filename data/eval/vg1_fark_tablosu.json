@@ -1,0 +1,64 @@
+{
+ "sorgular": [
+  {
+   "sorgu": "İş sözleşmesi feshinde ihbar süresi nedir?",
+   "once": {
+    "kaynak": "simulasyon_bellek",
+    "skor": 0.29,
+    "kosullanma": false,
+    "yanit": "Kanun: borçluların cezasına çarptırılır ve davaya başvurmak, mahkeme kararlarına aykırı olanların cezasının uygulanmasına ilişkin hükümlere aykırı olmaktan suçlu veya ceza mahkemesindeki davalara aykırı olmak üzere suçlu bulunur."
+   },
+   "sonra": {
+    "kaynak": "kanun_madde",
+    "skor": 0.7,
+    "kosullanma": true,
+    "yanit": "Kanunların uygulanmasındaki kararlarının belirlendiğini ve bunun yerine, kanunlara aykırı olduğu kararını vermektedir.",
+    "belge_bas": "İş Kanunu (Sayı: 4857) Madde 8 - İş sözleşmesi, bir tarafın (işçi) bağımlı olarak iş görmeyi, diğer tarafın (işveren) da ücret ödemeyi üstlenmesinden oluşan sözleşmedir. İş sözleşmesi, Kanunda aksi belirtilmedikçe, özel bir şekle tâbi değildir. Süresi bir yıl ve daha fazla olan iş sözleşmelerinin ya"
+   },
+   "birebir_alinti": {
+    "en_uzun_ortak_sozcuk_dizisi": 1,
+    "ornek": "ve",
+    "paylasilan_4gram": 0
+   },
+   "kavram_gecisi": {
+    "4857": false,
+    "madde": false,
+    "hafta": false,
+    "saat": false,
+    "kırkbeş": false,
+    "bildirim": false,
+    "sözleşme": false
+   }
+  },
+  {
+   "sorgu": "4857'de haftalık normal çalışma süresi hangi maddede düzenlenmiştir?",
+   "once": {
+    "kaynak": "simulasyon_bellek",
+    "skor": 0.08,
+    "kosullanma": false,
+    "yanit": "Bu belge, [?]' ( Serin), [?]' ( Serin), [?]' ( Serin), [?]' ( Serin), [?]' ( Seria), [?]' ( Serin), [?]' ( Seria), [?]' ("
+   },
+   "sonra": {
+    "kaynak": "kanun_madde",
+    "skor": 0.8333334,
+    "kosullanma": true,
+    "yanit": "Bunun yerine, bir bankasının ( örneğin) ve diğerleri ise, [?] birliklerin ( [Özel İsim]) ve 120.08 kişilik bir bankası, 12.085 ve 397,12.08. maddesine göre, 1250 ve 34. maddelerin yer aldığı birliklerinin 10. maddelere kadar olan paralı olduğu belirtilmekte, 10.",
+    "belge_bas": "İş Kanunu (Sayı: 4857) Madde 41 - Ülkenin genel yararları yahut işin niteliği veya üretimin artırılması gibi nedenlerle fazla çalışma yapılabilir. Fazla çalışma, Kanunda yazılı koşullar çerçevesinde, haftalık kırkbeş saati aşan çalışmalardır. 63 üncü madde hükmüne göre denkleştirme esasının uyguland"
+   },
+   "birebir_alinti": {
+    "en_uzun_ortak_sozcuk_dizisi": 1,
+    "ornek": "yerine",
+    "paylasilan_4gram": 0
+   },
+   "kavram_gecisi": {
+    "4857": false,
+    "madde": true,
+    "hafta": false,
+    "saat": false,
+    "kırkbeş": false,
+    "bildirim": false,
+    "sözleşme": false
+   }
+  }
+ ]
+}

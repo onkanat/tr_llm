@@ -1,0 +1,134 @@
+{
+ "evre": "oncesi",
+ "qdrant": "192.168.1.9:6333",
+ "zaman_utc": "2026-11-04T20:36:36Z",
+ "esik": 0.33,
+ "koleksiyonlar": {
+  "anka_bellek": 46,
+  "simulasyon_bellek": 4073
+ },
+ "koleksiyon_yok": [],
+ "per_koleksiyon": {
+  "anka_bellek": {
+   "İş sözleşmesi feshinde ihbar süresi nedir?": {
+    "sure_ms": 23.5,
+    "sonuclar": [
+     {
+      "skor": 0.0306,
+      "kok_eslesme": false,
+      "eslesen_kokler": [],
+      "metin": "Zıvana geçme (mortise and tenon) ve kurt dişi birleştirme, ahşap karkas, kapı ve pencere çerçevelerinde bükülme ve basma mukavemetini en üst düzeye çıkaran endüstriyel geçme teknikleridir. Yanakların birbirine sıfır toleransla ve kasmadan oturması mobilyanın ömrünü belirler."
+     },
+     {
+      "skor": 0.025,
+      "kok_eslesme": false,
+      "eslesen_kokler": [],
+      "metin": "Salatalık ve kabakgil bitkilerinde en tehlikeli hastalık yaprakların üstünde sarı açılı lekeler yapan mildiyö ve beyaz pudra tabakası oluşturan küllemedir. Bitki köklerinin havalanması, malçlama yapılması ve sabah erken saatte dipten sulama mantar sporlarının yayılmasını engeller."
+     },
+     {
+      "skor": 0.025,
+      "kok_eslesme": false,
+      "eslesen_kokler": [],
+      "metin": "Ahşap atölyesinde planya bıçakları, iskarpelalar ve testere dişlerinin daima jilet keskinliğinde olması zorunludur. Kör bıçaklar ahşap liflerini kesmek yerine ezer ve yolar; geri tepme (kickback) riskini artırır. Karbür uçlu bıçaklar sert ağaçlarda (meşe, gürgen) bilenme ömrünü uzatır; 25-30 derece bileme açısı ve su taşıyla çapak alma şarttır."
+     }
+    ]
+   },
+   "4857'de haftalık normal çalışma süresi hangi maddede düzenlenmiştir?": {
+    "sure_ms": 14.2,
+    "sonuclar": [
+     {
+      "skor": 0.0281,
+      "kok_eslesme": false,
+      "eslesen_kokler": [],
+      "metin": "Domates fidesi dikimi ilkbaharda don tehlikesi geçtikten sonra bol güneş alan, organik gübre ve kompost ile zenginleştirilmiş süzek toprağa yapılmalıdır. Düzenli damla sulama esastır; yapraklara su değdirilmemelidir. Domates en sık mildiyö (geç yanıklık), fusarium solgunluğu, erken yaprak lekesi ve bakteriyel benek hastalıklarına yakalanır. Kök boğazı çürüklüğünü önlemek için havalandırma şarttır."
+     },
+     {
+      "skor": 0.025,
+      "kok_eslesme": false,
+      "eslesen_kokler": [],
+      "metin": "Bahçe toprağı hazırlığında toprak pH derecesi 6.0 ile 7.0 arasında tutulmalıdır. Yanmış çiftlik gübresi, solucan gübresi ve leonardit toprağın su tutma kapasitesini ve mikrobiyal aktivitesini yükseltir. Ağaç budama kış dinlenme döneminde kuru ve hastalıklı dallar çıkarılarak yapılmalıdır."
+     },
+     {
+      "skor": 0.025,
+      "kok_eslesme": false,
+      "eslesen_kokler": [],
+      "metin": "Doğal ve tarihsel kayıtlarda Kaset Tavan öne çıkar. Çünkü Kaset Tavan, kubbe veya tonoz iç yüzeyine açılan kare biçimli geometrik girinti gözleridir. Nitekim strüktürün özgül ağırlığını büyük oranda azaltarak çökme gerilimini düşürür."
+     }
+    ]
+   }
+  },
+  "simulasyon_bellek": {
+   "İş sözleşmesi feshinde ihbar süresi nedir?": {
+    "sure_ms": 17.9,
+    "sonuclar": [
+     {
+      "skor": 0.29,
+      "kok_eslesme": true,
+      "eslesen_kokler": [
+       "süre",
+       "sözleş"
+      ],
+      "metin": "Acentelik sözleşmesi, sözleşmede belirtilen sözleşme geçerlilik süresinin bitimi ile son bulur."
+     },
+     {
+      "skor": 0.0629,
+      "kok_eslesme": true,
+      "eslesen_kokler": [
+       "süre"
+      ],
+      "metin": "O bir süre ne çalacağını, nereden başlayacağını kestiremedi, acemileşti."
+     },
+     {
+      "skor": 0.025,
+      "kok_eslesme": false,
+      "eslesen_kokler": [],
+      "metin": "Akvaryumdaki balıklar da büyük zayiat verdiler zamanla."
+     }
+    ]
+   },
+   "4857'de haftalık normal çalışma süresi hangi maddede düzenlenmiştir?": {
+    "sure_ms": 15.0,
+    "sonuclar": [
+     {
+      "skor": 0.08,
+      "kok_eslesme": true,
+      "eslesen_kokler": [
+       "normal"
+      ],
+      "metin": "Balköpüğü karıncaları normal işçilerden farklıdırlar; kursaklarını balla doldururlar, kursakları esnektir ve içlerini kıpırdayamayacak kadar doldururlar."
+     },
+     {
+      "skor": 0.0667,
+      "kok_eslesme": true,
+      "eslesen_kokler": [
+       "normal"
+      ],
+      "metin": "Oğullarının artık normal bir yaşam süreceğini sanan anne baba ona güzel de bir kız bularak baş göz etmişler."
+     },
+     {
+      "skor": 0.0571,
+      "kok_eslesme": true,
+      "eslesen_kokler": [
+       "düzenlen"
+      ],
+      "metin": "Yayın ve propaganda işleri bu yeni hayata göre düzenlenecektir."
+     }
+    ]
+   }
+  }
+ },
+ "zincir": {
+  "İş sözleşmesi feshinde ihbar süresi nedir?": {
+   "zincir_kaynak": "simulasyon_bellek",
+   "skor": 0.29,
+   "kok_eslesme": true,
+   "metin": "Acentelik sözleşmesi, sözleşmede belirtilen sözleşme geçerlilik süresinin bitimi ile son bulur."
+  },
+  "4857'de haftalık normal çalışma süresi hangi maddede düzenlenmiştir?": {
+   "zincir_kaynak": "simulasyon_bellek",
+   "skor": 0.08,
+   "kok_eslesme": true,
+   "metin": "Balköpüğü karıncaları normal işçilerden farklıdırlar; kursaklarını balla doldururlar, kursakları esnektir ve içlerini kıpırdayamayacak kadar doldururlar."
+  }
+ }
+}

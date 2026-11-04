@@ -1,0 +1,52 @@
+{
+ "evre": "oncesi",
+ "zaman_utc": "2026-11-04T20:53:34Z",
+ "qdrant_url": "http://192.168.1.9:6333",
+ "aux_koleksiyonlar_env": "",
+ "model": "data/anka_taban_pure.pt",
+ "router": "data/anka_router_v3.pt",
+ "router_sd_sha_uyum": true,
+ "max_new_tokens": 100,
+ "sorgular": {
+  "İş sözleşmesi feshinde ihbar süresi nedir?": {
+   "sure_s": 6.6,
+   "response_text": "Kanun: borçluların cezasına çarptırılır ve davaya başvurmak, mahkeme kararlarına aykırı olanların cezasının uygulanmasına ilişkin hükümlere aykırı olmaktan suçlu veya ceza mahkemesindeki davalara aykırı olmak üzere suçlu bulunur.",
+   "morphemes": "kanun : borç DERIV_lI PLURAL POSS_2SG ceza POSS_3SG CASE_DAT_N çarptırıl TENSE_AORIST ve dava CASE_DAT başvur INF_mAk , mahkeme karar POSS_3PL CASE_DAT_N aykırı ol PART_An PLURAL POSS_2SG ceza POSS_3SG CASE_GEN_N uygulan INF_mA POSS_3SG CASE_DAT_N ilişkin hüküm PLURAL CASE_DAT aykırı ol INF_mAk CASE_ABL suç DERIV_lI veya ceza mahkeme POSS_3SG CASE_LOC_N REL_ki dava PLURAL CASE_DAT aykırı ol INF_mAk üzere suç DERIV_lI bulun TENSE_AORIST .",
+   "rag_document": "",
+   "source_collection": "simulasyon_bellek",
+   "rag_score": 0.29,
+   "conditioned": false,
+   "needs_retrieval": true,
+   "retrieval_triggered": true,
+   "entropy_pre": 9.449989318847656,
+   "entropy_post": 3.8492915630340576,
+   "router_experts": [
+    "legal",
+    "pedagogy"
+   ],
+   "active_expert": "legal",
+   "epistemic_failure": false,
+   "future_train_recorded": false
+  },
+  "4857'de haftalık normal çalışma süresi hangi maddede düzenlenmiştir?": {
+   "sure_s": 6.5,
+   "response_text": "Bu belge, [?]' ( Serin), [?]' ( Serin), [?]' ( Serin), [?]' ( Serin), [?]' ( Seria), [?]' ( Serin), [?]' ( Seria), [?]' (",
+   "morphemes": "bu belge , <UNK> ' ( <ENT> <CAP> s e r i n </ENT> ) , <UNK> ' ( <ENT> <CAP> s e r i n </ENT> ) , <UNK> ' ( <ENT> <CAP> s e r i n </ENT> ) , <UNK> ' ( <ENT> <CAP> s e r i n </ENT> ) , <UNK> ' ( <ENT> <CAP> s e r i a </ENT> ) , <UNK> ' ( <ENT> <CAP> s e r i n </ENT> ) , <UNK> ' ( <ENT> <CAP> s e r i a </ENT> ) , <UNK> ' ( <ENT> <CAP> s",
+   "rag_document": "",
+   "source_collection": "simulasyon_bellek",
+   "rag_score": 0.08,
+   "conditioned": false,
+   "needs_retrieval": true,
+   "retrieval_triggered": true,
+   "entropy_pre": 8.649165153503418,
+   "entropy_post": 3.0189874172210693,
+   "router_experts": [
+    "pedagogy",
+    "carpenter"
+   ],
+   "active_expert": "pedagogy",
+   "epistemic_failure": false,
+   "future_train_recorded": false
+  }
+ }
+}
