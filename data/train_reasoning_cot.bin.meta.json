@@ -1,0 +1,58 @@
+{
+  "dataset_name": "train_reasoning_cot",
+  "evre": "Evre-5 akıl yürütme derlemesi (P2.2, İLK derleme)",
+  "ureten_betik": "scripts/prepare_reasoning_dataset_p22.py",
+  "ureten_gorev": "P2.2",
+  "damga_utc": "2026-11-04T13:55:28.602449+00:00",
+  "block_size": 128,
+  "total_records": 3,
+  "record_count": 3,
+  "total_tokens": 1126,
+  "sozluk": "data/rebuild/vocab_anka_r1_33114.json",
+  "sozluk_giris": 33114,
+  "sozluk_sha256": "f9940a8d8e1f7cd9428d389f12ff4c5ee448e5a7bfcdcc8ecc9c616fce950984",
+  "lexicon": "data/lexicon/roots.tsv",
+  "lexicon_sha256": "e32677b2a80bd611f7da17b815b3891d0831a0f45d065f1e7de76acd1321630d",
+  "literal_entity_mode": false,
+  "kaynak": {
+    "vault": "data/pedagogy/cot_vault.jsonl",
+    "vault_sha256": "97b06fe5befd6613b520d28dc20a74deaeb30e4e8f7e6675a23720a019ff5619",
+    "ham_satir": 91,
+    "json_hata": 0,
+    "icerik_benzersiz": 22,
+    "kabul_edilen": 3,
+    "yapisal_elenen": {
+      "kart_kisa(<40)": 1,
+      "kart_adim_listesi": 16,
+      "kart_markdown": 2
+    },
+    "unk_esigi_pct": 10.0,
+    "unk_elenen": 0
+  },
+  "cikti_istatistik": {
+    "min_jeton": 71,
+    "maks_jeton": 557,
+    "ort_jeton": 375.33,
+    "maks_jeton_id": 32151,
+    "unk_adet": 9,
+    "unk_oran_pct": 0.7993,
+    "dusunce_bolum": {
+      "<DUSUNCE>": 3,
+      "</DUSUNCE>": 3
+    }
+  },
+  "boundaries": [
+    {
+      "offset": 0,
+      "length": 71
+    },
+    {
+      "offset": 71,
+      "length": 498
+    },
+    {
+      "offset": 569,
+      "length": 557
+    }
+  ]
+}
