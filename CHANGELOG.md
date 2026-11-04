@@ -4,6 +4,21 @@ Bu projedeki tüm önemli değişiklikler bu dosyada belgelenmektedir.
 
 Format [Keep a Changelog](https://keepachangelog.com/tr/1.0.0/) standardına dayanır ve bu proje [Semantic Versioning (SemVer)](https://semver.org/spec/v2.0.0.html) ilkelerini benimser.
 
+## [1.13.0] - 2026-11-04
+
+### Eklendi (Added)
+- **Faz-2 — sözlük-nitelik fonoloji hattı (Plan-1, inceleme K1-K3/Ö1 kapanışıyla):**
+  - Lexicon nitelik altyapısı: `PhonologyEngine.resolve_affix` lemma niteliklerini alıyor (FRONT/BACK_HARMONY → ünlü uyumu çevirisi); compiler/decompiler çağrı noktaları kök niteliğini geçirir.
+  - Sözlük verisi (satır 52.373 / lemma 48.200 sabit; çapa SHA beyanlı 3×): `et`/`fehmet` VOICING (`edeceğim`), `imkân`/`hâl`/`ihtimal` â-uyum istisnaları (`imkânı`, `hâli`, `ihtimali`), `de`/`ye` FRONT_HARMONY (ünlüsüz-kalan gövde kaynaşması: `diyor`, `yiyor`).
+  - -(I)yor ünlü kaynaşması (`anlıyor`/`arıyor`/`oynuyor`/`okuyor` sınıfı, 8 vaka + regresyonlar); NEG+(I)yor budama düzeltmesi (`anlamıyor` sınıfı çözülür; fonoloji artık ölü kod değil).
+  - Morfotaktik: isim-soylu şahıs kenarları (`iyiyim`, `nasılsın`, `evdeyim`; çıplak NOUN_ROOT bilinçli hariç — `evim` iyelik ikilemesi korunur) ve ADJ→isim türetimleri (DERIV_lIk/lI/sIz/CI: `hayranlık`, `güzellik`, `güzelsiz`).
+  - Decompiler sağlamlaştırma: PAST_PERSON override önceliği (`geldik` sınıfı geri geldi), kök-bağlı aday seçimi (`iyiyim`/`hastayım` üretim roundtrip). Test paketi **495 passed / 1 xfailed**.
+- **Faz-3 — külliyat v2 (29,1M token):** GTS tanım çıkarıcı (128.327 satır — kaynak tavanı kanıtlı), Wikipedia çok-parça akışı (27M token, resume'lu), birleşme betiği `scripts/assemble_kulliyat_v2.py` — sözlük kapsamı %14,7 → **%95,58**; katmanlı %2 val dilimi + `.bin.meta.json` provenance kapısı; `scripts/eval_ce_val.py` pencere-CE değerlendiricisi.
+- **T3.4/T3.5 — devam-ön-eğitim `data/anka_taban_v3.pt` + değerlendirme:** 1 epok (14.226 adım, 12,9 sa), kayıp 3,59 → 3,31 (son200 ±0,17), LR 2e-4→2e-5 tam anneal. Düz metinde net iyileşme: kulliyat_v2 val CE 3,8205 → **3,1936** (PPL 45,6 → 24,4; −%16,4 CE); eski a1r pencere-CE 3,4899 → 3,2734. SFT biçiminde bilinçli/ölçülmüş gerileme: masked SFT val CE 2,3049 → 3,4789 (saf-korpus koşumu, SFT-replay yok), dil bilgisi paketi güveni 0,9998 → 0,0726 — **v3 ceket tabanı olarak KULLANILMAZ**; ceket hattı için SFT-replay (P2.6) şart. Ölçüm kayıtları: `data/eval/t34_v3_degerlendirme_2026-11-04.md`, `data/eval/t34_egitim_ozet_2026-11-04.md`.
+
+### Değişti (Changed)
+- Hüküm ölçütü netleştirmesi: T-0209 kayıtlarındaki "Val CE 2,3049" **masked SFT val CE**'dir (pencere-CE 3,4899 ayrı satırdadır); eşik denetimleri artık ölçüt-metrik adıyla yazılır.
+
 ## [1.12.0] - 2026-11-04
 
 ### Değişti (Changed)
