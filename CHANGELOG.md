@@ -4,6 +4,18 @@ Bu projedeki tüm önemli değişiklikler bu dosyada belgelenmektedir.
 
 Format [Keep a Changelog](https://keepachangelog.com/tr/1.0.0/) standardına dayanır ve bu proje [Semantic Versioning (SemVer)](https://semver.org/spec/v2.0.0.html) ilkelerini benimser.
 
+## [1.16.0] - 2026-11-04
+
+### Eklendi (Added)
+- **P2.2 — Evre-5 akıl yürütme derlemesi:** `scripts/prepare_reasoning_dataset_p22.py` + `data/train_reasoning_cot.bin` (1.126 uint16 token; 3 kalite-kapılı kayıt — kasada 22 benzersiz kayıttan 19'u ayrıştırıcı artefaktı nedeniyle elendi, gerekçeleri meta'da). UNK %0,8; sınır kapısı maks id 32.151; `KristalDataset` P2.3 tüketimi kanıtlı. Plan adı `prepare_reasoning_dataset.py` izlenmiş v1.5.0 betiğine ait olduğundan yeni betik `_p22` adıyla (emeklilik kararı ayrı kalem).
+- **P2.3 — ilk gerçek otonom retrain döngüsü (uçtan uca kanıt):** planın 'eski-şema' önermesi git kanıtıyla çürütüldü (5 kayıt zaten 14-alanlı yeni şemada) — göç uydurulmadı; 7 testlik şema doğrulayıcısı + sigorta kopyası eklendi. Canlı vaka: 'Pulsarlar neden bu kadar düzenli radyo darbeleri yayar?' → entropi 5,46→6,02 (τ üzeri) → epistemik hat yeni şemayla yazdı (5→6) → backlog eşiği (6≥5) → `retrain_pipeline.run_training` 12 adım EXIT=0 (8,98 sn, scratch kaydı) → arşiv; `anka_taban_pure.pt` sha256 değişmedi. Hüküm: `data/eval/p23_otonom_retrain_hukum_2026-11-04.json`.
+- **P2.4 — τ=2,5 ve 0,33 eşik kalibrasyonu (ölçüm → dondurma):** 36 sorguluk canlı-varı set (gerçek gateway + salt-okunur anka_bellek): τ=2,5 %100 tetikler (prompt-entropi tabanı ≥3,28 nat) ve alternatif τ masası ayrımı iyileştirmiyor (kategori dağılımları örtüşük, sıralama ters) → **τ=2,5 ölçümle dondu**; 0,33 alan sorgularının 8/10'unu geçiriyor, yükseltme kapsamı düşürüyor (0,40→%50, 0,60→%20), elelenenler eşikle kurtarılamaz → **0,33 ölçümle dondu**. Ham dağılım: `data/eval/p24_esik_dagilim_2026-11-04.json` + rapor `p24_esik_kalibrasyon_2026-11-04.md`.
+
+### Bilinen sınırlar / arka-log (P2.4 bulguları)
+- `pedagogical_supervisor.py:644` `--auto-retrain` varsayılan `RetrainPipeline()` ile KIRIK (`run_training` T-0087 açık yol ister — RuntimeError); canlı kullanım için konfigüre pipeline enjeksiyonu gerekli.
+- Uzak Qdrant'ta `simulasyon_bellek` BOŞ (0 nokta) — fallback dalı ölü.
+- Merak tetiğinde ayrım istenirse çözüm τ değil sinyal değişikliği (ΔH / post-entropi) — ayrı iş kalemi.
+
 ## [1.15.0] - 2026-11-04
 
 ### Eklendi (Added)
