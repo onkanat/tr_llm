@@ -4,6 +4,16 @@ Bu projedeki tüm önemli değişiklikler bu dosyada belgelenmektedir.
 
 Format [Keep a Changelog](https://keepachangelog.com/tr/1.0.0/) standardına dayanır ve bu proje [Semantic Versioning (SemVer)](https://semver.org/spec/v2.0.0.html) ilkelerini benimser.
 
+## [1.22.0] - 2026-11-05
+
+### Eklendi (Added)
+- **VG-3 — ΔH eşik dondurma girişimi (çıpalı envanter): HÜKÜM DONDURMA YOK — aday ÇÜRÜTÜLDÜ.** 107 sorgu, aux'lu canlı hat (`QDRANT_EXTRA_COLLECTIONS`), envanter GET-ile çıpalandı (anka 46 / muhakeme 91 / simulasyon 4.073 / gts 128.327 / kanun 4.068 / yetenek 36). `delta_h @ −0,85`: J **+0,231 → +0,113**, CI [+0,02;+0,45] (0-dışlar) → **[−0,05;+0,29] (0-içler)**; post_h adaylarının tamamı reddedildi. **Mekanizm ölçüldü:** aux 32/107 yanıtın kaynağı (gts 24 / kanun 8; hepsi cond False→True), belirsiz 28/28 koşullandı, H_post medyan 4,21→3,22, ΔH medyan −1,77→−2,64 → belirsiz-rest ayrımı kayboldu; aux entropiyi düşürmüyor, yeniden dağıyor (12/32 flip'te arttı). **Çıpalam kuralı (iki-olgulu kanıt):** ΔH eşiği envanterine bağlıdır — her ekim J'yi düşürdü (+0,323 → +0,231 → +0,113); **envanter değişince eşik yürürlükten düşer, yeniden ölçüm+çıpalam şart.** Operasyonel durum: varsayılan `entropy/τ=2,5` (P2.4'te ölçümle donmuş) yürürlükte; `delta_h` opsiyonel ve eşiksiz kalır.
+
+### Arka-log (VG-3 bulguları — yeni iş kalemleri)
+- ΔH sinyal tasarımı aux çağında eskidi: kaynak-koşullu / skor-kapılı eşik tasarımı denetçi kararı bekliyor.
+- **Aux, çöp girdiye future-train A-yolunu açtı** ("?" girdisi gts'te skor 1,0 ile koşullandı — #91): `is_high_similarity` kapısının aux kaynaklı belgelerde gözden geçirilmesi gerekli.
+- Model enjekte edilen RAG belgesini çıktıya taşımıyor (VG-1: 0 4-gram örtüşme) → **RAG-koşullanmalı SFT** (alıntı davranışı öğretimi) sıradaki en yüksek kazanç kalemi.
+
 ## [1.21.0] - 2026-11-04
 
 ### Eklendi (Added)
