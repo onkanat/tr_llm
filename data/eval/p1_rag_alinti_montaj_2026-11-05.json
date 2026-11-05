@@ -1,0 +1,61 @@
+{
+ "gorev": "P1 RAG-alıntı SFT montaj",
+ "tarih": "2026-11-05",
+ "yapi": "v4 — v1 soru/çıktı stili (madde-numaralı sorular; koşum-6) + v1-v3 arası filtre iyileştirmeleri (sözcük≥4, gövde tavan 45, zarf tavan 120)",
+ "cikti": "data/pedagogy/rag_alinti_sft.jsonl",
+ "sha256": "143b844ce4dd6db80bce1b283cb167a45c5ed7f693f913e1bc8e994c17448d83",
+ "toplam_kayit": 482,
+ "gts_kart": 310,
+ "kanun_kart": 172,
+ "val_kuyruk": "son-50 (bu sete özgü; pure_base_sft ile karışmaz)",
+ "val_n": 50,
+ "val_bilesim": {
+  "gts": 34,
+  "kanun": 16
+ },
+ "train_n": 432,
+ "pencere_onerisi_n": 108,
+ "unk_kayit": 0,
+ "morf_istatistik": {
+  "min": 51,
+  "medyan": 86,
+  "maks": 120,
+  "tavan": 120
+ },
+ "alinti_denetim_orani": "482/482",
+ "atik": {
+  "gts": {
+   "unk": 0,
+   "uzun": 0
+  },
+  "kanun": {
+   "unk": 195,
+   "uzun": 47,
+   "alinti": 1
+  }
+ },
+ "kanun_dagilimi": {
+  "0657": 11,
+  "2577": 2,
+  "2872": 2,
+  "3194": 3,
+  "4708": 1,
+  "4721": 79,
+  "4857": 4,
+  "5237": 12,
+  "5271": 13,
+  "5378": 2,
+  "5510": 1,
+  "6098": 19,
+  "6100": 19,
+  "6331": 1,
+  "6446": 1,
+  "6502": 1,
+  "6698": 1
+ },
+ "kaynaklar": [
+  "data/kulliyat_v2/gts_definitions.txt",
+  "data/legal_korpus/*.txt"
+ ],
+ "kural": "commit YOK; Qdrant YOK; yerel dosyalar"
+}

@@ -1,0 +1,551 @@
+{
+  "gorev": "P2.5 FAZ-2A legal ceketi (T-0209 marangoz kalıbı)",
+  "mod": "egitim",
+  "pilot": false,
+  "durum": "KAPILAR_KALDI",
+  "hukum": "KALDI",
+  "tarif": {
+    "init_model": "data/anka_taban_pure.pt",
+    "pencere_karisim": "YOK (saf alan SFT — T-0209'un ölçülmüş davranışı; KL dalı kaldırıldı)",
+    "peak_lr": 5e-05,
+    "min_lr": 1e-05,
+    "warmup": 4,
+    "warmup_gerekce": "marangoz 15/234 adım (%6,4) → 39 adımda oransal 3",
+    "batch": 16,
+    "accum": 2,
+    "weight_decay": 0.01,
+    "clip": 1.0,
+    "epochs": 3,
+    "block": 128,
+    "sub_chunk": 8,
+    "tokenizer_modu": "literal_entity_mode=True (FAZ-1 sözleşmesi)"
+  },
+  "veri": {
+    "sft_path": "data/pedagogy/legal_canonical_sft.jsonl",
+    "kayit": 463,
+    "val_n": 50,
+    "train_n": 413,
+    "train_ds_n": 413
+  },
+  "provenans": {
+    "init_sha256": "5479a2f35a88975cae3cd8e66e4aef0bb7b09bea5274828709fe2c0e1d263360",
+    "sft_sha256": "69670bc6ddbc033cff4a38a044ef0ccd5a82c278cfd8f564755ea70634734e9c",
+    "vocab_sha256": "f9940a8d8e1f7cd9428d389f12ff4c5ee448e5a7bfcdcc8ecc9c616fce950984",
+    "cikti": "data/anka_legal_p26lr.pt",
+    "cikti_sha256": "8794708c444ddf07b277dc187bf40c8aa69c6c1f50aa3669bb98d61e8d524455"
+  },
+  "cipa_taban": {
+    "val_ce": 4.782288551330566,
+    "val_ppl": 119.37723860421929,
+    "kanonik": {
+      "tohum": 42,
+      "orneklem_idx": [
+        12,
+        15,
+        16,
+        44,
+        47,
+        52,
+        57,
+        71,
+        111,
+        114,
+        125,
+        140,
+        216,
+        279,
+        302,
+        327,
+        346,
+        377,
+        379,
+        456
+      ],
+      "n": 20,
+      "valdeki": 1,
+      "kart4_oran": 0.0,
+      "etiket16_oran": 0.0,
+      "ortak_on_ort": 0.0
+    },
+    "ood": [
+      {
+        "kaynak": "data/pedagogy/marangoz_canonical_sft.jsonl#0",
+        "ce": 1.235628
+      },
+      {
+        "kaynak": "data/pedagogy/marangoz_canonical_sft.jsonl#1",
+        "ce": 0.589025
+      },
+      {
+        "kaynak": "data/pedagogy/bahcivan_canonical_sft.jsonl#0",
+        "ce": 4.803189
+      }
+    ]
+  },
+  "egitim": {
+    "sure_sn": 66.3,
+    "opt_adim": 39,
+    "s_adim_son20_ort": 1.39,
+    "s_adim_son20_std": 0.064,
+    "epoch_val_ces": [
+      4.679719,
+      4.61164,
+      4.588212
+    ],
+    "dur_nedeni": null,
+    "en_iyi_epok": 3,
+    "geri_yuklendi": false
+  },
+  "degerlendirme": {
+    "final_val_ce": 4.588212370872498,
+    "final_val_ppl": 98.31851593123967,
+    "val_ce_delta": 0.194076,
+    "kanonik_ceket": {
+      "tohum": 42,
+      "orneklem_idx": [
+        12,
+        15,
+        16,
+        44,
+        47,
+        52,
+        57,
+        71,
+        111,
+        114,
+        125,
+        140,
+        216,
+        279,
+        302,
+        327,
+        346,
+        377,
+        379,
+        456
+      ],
+      "n": 20,
+      "valdeki": 1,
+      "kart4_oran": 0.0,
+      "etiket16_oran": 0.0,
+      "ortak_on_ort": 0.0
+    },
+    "kanonik_satirlar_ceket": [
+      {
+        "idx": 12,
+        "val_mi": false,
+        "kart4": false,
+        "etiket16": false,
+        "ortak_on": 0,
+        "gen_uzunluk": 48,
+        "gold_uzunluk": 41
+      },
+      {
+        "idx": 15,
+        "val_mi": false,
+        "kart4": false,
+        "etiket16": false,
+        "ortak_on": 0,
+        "gen_uzunluk": 48,
+        "gold_uzunluk": 47
+      },
+      {
+        "idx": 16,
+        "val_mi": false,
+        "kart4": false,
+        "etiket16": false,
+        "ortak_on": 0,
+        "gen_uzunluk": 48,
+        "gold_uzunluk": 45
+      },
+      {
+        "idx": 44,
+        "val_mi": false,
+        "kart4": false,
+        "etiket16": false,
+        "ortak_on": 0,
+        "gen_uzunluk": 32,
+        "gold_uzunluk": 54
+      },
+      {
+        "idx": 47,
+        "val_mi": false,
+        "kart4": false,
+        "etiket16": false,
+        "ortak_on": 0,
+        "gen_uzunluk": 48,
+        "gold_uzunluk": 50
+      },
+      {
+        "idx": 52,
+        "val_mi": false,
+        "kart4": false,
+        "etiket16": false,
+        "ortak_on": 0,
+        "gen_uzunluk": 48,
+        "gold_uzunluk": 62
+      },
+      {
+        "idx": 57,
+        "val_mi": false,
+        "kart4": false,
+        "etiket16": false,
+        "ortak_on": 0,
+        "gen_uzunluk": 48,
+        "gold_uzunluk": 65
+      },
+      {
+        "idx": 71,
+        "val_mi": false,
+        "kart4": false,
+        "etiket16": false,
+        "ortak_on": 0,
+        "gen_uzunluk": 15,
+        "gold_uzunluk": 43
+      },
+      {
+        "idx": 111,
+        "val_mi": false,
+        "kart4": false,
+        "etiket16": false,
+        "ortak_on": 0,
+        "gen_uzunluk": 48,
+        "gold_uzunluk": 132
+      },
+      {
+        "idx": 114,
+        "val_mi": false,
+        "kart4": false,
+        "etiket16": false,
+        "ortak_on": 0,
+        "gen_uzunluk": 35,
+        "gold_uzunluk": 57
+      },
+      {
+        "idx": 125,
+        "val_mi": false,
+        "kart4": false,
+        "etiket16": false,
+        "ortak_on": 0,
+        "gen_uzunluk": 48,
+        "gold_uzunluk": 101
+      },
+      {
+        "idx": 140,
+        "val_mi": false,
+        "kart4": false,
+        "etiket16": false,
+        "ortak_on": 0,
+        "gen_uzunluk": 48,
+        "gold_uzunluk": 87
+      },
+      {
+        "idx": 216,
+        "val_mi": false,
+        "kart4": false,
+        "etiket16": false,
+        "ortak_on": 0,
+        "gen_uzunluk": 25,
+        "gold_uzunluk": 120
+      },
+      {
+        "idx": 279,
+        "val_mi": false,
+        "kart4": false,
+        "etiket16": false,
+        "ortak_on": 0,
+        "gen_uzunluk": 13,
+        "gold_uzunluk": 169
+      },
+      {
+        "idx": 302,
+        "val_mi": false,
+        "kart4": false,
+        "etiket16": false,
+        "ortak_on": 0,
+        "gen_uzunluk": 48,
+        "gold_uzunluk": 152
+      },
+      {
+        "idx": 327,
+        "val_mi": false,
+        "kart4": false,
+        "etiket16": false,
+        "ortak_on": 0,
+        "gen_uzunluk": 48,
+        "gold_uzunluk": 159
+      },
+      {
+        "idx": 346,
+        "val_mi": false,
+        "kart4": false,
+        "etiket16": false,
+        "ortak_on": 0,
+        "gen_uzunluk": 48,
+        "gold_uzunluk": 76
+      },
+      {
+        "idx": 377,
+        "val_mi": false,
+        "kart4": false,
+        "etiket16": false,
+        "ortak_on": 0,
+        "gen_uzunluk": 48,
+        "gold_uzunluk": 149
+      },
+      {
+        "idx": 379,
+        "val_mi": false,
+        "kart4": false,
+        "etiket16": false,
+        "ortak_on": 0,
+        "gen_uzunluk": 48,
+        "gold_uzunluk": 209
+      },
+      {
+        "idx": 456,
+        "val_mi": true,
+        "kart4": false,
+        "etiket16": false,
+        "ortak_on": 0,
+        "gen_uzunluk": 3,
+        "gold_uzunluk": 263
+      }
+    ],
+    "kanonik_satirlar_taban": [
+      {
+        "idx": 12,
+        "val_mi": false,
+        "kart4": false,
+        "etiket16": false,
+        "ortak_on": 0,
+        "gen_uzunluk": 24,
+        "gold_uzunluk": 41
+      },
+      {
+        "idx": 15,
+        "val_mi": false,
+        "kart4": false,
+        "etiket16": false,
+        "ortak_on": 0,
+        "gen_uzunluk": 48,
+        "gold_uzunluk": 47
+      },
+      {
+        "idx": 16,
+        "val_mi": false,
+        "kart4": false,
+        "etiket16": false,
+        "ortak_on": 0,
+        "gen_uzunluk": 48,
+        "gold_uzunluk": 45
+      },
+      {
+        "idx": 44,
+        "val_mi": false,
+        "kart4": false,
+        "etiket16": false,
+        "ortak_on": 0,
+        "gen_uzunluk": 48,
+        "gold_uzunluk": 54
+      },
+      {
+        "idx": 47,
+        "val_mi": false,
+        "kart4": false,
+        "etiket16": false,
+        "ortak_on": 0,
+        "gen_uzunluk": 48,
+        "gold_uzunluk": 50
+      },
+      {
+        "idx": 52,
+        "val_mi": false,
+        "kart4": false,
+        "etiket16": false,
+        "ortak_on": 0,
+        "gen_uzunluk": 48,
+        "gold_uzunluk": 62
+      },
+      {
+        "idx": 57,
+        "val_mi": false,
+        "kart4": false,
+        "etiket16": false,
+        "ortak_on": 0,
+        "gen_uzunluk": 15,
+        "gold_uzunluk": 65
+      },
+      {
+        "idx": 71,
+        "val_mi": false,
+        "kart4": false,
+        "etiket16": false,
+        "ortak_on": 0,
+        "gen_uzunluk": 42,
+        "gold_uzunluk": 43
+      },
+      {
+        "idx": 111,
+        "val_mi": false,
+        "kart4": false,
+        "etiket16": false,
+        "ortak_on": 0,
+        "gen_uzunluk": 17,
+        "gold_uzunluk": 132
+      },
+      {
+        "idx": 114,
+        "val_mi": false,
+        "kart4": false,
+        "etiket16": false,
+        "ortak_on": 0,
+        "gen_uzunluk": 48,
+        "gold_uzunluk": 57
+      },
+      {
+        "idx": 125,
+        "val_mi": false,
+        "kart4": false,
+        "etiket16": false,
+        "ortak_on": 0,
+        "gen_uzunluk": 36,
+        "gold_uzunluk": 101
+      },
+      {
+        "idx": 140,
+        "val_mi": false,
+        "kart4": false,
+        "etiket16": false,
+        "ortak_on": 0,
+        "gen_uzunluk": 48,
+        "gold_uzunluk": 87
+      },
+      {
+        "idx": 216,
+        "val_mi": false,
+        "kart4": false,
+        "etiket16": false,
+        "ortak_on": 0,
+        "gen_uzunluk": 48,
+        "gold_uzunluk": 120
+      },
+      {
+        "idx": 279,
+        "val_mi": false,
+        "kart4": false,
+        "etiket16": false,
+        "ortak_on": 0,
+        "gen_uzunluk": 25,
+        "gold_uzunluk": 169
+      },
+      {
+        "idx": 302,
+        "val_mi": false,
+        "kart4": false,
+        "etiket16": false,
+        "ortak_on": 0,
+        "gen_uzunluk": 48,
+        "gold_uzunluk": 152
+      },
+      {
+        "idx": 327,
+        "val_mi": false,
+        "kart4": false,
+        "etiket16": false,
+        "ortak_on": 0,
+        "gen_uzunluk": 48,
+        "gold_uzunluk": 159
+      },
+      {
+        "idx": 346,
+        "val_mi": false,
+        "kart4": false,
+        "etiket16": false,
+        "ortak_on": 0,
+        "gen_uzunluk": 48,
+        "gold_uzunluk": 76
+      },
+      {
+        "idx": 377,
+        "val_mi": false,
+        "kart4": false,
+        "etiket16": false,
+        "ortak_on": 0,
+        "gen_uzunluk": 33,
+        "gold_uzunluk": 149
+      },
+      {
+        "idx": 379,
+        "val_mi": false,
+        "kart4": false,
+        "etiket16": false,
+        "ortak_on": 0,
+        "gen_uzunluk": 19,
+        "gold_uzunluk": 209
+      },
+      {
+        "idx": 456,
+        "val_mi": true,
+        "kart4": false,
+        "etiket16": false,
+        "ortak_on": 0,
+        "gen_uzunluk": 3,
+        "gold_uzunluk": 263
+      }
+    ],
+    "ood_karsilastirma": [
+      {
+        "kaynak": "data/pedagogy/marangoz_canonical_sft.jsonl#0",
+        "ce_taban": 1.235628,
+        "ce_ceket": 1.219249,
+        "ce_delta": -0.016379,
+        "uyum32": 0.1875,
+        "gen_taban_uzunluk": 48,
+        "gen_ceket_uzunluk": 43
+      },
+      {
+        "kaynak": "data/pedagogy/marangoz_canonical_sft.jsonl#1",
+        "ce_taban": 0.589025,
+        "ce_ceket": 0.637204,
+        "ce_delta": 0.048179,
+        "uyum32": 0.9062,
+        "gen_taban_uzunluk": 48,
+        "gen_ceket_uzunluk": 48
+      },
+      {
+        "kaynak": "data/pedagogy/bahcivan_canonical_sft.jsonl#0",
+        "ce_taban": 4.803189,
+        "ce_ceket": 4.728932,
+        "ce_delta": -0.074257,
+        "uyum32": 0.2188,
+        "gen_taban_uzunluk": 39,
+        "gen_ceket_uzunluk": 48
+      }
+    ]
+  },
+  "kapilar": {
+    "kapi1_val_ce": {
+      "kural": "final_val_ce (4.588212) <= init_val_ce (4.782289) - 0.25",
+      "delta": 0.194076,
+      "gecti": false
+    },
+    "kapi2_kanonik": {
+      "kural": "etiket16_oran (0.00) >= 0.5 VE > taban (0.00)",
+      "gecti": false
+    },
+    "kapi3_ood": {
+      "kural": "ort CE delta (-0.0142) <= +0.15 VE ort uyum32 (0.44) >= 0.7",
+      "ce_delta_ort": -0.014152,
+      "uyum32_ort": 0.4375,
+      "gecti": false
+    }
+  },
+  "kapi_sabitleri": {
+    "kapi1_val_ce_delta": 0.25,
+    "kapi2_etiket16_min": 0.5,
+    "kapi3_ce_delta_max": 0.15,
+    "kapi3_uyum32_min": 0.7
+  },
+  "history_path": "data/eval/p25_legal_history_p26lr.json"
+}

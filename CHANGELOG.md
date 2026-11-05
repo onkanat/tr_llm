@@ -4,6 +4,14 @@ Bu projedeki tüm önemli değişiklikler bu dosyada belgelenmektedir.
 
 Format [Keep a Changelog](https://keepachangelog.com/tr/1.0.0/) standardına dayanır ve bu proje [Semantic Versioning (SemVer)](https://semver.org/spec/v2.0.0.html) ilkelerini benimser.
 
+## [1.23.0] - 2026-11-05
+
+### Eklendi (Added)
+- **İş emri 3 — aux çöp-girdi kapısı:** `'?'`-nin 1,0 skoru mekanizması çözüldü (noktalama ayrımcı kök sayılıyor → GTS'teki '?'-li madde match_ratio 1,0 → ham RRF tavanı); düzeltme: aux yükseltmesi için **≥1 alfanümerik ayrımcı sorgu-kökü** — canlı 32/32 fark: **30 meşru flip korunur, 2 sert-çöp düşer, 0 meşru kayıp**; future-train çöp kaydı üretilmiyor (sha özdeş); anka birincil zinciri dokunulmaz (testli).
+- **İş emri 4 — ΔH aux_aware sinyal (op-in) + F1 dondurması:** 3.509 kural taramasında 0-DIŞLAYAN ilk kural: **F1 `aux→post_h≥2,25 | birincil→ΔH≥−0,75`** (J **+0,297**, CI95 [+0,091;+0,516], tetik %28) — merak.py'ye `trigger_signal='aux_aware'` op-in (default entropy/τ=2,5 bit-özdeş); **F1 çıpalı envanter için donduruldu** (çıpalam kuralı: envanter değişince eşik yürürlükten düşer).
+- **İş emri 2 — yetenek ağı v2 (HÜKÜM GEÇTİ):** telemetri (`yetenek_telemetri.jsonl`; sinyal = zirve-yetenek⟷router-uzman uyumu), **deterministik ağırlık evrimi** (uyum ×1,05 / uyumsuz ×0,95, bant [0,5;2,0], yeniden-oynatma determinizmi testli; simülasyon: kristal_derleyici 1,10→1,155, zirve etki +%5), gateway'de **op-in danışma kancası** (default KAPALI — yanıt anahtar-seti ve davranışı birebir; açıkken zirve+uyum+sinyal META'ya + telemetriye; router KARARI değişmez — P2.8 kanıtı korunur), **5 gerçek kısıt kartı** (baskılayıcı çarpan ≤1; ör. `donmus_sozluk_33_114` ×0,5 → Sözlük Genişletme sıra 1→3 rank-flip kanıtı). Koleksiyon 36→**41** (idempotent); 52/52 v2 testi; v1 ile kısıtsız birebirlik testli.
+- **İş emri 1 — RAG-koşullanmalı SFT (2/3 kapı, kök neden ölçüldü):** `rag_alinti_sft.jsonl` **482 kayıt** (310 GTS + 172 kanun; birebir-alıntı denetimi %100, UNK 0) → `anka_rag_alinti.pt` (12 epok, val CE 4,753→**3,242**; pencere-CE korundu). **K2 dürüstlük GEÇTİ** (belge yokken 'Belgedeki/belge' dürüst ifadeler) · **K3 nöbet GEÇTİ** (taban bandında). **K1 alıntı KALDI — kök neden ölçüldü: model ailesinde endüksiyon/kopya devresi yok** (taban bile argmax'ta d=1 '7 7' tekrarını kopyalayamıyor; 'kaynak/belge' ÇERÇEVESİ öğrenildi, içerik kopyalanmıyor); ikincil: 128-jeton eğitim penceresi vs ~230-jeton retrieval belgesi (derin OOD) + p26 kayıp seyreltmesi. **Çare haritası:** (1) kopya-formatlı pretrain pencereleri (kök çözüm), (2) `kanun_madde` koleksiyonunun ~45-morf parçalarla yeniden ekimi, (3) hedef-özel kayıp. Hüküm kayıtları: `data/eval/p1_rag_alinti_*`, `p24d_*`, `p24e_*`, `vg2b_*`.
+
 ## [1.22.0] - 2026-11-05
 
 ### Eklendi (Added)

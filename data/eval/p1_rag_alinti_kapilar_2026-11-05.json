@@ -1,0 +1,274 @@
+{
+ "tarih": "2026-11-05",
+ "esikler": {
+  "K1": {
+   "paylasilan_4gram": 3,
+   "kaynak": "madde no (rakam) VE madde/4857/İş Kanunu referansı",
+   "once_kanit": "vg1_fark_tablosu.json: 0 4-gram, LCS 1 sözcük"
+  },
+  "K2": {
+   "morf_min": 5,
+   "unk_yzde": 3.0,
+   "tekil_oran": 0.3
+  },
+  "K3": {
+   "morf_band": 0.3,
+   "unk_yzde": 3.0,
+   "sorgular": [
+    "Zımpara nedir ve nasıl kullanılır?",
+    "Fidan nasıl dikilir?",
+    "Okula gitmek için hangi ekler kullanılır?"
+   ]
+  }
+ },
+ "modeller": {
+  "taban": "data/anka_taban_pure.pt",
+  "model": "data/anka_rag_alinti.pt"
+ },
+ "K1": {
+  "İş sözleşmesi feshinde ihbar süresi nedir?": {
+   "beklenen_madde": "8",
+   "taban": {
+    "sure_s": 0.9,
+    "metin": "Belge, bunun yerine getirilmesi gereğen bir karardır.",
+    "morfem": "belge , bu CASE_GEN yerine getirilme POSS_3SG gerek PART_An bir karar COPULA_AORIST .",
+    "morfem_say": 13,
+    "unk_yzde": 0.0,
+    "paylasilan_4gram": 0,
+    "en_uzun_ortak_sozcuk": 1,
+    "lcs_ornek": "belge",
+    "beklenen_madde": "8",
+    "numara_var": false,
+    "referans_var": false,
+    "tam_4857": false,
+    "kaynak_ok": false
+   },
+   "alinti_modeli": {
+    "sure_s": 0.6,
+    "metin": "Belge, kaynak: sözlük maddesinin ( sayfa 1).",
+    "morfem": "belge , kaynak : söz DERIV_lIk madde POSS_3SG CASE_GEN_N ( sayfa 1 ) .",
+    "morfem_say": 14,
+    "unk_yzde": 0.0,
+    "paylasilan_4gram": 0,
+    "en_uzun_ortak_sozcuk": 1,
+    "lcs_ornek": "belge",
+    "beklenen_madde": "8",
+    "numara_var": false,
+    "referans_var": true,
+    "tam_4857": false,
+    "kaynak_ok": false
+   },
+   "alinti_modeli_egitim_talimatli": {
+    "metin": "Belge, kaynak: sözlük tanım anlamına gelmektedir: sözlük tanım anlamı: bir sözcüğünün ( [?]).",
+    "paylasilan_4gram": 0,
+    "beklenen_madde": "8",
+    "numara_var": false,
+    "referans_var": false,
+    "tam_4857": false,
+    "kaynak_ok": false
+   },
+   "hukum": {
+    "kosul_4gram": false,
+    "kosul_kaynak": false,
+    "gecti": false
+   }
+  },
+  "4857'de haftalık normal çalışma süresi hangi maddede düzenlenmiştir?": {
+   "beklenen_madde": "41",
+   "taban": {
+    "sure_s": 51.5,
+    "metin": "Bunun yerine, bir bankasının ( örneğin) ve diğerleri ise, [?] birliklerin ( [Özel İsim]) ve 120.08 kişilik bir bankası, 12.085 ve 397,12.08. maddesine göre, 1250 ve 34. maddelerin yer aldığı birliklerinin 10. maddelere kadar olan paralı olduğu belirtilmekte, 10.",
+    "morfem": "bu CASE_GEN yerine , bir banka POSS_3SG CASE_GEN_N ( örneğin ) ve diğer POSS_3PL is CASE_DAT , <UNK> bir DERIV_lIk PLURAL POSS_2SG ( <PROPER_NOUN> ) ve 1 2 0 . 0 8 kişi DERIV_lIk bir banka POSS_3SG , 1 2 . 0 8 5 ve 3 9 7 , 1 2 . 0 8 . madde POSS_3SG CASE_DAT_N göre , 1 2 5 0 ve 3 4 . madde PLURAL POSS_2SG yer al PART_DIk POSS_3SG bir DERIV_lIk POSS_3PL CASE_GEN_N 1 0 . madde PLURAL CASE_DAT kadar o DERIV_lAn para DERIV_lI ol PART_DIk POSS_3SG belirtil INF_mAk CASE_LOC , 1 0 .",
+    "morfem_say": 100,
+    "unk_yzde": 1.0,
+    "paylasilan_4gram": 0,
+    "en_uzun_ortak_sozcuk": 1,
+    "lcs_ornek": "yerine",
+    "beklenen_madde": "41",
+    "numara_var": false,
+    "referans_var": true,
+    "tam_4857": false,
+    "kaynak_ok": false
+   },
+   "alinti_modeli": {
+    "sure_s": 0.7,
+    "metin": "( kaynak: 1).",
+    "morfem": "( kaynak : 1 ) .",
+    "morfem_say": 6,
+    "unk_yzde": 0.0,
+    "paylasilan_4gram": 0,
+    "en_uzun_ortak_sozcuk": 0,
+    "lcs_ornek": "",
+    "beklenen_madde": "41",
+    "numara_var": false,
+    "referans_var": false,
+    "tam_4857": false,
+    "kaynak_ok": false
+   },
+   "alinti_modeli_egitim_talimatli": {
+    "metin": "Belgesinin kaynaklarını içermektedir.",
+    "paylasilan_4gram": 0,
+    "beklenen_madde": "41",
+    "numara_var": false,
+    "referans_var": false,
+    "tam_4857": false,
+    "kaynak_ok": false
+   },
+   "hukum": {
+    "kosul_4gram": false,
+    "kosul_kaynak": false,
+    "gecti": false
+   }
+  }
+ },
+ "K2": {
+  "İş sözleşmesi feshinde ihbar süresi nedir?": {
+   "taban": {
+    "sure_s": 0.3,
+    "metin": "Bu belge, bir kişinin kendisini [?].",
+    "morfem": "bu belge , bir kişi CASE_GEN kendi POSS_3SG CASE_ACC_N <UNK> .",
+    "morfem_say": 11,
+    "unk_yzde": 9.09,
+    "tekil_oran": 1.0,
+    "durust_ifade": true
+   },
+   "alinti_modeli": {
+    "sure_s": 0.6,
+    "metin": "Belgedeki sözlük maddesinde dava açıldığında, bu belgenin sözlüğü ( kaynak: madde 1).",
+    "morfem": "belge CASE_LOC REL_ki söz DERIV_lIk madde POSS_3SG CASE_LOC_N dava açıl PART_DIk POSS_2SG CASE_LOC , bu belge CASE_GEN söz DERIV_lIk POSS_3SG ( kaynak : madde 1 ) .",
+    "morfem_say": 27,
+    "unk_yzde": 0.0,
+    "tekil_oran": 0.778,
+    "durust_ifade": true
+   },
+   "hukum": {
+    "kosul_morf": true,
+    "kosul_unk": true,
+    "kosul_tekil": true,
+    "gecti": true
+   }
+  },
+  "4857'de haftalık normal çalışma süresi hangi maddede düzenlenmiştir?": {
+   "taban": {
+    "sure_s": 2.5,
+    "metin": "Bu belge, [?]' ( Serin), [?]' ( Serin), [?]' ( Serin), [?]' ( Serin), [?]' ( Seria), [?]' ( Serin), [?]' ( Seria), [?]' (",
+    "morfem": "bu belge , <UNK> ' ( <ENT> <CAP> s e r i n </ENT> ) , <UNK> ' ( <ENT> <CAP> s e r i n </ENT> ) , <UNK> ' ( <ENT> <CAP> s e r i n </ENT> ) , <UNK> ' ( <ENT> <CAP> s e r i n </ENT> ) , <UNK> ' ( <ENT> <CAP> s e r i a </ENT> ) , <UNK> ' ( <ENT> <CAP> s e r i n </ENT> ) , <UNK> ' ( <ENT> <CAP> s e r i a </ENT> ) , <UNK> ' ( <ENT> <CAP> s",
+    "morfem_say": 100,
+    "unk_yzde": 8.0,
+    "tekil_oran": 0.16,
+    "durust_ifade": true
+   },
+   "alinti_modeli": {
+    "sure_s": 0.3,
+    "metin": "Belge, kaynak: sözlük maddesinin ( sayfa 1).",
+    "morfem": "belge , kaynak : söz DERIV_lIk madde POSS_3SG CASE_GEN_N ( sayfa 1 ) .",
+    "morfem_say": 14,
+    "unk_yzde": 0.0,
+    "tekil_oran": 1.0,
+    "durust_ifade": true
+   },
+   "hukum": {
+    "kosul_morf": true,
+    "kosul_unk": true,
+    "kosul_tekil": true,
+    "gecti": true
+   }
+  }
+ },
+ "K3": {
+  "Zımpara nedir ve nasıl kullanılır?": {
+   "taban": {
+    "morfem_say": 45,
+    "unk": 0,
+    "morfem": "usta Cevabı : teknik çözüm : Ahşabın lif POSS_3PL boyuna neredeyse hiç çalış GERUND_mAdAn oturma CASE_DAT yara PART_An ayar DERIV_lI çivi çakma alet POSS_2SG CASE_ACC kullan GERUND_ArAk plaka aç INF_mAk için ayak PLURAL açar ; böylece her santim kalın DERIV_lIk CASE_LOC kanal açıl TENSE_NECESS COPULA_AORIST",
+    "metin": "Usta Cevabı: teknik çözüm: Ahşabın lifleri boyuna neredeyse hiç çalışmadan oturmaya yarayan ayarlı çivi çakma aletini kullanarak plaka açmak için ayaklar açar; böylece her santim kalınlıkta kanal açılmalıdır"
+   },
+   "alinti_modeli": {
+    "morfem_say": 44,
+    "unk": 1,
+    "morfem": "teknik rapor : vernik kat POSS_3PL ara katman PLURAL CASE_LOC REL_ki elektron DERIV_lI tüp ( <UNK> ) ol GERUND_ArAk adlandırıl PART_An ışık POSS_2SG CASE_ACC oluştur INF_mAk için cam gibi kusur DERIV_sIz bir şekil sağ TENSE_AORIST_VOWEL ; bu neden CASE_INS jel kıvam POSS_3SG kopar .",
+    "metin": "Teknik rapor: vernik katları ara katmanlardaki elektronlu tüp ( [?]) olarak adlandırılan ışığını oluşturmak için cam gibi kusursuz bir şekil sağar; bu nedenle jel kıvamı kopar."
+   },
+   "hukum": {
+    "taban_morf": 45,
+    "model_morf": 44,
+    "sapma_yzde": 2.2,
+    "kosul_band": true,
+    "kosul_unk": true,
+    "gecti": true
+   }
+  },
+  "Fidan nasıl dikilir?": {
+   "taban": {
+    "morfem_say": 45,
+    "unk": 0,
+    "morfem": "ceviz ağa DERIV_CI : zengin damar desen POSS_2SG CASE_DAT ve asil kahverengi ton PLURAL CASE_LOC , sert koku DERIV_lI bir ağaç COPULA_AORIST ; sandık iç POSS_3PL CASE_LOC_N is CASE_DAT yüzde 1 - 5 oran POSS_2SG CASE_ACC milimetre CASE_GEN altın CASE_ABL görün PART_An lüks mobilya tür",
+    "metin": "Ceviz ağacı: zengin damar desenine ve asil kahverengi tonlarda, sert kokulu bir ağaçtır; sandık içlerinde ise yüzde 1-5 oranını milimetrenin altından görünen lüks mobilya tür"
+   },
+   "alinti_modeli": {
+    "morfem_say": 40,
+    "unk": 1,
+    "morfem": "ceviz ağa DERIV_CI : zengin damar POSS_3PL CASE_DAT_N göre su CASE_DAT , asit PLURAL CASE_INS eritil GERUND_ArAk bez ponpon TENSE_AORIST_VOWEL ; dış <UNK> bahçe mobilya POSS_2SG CASE_LOC ve fıçı yapım POSS_2SG CASE_ACC yap PART_An <PROPER_NOUN> çe DERIV_lIk yağı COPULA_AORIST .",
+    "metin": "Ceviz ağacı: zengin damarlarına göre suya, asitlerle eritilerek bez ponponar; dış [?] bahçe mobilyanda ve fıçı yapımını yapan [Özel İsim] çelik yağıdır."
+   },
+   "hukum": {
+    "taban_morf": 45,
+    "model_morf": 40,
+    "sapma_yzde": 11.1,
+    "kosul_band": true,
+    "kosul_unk": true,
+    "gecti": true
+   }
+  },
+  "Okula gitmek için hangi ekler kullanılır?": {
+   "taban": {
+    "morfem_say": 37,
+    "unk": 1,
+    "morfem": "<PROPER_NOUN> , <UNK> ' POSS_2SG bir parça POSS_3SG ol GERUND_ArAk kabul edil PART_DIk CASE_ABL sonra gelen PLURAL tarafından öldürül PART_An ve bu CASE_GEN yerine yeni kurulan arkadaş POSS_3PL CASE_GEN_N ad DERIV_lI eser CASE_LOC REL_ki karakter COPULA_AORIST .",
+    "metin": "[Özel İsim], [?]'in bir parçası olarak kabul edildikten sonra gelenler tarafından öldürülen ve bunun yerine yeni kurulan arkadaşlarının adlı eserdeki karakterdir."
+   },
+   "alinti_modeli": {
+    "morfem_say": 45,
+    "unk": 1,
+    "morfem": "belge CASE_LOC REL_ki söz DERIV_lIk PLURAL POSS_2SG , <UNK> ' ( kaynak : madde 1 ) ; sayfa 3 4 - bit TENSE_EVIDENTIAL COPULA_AORIST ve bu durum POSS_3SG ayrıntı DERIV_lI ol GERUND_ArAk tanımlan PART_An bir terim CASE_INS belirtil PART_DIk POSS_3PL CASE_ACC_N göster INF_mAk için kullanıl",
+    "metin": "Belgedeki sözlüklerin, [?]' ( kaynak: madde 1); sayfa 34- bitmiştir ve bu durumu ayrıntılı olarak tanımlanan bir terimle belirtildiklerini göstermek için kullanıl"
+   },
+   "hukum": {
+    "taban_morf": 37,
+    "model_morf": 45,
+    "sapma_yzde": 21.6,
+    "kosul_band": true,
+    "kosul_unk": true,
+    "gecti": true
+   }
+  }
+ },
+ "hukum": {
+  "K1_alinti": "KALDI",
+  "K2_durustluk": "GECTI",
+  "K3_nobet": "GECTI",
+  "genel": "KALDI"
+ },
+ "K1_kisa_belge_kontrolu": {
+  "taban": {
+   "metin": "Eğer vatandaşların maaşı, [?] ve kararlı bir şekilde uygulanması gerektiğini göstermektedir.",
+   "morfem": "eğer vatandaş PLURAL POSS_2SG maaş POSS_3SG , <UNK> ve karar DERIV_lI bir şekil CASE_LOC uygulan INF_mA POSS_3SG gerek PART_DIk POSS_2SG CASE_ACC göster INF_mAk CASE_LOC COPULA_AORIST .",
+   "paylasilan_4gram": 0,
+   "beklenen_madde": "17",
+   "numara_var": false,
+   "referans_var": false,
+   "tam_4857": false,
+   "kaynak_ok": false
+  },
+  "alinti_modeli": {
+   "metin": "Belgedeki bilgilerin, bir kişinin kendisini göstermektedir.",
+   "morfem": "belge CASE_LOC REL_ki bilgi PLURAL POSS_2SG , bir kişi CASE_GEN kendi POSS_3SG CASE_ACC_N göster INF_mAk CASE_LOC COPULA_AORIST .",
+   "paylasilan_4gram": 0,
+   "beklenen_madde": "17",
+   "numara_var": false,
+   "referans_var": false,
+   "tam_4857": false,
+   "kaynak_ok": false
+  }
+ }
+}

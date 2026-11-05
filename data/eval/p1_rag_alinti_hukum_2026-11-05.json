@@ -1,0 +1,102 @@
+{
+  "gorev": "P1 RAG-alıntı SFT-replay (p26 tarifi)",
+  "durum": "BASARILI",
+  "init_model": "data/anka_taban_pure.pt",
+  "teacher_model": "data/anka_taban_pure.pt",
+  "sft_path": "data/pedagogy/rag_alinti_sft.jsonl",
+  "sft_sha256": "143b844ce4dd6db80bce1b283cb167a45c5ed7f693f913e1bc8e994c17448d83",
+  "kl_beta": 0.2,
+  "pencere_bin": "data/kulliyat_v2/kulliyat_v2.bin",
+  "pencere_n": 108,
+  "sft_train_n": 432,
+  "val_n": 50,
+  "val_kuyrugu": "son-50 (sete özgü)",
+  "peak_lr": 5e-05,
+  "min_lr": 1e-05,
+  "warmup": 20,
+  "epochs": 12,
+  "opt_adim": 204,
+  "sure_sn": 502.1,
+  "on_hesap_sn": 9.5,
+  "kl_aktif_mikro": 400,
+  "kl_toplam_mikro": 408,
+  "kl_ort": 0.1307373554612111,
+  "s_adim_son20_ort": 2.29,
+  "s_adim_son20_std": 0.247,
+  "init_val_ce": 4.752722144126892,
+  "final_val_ce": 3.2416460514068604,
+  "val_nobeti": [
+    {
+      "epok": 0,
+      "val_ce": 4.752722144126892,
+      "aciklama": "başlangıç (init)"
+    },
+    {
+      "epok": 1,
+      "val_ce": 4.5394240617752075,
+      "val_ppl": 93.63685554223694
+    },
+    {
+      "epok": 2,
+      "val_ce": 4.199190855026245,
+      "val_ppl": 66.6323939557487
+    },
+    {
+      "epok": 3,
+      "val_ce": 3.9638469219207764,
+      "val_ppl": 52.659513837362766
+    },
+    {
+      "epok": 4,
+      "val_ce": 3.7797263860702515,
+      "val_ppl": 43.80405469619393
+    },
+    {
+      "epok": 5,
+      "val_ce": 3.6390830278396606,
+      "val_ppl": 38.05692358122261
+    },
+    {
+      "epok": 6,
+      "val_ce": 3.523267984390259,
+      "val_ppl": 33.895016049534746
+    },
+    {
+      "epok": 7,
+      "val_ce": 3.4377700090408325,
+      "val_ppl": 31.11748902012475
+    },
+    {
+      "epok": 8,
+      "val_ce": 3.3729066252708435,
+      "val_ppl": 29.163170393018536
+    },
+    {
+      "epok": 9,
+      "val_ce": 3.3256818056106567,
+      "val_ppl": 27.81795861868941
+    },
+    {
+      "epok": 10,
+      "val_ce": 3.29121595621109,
+      "val_ppl": 26.87552325498151
+    },
+    {
+      "epok": 11,
+      "val_ce": 3.2638025879859924,
+      "val_ppl": 26.148781372368614
+    },
+    {
+      "epok": 12,
+      "val_ce": 3.2416460514068604,
+      "val_ppl": 25.57578617656483
+    }
+  ],
+  "en_iyi_epok": 12,
+  "en_iyi_val_ce": 3.2416460514068604,
+  "geri_yuklendi": false,
+  "init_pencere_ce": 3.9633,
+  "final_pencere_ce": 3.8771,
+  "cikti": "data/anka_rag_alinti.pt",
+  "cikti_sha256": "f0e2aad2565ec78762c82b2b5a45fe799e7a58372ef86e9970b130bdffe9b12c"
+}
