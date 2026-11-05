@@ -31,7 +31,7 @@ from src.compiler.core import CrystalCompiler
 from src.llm.tokenizer import KristalTokenizer, Vocabulary
 from src.compiler.decompiler import MorphemeDecompiler
 from src.rag.vector_memory import VectorMemory, generate_kristal_vector, generate_sparse_vector, resolve_qdrant_url
-from src.rag.yetenek_agi import KANCA_TOP_K  # VG-2 gözlem kancası (opsiyonel; davranış değişikliği YOK)
+from src.rag.yetenek_agi import KANCA_TOP_K, TELEMETRI_YOLU, danisma_raporu  # VG-2 gözlem kancası + VG-2b danışma (opsiyonel; davranış değişikliği YOK)
 from src.rag.epistemic_agent import EpistemicCuriosityAgent
 from src.rag.merak import CuriosityEngine
 from src.llm.router import TriModalRouter
@@ -64,7 +64,9 @@ class AgentGateway:
         qdrant_host: Optional[str] = None,
         qdrant_port: Optional[int] = None,
         yetenek_agi: Optional[Any] = None,
-        auxiliary_memories: Optional[List[VectorMemory]] = None
+        auxiliary_memories: Optional[List[VectorMemory]] = None,
+        yetenek_danisma: bool = False,
+        yetenek_telemetri_yolu: str = TELEMETRI_YOLU
     ):
         self.device = torch.device(device)
         self.future_train_path = future_train_path
@@ -78,6 +80,14 @@ class AgentGateway:
         # HİÇ eklenmez). Verilirse ask() sorgu-başına aktif yetenekleri
         # gözlem alanına yazar — yalnız GÖZLEM, yönlendirme/üretim DEĞİŞMEZ.
         self.yetenek_agi = yetenek_agi
+        # VG-2b (2026-11-05): GÖZLEM→DANIŞMA yükseltmesi (GÖREV-3). OP-İN,
+        # default KAPALI (False) — mevcut davranış birebir. AÇIKKEN:
+        # (a) aktivasyon zirvesi + router uzmanı + uyum/sinyal META'ya
+        # ('yetenek_danisma') yazılır; (b) olay telemetriye kaydedilir;
+        # (c) uyumsuzlukta YALNIZ LOGLANIR — router KARARI DEĞİŞTİRİLMEZ
+        # (P2.8 router kanıtlı; karar değişikliği ayrı ölçüm ister).
+        self.yetenek_danisma = bool(yetenek_danisma)
+        self.yetenek_telemetri_yolu = str(yetenek_telemetri_yolu)
         # VG-1 (2026-11-04): canlı retrieval zincirine env/arg ile eklenen aux
         # koleksiyonlar (ör. gts_bellek, kanun_madde). None/boş → davranış
         # bugünküyle birebir. Kurulu epistemic_agent'a taşınır (search_memory).
@@ -375,9 +385,37 @@ class AgentGateway:
         # raporlanır (kanca yalnız gözlemler, karar vermez).
         if self.yetenek_agi is not None:
             try:
-                sonuc["yetenek_aktivasyonu"] = self.yetenek_agi.aktivasyon(
+                aktivasyon_sonuc = self.yetenek_agi.aktivasyon(
                     sorgu=query, top_k=KANCA_TOP_K
                 )
+                sonuc["yetenek_aktivasyonu"] = aktivasyon_sonuc
+                # VG-2b DANIŞMA (2026-11-05, GÖREV-3): OP-İN, default KAPALI —
+                # açıkken zirve→uzman eşleşmesi + sinyal META'ya yazılır ve
+                # olay telemetriye kaydedilir; uyumsuzluk YALNIZ LOGLANIR.
+                # router'ın KARARI (active_expert/router_experts) DEĞİŞTİRİLMEZ.
+                if self.yetenek_danisma:
+                    try:
+                        router_uzmanlari = sonuc.get("router_experts") or []
+                        router_uzmani = sonuc.get("active_expert") or (
+                            router_uzmanlari[0] if router_uzmanlari else None
+                        )
+                        rapor = danisma_raporu(
+                            aktivasyon_sonuc, sorgu=query,
+                            router_uzmani=router_uzmani, kaynak="gateway",
+                            telemetri_yolu=self.yetenek_telemetri_yolu,
+                        )
+                        sonuc["yetenek_danisma"] = rapor["meta"]
+                        if rapor["meta"].get("uyum") is False:
+                            print(
+                                f"[VG2B_DANISMA] uyumsuzluk: aktivasyon zirvesi "
+                                f"'{rapor['meta']['zirve_ad']}' → "
+                                f"'{rapor['meta']['zirve_uzmani']}' ama router "
+                                f"'{rapor['meta']['router_uzmani']}' seçti — "
+                                f"KARAR DEĞİŞMEDİ (yalnız kayıt; P2.8 router kanıtlı)"
+                            )
+                    except Exception as e:  # noqa: BLE001 — danışma hatası gözlemi bozmaz
+                        print(f"[VG2B_DANISMA] danışma başarısız: {type(e).__name__}: {e}")
+                        sonuc["yetenek_danisma"] = None
             except Exception as e:  # noqa: BLE001 — gözlem hatası ask'i durduramaz
                 print(f"[VG2_KANCA] yetenek-aktivasyon gözlemi başarısız: {type(e).__name__}: {e}")
                 sonuc["yetenek_aktivasyonu"] = None

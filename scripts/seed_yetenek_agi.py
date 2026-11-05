@@ -31,7 +31,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from src.rag.vector_memory import resolve_qdrant_url
-from src.rag.yetenek_agi import KOLEKSIYON, VEKTOR_BOYUTU, kart_envanteri
+from src.rag.yetenek_agi import KOLEKSIYON, VEKTOR_BOYUTU, kart_envanteri, kisit_envanteri
 from src.compiler.lexicon import LexiconManager
 from src.compiler.morphotactics import build_default_graph
 from src.compiler.core import CrystalCompiler
@@ -71,11 +71,13 @@ def main() -> int:
     print(f"[EKIM] hedef Qdrant: {hedef[0]}:{hedef[1]} (url={hedef_url!r})")
     print(f"[EKIM] koleksiyon: {args.collection} | vektör boyutu: {VEKTOR_BOYUTU}")
 
-    kartlar = kart_envanteri()
+    kartlar = list(kart_envanteri()) + list(kisit_envanteri())
     alanlar = {}
     for k in kartlar:
         alanlar[k.etki_alani] = alanlar.get(k.etki_alani, 0) + 1
-    print(f"[EKIM] kart envanteri: {len(kartlar)} kart | alanlar: {alanlar}")
+    print(f"[EKIM] kart envanteri: {len(kartlar)} kart "
+          f"({len(kart_envanteri())} yetenek + {len(kisit_envanteri())} kısıt) "
+          f"| alanlar: {alanlar}")
     if args.collection != KOLEKSIYON:
         print(f"[EKIM][HATA] yazma yetkisi YALNIZ '{KOLEKSIYON}'; '{args.collection}' REDDEDİLDİ")
         return 1
