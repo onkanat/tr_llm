@@ -4,6 +4,11 @@ Bu projedeki tüm önemli değişiklikler bu dosyada belgelenmektedir.
 
 Format [Keep a Changelog](https://keepachangelog.com/tr/1.0.0/) standardına dayanır ve bu proje [Semantic Versioning (SemVer)](https://semver.org/spec/v2.0.0.html) ilkelerini benimser.
 
+## [1.24.0] - 2026-11-05
+
+### Eklendi (Added)
+- **v4 öğrenci koşumu (T-0209 kavşağından devam, İLAN `f225cc4`'te donmuş): HÜKÜM 1/3 — bilgi kapısı AÇILAMADI, çıpa BİLGİYİ DE BLOKLADI.** 11.380 adım / 10,4 sa (dürüst bandın 24-48 sa altında — sakin makine); KL 22.760/22.760 mikro-partide aktif (tüm-satır kipi), KL ort **0,44**. **K1 okuryazarlık GEÇTİ** (SFT val CE 2,3043→**2,3926**, eşik ≤2,45 — literacy tuttu). **K2 bilgi KALDI**: resmi VAL pencere-CE **3,9053**/PPL 49,7 — eşik ≤3,23'ün çok üstünde **ve saf pure'dan (3,8205) KÖTÜ**: %80 külliyat sinyali, tüm-satır KL β=0,2 çıpası tarafından domine edildi (model pure'dan KL 0,44 ölçüsünde uzaklaştı ama VAL'de iyileşmeyen yönde — bağlantısız sürüklenme). **K3 nöbet KALDI (marjinal)**: 4/4 top-1 doğru (root 0,9996 / TENSE 0,9999 / case 0,9995 / PLURAL 0,9441) ama görev-4 güveni 0,99 altında (pure 0,9986→0,9441). `anka_ogrenci_v4.pt` = pure artı gürültü — avantajsız. **Ölçülmüş tasarım-uzayı (3 nokta):** T3.4 (lr 2e-4, çıpasız) bilgi GİRDİ/okuryazarlık ÖLDÜ · v4 (lr 5e-5, tüm-satır β=0,2) okuryazarlık TUTTU/bilgi BLOKLANDI · aradaki nokta ölçülmedi. **Sıradaki adaylar:** (A) KL yalnız SFT satırlarında (çıpa formatı korur, pencereleri serbest bırakır — felsefi olarak doğru çıpa), (B) çıpasız lr 1e-4 + %20 SFT çapası, (C) tüm-satır β=0,05 + lr 1e-4. Koşum kayıtları: `data/eval/v4_ogrenci_{history,hukum}_*`.
+
 ## [1.23.0] - 2026-11-05
 
 ### Eklendi (Added)
