@@ -22,6 +22,7 @@ epistemik döngüyü işletir.
 
 import os
 import json
+import re
 import logging
 from datetime import datetime, timezone
 from typing import Dict, Any, Optional, List, Tuple
@@ -38,6 +39,7 @@ from src.llm.router import TriModalRouter
 from src.rag.vector_memory import VectorMemory
 from src.rag.embedding import generate_kristal_vector, generate_sparse_vector
 from src.rag.rag_pipeline import is_context_usable, build_rag_prompt_tokens, RAG_MATCH_THRESHOLD
+from src.rag.hybrid_search import extract_distinctive_roots
 
 # T-0157: Üretimde asla çıkarılmayacak yapısal zarf-jetonları
 # (chat_prompt.py:174-182 kalıbının gateway karşılığı). EOS/</OUTPUT>
@@ -47,6 +49,33 @@ YAPISAL_BASTIRMA_JETONLARI = ("<PAD>", "<BOS>", "<INSTRUCTION>", "</INSTRUCTION>
 # T-0157: Üretim-sonrası id-düzeyi temizlik (ikinci savunma hattı).
 # UNK FİLTRELENMEZ — morpheme_output'taki UNK sayımı epistemik-sinyaldir.
 TEMIZLIK_JETONLARI = YAPISAL_BASTIRMA_JETONLARI + ("<EOS>", "</OUTPUT>")
+
+# P24d Kalem-3 (2026-11-05): aux yükseltme kapısının çöp-girdi ölçütü.
+# Kanıt (p24c #91, data/eval/p24c_esik_dagilim_2026-11-04.json): '?' sorgusu
+# gts_bellek'te 1,0 skorla döndü, aux yükseltmesi koşullanmayı açtı ve
+# future-train A-yoluna (epistemic_failure) kayıt üretildi. Mekanizma
+# (ölçüldü, scratch/p24d_probe1_mekanizma.py): tek noktalama morfemi '?'
+# extract_distinctive_roots'ta AYRICI KÖK sayılır; GTS maddesi ('ne
+# söylüyorsun?: …') kök kümesinde '?' taşıdığından match_ratio=1,0 → kök
+# cezası YOK, iki kolda rank-1 → ham RRF tavanı 1,0. Yani sıfır
+# sözcük-içerikli girdi kapıdan tam skorla geçebiliyor.
+# Ölçüt (107'lik p24c setinde ölçüldü, 32 aux flip): aux yükseltmesi sorgunun
+# ≥1 ALFANÜMERİK (harf/rakam) ayrıkcı kök üretmesini ister → 2 çöp flip
+# ('?' #91, '!!!' #104) düşer; 30/32 sözcük-içerikli flip (VG-1 İHBAR/4857
+# profili dahil) KORUNUR. Reddedilen adaylar (ölçüm): 0,50 aux-eşiği ('?'
+# 1,0 ile geçer + 15 meşru flip düşer), ≥2 ortak-kök (13 meşru flip düşer),
+# kara-liste (genelleyemez). ANKA BİRİNCİL ZİNCİRİ bu ölçüte TABİ DEĞİLDİR:
+# ölçüt yalnız aux yükseltme bloğunda uygulanır; aux-BOŞ davranış birebir.
+_LEXICAL_ROOT_RE = re.compile(r"[0-9a-zçğıöşü]")
+
+
+def _query_has_lexical_root(query_tags: str) -> bool:
+    """True: sorgu en az bir harf/rakam içeren ayrımcı morf-kökü üretir.
+
+    extract_distinctive_roots kökleri küçük harfe çevirir; noktalama kökleri
+    ('?', '!', ':', '.') bu desende eşleşmez → saf-noktalama girdisi False.
+    """
+    return any(_LEXICAL_ROOT_RE.search(r) for r in extract_distinctive_roots(query_tags))
 
 
 def load_trained_router_state(router: TriModalRouter, router_state_path: str) -> TriModalRouter:
@@ -263,9 +292,13 @@ class EpistemicCuriosityAgent:
         # Zincir belgesi kullanılabilirse aux HİÇ sorgulanmaz. Aux adayı ancak
         # kök-eşleşmeli VE 0,33+ skorluysa yükseltilir (koşullanma False→True
         # değişiminde); birden çok aux geçiyorsa en yüksek skor kazanır.
-        if self.auxiliary_memories and not is_context_usable(
-            float(pick.get("score", 0.0)) if pick else 0.0
-        ):
+        # P24d Kalem-3: çöp-girdi kapısı — sorgu ≥1 alfanümerik ayrımcı kök
+        # üretmiyorsa (saf noktalama: '?', '!!!'…) aux bloğu HİÇ girilmez;
+        # yükseltme yok, zincir sonucu aynen döner (test_p24d_aux_cop_girdi_kapisi).
+        if (self.auxiliary_memories and _query_has_lexical_root(query_tags)
+                and not is_context_usable(
+                    float(pick.get("score", 0.0)) if pick else 0.0
+                )):
             best_aux, best_aux_source, best_aux_score = None, None, -1.0
             for aux_memory in self.auxiliary_memories:
                 aux_results = aux_memory.hybrid_recall(

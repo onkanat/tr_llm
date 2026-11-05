@@ -17,18 +17,39 @@ class CuriosityEngine(nn.Module):
     (entropy gain: (H(z) - entropy_pre) >= tau, entropy_pre REQUIRED) |
     'post_h' (absolute threshold on the POST-retrieval entropy the caller
     passes in). The frozen tau=2.5 default is NOT changed by this parameter.
+    OPT-IN 'aux_aware' (P24e Kalem-4, 2026-11-05): kaynak-koşullu eşik —
+    aux kaynaklı bağlamda (context_is_aux=True) POST entropi >= tau_aux;
+    birincil zincirde (context_is_aux=False) ΔH = (H(z) − entropy_pre) >=
+    tau_primary (entropy_pre REQUIRED). Gerekçe (p24c çıpalı-envanter
+    ölçümü, data/eval/p24c_esik_dagilim_2026-11-04.json): aux ekimi ΔH'nin
+    ayrım gücünü öldürdü (belirsiz 28/28 koşullandı; delta_h@−0,85 J +0,113,
+    CI 0 içerir) — ΔH yalnız BİRİNCİL zincirde bilgi taşır, aux'ta post_h
+    taşır. Dondurulmuş ölçülmüş eşikler (107 sorgu; bootstrap 1000,
+    kategori-tabakalı, tohum 20261104): tau_aux=2,25 / tau_primary=−0,75 →
+    J=+0,297, CI [+0,091;+0,516] (0'ı DIŞLAR), tetik %28.
+    ÇIPALAMA KURALI (bkz. p24c HÜKÜM §2): bu eşikler ölçüldükleri Qdrant
+    envanterine çıpalıdır (anka_bellek 46 / muhakeme_bellek 91 /
+    simulasyon_bellek 4.073 / gts_bellek 128.327 / kanun_madde 4.068 /
+    yetenek_agi 36). ENVANTER DEĞİŞİNCE — yeni koleksiyon ekimi, mevcut
+    koleksiyona ekim/silme, aux zinciri değişikliği — eşikler YÜRÜRLÜKTEN
+    DÜŞER: yeniden ölçüm + yeniden çıpalam yapılmadan kullanılmaz.
     """
     def __init__(self, hidden_dim: int = 768, curiosity_dim: int = 768, tau: float = 2.5,
-                 trigger_signal: str = 'entropy'):
+                 trigger_signal: str = 'entropy',
+                 tau_aux: float = 2.25, tau_primary: float = -0.75):
         super().__init__()
-        if trigger_signal not in ('entropy', 'delta_h', 'post_h'):
+        if trigger_signal not in ('entropy', 'delta_h', 'post_h', 'aux_aware'):
             raise ValueError(
                 f"Geçersiz trigger_signal: {trigger_signal!r}; "
-                "geçerli değerler: 'entropy' | 'delta_h' | 'post_h'")
+                "geçerli değerler: 'entropy' | 'delta_h' | 'post_h' | 'aux_aware'")
         self.hidden_dim = hidden_dim
         self.curiosity_dim = curiosity_dim
         self.tau = tau
         self.trigger_signal = trigger_signal
+        # P24e aux_aware eşikleri — dondurulmuş ölçüm değerleri (çıpalama
+        # kuralı yukarıda); çağıran yeniden ölçümle GÜNCELLEYEBİLİR.
+        self.tau_aux = float(tau_aux)
+        self.tau_primary = float(tau_primary)
         
         # Linear projection to synthesize curiosity vector from hidden state z
         self.q_proj = nn.Linear(hidden_dim, curiosity_dim)
@@ -48,17 +69,24 @@ class CuriosityEngine(nn.Module):
         return entropy
 
     def detect_epistemic_gap(self, entropy: torch.Tensor,
-                            entropy_pre: Optional[torch.Tensor] = None) -> torch.Tensor:
+                            entropy_pre: Optional[torch.Tensor] = None,
+                            context_is_aux: Optional[torch.Tensor] = None) -> torch.Tensor:
         """
         Returns boolean mask indicating where the trigger signal exceeds
         threshold tau (tau >= 2.5).
 
-        trigger_signal modes (P2.6 opt-in):
-          'entropy' (DEFAULT) — absolute H(z) >= tau; entropy_pre is IGNORED.
+        trigger_signal modes (P2.6 opt-in / P24e Kalem-4):
+          'entropy' (DEFAULT) — absolute H(z) >= tau; entropy_pre and
+          context_is_aux are IGNORED.
           'delta_h' — entropy gain (H(z) - entropy_pre) >= tau; entropy_pre is
           REQUIRED (ValueError when absent).
           'post_h' — absolute H(z) >= tau where the caller passes the
           POST-retrieval entropy; entropy_pre is IGNORED.
+          'aux_aware' (P24e) — kaynak-koşullu: context_is_aux REQUIRED
+          (ValueError when absent). True → absolute H(z) >= tau_aux
+          (post-retrieval entropy; entropy_pre IGNORED — ΔH aux çağında
+          bilgi taşımaz, p24c §6); False → (H(z) - entropy_pre) >=
+          tau_primary (entropy_pre REQUIRED — ΔH birincil zincirde yaşar).
         """
         if self.trigger_signal == 'delta_h':
             if entropy_pre is None:
@@ -66,6 +94,18 @@ class CuriosityEngine(nn.Module):
                     "trigger_signal='delta_h' entropy_pre gerektirir: "
                     "H(z)_pre olmaksızın ΔH tanımsızdır")
             return (entropy - entropy_pre) >= self.tau
+        if self.trigger_signal == 'aux_aware':
+            if context_is_aux is None:
+                raise ValueError(
+                    "trigger_signal='aux_aware' context_is_aux gerektirir: "
+                    "kaynak (aux/birincil) bilinmeden kaynak-koşullu eşik tanımsızdır")
+            if bool(context_is_aux):
+                return entropy >= self.tau_aux
+            if entropy_pre is None:
+                raise ValueError(
+                    "trigger_signal='aux_aware' birincil zincirde entropy_pre gerektirir: "
+                    "H(z)_pre olmaksızın ΔH tanımsızdır")
+            return (entropy - entropy_pre) >= self.tau_primary
         return entropy >= self.tau
 
     def forward(
@@ -74,7 +114,8 @@ class CuriosityEngine(nn.Module):
         logits: torch.Tensor,
         has_unk: bool = False,
         unk_token_id: Optional[int] = 1,
-        entropy_pre: Optional[torch.Tensor] = None
+        entropy_pre: Optional[torch.Tensor] = None,
+        context_is_aux: Optional[torch.Tensor] = None
     ) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
         """
         Args:
@@ -83,14 +124,19 @@ class CuriosityEngine(nn.Module):
             has_unk: Boolean flag indicating presence of <UNK> morpheme in input context
             unk_token_id: Token ID for <UNK> to detect predictive epistemic gap
             entropy_pre: Optional pre-retrieval entropy H(z)_pre; consumed only by
-            trigger_signal='delta_h' (P2.6 opt-in), ignored otherwise
+            trigger_signal='delta_h' and 'aux_aware' birincil kolu (P2.6/P24e
+            opt-in), ignored otherwise
+            context_is_aux: Optional source flag (True: aux koleksiyondan gelen
+            bağlam; False: birincil ANKA zinciri); consumed only by
+            trigger_signal='aux_aware' (P24e opt-in), ignored otherwise
         Returns:
             entropy: Calculated Shannon entropy H(z)
             needs_retrieval: Boolean tensor (signal >= tau or has_unk)
             q_merak: Synthesized curiosity vector (batch_size, curiosity_dim)
         """
         entropy = self.calculate_entropy(logits)
-        needs_retrieval = self.detect_epistemic_gap(entropy, entropy_pre=entropy_pre)
+        needs_retrieval = self.detect_epistemic_gap(
+            entropy, entropy_pre=entropy_pre, context_is_aux=context_is_aux)
         
         # Epistemic trigger 1: Context contains <UNK> morpheme
         if has_unk:
