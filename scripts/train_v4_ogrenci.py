@@ -11,8 +11,8 @@ TEK karışımda; öğrenci sınıf atlar ama okuryazarlığını ASLA kaybetmez
 
 TARİF (ölçülmüş zemin; kanıt: data/eval/p26_kapı_olcum_2026-11-04.md):
 - Başlangıç VE KL öğretmeni: data/anka_taban_pure.pt (öz-çapa; adım-0'da KL≈0).
-  Öğretmen TÜM satırlarda ateşlenir (yalnız pencere değil) — v4'te tüm model
-  pure'a çıpalanır (p26'da yalnız kaynak==1 satırları).
+  KL satır-seçimi kipe göre: tum → tüm model pure'a çıpalanır; sft (v4b) →
+  yalnız SFT satırları; pencere (p26) → yalnız kaynak==1 satırları.
 - Veri karışımı (token-bazlı, ölçüm: scratch/v4_zemin_probe.py 05.11.2026):
   pure_base_sft_v4 kayıt başına GERÇEK hedef konumu ort 52,86 → mikro-parti
   (16 satır) 10 pencere + 6 SFT satırı = hedef-konum bazlı %80,1 külliyat /
@@ -28,14 +28,20 @@ TARİF (ölçülmüş zemin; kanıt: data/eval/p26_kapı_olcum_2026-11-04.md):
 - KL: forward-KL T=1, öğretmen no_grad, β=0,2; mikro-parti SUB_CHUNK=8 (MPS OOM
   dersi), öğretmen satırları KL_CHUNK=4 yığınlarla; satır-seçim KAYNAK tensorüyle
   (p26 B1 düzeltmesi; T-0209 'len(batch)==4' ölü-kod dersinin tekrarı YOK).
+- KL KİPİ (v4b): --kl-kip {tum,sft,pencere}, satır-seçim TEK NOKTA kl_satirlari_sec.
+  "tum" = v4 (TÜM satır → bilgi ekseni bloklandı: pencere-CE 3,96→4,15, resmi VAL
+  3,905). "sft" = v4b (KL YALNIZ kaynak==0 SFT satırlarında; pencere satırları
+  ÇIPASIZ → bilgi serbest, okuryazarlık çıpalı). "pencere" = p26. Geriye uyum:
+  --no-kl-tum-satirlar → pencere; varsayılan aynen tum.
+- lr: v4b peak 1e-4 ORTA NOKTA (v4 kanıtı: 5e-5 bilgiyi blokladı — KALDI; T3.4
+  kanıtı: 2e-4 okuryazarlığı öldürdü — İHLAL; 1e-4 kanıtsız, K1 erken-duruş
+  sigortasıyla), warmup 200, cosine → min 1e-5.
 - VAL-NÖBETİ (her --save-every'de): SFT val-CE (val-150, FastSampleAlignedDataset
   — TABAN 2,3043 rig'i) + külliyat pencere-CE (TRAIN bin, 25 pencere, tohum 7 —
   p26 avlusu; resmi VAL avlusu eval_ce_val.py'de AYRI) + paket güveni (tek görev
   'okula'→'case'; TABAN 0,9998 referansı) + kayıp eğrisi (history).
 - K1 ERKEN-DURUŞ İZNİ: toplam adımın ilk %20'sindeki nöbetlerde SFT val CE 2,45'i
   AŞARSA koşum DURUR (İLAN kapısı K1'in canlı tripwire'ı).
-- lr: peak 5e-5 (GÜVENLİ-KANITLI: p26 tur-1/4/5 + P1 dört koşum), warmup 200,
-  cosine → min 1e-5. 2e-4 YIKICI-KANITLI (T3.4); arada değer KANITSIZ — alınmadı.
 - Pencere tavanı 128 (aile dersi); KristalLM block_size=4096 (p26 deseni).
 
 PİLOT modu: --max-opt-steps N → N opt-adımda kes, yine de nöbet/val/final-ölçüm
@@ -47,20 +53,23 @@ Kullanım (PİLOT — scratch'e kaydeder, donmuş yol YOK):
     --init-model data/anka_taban_pure.pt \
     --sft-path data/pedagogy/pure_base_sft_v4.jsonl \
     --pencere-bin data/kulliyat_v2/kulliyat_v2.bin \
+    --kl-kip sft --kl-beta 0.2 --peak-lr 1e-4 --min-lr 1e-5 --warmup 200 \
     --save-every 25 --max-opt-steps 50 --toplam-adim 11380 \
-    --save-path scratch/v4_ogrenci_pilot.pt \
-    --history-path scratch/v4_ogrenci_pilot_history.json \
-    --hukum-path scratch/v4_ogrenci_pilot_hukum.json
+    --save-path scratch/v4b_ogrenci_pilot.pt \
+    --history-path scratch/v4b_ogrenci_pilot_history.json \
+    --hukum-path scratch/v4b_ogrenci_pilot_hukum.json
 
 TAM koşum (İLAN onayı SONRASI; data/ çıktısı için --allow-frozen-write):
   venv/bin/python scripts/train_v4_ogrenci.py \
     --init-model data/anka_taban_pure.pt \
     --sft-path data/pedagogy/pure_base_sft_v4.jsonl \
     --pencere-bin data/kulliyat_v2/kulliyat_v2.bin \
-    --save-every 500 --toplam-adim 11380 \
-    --save-path data/anka_ogrenci_v4.pt --allow-frozen-write \
-    --history-path data/eval/v4_ogrenci_history.json \
-    --hukum-path data/eval/v4_ogrenci_hukum_2026-11-05.json
+    --kl-kip sft --kl-beta 0.2 --peak-lr 1e-4 --min-lr 1e-5 --warmup 200 \
+    --batch 16 --accum 2 --pencere-satir 10 \
+    --toplam-adim 11380 --save-every 500 \
+    --save-path data/anka_ogrenci_v4b.pt --allow-frozen-write \
+    --history-path data/eval/v4b_ogrenci_history.json \
+    --hukum-path data/eval/v4b_ogrenci_hukum_2026-11-05.json
 """
 import argparse
 import json
@@ -115,18 +124,55 @@ def planla_pencere_baslar(n_token, adet, seed, epok, block=BLOCK):
     return (secim * block).astype(np.int64)
 
 
-def kl_satirlari_sec(kaynak, beta, tum_satirlar=True):
-    """p26 B1 satır-seçim düzeltmesi, v4 genişletmesi.
+def kl_satirlari_sec(kaynak, beta, tum_satirlar=True, kip=None):
+    """KL satır-seçimi — TEK NOKTA (p26 B1 + v4 tüm-satır + v4b SFT kipi).
 
-    beta<=0 → boş (KL kapalı). tum_satirlar=True (v4) → TAM parti: öğrenci tümüyle
-    pure'a çıpalanır. tum_satirlar=False (p26 kipi) → yalnız kaynak==1 (pencere)
-    satırları. CPU tensoründe nonzero (t0200 koşum-3 MPS SIGSEGV önlemi).
+    Kipler: "tum" (v4, varsayılan) → TAM parti: öğrenci tümüyle pure'a çıpalanır.
+    "sft" (v4b) → yalnız kaynak==0 (SFT) satırları: okuryazarlık çapası çıpalı,
+    pencere (bilgi) satırları ÇIPASIZ — bilgi gradyanı KL ile bloklanamaz.
+    "pencere" (p26) → yalnız kaynak==1 satırları. tum_satirlar geriye-uyum
+    kısayolu (True→tum, False→pencere); kip AÇIK verildiyse O kazanır.
+    beta<=0 → boş (KL kapalı; kip ne olursa olsun). CPU tensoründe nonzero
+    (t0200 koşum-3 MPS SIGSEGV önlemi).
     """
     if beta <= 0.0:
         return torch.empty(0, dtype=torch.long)
-    if tum_satirlar:
+    if kip is None:
+        kip = "tum" if tum_satirlar else "pencere"
+    if kip == "tum":
         return torch.arange(int(kaynak.numel()), dtype=torch.long)
-    return (kaynak == 1.0).nonzero(as_tuple=True)[0].to(torch.long)
+    if kip == "sft":
+        return (kaynak == 0.0).nonzero(as_tuple=True)[0].to(torch.long)
+    if kip == "pencere":
+        return (kaynak == 1.0).nonzero(as_tuple=True)[0].to(torch.long)
+    raise ValueError(f"bilinmeyen KL kipi: {kip!r} (tum|sft|pencere)")
+
+
+def kl_kip_coz(args):
+    """CLI KL-kipi çözümü: --kl-kip açık beyanı; --kl-tum-satirlar geriye-uyum kısayolu.
+
+    Eski --kl-tum-satirlar bayrağı EŞLENİR: bayrak → "tum",
+    --no-kl-tum-satirlar → "pencere" (p26 kipi). --kl-kip verilmediyse eşleme
+    yürür; hiçbiri verilmediyse varsayılan "tum" (v4 aynen). İkisi de açık
+    verilip ÇELİŞİYORSA RuntimeError — sessiz kısayol zaferi YOK (çıpa
+    daima açık beyanlı: hangi satırların çıpalandığı kayıttan okunabilir).
+    """
+    if args.kl_kip is None:
+        if args.kl_tum_satirlar is None:
+            return "tum"
+        return "tum" if args.kl_tum_satirlar else "pencere"
+    if args.kl_tum_satirlar is not None:
+        eski = "tum" if args.kl_tum_satirlar else "pencere"
+        if eski != args.kl_kip:
+            raise RuntimeError(
+                f"V4_DUR: --kl-kip {args.kl_kip!r} ile --kl-tum-satirlar="
+                f"{args.kl_tum_satirlar} (eşlemesi {eski!r}) çelişiyor — tek kip beyanı ver")
+    return args.kl_kip
+
+
+KL_KIP_AD = {"tum": "TÜM satırlar (v4)",
+             "sft": "yalnız SFT satırları (v4b — pencere satırları ÇIPASIZ)",
+             "pencere": "yalnız pencere satırları (p26)"}
 
 
 def karisim_orani_hesapla(pencere_satir, sft_satir, ort_sft_hedef, block=BLOCK):
@@ -232,18 +278,20 @@ class V4OgrenciDataset(torch.utils.data.Dataset):
 
 
 def mikro_parti_kayip(ogrenci, hoca, x, y, sm, kaynak, beta, tum_satirlar=True,
-                      accum=1, sub_chunk=SUB_CHUNK, kl_chunk=KL_CHUNK):
-    """p26 mikro-parti kayıp matematiği BİREBİR (docstring not-6/7), v4 tüm-satır KL.
+                      kip=None, accum=1, sub_chunk=SUB_CHUNK, kl_chunk=KL_CHUNK):
+    """p26 mikro-parti kayıp matematiği BİREBİR (docstring not-6/7); kip kl_satirlari_sec'te.
 
     CE payı: alt-yığınların (CE_none×sm).sum()/sm_payda toplamı TAM parti
     (T-0209 ce_loss) değerine VE gradyanına eşit (toplam lineer; payda TAM partiden).
-    KL payı: satır-seçim global kaynak/beta ile; KL_CHUNK yığın satır-toplamlarının
-    cat().sum()'ı tam-seçimin .sum(-1).sum()'ına eşit; pay = mikro-parti GENELİ
-    seçili-satır × T_poz (v4 tüm-satır: 16×128 konum ortalaması).
-    Yan etki: (loss/accum).backward() her alt-yığında çağrılır (p26 akışı).
+    KL payı: satır-seçim TEK NOKTA (kl_satirlari_sec; kip tum/sft/pencere) global
+    kaynak/beta ile; KL_CHUNK yığın satır-toplamlarının cat().sum()'ı tam-seçimin
+    .sum(-1).sum()'ına eşit; pay = mikro-parti GENELİ seçili-satır × T_poz
+    (tum kipinde 16×128 konum ortalaması; sft/pencere kiplerinde seçilen
+    satır sayısının T_poz'u). Yan etki: (loss/accum).backward() her alt-yığında
+    çağrılır (p26 akışı).
     """
     sm_payda = sm.sum() + 1e-8
-    satirlar = kl_satirlari_sec(kaynak, beta, tum_satirlar)
+    satirlar = kl_satirlari_sec(kaynak, beta, tum_satirlar=tum_satirlar, kip=kip)
     kl_satir_sayisi = int(satirlar.numel())
     T_poz = x.size(1)
     kl_toplam_deger, kl_aktif = 0.0, False
@@ -331,8 +379,12 @@ def parse_args():
     p.add_argument("--pencere-bin", default="data/kulliyat_v2/kulliyat_v2.bin")
     p.add_argument("--vocab", default="data/rebuild/vocab_anka_r1_33114.json")
     p.add_argument("--kl-beta", type=float, default=0.2)
-    p.add_argument("--kl-tum-satirlar", action=argparse.BooleanOptionalAction, default=True,
-                   help="v4: KL TÜM satırlarda (kapatırsa p26 kipi: yalnız pencere satırları)")
+    p.add_argument("--kl-kip", choices=["tum", "sft", "pencere"], default=None,
+                   help="KL satır-seçim kipi: tum (v4: TÜM satır) | sft (v4b: YALNIZ SFT "
+                        "satırları, pencere satırları ÇIPASIZ) | pencere (p26: yalnız pencere)")
+    p.add_argument("--kl-tum-satirlar", action=argparse.BooleanOptionalAction, default=None,
+                   help="GERİYE UYUM kısayolu: --no-kl-tum-satirlar → --kl-kip pencere; "
+                        "--kl-kip ile çelişkide koşum DURUR; hiçbiri yoksa kip tum")
     p.add_argument("--peak-lr", type=float, default=5e-5)
     p.add_argument("--min-lr", type=float, default=1e-5)
     p.add_argument("--warmup", type=int, default=200)
@@ -363,13 +415,18 @@ def main():
     args = parse_args()
     if args.teacher_model is None:
         args.teacher_model = args.init_model
+    try:
+        kl_kip = kl_kip_coz(args)
+    except RuntimeError as e:
+        print(str(e), flush=True)
+        return 2
 
     t_program_basla = time.time()
     device = torch.device("mps" if torch.backends.mps.is_available() else "cpu")
     if device.type != "mps":
         raise RuntimeError("V4_DUR: MPS yok — koşum sandbox DIŞI olmalı (p26 kuralı)")
     pilot = args.max_opt_steps is not None
-    print(f"=== V4 ÖĞRENCİ (külliyat+SFT çapası, tüm-satır KL β={args.kl_beta}) | "
+    print(f"=== V4 ÖĞRENCİ (külliyat+SFT çapası, KL kipi={kl_kip} β={args.kl_beta}) | "
           f"cihaz={device} | pilot={pilot} ===", flush=True)
     print(f"[MPS] önerilen çalışma-seti sınırı: {torch.mps.recommended_max_memory() / 2**30:.2f} GB", flush=True)
 
@@ -459,6 +516,7 @@ def main():
     opt_step, accum_sayac, running = 0, 0, 0.0
     adim_sureleri, history = [], []
     kl_aktif_mikro, kl_toplam_mikro, kl_degerleri = 0, 0, []
+    kl_satir_toplami, satir_toplami = 0, 0  # v4b KL-deseni: satır-bazlı ateşlenme kanıtı
     adim_kl_degerleri = []
     val_nobeti = [{"adim": 0, **init_nobet, "aciklama": "başlangıç (init)"}]
     mps_tez_gb, mps_surucu_gb = 0.0, 0.0
@@ -480,9 +538,11 @@ def main():
                 step_t0 = time.time()  # opt-adımın BAŞI (accum penceresinin ilk mikro-partisi)
             x, y, sm, kaynak = batch  # kaynak: 0=SFT, 1=pencere (p26 B1)
             kl_toplam_mikro += 1
+            satir_toplami += int(kaynak.numel())
             x = x.to(device); y = y.to(device); sm = sm.to(device)
             sonuc = mikro_parti_kayip(model, hoca, x, y, sm, kaynak, args.kl_beta,
-                                      tum_satirlar=args.kl_tum_satirlar, accum=args.accum)
+                                      kip=kl_kip, accum=args.accum)
+            kl_satir_toplami += int(sonuc["kl_satir"])
             running += sonuc["loss"]; accum_sayac += 1
             if sonuc["kl_aktif"]:
                 kl_aktif_mikro += 1
@@ -567,9 +627,12 @@ def main():
         kanit = (f"[KL-KANIT] KL dalı {kl_aktif_mikro}/{kl_toplam_mikro} mikro-partide ateşlendi"
                  + (f" | tüm-koşum KL ort {kl_ort:.6f}" if kl_ort is not None
                     else " | KL HİÇ ATEŞLENMEDİ")
-                 + (f" | kip: {'TÜM satırlar (v4)' if args.kl_tum_satirlar else 'yalnız pencere (p26)'}"
-                    " (öz-çapa öğretmen==init; ölçülen başlangıç KL ~0,125 = train/eval"
-                    " dropout asimetrisi, ağırlık özdeşliğiyle çelişkili DEĞİL)"))
+                 + f" | kip: {KL_KIP_AD[kl_kip]}"
+                 + (f" | satır-deseni: {kl_satir_toplami}/{satir_toplami} satır"
+                    f" (%{100 * kl_satir_toplami / satir_toplami:.1f})"
+                    if satir_toplami else "")
+                 + " (öz-çapa öğretmen==init; ölçülen başlangıç KL ~0,125 = train/eval"
+                   " dropout asimetrisi, ağırlık özdeşliğiyle çelişkili DEĞİL)")
     else:
         kanit = "[KL-KANIT] kl-beta=0 → KL kapalı"
     print(kanit, flush=True)
@@ -592,7 +655,7 @@ def main():
     with open(args.history_path, "w", encoding="utf-8") as f:
         json.dump(history, f, indent=2)
     hukum = {
-        "gorev": "V4 öğrenci (külliyat %80 + SFT çapası %20, tüm-satır KL pure'a)",
+        "gorev": f"V4 öğrenci (külliyat %80 + SFT çapası %20, KL kipi={kl_kip} pure'a)",
         "pilot": pilot, "durum": ("ERKEN_DURUS_K1" if erken_durus else "BASARILI"),
         "init_model": args.init_model, "teacher_model": args.teacher_model,
         "init_sha256": compute_sha256(args.init_model),
@@ -604,7 +667,10 @@ def main():
         "karisim": karisim, "pencere_satir": args.pencere_satir, "sft_satir": sft_satir,
         "sft_train_n": len(sft_dataset), "val_n": len(val_dataset),
         "sft_tur_adim": sft_tur_adim,
-        "kl_beta": args.kl_beta, "kl_tum_satirlar": args.kl_tum_satirlar,
+        "kl_beta": args.kl_beta, "kl_kip": kl_kip,
+        "kl_tum_satirlar_bayrak": args.kl_tum_satirlar,
+        "kl_aktif_orani": round(kl_aktif_mikro / kl_toplam_mikro, 4) if kl_toplam_mikro else None,
+        "kl_satir_orani": round(kl_satir_toplami / satir_toplami, 4) if satir_toplami else None,
         "peak_lr": args.peak_lr, "min_lr": args.min_lr, "warmup": args.warmup,
         "batch": args.batch, "accum": args.accum, "epochs": args.epochs,
         "steps_per_epoch": steps_per_epoch, "toplam_adim": toplam_adim,
@@ -614,6 +680,7 @@ def main():
         "s_adim_son20_std": round(std20, 3) if std20 is not None else None,
         "eta_bant": eta_bant,
         "kl_aktif_mikro": kl_aktif_mikro, "kl_toplam_mikro": kl_toplam_mikro,
+        "kl_satir_toplami": kl_satir_toplami, "satir_toplami": satir_toplami,
         "kl_ort": kl_ort,
         "mps_tez_gb": round(mps_tez_gb, 3), "mps_surucu_gb": round(mps_surucu_gb, 3),
         "val_nobeti": val_nobeti,

@@ -103,6 +103,67 @@ def test_kl_satir_secimi_p26_kipi_yalniz_pencere():
 
 
 # --------------------------------------------------------------------------
+# 3b) v4b KL KİPİ — --kl-kip {tum,sft,pencere}; satır-seçim TEK NOKTADA
+# --------------------------------------------------------------------------
+
+def test_kl_kip_sft_yalniz_kaynak_sifir_satirlarinda():
+    """v4b SFT kipi: KL kaynak==0 (SFT) satırlarında ateşlenir; kaynak==1 (pencere) ÇIPASIZ."""
+    kaynak = torch.tensor([0.0, 1.0, 1.0, 0.0])
+    secim = kl_satirlari_sec(kaynak, beta=0.2, kip="sft")
+    assert secim.tolist() == [0, 3]  # yalnız SFT satırları — pencere satırları (1, 2) YOK
+    hepsi_pencere = torch.ones(6)
+    assert kl_satirlari_sec(hepsi_pencere, beta=0.2, kip="sft").numel() == 0
+
+
+def test_kl_kip_beta_sifir_hicbir_kipte_ateslenmez():
+    """β=0 → ÜÇ kipte de satır-seçim BOŞ (KL kapalı; kip beyanı önemsiz)."""
+    kaynak = torch.tensor([0.0, 0.0, 1.0, 1.0])
+    for kip in ("tum", "sft", "pencere"):
+        assert kl_satirlari_sec(kaynak, beta=0.0, kip=kip).numel() == 0
+
+
+def test_kl_kip_tum_ve_pencere_tanimlari_aynen():
+    """Kip uzayı tek noktada: tum (v4) TAM parti; pencere (p26) kaynak==1 — değerler aynen."""
+    kaynak = torch.tensor([0.0, 1.0, 1.0, 0.0])
+    assert kl_satirlari_sec(kaynak, beta=0.2, kip="tum").tolist() == [0, 1, 2, 3]
+    assert kl_satirlari_sec(kaynak, beta=0.2, kip="pencere").tolist() == [1, 2]
+
+
+def test_kl_kip_tum_satirlar_geriye_uyum_kisayolu():
+    """Geriye uyum: tum_satirlar=True→tum, False→pencere; kip AÇIK verildiyse KAZANIR."""
+    kaynak = torch.tensor([0.0, 1.0, 1.0, 0.0])
+    assert kl_satirlari_sec(kaynak, 0.2, tum_satirlar=True).tolist() == [0, 1, 2, 3]
+    assert kl_satirlari_sec(kaynak, 0.2, tum_satirlar=False).tolist() == [1, 2]
+    assert kl_satirlari_sec(kaynak, 0.2, tum_satirlar=True, kip="sft").tolist() == [0, 3]
+
+
+def test_kl_kip_bilinmeyen_deger_hata():
+    """Yanlış kip adı sessiz DEĞİL — açık ValueError."""
+    with pytest.raises(ValueError):
+        kl_satirlari_sec(torch.tensor([0.0, 1.0]), beta=0.2, kip="yok")
+
+
+def test_kl_kip_cozum_cli_geriye_uyum():
+    """--kl-kip çözümü: varsayılan tum; --no-kl-tum-satirlar → pencere; çelişki → DUR."""
+    from types import SimpleNamespace
+    from scripts.train_v4_ogrenci import kl_kip_coz
+    # hiç bayrak yok → varsayılan aynen tum (v4 geriye uyum)
+    assert kl_kip_coz(SimpleNamespace(kl_kip=None, kl_tum_satirlar=None)) == "tum"
+    # eski bayrak tek başına: --no-kl-tum-satirlar → pencere (p26), --kl-tum-satirlar → tum
+    assert kl_kip_coz(SimpleNamespace(kl_kip=None, kl_tum_satirlar=False)) == "pencere"
+    assert kl_kip_coz(SimpleNamespace(kl_kip=None, kl_tum_satirlar=True)) == "tum"
+    # yeni bayrak tek başına: sft (v4b)
+    assert kl_kip_coz(SimpleNamespace(kl_kip="sft", kl_tum_satirlar=None)) == "sft"
+    # çelişkili ikili → sessiz kısayol zaferi YOK, açık RuntimeError
+    with pytest.raises(RuntimeError):
+        kl_kip_coz(SimpleNamespace(kl_kip="sft", kl_tum_satirlar=True))   # eski eşleme tum
+    with pytest.raises(RuntimeError):
+        kl_kip_coz(SimpleNamespace(kl_kip="tum", kl_tum_satirlar=False))  # eski eşleme pencere
+    # TUTARLI ikili → geçer
+    assert kl_kip_coz(SimpleNamespace(kl_kip="pencere", kl_tum_satirlar=False)) == "pencere"
+
+
+# --------------------------------------------------------------------------
 # 4) Mini-batch karışım düzeni (tam 10P+6S; SFT çapası tekrarlı döngü)
 # --------------------------------------------------------------------------
 
@@ -287,6 +348,36 @@ def test_mikro_parti_p26_kipi_yanliz_pencere():
     r2 = mikro_parti_kayip(ogrenci, hoca, x, y, sm, hepsi_sft, 0.2,
                            tum_satirlar=False, accum=1)
     assert r2["kl_aktif"] is False
+
+
+def test_mikro_parti_sft_kipi_ogretmen_yalniz_sft_satirlarinda():
+    """v4b duman: kip='sft' → öğretmen YALNIZ kaynak==0 satırlarında; TÜM-değil; denklik aynen."""
+    V, beta = 40, 0.2
+    x, y, sm, kaynak = _rastgele_parti(V)  # 8 SFT (kaynak=0) + 8 pencere (kaynak=1)
+    ogrenci, hoca = _mini_cift(V)
+    sayac = {"cagri": 0, "satir": 0}
+    hoca.sayac = sayac
+    r = mikro_parti_kayip(ogrenci, hoca, x, y, sm, kaynak, beta, kip="sft",
+                          accum=1, sub_chunk=8, kl_chunk=4)
+    assert r["kl_aktif"] is True and r["kl_satir"] == 8  # 8 SFT satırı — 16 DEĞİL (TÜM-değil)
+    assert sayac["satir"] == 8  # öğretmen pencere satırlarını GÖRMEDİ
+    # TAMAMI pencere satırı → SFT kipinde KL HİÇ ateşlenmez (çıpa yalnız öğrencinin bildiğinde)
+    hepsi_pencere = torch.ones_like(kaynak)
+    r2 = mikro_parti_kayip(ogrenci, hoca, x, y, sm, hepsi_pencere, beta, kip="sft", accum=1)
+    assert r2["kl_aktif"] is False and r2["kl"] is None
+    # sub-chunk denkliği kip='sft'te de TAM-seçimle eşit (değer VE gradyan)
+    sonuclar, gradlar = [], []
+    for sub, kl in ((SUB_CHUNK, KL_CHUNK), (9999, 9999)):
+        o2, h2 = _mini_cift(V)
+        o2.zero_grad()
+        rr = mikro_parti_kayip(o2, h2, x, y, sm, kaynak, beta, kip="sft",
+                              accum=1, sub_chunk=sub, kl_chunk=kl)
+        sonuclar.append(rr)
+        gradlar.append([p.grad.clone() for p in o2.parameters()])
+    assert sonuclar[0]["loss"] == pytest.approx(sonuclar[1]["loss"], rel=1e-5, abs=1e-6)
+    assert sonuclar[0]["kl"] == pytest.approx(sonuclar[1]["kl"], rel=1e-4, abs=1e-7)
+    for g1, g2 in zip(gradlar[0], gradlar[1]):
+        assert torch.allclose(g1, g2, rtol=1e-4, atol=1e-6)
 
 
 # --------------------------------------------------------------------------
