@@ -4,6 +4,11 @@ Bu projedeki tüm önemli değişiklikler bu dosyada belgelenmektedir.
 
 Format [Keep a Changelog](https://keepachangelog.com/tr/1.0.0/) standardına dayanır ve bu proje [Semantic Versioning (SemVer)](https://semver.org/spec/v2.0.0.html) ilkelerini benimser.
 
+## [1.25.0] - 2026-11-06
+
+### Eklendi (Added)
+- **v4b öğrenci koşumu (aday A + lr 1e-4): HÜKÜM 0/3 — KÖK NEDEN BULUNDU: sm-ağırlıklı kayıp formu serbest pencerelerde PATOLOJİKTİR.** 11.380 adım / 8,5 sa; KL yalnız SFT satırlarında (22.760/22.760 mikro-parti, %37,5 satır) — kip mekanik olarak DOĞRU çalıştı, ama **kayıp değerleri negatife sarktı** (−0,96 gözlemlendi) ve pencere-CE 3,96→**6,84**'e patladı: `(CE_none×sm)/sm.sum()` formu ±1 işaret maskesini KAYIP AĞIRLIĞI yapar — sm=−1 jetonlarında kaybı düşürmek CE'lerini YÜKSELTİR; T-0209 ailesinde (küçük pencere sayıları + 1e-5 + çıpalar) patoloji sınırlı kalıyordu, serbest pencere + 1e-4'te patladı. **K1 KALDI** (SFT CE 2,3043→**3,0168** > 2,45 — erken-duruş penceresi ilk %20'de tetiklenmedi, yıkım sonra geldi: ders: **K1 nöbeti koşumun TAMAMINA yayılmalı**); **K2 KALDI** (resmi VAL **6,0382**/PPL 419 — pure 3,8205); **K3 KALDI** (görev-2 top-1 bozuldu: `:` 0,9969 — TENSE değil). `anka_ogrenci_v4b.pt` arşive. **Tasarım uzayı 4 nokta:** T3.4 (plain-CE, 2e-4): bilgi GİRDİ/okuryazarlık öldü · v4 (sm-kayıp, tüm-satır KL): okuryazarlık tuttu/bilgi bloklandı · v4b (sm-kayıp, serbest pencere): İKİSİ DE YIKILDI · **kanıt-net sonuç: bilgiyi YALNIZCA plain-CE (train.py pretrain kalıbı) soktu.** **v4c tasarımı olgunlaştı:** pencere satırlarında PLAIN CE + SFT satırlarında maskeli CE + %20 SFT çapası + (ops. SFT-satır KL) + K1 nöbeti tüm koşuma — karışım mekanizması hazır, yalnız kayıp dalı değişir.
+
 ## [1.24.0] - 2026-11-05
 
 ### Eklendi (Added)

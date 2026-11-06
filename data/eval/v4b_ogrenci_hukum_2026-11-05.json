@@ -1,0 +1,291 @@
+{
+  "gorev": "V4 öğrenci (külliyat %80 + SFT çapası %20, KL kipi=sft pure'a)",
+  "pilot": false,
+  "durum": "BASARILI",
+  "init_model": "data/anka_taban_pure.pt",
+  "teacher_model": "data/anka_taban_pure.pt",
+  "init_sha256": "5479a2f35a88975cae3cd8e66e4aef0bb7b09bea5274828709fe2c0e1d263360",
+  "sft_path": "data/pedagogy/pure_base_sft_v4.jsonl",
+  "sft_sha256": "f90cf88b9f79037571c055dadc4f6322ee5bd2ead6a64796b32b4e3172368369",
+  "pencere_bin": "data/kulliyat_v2/kulliyat_v2.bin",
+  "pencere_bin_sha256": "7f91317aa58b17e777304b70619dc48b912c47ad563a478f5ca89cd95b57745c",
+  "vocab_sha256": "f9940a8d8e1f7cd9428d389f12ff4c5ee448e5a7bfcdcc8ecc9c616fce950984",
+  "kulliyat_token": 29135254,
+  "pencere_n": 227600,
+  "kulliyat_epok_kapsama": 0.999921,
+  "karisim": {
+    "pencere_satir": 10,
+    "sft_satir": 6,
+    "ort_sft_hedef": 52.85998209489705,
+    "hedef_bazli": {
+      "kulliyat": 0.8014225788883536,
+      "sft": 0.1985774211116465
+    },
+    "baglam_bazli": {
+      "kulliyat": 0.625,
+      "sft": 0.375
+    }
+  },
+  "pencere_satir": 10,
+  "sft_satir": 6,
+  "sft_train_n": 5585,
+  "val_n": 150,
+  "sft_tur_adim": 466,
+  "kl_beta": 0.2,
+  "kl_kip": "sft",
+  "kl_tum_satirlar_bayrak": null,
+  "kl_aktif_orani": 1.0,
+  "kl_satir_orani": 0.375,
+  "peak_lr": 0.0001,
+  "min_lr": 1e-05,
+  "warmup": 200,
+  "batch": 16,
+  "accum": 2,
+  "epochs": 1,
+  "steps_per_epoch": 11380,
+  "toplam_adim": 11380,
+  "opt_adim": 11380,
+  "sure_sn": 30650.1,
+  "on_hesap_sn": 67.4,
+  "s_adim_son20_ort": 2.614,
+  "s_adim_son20_std": 0.236,
+  "eta_bant": {
+    "carpan": 3.0,
+    "toplam_adim": 11380,
+    "alt_sa": 22.6,
+    "ust_sa": 27.0,
+    "nokta_sa": 24.8
+  },
+  "kl_aktif_mikro": 22760,
+  "kl_toplam_mikro": 22760,
+  "kl_satir_toplami": 136560,
+  "satir_toplami": 364160,
+  "kl_ort": 0.7380823862176403,
+  "mps_tez_gb": 1.773,
+  "mps_surucu_gb": 3.565,
+  "val_nobeti": [
+    {
+      "adim": 0,
+      "sft_val_ce": 2.304304277896881,
+      "sft_val_ppl": 10.017206635484342,
+      "pencere_ce_train": 3.9633,
+      "okula_top1": "case",
+      "okula_guven": 0.999818742275238,
+      "okula_dogru": true,
+      "aciklama": "başlangıç (init)"
+    },
+    {
+      "sft_val_ce": 2.337808036804199,
+      "sft_val_ppl": 10.35850619542477,
+      "pencere_ce_train": 3.6098,
+      "okula_top1": "case",
+      "okula_guven": 0.9980040192604065,
+      "okula_dogru": true,
+      "adim": 500
+    },
+    {
+      "sft_val_ce": 2.3228754878044127,
+      "sft_val_ppl": 10.20497644221947,
+      "pencere_ce_train": 3.5873,
+      "okula_top1": "case",
+      "okula_guven": 0.9975973963737488,
+      "okula_dogru": true,
+      "adim": 1000
+    },
+    {
+      "sft_val_ce": 2.329125440120697,
+      "sft_val_ppl": 10.268956787158634,
+      "pencere_ce_train": 3.6436,
+      "okula_top1": "case",
+      "okula_guven": 0.997565746307373,
+      "okula_dogru": true,
+      "adim": 1500
+    },
+    {
+      "sft_val_ce": 2.3293500900268556,
+      "sft_val_ppl": 10.271263966481321,
+      "pencere_ce_train": 3.785,
+      "okula_top1": "case",
+      "okula_guven": 0.9991152882575989,
+      "okula_dogru": true,
+      "adim": 2000
+    },
+    {
+      "sft_val_ce": 2.3362695574760437,
+      "sft_val_ppl": 10.342582100358998,
+      "pencere_ce_train": 3.9004,
+      "okula_top1": "case",
+      "okula_guven": 0.9994882345199585,
+      "okula_dogru": true,
+      "adim": 2500
+    },
+    {
+      "sft_val_ce": 2.380346441268921,
+      "sft_val_ppl": 10.8086467766755,
+      "pencere_ce_train": 4.0472,
+      "okula_top1": "case",
+      "okula_guven": 0.9994496703147888,
+      "okula_dogru": true,
+      "adim": 3000
+    },
+    {
+      "sft_val_ce": 2.439652442932129,
+      "sft_val_ppl": 11.46905389926266,
+      "pencere_ce_train": 4.2128,
+      "okula_top1": "case",
+      "okula_guven": 0.9982393980026245,
+      "okula_dogru": true,
+      "adim": 3500
+    },
+    {
+      "sft_val_ce": 2.475068378448486,
+      "sft_val_ppl": 11.88251959357492,
+      "pencere_ce_train": 4.3892,
+      "okula_top1": "case",
+      "okula_guven": 0.9935344457626343,
+      "okula_dogru": true,
+      "adim": 4000
+    },
+    {
+      "sft_val_ce": 2.5087307929992675,
+      "sft_val_ppl": 12.289322463864723,
+      "pencere_ce_train": 4.5769,
+      "okula_top1": "case",
+      "okula_guven": 0.997188150882721,
+      "okula_dogru": true,
+      "adim": 4500
+    },
+    {
+      "sft_val_ce": 2.5560518860816956,
+      "sft_val_ppl": 12.884845921799615,
+      "pencere_ce_train": 4.7695,
+      "okula_top1": "case",
+      "okula_guven": 0.9975621700286865,
+      "okula_dogru": true,
+      "adim": 5000
+    },
+    {
+      "sft_val_ce": 2.583663558959961,
+      "sft_val_ppl": 13.245575325439761,
+      "pencere_ce_train": 4.9595,
+      "okula_top1": "case",
+      "okula_guven": 0.9981854557991028,
+      "okula_dogru": true,
+      "adim": 5500
+    },
+    {
+      "sft_val_ce": 2.627654993534088,
+      "sft_val_ppl": 13.841273938516654,
+      "pencere_ce_train": 5.1444,
+      "okula_top1": "case",
+      "okula_guven": 0.9970236420631409,
+      "okula_dogru": true,
+      "adim": 6000
+    },
+    {
+      "sft_val_ce": 2.664874541759491,
+      "sft_val_ppl": 14.366147081396367,
+      "pencere_ce_train": 5.315,
+      "okula_top1": "case",
+      "okula_guven": 0.9975444674491882,
+      "okula_dogru": true,
+      "adim": 6500
+    },
+    {
+      "sft_val_ce": 2.794300043582916,
+      "sft_val_ppl": 16.35117963357089,
+      "pencere_ce_train": 5.8601,
+      "okula_top1": "case",
+      "okula_guven": 0.996672511100769,
+      "okula_dogru": true,
+      "adim": 7000
+    },
+    {
+      "sft_val_ce": 2.841703104972839,
+      "sft_val_ppl": 17.14494031935252,
+      "pencere_ce_train": 6.0749,
+      "okula_top1": "case",
+      "okula_guven": 0.9969051480293274,
+      "okula_dogru": true,
+      "adim": 7500
+    },
+    {
+      "sft_val_ce": 2.881102204322815,
+      "sft_val_ppl": 17.833918973369077,
+      "pencere_ce_train": 6.2434,
+      "okula_top1": "case",
+      "okula_guven": 0.996364951133728,
+      "okula_dogru": true,
+      "adim": 8000
+    },
+    {
+      "sft_val_ce": 2.904884433746338,
+      "sft_val_ppl": 18.263132928394644,
+      "pencere_ce_train": 6.3868,
+      "okula_top1": "case",
+      "okula_guven": 0.9967684745788574,
+      "okula_dogru": true,
+      "adim": 8500
+    },
+    {
+      "sft_val_ce": 2.9429584622383116,
+      "sft_val_ppl": 18.971890991431476,
+      "pencere_ce_train": 6.5017,
+      "okula_top1": "case",
+      "okula_guven": 0.996127188205719,
+      "okula_dogru": true,
+      "adim": 9000
+    },
+    {
+      "sft_val_ce": 2.9631377458572388,
+      "sft_val_ppl": 19.35861898446916,
+      "pencere_ce_train": 6.5937,
+      "okula_top1": "case",
+      "okula_guven": 0.9969460368156433,
+      "okula_dogru": true,
+      "adim": 9500
+    },
+    {
+      "sft_val_ce": 2.981437563896179,
+      "sft_val_ppl": 19.71613949223935,
+      "pencere_ce_train": 6.6709,
+      "okula_top1": "case",
+      "okula_guven": 0.9960980415344238,
+      "okula_dogru": true,
+      "adim": 10000
+    },
+    {
+      "sft_val_ce": 2.9950478076934814,
+      "sft_val_ppl": 19.986315366656243,
+      "pencere_ce_train": 6.7384,
+      "okula_top1": "case",
+      "okula_guven": 0.9961024522781372,
+      "okula_dogru": true,
+      "adim": 10500
+    },
+    {
+      "sft_val_ce": 3.007232391834259,
+      "sft_val_ppl": 20.23132997715896,
+      "pencere_ce_train": 6.7941,
+      "okula_top1": "case",
+      "okula_guven": 0.9952812790870667,
+      "okula_dogru": true,
+      "adim": 11000
+    },
+    {
+      "sft_val_ce": 3.0168384552001952,
+      "sft_val_ppl": 20.426609848664416,
+      "pencere_ce_train": 6.8372,
+      "okula_top1": "case",
+      "okula_guven": 0.9959969520568848,
+      "okula_dogru": true,
+      "adim": 11380,
+      "aciklama": "final"
+    }
+  ],
+  "k1_esik": 2.45,
+  "k1_siniri": 2276,
+  "erken_durus": null,
+  "cikti": "data/anka_ogrenci_v4b.pt",
+  "cikti_sha256": "ae496afb27425abe25bf3dc265084bb14b4fe05dad6cde6d9fd8a675ed385148"
+}
