@@ -21,10 +21,19 @@ TARİF (ölçülmüş zemin; kanıt: data/eval/p26_kapı_olcum_2026-11-04.md):
   tekrarsız → 1 epok = külliyatın ~tümü bir kez). SFT çapası her turda yeniden
   karıştırılarak SONSUZ döngü (tekrarlı çapa; ~5.585 kayıt / 12 SFT-satır-adım
   ≈ 465 adımda tam tur).
-- Kayıp formu p26'dan BİREBİR (bilinçli): ce = (CE_none×sm).sum()/(sm.sum()+1e-8);
-  sm ±1 İŞARET maskesidir (kayıp maskesi değil), -100 hedefler CE'de 0, prompt
-  konumları paydada (seyreltme ölçümü: hedef/sm ≈ 0,417 — v4'te çapa ~25 tur
-  tekrarlandığından underfit riski p26 dar-set dersiyle AŞILIR).
+- Kayıp formu — KAYIP AĞIRLIĞI kipe göre (--pencere-kayip, v4c):
+  "sm" (v4/v4b varsayılan) = p26 formu BİREBİR: w=sm ±1 (T-0209), -100 hedefler
+  CE'de 0, prompt konumları paydada (seyreltme ölçümü: hedef/sm ≈ 0,417 — v4'te
+  çapa ~25 tur tekrarlandığından underfit riski p26 dar-set dersiyle AŞILIR).
+  "plain" (v4c) = pencere satırlarında w=geçerli-hedef göstergesi (y != -100;
+  gerçek pencerede TÜM 128 konum geçerli) → pencere dalı STANDART ORTALAMA CE,
+  ≥0 her zaman (negatif İMKÂNSIZ); SFT satırlarında w=sm AYNEN kalır (iki
+  değişken birden değişmez). sm MODELE gömme girdisi olarak yaşamaya DEVAM EDER
+  (KristalEmbedding her forward'da ±1 işareti uygular — yalnız KAYIP AĞIRLIĞI
+  değişti, mimari aynen). sm dalında −1 işaretli pencere konumları kayıp payından
+  ÇIKARIR (gradyanı yukarı çevirir; pencere bileşeni negatifa inebilir —
+  sm-kayıp patolojisi). Zemin: T3.4 kanıtı — bilgiyi pencere satırına PLAIN CE
+  soktu (3,8205→3,1936); okuryazarlığı SFT çapası + SFT-KL korur (v4b deseninde).
 - KL: forward-KL T=1, öğretmen no_grad, β=0,2; mikro-parti SUB_CHUNK=8 (MPS OOM
   dersi), öğretmen satırları KL_CHUNK=4 yığınlarla; satır-seçim KAYNAK tensorüyle
   (p26 B1 düzeltmesi; T-0209 'len(batch)==4' ölü-kod dersinin tekrarı YOK).
@@ -40,8 +49,9 @@ TARİF (ölçülmüş zemin; kanıt: data/eval/p26_kapı_olcum_2026-11-04.md):
   — TABAN 2,3043 rig'i) + külliyat pencere-CE (TRAIN bin, 25 pencere, tohum 7 —
   p26 avlusu; resmi VAL avlusu eval_ce_val.py'de AYRI) + paket güveni (tek görev
   'okula'→'case'; TABAN 0,9998 referansı) + kayıp eğrisi (history).
-- K1 ERKEN-DURUŞ İZNİ: toplam adımın ilk %20'sindeki nöbetlerde SFT val CE 2,45'i
-  AŞARSA koşum DURUR (İLAN kapısı K1'in canlı tripwire'ı).
+- K1 ERKEN-DURUŞ (v4c: TÜM KOŞUM): HER nöbet noktasında (save-every katları) SFT
+  val CE 2,45'i AŞARSA koşum DURUR (v4b dersi: ilk %20 penceresi yetmedi — kural
+  nöbet-örgüsüyle tüm koşuma uzatıldı; İLAN kapısı K1'in canlı tripwire'ı).
 - Pencere tavanı 128 (aile dersi); KristalLM block_size=4096 (p26 deseni).
 
 PİLOT modu: --max-opt-steps N → N opt-adımda kes, yine de nöbet/val/final-ölçüm
@@ -53,23 +63,24 @@ Kullanım (PİLOT — scratch'e kaydeder, donmuş yol YOK):
     --init-model data/anka_taban_pure.pt \
     --sft-path data/pedagogy/pure_base_sft_v4.jsonl \
     --pencere-bin data/kulliyat_v2/kulliyat_v2.bin \
-    --kl-kip sft --kl-beta 0.2 --peak-lr 1e-4 --min-lr 1e-5 --warmup 200 \
+    --kl-kip sft --kl-beta 0.2 --pencere-kayip plain \
+    --peak-lr 1e-4 --min-lr 1e-5 --warmup 200 \
     --save-every 25 --max-opt-steps 50 --toplam-adim 11380 \
-    --save-path scratch/v4b_ogrenci_pilot.pt \
-    --history-path scratch/v4b_ogrenci_pilot_history.json \
-    --hukum-path scratch/v4b_ogrenci_pilot_hukum.json
+    --save-path scratch/v4c_ogrenci_pilot.pt \
+    --history-path scratch/v4c_ogrenci_pilot_history.json \
+    --hukum-path scratch/v4c_ogrenci_pilot_hukum.json
 
 TAM koşum (İLAN onayı SONRASI; data/ çıktısı için --allow-frozen-write):
   venv/bin/python scripts/train_v4_ogrenci.py \
     --init-model data/anka_taban_pure.pt \
     --sft-path data/pedagogy/pure_base_sft_v4.jsonl \
     --pencere-bin data/kulliyat_v2/kulliyat_v2.bin \
-    --kl-kip sft --kl-beta 0.2 --peak-lr 1e-4 --min-lr 1e-5 --warmup 200 \
+    --kl-kip sft --kl-beta 0.2 --pencere-kayip plain --peak-lr 1e-4 --min-lr 1e-5 --warmup 200 \
     --batch 16 --accum 2 --pencere-satir 10 \
     --toplam-adim 11380 --save-every 500 \
-    --save-path data/anka_ogrenci_v4b.pt --allow-frozen-write \
-    --history-path data/eval/v4b_ogrenci_history.json \
-    --hukum-path data/eval/v4b_ogrenci_hukum_2026-11-05.json
+    --save-path data/anka_ogrenci_v4c.pt --allow-frozen-write \
+    --history-path data/eval/v4c_ogrenci_history.json \
+    --hukum-path data/eval/v4c_ogrenci_hukum_2026-11-06.json
 """
 import argparse
 import json
@@ -103,7 +114,6 @@ from train import check_frozen_save_path
 
 TARIH = time.strftime("%Y-%m-%d")
 K1_ESIK = 2.45          # İLAN donmuş kapısı: SFT val CE üst-sınırı (pure 2,3043 bandı)
-K1_IZLEME_ORANI = 0.20  # erken-duruş izni: toplam adımın ilk %20'si
 
 
 # ----------------------------------------------------------------------------
@@ -203,6 +213,18 @@ def nobet_ateslenmeli(opt_step, save_every, toplam_adim):
     return save_every > 0 and opt_step % save_every == 0 and opt_step < toplam_adim
 
 
+def k1_erken_durus_karar(nobet, esik=K1_ESIK):
+    """K1 nöbet kuralı (v4c): HER nöbet noktasında geçerli — %20 penceresi YOK.
+
+    v4b dersi: erken-duruş izni toplam adımın ilk %20'siyle sınırlıydı; okuryazarlık
+    sürüklenmesi sonraki adımlarda da yakalanabilmeli. Kural: val-nöbetinin SFT
+    CE'si eşiği SERT aşarsa (>) koşum DURUR (ERKEN_DURUS_K1; İLAN kapısı K1'in
+    canlı tripwire'ı). Ölçüm yoksa (None) karar verilmez.
+    """
+    ce = nobet.get("sft_val_ce") if isinstance(nobet, dict) else None
+    return ce is not None and ce > esik
+
+
 def _sft_akisi_uret(sft_n, seed, epok):
     """SFT çapası sonsuz döngü akışı: her tur ayrı tohumla yeniden karıştırma."""
     tur = 0
@@ -278,11 +300,26 @@ class V4OgrenciDataset(torch.utils.data.Dataset):
 
 
 def mikro_parti_kayip(ogrenci, hoca, x, y, sm, kaynak, beta, tum_satirlar=True,
-                      kip=None, accum=1, sub_chunk=SUB_CHUNK, kl_chunk=KL_CHUNK):
-    """p26 mikro-parti kayıp matematiği BİREBİR (docstring not-6/7); kip kl_satirlari_sec'te.
+                      kip=None, pencere_kayip="sm", accum=1, sub_chunk=SUB_CHUNK, kl_chunk=KL_CHUNK):
+    """p26 mikro-parti kayıp matematiği BİREBİR (docstring not-6/7); kip kl_satirlari_sec'te;
+    pencere-kayıp AĞIRLIĞI v4c kipiyle (--pencere-kayip sm|plain).
 
-    CE payı: alt-yığınların (CE_none×sm).sum()/sm_payda toplamı TAM parti
-    (T-0209 ce_loss) değerine VE gradyanına eşit (toplam lineer; payda TAM partiden).
+    KAYIP AĞIRLIĞI w (v4c TEK CERRAHİ DEĞİŞİKLİĞİ — yalnız ağırlık, mimari aynen):
+    - "sm" (v4/v4b varsayılan): w = sm — T-0209 formuna BİREBİR. Pencere satırlarında
+      −1 işaretli konumlar kayıp payından ÇIKARIR (gradyanı yukarı çevirir; pencere
+      bileşeni negatifa inebilir — sm-kayıp patolojisi).
+    - "plain" (v4c): pencere satırlarında w = geçerli-hedef göstergesi (y != -100;
+      gerçek pencerede TÜM konumlar geçerli) → pencere dalı STANDART ORTALAMA CE,
+      değeri ≥0 HER ZAMAN (negatif İMKÂNSIZ). SFT satırlarında w = sm AYNEN (iki
+      değişken birden değişmez). sm MODELE gömme girdisi olmaya DEVAM EDER —
+      ogrenci(x) çağrısında KristalEmbedding ±1 işareti her forward'da uygular;
+      değişen yalnız KAYIP AĞIRLIĞI'dır.
+    Tanık "pencere_ce": mikro-partinin pencere-satırı kayıp bileşeni (plain: ≥0
+    patoloji tanığı; sm: negatif olabilir — patoloji görünür). Pencere satırı
+    yoksa None.
+
+    CE payı: alt-yığınların (CE_none×w).sum()/payda toplamı TAM parti (T-0209
+    ce_loss) değerine VE gradyanına eşit (toplam lineer; payda TAM partiden).
     KL payı: satır-seçim TEK NOKTA (kl_satirlari_sec; kip tum/sft/pencere) global
     kaynak/beta ile; KL_CHUNK yığın satır-toplamlarının cat().sum()'ı tam-seçimin
     .sum(-1).sum()'ına eşit; pay = mikro-parti GENELİ seçili-satır × T_poz
@@ -290,18 +327,32 @@ def mikro_parti_kayip(ogrenci, hoca, x, y, sm, kaynak, beta, tum_satirlar=True,
     satır sayısının T_poz'u). Yan etki: (loss/accum).backward() her alt-yığında
     çağrılır (p26 akışı).
     """
-    sm_payda = sm.sum() + 1e-8
+    if pencere_kayip not in ("sm", "plain"):
+        raise ValueError(f"bilinmeyen pencere-kayıp kipi: {pencere_kayip!r} (sm|plain)")
+    pencere_satiri = (kaynak == 1.0).to(torch.bool).view(-1, *([1] * (sm.dim() - 1)))
+    if pencere_kayip == "plain":
+        gecerli = (y != -100).to(sm.dtype).reshape(sm.shape)
+        w = torch.where(pencere_satiri.to(sm.device), gecerli, sm)
+    else:
+        w = sm  # v4/v4b: T-0209 ağırlığı BİREBİR
+    payda = w.sum() + 1e-8
     satirlar = kl_satirlari_sec(kaynak, beta, tum_satirlar=tum_satirlar, kip=kip)
     kl_satir_sayisi = int(satirlar.numel())
     T_poz = x.size(1)
     kl_toplam_deger, kl_aktif = 0.0, False
+    pencere_pay, pencere_payda = 0.0, 0.0
     toplam_loss = 0.0
     for a0 in range(0, x.size(0), sub_chunk):
         x_c = x[a0:a0 + sub_chunk]; y_c = y[a0:a0 + sub_chunk]; sm_c = sm[a0:a0 + sub_chunk]
+        w_c = w[a0:a0 + sub_chunk]
         logits, _ = ogrenci(x_c)
         V = logits.size(-1)
         ce_none = F.cross_entropy(logits.reshape(-1, V), y_c.reshape(-1), reduction="none").view_as(sm_c)
-        loss = (ce_none * sm_c).sum() / sm_payda  # T-0209 BİREBİR; -100 hedef CE'de 0
+        loss = (ce_none * w_c).sum() / payda  # sm kipinde T-0209 BİREBİR; -100 hedefler CE'de 0
+        # v4c tanığı: pencere-satırı kayıp bileşeni (plain ≥0 — patoloji nöbeti)
+        ag_c = pencere_satiri[a0:a0 + sub_chunk].to(sm.dtype).to(sm.device)
+        pencere_pay += float((ce_none * w_c * ag_c).sum().item())
+        pencere_payda += float((w_c * ag_c).sum().item())
         if kl_satir_sayisi > 0:
             yerel = satirlar[(satirlar >= a0) & (satirlar < a0 + sub_chunk)] - a0
             if yerel.numel() > 0:
@@ -325,8 +376,9 @@ def mikro_parti_kayip(ogrenci, hoca, x, y, sm, kaynak, beta, tum_satirlar=True,
         toplam_loss += float(loss.item())
         del logits, loss, ce_none
     kl_deger = (kl_toplam_deger / (kl_satir_sayisi * T_poz)) if kl_aktif else None
+    pencere_ce = (pencere_pay / pencere_payda) if abs(pencere_payda) > 1e-8 else None
     return {"loss": toplam_loss, "kl_aktif": kl_aktif, "kl": kl_deger,
-            "kl_satir": kl_satir_sayisi}
+            "kl_satir": kl_satir_sayisi, "pencere_ce": pencere_ce}
 
 
 def paket_guveni_okula(model, tokenizer, vocab, device):
@@ -385,6 +437,10 @@ def parse_args():
     p.add_argument("--kl-tum-satirlar", action=argparse.BooleanOptionalAction, default=None,
                    help="GERİYE UYUM kısayolu: --no-kl-tum-satirlar → --kl-kip pencere; "
                         "--kl-kip ile çelişkide koşum DURUR; hiçbiri yoksa kip tum")
+    p.add_argument("--pencere-kayip", choices=["sm", "plain"], default="sm",
+                   help="pencere satırlarının KAYIP AĞIRLIĞI: sm (v4/v4b: T-0209 ±1 formu "
+                        "BİREBİR) | plain (v4c: geçerli hedefler üzerinde standart ortalama "
+                        "CE — negatif İMKÂNSIZ; SFT satırları sm formunda KALIR; mimari aynen)")
     p.add_argument("--peak-lr", type=float, default=5e-5)
     p.add_argument("--min-lr", type=float, default=1e-5)
     p.add_argument("--warmup", type=int, default=200)
@@ -517,13 +573,14 @@ def main():
     adim_sureleri, history = [], []
     kl_aktif_mikro, kl_toplam_mikro, kl_degerleri = 0, 0, []
     kl_satir_toplami, satir_toplami = 0, 0  # v4b KL-deseni: satır-bazlı ateşlenme kanıtı
+    pencere_ce_degerleri = []  # v4c: pencere-satırı kayıp bileşeni (plain ≥0 patoloji tanığı)
     adim_kl_degerleri = []
+    adim_pencere_ce = []
     val_nobeti = [{"adim": 0, **init_nobet, "aciklama": "başlangıç (init)"}]
     mps_tez_gb, mps_surucu_gb = 0.0, 0.0
     step_t0 = None
     erken_durus = None
     kesildi = False
-    k1_siniri = math.ceil(K1_IZLEME_ORANI * toplam_adim)
     # nöbet düzeni planın ETKİN sonuna bakar (pilot kesmesi = son; final nöbet zaten
     # döngü sonrası atılır → aynı noktada çifte kayıt OLMAZ)
     etkin_son = min(toplam_adim, args.max_opt_steps) if pilot else toplam_adim
@@ -541,9 +598,13 @@ def main():
             satir_toplami += int(kaynak.numel())
             x = x.to(device); y = y.to(device); sm = sm.to(device)
             sonuc = mikro_parti_kayip(model, hoca, x, y, sm, kaynak, args.kl_beta,
-                                      kip=kl_kip, accum=args.accum)
+                                      kip=kl_kip, pencere_kayip=args.pencere_kayip,
+                                      accum=args.accum)
             kl_satir_toplami += int(sonuc["kl_satir"])
             running += sonuc["loss"]; accum_sayac += 1
+            if sonuc["pencere_ce"] is not None:
+                pencere_ce_degerleri.append(sonuc["pencere_ce"])
+                adim_pencere_ce.append(sonuc["pencere_ce"])
             if sonuc["kl_aktif"]:
                 kl_aktif_mikro += 1
                 adim_kl_degerleri.append(sonuc["kl"])
@@ -565,7 +626,11 @@ def main():
                 step_t0 = None
                 opt_step += 1; accum_sayac = 0
                 step_loss = running / args.accum; running = 0.0
+                step_pencere_ce = ((sum(adim_pencere_ce) / len(adim_pencere_ce))
+                                   if adim_pencere_ce else None)
+                adim_pencere_ce = []
                 history.append({"adim": opt_step, "loss": step_loss, "lr": lr, "epok": epok + 1,
+                               "pencere_ce": step_pencere_ce,
                                "kl_aktif": len(adim_kl_degerleri),
                                "kl_ort": (sum(adim_kl_degerleri) / len(adim_kl_degerleri))
                                          if adim_kl_degerleri else None})
@@ -573,7 +638,9 @@ def main():
                 if opt_step % 10 == 0 or opt_step in (1, toplam_adim):
                     son = adim_sureleri[-10:]
                     ort = sum(son) / len(son)
-                    print(f"Adım {opt_step}/{toplam_adim} | Loss {step_loss:.4f} | LR {lr:.2e} | "
+                    pencere_str = f"{step_pencere_ce:.4f}" if step_pencere_ce is not None else "yok"
+                    print(f"Adım {opt_step}/{toplam_adim} | Loss {step_loss:.4f} | "
+                          f"pencere-kayıp {pencere_str} | LR {lr:.2e} | "
                           f"adım-süresi ort {ort:.2f}s (son {len(son)}) | "
                           f"MPS {torch.mps.current_allocated_memory() / 2**30:.2f}GB tepe {mps_tez_gb:.2f} | "
                           f"KL-aktif {kl_aktif_mikro}/{kl_toplam_mikro} mikro-parti", flush=True)
@@ -589,11 +656,11 @@ def main():
                           f"pencere-CE {nobet['pencere_ce_train']:.4f} | "
                           f"okula {nobet['okula_top1']} @ {nobet['okula_guven']:.4f} | "
                           f"ckpt '{args.save_path}' (ara, atomik)", flush=True)
-                    if opt_step <= k1_siniri and nobet["sft_val_ce"] > K1_ESIK:
+                    if k1_erken_durus_karar(nobet):
                         erken_durus = {"adim": opt_step, "sft_val_ce": nobet["sft_val_ce"],
-                                       "esik": K1_ESIK, "sinir_adim": k1_siniri}
+                                       "esik": K1_ESIK, "kapsam": "tum_kosum"}
                         print(f"[K1-ERKEN-DURUŞ] adım {opt_step}: SFT val CE {nobet['sft_val_ce']:.6f} > "
-                              f"{K1_ESIK} (ilk %{int(K1_IZLEME_ORANI * 100)} penceresi) → koşum DURUR; "
+                              f"{K1_ESIK} (v4c: HER nöbet noktası — tüm koşum) → koşum DURUR; "
                               f"ara checkpoint nöbette kaydedildi", flush=True)
                         kesildi = True
                 if erken_durus:
@@ -623,6 +690,17 @@ def main():
           f"{final_nobet['okula_top1']}@{final_nobet['okula_guven']:.4f} | "
           f"Süre: {toplam_sure:.1f} sn", flush=True)
     kl_ort = (sum(kl_degerleri) / len(kl_degerleri)) if kl_degerleri else None
+    # v4c patoloji tanığı: pencere-satırı kayıp bileşeni (plain dal ≥0 — negatif İMKÂNSIZ)
+    penc_min = min(pencere_ce_degerleri) if pencere_ce_degerleri else None
+    penc_ort = (sum(pencere_ce_degerleri) / len(pencere_ce_degerleri)) if pencere_ce_degerleri else None
+    penc_max = max(pencere_ce_degerleri) if pencere_ce_degerleri else None
+    if penc_min is not None:
+        print(f"[PENCERE-KAYIP] kip={args.pencere_kayip} | pencere-satırı bileşeni "
+              f"min {penc_min:.4f} / ort {penc_ort:.4f} / max {penc_max:.4f} "
+              f"({len(pencere_ce_degerleri)} mikro-parti)", flush=True)
+        if args.pencere_kayip == "plain" and penc_min < 0.0:
+            raise RuntimeError("V4_DUR: plain pencere dalı NEGATİF ölçüldü — matematikçe "
+                               "imkânsız, kayıp formu bozuldu (patoloji nöbeti)")
     if args.kl_beta > 0.0:
         kanit = (f"[KL-KANIT] KL dalı {kl_aktif_mikro}/{kl_toplam_mikro} mikro-partide ateşlendi"
                  + (f" | tüm-koşum KL ort {kl_ort:.6f}" if kl_ort is not None
@@ -655,7 +733,8 @@ def main():
     with open(args.history_path, "w", encoding="utf-8") as f:
         json.dump(history, f, indent=2)
     hukum = {
-        "gorev": f"V4 öğrenci (külliyat %80 + SFT çapası %20, KL kipi={kl_kip} pure'a)",
+        "gorev": f"V4 öğrenci (külliyat %80 + SFT çapası %20, KL kipi={kl_kip} pure'a, "
+                 f"pencere-kayıp={args.pencere_kayip})",
         "pilot": pilot, "durum": ("ERKEN_DURUS_K1" if erken_durus else "BASARILI"),
         "init_model": args.init_model, "teacher_model": args.teacher_model,
         "init_sha256": compute_sha256(args.init_model),
@@ -667,8 +746,11 @@ def main():
         "karisim": karisim, "pencere_satir": args.pencere_satir, "sft_satir": sft_satir,
         "sft_train_n": len(sft_dataset), "val_n": len(val_dataset),
         "sft_tur_adim": sft_tur_adim,
-        "kl_beta": args.kl_beta, "kl_kip": kl_kip,
+        "kl_beta": args.kl_beta, "kl_kip": kl_kip, "pencere_kayip": args.pencere_kayip,
         "kl_tum_satirlar_bayrak": args.kl_tum_satirlar,
+        "pencere_ce_min": round(penc_min, 6) if penc_min is not None else None,
+        "pencere_ce_ort": round(penc_ort, 6) if penc_ort is not None else None,
+        "pencere_ce_max": round(penc_max, 6) if penc_max is not None else None,
         "kl_aktif_orani": round(kl_aktif_mikro / kl_toplam_mikro, 4) if kl_toplam_mikro else None,
         "kl_satir_orani": round(kl_satir_toplami / satir_toplami, 4) if satir_toplami else None,
         "peak_lr": args.peak_lr, "min_lr": args.min_lr, "warmup": args.warmup,
@@ -684,7 +766,7 @@ def main():
         "kl_ort": kl_ort,
         "mps_tez_gb": round(mps_tez_gb, 3), "mps_surucu_gb": round(mps_surucu_gb, 3),
         "val_nobeti": val_nobeti,
-        "k1_esik": K1_ESIK, "k1_siniri": k1_siniri, "erken_durus": erken_durus,
+        "k1_esik": K1_ESIK, "k1_kapsam": "tum_kosum (her save-every nöbeti)", "erken_durus": erken_durus,
         "cikti": args.save_path, "cikti_sha256": compute_sha256(args.save_path),
     }
     with open(args.hukum_path, "w", encoding="utf-8") as f:

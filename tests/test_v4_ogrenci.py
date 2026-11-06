@@ -15,6 +15,7 @@ import sys
 import numpy as np
 import pytest
 import torch
+import torch.nn.functional as F
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -459,3 +460,225 @@ def test_paket_guveni_okula_probe(gercek_tokenizer):
     mini.eval()
     paket_guveni_okula(mini, tokenizer, vocab, torch.device("cpu"))
     assert mini.training is False  # eval'deydi → eval kalır (kip korumalı)
+
+
+# --------------------------------------------------------------------------
+# 3c) v4c PENCERE-KAYIP KİPİ — --pencere-kayip {sm,plain} (tek değişken:
+#     yalnız pencere satırlarının KAYIP AĞIRLIĞI; mimari ve SFT formu aynen)
+# --------------------------------------------------------------------------
+
+def test_pencere_kayip_cli_varsayilan_sm_ve_gecersiz_hata(monkeypatch):
+    """--pencere-kayip: varsayılan sm (v4b geriye uyum — eski komut birebir koşar),
+    plain kabul; bilinmeyen değer argparse'dan açık SystemExit."""
+    from scripts.train_v4_ogrenci import parse_args
+    monkeypatch.setattr(sys, "argv", ["train_v4_ogrenci.py", "--save-path", "scratch/x.pt"])
+    assert parse_args().pencere_kayip == "sm"
+    monkeypatch.setattr(sys, "argv", ["train_v4_ogrenci.py", "--save-path", "scratch/x.pt",
+                                      "--pencere-kayip", "plain"])
+    assert parse_args().pencere_kayip == "plain"
+    monkeypatch.setattr(sys, "argv", ["train_v4_ogrenci.py", "--save-path", "scratch/x.pt",
+                                      "--pencere-kayip", "yok"])
+    with pytest.raises(SystemExit):
+        parse_args()
+
+
+def test_pencere_kayip_plain_pencere_satiri_standart_ortalama():
+    """v4c ÖZÜ: plain kipte pencere satırı kaybı = STANDART ORTALAMA CE (geçerli
+    hedefler üzerinde); sm kipi aynı girdiyle FARKLI değer verir (dal değişti)."""
+    V, B, T = 40, 8, 32
+    g = torch.Generator().manual_seed(3)
+    x = torch.randint(0, V, (B, T), generator=g)
+    y = torch.randint(0, V, (B, T), generator=g)  # pencere: TÜM konumlar geçerli
+    sm = torch.ones(B, T)
+    sm[:, ::3] = -1.0  # ±1 işaret maskesi (pencerelerde negasyon bölgeleri)
+    kaynak = torch.ones(B)  # TAMAMI pencere satırı
+    ogrenci, hoca = _mini_cift(V)
+    r = mikro_parti_kayip(ogrenci, hoca, x, y, sm, kaynak, 0.0, kip="sft",
+                          pencere_kayip="plain", accum=1, sub_chunk=9999)
+    with torch.no_grad():
+        logits, _ = ogrenci(x)
+        beklenen = F.cross_entropy(logits.reshape(-1, V), y.reshape(-1))
+    assert r["loss"] == pytest.approx(float(beklenen), rel=1e-6)
+    assert r["pencere_ce"] == pytest.approx(float(beklenen), rel=1e-6)
+    r_sm = mikro_parti_kayip(ogrenci, hoca, x, y, sm, kaynak, 0.0, kip="sft",
+                             pencere_kayip="sm", accum=1, sub_chunk=9999)
+    assert r_sm["loss"] != pytest.approx(float(beklenen), rel=1e-6)  # ±1 ağırlık farkı
+
+
+def test_pencere_kayip_sft_satiri_formu_degismez():
+    """TAMAMI SFT satırı: plain kipi sm kipine değer VE gradyan bakımından BİREBİR
+    (iki değişken birden değişmez — SFT dalı dokunulmaz)."""
+    V = 40
+    x, y, sm, kaynak = _rastgele_parti(V)
+    kaynak = torch.zeros_like(kaynak)  # TAMAMI SFT satırı
+    sonuclar, gradlar = [], []
+    for kip_k in ("sm", "plain"):
+        ogrenci, hoca = _mini_cift(V)
+        ogrenci.zero_grad()
+        r = mikro_parti_kayip(ogrenci, hoca, x, y, sm, kaynak, 0.0, kip="sft",
+                              pencere_kayip=kip_k, accum=1, sub_chunk=9999)
+        sonuclar.append(r)
+        gradlar.append([p.grad.clone() for p in ogrenci.parameters()])
+    assert sonuclar[0]["loss"] == pytest.approx(sonuclar[1]["loss"], rel=1e-9, abs=0.0)
+    assert sonuclar[1]["pencere_ce"] is None  # pencere satırı yok → bileşen yok
+    for g1, g2 in zip(gradlar[0], gradlar[1]):
+        assert torch.equal(g1, g2)
+
+
+def test_pencere_kayip_karisik_parti_el_formulu():
+    """Karışık parti (8 SFT + 8 pencere): plain = [Σ_p CE×geçerli + Σ_s CE×sm] /
+    [Σ_p geçerli + Σ_s sm] — pencere dalı geçerli-gösterge, SFT dalı sm AYNEN;
+    sm kipi formülü de elle doğrulanır (v4b BİREBİR korunur)."""
+    V = 40
+    x, y, sm, kaynak = _rastgele_parti(V)  # 8 SFT + 8 pencere; y'nin ilk yarısı -100
+    ogrenci, hoca = _mini_cift(V)
+    with torch.no_grad():
+        logits, _ = ogrenci(x)
+        ce = F.cross_entropy(logits.reshape(-1, V), y.reshape(-1), reduction="none").view_as(sm)
+        gecerli = (y != -100).to(sm.dtype).reshape(sm.shape)
+        kose = (kaynak == 1.0).view(-1, 1)  # sm (B,T) → satır maskesi (B,1) broadcast
+        w_plain = torch.where(kose, gecerli, sm)
+        beklenen_plain = float((ce * w_plain).sum() / (w_plain.sum() + 1e-8))
+        ag = kose.to(sm.dtype)
+        beklenen_penc = float((ce * w_plain * ag).sum() / (w_plain * ag).sum())
+        beklenen_sm = float((ce * sm).sum() / (sm.sum() + 1e-8))
+    r = mikro_parti_kayip(ogrenci, hoca, x, y, sm, kaynak, 0.0, kip="sft",
+                          pencere_kayip="plain", accum=1, sub_chunk=9999)
+    assert r["loss"] == pytest.approx(beklenen_plain, rel=1e-6)
+    assert r["pencere_ce"] == pytest.approx(beklenen_penc, rel=1e-6)
+    assert r["pencere_ce"] >= 0.0  # pencere dalı: geçerli hedeflerde standart ortalama
+    r_sm = mikro_parti_kayip(ogrenci, hoca, x, y, sm, kaynak, 0.0, kip="sft",
+                             pencere_kayip="sm", accum=1, sub_chunk=9999)
+    assert r_sm["loss"] == pytest.approx(beklenen_sm, rel=1e-6)
+
+
+def test_pencere_kayip_plain_dal_negatif_imkansiz():
+    """ÖLÇEK: plain dalın pencere bileşeni ≥0 HER ZAMAN — adversarial −1-yoğun
+    işaret maskesinde bile (negatif İMKÂNSIZ; patoloji testi)."""
+    V = 40
+    for tohum in range(6):
+        x, y, sm, kaynak = _rastgele_parti(V, tohum=tohum)
+        sm = sm.clone()
+        sm[kaynak == 1.0] = -1.0       # pencere satırları: ağır −1 işaret maskesi
+        sm[kaynak == 1.0, ::2] = 1.0
+        ogrenci, hoca = _mini_cift(V, tohum=10 + tohum)
+        r = mikro_parti_kayip(ogrenci, hoca, x, y, sm, kaynak, 0.0, kip="sft",
+                              pencere_kayip="plain", accum=1, sub_chunk=8)
+        assert r["pencere_ce"] is not None
+        assert r["pencere_ce"] >= 0.0
+
+
+class _SabitLogitLM(torch.nn.Module):
+    """Pencere-patolojisi testi için sabit-logit model: konum t'de hedef (t%V) ~0 nat,
+    başka hedef ~10 nat — CE'nin konumlar arası yayılımını DETERMİNİSTİK kurar
+    (parametreleri 0.0×katkıyla grafte tutar: backward geçerli)."""
+
+    def __init__(self, V, d=8):
+        super().__init__()
+        self.emb = torch.nn.Embedding(V, d)
+        self.head = torch.nn.Linear(d, V)
+        self.V = V
+
+    def forward(self, x, targets=None, sign_mask=None):
+        B, T = x.shape
+        sabit = torch.zeros(T, self.V, device=x.device)
+        sabit[torch.arange(T), torch.arange(T) % self.V] = 10.0
+        logits = sabit.unsqueeze(0) + 0.0 * self.head(self.emb(x))
+        return logits, None
+
+
+def test_pencere_kayip_sm_dali_patoloji_negatif_mumkun():
+    """PATOLOJİ KANITI (v4b formu): sm dalında pencere bileşeni NEGATİF olabilir —
+    −1 işaretli yüksek-CE konumlar kayıp payından ÇIKARIR. Aynı girdide plain dal
+    muaftır (≥0). v4c'nin var olma sebebi budur."""
+    V, B, T = 40, 8, 32
+    x = torch.zeros(B, T, dtype=torch.long)
+    y = (torch.arange(T) % V).unsqueeze(0).expand(B, T).clone()  # ~0 nat her konumda
+    y[:, 3] = (3 + 1) % V   # 2B konum ~10 nat (imkânsız hedef)
+    y[:, 17] = (17 + 1) % V
+    kaynak = torch.ones(B)   # TAMAMI pencere satırı
+    sm = torch.ones(B, T)
+    sm[:, 3] = -1.0; sm[:, 17] = -1.0  # yüksek-CE konumlar −1 işaretli
+    ogrenci, hoca = _SabitLogitLM(V), _SabitLogitLM(V)
+    r_sm = mikro_parti_kayip(ogrenci, hoca, x, y, sm, kaynak, 0.0, kip="sft",
+                             pencere_kayip="sm", accum=1, sub_chunk=9999)
+    assert r_sm["pencere_ce"] < 0.0  # Σ(ce×sm) < 0 iken Σsm > 0 → negatif (form mümkünü)
+    r_plain = mikro_parti_kayip(ogrenci, hoca, x, y, sm, kaynak, 0.0, kip="sft",
+                                pencere_kayip="plain", accum=1, sub_chunk=9999)
+    assert r_plain["pencere_ce"] > 0.0  # aynı girdide standart ortalama — patolojiden muaf
+
+
+class _GommeIsaretKayitLM(torch.nn.Module):
+    """KristalLM gömme davranışının kayıtlı taklidi: sign_mask verilmediyse iç hesap
+    (KristalEmbedding.forward fallback BİREBİR) — ±1 işaret her forward'da uygulanır."""
+
+    def __init__(self, V, d=24):
+        super().__init__()
+        self.emb = torch.nn.Embedding(V, d)
+        self.head = torch.nn.Linear(d, V)
+        self.isaret_kaydi = []
+
+    def compute_sign_mask(self, x):
+        return torch.where(x % 2 == 0, 1.0, -1.0).unsqueeze(-1)
+
+    def forward(self, x, targets=None, sign_mask=None):
+        if sign_mask is None:
+            sign_mask = self.compute_sign_mask(x)  # KristalEmbedding fallback yolu
+            kaynak = "ic-hesap"
+        else:
+            kaynak = "verildi"
+        self.isaret_kaydi.append(kaynak)
+        return self.head(self.emb(x) * sign_mask), None
+
+
+def test_pencere_kayip_sm_gomme_girdisi_korunur():
+    """v4c plain kipi MİMARİYİ DEĞİŞTİRMEZ: sm gömme girdisi olarak yaşamaya devam
+    eder — model her forward'da ±1 işaretini UYGULAR (yalnız KAYIP AĞIRLIĞI değişti)."""
+    V = 40
+    x, y, sm, kaynak = _rastgele_parti(V)  # 16 satır, sub_chunk=8 → 2 ileri
+    ogrenci = _GommeIsaretKayitLM(V)
+    hoca = _GommeIsaretKayitLM(V)
+    r = mikro_parti_kayip(ogrenci, hoca, x, y, sm, kaynak, 0.0, kip="sft",
+                          pencere_kayip="plain", accum=1, sub_chunk=8)
+    assert len(ogrenci.isaret_kaydi) == 2  # alt-yığın disiplini: 16 satır / SUB_CHUNK 8
+    assert all(k == "ic-hesap" for k in ogrenci.isaret_kaydi)  # işaret UYGULANDI her ileride
+    assert r["loss"] > 0.0  # kayıp hesaplandı (dal live)
+
+
+def test_pencere_kayip_plain_denklik_deger_ve_gradyan():
+    """v4c konfigürasyonu (kip=sft, β=0,2, plain): alt-yığınlar TAM partiye değer VE
+    gradyan bakımından eşit; pencere bileşeni de birebir (payda TAM partiden)."""
+    V, beta = 40, 0.2
+    x, y, sm, kaynak = _rastgele_parti(V)
+    sonuclar, gradlar, penc_degerler = [], [], []
+    for sub, kl in ((SUB_CHUNK, KL_CHUNK), (9999, 9999)):
+        ogrenci, hoca = _mini_cift(V)
+        ogrenci.zero_grad()
+        r = mikro_parti_kayip(ogrenci, hoca, x, y, sm, kaynak, beta, kip="sft",
+                              pencere_kayip="plain", accum=1, sub_chunk=sub, kl_chunk=kl)
+        sonuclar.append(r)
+        gradlar.append([p.grad.clone() for p in ogrenci.parameters()])
+        penc_degerler.append(r["pencere_ce"])
+    assert sonuclar[0]["loss"] == pytest.approx(sonuclar[1]["loss"], rel=1e-5, abs=1e-6)
+    assert sonuclar[0]["kl"] == pytest.approx(sonuclar[1]["kl"], rel=1e-4, abs=1e-7)
+    assert penc_degerler[0] == pytest.approx(penc_degerler[1], rel=1e-5, abs=1e-6)
+    for g1, g2 in zip(gradlar[0], gradlar[1]):
+        assert torch.allclose(g1, g2, rtol=1e-4, atol=1e-6)
+
+
+# --------------------------------------------------------------------------
+# 6b) v4c K1 NÖBET KURALI — HER nöbet noktası (ilk %20 penceresi YOK; v4b dersi)
+# --------------------------------------------------------------------------
+
+def test_k1_nobet_kurali_tum_kosum():
+    """ERKEN_DURUS_K1 her nöbet noktasında geçerli: adım 6000 (eski %20 sınırının
+    çok ötesi) ve 11300'te bile SFT CE 2,45 üstü → DURUR; eşik kendisi geçer;
+    eksik ölçüm kararsız bırakır."""
+    from scripts.train_v4_ogrenci import k1_erken_durus_karar, K1_ESIK
+    assert K1_ESIK == 2.45  # İLAN donmuş kapısı donuk
+    assert k1_erken_durus_karar({"adim": 500, "sft_val_ce": 2.501}) is True
+    assert k1_erken_durus_karar({"adim": 6000, "sft_val_ce": 2.501}) is True   # v4b'de DURMAZDI
+    assert k1_erken_durus_karar({"adim": 11300, "sft_val_ce": 2.501}) is True  # koşum sonu yakınında bile
+    assert k1_erken_durus_karar({"adim": 6000, "sft_val_ce": 2.45}) is False  # eşik aşımı SERT (>)
+    assert k1_erken_durus_karar({"adim": 6000, "sft_val_ce": 2.30}) is False
+    assert k1_erken_durus_karar({"adim": 6000, "sft_val_ce": None}) is False   # ölçüm yok → karar yok
