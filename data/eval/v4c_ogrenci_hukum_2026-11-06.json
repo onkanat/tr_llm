@@ -1,0 +1,295 @@
+{
+  "gorev": "V4 öğrenci (külliyat %80 + SFT çapası %20, KL kipi=sft pure'a, pencere-kayıp=plain)",
+  "pilot": false,
+  "durum": "BASARILI",
+  "init_model": "data/anka_taban_pure.pt",
+  "teacher_model": "data/anka_taban_pure.pt",
+  "init_sha256": "5479a2f35a88975cae3cd8e66e4aef0bb7b09bea5274828709fe2c0e1d263360",
+  "sft_path": "data/pedagogy/pure_base_sft_v4.jsonl",
+  "sft_sha256": "f90cf88b9f79037571c055dadc4f6322ee5bd2ead6a64796b32b4e3172368369",
+  "pencere_bin": "data/kulliyat_v2/kulliyat_v2.bin",
+  "pencere_bin_sha256": "7f91317aa58b17e777304b70619dc48b912c47ad563a478f5ca89cd95b57745c",
+  "vocab_sha256": "f9940a8d8e1f7cd9428d389f12ff4c5ee448e5a7bfcdcc8ecc9c616fce950984",
+  "kulliyat_token": 29135254,
+  "pencere_n": 227600,
+  "kulliyat_epok_kapsama": 0.999921,
+  "karisim": {
+    "pencere_satir": 10,
+    "sft_satir": 6,
+    "ort_sft_hedef": 52.85998209489705,
+    "hedef_bazli": {
+      "kulliyat": 0.8014225788883536,
+      "sft": 0.1985774211116465
+    },
+    "baglam_bazli": {
+      "kulliyat": 0.625,
+      "sft": 0.375
+    }
+  },
+  "pencere_satir": 10,
+  "sft_satir": 6,
+  "sft_train_n": 5585,
+  "val_n": 150,
+  "sft_tur_adim": 466,
+  "kl_beta": 0.2,
+  "kl_kip": "sft",
+  "pencere_kayip": "plain",
+  "kl_tum_satirlar_bayrak": null,
+  "pencere_ce_min": 2.268678,
+  "pencere_ce_ort": 3.446656,
+  "pencere_ce_max": 4.416282,
+  "kl_aktif_orani": 1.0,
+  "kl_satir_orani": 0.375,
+  "peak_lr": 0.0001,
+  "min_lr": 1e-05,
+  "warmup": 200,
+  "batch": 16,
+  "accum": 2,
+  "epochs": 1,
+  "steps_per_epoch": 11380,
+  "toplam_adim": 11380,
+  "opt_adim": 11380,
+  "sure_sn": 30493.5,
+  "on_hesap_sn": 60.9,
+  "s_adim_son20_ort": 2.663,
+  "s_adim_son20_std": 0.277,
+  "eta_bant": {
+    "carpan": 3.0,
+    "toplam_adim": 11380,
+    "alt_sa": 22.6,
+    "ust_sa": 27.9,
+    "nokta_sa": 25.3
+  },
+  "kl_aktif_mikro": 22760,
+  "kl_toplam_mikro": 22760,
+  "kl_satir_toplami": 136560,
+  "satir_toplami": 364160,
+  "kl_ort": 0.15557374906080748,
+  "mps_tez_gb": 1.773,
+  "mps_surucu_gb": 3.565,
+  "val_nobeti": [
+    {
+      "adim": 0,
+      "sft_val_ce": 2.304304277896881,
+      "sft_val_ppl": 10.017206635484342,
+      "pencere_ce_train": 3.9633,
+      "okula_top1": "case",
+      "okula_guven": 0.999818742275238,
+      "okula_dogru": true,
+      "aciklama": "başlangıç (init)"
+    },
+    {
+      "sft_val_ce": 2.341946041584015,
+      "sft_val_ppl": 10.40145855080942,
+      "pencere_ce_train": 3.6008,
+      "okula_top1": "case",
+      "okula_guven": 0.9981873631477356,
+      "okula_dogru": true,
+      "adim": 500
+    },
+    {
+      "sft_val_ce": 2.3268291354179382,
+      "sft_val_ppl": 10.245403186867286,
+      "pencere_ce_train": 3.5216,
+      "okula_top1": "case",
+      "okula_guven": 0.998117208480835,
+      "okula_dogru": true,
+      "adim": 1000
+    },
+    {
+      "sft_val_ce": 2.315220320224762,
+      "sft_val_ppl": 10.127153889791456,
+      "pencere_ce_train": 3.4809,
+      "okula_top1": "case",
+      "okula_guven": 0.9986926913261414,
+      "okula_dogru": true,
+      "adim": 1500
+    },
+    {
+      "sft_val_ce": 2.290123665332794,
+      "sft_val_ppl": 9.876158944140236,
+      "pencere_ce_train": 3.4529,
+      "okula_top1": "case",
+      "okula_guven": 0.9988545179367065,
+      "okula_dogru": true,
+      "adim": 2000
+    },
+    {
+      "sft_val_ce": 2.2749304294586183,
+      "sft_val_ppl": 9.727242259508975,
+      "pencere_ce_train": 3.4348,
+      "okula_top1": "case",
+      "okula_guven": 0.9989778995513916,
+      "okula_dogru": true,
+      "adim": 2500
+    },
+    {
+      "sft_val_ce": 2.2660996675491334,
+      "sft_val_ppl": 9.641721461739793,
+      "pencere_ce_train": 3.4206,
+      "okula_top1": "case",
+      "okula_guven": 0.9983044862747192,
+      "okula_dogru": true,
+      "adim": 3000
+    },
+    {
+      "sft_val_ce": 2.2638981223106383,
+      "sft_val_ppl": 9.620518124382034,
+      "pencere_ce_train": 3.4037,
+      "okula_top1": "case",
+      "okula_guven": 0.9992759823799133,
+      "okula_dogru": true,
+      "adim": 3500
+    },
+    {
+      "sft_val_ce": 2.260700523853302,
+      "sft_val_ppl": 9.58980470123543,
+      "pencere_ce_train": 3.3936,
+      "okula_top1": "case",
+      "okula_guven": 0.9989951252937317,
+      "okula_dogru": true,
+      "adim": 4000
+    },
+    {
+      "sft_val_ce": 2.255051517486572,
+      "sft_val_ppl": 9.535784557145623,
+      "pencere_ce_train": 3.3866,
+      "okula_top1": "case",
+      "okula_guven": 0.9995043277740479,
+      "okula_dogru": true,
+      "adim": 4500
+    },
+    {
+      "sft_val_ce": 2.241020715236664,
+      "sft_val_ppl": 9.402924098742371,
+      "pencere_ce_train": 3.3827,
+      "okula_top1": "case",
+      "okula_guven": 0.999453604221344,
+      "okula_dogru": true,
+      "adim": 5000
+    },
+    {
+      "sft_val_ce": 2.22717080116272,
+      "sft_val_ppl": 9.273592093874964,
+      "pencere_ce_train": 3.3759,
+      "okula_top1": "case",
+      "okula_guven": 0.9995142221450806,
+      "okula_dogru": true,
+      "adim": 5500
+    },
+    {
+      "sft_val_ce": 2.22673100233078,
+      "sft_val_ppl": 9.269514475635786,
+      "pencere_ce_train": 3.3688,
+      "okula_top1": "case",
+      "okula_guven": 0.9994255304336548,
+      "okula_dogru": true,
+      "adim": 6000
+    },
+    {
+      "sft_val_ce": 2.2365885853767393,
+      "sft_val_ppl": 9.361341336245571,
+      "pencere_ce_train": 3.3674,
+      "okula_top1": "case",
+      "okula_guven": 0.9992851614952087,
+      "okula_dogru": true,
+      "adim": 6500
+    },
+    {
+      "sft_val_ce": 2.2366658806800843,
+      "sft_val_ppl": 9.36206495192956,
+      "pencere_ce_train": 3.3623,
+      "okula_top1": "case",
+      "okula_guven": 0.9992561936378479,
+      "okula_dogru": true,
+      "adim": 7000
+    },
+    {
+      "sft_val_ce": 2.2365552186965942,
+      "sft_val_ppl": 9.361028984574574,
+      "pencere_ce_train": 3.3589,
+      "okula_top1": "case",
+      "okula_guven": 0.9992577433586121,
+      "okula_dogru": true,
+      "adim": 7500
+    },
+    {
+      "sft_val_ce": 2.233150231838226,
+      "sft_val_ppl": 9.329209007945646,
+      "pencere_ce_train": 3.3561,
+      "okula_top1": "case",
+      "okula_guven": 0.9992011189460754,
+      "okula_dogru": true,
+      "adim": 8000
+    },
+    {
+      "sft_val_ce": 2.2336793422698973,
+      "sft_val_ppl": 9.334146495873984,
+      "pencere_ce_train": 3.3542,
+      "okula_top1": "case",
+      "okula_guven": 0.9992300271987915,
+      "okula_dogru": true,
+      "adim": 8500
+    },
+    {
+      "sft_val_ce": 2.23635493516922,
+      "sft_val_ppl": 9.359154312408933,
+      "pencere_ce_train": 3.3531,
+      "okula_top1": "case",
+      "okula_guven": 0.9993153810501099,
+      "okula_dogru": true,
+      "adim": 9000
+    },
+    {
+      "sft_val_ce": 2.231235122680664,
+      "sft_val_ppl": 9.311359651530106,
+      "pencere_ce_train": 3.3503,
+      "okula_top1": "case",
+      "okula_guven": 0.9993997812271118,
+      "okula_dogru": true,
+      "adim": 9500
+    },
+    {
+      "sft_val_ce": 2.2317116022109986,
+      "sft_val_ppl": 9.315797380963302,
+      "pencere_ce_train": 3.3479,
+      "okula_top1": "case",
+      "okula_guven": 0.9993094205856323,
+      "okula_dogru": true,
+      "adim": 10000
+    },
+    {
+      "sft_val_ce": 2.233083629608154,
+      "sft_val_ppl": 9.32858768251197,
+      "pencere_ce_train": 3.3475,
+      "okula_top1": "case",
+      "okula_guven": 0.9992960691452026,
+      "okula_dogru": true,
+      "adim": 10500
+    },
+    {
+      "sft_val_ce": 2.2337681651115417,
+      "sft_val_ppl": 9.334975618112026,
+      "pencere_ce_train": 3.349,
+      "okula_top1": "case",
+      "okula_guven": 0.9992973804473877,
+      "okula_dogru": true,
+      "adim": 11000
+    },
+    {
+      "sft_val_ce": 2.2344959020614623,
+      "sft_val_ppl": 9.341771497302204,
+      "pencere_ce_train": 3.3495,
+      "okula_top1": "case",
+      "okula_guven": 0.9993016719818115,
+      "okula_dogru": true,
+      "adim": 11380,
+      "aciklama": "final"
+    }
+  ],
+  "k1_esik": 2.45,
+  "k1_kapsam": "tum_kosum (her save-every nöbeti)",
+  "erken_durus": null,
+  "cikti": "data/anka_ogrenci_v4c.pt",
+  "cikti_sha256": "de5ad556a7c0b7e5c2d350392639afc0048b69c5a1c8defdffb2e4b9c8c42b9c"
+}

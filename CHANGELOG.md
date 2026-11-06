@@ -4,6 +4,11 @@ Bu projedeki tüm önemli değişiklikler bu dosyada belgelenmektedir.
 
 Format [Keep a Changelog](https://keepachangelog.com/tr/1.0.0/) standardına dayanır ve bu proje [Semantic Versioning (SemVer)](https://semver.org/spec/v2.0.0.html) ilkelerini benimser.
 
+## [1.26.0] - 2026-11-06
+
+### Eklendi (Added)
+- **v4c öğrenci koşumu (plain-CE pencereler + SFT çapası + SFT-satır KL): HÜKÜM 1/3 — TARİFİN İKİ EKSENDE DE ÇALIŞTIĞI İLK KOŞUM; donmuş barlara küçük mesafelerle KALDI.** 11.380 adım / 8,5 sa. **K1 okuryazarlık GEÇTİ ve İYİLEŞTİ:** SFT val CE 2,3043→**2,2345** (pure'un kendisinden iyi; eşik 2,45 geniş payla). **K2 bilgi KALDI — 0,065 nat farkla:** resmi VAL **3,2951**/PPL 26,98 (pure 3,8205 → **−0,526 nat**, v3'ün 3,1936'sına çok yakın; bar 3,23). **K3 nöbet KALDI (marjinal):** 4/4 top-1 doğru (root 0,9999 / TENSE 0,9997 / case 0,9993 / PLURAL **0,9721**) — PLURAL güveni 0,99 altı (v4: 0,9441 → v4c: 0,9721; bu görev devam-eğitimlerinde sistematik marjinal). Kayıp sağlığı: pencere bileşeni min 2,27/ort 3,45 — patoloji yok; KL ort 0,156 (v4'ün 0,44'ünden çok düşük — format çıpası noktasal çalıştı). **Tasarım uzayı:** T3.4 (bilgi✓/okuryazarlık✗) · v4 (✗/✓) · v4b (✗/✗) · **v4c (bilgi ~✓ −0,526 + okuryazarlık ✓ iyileşerek)**. **Sıradaki aday (v4d):** v4c'den devam +2.500 adım taze kısa cosine (5e-5→1e-5), aynı tarif — K2'nin 0,065'i hedefli. `anka_ogrenci_v4c.pt` = serinin en iyi öğrencisi (sha `de5ad556…`). Hüküm kayıtları: `data/eval/v4c_ogrenci_{history,hukum}_*`.
+
 ## [1.25.0] - 2026-11-06
 
 ### Eklendi (Added)
