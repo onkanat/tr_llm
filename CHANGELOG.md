@@ -4,6 +4,19 @@ Bu projedeki tüm önemli değişiklikler bu dosyada belgelenmektedir.
 
 Format [Keep a Changelog](https://keepachangelog.com/tr/1.0.0/) standardına dayanır ve bu proje [Semantic Versioning (SemVer)](https://semver.org/spec/v2.0.0.html) ilkelerini benimser.
 
+## [1.28.0] - 2026-11-07
+
+### Eklendi (Added)
+- **CANLI YIĞIN TERFİSİ — TABAN `anka_taban_pure.pt` → `anka_ogrenci_v5.pt` (kullanıcı talimatı "B": "istisna dokümanlarda belirtilsin").** `scripts/baslat_canli_gateway.py`: `DEFAULT_BASE_PATH`/`BEKLENEN_BASE_SHA` sabitleri, `--model` varsayılanı bu sabite bağlandı, **taban sha256 çıpası fail-closed** (varsayılan tabanda eşleşmezse `RuntimeError`; açık `--model` ile geri dönüş serbest). **AÇIK İSTİSNA (eşikler kaydırılmadı):** üç donmuş kapıdan yalnız K1 geçti — K1 **2,221915 ≤ 2,45 GEÇTİ** (seri rekoru) · K2 **3,2636 > 3,23 KALDI** (0,0336 nat) · K3 **PLURAL 0,9696 < 0,99 KALDI**. Makine-okur istisna: `data/eval/v5_terfi_istisna_2026-11-07.json`; terfi raporu + ölçülen riskler: `data/eval/v5_terfi_2026-11-07.md`. **Ölçüm (8 sabit sorgu, DIRECT, iki taban iki kez = deterministik):** birincil sınıf 7/8 korundu; 1 kayma (pedagoji → gardener) + 3 ikincil kayma — router v3 *pure* temsillerine hizalı, v5'e yeniden hizalanmadı (açık uyarı). Ceketli sorgularda yanıt metni **birebir aynı** (üretim cekette); tabanın ürettiği sınıflarda (grammar_core, pedagoji) içerik değişti ve pedagojide **külliyat üslubu sızması** ölçüldü. Qdrant'a yazım YOK (`retrieval_triggered=false` tümünde; `future_train_vector.jsonl` sha önce/son aynı). TDD: `tests/test_v5_terfi.py` RED 3 failed → **GREEN 6 passed**. Geri dönüş: `--model data/anka_taban_pure.pt` (pure sha `5479a2f3…` değişmedi). USER_GUIDE + .gemini/AGENT.md damgaları güncellendi.
+
+## [1.27.0] - 2026-11-07
+
+### Eklendi (Added)
+- **v5 öğrenci koşumu (pure'dan lr 1,5e-4, çıpa ve karışım v4c ile aynı): HÜKÜM 1/3 — K1 SERİ REKORU, K2 yarıya indi ama 0,0336 nat ile KALDI.** 11.380 adım / 10,1 sa. **K1:** SFT val CE 2,3043→**2,221915** (pure ve v4c'den iyi; eşik 2,45, pay 0,228 kullanılmadı). **K2:** resmi VAL **3,2636**/PPL 26,14 (v4c 3,2951; pure 3,8205 → −0,5569) — bar 3,23, **0,0336 nat KALDI**. **K3:** 4/4 top-1, **PLURAL 0,9696** (v4c 0,9721) → KALDI. **Ölçülen LR yanıtı: +0,5e-4 = −0,0315 nat** (1e-4→3,2951, 1,5e-4→3,2636); çıpalı 2e-4 ekstrapolasyonu **3,2321** = barın 0,0021 üstü → LR ekseni de bar dibinde doyuyor. Kuyruk yakınsamış (son 3.000 adım −0,00146 nat/1000). **Tasarım uzayı:** T3.4 (2e-4 çıpasız: 3,1936/okuryazarlık öldü) · v4 (5e-5 tüm-KL: 3,905) · v4b (sm-kayıp: 6,0382) · v4c (1e-4: 3,2951) · **v5 (1,5e-4: 3,2636)** · v4d sonda (devam ekseni: −0,0015 nat @1.000 adım = TÜKENDİ). `anka_ogrenci_v5.pt` sha `1eded7fa…e3904` — serinin en iyisi. Hüküm: `data/eval/v5_ogrenci_hukum_2026-11-07.md`.
+- **v4d ölçüm sondası (v4c'den sabit 5e-5, 1.000 adım, 48,6 dk): A seçeneği (devam koşumu) ÖLÇÜMLE REDDEDİLDİ.** Pencere-CE 3,3495→3,3480 (**−0,0015 nat**; koşum-öncesi donmuş eşik ≥0,0260) ve SFT CE 2,2345→2,2498. Karar kuralı koşumdan önce dondu (`data/eval/v4d_sonda_ilan_2026-11-07.md`); hüküm `data/eval/v4d_sonda_hukum_2026-11-07.md`. Ders: devam ekseni kapalı — darboğaz adım sayısı değil, çıpa↔külliyat dengesi.
+
+
+
 ## [1.26.0] - 2026-11-06
 
 ### Eklendi (Added)

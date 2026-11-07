@@ -25,6 +25,19 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 import src.gateway.agent_gateway as ag  # noqa: E402
 
 CANLI_HOST = "delinux01.local"
+# V5 ÖĞRENCİ TERFİSİ (2026-11-07, kullanıcı talimatı: "B") — TABAN DEĞİŞTİ:
+# anka_taban_pure.pt → anka_ogrenci_v5.pt (öğrenci serisinin en iyisi).
+# AÇIK İSTİSNA (bu uyarı KAPANMAZ): v5 üç donmuş kapıdan YALNIZ K1'i geçti.
+#   K1 okuryazarlık 2,221915 ≤ 2,45  GEÇTİ (pure 2,304304 — seri rekoru)
+#   K2 bilgi        3,2636  > 3,23  KALDI (0,0336 nat eksik; pure 3,8205 → −0,5569)
+#   K3 nöbet        PLURAL 0,9696 < 0,99 KALDI (4/4 top-1 doğru)
+# Kanıt: data/eval/v5_ogrenci_hukum_2026-11-07.md · makine-okur istisna kaydı
+# data/eval/v5_terfi_istisna_2026-11-07.json · terfi ölçümleri/riskler
+# data/eval/v5_terfi_2026-11-07.md. Eşikler KAYDIRILMADI; istisna AÇIK yazıldı.
+# Geri dönüş: --model data/anka_taban_pure.pt (pure diskte DEĞİŞMEDİ).
+DEFAULT_BASE_PATH = "data/anka_ogrenci_v5.pt"
+# Tabanın sha256 çıpası (terfi hükmüyle birebir; T-0160 fail-closed deseni):
+BEKLENEN_BASE_SHA = "1eded7fa2c4a5337496a890c01b683b74133191433f69b23853a70ee1f7e3904"
 # P25 TERFİ (2026-11-04, kullanıcı talimatı): router v2 → v3 (legal sınıfı
 # 0→60 örnek; hukuk probunda 0/10 → 8/10 legal; diğer 4 sınıf v2-paritesi 1,0;
 # hüküm: data/eval/p25_router_v3_hukum_2026-11-04.json — P25_ROUTER_V3_LEGAL_GECTI).
@@ -86,14 +99,34 @@ def main():
     ayarla.add_argument("--host", type=str, default="0.0.0.0",
                         help="Dinlenecek ağ arayüzü IP adresi (varsayılan: 0.0.0.0)")
     ayarla.add_argument("--port", type=int, default=8080)
-    ayarla.add_argument("--model", type=str, default="data/anka_taban_pure.pt",
-                        help="Yüklenecek saf taban model checkpoint yolu (varsayılan: anka_taban_pure.pt)")
+    ayarla.add_argument("--model", type=str, default=DEFAULT_BASE_PATH,
+                        help="Yüklenecek taban model checkpoint yolu (varsayılan: anka_ogrenci_v5.pt — "
+                             "V5 terfi 2026-11-07, AÇIK İSTİSNA: K2/K3 KALDI; geri dönüş: "
+                             "data/anka_taban_pure.pt)")
     ayarla.add_argument("--router", type=str, default=DEFAULT_ROUTER_PATH,
                         help="Yüklenecek router checkpoint yolu (varsayılan: anka_router_v3.pt — P25 terfi)")
     ayarla.add_argument("--qdrant-url", type=str, default=None,
                         help="Qdrant URL'i (ör. http://192.168.1.9:6333); yoksa QDRANT_URL env, "
                              "o da yoksa eski CanliVectorMemory köprüsü (delinux01.local) geçerli")
     args = ayarla.parse_args()
+
+    # V5 TERFİ çıpası (T-0160 fail-closed deseni): VARSAYILAN taban kullanılıyorsa
+    # dosyanın sha256'sı hüküm çıpasıyla EŞLEŞMEK ZORUNDA — sessiz-yanlış-ağırlıkla
+    # canlıya çıkma engellenir. Açıkça başka bir --model verilirse çıpa uygulanmaz
+    # (geri dönüş ve deney yolları serbest kalır).
+    if args.model == DEFAULT_BASE_PATH:
+        _h = hashlib.sha256()
+        with open(args.model, "rb") as _f:
+            for _parca in iter(lambda: _f.read(1 << 20), b""):
+                _h.update(_parca)
+        taban_sha = _h.hexdigest()
+        print("[CANLI-GW] taban_sha256 =", taban_sha, flush=True)
+        print("[CANLI-GW] beklenen", BEKLENEN_BASE_SHA[:8], "→ EŞLEŞME:", taban_sha == BEKLENEN_BASE_SHA, flush=True)
+        if taban_sha != BEKLENEN_BASE_SHA:
+            raise RuntimeError(
+                "DURDURULDU: taban sha256 çıpası uymadı (%s != %s); sessiz-yanlış-ağırlık "
+                "başlatma engellendi (T-0160 fail-closed)" % (taban_sha, BEKLENEN_BASE_SHA)
+            )
 
     # P2.1: create_default artık QDRANT_URL arg/env'ini çözer — sabit-köprü
     # (CanliVectorMemory) yalnız URL verilmediğinde devrede kalır (geriye-uyum).

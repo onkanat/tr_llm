@@ -1,0 +1,65 @@
+{
+  "kayit_turu": "canli_yigin_terfi_istisnasi",
+  "tarih": "2026-11-07",
+  "model": "data/anka_ogrenci_v5.pt",
+  "model_sha256": "1eded7fa2c4a5337496a890c01b683b74133191433f69b23853a70ee1f7e3904",
+  "istisna_turu": "iki_kapi_istisnasi",
+  "onay": {
+    "kullanici_talimati": true,
+    "talimat_metni": "B fakat dokümanlarda istisna belirtilsin",
+    "tarih": "2026-11-07"
+  },
+  "kapilar": {
+    "K1": {
+      "ad": "okuryazarlık (masked SFT val CE)",
+      "olcum": 2.221915,
+      "esik": 2.45,
+      "hukum": "GECTI",
+      "not": "seri rekoru; pure 2.304304, v4c 2.2345"
+    },
+    "K2": {
+      "ad": "bilgi (resmi VAL pencere-CE, eval_ce_val.py, 500 pencere, tohum 1337)",
+      "olcum": 3.2636,
+      "esik": 3.23,
+      "eksik_nat": 0.0336,
+      "hukum": "KALDI",
+      "not": "pure 3.8205 → −0.5569 nat; bar 0.59 nat ister; v4c 3.2951 idi (0.0651 eksik)"
+    },
+    "K3": {
+      "ad": "nöbet (test_model.py, 4 SFT görevi top-1 VE güven ≥0.99)",
+      "olcum": 0.9696,
+      "esik": 0.99,
+      "eksik": 0.0204,
+      "hukum": "KALDI",
+      "gorevler": {"root": 1.0, "TENSE": 0.9997, "case": 0.9986, "PLURAL": 0.9696},
+      "not": "4/4 top-1 doğru; yalnız PLURAL güveni eşiğin altında (v4c 0.9721)"
+    }
+  },
+  "gerekce": [
+    "Üç kapıdan ikisi kıl payı kaldı: K2 0.0336 nat (barın %98.96'sı), K3 0.0219 güven.",
+    "K2 barı çıpasız T3.4 koşumundan (3.1936, okuryazarlık öldü) türetilmiştir; K1 çapası yürürlükteyken ölçülen LR yanıt eğrisi barın hemen dibinde doyuyor (1e-4→3.2951, 1.5e-4→3.2636, çıpalı 2e-4 ekstrapolasyonu 3.2321).",
+    "Ağırlıklar semantik bilgi taşımaz (Chinchilla %1.5 + kopya devresi yok — P1 ölçümü); bilgi vektör katmanında yaşar. K2 farkı operasyonel olarak RAG katmanıyla kapanır.",
+    "Devam koşumu ekseni ölçümle kapandı (v4d sonda: −0.0015 nat @1000 adım)."
+  ],
+  "olculen_riskler": {
+    "router_kaymasi": {
+      "yontem": "canlı gateway, DIRECT mod, 8 sabit sorgu, aynı router v3 ve uzmanlar",
+      "ozet": "8 sorgunun 7'sinde birincil sınıf KORUNDU; 1 pedagoji sorgusu pedagogy→gardener kaydı (2. sırada legal); ikincil sınıflarda 3 kayma",
+      "kanit": "data/eval/v5_terfi_2026-11-07.md §4 · scratch/v5_terfi_{pure,v5}.json"
+    },
+    "qdranta_yazim": "YOK — tüm probeler DIRECT (retrieval_triggered=false); data/future_train_vector.jsonl sha256 önce/son aynı (e3b0c44…)"
+  },
+  "kanit": {
+    "hukum": "data/eval/v5_ogrenci_hukum_2026-11-07.md",
+    "hukum_json": "data/eval/v5_ogrenci_hukum_2026-11-07.json",
+    "ilan": "data/eval/v5_ogrenci_ilan_2026-11-07.md",
+    "terfi_raporu": "data/eval/v5_terfi_2026-11-07.md",
+    "kosum_logu": "scratch/v5_ogrenci_run.log",
+    "test": "tests/test_v5_terfi.py"
+  },
+  "geri_donus": {
+    "model": "data/anka_taban_pure.pt",
+    "model_sha256": "5479a2f35a88975cae3cd8e66e4aef0bb7b09bea5274828709fe2c0e1d263360",
+    "yol": "scripts/baslat_canli_gateway.py --model data/anka_taban_pure.pt (yığın aynen çalışır; pure diskte DEĞİŞMEDİ)"
+  }
+}

@@ -42,6 +42,10 @@ Eğitim külliyatı **hangi sözlükle** derlendiyse, çıkarım da **o sözlük
 > `size mismatch for embedding.embedding.weight: ... [33114, 768] ... current model is [31357, 768]`.
 > `strict=False` bunu **yutmaz** (o yalnız eksik/fazla *anahtarı* yutar, *şekli* değil).
 
+> [!IMPORTANT]
+> **TABAN TERFİSİ — `anka_taban_pure.pt` → `data/anka_ogrenci_v5.pt` (07.11.2026, kullanıcı talimatı: "B", istisnalı).**
+> Canlı gateway tabanı v5'tir (sha `1eded7fa…`, 93.42M). **AÇIK İSTİSNA — üç donmuş kapıdan yalnız K1 geçildi:** K1 okuryazarlık **2,2219 ≤ 2,45 GEÇTİ** (pure 2,3043 — seri rekoru) · K2 bilgi **3,2636 > 3,23 KALDI** (0,0336 nat eksik; pure 3,8205 → −0,5569) · K3 nöbet 4/4 top-1 ama **PLURAL 0,9696 < 0,99 KALDI**. Eşikler KAYDIRILMADI. Makine-okur istisna: `data/eval/v5_terfi_istisna_2026-11-07.json`; ölçüm + açık riskler (router v3 pure temsillerine hizalı olduğu için 8 sorgunun 1'inde birincil sınıf kayması; pedagoji sınıfında üslup kaybı): `data/eval/v5_terfi_2026-11-07.md`. **Geri dönüş:** `--model data/anka_taban_pure.pt` (pure diskte değişmedi, sha `5479a2f3…`).
+
 > [!NOTE]
 > **Güncel Taban Model, Ceketler ve Gateway Entegrasyonu (damgalı ölçüm: 16 Eki 2026; M5 Sistem Mühürlemesi):**
 > Soyağacındaki güncel saf taban ağırlıkları **`data/anka_taban_pure.pt`** (sha `5479a2f3…`, marangozluk sızıntılarından arındırılmış, 93.42M parametre) dosyasında yer almaktadır. Uzman ceketler olarak **`data/anka_bahcivan.pt`** (sha `2d5e5b21…`, bahçıvanlık dikey) ve **`data/anka_marangoz.pt`** (sha `d1eae594…`, marangozluk dikey) bulunmaktadır. `AgentGateway.create_default(model_path=..., vocab_path=..., router_state_path=..., expert_model_paths=...)` arayüzü, `router_state_path` için 5 sınıflı **`data/anka_router_v2.pt`** (sha `74b9c808…`, state dict sha `a2a95957…`; saf taban temsillerine %100 doğrulukla yeniden hizalanmıştır) dosyasını arar ve dinamik olarak ilgili uzman ceketi devreye sokar. Canlı ortam başlatıcısı `scripts/baslat_canli_gateway.py` saf taban ve iki uzman ceketi ile birlikte port 8080'de canlı hizmet vermektedir. Tüm modeller `data/rebuild/vocab_anka_r1_33114.json` sözlüğü ile `strict=True` olarak yüklenir.
@@ -479,16 +483,19 @@ Küçük modeli çoklu branşta (1931 Türk Tarihi, Edebiyat & Şiir, Lise Fen/S
 
 ### 🚪 2. HTTP REST Gateway Sunucusu ve Canlı MoE Dağıtımı
 
-Ağ geçidini saf taban model (`anka_taban_pure.pt`), 5-sınıflı yönlendirici (`anka_router_v2.pt`) ve iki dikey uzman ceketi (`anka_marangoz.pt`, `anka_bahcivan.pt`) ile canlı ortamda çalıştırmanın en doğrudan ve doğrulanmış yolu:
+Ağ geçidini canlı taban **`anka_ogrenci_v5.pt`** (07.11.2026 terfisi, istisnalı — bkz. yukarıdaki kutu), 5-sınıflı yönlendirici (`anka_router_v3.pt`) ve üç dikey uzman ceketi (`anka_marangoz.pt`, `anka_bahcivan.pt`, `anka_legal_replay.pt`) ile canlı ortamda çalıştırmanın en doğrudan ve doğrulanmış yolu:
 ```bash
-# Canlı MoE Gateway sunucusunu başlatma (varsayılan port 8080):
-./venv/bin/python scripts/baslat_canli_gateway.py --port 8080 --model data/anka_taban_pure.pt --router data/anka_router_v2.pt
+# Canlı MoE Gateway sunucusunu başlatma (varsayılan port 8080; --model verilmezse v5 tabanı):
+./venv/bin/python scripts/baslat_canli_gateway.py --port 8080 --router data/anka_router_v3.pt
+# Geri dönüş (eski taban):
+./venv/bin/python scripts/baslat_canli_gateway.py --port 8080 --model data/anka_taban_pure.pt
 ```
 
-Bu başlatıcı, canlı Qdrant vektörel bellek (`delinux01.local:6333`) köprüsünü kurar, router ağırlıklarının `BEKLENEN_ROUTER_SD_SHA` (`a2a95957...`) çıpasıyla birebir eşleştiğini doğrular ve gelen sorguları otomatik olarak ilgili uzmana yönlendirir:
+Bu başlatıcı, canlı Qdrant vektörel bellek (`delinux01.local:6333`) köprüsünü kurar, **taban sha256'sını `BEKLENEN_BASE_SHA` (`1eded7fa...`)** ve router ağırlıklarını `BEKLENEN_ROUTER_SD_SHA` (`4016b210...`) çıpalarıyla birebir doğrular (eşleşmezse fail-closed) ve gelen sorguları otomatik olarak ilgili uzmana yönlendirir:
 - **Ahşap ve Marangozluk Sorguları:** `anka_marangoz.pt` ceketine yönlendirilir (`active_expert="carpenter"`).
 - **Bitki, Tarım ve Bahçıvanlık:** `anka_bahcivan.pt` ceketine yönlendirilir (`active_expert="gardener"`).
-- **Pedagoji, Dilbilgisi ve Genel Türkçe:** Saf taban modele yönlendirilir (`anka_taban_pure.pt`).
+- **Hukuk:** `anka_legal_replay.pt` ceketine yönlendirilir (`active_expert="legal"`; ceket P2.5 kapılarını geçmedi — uyarı açık).
+- **Pedagoji, Dilbilgisi ve Genel Türkçe:** canlı tabana yönlendirilir (`anka_ogrenci_v5.pt`; bu sınıfta v5'in üslup kaybı ölçüldü — `data/eval/v5_terfi_2026-11-07.md` §5).
 
 Alternatif olarak, arena betiği üzerinden de ağ geçidi ayağa kaldırılabilir:
 ```bash
