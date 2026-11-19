@@ -1,0 +1,29 @@
+{
+  "ngram_overlap": {
+    "val_out_4gram_overlap": 98.11735001838822,
+    "test_out_4gram_overlap": 97.19331054371195,
+    "val_full_4gram_overlap": 97.44843102605401,
+    "test_full_4gram_overlap": 96.69974359429236
+  },
+  "tfidf_sentence_selector": {
+    "mean_rouge_l": 0.4194277915153468,
+    "bootstrap_ci": [
+      0.41010536806714276,
+      0.42908778847769274
+    ],
+    "wood_rouge": 0.3406102870323342,
+    "hist_rouge": 0.49794321279880305
+  },
+  "entity_fidelity": {
+    "ref_proper_count": 136,
+    "pred_proper_count": 129,
+    "standard_rouge": 0.866192166045321,
+    "stripped_rouge": 0.8415439080239644,
+    "inflation_diff": 0.024648258021356617
+  },
+  "doc_swap": {
+    "doc_follow_rate": 43.0,
+    "orig_hallucination_rate": 54.0,
+    "neutral_rate": 3.0
+  }
+}

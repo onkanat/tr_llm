@@ -1,0 +1,79 @@
+{
+  "timestamp": "2026-09-14",
+  "cardinality": {
+    "train_unique_entities": 40,
+    "test_unique_entities": 18,
+    "val_unique_entities": 10,
+    "total_records": 3000,
+    "natural_records": 2100,
+    "cf_records": 900
+  },
+  "all_features_neutral": true,
+  "feature_aucs": {
+    "input_char_len": {
+      "raw_auc": 0.505,
+      "effective_auc": 0.505,
+      "is_neutral": true
+    },
+    "input_word_count": {
+      "raw_auc": 0.5328,
+      "effective_auc": 0.5328,
+      "is_neutral": true
+    },
+    "output_char_len": {
+      "raw_auc": 0.5063,
+      "effective_auc": 0.5063,
+      "is_neutral": true
+    },
+    "output_word_count": {
+      "raw_auc": 0.5365,
+      "effective_auc": 0.5365,
+      "is_neutral": true
+    },
+    "comma_count": {
+      "raw_auc": 0.4907,
+      "effective_auc": 0.5093,
+      "is_neutral": true
+    },
+    "semicolon_count": {
+      "raw_auc": 0.5,
+      "effective_auc": 0.5,
+      "is_neutral": true
+    },
+    "q_char_len": {
+      "raw_auc": 0.5002,
+      "effective_auc": 0.5002,
+      "is_neutral": true
+    },
+    "marker_beklenenin": {
+      "raw_auc": 0.5,
+      "effective_auc": 0.5,
+      "is_neutral": true
+    },
+    "marker_tersine": {
+      "raw_auc": 0.5,
+      "effective_auc": 0.5,
+      "is_neutral": true
+    },
+    "marker_evrimleşmiştir": {
+      "raw_auc": 0.5,
+      "effective_auc": 0.5,
+      "is_neutral": true
+    },
+    "marker_aslında": {
+      "raw_auc": 0.5,
+      "effective_auc": 0.5,
+      "is_neutral": true
+    },
+    "marker_oysa": {
+      "raw_auc": 0.5,
+      "effective_auc": 0.5,
+      "is_neutral": true
+    },
+    "marker_yanılsama": {
+      "raw_auc": 0.5,
+      "effective_auc": 0.5,
+      "is_neutral": true
+    }
+  }
+}

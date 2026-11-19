@@ -1,0 +1,83 @@
+{
+  "model_checkpoint": "/Users/hakankilicaslan/Git/tr_llm/data/rag_pilot/kristal_rag_pilot_best.pt",
+  "mean_rouge_l": 0.8661040311385909,
+  "bootstrap_95_ci": [
+    0.8467352972481196,
+    0.8822718378368218
+  ],
+  "woodcraft_rouge_l": 0.9135917787674659,
+  "history_rouge_l": 0.8187925533231762,
+  "fidelity_rate": 84.45370746686427,
+  "length_ratio": 0.353699241212432,
+  "query_root_overlap": 5.56,
+  "incoherence_rate": 14.000000000000002,
+  "morphology_e7_acc": 80.0,
+  "first_sentence_baseline_rouge": 0.4081468935466647,
+  "zero_shot_baseline_rouge": 0.1404885625882036,
+  "val_loss_ratio": 0.0024131833080406474,
+  "trio_pass": true,
+  "outcome": "PASS",
+  "explanation": "Model RAG bağlamından başarıyla sentez yapmaktadır. ROUGE-L GA alt sınırı (0.8467 >= 0.30), İlk-cümle baz hattından farkı (+0.4580 >= +0.08), Kopya Karşıtı Üçlü ve E7 Morfoloji (%80.0) eşiklerini karşılamıştır.",
+  "samples": [
+    {
+      "idx": 0,
+      "domain": "carpenter",
+      "question": "Pelesenk ahşabında Epoksi dolgu tekniği işlemi nasıl tatbik edilir ve sağladığı koruma nedir?",
+      "prediction": "pelesenk üzerine <PROPER_NOUN> dolgu teknik POSS_3SG , doğal ahşap yarık ve çatlak POSS_3PL CASE_ACC_N doldur GERUND_ArAk bağlama <UNK> döküm esnasında hava kabarcık POSS_3PL CASE_GEN_N pürmüz CASE_INS patlatılma POSS_3SG şekil POSS_2SG CASE_LOC tatbik edil GERUND_ArAk yüzey POSS_2SG nem CASE_DAT karşı korunma POSS_3SG CASE_ACC_N ve estetik görünme",
+      "reference": "Pelesenk üzerine Epoksi dolgu tekniği, doğal ahşap yarık ve çatlaklarını doldurarak bağlama esasıyla döküm esnasında hava kabarcıklarının pürmüzle patlatılması şeklinde tatbik edilerek yüzeyin neme karşı korunmasını ve estetik görünmesini sağlar.",
+      "rouge_l": 0.9278350515463918,
+      "fidelity": 0.8461538461538461,
+      "query_overlap": 6
+    },
+    {
+      "idx": 1,
+      "domain": "carpenter",
+      "question": "Abanoz ağacının işleme özellikleri ve Yarım bindirme köşe geçme tekniğinin sağladığı avantaj nedir?",
+      "prediction": "abanoz simsiyah renk ve çok yüksek özgül ağır DERIV_lIk sebebiyle piyano tuş POSS_3PL ve satranç takım POSS_3SG taş POSS_3PL CASE_LOC_N kullanıl TENSE_AORIST ; yarım bindirme köşe geçme is CASE_DAT geniş yapışma alan POSS_3SG sağla GERUND_ArAk parça PLURAL POSS_2SG güven CASE_INS Birleşme POSS_3SG CASE_ACC_N temin eder",
+      "reference": "Abanoz simsiyah renk ve çok yüksek özgül ağırlık sebebiyle piyano tuşları ve satranç takımı taşlarında kullanılır; Yarım bindirme köşe geçme ise geniş yapışma alanı sağlayarak parçaların güvenle birleşmesini temin eder.",
+      "rouge_l": 0.967741935483871,
+      "fidelity": 0.8,
+      "query_overlap": 7
+    },
+    {
+      "idx": 2,
+      "domain": "carpenter",
+      "question": "Maun ahşabında Kademeli kuru zımparalama işlemi nasıl tatbik edilir ve sağladığı koruma nedir?",
+      "prediction": "maun üzerine Kademeli kuru zımparalama , lif kopar GERUND_mAdAn yüzey pürüz DERIV_lI DERIV_lIk POSS_2SG CASE_ACC sıfır CASE_DAT indirme <UNK> kum sıra POSS_3SG CASE_GEN_N <UNK> 1 2 0 , 1 8 0 ve <UNK> atla GERUND_mAdAn takip edilme POSS_3SG şekil POSS_2SG CASE_LOC tatbik edil GERUND_ArAk yüzey",
+      "reference": "Maun üzerine Kademeli kuru zımparalama, lif koparmadan yüzey pürüzlülüğünü sıfıra indirme esasıyla kum sırasının 80'den 120, 180 ve 240'a atlamadan takip edilmesi şeklinde tatbik edilerek yüzeyin neme karşı korunmasını ve estetik görünmesini sağlar.",
+      "rouge_l": 0.8411214953271028,
+      "fidelity": 0.9166666666666666,
+      "query_overlap": 7
+    },
+    {
+      "idx": 3,
+      "domain": "turk_tarihi",
+      "question": "Uygur Kültürü ve Matbaası mirasının temel siyasi ve kültürel mesajı nedir?",
+      "prediction": "Uygur kültür POSS_3SG ve matbaa POSS_3SG , <PROPER_NOUN> tarım Havzası ve turfa POSS_2SG vaha POSS_3PL CASE_DAT_N göç ede POSS_2SG Uygur PLURAL temel POSS_2SG CASE_LOC <PROPER_NOUN> ve Budizm inan DERIV_CI CASE_GEN <UNK> yerleşik şehir hayat POSS_3SG anlayış POSS_2SG CASE_ACC vurgu PLURAL ve Türklerin matbaa teknoloji POSS_3SG",
+      "reference": "Uygur Kültürü ve Matbaası, Ötüken'den Tarım Havzası ve Turfan vahalarına göç eden Uygurlar temelinde Maniheizm ve Budizm inancının benimsenmesiyle yerleşik şehir hayatı anlayışını vurgular ve Türklerin matbaa teknolojisini Çinlilerle birlikte geliştirdiğini gösterir.",
+      "rouge_l": 0.8571428571428571,
+      "fidelity": 0.8571428571428571,
+      "query_overlap": 5
+    },
+    {
+      "idx": 4,
+      "domain": "turk_tarihi",
+      "question": "Ahi Evran ve Ahilik Düzenlemesi mirasının temel siyasi ve kültürel mesajı nedir?",
+      "prediction": "Ahi <PROPER_NOUN> ve Ahi DERIV_lIk düzenleme POSS_3SG , <PROPER_NOUN> merkez DERIV_lI Ahi <PROPER_NOUN> tarafından teşkilatlandırıl PART_An esnaf Birliği temel POSS_2SG CASE_LOC meslek ahlak POSS_3SG , usta - çırak hiyerarşi POSS_3SG , standart mal üretim POSS_3SG ve dayanışma anlayış POSS_2SG CASE_ACC vurgu PLURAL ve Türk esnaf",
+      "reference": "Ahi Evran ve Ahilik Düzenlemesi, Kırşehir merkezli Ahi Evran tarafından teşkilatlandırılan esnaf birliği temelinde meslek ahlakı, usta-çırak hiyerarşisi, standart mal üretimi ve dayanışma anlayışını vurgular ve Türk esnaf teşkilatlanmasının ve mesleki oto-kontrolünün temeltaşıdır.",
+      "rouge_l": 0.8653846153846153,
+      "fidelity": 0.8636363636363636,
+      "query_overlap": 4
+    },
+    {
+      "idx": 50,
+      "domain": "carpenter",
+      "question": "Ceviz ağacının işleme özellikleri ve Bisko (bisküvi) lamel birleştirme tekniğinin sağladığı avantaj nedir?",
+      "prediction": "ceviz asıl kahverengi ton POSS_3PL ve zengin damar desen POSS_3SG sebebiyle lüks kakma işçi DERIV_lIk POSS_3SG ve tüfek dipçik POSS_3PL CASE_LOC_N kullanıl TENSE_AORIST ; <PROPER_NOUN> ( bisküvi ) lamel birleştir INF_mA is CASE_DAT Hızlı montaj ve giz DERIV_lI tutunma sağla GERUND_ArAk parça PLURAL POSS_2SG güven",
+      "reference": "Ceviz asıl kahverengi tonları ve zengin damar deseni sebebiyle lüks kakma işçiliği ve tüfek dipçiklerinde kullanılır; Bisko (bisküvi) lamel birleştirme ise hızlı montaj ve gizli tutunma sağlayarak parçaların güvenle birleşmesini temin eder.",
+      "rouge_l": 0.9090909090909091,
+      "fidelity": 0.8275862068965517,
+      "query_overlap": 8
+    }
+  ]
+}

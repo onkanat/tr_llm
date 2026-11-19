@@ -1,0 +1,70 @@
+{
+  "n": 100,
+  "memorization_rate": 0.0,
+  "incoherence_rate": 8.0,
+  "mean_rouge_l": 0.3848663291423982,
+  "median_rouge_l": 0.3971830985915493,
+  "rouge_ci": [
+    0.3608216736698974,
+    0.408910984614899
+  ],
+  "content_overlap_rate": 53.0,
+  "decision": "BAŞARISIZ",
+  "samples": [
+    {
+      "idx": 1,
+      "input": "Atölye pratiği: Marangozlukta tığ ne işe yarar ve nasıl kullanılır?",
+      "generated_morphemes": "tığ : vida takıl TENSE_FUT nokta CASE_ACC tam merkez CASE_ABL işaretle GERUND_ArAk vida uç POSS_2SG CASE_GEN kayma POSS_",
+      "generated_surface": "tığ: vida takılacak noktayı tam merkezden işaretleyerek vida ucunun kaymasını engelleyen sivri uçlu kılavuz alettir.",
+      "reference": "Tığ: Vida takılacak noktayı tam merkezden işaretleyerek vida ucunun kaymasını engelleyen sivri uçlu kılavuz alettir.",
+      "rouge_l": 0.29268292682926833,
+      "is_memorized": false,
+      "is_incoherent": false,
+      "has_overlap": false
+    },
+    {
+      "idx": 2,
+      "input": "Atölye pratiği: Masif mobilya imalatında tabii kurutma göz ardı edilirse ne tür sorunlar yaşanır?",
+      "generated_morphemes": "eğer tabii kurutma dikkate alın COPULA_COND dikkate alın COPULA_COND da , <UNK> <UNK> ( <UNK> ) ile sabit vidalan TENSE_",
+      "generated_surface": "eğer tabii kurutma dikkate alınsa dikkate alınsa da, [?] [?] ( [?]) ile sabit vidalanır. çünkü Kerestenin [?] açık havada doğrudan güneş ve yağmurdan ",
+      "reference": "Eğer tabii kurutma dikkate alınmazsa ahşap zamanla çeker, çatlar veya eğrilir. Çünkü kerestenin çıtalanarak açık havada doğrudan güneş ve yağmurdan ko",
+      "rouge_l": 0.4533333333333333,
+      "is_memorized": false,
+      "is_incoherent": false,
+      "has_overlap": true
+    },
+    {
+      "idx": 3,
+      "input": "Ahşap atölyesi güvenlik ve imalat rehberi: Ahşap atölyesinde zımpara takozu aletinin doğru kullanım tekniği nedir?",
+      "generated_morphemes": "zımpara takoz POSS_3SG zımpara <UNK> ahşap yüzey CASE_DAT eşit ve düzgün basma POSS_3SG CASE_ACC_N sağla GERUND_ArAk dal",
+      "generated_surface": "zımpara takozu zımpara [?] ahşap yüzeye eşit ve düzgün basmasını sağlayarak dalgalanmayı önleyen kauçuk veya mantar bloktur. Aletin kesici [?] daima k",
+      "reference": "Zımpara takozu zımpara kağıdının ahşap yüzeye eşit ve düzgün basmasını sağlayarak dalgalanmayı önleyen kauçuk veya mantar bloktur. Aletin kesici ağzı ",
+      "rouge_l": 0.3943661971830986,
+      "is_memorized": false,
+      "is_incoherent": false,
+      "has_overlap": true
+    },
+    {
+      "idx": 4,
+      "input": "Marangozluk alan uzmanlığı: Usta marangoz olarak açıkla: ceviz ağacı ile çalışırken nelere dikkat edilmelidir?",
+      "generated_morphemes": "ceviz ağa DERIV_CI zengin damar desen POSS_2SG CASE_DAT ve asil kahverengi ton PLURAL CASE_DAT sahip , işleme POSS_3SG k",
+      "generated_surface": "ceviz ağacı zengin damar desenine ve asil kahverengi tonlara sahip, işlemesi kolay, formunu mükemmel koruyan lüks mobilya ağacıdır. İşleme esnasında l",
+      "reference": "Ceviz ağacı zengin damar desenine ve asil kahverengi tonlara sahip, işlemesi kolay, formunu mükemmel koruyan lüks mobilya ağacıdır. İşleme esnasında l",
+      "rouge_l": 0.4615384615384615,
+      "is_memorized": false,
+      "is_incoherent": false,
+      "has_overlap": false
+    },
+    {
+      "idx": 5,
+      "input": "Kırmızımsı kahverengi, büzülme ve çalışma yapmayan çok stabil bir tropikal ağaçtır",
+      "generated_morphemes": "usta Cevabı : bu gereksinim için maun ağa DERIV_CI son derece uygun COPULA_AORIST . kırmızımsı kahverengi , büzülme ve ç",
+      "generated_surface": "usta Cevabı: bu gereksinim için maun ağacı son derece uygundur. kırmızımsı kahverengi, büzülme ve çalışma yapan ağaçtır; klasik müzik aletleri ve gemi",
+      "reference": "Bu gereksinim için maun ağacı son derece uygundur. Kırmızımsı kahverengi, büzülme ve çalışma yapmayan çok stabil bir tropikal ağaçtır; klasik müzik al",
+      "rouge_l": 0.5172413793103449,
+      "is_memorized": false,
+      "is_incoherent": false,
+      "has_overlap": true
+    }
+  ]
+}

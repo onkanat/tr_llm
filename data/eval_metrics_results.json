@@ -1,0 +1,102 @@
+{
+  "metrics": {
+    "M1_clone_rate": "0.0%",
+    "M2_template_clones": 0,
+    "M5_fake_cites": 0,
+    "M6_forbidden_tokens": 0,
+    "M8_wood_matches": 0,
+    "M9_sci_matches": 0,
+    "M10_hist_matches": 1
+  },
+  "comparisons": [
+    {
+      "persona_name": "P7_Tarih",
+      "instruction": "Cumhuriyet dönemi Türk tarihi uzmanı olarak cevapla.",
+      "checkpoint": "kristal_model.pt",
+      "raw_input": "<BOS> <INSTRUCTION> cumhuriyet dönem POSS_3SG Türk tarih POSS_3SG uzman POSS_3SG ol GERUND_ArAk cevapla </INSTRUCTION> <INPUT> Türk kelime POSS_3SG CASE_GEN_N köken POSS_3SG </INPUT> <OUTPUT>",
+      "raw_output": "metin CASE_LOC REL_ki bir şekil CASE_LOC REL_ki ol GERUND_ArAk tanımlan PART_An bir güç DERIV_lI ve bu durum PLURAL POSS_2SG CASE_GEN önem DERIV_lI bir bir dönem POSS_3SG ol PART_DIk POSS_3PL CASE_ACC_N sağla INF_mAk CASE_LOC COPULA_AORIST </OUTPUT>",
+      "decompiled": "Metindeki bir şekildeki olarak tanımlanan bir güçlü ve bu durumlarının önemli bir bir dönemi olduklarını sağlamaktadır",
+      "prefix_6": "metin CASE_LOC REL_ki bir şekil CASE_LOC",
+      "has_template_clone": false,
+      "has_fake_cite": false,
+      "has_forbidden_tokens": false
+    },
+    {
+      "persona_name": "P6_Ahsap_Base",
+      "instruction": "Ahşap ve marangozluk uzmanı olarak cevapla.",
+      "checkpoint": "kristal_model.pt",
+      "raw_input": "<BOS> <INSTRUCTION> ahşap ve marangoz DERIV_lIk uzman POSS_3SG ol GERUND_ArAk cevapla </INSTRUCTION> <INPUT> Türk kelime POSS_3SG CASE_GEN_N köken POSS_3SG </INPUT> <OUTPUT>",
+      "raw_output": "bu durum PLURAL POSS_2SG CASE_ACC ve bu durum için kullanıl TENSE_NECESS COPULA_AORIST </OUTPUT>",
+      "decompiled": "Bu durumlarını ve bu durum için kullanılmalıdır",
+      "prefix_6": "bu durum PLURAL POSS_2SG CASE_ACC ve",
+      "has_template_clone": false,
+      "has_fake_cite": false,
+      "has_forbidden_tokens": false
+    },
+    {
+      "persona_name": "P6_Ahsap_Carpenter",
+      "instruction": "Ahşap ve marangozluk uzmanı olarak cevapla.",
+      "checkpoint": "kristal_carpenter_model.pt",
+      "raw_input": "<BOS> <INSTRUCTION> ahşap ve marangoz DERIV_lIk uzman POSS_3SG ol GERUND_ArAk cevapla </INSTRUCTION> <INPUT> Türk kelime POSS_3SG CASE_GEN_N köken POSS_3SG </INPUT> <OUTPUT>",
+      "raw_output": "teknik çözüm bu gereksinim için maun ağa DERIV_CI son derece uygun COPULA_AORIST kırmızımsı kahverengi büzülme ve çalışma yap GERUND_ArAk su al GERUND_Ip verme CASE_ACC durdur PART_DIk POSS_3SG karar DERIV_lI durum COPULA_AORIST </OUTPUT>",
+      "decompiled": "Teknik çözüm bu gereksinim için maun ağacı son derece uygundur kırmızımsı kahverengi büzülme ve çalışma yaparak su alıp vermeyi durdurduğu kararlı durumdur",
+      "prefix_6": "teknik çözüm bu gereksinim için maun",
+      "has_template_clone": false,
+      "has_fake_cite": false,
+      "has_forbidden_tokens": false
+    },
+    {
+      "persona_name": "P8_Fen",
+      "instruction": "Temel bilimler ve lise fen uzmanı olarak açıkla.",
+      "checkpoint": "kristal_model.pt",
+      "raw_input": "<BOS> <INSTRUCTION> temel bilim PLURAL ve lise fen uzman POSS_3SG ol GERUND_ArAk açıkla </INSTRUCTION> <INPUT> Türk kelime POSS_3SG CASE_GEN_N köken POSS_3SG </INPUT> <OUTPUT>",
+      "raw_output": "teknik çözüm bu gereksinim için marangoz DERIV_lIk POSS_3SG CASE_LOC_N kullanıl TENSE_NECESS COPULA_AORIST </OUTPUT>",
+      "decompiled": "Teknik çözüm bu gereksinim için marangozluğunda kullanılmalıdır",
+      "prefix_6": "teknik çözüm bu gereksinim için marangoz",
+      "has_template_clone": false,
+      "has_fake_cite": false,
+      "has_forbidden_tokens": false
+    },
+    {
+      "persona_name": "P9_Edebiyat",
+      "instruction": "Türk edebiyatı ve kültür uzmanı olarak açıkla.",
+      "checkpoint": "kristal_model.pt",
+      "raw_input": "<BOS> <INSTRUCTION> Türk edebiyat POSS_3SG ve kültür uzman POSS_3SG ol GERUND_ArAk açıkla </INSTRUCTION> <INPUT> Türk kelime POSS_3SG CASE_GEN_N köken POSS_3SG </INPUT> <OUTPUT>",
+      "raw_output": "bu durum PLURAL POSS_2SG CASE_ACC ve bu durum bir asistan ol GERUND_ArAk tanımlan PART_An özel DERIV_lIk POSS_3SG COPULA_AORIST </OUTPUT>",
+      "decompiled": "Bu durumlarını ve bu durum bir asistan olarak tanımlanan özelliğidir",
+      "prefix_6": "bu durum PLURAL POSS_2SG CASE_ACC ve",
+      "has_template_clone": false,
+      "has_fake_cite": false,
+      "has_forbidden_tokens": false
+    },
+    {
+      "persona_name": "P1_Kok",
+      "instruction": "Kelimedeki kök morfemini bul.",
+      "checkpoint": "kristal_model.pt",
+      "raw_input": "<BOS> <INSTRUCTION> kelime CASE_LOC REL_ki kök morfem POSS_2SG CASE_ACC bul </INSTRUCTION> <INPUT> Türk kelime POSS_3SG CASE_GEN_N köken POSS_3SG </INPUT> <OUTPUT>",
+      "raw_output": "root bul </OUTPUT>",
+      "decompiled": "Root bul",
+      "prefix_6": "root bul </OUTPUT>",
+      "has_template_clone": false,
+      "has_fake_cite": false,
+      "has_forbidden_tokens": false
+    }
+  ],
+  "woodcraft": {
+    "question": "Zıvana bağlantısı nasıl yapılır?",
+    "raw_output": "teknik çözüm bu gereksinim için maun ağa DERIV_CI son derece uygun COPULA_AORIST kırmızımsı kahverengi büzülme ve çalışma yap GERUND_ArAk su al GERUND_Ip verme CASE_ACC durdur PART_DIk POSS_3SG karar DERIV_lI durum COPULA_AORIST </OUTPUT>",
+    "decompiled": "Teknik çözüm bu gereksinim için maun ağacı son derece uygundur kırmızımsı kahverengi büzülme ve çalışma yaparak su alıp vermeyi durdurduğu kararlı durumdur",
+    "matches": []
+  },
+  "science": {
+    "question": "Fotosentez nedir?",
+    "raw_output": "günaydın gün POSS_2PL aydın neşe DERIV_lI ve verim DERIV_lI PLURAL nasıl yardım DERIV_CI olabil TENSE_AORIST PERSON_1SG </OUTPUT>",
+    "decompiled": "Günaydın gününüz aydın neşeli ve verimliler nasıl yardımcı olabilirim",
+    "matches": []
+  },
+  "abstain": {
+    "question": "2099 yılında Mars'ta kim başkan seçildi?",
+    "raw_output": "bu durum PLURAL POSS_2SG CASE_ACC göster INF_mAk CASE_LOC COPULA_AORIST </OUTPUT>",
+    "decompiled": "Bu durumlarını göstermektedir"
+  }
+}

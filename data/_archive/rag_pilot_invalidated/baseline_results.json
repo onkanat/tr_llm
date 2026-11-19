@@ -1,0 +1,32 @@
+{
+  "zero_shot": {
+    "mean_rouge_l": 0.1404885625882036,
+    "bootstrap_95_ci": [
+      0.13090325433878983,
+      0.15192533506543213
+    ],
+    "fidelity_rate": 27.240956364532547,
+    "length_ratio": 0.2047811934713305,
+    "query_root_overlap": 1.5
+  },
+  "first_sentence": {
+    "mean_rouge_l": 0.4081468935466647,
+    "bootstrap_95_ci": [
+      0.40096031864914145,
+      0.4149764186883165
+    ],
+    "fidelity_rate": 100.0,
+    "length_ratio": 0.22626707572529622,
+    "query_root_overlap": 4.07
+  },
+  "random_sentence": {
+    "mean_rouge_l": 0.19453419035846134,
+    "bootstrap_95_ci": [
+      0.18785458443720884,
+      0.20134989838251505
+    ],
+    "fidelity_rate": 15.344055944055942,
+    "length_ratio": 0.1836672778436089,
+    "query_root_overlap": 0.19
+  }
+}

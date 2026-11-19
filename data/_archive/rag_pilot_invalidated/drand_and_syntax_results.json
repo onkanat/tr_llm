@@ -1,0 +1,32 @@
+{
+  "fstring_source_audit": {
+    "train_template_count": 550,
+    "test_template_count": 100,
+    "train_template_pct": 68.75,
+    "test_template_pct": 100.0
+  },
+  "syntax_signature_audit": {
+    "unique_train_sigs": 172,
+    "unique_test_sigs": 53,
+    "shared_sigs": 33,
+    "test_syntax_leak_pct": 80.0
+  },
+  "drand_experiment": {
+    "mean_score_orig": 0.5127585756227657,
+    "ci_orig": [
+      0.44797636610737535,
+      0.5779515116644192
+    ],
+    "mean_score_prime": 0.35148824334901074,
+    "ci_prime": [
+      0.2984160411746501,
+      0.4051773113741319
+    ],
+    "mean_score_rand": 0.029473576033734253,
+    "ci_rand": [
+      0.024973506917731057,
+      0.034202191522258105
+    ],
+    "diagnosis": "H2 DESTEKLENİYOR (Modelde zayıf ama gerçek bir belge-okuma sinyali mevcut: D_rand < D')"
+  }
+}

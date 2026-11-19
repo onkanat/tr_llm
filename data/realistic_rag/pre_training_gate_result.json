@@ -1,0 +1,39 @@
+{
+  "timestamp": "2026-09-14T08:38:35Z",
+  "kriter_1_4gram_overlap": {
+    "test_total_4grams": 4405,
+    "test_shared_4grams": 0,
+    "overlap_pct": 0.0,
+    "threshold_pct": 10.0,
+    "passed": true
+  },
+  "kriter_2_syntax_signature_overlap": {
+    "train_unique_skeletons": 40,
+    "test_shared_skeletons": 0,
+    "test_total_records": 200,
+    "overlap_pct": 0.0,
+    "threshold_pct": 10.0,
+    "passed": true
+  },
+  "kriter_3_b1_5_corpus_isolation": {
+    "pilot_docs_total_4grams": 107682,
+    "pilot_docs_b1_5_overlap": 0,
+    "overlap_pct": 0.0,
+    "threshold_pct": 5.0,
+    "passed": true
+  },
+  "kriter_4_sim_memory_isolation": {
+    "pilot_docs_total_4grams": 107682,
+    "sim_overlap_count": 0,
+    "overlap_pct": 0.0,
+    "threshold_pct": 5.0,
+    "passed": true
+  },
+  "kriter_5_test_core_entity_isolation": {
+    "test_core_entities_count": 18,
+    "leaked_entities_count": 0,
+    "leaked_entities": [],
+    "passed": true
+  },
+  "all_passed": true
+}

@@ -1,0 +1,4622 @@
+[
+  {
+    "question_id": "carpenter_0000",
+    "stratum": "carpenter",
+    "correct_index": 3,
+    "predicted_index": 3,
+    "is_correct": 1
+  },
+  {
+    "question_id": "carpenter_0001",
+    "stratum": "carpenter",
+    "correct_index": 9,
+    "predicted_index": 9,
+    "is_correct": 1
+  },
+  {
+    "question_id": "carpenter_0002",
+    "stratum": "carpenter",
+    "correct_index": 0,
+    "predicted_index": 0,
+    "is_correct": 1
+  },
+  {
+    "question_id": "carpenter_0003",
+    "stratum": "carpenter",
+    "correct_index": 7,
+    "predicted_index": 1,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0004",
+    "stratum": "carpenter",
+    "correct_index": 7,
+    "predicted_index": 2,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0005",
+    "stratum": "carpenter",
+    "correct_index": 5,
+    "predicted_index": 5,
+    "is_correct": 1
+  },
+  {
+    "question_id": "carpenter_0006",
+    "stratum": "carpenter",
+    "correct_index": 6,
+    "predicted_index": 0,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0007",
+    "stratum": "carpenter",
+    "correct_index": 0,
+    "predicted_index": 8,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0008",
+    "stratum": "carpenter",
+    "correct_index": 6,
+    "predicted_index": 6,
+    "is_correct": 1
+  },
+  {
+    "question_id": "carpenter_0009",
+    "stratum": "carpenter",
+    "correct_index": 2,
+    "predicted_index": 9,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0010",
+    "stratum": "carpenter",
+    "correct_index": 1,
+    "predicted_index": 0,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0011",
+    "stratum": "carpenter",
+    "correct_index": 2,
+    "predicted_index": 2,
+    "is_correct": 1
+  },
+  {
+    "question_id": "carpenter_0012",
+    "stratum": "carpenter",
+    "correct_index": 6,
+    "predicted_index": 0,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0013",
+    "stratum": "carpenter",
+    "correct_index": 0,
+    "predicted_index": 6,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0014",
+    "stratum": "carpenter",
+    "correct_index": 2,
+    "predicted_index": 2,
+    "is_correct": 1
+  },
+  {
+    "question_id": "carpenter_0015",
+    "stratum": "carpenter",
+    "correct_index": 4,
+    "predicted_index": 4,
+    "is_correct": 1
+  },
+  {
+    "question_id": "carpenter_0016",
+    "stratum": "carpenter",
+    "correct_index": 0,
+    "predicted_index": 6,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0017",
+    "stratum": "carpenter",
+    "correct_index": 2,
+    "predicted_index": 0,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0018",
+    "stratum": "carpenter",
+    "correct_index": 5,
+    "predicted_index": 1,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0019",
+    "stratum": "carpenter",
+    "correct_index": 6,
+    "predicted_index": 1,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0020",
+    "stratum": "carpenter",
+    "correct_index": 8,
+    "predicted_index": 1,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0021",
+    "stratum": "carpenter",
+    "correct_index": 5,
+    "predicted_index": 9,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0022",
+    "stratum": "carpenter",
+    "correct_index": 2,
+    "predicted_index": 2,
+    "is_correct": 1
+  },
+  {
+    "question_id": "carpenter_0023",
+    "stratum": "carpenter",
+    "correct_index": 6,
+    "predicted_index": 0,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0024",
+    "stratum": "carpenter",
+    "correct_index": 0,
+    "predicted_index": 0,
+    "is_correct": 1
+  },
+  {
+    "question_id": "carpenter_0025",
+    "stratum": "carpenter",
+    "correct_index": 8,
+    "predicted_index": 7,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0026",
+    "stratum": "carpenter",
+    "correct_index": 1,
+    "predicted_index": 1,
+    "is_correct": 1
+  },
+  {
+    "question_id": "carpenter_0027",
+    "stratum": "carpenter",
+    "correct_index": 0,
+    "predicted_index": 0,
+    "is_correct": 1
+  },
+  {
+    "question_id": "carpenter_0028",
+    "stratum": "carpenter",
+    "correct_index": 4,
+    "predicted_index": 4,
+    "is_correct": 1
+  },
+  {
+    "question_id": "carpenter_0029",
+    "stratum": "carpenter",
+    "correct_index": 8,
+    "predicted_index": 8,
+    "is_correct": 1
+  },
+  {
+    "question_id": "carpenter_0030",
+    "stratum": "carpenter",
+    "correct_index": 2,
+    "predicted_index": 2,
+    "is_correct": 1
+  },
+  {
+    "question_id": "carpenter_0031",
+    "stratum": "carpenter",
+    "correct_index": 0,
+    "predicted_index": 0,
+    "is_correct": 1
+  },
+  {
+    "question_id": "carpenter_0032",
+    "stratum": "carpenter",
+    "correct_index": 2,
+    "predicted_index": 0,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0033",
+    "stratum": "carpenter",
+    "correct_index": 0,
+    "predicted_index": 6,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0034",
+    "stratum": "carpenter",
+    "correct_index": 3,
+    "predicted_index": 0,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0035",
+    "stratum": "carpenter",
+    "correct_index": 0,
+    "predicted_index": 4,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0036",
+    "stratum": "carpenter",
+    "correct_index": 6,
+    "predicted_index": 9,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0037",
+    "stratum": "carpenter",
+    "correct_index": 8,
+    "predicted_index": 5,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0038",
+    "stratum": "carpenter",
+    "correct_index": 4,
+    "predicted_index": 4,
+    "is_correct": 1
+  },
+  {
+    "question_id": "carpenter_0039",
+    "stratum": "carpenter",
+    "correct_index": 4,
+    "predicted_index": 1,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0040",
+    "stratum": "carpenter",
+    "correct_index": 1,
+    "predicted_index": 1,
+    "is_correct": 1
+  },
+  {
+    "question_id": "carpenter_0041",
+    "stratum": "carpenter",
+    "correct_index": 4,
+    "predicted_index": 1,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0042",
+    "stratum": "carpenter",
+    "correct_index": 7,
+    "predicted_index": 5,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0043",
+    "stratum": "carpenter",
+    "correct_index": 6,
+    "predicted_index": 1,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0044",
+    "stratum": "carpenter",
+    "correct_index": 9,
+    "predicted_index": 3,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0045",
+    "stratum": "carpenter",
+    "correct_index": 8,
+    "predicted_index": 3,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0046",
+    "stratum": "carpenter",
+    "correct_index": 1,
+    "predicted_index": 9,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0047",
+    "stratum": "carpenter",
+    "correct_index": 0,
+    "predicted_index": 3,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0048",
+    "stratum": "carpenter",
+    "correct_index": 9,
+    "predicted_index": 1,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0049",
+    "stratum": "carpenter",
+    "correct_index": 0,
+    "predicted_index": 2,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0050",
+    "stratum": "carpenter",
+    "correct_index": 1,
+    "predicted_index": 3,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0051",
+    "stratum": "carpenter",
+    "correct_index": 2,
+    "predicted_index": 2,
+    "is_correct": 1
+  },
+  {
+    "question_id": "carpenter_0052",
+    "stratum": "carpenter",
+    "correct_index": 9,
+    "predicted_index": 4,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0053",
+    "stratum": "carpenter",
+    "correct_index": 6,
+    "predicted_index": 0,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0054",
+    "stratum": "carpenter",
+    "correct_index": 4,
+    "predicted_index": 6,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0055",
+    "stratum": "carpenter",
+    "correct_index": 6,
+    "predicted_index": 6,
+    "is_correct": 1
+  },
+  {
+    "question_id": "carpenter_0056",
+    "stratum": "carpenter",
+    "correct_index": 4,
+    "predicted_index": 0,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0057",
+    "stratum": "carpenter",
+    "correct_index": 0,
+    "predicted_index": 1,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0058",
+    "stratum": "carpenter",
+    "correct_index": 8,
+    "predicted_index": 8,
+    "is_correct": 1
+  },
+  {
+    "question_id": "carpenter_0059",
+    "stratum": "carpenter",
+    "correct_index": 6,
+    "predicted_index": 2,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0060",
+    "stratum": "carpenter",
+    "correct_index": 9,
+    "predicted_index": 9,
+    "is_correct": 1
+  },
+  {
+    "question_id": "carpenter_0061",
+    "stratum": "carpenter",
+    "correct_index": 6,
+    "predicted_index": 3,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0062",
+    "stratum": "carpenter",
+    "correct_index": 5,
+    "predicted_index": 0,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0063",
+    "stratum": "carpenter",
+    "correct_index": 5,
+    "predicted_index": 1,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0064",
+    "stratum": "carpenter",
+    "correct_index": 8,
+    "predicted_index": 4,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0065",
+    "stratum": "carpenter",
+    "correct_index": 1,
+    "predicted_index": 0,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0066",
+    "stratum": "carpenter",
+    "correct_index": 6,
+    "predicted_index": 1,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0067",
+    "stratum": "carpenter",
+    "correct_index": 3,
+    "predicted_index": 0,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0068",
+    "stratum": "carpenter",
+    "correct_index": 2,
+    "predicted_index": 1,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0069",
+    "stratum": "carpenter",
+    "correct_index": 8,
+    "predicted_index": 2,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0070",
+    "stratum": "carpenter",
+    "correct_index": 9,
+    "predicted_index": 0,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0071",
+    "stratum": "carpenter",
+    "correct_index": 4,
+    "predicted_index": 4,
+    "is_correct": 1
+  },
+  {
+    "question_id": "carpenter_0072",
+    "stratum": "carpenter",
+    "correct_index": 0,
+    "predicted_index": 4,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0073",
+    "stratum": "carpenter",
+    "correct_index": 2,
+    "predicted_index": 1,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0074",
+    "stratum": "carpenter",
+    "correct_index": 7,
+    "predicted_index": 7,
+    "is_correct": 1
+  },
+  {
+    "question_id": "carpenter_0075",
+    "stratum": "carpenter",
+    "correct_index": 9,
+    "predicted_index": 8,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0076",
+    "stratum": "carpenter",
+    "correct_index": 6,
+    "predicted_index": 3,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0077",
+    "stratum": "carpenter",
+    "correct_index": 3,
+    "predicted_index": 3,
+    "is_correct": 1
+  },
+  {
+    "question_id": "carpenter_0078",
+    "stratum": "carpenter",
+    "correct_index": 7,
+    "predicted_index": 1,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0079",
+    "stratum": "carpenter",
+    "correct_index": 1,
+    "predicted_index": 1,
+    "is_correct": 1
+  },
+  {
+    "question_id": "carpenter_0080",
+    "stratum": "carpenter",
+    "correct_index": 9,
+    "predicted_index": 0,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0081",
+    "stratum": "carpenter",
+    "correct_index": 8,
+    "predicted_index": 4,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0082",
+    "stratum": "carpenter",
+    "correct_index": 0,
+    "predicted_index": 0,
+    "is_correct": 1
+  },
+  {
+    "question_id": "carpenter_0083",
+    "stratum": "carpenter",
+    "correct_index": 1,
+    "predicted_index": 1,
+    "is_correct": 1
+  },
+  {
+    "question_id": "carpenter_0084",
+    "stratum": "carpenter",
+    "correct_index": 4,
+    "predicted_index": 4,
+    "is_correct": 1
+  },
+  {
+    "question_id": "carpenter_0085",
+    "stratum": "carpenter",
+    "correct_index": 6,
+    "predicted_index": 1,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0086",
+    "stratum": "carpenter",
+    "correct_index": 4,
+    "predicted_index": 4,
+    "is_correct": 1
+  },
+  {
+    "question_id": "carpenter_0087",
+    "stratum": "carpenter",
+    "correct_index": 7,
+    "predicted_index": 0,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0088",
+    "stratum": "carpenter",
+    "correct_index": 4,
+    "predicted_index": 3,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0089",
+    "stratum": "carpenter",
+    "correct_index": 2,
+    "predicted_index": 2,
+    "is_correct": 1
+  },
+  {
+    "question_id": "carpenter_0090",
+    "stratum": "carpenter",
+    "correct_index": 9,
+    "predicted_index": 1,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0091",
+    "stratum": "carpenter",
+    "correct_index": 0,
+    "predicted_index": 6,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0092",
+    "stratum": "carpenter",
+    "correct_index": 9,
+    "predicted_index": 5,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0093",
+    "stratum": "carpenter",
+    "correct_index": 0,
+    "predicted_index": 0,
+    "is_correct": 1
+  },
+  {
+    "question_id": "carpenter_0094",
+    "stratum": "carpenter",
+    "correct_index": 1,
+    "predicted_index": 6,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0095",
+    "stratum": "carpenter",
+    "correct_index": 7,
+    "predicted_index": 7,
+    "is_correct": 1
+  },
+  {
+    "question_id": "carpenter_0096",
+    "stratum": "carpenter",
+    "correct_index": 5,
+    "predicted_index": 2,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0097",
+    "stratum": "carpenter",
+    "correct_index": 5,
+    "predicted_index": 3,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0098",
+    "stratum": "carpenter",
+    "correct_index": 0,
+    "predicted_index": 0,
+    "is_correct": 1
+  },
+  {
+    "question_id": "carpenter_0099",
+    "stratum": "carpenter",
+    "correct_index": 1,
+    "predicted_index": 1,
+    "is_correct": 1
+  },
+  {
+    "question_id": "carpenter_0100",
+    "stratum": "carpenter",
+    "correct_index": 7,
+    "predicted_index": 4,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0101",
+    "stratum": "carpenter",
+    "correct_index": 5,
+    "predicted_index": 1,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0102",
+    "stratum": "carpenter",
+    "correct_index": 1,
+    "predicted_index": 1,
+    "is_correct": 1
+  },
+  {
+    "question_id": "carpenter_0103",
+    "stratum": "carpenter",
+    "correct_index": 5,
+    "predicted_index": 1,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0104",
+    "stratum": "carpenter",
+    "correct_index": 5,
+    "predicted_index": 0,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0105",
+    "stratum": "carpenter",
+    "correct_index": 3,
+    "predicted_index": 3,
+    "is_correct": 1
+  },
+  {
+    "question_id": "carpenter_0106",
+    "stratum": "carpenter",
+    "correct_index": 9,
+    "predicted_index": 5,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0107",
+    "stratum": "carpenter",
+    "correct_index": 5,
+    "predicted_index": 1,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0108",
+    "stratum": "carpenter",
+    "correct_index": 4,
+    "predicted_index": 0,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0109",
+    "stratum": "carpenter",
+    "correct_index": 1,
+    "predicted_index": 2,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0110",
+    "stratum": "carpenter",
+    "correct_index": 3,
+    "predicted_index": 0,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0111",
+    "stratum": "carpenter",
+    "correct_index": 7,
+    "predicted_index": 3,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0112",
+    "stratum": "carpenter",
+    "correct_index": 5,
+    "predicted_index": 5,
+    "is_correct": 1
+  },
+  {
+    "question_id": "carpenter_0113",
+    "stratum": "carpenter",
+    "correct_index": 5,
+    "predicted_index": 5,
+    "is_correct": 1
+  },
+  {
+    "question_id": "carpenter_0114",
+    "stratum": "carpenter",
+    "correct_index": 7,
+    "predicted_index": 1,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0115",
+    "stratum": "carpenter",
+    "correct_index": 7,
+    "predicted_index": 4,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0116",
+    "stratum": "carpenter",
+    "correct_index": 4,
+    "predicted_index": 5,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0117",
+    "stratum": "carpenter",
+    "correct_index": 9,
+    "predicted_index": 0,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0118",
+    "stratum": "carpenter",
+    "correct_index": 4,
+    "predicted_index": 4,
+    "is_correct": 1
+  },
+  {
+    "question_id": "carpenter_0119",
+    "stratum": "carpenter",
+    "correct_index": 6,
+    "predicted_index": 6,
+    "is_correct": 1
+  },
+  {
+    "question_id": "carpenter_0120",
+    "stratum": "carpenter",
+    "correct_index": 2,
+    "predicted_index": 4,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0121",
+    "stratum": "carpenter",
+    "correct_index": 6,
+    "predicted_index": 6,
+    "is_correct": 1
+  },
+  {
+    "question_id": "carpenter_0122",
+    "stratum": "carpenter",
+    "correct_index": 3,
+    "predicted_index": 4,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0123",
+    "stratum": "carpenter",
+    "correct_index": 3,
+    "predicted_index": 3,
+    "is_correct": 1
+  },
+  {
+    "question_id": "carpenter_0124",
+    "stratum": "carpenter",
+    "correct_index": 6,
+    "predicted_index": 4,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0125",
+    "stratum": "carpenter",
+    "correct_index": 9,
+    "predicted_index": 0,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0126",
+    "stratum": "carpenter",
+    "correct_index": 6,
+    "predicted_index": 6,
+    "is_correct": 1
+  },
+  {
+    "question_id": "carpenter_0127",
+    "stratum": "carpenter",
+    "correct_index": 8,
+    "predicted_index": 8,
+    "is_correct": 1
+  },
+  {
+    "question_id": "carpenter_0128",
+    "stratum": "carpenter",
+    "correct_index": 3,
+    "predicted_index": 1,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0129",
+    "stratum": "carpenter",
+    "correct_index": 9,
+    "predicted_index": 4,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0130",
+    "stratum": "carpenter",
+    "correct_index": 2,
+    "predicted_index": 0,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0131",
+    "stratum": "carpenter",
+    "correct_index": 5,
+    "predicted_index": 5,
+    "is_correct": 1
+  },
+  {
+    "question_id": "carpenter_0132",
+    "stratum": "carpenter",
+    "correct_index": 9,
+    "predicted_index": 4,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0133",
+    "stratum": "carpenter",
+    "correct_index": 3,
+    "predicted_index": 2,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0134",
+    "stratum": "carpenter",
+    "correct_index": 2,
+    "predicted_index": 3,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0135",
+    "stratum": "carpenter",
+    "correct_index": 0,
+    "predicted_index": 0,
+    "is_correct": 1
+  },
+  {
+    "question_id": "carpenter_0136",
+    "stratum": "carpenter",
+    "correct_index": 1,
+    "predicted_index": 1,
+    "is_correct": 1
+  },
+  {
+    "question_id": "carpenter_0137",
+    "stratum": "carpenter",
+    "correct_index": 3,
+    "predicted_index": 2,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0138",
+    "stratum": "carpenter",
+    "correct_index": 9,
+    "predicted_index": 2,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0139",
+    "stratum": "carpenter",
+    "correct_index": 9,
+    "predicted_index": 1,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0140",
+    "stratum": "carpenter",
+    "correct_index": 0,
+    "predicted_index": 1,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0141",
+    "stratum": "carpenter",
+    "correct_index": 9,
+    "predicted_index": 9,
+    "is_correct": 1
+  },
+  {
+    "question_id": "carpenter_0142",
+    "stratum": "carpenter",
+    "correct_index": 8,
+    "predicted_index": 1,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0143",
+    "stratum": "carpenter",
+    "correct_index": 2,
+    "predicted_index": 2,
+    "is_correct": 1
+  },
+  {
+    "question_id": "carpenter_0144",
+    "stratum": "carpenter",
+    "correct_index": 2,
+    "predicted_index": 0,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0145",
+    "stratum": "carpenter",
+    "correct_index": 2,
+    "predicted_index": 5,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0146",
+    "stratum": "carpenter",
+    "correct_index": 5,
+    "predicted_index": 2,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0147",
+    "stratum": "carpenter",
+    "correct_index": 1,
+    "predicted_index": 2,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0148",
+    "stratum": "carpenter",
+    "correct_index": 6,
+    "predicted_index": 3,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0149",
+    "stratum": "carpenter",
+    "correct_index": 0,
+    "predicted_index": 0,
+    "is_correct": 1
+  },
+  {
+    "question_id": "carpenter_0150",
+    "stratum": "carpenter",
+    "correct_index": 8,
+    "predicted_index": 0,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0151",
+    "stratum": "carpenter",
+    "correct_index": 5,
+    "predicted_index": 5,
+    "is_correct": 1
+  },
+  {
+    "question_id": "carpenter_0152",
+    "stratum": "carpenter",
+    "correct_index": 5,
+    "predicted_index": 5,
+    "is_correct": 1
+  },
+  {
+    "question_id": "carpenter_0153",
+    "stratum": "carpenter",
+    "correct_index": 8,
+    "predicted_index": 4,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0154",
+    "stratum": "carpenter",
+    "correct_index": 7,
+    "predicted_index": 7,
+    "is_correct": 1
+  },
+  {
+    "question_id": "carpenter_0155",
+    "stratum": "carpenter",
+    "correct_index": 8,
+    "predicted_index": 2,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0156",
+    "stratum": "carpenter",
+    "correct_index": 5,
+    "predicted_index": 5,
+    "is_correct": 1
+  },
+  {
+    "question_id": "carpenter_0157",
+    "stratum": "carpenter",
+    "correct_index": 9,
+    "predicted_index": 0,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0158",
+    "stratum": "carpenter",
+    "correct_index": 9,
+    "predicted_index": 0,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0159",
+    "stratum": "carpenter",
+    "correct_index": 7,
+    "predicted_index": 1,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0160",
+    "stratum": "carpenter",
+    "correct_index": 0,
+    "predicted_index": 0,
+    "is_correct": 1
+  },
+  {
+    "question_id": "carpenter_0161",
+    "stratum": "carpenter",
+    "correct_index": 1,
+    "predicted_index": 0,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0162",
+    "stratum": "carpenter",
+    "correct_index": 8,
+    "predicted_index": 0,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0163",
+    "stratum": "carpenter",
+    "correct_index": 9,
+    "predicted_index": 4,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0164",
+    "stratum": "carpenter",
+    "correct_index": 4,
+    "predicted_index": 4,
+    "is_correct": 1
+  },
+  {
+    "question_id": "carpenter_0165",
+    "stratum": "carpenter",
+    "correct_index": 6,
+    "predicted_index": 6,
+    "is_correct": 1
+  },
+  {
+    "question_id": "carpenter_0166",
+    "stratum": "carpenter",
+    "correct_index": 2,
+    "predicted_index": 0,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0167",
+    "stratum": "carpenter",
+    "correct_index": 7,
+    "predicted_index": 3,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0168",
+    "stratum": "carpenter",
+    "correct_index": 0,
+    "predicted_index": 3,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0169",
+    "stratum": "carpenter",
+    "correct_index": 1,
+    "predicted_index": 4,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0170",
+    "stratum": "carpenter",
+    "correct_index": 9,
+    "predicted_index": 9,
+    "is_correct": 1
+  },
+  {
+    "question_id": "carpenter_0171",
+    "stratum": "carpenter",
+    "correct_index": 1,
+    "predicted_index": 1,
+    "is_correct": 1
+  },
+  {
+    "question_id": "carpenter_0172",
+    "stratum": "carpenter",
+    "correct_index": 6,
+    "predicted_index": 6,
+    "is_correct": 1
+  },
+  {
+    "question_id": "carpenter_0173",
+    "stratum": "carpenter",
+    "correct_index": 4,
+    "predicted_index": 2,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0174",
+    "stratum": "carpenter",
+    "correct_index": 3,
+    "predicted_index": 3,
+    "is_correct": 1
+  },
+  {
+    "question_id": "carpenter_0175",
+    "stratum": "carpenter",
+    "correct_index": 6,
+    "predicted_index": 3,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0176",
+    "stratum": "carpenter",
+    "correct_index": 0,
+    "predicted_index": 0,
+    "is_correct": 1
+  },
+  {
+    "question_id": "carpenter_0177",
+    "stratum": "carpenter",
+    "correct_index": 5,
+    "predicted_index": 2,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0178",
+    "stratum": "carpenter",
+    "correct_index": 4,
+    "predicted_index": 4,
+    "is_correct": 1
+  },
+  {
+    "question_id": "carpenter_0179",
+    "stratum": "carpenter",
+    "correct_index": 5,
+    "predicted_index": 0,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0180",
+    "stratum": "carpenter",
+    "correct_index": 5,
+    "predicted_index": 1,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0181",
+    "stratum": "carpenter",
+    "correct_index": 9,
+    "predicted_index": 9,
+    "is_correct": 1
+  },
+  {
+    "question_id": "carpenter_0182",
+    "stratum": "carpenter",
+    "correct_index": 0,
+    "predicted_index": 1,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0183",
+    "stratum": "carpenter",
+    "correct_index": 9,
+    "predicted_index": 9,
+    "is_correct": 1
+  },
+  {
+    "question_id": "carpenter_0184",
+    "stratum": "carpenter",
+    "correct_index": 6,
+    "predicted_index": 6,
+    "is_correct": 1
+  },
+  {
+    "question_id": "carpenter_0185",
+    "stratum": "carpenter",
+    "correct_index": 0,
+    "predicted_index": 0,
+    "is_correct": 1
+  },
+  {
+    "question_id": "carpenter_0186",
+    "stratum": "carpenter",
+    "correct_index": 2,
+    "predicted_index": 2,
+    "is_correct": 1
+  },
+  {
+    "question_id": "carpenter_0187",
+    "stratum": "carpenter",
+    "correct_index": 6,
+    "predicted_index": 6,
+    "is_correct": 1
+  },
+  {
+    "question_id": "carpenter_0188",
+    "stratum": "carpenter",
+    "correct_index": 5,
+    "predicted_index": 0,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0189",
+    "stratum": "carpenter",
+    "correct_index": 9,
+    "predicted_index": 2,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0190",
+    "stratum": "carpenter",
+    "correct_index": 0,
+    "predicted_index": 0,
+    "is_correct": 1
+  },
+  {
+    "question_id": "carpenter_0191",
+    "stratum": "carpenter",
+    "correct_index": 2,
+    "predicted_index": 2,
+    "is_correct": 1
+  },
+  {
+    "question_id": "carpenter_0192",
+    "stratum": "carpenter",
+    "correct_index": 0,
+    "predicted_index": 8,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0193",
+    "stratum": "carpenter",
+    "correct_index": 2,
+    "predicted_index": 0,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0194",
+    "stratum": "carpenter",
+    "correct_index": 3,
+    "predicted_index": 3,
+    "is_correct": 1
+  },
+  {
+    "question_id": "carpenter_0195",
+    "stratum": "carpenter",
+    "correct_index": 6,
+    "predicted_index": 5,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0196",
+    "stratum": "carpenter",
+    "correct_index": 0,
+    "predicted_index": 1,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0197",
+    "stratum": "carpenter",
+    "correct_index": 7,
+    "predicted_index": 7,
+    "is_correct": 1
+  },
+  {
+    "question_id": "carpenter_0198",
+    "stratum": "carpenter",
+    "correct_index": 0,
+    "predicted_index": 4,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0199",
+    "stratum": "carpenter",
+    "correct_index": 8,
+    "predicted_index": 6,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0200",
+    "stratum": "carpenter",
+    "correct_index": 9,
+    "predicted_index": 0,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0201",
+    "stratum": "carpenter",
+    "correct_index": 4,
+    "predicted_index": 2,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0202",
+    "stratum": "carpenter",
+    "correct_index": 9,
+    "predicted_index": 0,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0203",
+    "stratum": "carpenter",
+    "correct_index": 7,
+    "predicted_index": 2,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0204",
+    "stratum": "carpenter",
+    "correct_index": 1,
+    "predicted_index": 0,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0205",
+    "stratum": "carpenter",
+    "correct_index": 6,
+    "predicted_index": 0,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0206",
+    "stratum": "carpenter",
+    "correct_index": 4,
+    "predicted_index": 2,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0207",
+    "stratum": "carpenter",
+    "correct_index": 1,
+    "predicted_index": 1,
+    "is_correct": 1
+  },
+  {
+    "question_id": "carpenter_0208",
+    "stratum": "carpenter",
+    "correct_index": 1,
+    "predicted_index": 0,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0209",
+    "stratum": "carpenter",
+    "correct_index": 4,
+    "predicted_index": 0,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0210",
+    "stratum": "carpenter",
+    "correct_index": 3,
+    "predicted_index": 2,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0211",
+    "stratum": "carpenter",
+    "correct_index": 9,
+    "predicted_index": 4,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0212",
+    "stratum": "carpenter",
+    "correct_index": 8,
+    "predicted_index": 8,
+    "is_correct": 1
+  },
+  {
+    "question_id": "carpenter_0213",
+    "stratum": "carpenter",
+    "correct_index": 1,
+    "predicted_index": 0,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0214",
+    "stratum": "carpenter",
+    "correct_index": 6,
+    "predicted_index": 2,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0215",
+    "stratum": "carpenter",
+    "correct_index": 7,
+    "predicted_index": 7,
+    "is_correct": 1
+  },
+  {
+    "question_id": "carpenter_0216",
+    "stratum": "carpenter",
+    "correct_index": 1,
+    "predicted_index": 1,
+    "is_correct": 1
+  },
+  {
+    "question_id": "carpenter_0217",
+    "stratum": "carpenter",
+    "correct_index": 8,
+    "predicted_index": 4,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0218",
+    "stratum": "carpenter",
+    "correct_index": 1,
+    "predicted_index": 1,
+    "is_correct": 1
+  },
+  {
+    "question_id": "carpenter_0219",
+    "stratum": "carpenter",
+    "correct_index": 4,
+    "predicted_index": 5,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0220",
+    "stratum": "carpenter",
+    "correct_index": 2,
+    "predicted_index": 2,
+    "is_correct": 1
+  },
+  {
+    "question_id": "carpenter_0221",
+    "stratum": "carpenter",
+    "correct_index": 7,
+    "predicted_index": 3,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0222",
+    "stratum": "carpenter",
+    "correct_index": 1,
+    "predicted_index": 1,
+    "is_correct": 1
+  },
+  {
+    "question_id": "carpenter_0223",
+    "stratum": "carpenter",
+    "correct_index": 6,
+    "predicted_index": 3,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0224",
+    "stratum": "carpenter",
+    "correct_index": 3,
+    "predicted_index": 0,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0225",
+    "stratum": "carpenter",
+    "correct_index": 3,
+    "predicted_index": 0,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0226",
+    "stratum": "carpenter",
+    "correct_index": 9,
+    "predicted_index": 9,
+    "is_correct": 1
+  },
+  {
+    "question_id": "carpenter_0227",
+    "stratum": "carpenter",
+    "correct_index": 5,
+    "predicted_index": 1,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0228",
+    "stratum": "carpenter",
+    "correct_index": 8,
+    "predicted_index": 0,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0229",
+    "stratum": "carpenter",
+    "correct_index": 9,
+    "predicted_index": 9,
+    "is_correct": 1
+  },
+  {
+    "question_id": "carpenter_0230",
+    "stratum": "carpenter",
+    "correct_index": 7,
+    "predicted_index": 0,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0231",
+    "stratum": "carpenter",
+    "correct_index": 0,
+    "predicted_index": 2,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0232",
+    "stratum": "carpenter",
+    "correct_index": 4,
+    "predicted_index": 1,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0233",
+    "stratum": "carpenter",
+    "correct_index": 3,
+    "predicted_index": 1,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0234",
+    "stratum": "carpenter",
+    "correct_index": 6,
+    "predicted_index": 2,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0235",
+    "stratum": "carpenter",
+    "correct_index": 2,
+    "predicted_index": 5,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0236",
+    "stratum": "carpenter",
+    "correct_index": 1,
+    "predicted_index": 1,
+    "is_correct": 1
+  },
+  {
+    "question_id": "carpenter_0237",
+    "stratum": "carpenter",
+    "correct_index": 0,
+    "predicted_index": 0,
+    "is_correct": 1
+  },
+  {
+    "question_id": "carpenter_0238",
+    "stratum": "carpenter",
+    "correct_index": 5,
+    "predicted_index": 1,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0239",
+    "stratum": "carpenter",
+    "correct_index": 0,
+    "predicted_index": 1,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0240",
+    "stratum": "carpenter",
+    "correct_index": 9,
+    "predicted_index": 9,
+    "is_correct": 1
+  },
+  {
+    "question_id": "carpenter_0241",
+    "stratum": "carpenter",
+    "correct_index": 8,
+    "predicted_index": 0,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0242",
+    "stratum": "carpenter",
+    "correct_index": 5,
+    "predicted_index": 0,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0243",
+    "stratum": "carpenter",
+    "correct_index": 4,
+    "predicted_index": 4,
+    "is_correct": 1
+  },
+  {
+    "question_id": "carpenter_0244",
+    "stratum": "carpenter",
+    "correct_index": 6,
+    "predicted_index": 7,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0245",
+    "stratum": "carpenter",
+    "correct_index": 4,
+    "predicted_index": 0,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0246",
+    "stratum": "carpenter",
+    "correct_index": 0,
+    "predicted_index": 0,
+    "is_correct": 1
+  },
+  {
+    "question_id": "carpenter_0247",
+    "stratum": "carpenter",
+    "correct_index": 1,
+    "predicted_index": 0,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0248",
+    "stratum": "carpenter",
+    "correct_index": 1,
+    "predicted_index": 1,
+    "is_correct": 1
+  },
+  {
+    "question_id": "carpenter_0249",
+    "stratum": "carpenter",
+    "correct_index": 2,
+    "predicted_index": 4,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0250",
+    "stratum": "carpenter",
+    "correct_index": 4,
+    "predicted_index": 4,
+    "is_correct": 1
+  },
+  {
+    "question_id": "carpenter_0251",
+    "stratum": "carpenter",
+    "correct_index": 4,
+    "predicted_index": 3,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0252",
+    "stratum": "carpenter",
+    "correct_index": 9,
+    "predicted_index": 6,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0253",
+    "stratum": "carpenter",
+    "correct_index": 8,
+    "predicted_index": 9,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0254",
+    "stratum": "carpenter",
+    "correct_index": 8,
+    "predicted_index": 0,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0255",
+    "stratum": "carpenter",
+    "correct_index": 7,
+    "predicted_index": 3,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0256",
+    "stratum": "carpenter",
+    "correct_index": 5,
+    "predicted_index": 3,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0257",
+    "stratum": "carpenter",
+    "correct_index": 6,
+    "predicted_index": 6,
+    "is_correct": 1
+  },
+  {
+    "question_id": "carpenter_0258",
+    "stratum": "carpenter",
+    "correct_index": 8,
+    "predicted_index": 0,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0259",
+    "stratum": "carpenter",
+    "correct_index": 3,
+    "predicted_index": 3,
+    "is_correct": 1
+  },
+  {
+    "question_id": "carpenter_0260",
+    "stratum": "carpenter",
+    "correct_index": 2,
+    "predicted_index": 2,
+    "is_correct": 1
+  },
+  {
+    "question_id": "carpenter_0261",
+    "stratum": "carpenter",
+    "correct_index": 2,
+    "predicted_index": 2,
+    "is_correct": 1
+  },
+  {
+    "question_id": "carpenter_0262",
+    "stratum": "carpenter",
+    "correct_index": 6,
+    "predicted_index": 1,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0263",
+    "stratum": "carpenter",
+    "correct_index": 8,
+    "predicted_index": 7,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0264",
+    "stratum": "carpenter",
+    "correct_index": 7,
+    "predicted_index": 4,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0265",
+    "stratum": "carpenter",
+    "correct_index": 7,
+    "predicted_index": 1,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0266",
+    "stratum": "carpenter",
+    "correct_index": 1,
+    "predicted_index": 2,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0267",
+    "stratum": "carpenter",
+    "correct_index": 4,
+    "predicted_index": 5,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0268",
+    "stratum": "carpenter",
+    "correct_index": 6,
+    "predicted_index": 6,
+    "is_correct": 1
+  },
+  {
+    "question_id": "carpenter_0269",
+    "stratum": "carpenter",
+    "correct_index": 5,
+    "predicted_index": 3,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0270",
+    "stratum": "carpenter",
+    "correct_index": 4,
+    "predicted_index": 2,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0271",
+    "stratum": "carpenter",
+    "correct_index": 1,
+    "predicted_index": 1,
+    "is_correct": 1
+  },
+  {
+    "question_id": "carpenter_0272",
+    "stratum": "carpenter",
+    "correct_index": 3,
+    "predicted_index": 0,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0273",
+    "stratum": "carpenter",
+    "correct_index": 6,
+    "predicted_index": 1,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0274",
+    "stratum": "carpenter",
+    "correct_index": 6,
+    "predicted_index": 1,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0275",
+    "stratum": "carpenter",
+    "correct_index": 5,
+    "predicted_index": 5,
+    "is_correct": 1
+  },
+  {
+    "question_id": "carpenter_0276",
+    "stratum": "carpenter",
+    "correct_index": 3,
+    "predicted_index": 2,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0277",
+    "stratum": "carpenter",
+    "correct_index": 3,
+    "predicted_index": 3,
+    "is_correct": 1
+  },
+  {
+    "question_id": "carpenter_0278",
+    "stratum": "carpenter",
+    "correct_index": 4,
+    "predicted_index": 4,
+    "is_correct": 1
+  },
+  {
+    "question_id": "carpenter_0279",
+    "stratum": "carpenter",
+    "correct_index": 2,
+    "predicted_index": 1,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0280",
+    "stratum": "carpenter",
+    "correct_index": 8,
+    "predicted_index": 7,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0281",
+    "stratum": "carpenter",
+    "correct_index": 1,
+    "predicted_index": 0,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0282",
+    "stratum": "carpenter",
+    "correct_index": 2,
+    "predicted_index": 4,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0283",
+    "stratum": "carpenter",
+    "correct_index": 1,
+    "predicted_index": 1,
+    "is_correct": 1
+  },
+  {
+    "question_id": "carpenter_0284",
+    "stratum": "carpenter",
+    "correct_index": 6,
+    "predicted_index": 0,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0285",
+    "stratum": "carpenter",
+    "correct_index": 6,
+    "predicted_index": 0,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0286",
+    "stratum": "carpenter",
+    "correct_index": 0,
+    "predicted_index": 0,
+    "is_correct": 1
+  },
+  {
+    "question_id": "carpenter_0287",
+    "stratum": "carpenter",
+    "correct_index": 2,
+    "predicted_index": 5,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0288",
+    "stratum": "carpenter",
+    "correct_index": 7,
+    "predicted_index": 3,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0289",
+    "stratum": "carpenter",
+    "correct_index": 4,
+    "predicted_index": 4,
+    "is_correct": 1
+  },
+  {
+    "question_id": "carpenter_0290",
+    "stratum": "carpenter",
+    "correct_index": 6,
+    "predicted_index": 1,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0291",
+    "stratum": "carpenter",
+    "correct_index": 5,
+    "predicted_index": 3,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0292",
+    "stratum": "carpenter",
+    "correct_index": 9,
+    "predicted_index": 5,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0293",
+    "stratum": "carpenter",
+    "correct_index": 1,
+    "predicted_index": 2,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0294",
+    "stratum": "carpenter",
+    "correct_index": 5,
+    "predicted_index": 0,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0295",
+    "stratum": "carpenter",
+    "correct_index": 5,
+    "predicted_index": 5,
+    "is_correct": 1
+  },
+  {
+    "question_id": "carpenter_0296",
+    "stratum": "carpenter",
+    "correct_index": 0,
+    "predicted_index": 0,
+    "is_correct": 1
+  },
+  {
+    "question_id": "carpenter_0297",
+    "stratum": "carpenter",
+    "correct_index": 7,
+    "predicted_index": 1,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0298",
+    "stratum": "carpenter",
+    "correct_index": 1,
+    "predicted_index": 3,
+    "is_correct": 0
+  },
+  {
+    "question_id": "carpenter_0299",
+    "stratum": "carpenter",
+    "correct_index": 2,
+    "predicted_index": 4,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0000",
+    "stratum": "turk_tarihi",
+    "correct_index": 6,
+    "predicted_index": 6,
+    "is_correct": 1
+  },
+  {
+    "question_id": "turk_tarihi_0001",
+    "stratum": "turk_tarihi",
+    "correct_index": 2,
+    "predicted_index": 2,
+    "is_correct": 1
+  },
+  {
+    "question_id": "turk_tarihi_0002",
+    "stratum": "turk_tarihi",
+    "correct_index": 4,
+    "predicted_index": 4,
+    "is_correct": 1
+  },
+  {
+    "question_id": "turk_tarihi_0003",
+    "stratum": "turk_tarihi",
+    "correct_index": 1,
+    "predicted_index": 6,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0004",
+    "stratum": "turk_tarihi",
+    "correct_index": 4,
+    "predicted_index": 9,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0005",
+    "stratum": "turk_tarihi",
+    "correct_index": 2,
+    "predicted_index": 7,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0006",
+    "stratum": "turk_tarihi",
+    "correct_index": 4,
+    "predicted_index": 2,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0007",
+    "stratum": "turk_tarihi",
+    "correct_index": 9,
+    "predicted_index": 0,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0008",
+    "stratum": "turk_tarihi",
+    "correct_index": 5,
+    "predicted_index": 0,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0009",
+    "stratum": "turk_tarihi",
+    "correct_index": 0,
+    "predicted_index": 0,
+    "is_correct": 1
+  },
+  {
+    "question_id": "turk_tarihi_0010",
+    "stratum": "turk_tarihi",
+    "correct_index": 8,
+    "predicted_index": 2,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0011",
+    "stratum": "turk_tarihi",
+    "correct_index": 9,
+    "predicted_index": 0,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0012",
+    "stratum": "turk_tarihi",
+    "correct_index": 6,
+    "predicted_index": 2,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0013",
+    "stratum": "turk_tarihi",
+    "correct_index": 0,
+    "predicted_index": 8,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0014",
+    "stratum": "turk_tarihi",
+    "correct_index": 2,
+    "predicted_index": 0,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0015",
+    "stratum": "turk_tarihi",
+    "correct_index": 4,
+    "predicted_index": 9,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0016",
+    "stratum": "turk_tarihi",
+    "correct_index": 5,
+    "predicted_index": 9,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0017",
+    "stratum": "turk_tarihi",
+    "correct_index": 4,
+    "predicted_index": 4,
+    "is_correct": 1
+  },
+  {
+    "question_id": "turk_tarihi_0018",
+    "stratum": "turk_tarihi",
+    "correct_index": 6,
+    "predicted_index": 7,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0019",
+    "stratum": "turk_tarihi",
+    "correct_index": 2,
+    "predicted_index": 9,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0020",
+    "stratum": "turk_tarihi",
+    "correct_index": 6,
+    "predicted_index": 6,
+    "is_correct": 1
+  },
+  {
+    "question_id": "turk_tarihi_0021",
+    "stratum": "turk_tarihi",
+    "correct_index": 6,
+    "predicted_index": 8,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0022",
+    "stratum": "turk_tarihi",
+    "correct_index": 3,
+    "predicted_index": 3,
+    "is_correct": 1
+  },
+  {
+    "question_id": "turk_tarihi_0023",
+    "stratum": "turk_tarihi",
+    "correct_index": 3,
+    "predicted_index": 0,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0024",
+    "stratum": "turk_tarihi",
+    "correct_index": 2,
+    "predicted_index": 0,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0025",
+    "stratum": "turk_tarihi",
+    "correct_index": 8,
+    "predicted_index": 6,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0026",
+    "stratum": "turk_tarihi",
+    "correct_index": 4,
+    "predicted_index": 9,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0027",
+    "stratum": "turk_tarihi",
+    "correct_index": 6,
+    "predicted_index": 7,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0028",
+    "stratum": "turk_tarihi",
+    "correct_index": 5,
+    "predicted_index": 7,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0029",
+    "stratum": "turk_tarihi",
+    "correct_index": 7,
+    "predicted_index": 7,
+    "is_correct": 1
+  },
+  {
+    "question_id": "turk_tarihi_0030",
+    "stratum": "turk_tarihi",
+    "correct_index": 6,
+    "predicted_index": 6,
+    "is_correct": 1
+  },
+  {
+    "question_id": "turk_tarihi_0031",
+    "stratum": "turk_tarihi",
+    "correct_index": 0,
+    "predicted_index": 1,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0032",
+    "stratum": "turk_tarihi",
+    "correct_index": 0,
+    "predicted_index": 2,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0033",
+    "stratum": "turk_tarihi",
+    "correct_index": 4,
+    "predicted_index": 7,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0034",
+    "stratum": "turk_tarihi",
+    "correct_index": 2,
+    "predicted_index": 4,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0035",
+    "stratum": "turk_tarihi",
+    "correct_index": 0,
+    "predicted_index": 9,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0036",
+    "stratum": "turk_tarihi",
+    "correct_index": 3,
+    "predicted_index": 3,
+    "is_correct": 1
+  },
+  {
+    "question_id": "turk_tarihi_0037",
+    "stratum": "turk_tarihi",
+    "correct_index": 1,
+    "predicted_index": 1,
+    "is_correct": 1
+  },
+  {
+    "question_id": "turk_tarihi_0038",
+    "stratum": "turk_tarihi",
+    "correct_index": 1,
+    "predicted_index": 2,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0039",
+    "stratum": "turk_tarihi",
+    "correct_index": 8,
+    "predicted_index": 8,
+    "is_correct": 1
+  },
+  {
+    "question_id": "turk_tarihi_0040",
+    "stratum": "turk_tarihi",
+    "correct_index": 0,
+    "predicted_index": 2,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0041",
+    "stratum": "turk_tarihi",
+    "correct_index": 0,
+    "predicted_index": 2,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0042",
+    "stratum": "turk_tarihi",
+    "correct_index": 4,
+    "predicted_index": 7,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0043",
+    "stratum": "turk_tarihi",
+    "correct_index": 8,
+    "predicted_index": 1,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0044",
+    "stratum": "turk_tarihi",
+    "correct_index": 7,
+    "predicted_index": 3,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0045",
+    "stratum": "turk_tarihi",
+    "correct_index": 1,
+    "predicted_index": 1,
+    "is_correct": 1
+  },
+  {
+    "question_id": "turk_tarihi_0046",
+    "stratum": "turk_tarihi",
+    "correct_index": 2,
+    "predicted_index": 2,
+    "is_correct": 1
+  },
+  {
+    "question_id": "turk_tarihi_0047",
+    "stratum": "turk_tarihi",
+    "correct_index": 6,
+    "predicted_index": 7,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0048",
+    "stratum": "turk_tarihi",
+    "correct_index": 5,
+    "predicted_index": 5,
+    "is_correct": 1
+  },
+  {
+    "question_id": "turk_tarihi_0049",
+    "stratum": "turk_tarihi",
+    "correct_index": 9,
+    "predicted_index": 1,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0050",
+    "stratum": "turk_tarihi",
+    "correct_index": 7,
+    "predicted_index": 1,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0051",
+    "stratum": "turk_tarihi",
+    "correct_index": 2,
+    "predicted_index": 1,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0052",
+    "stratum": "turk_tarihi",
+    "correct_index": 6,
+    "predicted_index": 9,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0053",
+    "stratum": "turk_tarihi",
+    "correct_index": 5,
+    "predicted_index": 2,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0054",
+    "stratum": "turk_tarihi",
+    "correct_index": 2,
+    "predicted_index": 2,
+    "is_correct": 1
+  },
+  {
+    "question_id": "turk_tarihi_0055",
+    "stratum": "turk_tarihi",
+    "correct_index": 3,
+    "predicted_index": 5,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0056",
+    "stratum": "turk_tarihi",
+    "correct_index": 4,
+    "predicted_index": 4,
+    "is_correct": 1
+  },
+  {
+    "question_id": "turk_tarihi_0057",
+    "stratum": "turk_tarihi",
+    "correct_index": 3,
+    "predicted_index": 4,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0058",
+    "stratum": "turk_tarihi",
+    "correct_index": 4,
+    "predicted_index": 7,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0059",
+    "stratum": "turk_tarihi",
+    "correct_index": 8,
+    "predicted_index": 8,
+    "is_correct": 1
+  },
+  {
+    "question_id": "turk_tarihi_0060",
+    "stratum": "turk_tarihi",
+    "correct_index": 9,
+    "predicted_index": 2,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0061",
+    "stratum": "turk_tarihi",
+    "correct_index": 9,
+    "predicted_index": 9,
+    "is_correct": 1
+  },
+  {
+    "question_id": "turk_tarihi_0062",
+    "stratum": "turk_tarihi",
+    "correct_index": 9,
+    "predicted_index": 5,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0063",
+    "stratum": "turk_tarihi",
+    "correct_index": 4,
+    "predicted_index": 5,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0064",
+    "stratum": "turk_tarihi",
+    "correct_index": 4,
+    "predicted_index": 2,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0065",
+    "stratum": "turk_tarihi",
+    "correct_index": 4,
+    "predicted_index": 6,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0066",
+    "stratum": "turk_tarihi",
+    "correct_index": 2,
+    "predicted_index": 1,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0067",
+    "stratum": "turk_tarihi",
+    "correct_index": 3,
+    "predicted_index": 4,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0068",
+    "stratum": "turk_tarihi",
+    "correct_index": 2,
+    "predicted_index": 0,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0069",
+    "stratum": "turk_tarihi",
+    "correct_index": 4,
+    "predicted_index": 8,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0070",
+    "stratum": "turk_tarihi",
+    "correct_index": 0,
+    "predicted_index": 0,
+    "is_correct": 1
+  },
+  {
+    "question_id": "turk_tarihi_0071",
+    "stratum": "turk_tarihi",
+    "correct_index": 6,
+    "predicted_index": 7,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0072",
+    "stratum": "turk_tarihi",
+    "correct_index": 7,
+    "predicted_index": 6,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0073",
+    "stratum": "turk_tarihi",
+    "correct_index": 1,
+    "predicted_index": 1,
+    "is_correct": 1
+  },
+  {
+    "question_id": "turk_tarihi_0074",
+    "stratum": "turk_tarihi",
+    "correct_index": 4,
+    "predicted_index": 1,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0075",
+    "stratum": "turk_tarihi",
+    "correct_index": 5,
+    "predicted_index": 4,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0076",
+    "stratum": "turk_tarihi",
+    "correct_index": 0,
+    "predicted_index": 6,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0077",
+    "stratum": "turk_tarihi",
+    "correct_index": 3,
+    "predicted_index": 3,
+    "is_correct": 1
+  },
+  {
+    "question_id": "turk_tarihi_0078",
+    "stratum": "turk_tarihi",
+    "correct_index": 5,
+    "predicted_index": 0,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0079",
+    "stratum": "turk_tarihi",
+    "correct_index": 7,
+    "predicted_index": 7,
+    "is_correct": 1
+  },
+  {
+    "question_id": "turk_tarihi_0080",
+    "stratum": "turk_tarihi",
+    "correct_index": 1,
+    "predicted_index": 7,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0081",
+    "stratum": "turk_tarihi",
+    "correct_index": 7,
+    "predicted_index": 2,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0082",
+    "stratum": "turk_tarihi",
+    "correct_index": 2,
+    "predicted_index": 5,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0083",
+    "stratum": "turk_tarihi",
+    "correct_index": 6,
+    "predicted_index": 6,
+    "is_correct": 1
+  },
+  {
+    "question_id": "turk_tarihi_0084",
+    "stratum": "turk_tarihi",
+    "correct_index": 8,
+    "predicted_index": 8,
+    "is_correct": 1
+  },
+  {
+    "question_id": "turk_tarihi_0085",
+    "stratum": "turk_tarihi",
+    "correct_index": 5,
+    "predicted_index": 1,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0086",
+    "stratum": "turk_tarihi",
+    "correct_index": 2,
+    "predicted_index": 2,
+    "is_correct": 1
+  },
+  {
+    "question_id": "turk_tarihi_0087",
+    "stratum": "turk_tarihi",
+    "correct_index": 7,
+    "predicted_index": 2,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0088",
+    "stratum": "turk_tarihi",
+    "correct_index": 6,
+    "predicted_index": 0,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0089",
+    "stratum": "turk_tarihi",
+    "correct_index": 7,
+    "predicted_index": 7,
+    "is_correct": 1
+  },
+  {
+    "question_id": "turk_tarihi_0090",
+    "stratum": "turk_tarihi",
+    "correct_index": 9,
+    "predicted_index": 9,
+    "is_correct": 1
+  },
+  {
+    "question_id": "turk_tarihi_0091",
+    "stratum": "turk_tarihi",
+    "correct_index": 9,
+    "predicted_index": 1,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0092",
+    "stratum": "turk_tarihi",
+    "correct_index": 1,
+    "predicted_index": 1,
+    "is_correct": 1
+  },
+  {
+    "question_id": "turk_tarihi_0093",
+    "stratum": "turk_tarihi",
+    "correct_index": 7,
+    "predicted_index": 7,
+    "is_correct": 1
+  },
+  {
+    "question_id": "turk_tarihi_0094",
+    "stratum": "turk_tarihi",
+    "correct_index": 3,
+    "predicted_index": 3,
+    "is_correct": 1
+  },
+  {
+    "question_id": "turk_tarihi_0095",
+    "stratum": "turk_tarihi",
+    "correct_index": 9,
+    "predicted_index": 2,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0096",
+    "stratum": "turk_tarihi",
+    "correct_index": 5,
+    "predicted_index": 9,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0097",
+    "stratum": "turk_tarihi",
+    "correct_index": 9,
+    "predicted_index": 4,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0098",
+    "stratum": "turk_tarihi",
+    "correct_index": 0,
+    "predicted_index": 2,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0099",
+    "stratum": "turk_tarihi",
+    "correct_index": 9,
+    "predicted_index": 6,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0100",
+    "stratum": "turk_tarihi",
+    "correct_index": 3,
+    "predicted_index": 5,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0101",
+    "stratum": "turk_tarihi",
+    "correct_index": 6,
+    "predicted_index": 8,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0102",
+    "stratum": "turk_tarihi",
+    "correct_index": 8,
+    "predicted_index": 7,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0103",
+    "stratum": "turk_tarihi",
+    "correct_index": 6,
+    "predicted_index": 0,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0104",
+    "stratum": "turk_tarihi",
+    "correct_index": 1,
+    "predicted_index": 3,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0105",
+    "stratum": "turk_tarihi",
+    "correct_index": 1,
+    "predicted_index": 2,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0106",
+    "stratum": "turk_tarihi",
+    "correct_index": 5,
+    "predicted_index": 6,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0107",
+    "stratum": "turk_tarihi",
+    "correct_index": 9,
+    "predicted_index": 7,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0108",
+    "stratum": "turk_tarihi",
+    "correct_index": 5,
+    "predicted_index": 5,
+    "is_correct": 1
+  },
+  {
+    "question_id": "turk_tarihi_0109",
+    "stratum": "turk_tarihi",
+    "correct_index": 4,
+    "predicted_index": 0,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0110",
+    "stratum": "turk_tarihi",
+    "correct_index": 4,
+    "predicted_index": 4,
+    "is_correct": 1
+  },
+  {
+    "question_id": "turk_tarihi_0111",
+    "stratum": "turk_tarihi",
+    "correct_index": 5,
+    "predicted_index": 9,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0112",
+    "stratum": "turk_tarihi",
+    "correct_index": 2,
+    "predicted_index": 4,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0113",
+    "stratum": "turk_tarihi",
+    "correct_index": 0,
+    "predicted_index": 1,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0114",
+    "stratum": "turk_tarihi",
+    "correct_index": 8,
+    "predicted_index": 8,
+    "is_correct": 1
+  },
+  {
+    "question_id": "turk_tarihi_0115",
+    "stratum": "turk_tarihi",
+    "correct_index": 9,
+    "predicted_index": 3,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0116",
+    "stratum": "turk_tarihi",
+    "correct_index": 5,
+    "predicted_index": 1,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0117",
+    "stratum": "turk_tarihi",
+    "correct_index": 9,
+    "predicted_index": 1,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0118",
+    "stratum": "turk_tarihi",
+    "correct_index": 6,
+    "predicted_index": 0,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0119",
+    "stratum": "turk_tarihi",
+    "correct_index": 8,
+    "predicted_index": 0,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0120",
+    "stratum": "turk_tarihi",
+    "correct_index": 4,
+    "predicted_index": 4,
+    "is_correct": 1
+  },
+  {
+    "question_id": "turk_tarihi_0121",
+    "stratum": "turk_tarihi",
+    "correct_index": 1,
+    "predicted_index": 1,
+    "is_correct": 1
+  },
+  {
+    "question_id": "turk_tarihi_0122",
+    "stratum": "turk_tarihi",
+    "correct_index": 8,
+    "predicted_index": 0,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0123",
+    "stratum": "turk_tarihi",
+    "correct_index": 6,
+    "predicted_index": 1,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0124",
+    "stratum": "turk_tarihi",
+    "correct_index": 8,
+    "predicted_index": 0,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0125",
+    "stratum": "turk_tarihi",
+    "correct_index": 4,
+    "predicted_index": 4,
+    "is_correct": 1
+  },
+  {
+    "question_id": "turk_tarihi_0126",
+    "stratum": "turk_tarihi",
+    "correct_index": 7,
+    "predicted_index": 0,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0127",
+    "stratum": "turk_tarihi",
+    "correct_index": 0,
+    "predicted_index": 9,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0128",
+    "stratum": "turk_tarihi",
+    "correct_index": 0,
+    "predicted_index": 0,
+    "is_correct": 1
+  },
+  {
+    "question_id": "turk_tarihi_0129",
+    "stratum": "turk_tarihi",
+    "correct_index": 5,
+    "predicted_index": 0,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0130",
+    "stratum": "turk_tarihi",
+    "correct_index": 7,
+    "predicted_index": 7,
+    "is_correct": 1
+  },
+  {
+    "question_id": "turk_tarihi_0131",
+    "stratum": "turk_tarihi",
+    "correct_index": 8,
+    "predicted_index": 8,
+    "is_correct": 1
+  },
+  {
+    "question_id": "turk_tarihi_0132",
+    "stratum": "turk_tarihi",
+    "correct_index": 9,
+    "predicted_index": 6,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0133",
+    "stratum": "turk_tarihi",
+    "correct_index": 9,
+    "predicted_index": 4,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0134",
+    "stratum": "turk_tarihi",
+    "correct_index": 3,
+    "predicted_index": 3,
+    "is_correct": 1
+  },
+  {
+    "question_id": "turk_tarihi_0135",
+    "stratum": "turk_tarihi",
+    "correct_index": 4,
+    "predicted_index": 0,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0136",
+    "stratum": "turk_tarihi",
+    "correct_index": 6,
+    "predicted_index": 1,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0137",
+    "stratum": "turk_tarihi",
+    "correct_index": 8,
+    "predicted_index": 8,
+    "is_correct": 1
+  },
+  {
+    "question_id": "turk_tarihi_0138",
+    "stratum": "turk_tarihi",
+    "correct_index": 2,
+    "predicted_index": 4,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0139",
+    "stratum": "turk_tarihi",
+    "correct_index": 0,
+    "predicted_index": 9,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0140",
+    "stratum": "turk_tarihi",
+    "correct_index": 9,
+    "predicted_index": 6,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0141",
+    "stratum": "turk_tarihi",
+    "correct_index": 0,
+    "predicted_index": 0,
+    "is_correct": 1
+  },
+  {
+    "question_id": "turk_tarihi_0142",
+    "stratum": "turk_tarihi",
+    "correct_index": 8,
+    "predicted_index": 8,
+    "is_correct": 1
+  },
+  {
+    "question_id": "turk_tarihi_0143",
+    "stratum": "turk_tarihi",
+    "correct_index": 1,
+    "predicted_index": 0,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0144",
+    "stratum": "turk_tarihi",
+    "correct_index": 5,
+    "predicted_index": 6,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0145",
+    "stratum": "turk_tarihi",
+    "correct_index": 2,
+    "predicted_index": 4,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0146",
+    "stratum": "turk_tarihi",
+    "correct_index": 3,
+    "predicted_index": 3,
+    "is_correct": 1
+  },
+  {
+    "question_id": "turk_tarihi_0147",
+    "stratum": "turk_tarihi",
+    "correct_index": 1,
+    "predicted_index": 2,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0148",
+    "stratum": "turk_tarihi",
+    "correct_index": 2,
+    "predicted_index": 3,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0149",
+    "stratum": "turk_tarihi",
+    "correct_index": 4,
+    "predicted_index": 7,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0150",
+    "stratum": "turk_tarihi",
+    "correct_index": 5,
+    "predicted_index": 4,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0151",
+    "stratum": "turk_tarihi",
+    "correct_index": 2,
+    "predicted_index": 2,
+    "is_correct": 1
+  },
+  {
+    "question_id": "turk_tarihi_0152",
+    "stratum": "turk_tarihi",
+    "correct_index": 3,
+    "predicted_index": 2,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0153",
+    "stratum": "turk_tarihi",
+    "correct_index": 1,
+    "predicted_index": 7,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0154",
+    "stratum": "turk_tarihi",
+    "correct_index": 9,
+    "predicted_index": 5,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0155",
+    "stratum": "turk_tarihi",
+    "correct_index": 5,
+    "predicted_index": 1,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0156",
+    "stratum": "turk_tarihi",
+    "correct_index": 7,
+    "predicted_index": 2,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0157",
+    "stratum": "turk_tarihi",
+    "correct_index": 0,
+    "predicted_index": 8,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0158",
+    "stratum": "turk_tarihi",
+    "correct_index": 9,
+    "predicted_index": 3,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0159",
+    "stratum": "turk_tarihi",
+    "correct_index": 8,
+    "predicted_index": 4,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0160",
+    "stratum": "turk_tarihi",
+    "correct_index": 0,
+    "predicted_index": 2,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0161",
+    "stratum": "turk_tarihi",
+    "correct_index": 7,
+    "predicted_index": 0,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0162",
+    "stratum": "turk_tarihi",
+    "correct_index": 2,
+    "predicted_index": 4,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0163",
+    "stratum": "turk_tarihi",
+    "correct_index": 1,
+    "predicted_index": 6,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0164",
+    "stratum": "turk_tarihi",
+    "correct_index": 7,
+    "predicted_index": 4,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0165",
+    "stratum": "turk_tarihi",
+    "correct_index": 3,
+    "predicted_index": 9,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0166",
+    "stratum": "turk_tarihi",
+    "correct_index": 2,
+    "predicted_index": 2,
+    "is_correct": 1
+  },
+  {
+    "question_id": "turk_tarihi_0167",
+    "stratum": "turk_tarihi",
+    "correct_index": 3,
+    "predicted_index": 2,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0168",
+    "stratum": "turk_tarihi",
+    "correct_index": 9,
+    "predicted_index": 9,
+    "is_correct": 1
+  },
+  {
+    "question_id": "turk_tarihi_0169",
+    "stratum": "turk_tarihi",
+    "correct_index": 5,
+    "predicted_index": 7,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0170",
+    "stratum": "turk_tarihi",
+    "correct_index": 2,
+    "predicted_index": 4,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0171",
+    "stratum": "turk_tarihi",
+    "correct_index": 1,
+    "predicted_index": 2,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0172",
+    "stratum": "turk_tarihi",
+    "correct_index": 4,
+    "predicted_index": 0,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0173",
+    "stratum": "turk_tarihi",
+    "correct_index": 3,
+    "predicted_index": 3,
+    "is_correct": 1
+  },
+  {
+    "question_id": "turk_tarihi_0174",
+    "stratum": "turk_tarihi",
+    "correct_index": 9,
+    "predicted_index": 2,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0175",
+    "stratum": "turk_tarihi",
+    "correct_index": 9,
+    "predicted_index": 1,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0176",
+    "stratum": "turk_tarihi",
+    "correct_index": 9,
+    "predicted_index": 9,
+    "is_correct": 1
+  },
+  {
+    "question_id": "turk_tarihi_0177",
+    "stratum": "turk_tarihi",
+    "correct_index": 5,
+    "predicted_index": 5,
+    "is_correct": 1
+  },
+  {
+    "question_id": "turk_tarihi_0178",
+    "stratum": "turk_tarihi",
+    "correct_index": 6,
+    "predicted_index": 9,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0179",
+    "stratum": "turk_tarihi",
+    "correct_index": 3,
+    "predicted_index": 1,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0180",
+    "stratum": "turk_tarihi",
+    "correct_index": 8,
+    "predicted_index": 9,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0181",
+    "stratum": "turk_tarihi",
+    "correct_index": 6,
+    "predicted_index": 6,
+    "is_correct": 1
+  },
+  {
+    "question_id": "turk_tarihi_0182",
+    "stratum": "turk_tarihi",
+    "correct_index": 8,
+    "predicted_index": 8,
+    "is_correct": 1
+  },
+  {
+    "question_id": "turk_tarihi_0183",
+    "stratum": "turk_tarihi",
+    "correct_index": 5,
+    "predicted_index": 5,
+    "is_correct": 1
+  },
+  {
+    "question_id": "turk_tarihi_0184",
+    "stratum": "turk_tarihi",
+    "correct_index": 1,
+    "predicted_index": 2,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0185",
+    "stratum": "turk_tarihi",
+    "correct_index": 0,
+    "predicted_index": 5,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0186",
+    "stratum": "turk_tarihi",
+    "correct_index": 9,
+    "predicted_index": 4,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0187",
+    "stratum": "turk_tarihi",
+    "correct_index": 5,
+    "predicted_index": 7,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0188",
+    "stratum": "turk_tarihi",
+    "correct_index": 6,
+    "predicted_index": 0,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0189",
+    "stratum": "turk_tarihi",
+    "correct_index": 4,
+    "predicted_index": 5,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0190",
+    "stratum": "turk_tarihi",
+    "correct_index": 1,
+    "predicted_index": 5,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0191",
+    "stratum": "turk_tarihi",
+    "correct_index": 6,
+    "predicted_index": 6,
+    "is_correct": 1
+  },
+  {
+    "question_id": "turk_tarihi_0192",
+    "stratum": "turk_tarihi",
+    "correct_index": 8,
+    "predicted_index": 2,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0193",
+    "stratum": "turk_tarihi",
+    "correct_index": 3,
+    "predicted_index": 8,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0194",
+    "stratum": "turk_tarihi",
+    "correct_index": 2,
+    "predicted_index": 4,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0195",
+    "stratum": "turk_tarihi",
+    "correct_index": 0,
+    "predicted_index": 8,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0196",
+    "stratum": "turk_tarihi",
+    "correct_index": 3,
+    "predicted_index": 3,
+    "is_correct": 1
+  },
+  {
+    "question_id": "turk_tarihi_0197",
+    "stratum": "turk_tarihi",
+    "correct_index": 7,
+    "predicted_index": 7,
+    "is_correct": 1
+  },
+  {
+    "question_id": "turk_tarihi_0198",
+    "stratum": "turk_tarihi",
+    "correct_index": 8,
+    "predicted_index": 1,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0199",
+    "stratum": "turk_tarihi",
+    "correct_index": 8,
+    "predicted_index": 0,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0200",
+    "stratum": "turk_tarihi",
+    "correct_index": 9,
+    "predicted_index": 4,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0201",
+    "stratum": "turk_tarihi",
+    "correct_index": 7,
+    "predicted_index": 0,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0202",
+    "stratum": "turk_tarihi",
+    "correct_index": 1,
+    "predicted_index": 0,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0203",
+    "stratum": "turk_tarihi",
+    "correct_index": 8,
+    "predicted_index": 8,
+    "is_correct": 1
+  },
+  {
+    "question_id": "turk_tarihi_0204",
+    "stratum": "turk_tarihi",
+    "correct_index": 2,
+    "predicted_index": 0,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0205",
+    "stratum": "turk_tarihi",
+    "correct_index": 5,
+    "predicted_index": 5,
+    "is_correct": 1
+  },
+  {
+    "question_id": "turk_tarihi_0206",
+    "stratum": "turk_tarihi",
+    "correct_index": 4,
+    "predicted_index": 8,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0207",
+    "stratum": "turk_tarihi",
+    "correct_index": 5,
+    "predicted_index": 0,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0208",
+    "stratum": "turk_tarihi",
+    "correct_index": 1,
+    "predicted_index": 1,
+    "is_correct": 1
+  },
+  {
+    "question_id": "turk_tarihi_0209",
+    "stratum": "turk_tarihi",
+    "correct_index": 5,
+    "predicted_index": 5,
+    "is_correct": 1
+  },
+  {
+    "question_id": "turk_tarihi_0210",
+    "stratum": "turk_tarihi",
+    "correct_index": 5,
+    "predicted_index": 3,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0211",
+    "stratum": "turk_tarihi",
+    "correct_index": 1,
+    "predicted_index": 5,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0212",
+    "stratum": "turk_tarihi",
+    "correct_index": 1,
+    "predicted_index": 1,
+    "is_correct": 1
+  },
+  {
+    "question_id": "turk_tarihi_0213",
+    "stratum": "turk_tarihi",
+    "correct_index": 1,
+    "predicted_index": 0,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0214",
+    "stratum": "turk_tarihi",
+    "correct_index": 4,
+    "predicted_index": 0,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0215",
+    "stratum": "turk_tarihi",
+    "correct_index": 2,
+    "predicted_index": 2,
+    "is_correct": 1
+  },
+  {
+    "question_id": "turk_tarihi_0216",
+    "stratum": "turk_tarihi",
+    "correct_index": 5,
+    "predicted_index": 3,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0217",
+    "stratum": "turk_tarihi",
+    "correct_index": 0,
+    "predicted_index": 9,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0218",
+    "stratum": "turk_tarihi",
+    "correct_index": 4,
+    "predicted_index": 7,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0219",
+    "stratum": "turk_tarihi",
+    "correct_index": 0,
+    "predicted_index": 8,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0220",
+    "stratum": "turk_tarihi",
+    "correct_index": 6,
+    "predicted_index": 2,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0221",
+    "stratum": "turk_tarihi",
+    "correct_index": 0,
+    "predicted_index": 0,
+    "is_correct": 1
+  },
+  {
+    "question_id": "turk_tarihi_0222",
+    "stratum": "turk_tarihi",
+    "correct_index": 2,
+    "predicted_index": 4,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0223",
+    "stratum": "turk_tarihi",
+    "correct_index": 0,
+    "predicted_index": 0,
+    "is_correct": 1
+  },
+  {
+    "question_id": "turk_tarihi_0224",
+    "stratum": "turk_tarihi",
+    "correct_index": 9,
+    "predicted_index": 9,
+    "is_correct": 1
+  },
+  {
+    "question_id": "turk_tarihi_0225",
+    "stratum": "turk_tarihi",
+    "correct_index": 0,
+    "predicted_index": 2,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0226",
+    "stratum": "turk_tarihi",
+    "correct_index": 2,
+    "predicted_index": 7,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0227",
+    "stratum": "turk_tarihi",
+    "correct_index": 7,
+    "predicted_index": 0,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0228",
+    "stratum": "turk_tarihi",
+    "correct_index": 2,
+    "predicted_index": 5,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0229",
+    "stratum": "turk_tarihi",
+    "correct_index": 5,
+    "predicted_index": 1,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0230",
+    "stratum": "turk_tarihi",
+    "correct_index": 1,
+    "predicted_index": 8,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0231",
+    "stratum": "turk_tarihi",
+    "correct_index": 7,
+    "predicted_index": 3,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0232",
+    "stratum": "turk_tarihi",
+    "correct_index": 3,
+    "predicted_index": 3,
+    "is_correct": 1
+  },
+  {
+    "question_id": "turk_tarihi_0233",
+    "stratum": "turk_tarihi",
+    "correct_index": 2,
+    "predicted_index": 2,
+    "is_correct": 1
+  },
+  {
+    "question_id": "turk_tarihi_0234",
+    "stratum": "turk_tarihi",
+    "correct_index": 9,
+    "predicted_index": 0,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0235",
+    "stratum": "turk_tarihi",
+    "correct_index": 6,
+    "predicted_index": 3,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0236",
+    "stratum": "turk_tarihi",
+    "correct_index": 7,
+    "predicted_index": 8,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0237",
+    "stratum": "turk_tarihi",
+    "correct_index": 1,
+    "predicted_index": 2,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0238",
+    "stratum": "turk_tarihi",
+    "correct_index": 2,
+    "predicted_index": 5,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0239",
+    "stratum": "turk_tarihi",
+    "correct_index": 3,
+    "predicted_index": 3,
+    "is_correct": 1
+  },
+  {
+    "question_id": "turk_tarihi_0240",
+    "stratum": "turk_tarihi",
+    "correct_index": 1,
+    "predicted_index": 6,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0241",
+    "stratum": "turk_tarihi",
+    "correct_index": 0,
+    "predicted_index": 5,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0242",
+    "stratum": "turk_tarihi",
+    "correct_index": 7,
+    "predicted_index": 0,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0243",
+    "stratum": "turk_tarihi",
+    "correct_index": 1,
+    "predicted_index": 7,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0244",
+    "stratum": "turk_tarihi",
+    "correct_index": 2,
+    "predicted_index": 7,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0245",
+    "stratum": "turk_tarihi",
+    "correct_index": 3,
+    "predicted_index": 5,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0246",
+    "stratum": "turk_tarihi",
+    "correct_index": 7,
+    "predicted_index": 8,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0247",
+    "stratum": "turk_tarihi",
+    "correct_index": 6,
+    "predicted_index": 1,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0248",
+    "stratum": "turk_tarihi",
+    "correct_index": 8,
+    "predicted_index": 0,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0249",
+    "stratum": "turk_tarihi",
+    "correct_index": 2,
+    "predicted_index": 1,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0250",
+    "stratum": "turk_tarihi",
+    "correct_index": 8,
+    "predicted_index": 6,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0251",
+    "stratum": "turk_tarihi",
+    "correct_index": 4,
+    "predicted_index": 8,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0252",
+    "stratum": "turk_tarihi",
+    "correct_index": 1,
+    "predicted_index": 1,
+    "is_correct": 1
+  },
+  {
+    "question_id": "turk_tarihi_0253",
+    "stratum": "turk_tarihi",
+    "correct_index": 3,
+    "predicted_index": 9,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0254",
+    "stratum": "turk_tarihi",
+    "correct_index": 8,
+    "predicted_index": 8,
+    "is_correct": 1
+  },
+  {
+    "question_id": "turk_tarihi_0255",
+    "stratum": "turk_tarihi",
+    "correct_index": 6,
+    "predicted_index": 0,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0256",
+    "stratum": "turk_tarihi",
+    "correct_index": 5,
+    "predicted_index": 5,
+    "is_correct": 1
+  },
+  {
+    "question_id": "turk_tarihi_0257",
+    "stratum": "turk_tarihi",
+    "correct_index": 2,
+    "predicted_index": 2,
+    "is_correct": 1
+  },
+  {
+    "question_id": "turk_tarihi_0258",
+    "stratum": "turk_tarihi",
+    "correct_index": 5,
+    "predicted_index": 7,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0259",
+    "stratum": "turk_tarihi",
+    "correct_index": 5,
+    "predicted_index": 0,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0260",
+    "stratum": "turk_tarihi",
+    "correct_index": 5,
+    "predicted_index": 5,
+    "is_correct": 1
+  },
+  {
+    "question_id": "turk_tarihi_0261",
+    "stratum": "turk_tarihi",
+    "correct_index": 6,
+    "predicted_index": 4,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0262",
+    "stratum": "turk_tarihi",
+    "correct_index": 6,
+    "predicted_index": 0,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0263",
+    "stratum": "turk_tarihi",
+    "correct_index": 2,
+    "predicted_index": 4,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0264",
+    "stratum": "turk_tarihi",
+    "correct_index": 0,
+    "predicted_index": 2,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0265",
+    "stratum": "turk_tarihi",
+    "correct_index": 3,
+    "predicted_index": 3,
+    "is_correct": 1
+  },
+  {
+    "question_id": "turk_tarihi_0266",
+    "stratum": "turk_tarihi",
+    "correct_index": 0,
+    "predicted_index": 0,
+    "is_correct": 1
+  },
+  {
+    "question_id": "turk_tarihi_0267",
+    "stratum": "turk_tarihi",
+    "correct_index": 4,
+    "predicted_index": 0,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0268",
+    "stratum": "turk_tarihi",
+    "correct_index": 3,
+    "predicted_index": 0,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0269",
+    "stratum": "turk_tarihi",
+    "correct_index": 2,
+    "predicted_index": 2,
+    "is_correct": 1
+  },
+  {
+    "question_id": "turk_tarihi_0270",
+    "stratum": "turk_tarihi",
+    "correct_index": 6,
+    "predicted_index": 6,
+    "is_correct": 1
+  },
+  {
+    "question_id": "turk_tarihi_0271",
+    "stratum": "turk_tarihi",
+    "correct_index": 9,
+    "predicted_index": 7,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0272",
+    "stratum": "turk_tarihi",
+    "correct_index": 5,
+    "predicted_index": 5,
+    "is_correct": 1
+  },
+  {
+    "question_id": "turk_tarihi_0273",
+    "stratum": "turk_tarihi",
+    "correct_index": 6,
+    "predicted_index": 9,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0274",
+    "stratum": "turk_tarihi",
+    "correct_index": 8,
+    "predicted_index": 8,
+    "is_correct": 1
+  },
+  {
+    "question_id": "turk_tarihi_0275",
+    "stratum": "turk_tarihi",
+    "correct_index": 8,
+    "predicted_index": 1,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0276",
+    "stratum": "turk_tarihi",
+    "correct_index": 2,
+    "predicted_index": 2,
+    "is_correct": 1
+  },
+  {
+    "question_id": "turk_tarihi_0277",
+    "stratum": "turk_tarihi",
+    "correct_index": 5,
+    "predicted_index": 0,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0278",
+    "stratum": "turk_tarihi",
+    "correct_index": 3,
+    "predicted_index": 7,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0279",
+    "stratum": "turk_tarihi",
+    "correct_index": 0,
+    "predicted_index": 0,
+    "is_correct": 1
+  },
+  {
+    "question_id": "turk_tarihi_0280",
+    "stratum": "turk_tarihi",
+    "correct_index": 1,
+    "predicted_index": 1,
+    "is_correct": 1
+  },
+  {
+    "question_id": "turk_tarihi_0281",
+    "stratum": "turk_tarihi",
+    "correct_index": 3,
+    "predicted_index": 3,
+    "is_correct": 1
+  },
+  {
+    "question_id": "turk_tarihi_0282",
+    "stratum": "turk_tarihi",
+    "correct_index": 5,
+    "predicted_index": 3,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0283",
+    "stratum": "turk_tarihi",
+    "correct_index": 6,
+    "predicted_index": 6,
+    "is_correct": 1
+  },
+  {
+    "question_id": "turk_tarihi_0284",
+    "stratum": "turk_tarihi",
+    "correct_index": 4,
+    "predicted_index": 2,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0285",
+    "stratum": "turk_tarihi",
+    "correct_index": 4,
+    "predicted_index": 3,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0286",
+    "stratum": "turk_tarihi",
+    "correct_index": 0,
+    "predicted_index": 4,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0287",
+    "stratum": "turk_tarihi",
+    "correct_index": 3,
+    "predicted_index": 0,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0288",
+    "stratum": "turk_tarihi",
+    "correct_index": 4,
+    "predicted_index": 9,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0289",
+    "stratum": "turk_tarihi",
+    "correct_index": 0,
+    "predicted_index": 3,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0290",
+    "stratum": "turk_tarihi",
+    "correct_index": 9,
+    "predicted_index": 9,
+    "is_correct": 1
+  },
+  {
+    "question_id": "turk_tarihi_0291",
+    "stratum": "turk_tarihi",
+    "correct_index": 9,
+    "predicted_index": 9,
+    "is_correct": 1
+  },
+  {
+    "question_id": "turk_tarihi_0292",
+    "stratum": "turk_tarihi",
+    "correct_index": 8,
+    "predicted_index": 8,
+    "is_correct": 1
+  },
+  {
+    "question_id": "turk_tarihi_0293",
+    "stratum": "turk_tarihi",
+    "correct_index": 0,
+    "predicted_index": 0,
+    "is_correct": 1
+  },
+  {
+    "question_id": "turk_tarihi_0294",
+    "stratum": "turk_tarihi",
+    "correct_index": 0,
+    "predicted_index": 9,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0295",
+    "stratum": "turk_tarihi",
+    "correct_index": 4,
+    "predicted_index": 1,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0296",
+    "stratum": "turk_tarihi",
+    "correct_index": 3,
+    "predicted_index": 4,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0297",
+    "stratum": "turk_tarihi",
+    "correct_index": 5,
+    "predicted_index": 0,
+    "is_correct": 0
+  },
+  {
+    "question_id": "turk_tarihi_0298",
+    "stratum": "turk_tarihi",
+    "correct_index": 9,
+    "predicted_index": 9,
+    "is_correct": 1
+  },
+  {
+    "question_id": "turk_tarihi_0299",
+    "stratum": "turk_tarihi",
+    "correct_index": 7,
+    "predicted_index": 7,
+    "is_correct": 1
+  },
+  {
+    "question_id": "high_school_0000",
+    "stratum": "high_school",
+    "correct_index": 2,
+    "predicted_index": 8,
+    "is_correct": 0
+  },
+  {
+    "question_id": "high_school_0001",
+    "stratum": "high_school",
+    "correct_index": 2,
+    "predicted_index": 0,
+    "is_correct": 0
+  },
+  {
+    "question_id": "high_school_0002",
+    "stratum": "high_school",
+    "correct_index": 5,
+    "predicted_index": 8,
+    "is_correct": 0
+  },
+  {
+    "question_id": "high_school_0003",
+    "stratum": "high_school",
+    "correct_index": 3,
+    "predicted_index": 3,
+    "is_correct": 1
+  },
+  {
+    "question_id": "high_school_0004",
+    "stratum": "high_school",
+    "correct_index": 7,
+    "predicted_index": 7,
+    "is_correct": 1
+  },
+  {
+    "question_id": "high_school_0005",
+    "stratum": "high_school",
+    "correct_index": 2,
+    "predicted_index": 8,
+    "is_correct": 0
+  },
+  {
+    "question_id": "high_school_0006",
+    "stratum": "high_school",
+    "correct_index": 5,
+    "predicted_index": 5,
+    "is_correct": 1
+  },
+  {
+    "question_id": "high_school_0007",
+    "stratum": "high_school",
+    "correct_index": 0,
+    "predicted_index": 0,
+    "is_correct": 1
+  },
+  {
+    "question_id": "high_school_0008",
+    "stratum": "high_school",
+    "correct_index": 0,
+    "predicted_index": 0,
+    "is_correct": 1
+  },
+  {
+    "question_id": "high_school_0009",
+    "stratum": "high_school",
+    "correct_index": 2,
+    "predicted_index": 2,
+    "is_correct": 1
+  },
+  {
+    "question_id": "high_school_0010",
+    "stratum": "high_school",
+    "correct_index": 0,
+    "predicted_index": 0,
+    "is_correct": 1
+  },
+  {
+    "question_id": "high_school_0011",
+    "stratum": "high_school",
+    "correct_index": 9,
+    "predicted_index": 9,
+    "is_correct": 1
+  },
+  {
+    "question_id": "high_school_0012",
+    "stratum": "high_school",
+    "correct_index": 5,
+    "predicted_index": 5,
+    "is_correct": 1
+  },
+  {
+    "question_id": "high_school_0013",
+    "stratum": "high_school",
+    "correct_index": 4,
+    "predicted_index": 4,
+    "is_correct": 1
+  },
+  {
+    "question_id": "high_school_0014",
+    "stratum": "high_school",
+    "correct_index": 2,
+    "predicted_index": 2,
+    "is_correct": 1
+  },
+  {
+    "question_id": "high_school_0015",
+    "stratum": "high_school",
+    "correct_index": 0,
+    "predicted_index": 0,
+    "is_correct": 1
+  },
+  {
+    "question_id": "high_school_0016",
+    "stratum": "high_school",
+    "correct_index": 0,
+    "predicted_index": 0,
+    "is_correct": 1
+  },
+  {
+    "question_id": "high_school_0017",
+    "stratum": "high_school",
+    "correct_index": 7,
+    "predicted_index": 7,
+    "is_correct": 1
+  },
+  {
+    "question_id": "high_school_0018",
+    "stratum": "high_school",
+    "correct_index": 3,
+    "predicted_index": 0,
+    "is_correct": 0
+  },
+  {
+    "question_id": "high_school_0019",
+    "stratum": "high_school",
+    "correct_index": 7,
+    "predicted_index": 0,
+    "is_correct": 0
+  },
+  {
+    "question_id": "high_school_0020",
+    "stratum": "high_school",
+    "correct_index": 6,
+    "predicted_index": 6,
+    "is_correct": 1
+  },
+  {
+    "question_id": "high_school_0021",
+    "stratum": "high_school",
+    "correct_index": 4,
+    "predicted_index": 8,
+    "is_correct": 0
+  },
+  {
+    "question_id": "high_school_0022",
+    "stratum": "high_school",
+    "correct_index": 1,
+    "predicted_index": 0,
+    "is_correct": 0
+  },
+  {
+    "question_id": "high_school_0023",
+    "stratum": "high_school",
+    "correct_index": 6,
+    "predicted_index": 2,
+    "is_correct": 0
+  },
+  {
+    "question_id": "high_school_0024",
+    "stratum": "high_school",
+    "correct_index": 2,
+    "predicted_index": 0,
+    "is_correct": 0
+  },
+  {
+    "question_id": "high_school_0025",
+    "stratum": "high_school",
+    "correct_index": 6,
+    "predicted_index": 6,
+    "is_correct": 1
+  },
+  {
+    "question_id": "high_school_0026",
+    "stratum": "high_school",
+    "correct_index": 8,
+    "predicted_index": 3,
+    "is_correct": 0
+  },
+  {
+    "question_id": "high_school_0027",
+    "stratum": "high_school",
+    "correct_index": 5,
+    "predicted_index": 1,
+    "is_correct": 0
+  },
+  {
+    "question_id": "high_school_0028",
+    "stratum": "high_school",
+    "correct_index": 0,
+    "predicted_index": 0,
+    "is_correct": 1
+  },
+  {
+    "question_id": "literature_0000",
+    "stratum": "literature",
+    "correct_index": 1,
+    "predicted_index": 0,
+    "is_correct": 0
+  },
+  {
+    "question_id": "literature_0001",
+    "stratum": "literature",
+    "correct_index": 5,
+    "predicted_index": 5,
+    "is_correct": 1
+  },
+  {
+    "question_id": "literature_0002",
+    "stratum": "literature",
+    "correct_index": 9,
+    "predicted_index": 9,
+    "is_correct": 1
+  },
+  {
+    "question_id": "literature_0003",
+    "stratum": "literature",
+    "correct_index": 8,
+    "predicted_index": 4,
+    "is_correct": 0
+  },
+  {
+    "question_id": "literature_0004",
+    "stratum": "literature",
+    "correct_index": 6,
+    "predicted_index": 0,
+    "is_correct": 0
+  },
+  {
+    "question_id": "literature_0005",
+    "stratum": "literature",
+    "correct_index": 6,
+    "predicted_index": 6,
+    "is_correct": 1
+  },
+  {
+    "question_id": "literature_0006",
+    "stratum": "literature",
+    "correct_index": 7,
+    "predicted_index": 0,
+    "is_correct": 0
+  },
+  {
+    "question_id": "literature_0007",
+    "stratum": "literature",
+    "correct_index": 1,
+    "predicted_index": 0,
+    "is_correct": 0
+  },
+  {
+    "question_id": "literature_0008",
+    "stratum": "literature",
+    "correct_index": 5,
+    "predicted_index": 5,
+    "is_correct": 1
+  },
+  {
+    "question_id": "literature_0009",
+    "stratum": "literature",
+    "correct_index": 8,
+    "predicted_index": 8,
+    "is_correct": 1
+  },
+  {
+    "question_id": "literature_0010",
+    "stratum": "literature",
+    "correct_index": 1,
+    "predicted_index": 1,
+    "is_correct": 1
+  },
+  {
+    "question_id": "literature_0011",
+    "stratum": "literature",
+    "correct_index": 6,
+    "predicted_index": 6,
+    "is_correct": 1
+  },
+  {
+    "question_id": "literature_0012",
+    "stratum": "literature",
+    "correct_index": 0,
+    "predicted_index": 0,
+    "is_correct": 1
+  },
+  {
+    "question_id": "literature_0013",
+    "stratum": "literature",
+    "correct_index": 2,
+    "predicted_index": 0,
+    "is_correct": 0
+  },
+  {
+    "question_id": "literature_0014",
+    "stratum": "literature",
+    "correct_index": 2,
+    "predicted_index": 2,
+    "is_correct": 1
+  },
+  {
+    "question_id": "literature_0015",
+    "stratum": "literature",
+    "correct_index": 6,
+    "predicted_index": 6,
+    "is_correct": 1
+  },
+  {
+    "question_id": "literature_0016",
+    "stratum": "literature",
+    "correct_index": 5,
+    "predicted_index": 0,
+    "is_correct": 0
+  },
+  {
+    "question_id": "literature_0017",
+    "stratum": "literature",
+    "correct_index": 7,
+    "predicted_index": 9,
+    "is_correct": 0
+  },
+  {
+    "question_id": "literature_0018",
+    "stratum": "literature",
+    "correct_index": 8,
+    "predicted_index": 0,
+    "is_correct": 0
+  },
+  {
+    "question_id": "middle_school_0000",
+    "stratum": "middle_school",
+    "correct_index": 7,
+    "predicted_index": 0,
+    "is_correct": 0
+  },
+  {
+    "question_id": "middle_school_0001",
+    "stratum": "middle_school",
+    "correct_index": 8,
+    "predicted_index": 0,
+    "is_correct": 0
+  },
+  {
+    "question_id": "middle_school_0002",
+    "stratum": "middle_school",
+    "correct_index": 2,
+    "predicted_index": 0,
+    "is_correct": 0
+  },
+  {
+    "question_id": "middle_school_0003",
+    "stratum": "middle_school",
+    "correct_index": 1,
+    "predicted_index": 0,
+    "is_correct": 0
+  },
+  {
+    "question_id": "middle_school_0004",
+    "stratum": "middle_school",
+    "correct_index": 4,
+    "predicted_index": 0,
+    "is_correct": 0
+  },
+  {
+    "question_id": "middle_school_0005",
+    "stratum": "middle_school",
+    "correct_index": 4,
+    "predicted_index": 0,
+    "is_correct": 0
+  },
+  {
+    "question_id": "middle_school_0006",
+    "stratum": "middle_school",
+    "correct_index": 9,
+    "predicted_index": 0,
+    "is_correct": 0
+  },
+  {
+    "question_id": "middle_school_0007",
+    "stratum": "middle_school",
+    "correct_index": 4,
+    "predicted_index": 0,
+    "is_correct": 0
+  },
+  {
+    "question_id": "middle_school_0008",
+    "stratum": "middle_school",
+    "correct_index": 4,
+    "predicted_index": 0,
+    "is_correct": 0
+  },
+  {
+    "question_id": "middle_school_0009",
+    "stratum": "middle_school",
+    "correct_index": 8,
+    "predicted_index": 0,
+    "is_correct": 0
+  },
+  {
+    "question_id": "middle_school_0010",
+    "stratum": "middle_school",
+    "correct_index": 2,
+    "predicted_index": 2,
+    "is_correct": 1
+  },
+  {
+    "question_id": "middle_school_0011",
+    "stratum": "middle_school",
+    "correct_index": 0,
+    "predicted_index": 0,
+    "is_correct": 1
+  }
+]

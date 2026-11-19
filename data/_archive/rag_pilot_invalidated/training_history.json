@@ -1,0 +1,75 @@
+{
+  "init_val_loss": 5.972859272590051,
+  "best_val_loss": 0.014413604297890114,
+  "loss_ratio": 0.0024131833080406474,
+  "loss_drop_pct": 99.75868166919594,
+  "fit_diagnosis": "EĞİTİM BAŞARILI (Val Loss >= %10 azaldı -> Model RAG-sentez hedefine uyum sağlıyor)",
+  "status_category": "TRAIN_PASS",
+  "best_checkpoint": "/Users/hakankilicaslan/Git/tr_llm/data/rag_pilot/kristal_rag_pilot_best.pt",
+  "epochs": [
+    {
+      "epoch": 1,
+      "train_loss": 3.872822645902634,
+      "val_loss": 1.7456151247024536,
+      "val_ppl": 5.729424702363523,
+      "path": "/Users/hakankilicaslan/Git/tr_llm/data/rag_pilot/kristal_rag_pilot_ep1.pt",
+      "duration": 449.7148811817169
+    },
+    {
+      "epoch": 2,
+      "train_loss": 1.101024869978428,
+      "val_loss": 0.4071371257305145,
+      "val_ppl": 1.502510124334802,
+      "path": "/Users/hakankilicaslan/Git/tr_llm/data/rag_pilot/kristal_rag_pilot_ep2.pt",
+      "duration": 742.1150178909302
+    },
+    {
+      "epoch": 3,
+      "train_loss": 0.3041715097427368,
+      "val_loss": 0.11009593307971954,
+      "val_ppl": 1.1163851635887985,
+      "path": "/Users/hakankilicaslan/Git/tr_llm/data/rag_pilot/kristal_rag_pilot_ep3.pt",
+      "duration": 552.4837281703949
+    },
+    {
+      "epoch": 4,
+      "train_loss": 0.11031354036182166,
+      "val_loss": 0.044617886583392434,
+      "val_ppl": 1.0456282349851855,
+      "path": "/Users/hakankilicaslan/Git/tr_llm/data/rag_pilot/kristal_rag_pilot_ep4.pt",
+      "duration": 537.6211357116699
+    },
+    {
+      "epoch": 5,
+      "train_loss": 0.05903987897560001,
+      "val_loss": 0.02613669762817713,
+      "val_ppl": 1.0264812564364638,
+      "path": "/Users/hakankilicaslan/Git/tr_llm/data/rag_pilot/kristal_rag_pilot_ep5.pt",
+      "duration": 164.64320421218872
+    },
+    {
+      "epoch": 6,
+      "train_loss": 0.04285685623064637,
+      "val_loss": 0.018938042868215304,
+      "val_ppl": 1.019118505001811,
+      "path": "/Users/hakankilicaslan/Git/tr_llm/data/rag_pilot/kristal_rag_pilot_ep6.pt",
+      "duration": 167.90971302986145
+    },
+    {
+      "epoch": 7,
+      "train_loss": 0.03522823331877589,
+      "val_loss": 0.015977374492929533,
+      "val_ppl": 1.0161056952394216,
+      "path": "/Users/hakankilicaslan/Git/tr_llm/data/rag_pilot/kristal_rag_pilot_ep7.pt",
+      "duration": 213.5075488090515
+    },
+    {
+      "epoch": 8,
+      "train_loss": 0.03172734630294144,
+      "val_loss": 0.014413604297890114,
+      "val_ppl": 1.0145179811717118,
+      "path": "/Users/hakankilicaslan/Git/tr_llm/data/rag_pilot/kristal_rag_pilot_ep8.pt",
+      "duration": 163.12082290649414
+    }
+  ]
+}

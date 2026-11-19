@@ -1,0 +1,60 @@
+{
+  "model_name": "anka_base_v2",
+  "version": "2.0-sealed",
+  "muhur_durumu": "muhurlendi (G3a ceket tasarim dokumani ddd41c640d6f8583f55d2483a8e0f21e8f165dea5b43331816105c89db7a8a7c; operatör onayi 2026-09-26)",
+  "muhur_tarihi": "2026-09-26",
+  "muhur_referansi": "data/eval/ceket_tasarim_2026-09-26.md",
+  "model_path": "data/anka_base_v2.pt",
+  "model_sha256": "d0f415f3d882beb4a3dace87fc4a6024bf3c667f033790fc1e472cb60a664a50",
+  "model_bytes": 373735244,
+  "kafa_boyutu": 33114,
+  "vocab_path": "data/rebuild/vocab_anka_r1_33114.json",
+  "vocab_sha256": "f9940a8d8e1f7cd9428d389f12ff4c5ee448e5a7bfcdcc8ecc9c616fce950984",
+  "vocab_giris": 33114,
+  "lexicon_path": "data/lexicon/roots.tsv",
+  "lexicon_sha256": "fe3005e5e2a594f09cbcfc3286e2c8812953ae6614333815ab87a7e3a6763598",
+  "pretrain_bin_path": "data/train.bin",
+  "pretrain_bin_sha256": "00519ef695265a179336101efb0975aa8c522f288b7d55c9b53aa50bdc74cc5c",
+  "mimari": {
+    "n_layer": 6,
+    "n_head": 6,
+    "n_embd": 768,
+    "block_size": 4096,
+    "positional_embedding": "RoPE (Rotary)",
+    "weight_tying": false
+  },
+  "soy_zinciri": [
+    {
+      "asama": "Anka A2 Temel Pretrain",
+      "kaynak_checkpoint": "data/anka_a2.pt",
+      "kaynak_sha256": "e2352cd3bbf3e88f0d4d2e073d3aa8cd31317073b006ef676e945d4e9c964157",
+      "sozluk": "data/rebuild/vocab_anka_r2.json (33911)",
+      "aciklama": "Anka A2 pretrain omurgasi"
+    },
+    {
+      "asama": "T-0113 Ceket Seyreltme (Faz C) 30.020 Adim",
+      "kaynak_checkpoint": "scratch/t0113/seg_3.pt",
+      "kaynak_sha256": "b1c748f244c3d2c088a9104f05a8d555e139444cb255f7043e69a3c20655801b",
+      "sozluk": "data/rebuild/vocab_anka_r2.json (33911)",
+      "aciklama": "Marangoz zincirinin fiili egitim tabani (T-0123/T-0126/T-0127/T-0128)"
+    },
+    {
+      "asama": "G2 / T-0133 Kanonik Hizalama (Sifir Kirpma)",
+      "kaynak_checkpoint": "data/anka_base_v2.pt",
+      "kaynak_sha256": "d0f415f3d882beb4a3dace87fc4a6024bf3c667f033790fc1e472cb60a664a50",
+      "sozluk": "data/rebuild/vocab_anka_r1_33114.json (33114)",
+      "aciklama": "seg_3.pt modelinin vocab_anka_r1_33114 sozluk boyutuna tek seferlik kanonik resize_state_dict ile hizalanmasi (797 atil satir sifirlandi, fine-tune sirasinda [SOZLESME_UYARI] 0 satira indi)."
+    }
+  ],
+  "egitim_rejimi_beyani": {
+    "fine_tune_rejim_kaybi": "2.1 - 2.4 bandi",
+    "hedef_rejim": "SFT ve pretrain devam",
+    "optimizer_politika": "G1 fail-closed uc dalli politika"
+  },
+  "olcum_kanitlari": {
+    "sft_10step_mps_log": "scratch/t0133/sft_10steps_mps_loadpath.log",
+    "sozlesme_uyari_satir_sayisi": 0,
+    "ilk_adim_kaybi": 2.1994,
+    "son_adim_kaybi": 2.3597
+  }
+}

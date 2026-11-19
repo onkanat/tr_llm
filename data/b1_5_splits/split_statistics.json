@@ -1,0 +1,62 @@
+[
+  {
+    "stratum": "carpenter",
+    "total_records": 3825,
+    "total_clusters": 3420,
+    "mean_cluster_size": 1.118421052631579,
+    "max_cluster_size": 6,
+    "train_count": 3061,
+    "val_count": 382,
+    "test_count": 382
+  },
+  {
+    "stratum": "turk_tarihi",
+    "total_records": 6507,
+    "total_clusters": 6106,
+    "mean_cluster_size": 1.0656731084179496,
+    "max_cluster_size": 69,
+    "train_count": 5207,
+    "val_count": 650,
+    "test_count": 650
+  },
+  {
+    "stratum": "high_school",
+    "total_records": 298,
+    "total_clusters": 292,
+    "mean_cluster_size": 1.0205479452054795,
+    "max_cluster_size": 2,
+    "train_count": 240,
+    "val_count": 29,
+    "test_count": 29
+  },
+  {
+    "stratum": "literature",
+    "total_records": 198,
+    "total_clusters": 198,
+    "mean_cluster_size": 1.0,
+    "max_cluster_size": 1,
+    "train_count": 160,
+    "val_count": 19,
+    "test_count": 19
+  },
+  {
+    "stratum": "middle_school",
+    "total_records": 125,
+    "total_clusters": 52,
+    "mean_cluster_size": 2.4038461538461537,
+    "max_cluster_size": 5,
+    "train_count": 101,
+    "val_count": 12,
+    "test_count": 12
+  },
+  {
+    "stratum": "parenting",
+    "total_records": 5300,
+    "total_clusters": 4243,
+    "mean_cluster_size": 1.2491161913740279,
+    "max_cluster_size": 3,
+    "train_count": 4240,
+    "val_count": 530,
+    "test_count": 530
+  }
+]

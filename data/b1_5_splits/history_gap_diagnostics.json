@@ -1,0 +1,99 @@
+{
+  "n_total": 300,
+  "mean_rank_logp": 4.62,
+  "mean_rank_pmi": 2.4833333333333334,
+  "top1_logp": 15.666666666666668,
+  "top3_logp": 41.333333333333336,
+  "top5_logp": 64.0,
+  "top1_pmi": 38.333333333333336,
+  "top3_pmi": 78.33333333333333,
+  "top5_pmi": 93.66666666666667,
+  "length_logp_correlation": 0.2794972993261641,
+  "contingency_table": {
+    "n11": 11,
+    "n10": 36,
+    "n01": 80,
+    "n00": 173
+  },
+  "diagnosis": "LM Prior Maskelemesi: Modelin içerik sinyali var ancak jenerik şablonların LM prior'ı tarafından maskeleniyor.",
+  "sample_diagnostics": [
+    {
+      "question": "Murşile, Lidya/Etian tarihi bağlamında kimdir?",
+      "true_answer": "Murşile, önemli bir figür olup, Etislerin (Eti kralları) ilk krallarından biri olarak kabul edilir v",
+      "cond_rank": 2,
+      "pmi_rank": 1,
+      "picked_cond": "Metinde, Frigya (Frikya), Misya (Misya), Lidyalılar (Lidya) ve Karya (Karya) böl",
+      "picked_pmi": "Murşile, önemli bir figür olup, Etislerin (Eti kralları) ilk krallarından biri o",
+      "true_cond_lp": -2.527183507533314,
+      "true_prior_lp": -3.0010226130939257,
+      "true_pmi": 0.4738391055606117
+    },
+    {
+      "question": "Güney Çin'in kıyı bölgelerindeki nüfusla ilgili hangi etnografik gözlemler yapıl",
+      "true_answer": "Güney Çin'in kıyı bölgelerinde, kendi özgün karakteristiklerini ve geleneklerini korumuş çeşitli etn",
+      "cond_rank": 2,
+      "pmi_rank": 2,
+      "picked_cond": "İskender'in temel amacı, Pers donanmasını etkisiz hale getirmek için Fenike kıyı",
+      "picked_pmi": "Belgede, antik çağlarda Çin'in batı kesimlerinde bir uygarlığın ortaya çıktığı v",
+      "true_cond_lp": -2.497853054772978,
+      "true_prior_lp": -2.838515581812879,
+      "true_pmi": 0.3406625270399011
+    },
+    {
+      "question": "Belge hangi coğrafi/kültürel kategorilere göre düzenlenmiştir?",
+      "true_answer": "Belge, şu gibi kültürel ve bölgesel başlıklar altında düzenlenmiştir: Eti (Hitit), Fenike, İbraniler",
+      "cond_rank": 7,
+      "pmi_rank": 1,
+      "picked_cond": "Bu belge, çeşitli coğrafi bölgeleri, etnik grupları ve tarihi figürleri listeley",
+      "picked_pmi": "Belge, şu gibi kültürel ve bölgesel başlıklar altında düzenlenmiştir: Eti (Hitit",
+      "true_cond_lp": -3.170829954152962,
+      "true_prior_lp": -3.304767001239733,
+      "true_pmi": 0.13393704708677134
+    },
+    {
+      "question": "Türk_tarih_seti içeriğindeki 'tarih - 0386' (2026) çalışmasının ana konusunu ve ",
+      "true_answer": "Bu belge, \"A\" harfiyle başlayan girdileri içeren, özellikle Alamanlar, Altay, Anadolu gibi terimleri",
+      "cond_rank": 1,
+      "pmi_rank": 2,
+      "picked_cond": "Bu belge, \"A\" harfiyle başlayan girdileri içeren, özellikle Alamanlar, Altay, An",
+      "picked_pmi": "Yenisey Nehri, Türk halklarının ve Orta Asya'daki çeşitli göçebe konfederasyonla",
+      "true_cond_lp": -2.4357718147035254,
+      "true_prior_lp": -2.438465971318866,
+      "true_pmi": 0.0026941566153406704
+    },
+    {
+      "question": "Türk_tarih_seti içeriğindeki 'tarih - 0035' (2026) çalışmasının ana konusunu ve ",
+      "true_answer": "Bu tarihi ve bilimsel metin, yaşamın evrimsel kökenlerini ve insanlığın biyolojik soy ağacını incele",
+      "cond_rank": 2,
+      "pmi_rank": 3,
+      "picked_cond": "Bu belge, \"A\" harfiyle başlayan girdileri içeren, özellikle Alamanlar, Altay, An",
+      "picked_pmi": "Yenisey Nehri, Türk halklarının ve Orta Asya'daki çeşitli göçebe konfederasyonla",
+      "true_cond_lp": -2.4909600304414603,
+      "true_prior_lp": -2.4388087178549744,
+      "true_pmi": -0.052151312586485865
+    }
+  ],
+  "logp_rank_histogram": {
+    "2": 33,
+    "7": 30,
+    "1": 47,
+    "9": 19,
+    "8": 15,
+    "4": 36,
+    "3": 44,
+    "6": 26,
+    "5": 32,
+    "10": 18
+  },
+  "pmi_rank_histogram": {
+    "1": 115,
+    "2": 67,
+    "3": 53,
+    "5": 17,
+    "4": 29,
+    "8": 6,
+    "6": 5,
+    "7": 7,
+    "9": 1
+  }
+}

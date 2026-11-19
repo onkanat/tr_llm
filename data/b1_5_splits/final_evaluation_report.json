@@ -1,0 +1,229 @@
+{
+  "katman_1_hard_negatives": {
+    "carpenter": {
+      "n": 300,
+      "model_acc": 92.66666666666666,
+      "base_acc": 34.66666666666667,
+      "chi2": 162.6576086956522,
+      "p_val": 1.3956733652494036e-46,
+      "table": {
+        "n11": 99,
+        "n10": 179,
+        "n01": 5,
+        "n00": 17
+      },
+      "decision": "BAŞARILI (p < 0.05, Model > Taban)"
+    },
+    "high_school": {
+      "n": 29,
+      "model_acc": 37.93103448275862,
+      "base_acc": 58.620689655172406,
+      "chi2": 2.0833333333333335,
+      "p_val": 0.14599609375,
+      "table": {
+        "n11": 8,
+        "n10": 3,
+        "n01": 9,
+        "n00": 9
+      },
+      "decision": "TANIMLAYICI (Hüküm Yok: N<300)"
+    },
+    "literature": {
+      "n": 19,
+      "model_acc": 31.57894736842105,
+      "base_acc": 52.63157894736842,
+      "chi2": 0.9,
+      "p_val": 0.34375,
+      "table": {
+        "n11": 3,
+        "n10": 3,
+        "n01": 7,
+        "n00": 6
+      },
+      "decision": "TANIMLAYICI (Hüküm Yok: N<300)"
+    },
+    "middle_school": {
+      "n": 12,
+      "model_acc": 8.333333333333332,
+      "base_acc": 16.666666666666664,
+      "chi2": 0.0,
+      "p_val": 1.0,
+      "table": {
+        "n11": 0,
+        "n10": 1,
+        "n01": 2,
+        "n00": 9
+      },
+      "decision": "TANIMLAYICI (Hüküm Yok: N<300)"
+    },
+    "turk_tarihi": {
+      "n": 300,
+      "model_acc": 15.666666666666668,
+      "base_acc": 30.333333333333336,
+      "chi2": 15.939655172413794,
+      "p_val": 5.4004505269050944e-05,
+      "table": {
+        "n11": 11,
+        "n10": 36,
+        "n01": 80,
+        "n00": 173
+      },
+      "decision": "BAŞARISIZ (Model <= Taban)"
+    },
+    "overall": {
+      "n": 660,
+      "model_acc": 51.96969696969697,
+      "base_acc": 33.939393939393945,
+      "chi2": 42.84307692307692,
+      "p_val": 3.60971415902798e-11,
+      "table": {
+        "n11": 121,
+        "n10": 222,
+        "n01": 103,
+        "n00": 214
+      },
+      "decision": "BAŞARILI (p < 0.05)"
+    }
+  },
+  "katman_1_random_distractors": {
+    "carpenter": {
+      "n": 300,
+      "model_acc": 95.33333333333334,
+      "base_acc": 76.0,
+      "chi2": 56.01724137931034,
+      "p_val": 6.938893903907228e-18,
+      "table": {
+        "n11": 228,
+        "n10": 58,
+        "n01": 0,
+        "n00": 14
+      },
+      "decision": "BAŞARILI (p < 0.05, Model > Taban)"
+    },
+    "high_school": {
+      "n": 29,
+      "model_acc": 31.03448275862069,
+      "base_acc": 62.06896551724138,
+      "chi2": 5.818181818181818,
+      "p_val": 0.01171875,
+      "table": {
+        "n11": 8,
+        "n10": 1,
+        "n01": 10,
+        "n00": 10
+      },
+      "decision": "TANIMLAYICI (Hüküm Yok: N<300)"
+    },
+    "literature": {
+      "n": 19,
+      "model_acc": 36.84210526315789,
+      "base_acc": 52.63157894736842,
+      "chi2": 0.4444444444444444,
+      "p_val": 0.5078125,
+      "table": {
+        "n11": 4,
+        "n10": 3,
+        "n01": 6,
+        "n00": 6
+      },
+      "decision": "TANIMLAYICI (Hüküm Yok: N<300)"
+    },
+    "middle_school": {
+      "n": 12,
+      "model_acc": 8.333333333333332,
+      "base_acc": 8.333333333333332,
+      "chi2": 0.5,
+      "p_val": 1.0,
+      "table": {
+        "n11": 0,
+        "n10": 1,
+        "n01": 1,
+        "n00": 10
+      },
+      "decision": "TANIMLAYICI (Hüküm Yok: N<300)"
+    },
+    "turk_tarihi": {
+      "n": 300,
+      "model_acc": 19.666666666666664,
+      "base_acc": 57.333333333333336,
+      "chi2": 71.68,
+      "p_val": 1.3050738430953929e-18,
+      "table": {
+        "n11": 28,
+        "n10": 31,
+        "n01": 144,
+        "n00": 97
+      },
+      "decision": "BAŞARISIZ (Model <= Taban)"
+    },
+    "overall": {
+      "n": 660,
+      "model_acc": 54.848484848484844,
+      "base_acc": 65.0,
+      "chi2": 17.08235294117647,
+      "p_val": 3.2479528435460725e-05,
+      "table": {
+        "n11": 268,
+        "n10": 94,
+        "n01": 161,
+        "n00": 137
+      },
+      "decision": "MARJİNAL / BAŞARISIZ"
+    }
+  },
+  "katman_4_batch_generation": {
+    "n": 100,
+    "memorization_rate": 0.0,
+    "incoherence_rate": 39.0,
+    "mean_rouge_l": 0.4655432804241329,
+    "conditioning_rate": 28.000000000000004,
+    "decision": "BAŞARISIZ",
+    "samples": [
+      {
+        "idx": 1,
+        "input": "olmadığına",
+        "generated": "root : ol",
+        "reference": "ROOT: ol",
+        "rouge_l": 1.0,
+        "memorized": false,
+        "incoherent": true
+      },
+      {
+        "idx": 2,
+        "input": "Atölye şefinin değerlendirmesi: Ahşap yüzey işlemlerinde kademeli zımpara kuralı",
+        "generated": "Kademeli zımpara kur GERUND_AlI : zımparalama 8 0 veya 1 2 0 kumla başla TENSE_NECESS , art POSS_2SG CASE_ABL 1 8 0 , 2 ",
+        "reference": "Kademeli zımpara kuralı: Zımparalama 80 veya 120 kumla başlamalı, ardından 180, 240 ve son kat öncesi 320 kuma geçilerek",
+        "rouge_l": 0.34375000000000006,
+        "memorized": false,
+        "incoherent": false
+      },
+      {
+        "idx": 3,
+        "input": "Ahşabın son kat yüzeyinde tüy alma işlemi (water popping) nasıl tatbik edilmelid",
+        "generated": "tüy alma işlem POSS_3SG ( <UNK> <UNK> ) uygulama POSS_3SG CASE_LOC_N ahşap son zımpara CASE_ABL önce hafifçe nemlendir V",
+        "reference": "Tüy alma işlemi (water popping) uygulamasında ahşap son zımparadan önce hafifçe nemlendirilir; kalkan mikroskobik lifler",
+        "rouge_l": 0.3214285714285714,
+        "memorized": false,
+        "incoherent": false
+      },
+      {
+        "idx": 4,
+        "input": "yaptı",
+        "generated": "root : yap",
+        "reference": "ROOT: yap",
+        "rouge_l": 1.0,
+        "memorized": false,
+        "incoherent": true
+      },
+      {
+        "idx": 5,
+        "input": "Hattuşili III'ün yabancı güçler konusundaki temel stratejik kaygısı neydi?",
+        "generated": "<PROPER_NOUN> , <PROPER_NOUN> ve <PROPER_NOUN> gibi Çeşitli grup PLURAL POSS_2SG <UNK> Orta CASE_DAT çık PART_DIk POSS_3",
+        "reference": "Hattuşili III, Mısır ile olan rekabetin ötesinde, Hittite İmparatorluğu için gerçek ve en önemli tehlikenin Asur'dan kay",
+        "rouge_l": 0.05,
+        "memorized": false,
+        "incoherent": true
+      }
+    ]
+  }
+}
