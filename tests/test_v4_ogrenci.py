@@ -482,6 +482,37 @@ def test_pencere_kayip_cli_varsayilan_sm_ve_gecersiz_hata(monkeypatch):
         parse_args()
 
 
+def test_pencere_pad_maske_pad_konumlarini_paydadan_cikarir():
+    """KOPYA-HATTI (v6): pad_id verilince PAD konumları standart CE'nin paydasından
+    ÇIKAR (kopya pencereleri 128'e PAD ile dolar); maskesiz çağrı v4c BİREBİR kalır."""
+    V, B, T = 40, 4, 16
+    g = torch.Generator().manual_seed(11)
+    x = torch.randint(0, V, (B, T), generator=g)
+    y = torch.randint(0, V, (B, T), generator=g)
+    PAD = 1
+    y[:, -4:] = PAD          # son 4 konum dolgu
+    sm = torch.ones(B, T)
+    kaynak = torch.ones(B)    # pencere satırları
+    ogrenci, hoca = _mini_cift(V)
+
+    r_maskeli = mikro_parti_kayip(ogrenci, hoca, x, y, sm, kaynak, 0.0, kip="sft",
+                                  pencere_kayip="plain", accum=1, sub_chunk=9999, pad_id=PAD)
+    r_maske = mikro_parti_kayip(ogrenci, hoca, x, y, sm, kaynak, 0.0, kip="sft",
+                               pencere_kayip="plain", accum=1, sub_chunk=9999)
+    # maske PAD satırlarını paydadan çıkardığı için değer FARKLI olmalı
+    assert r_maskeli["loss"] != pytest.approx(r_maske["loss"], rel=1e-6)
+
+    # beklenen: yalnız PAD OLMAYAN konumlar üzerinde ortalama CE
+    with torch.no_grad():
+        logits, _ = ogrenci(x)
+        ce = F.cross_entropy(logits.reshape(-1, V), y.reshape(-1), reduction="none").view(B, T)
+        maske = (y != PAD).to(ce.dtype)
+        beklenen = float((ce * maske).sum() / maske.sum())
+    assert r_maskeli["loss"] == pytest.approx(beklenen, rel=1e-6)
+    # maskesiz çağrıda PAD konumları paydada → daha büyük payda, farklı değer
+    assert r_maske["loss"] == pytest.approx(float(ce.mean()), rel=1e-6)
+
+
 def test_pencere_kayip_plain_pencere_satiri_standart_ortalama():
     """v4c ÖZÜ: plain kipte pencere satırı kaybı = STANDART ORTALAMA CE (geçerli
     hedefler üzerinde); sm kipi aynı girdiyle FARKLI değer verir (dal değişti)."""

@@ -18,3 +18,11 @@ data/simulasyon_bellek_export.jsonl
 scratch/
 
 
+
+# yerel ajan izleri ve ara urunler
+.agent-bus/
+.agents/
+*.bak-*
+data/train_wiki_run.log
+*.progress.json
+scripts/bus_monitor/.son_tetik

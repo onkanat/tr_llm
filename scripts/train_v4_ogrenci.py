@@ -300,7 +300,8 @@ class V4OgrenciDataset(torch.utils.data.Dataset):
 
 
 def mikro_parti_kayip(ogrenci, hoca, x, y, sm, kaynak, beta, tum_satirlar=True,
-                      kip=None, pencere_kayip="sm", accum=1, sub_chunk=SUB_CHUNK, kl_chunk=KL_CHUNK):
+                      kip=None, pencere_kayip="sm", accum=1, sub_chunk=SUB_CHUNK,
+                      kl_chunk=KL_CHUNK, pad_id=None):
     """p26 mikro-parti kayıp matematiği BİREBİR (docstring not-6/7); kip kl_satirlari_sec'te;
     pencere-kayıp AĞIRLIĞI v4c kipiyle (--pencere-kayip sm|plain).
 
@@ -332,6 +333,11 @@ def mikro_parti_kayip(ogrenci, hoca, x, y, sm, kaynak, beta, tum_satirlar=True,
     pencere_satiri = (kaynak == 1.0).to(torch.bool).view(-1, *([1] * (sm.dim() - 1)))
     if pencere_kayip == "plain":
         gecerli = (y != -100).to(sm.dtype).reshape(sm.shape)
+        if pad_id is not None:
+            # KOPYA-HATTI (v6): kopya pencereleri 128'e PAD ile doldurulur; PAD konumları
+            # hedef DEĞİLDİR → standart CE'nin paydasına da girmez (yoksa model PAD
+            # yazmayı öğrenir). Varsayılan (pad_id=None) v4c davranışı BİREBİR.
+            gecerli = gecerli * (y != pad_id).to(sm.dtype).reshape(sm.shape)
         w = torch.where(pencere_satiri.to(sm.device), gecerli, sm)
     else:
         w = sm  # v4/v4b: T-0209 ağırlığı BİREBİR
@@ -441,6 +447,10 @@ def parse_args():
                    help="pencere satırlarının KAYIP AĞIRLIĞI: sm (v4/v4b: T-0209 ±1 formu "
                         "BİREBİR) | plain (v4c: geçerli hedefler üzerinde standart ortalama "
                         "CE — negatif İMKÂNSIZ; SFT satırları sm formunda KALIR; mimari aynen)")
+    p.add_argument("--pencere-pad-maske", action=argparse.BooleanOptionalAction, default=False,
+                   help="KOPYA-HATTI (v6): pencere satırlarında PAD konumlarını standart "
+                        "CE'nin PAYDASINDAN çıkar (kopya pencereleri 128'e PAD ile dolar; "
+                        "maskesiz model PAD yazmayı öğrenir). Varsayılan KAPALI = v4c birebir")
     p.add_argument("--peak-lr", type=float, default=5e-5)
     p.add_argument("--min-lr", type=float, default=1e-5)
     p.add_argument("--warmup", type=int, default=200)
@@ -496,6 +506,7 @@ def main():
     lexicon = LexiconManager(); lexicon.load_from_tsv("data/lexicon/roots.tsv")
     compiler = CrystalCompiler(lexicon, build_default_graph())
     vocab = Vocabulary(); vocab.load(args.vocab)
+    pad_id = vocab.stoi.get("<PAD>")  # KOPYA-HATTI: --pencere-pad-maske için
     tokenizer = KristalTokenizer(compiler, vocab)
     vocab_size = len(vocab.stoi)
 
@@ -599,7 +610,8 @@ def main():
             x = x.to(device); y = y.to(device); sm = sm.to(device)
             sonuc = mikro_parti_kayip(model, hoca, x, y, sm, kaynak, args.kl_beta,
                                       kip=kl_kip, pencere_kayip=args.pencere_kayip,
-                                      accum=args.accum)
+                                      accum=args.accum,
+                                      pad_id=(pad_id if args.pencere_pad_maske else None))
             kl_satir_toplami += int(sonuc["kl_satir"])
             running += sonuc["loss"]; accum_sayac += 1
             if sonuc["pencere_ce"] is not None:
